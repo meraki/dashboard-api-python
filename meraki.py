@@ -3384,8 +3384,10 @@ def delvlan(apikey, networkid, vlanid, suppressprint=False):
     return result
 
 
+### OTHER ###
 
-# MX performance score
+# MX performance score for load monitoring
+# https://documentation.meraki.com/MX-Z/Monitoring_and_Reporting/Load_Monitoring
 def getmxperf(apikey, networkid, serial, suppressprint=False):
     calltype = 'MX Performance Detail'
     geturl = '{0}/networks/{1}/devices/{2}/performance'.format(str(base_url), str(networkid), str(serial))
