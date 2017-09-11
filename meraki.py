@@ -1279,6 +1279,8 @@ def deladmin(apikey, orgid, adminid, suppressprint=False):
 # https://dashboard.meraki.com/api_docs#list-the-clients-of-a-device-up-to-a-maximum-of-a-month-ago
 def getclients(apikey, serialnum, timestamp=86400, suppressprint=False):
     calltype = 'Device Clients'
+    if timestamp > 2592000:
+        timestamp = 2592000
     geturl = '{0}/devices/{1}/clients?timespan={2}'.format(str(base_url), str(serialnum), str(timestamp))
     headers = {
         'x-cisco-meraki-api-key': format(str(apikey)),
@@ -1296,6 +1298,8 @@ def getclients(apikey, serialnum, timestamp=86400, suppressprint=False):
 # https://dashboard.meraki.com/api_docs#return-the-group-policy-that-is-assigned-to-a-device-in-the-network
 def getclientpolicy(apikey, networkid, clientmac, timestamp=86400, suppressprint=False):
     calltype = 'Device Clients'
+    if timestamp > 2592000:
+        timestamp = 2592000
     geturl = '{0}/networks/{1}/clients/{2}/policy?timespan={3}'.format(str(base_url), str(networkid), str(clientmac), str(timestamp))
     headers = {
         'x-cisco-meraki-api-key': format(str(apikey)),
@@ -1310,7 +1314,7 @@ def getclientpolicy(apikey, networkid, clientmac, timestamp=86400, suppressprint
 # https://dashboard.meraki.com/api_docs#update-the-group-policy-assigned-to-a-device-in-the-network
 def updateclientpolicy(apikey, networkid, clientmac, policy, policyid=None, suppressprint=False):
     calltype = 'Device Clients'
-    puturl = '{0}/networks/{1}/clients/{2}/policy?timespan=86400'.format(str(base_url), str(networkid), str(clientmac))
+    puturl = '{0}/networks/{1}/clients/{2}/policy?timespan=2592000'.format(str(base_url), str(networkid), str(clientmac))
     headers = {
         'x-cisco-meraki-api-key': format(str(apikey)),
         'Content-Type': 'application/json'
@@ -1323,6 +1327,36 @@ def updateclientpolicy(apikey, networkid, clientmac, policy, policyid=None, supp
     
     putdata = {'devicePolicy': policy, 'groupPolicyId': policyid}
     dashboard = requests.put(puturl, data=json.dumps(putdata), headers=headers)
+    result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
+    return result
+
+
+# Return the splash authorization for a client, for each SSID they've associated with through splash
+# https://dashboard.meraki.com/api_docs#return-the-splash-authorization-for-a-client-for-each-ssid-theyve-associated-with-through-splash
+def getclientsplash(apikey, networkid, clientmac, suppressprint=False):
+    calltype = 'Device Clients'
+    geturl = '{0}/networks/{1}/clients/{2}/splashAuthorizationStatus'.format(str(base_url), str(networkid), str(clientmac))
+    headers = {
+        'x-cisco-meraki-api-key': format(str(apikey)),
+        'Content-Type': 'application/json'
+    }
+    dashboard = requests.get(geturl, headers=headers)
+    result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
+    return result
+
+
+# Update a client device's splash authorization.
+# https://dashboard.meraki.com/api_docs#update-a-client-devices-splash-authorization
+def updateclientsplash(apikey, networkid, clientmac, ssid_authorization, suppressprint=False):
+    # ssid_authorization = {'ssids': {'0': {'isAuthorized': True}, '2': {'isAuthorized': False}}}
+    calltype = 'Device Clients'
+    puturl = '{0}/networks/{1}/clients/{2}/splashAuthorizationStatus'.format(str(base_url), str(networkid), str(clientmac))
+    headers = {
+        'x-cisco-meraki-api-key': format(str(apikey)),
+        'Content-Type': 'application/json'
+    }
+    putdata = ssid_authorization
+    dashboard = requests.put(puturl, data=json.dumps(putdata),  headers=headers)
     result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
     return result
 
