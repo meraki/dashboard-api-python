@@ -1550,12 +1550,51 @@ def removedevfromnet(apikey, networkid, serial, suppressprint=False):
     return result
 
 
-### WIRELESS L3 FIREWALL ###
+### MX L3 FIREWALL ###
+
+# Return the L3 firewall rules for an MX network
+# https://dashboard.meraki.com/api_docs#return-the-l3-firewall-rules-for-an-mx-network
+def getmxl3fwrules(apikey, networkid, suppressprint=False):
+    calltype = 'MX L3 Firewall'
+    geturl = '{0}/networks/{1}/l3FirewallRules'.format(str(base_url), str(networkid))
+    headers = {
+        'x-cisco-meraki-api-key': format(str(apikey)),
+        'Content-Type': 'application/json'
+    }
+    dashboard = requests.get(geturl, headers=headers)
+    result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
+    return result
+
+
+# Update the L3 firewall rules of an SSID on an MR network
+# https://dashboard.meraki.com/api_docs#update-the-l3-firewall-rules-of-an-ssid-on-an-mr-network
+def updatemxl3fwrules(apikey, networkid, fwrules, syslogDefaultRule=False, suppressprint=False):
+    # fwrules = [{'comment': 'A note about the rule', 'policy': 'deny', 'protocol': 'tcp', 'destPort': '80,443', 'destCidr': '192.168.1.0/24,192.168.2.0/24', 'srcPort': 'any', 'srcCidr': 'any', 'syslogEnabled': True}]
+
+    calltype = 'MX L3 Firewall'
+    puturl = '{0}/networks/{1}/l3FirewallRules'.format(str(base_url), str(networkid))
+    headers = {
+        'x-cisco-meraki-api-key': format(str(apikey)),
+        'Content-Type': 'application/json'
+    }
+    
+    putdata = {'rules': fwrules}
+
+    if syslogDefaultRule == True:
+        # Log the special default rule (boolean value - enable only if you've configured a syslog server) (optional)
+        putdata['syslogDefaultRule'] = True
+
+    dashboard = requests.put(puturl, data=json.dumps(putdata), headers=headers)
+    result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
+    return result
+
+
+### MR L3 FIREWALL ###
 
 # Return the L3 firewall rules for an SSID on an MR network
 # https://dashboard.meraki.com/api_docs#return-the-l3-firewall-rules-for-an-ssid-on-an-mr-network
 def getssidl3fwrules(apikey, networkid, ssidnum, suppressprint=False):
-    calltype = 'Wireless L3 Firewall'
+    calltype = 'MR L3 Firewall'
     geturl = '{0}/networks/{1}/ssids/{2}/l3FirewallRules'.format(str(base_url), str(networkid), str(ssidnum))
     headers = {
         'x-cisco-meraki-api-key': format(str(apikey)),
@@ -1571,7 +1610,7 @@ def getssidl3fwrules(apikey, networkid, ssidnum, suppressprint=False):
 def updatessidl3fwrules(apikey, networkid, ssidnum, fwrules, allowlan=None, suppressprint=False):
     # fwrules = [{'comment': 'A note about the rule', 'policy': 'deny', 'protocol': 'tcp', 'destPort': 'Any', 'destCidr': '192.168.1.0/24'}]
 
-    calltype = 'Wireless L3 Firewall'
+    calltype = 'MR L3 Firewall'
     puturl = '{0}/networks/{1}/ssids/{2}/l3FirewallRules'.format(str(base_url), str(networkid), str(ssidnum))
     headers = {
         'x-cisco-meraki-api-key': format(str(apikey)),
