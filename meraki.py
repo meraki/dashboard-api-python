@@ -1566,8 +1566,8 @@ def getmxl3fwrules(apikey, networkid, suppressprint=False):
     return result
 
 
-# Update the L3 firewall rules of an SSID on an MR network
-# https://dashboard.meraki.com/api_docs#update-the-l3-firewall-rules-of-an-ssid-on-an-mr-network
+# Update the L3 firewall rules of an MX network
+# https://dashboard.meraki.com/api_docs#update-the-l3-firewall-rules-of-an-mx-network
 def updatemxl3fwrules(apikey, networkid, fwrules, syslogDefaultRule=False, suppressprint=False):
     # fwrules = [{'comment': 'A note about the rule', 'policy': 'deny', 'protocol': 'tcp', 'destPort': '80,443', 'destCidr': '192.168.1.0/24,192.168.2.0/24', 'srcPort': 'any', 'srcCidr': 'any', 'syslogEnabled': True}]
 
