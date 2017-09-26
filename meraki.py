@@ -1294,8 +1294,8 @@ def getclients(apikey, serialnum, timestamp=86400, suppressprint=False):
     return result
 
 
-# Return the group policy that is assigned to a device in the network.
-# https://dashboard.meraki.com/api_docs#return-the-group-policy-that-is-assigned-to-a-device-in-the-network
+# Return the policy assigned to a client on the network.
+# https://dashboard.meraki.com/api_docs#return-the-policy-assigned-to-a-client-on-the-network
 def getclientpolicy(apikey, networkid, clientmac, timestamp=86400, suppressprint=False):
     calltype = 'Device Clients'
     if timestamp > 2592000:
@@ -1310,8 +1310,8 @@ def getclientpolicy(apikey, networkid, clientmac, timestamp=86400, suppressprint
     return result
 
 
-# Update the group policy assigned to a device in the network.
-# https://dashboard.meraki.com/api_docs#update-the-group-policy-assigned-to-a-device-in-the-network
+# Update the policy assigned to a client on the network.
+# https://dashboard.meraki.com/api_docs#update-the-policy-assigned-to-a-client-on-the-network
 def updateclientpolicy(apikey, networkid, clientmac, policy, policyid=None, suppressprint=False):
     calltype = 'Device Clients'
     puturl = '{0}/networks/{1}/clients/{2}/policy?timespan=2592000'.format(str(base_url), str(networkid), str(clientmac))
@@ -1331,7 +1331,7 @@ def updateclientpolicy(apikey, networkid, clientmac, policy, policyid=None, supp
     return result
 
 
-# Return the splash authorization for a client, for each SSID they've associated with through splash
+# Return the splash authorization for a client, for each SSID they've associated with through splash.
 # https://dashboard.meraki.com/api_docs#return-the-splash-authorization-for-a-client-for-each-ssid-theyve-associated-with-through-splash
 def getclientsplash(apikey, networkid, clientmac, suppressprint=False):
     calltype = 'Device Clients'
@@ -1345,8 +1345,8 @@ def getclientsplash(apikey, networkid, clientmac, suppressprint=False):
     return result
 
 
-# Update a client device's splash authorization.
-# https://dashboard.meraki.com/api_docs#update-a-client-devices-splash-authorization
+# Update a client's splash authorization.
+# https://dashboard.meraki.com/api_docs#update-a-clients-splash-authorization
 def updateclientsplash(apikey, networkid, clientmac, ssid_authorization, suppressprint=False):
     # ssid_authorization = {'ssids': {'0': {'isAuthorized': True}, '2': {'isAuthorized': False}}}
     calltype = 'Device Clients'
@@ -1485,21 +1485,21 @@ def updatedevice(apikey, networkid, serial, name=None, tags=None, lat=None, lng=
 
     putdata = {}
 
-    if name:
+    if name is not None:
         putdata['name'] = name
 
-    if tags:
+    if tags is not None:
         putdata['tags'] = __listtotag(tags)
 
     if lat and not lng:
         raise ValueError('If latitude is entered a longitude value must also be entered')
     elif lng and not lat:
         raise ValueError('If longitude is entered a latitude value must also be entered')
-    elif lat and lng:
+    else:
         putdata['lat'] = lat
         putdata['lng'] = lng
 
-    if address:
+    if address is not None:
         putdata['address'] = address
 
     if move:
