@@ -3271,8 +3271,7 @@ def getswitchportdetail(apikey, serialnum, portnum, suppressprint=False):
 
 # Update a switch port
 # https://dashboard.meraki.com/api_docs#update-a-switch-port
-def updateswitchport(apikey, serialnum, portnum, name, tags, enabled, porttype, vlan, voicevlan, allowedvlans, poe,
-                     isolation, rstp, stpguard, accesspolicynum, suppressprint=False):
+def updateswitchport(apikey, serialnum, portnum, name=None, tags=None, enabled=None, porttype=None, vlan=None, voicevlan=None, allowedvlans=None, poe=None, isolation=None, rstp=None, stpguard=None, accesspolicynum=None, suppressprint=False):
 
     calltype = 'Switch Port'
     puturl = '{0}/devices/{1}/switchPorts/{2}'.format(str(base_url), str(serialnum), str(portnum))
@@ -3283,15 +3282,15 @@ def updateswitchport(apikey, serialnum, portnum, name, tags, enabled, porttype, 
 
     putdata = {}
 
-    if name in locals():
+    if name is not None and name in locals():
         putdata['name'] = str(name)
 
-    if tags in locals():
+    if tags is not None and tags in locals():
         putdata['tags'] = __listtotag(tags)
 
     if enabled in locals() and not isinstance(enabled, bool):
         raise ValueError("Enabled must be a boolean variable")
-    elif enabled in locals():
+    elif enabled is not None:
         putdata['enabled'] = str(enabled)
 
     if porttype in locals() and porttype not in ['access', 'trunk']:
@@ -3299,16 +3298,16 @@ def updateswitchport(apikey, serialnum, portnum, name, tags, enabled, porttype, 
     elif porttype in locals():
         putdata['type'] = str(porttype)
 
-    if vlan in locals():
+    if vlan is not None and vlan in locals():
         putdata['vlan'] = str(vlan)
 
-    if voicevlan in locals():
+    if voicevlan is not None and voicevlan in locals():
         putdata['voiceVlan'] = voicevlan
 
-    if allowedvlans in locals():
+    if allowedvlans is not None and allowedvlans in locals():
         putdata['allowedVlans'] = allowedvlans
 
-    if poe in locals and not isinstance(poe, bool):
+    if poe in locals() and not isinstance(poe, bool):
         raise ValueError("PoE enabled must be a boolean variable")
     elif poe in locals():
         putdata['poeEnabled'] = str(poe)
@@ -3328,9 +3327,9 @@ def updateswitchport(apikey, serialnum, portnum, name, tags, enabled, porttype, 
     elif stpguard in locals():
         putdata['stpGuard'] = stpguard
 
-    if accesspolicynum in locals():
+    if accesspolicynum is not None and accesspolicynum in locals():
         putdata['accessPolicyNumber'] = accesspolicynum
-
+    print(putdata)
     dashboard = requests.put(puturl, data=json.dumps(putdata), headers=headers)
     #
     # Call return handler function to parse Dashboard response
