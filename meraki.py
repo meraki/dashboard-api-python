@@ -3085,12 +3085,12 @@ def updatessid(apikey, networkid, ssidnum, name, enabled, authmode, encryptionmo
     elif authmode:
         putdata['authMode'] = str(authmode)
 
-    if encryptionmode and (authmode is not 'psk' or not psk or not authmode):
+    if encryptionmode and (authmode != 'psk' or not psk or not authmode):
         raise ValueError("If encryption mode is passed, authentication mode must be psk and psk must also be passed")
     elif encryptionmode:
         putdata['encryptionMode'] = str(encryptionmode)
 
-    if psk and (authmode is not 'psk' or not encryptionmode or not authmode):
+    if psk and (authmode != 'psk' or not encryptionmode or not authmode):
         raise ValueError("If psk is passed, authentication mode and encryption mode must also be passed")
     elif len(psk) < 8 and encryptionmode == 'wpa':
         raise ValueError("If encryption mode is wpa, the psk must be a minimum of 8 characters")
