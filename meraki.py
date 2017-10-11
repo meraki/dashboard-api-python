@@ -1918,6 +1918,63 @@ def getairmarshal(apikey, networkid, timespan=3600, suppressprint=False):
     return result
 
 
+# Return the Bluetooth settings for a network. Bluetooth settings must be enabled on the network.
+# https://dashboard.meraki.com/api_docs#return-the-bluetooth-settings-for-a-network
+def getbluetooth(apikey, networkid, suppressprint=False):
+    calltype = 'Network Detail'
+    geturl = '{0}/networks/{1}/bluetoothSettings'.format(str(base_url), str(networkid))
+    headers = {
+        'x-cisco-meraki-api-key': format(str(apikey)),
+        'Content-Type': 'application/json'
+    }
+    dashboard = requests.get(geturl, headers=headers)
+    result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
+    return result
+
+
+# Update the Bluetooth settings for a network. See the docs page for Bluetooth settings.
+# https://dashboard.meraki.com/api_docs#update-the-bluetooth-settings-for-a-network
+def updatebluetooth(apikey, networkid, scanning=False, advertising=False, uuid=None, nonunique=False, major=None, minor=None, suppressprint=False):
+    calltype = 'Network Detail'
+    puturl = '{0}/networks/{1}/bluetoothSettings'.format(str(base_url), str(networkid))
+    headers = {
+        'x-cisco-meraki-api-key': format(str(apikey)),
+        'Content-Type': 'application/json'
+    }
+
+    putdata = {'scanningEnabled': scanning, 'advertisingEnabled': advertising}
+    print(putdata)
+    if advertising:
+        if uuid:
+            putdata['uuid'] = uuid
+        else:
+            raise ValueError('Parameter uuid must be specified if advertising is true')
+        if nonunique and major and minor:
+            putdata['majorMinorAssignmentMode'] = 'Non-unique'
+            if type(major) == int:
+                if major < 0 or major > 65535:
+                    raise ValueError('Parameters major and minor must be between 0 and 65535, inclusive')
+                else:
+                    putdata['major'] = major
+            else:
+                putdata['major'] = int(major)
+            if type(minor) == int:
+                if minor < 0 or minor > 65535:
+                    raise ValueError('Parameters major and minor must be between 0 and 65535, inclusive')
+                else:
+                    putdata['minor'] = minor
+            else:
+                putdata['minor'] = int(minor)
+        elif nonunique:
+            raise ValueError('Parameters major and minor must be specified if unique is false')
+        else:
+            putdata['majorMinorAssignmentMode'] = 'Unique'
+
+    dashboard = requests.put(puturl, data=json.dumps(putdata), headers=headers)
+    result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
+    return result
+
+
 ### ORGANIZATIONS ###
 
 # List the organizations that the user has privileges on
