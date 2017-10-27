@@ -1580,10 +1580,9 @@ def updatemxl3fwrules(apikey, networkid, fwrules, syslogDefaultRule=False, suppr
     
     putdata = {'rules': fwrules}
 
-    if syslogDefaultRule == True:
-        # Log the special default rule (boolean value - enable only if you've configured a syslog server) (optional)
-        putdata['syslogDefaultRule'] = True
-
+    # Log the special default rule (boolean value - enable only if you've configured a syslog server) (optional)
+    putdata['syslogDefaultRule'] = syslogDefaultRule
+    
     dashboard = requests.put(puturl, data=json.dumps(putdata), headers=headers)
     result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
     return result
@@ -1966,7 +1965,7 @@ def updatebluetooth(apikey, networkid, scanning=False, advertising=False, uuid=N
             else:
                 putdata['minor'] = int(minor)
         elif nonunique:
-            raise ValueError('Parameters major and minor must be specified if unique is false')
+            raise ValueError('Parameters major and minor must be specified if nonunique is True')
         else:
             putdata['majorMinorAssignmentMode'] = 'Unique'
 
@@ -3339,54 +3338,66 @@ def updateswitchport(apikey, serialnum, portnum, name=None, tags=None, enabled=N
 
     putdata = {}
 
-    if name is not None and name in locals():
+    if name is not None:
         putdata['name'] = str(name)
 
-    if tags is not None and tags in locals():
+    if tags is not None:
         putdata['tags'] = __listtotag(tags)
 
-    if enabled in locals() and not isinstance(enabled, bool):
-        raise ValueError("Enabled must be a boolean variable")
-    elif enabled is not None:
-        putdata['enabled'] = str(enabled)
+    if enabled is None:
+        pass
+    elif isinstance(enabled, bool):
+        putdata['enabled'] = enabled
+    else:
+        raise ValueError('Enabled must be a boolean variable')
 
-    if porttype in locals() and porttype not in ['access', 'trunk']:
-        raise ValueError("Type must be either 'access' or 'trunk'")
-    elif porttype in locals():
+    if porttype is None:
+        pass
+    elif porttype in ('access', 'trunk'):
         putdata['type'] = str(porttype)
+    else:
+        raise ValueError('Type must be either "access" or "trunk"')
 
-    if vlan is not None and vlan in locals():
+    if vlan is not None:
         putdata['vlan'] = str(vlan)
 
-    if voicevlan is not None and voicevlan in locals():
+    if voicevlan is not None:
         putdata['voiceVlan'] = voicevlan
 
-    if allowedvlans is not None and allowedvlans in locals():
+    if allowedvlans is not None:
         putdata['allowedVlans'] = allowedvlans
 
-    if poe in locals() and not isinstance(poe, bool):
-        raise ValueError("PoE enabled must be a boolean variable")
-    elif poe in locals():
-        putdata['poeEnabled'] = str(poe)
+    if poe is None:
+        pass
+    elif isinstance(poe, bool):
+        putdata['poeEnabled'] = poe
+    else:
+        raise ValueError('PoE enabled must be a boolean variable')
 
-    if isolation in locals() and not isinstance(isolation, bool):
-        raise ValueError("Port isolation enabled must be a bolean variable")
-    elif isolation in locals():
+    if isolation is None:
+        pass
+    elif isinstance(isolation, bool):
         putdata['isolation'] = isolation
+    else:
+        raise ValueError('Port isolation must be a boolean variable')
 
-    if rstp in locals() and not isinstance(rstp,bool):
-        raise ValueError("RSTP enabled must be a boolean variable")
-    elif rstp in locals():
+    if rstp is None:
+        pass
+    elif isinstance(rstp, bool):
         putdata['rstpEnabled'] = rstp
+    else:
+        raise ValueError('RSTP enabled must be a boolean variable')
 
-    if stpguard in locals() and stpguard not in ['disabled', 'root guard', 'BPDU guard']:
-        raise ValueError("Valid values for STP Guard are 'disabled', 'root guard',  or 'BPDU Guard'")
-    elif stpguard in locals():
+    if stpguard is None:
+        pass
+    elif stpguard in ('disabled', 'Root guard', 'BPDU guard', 'Loop guard'):
         putdata['stpGuard'] = stpguard
+    else:
+        raise ValueError('Valid values for STP Guard are "disabled", "Root guard", "BPDU guard", or "Loop guard"')
 
-    if accesspolicynum is not None and accesspolicynum in locals():
+    if accesspolicynum is not None:
         putdata['accessPolicyNumber'] = accesspolicynum
-    print(putdata)
+    
     dashboard = requests.put(puturl, data=json.dumps(putdata), headers=headers)
     #
     # Call return handler function to parse Dashboard response
