@@ -18,17 +18,17 @@ Also available via [PIP](https://pypi.python.org/pypi/meraki/).
 ## Example
 
 ```python
-import merakiapi as m
+from meraki import meraki
 
 apikey = "jkhsfsdhk32424******example*****jlasdfsdfl3245345"
-myOrgs = m.myorgaccess(apikey)
+myOrgs = meraki.myorgaccess(apikey)
 print(myOrgs)
 ```
 
 ## Useful API calls to get started
 
 ```python
-myNetworks = m.getnetworklist(apikey, orgid)
-deviceList = m.getnetworkdevices(apikey, networkid)
-clientList = m.getclients(apikey,serialnum)
+myNetworks = meraki.getnetworklist(apikey, orgid)
+deviceList = meraki.getnetworkdevices(apikey, networkid)
+clientList = meraki.getclients(apikey,serialnum)
 ```
