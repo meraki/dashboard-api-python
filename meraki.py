@@ -21,7 +21,7 @@ import re
 import warnings
 
 
-base_url = 'https://dashboard.meraki.com/api/v0'
+base_url = 'https://api.meraki.com/api/v0'
 
 tzlist = ['Africa/Abidjan',
           'Africa/Accra',
