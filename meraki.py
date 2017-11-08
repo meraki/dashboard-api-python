@@ -1550,6 +1550,30 @@ def removedevfromnet(apikey, networkid, serial, suppressprint=False):
     return result
 
 
+# List LLDP and CDP information for a device
+# https://dashboard.meraki.com/api_docs#list-lldp-and-cdp-information-for-a-device
+def getlldpcdp(apikey, networkid, serial, timespan=10800, suppressprint=False):
+    '''
+    The timespan for which LLDP and CDP information will be fetched. Must be in seconds and less than or equal to a month (2592000 seconds). LLDP and CDP information is sent to the Meraki dashboard every 10 minutes. In instances where this LLDP and CDP information matches an existing entry in the Meraki dashboard, the data is updated once every two hours. Meraki recommends querying LLDP and CDP information at an interval slightly greater than two hours, to ensure that unchanged CDP / LLDP information can be queried consistently.
+    '''
+    if timespan > 2592000:
+        timespan = 2592000
+    
+    calltype = 'Devices'
+    geturl = '{0}/networks/{1}/devices/{2}/lldp_cdp?timespan={3}'.format(base_url, networkid, serial, timespan)
+    headers = {
+        'x-cisco-meraki-api-key': format(str(apikey)),
+        'Content-Type': 'application/json'
+    }
+
+    dashboard = requests.get(geturl, headers=headers)
+    #
+    # Call return handler function to parse Dashboard response
+    #
+    result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
+    return result
+
+
 ### MX L3 FIREWALL ###
 
 # Return the L3 firewall rules for an MX network
