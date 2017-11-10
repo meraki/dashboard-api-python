@@ -1574,6 +1574,41 @@ def getlldpcdp(apikey, networkid, serial, timespan=10800, suppressprint=False):
     return result
 
 
+### MX cellular firewall###
+
+# Return the cellular firewall rules for an MX network
+# https://n118.meraki.com/api_docs#return-the-cellular-firewall-rules-for-an-mx-network
+def getmxcellularfwrules(apikey, networkid, suppressprint=False):
+    calltype = 'MX cellular Firewall'
+    geturl = '{0}/networks/{1}/cellularFirewallRules'.format(str(base_url), str(networkid))
+    headers = {
+        'x-cisco-meraki-api-key': format(str(apikey)),
+        'Content-Type': 'application/json'
+    }
+    dashboard = requests.get(geturl, headers=headers)
+    result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
+    return result
+
+
+# Update the cellular firewall rules of an MX network
+# https://api.meraki.com/api_docs#update-the-cellular-firewall-rules-of-an-mx-network
+def updatemxcellularfwrules(apikey, networkid, cellularrules, suppressprint=False):
+    # cellularrules = [{'comment': 'A note about the rule', 'policy': 'deny', 'protocol': 'tcp', 'destPort': '80,443', 'destCidr': '192.168.1.0/24,192.168.2.0/24', 'srcPort': 'any', 'srcCidr': 'any', 'syslogEnabled': True}]
+
+    calltype = 'MX cellular Firewall'
+    puturl = '{0}/networks/{1}/cellularFirewallRules'.format(str(base_url), str(networkid))
+    headers = {
+        'x-cisco-meraki-api-key': format(str(apikey)),
+        'Content-Type': 'application/json'
+    }
+    
+    putdata = {'rules': cellularrules}
+    
+    dashboard = requests.put(puturl, data=json.dumps(putdata), headers=headers)
+    result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
+    return result
+
+
 ### MX L3 FIREWALL ###
 
 # Return the L3 firewall rules for an MX network
