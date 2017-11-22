@@ -696,14 +696,18 @@ class SSID(DashboardObject):
 
     Provides a simplified object for downloading and manipulating SSID Attributes from Dashboard
 
+    test1 = meraki.SSID(0, name='Demo Kit WiFi', enabled=True, splashPage=None, ssidAdminAccessible=False, authMode='psk', psk= 'testtest', encryptionMode='wpa', wpaEncryptionMode='WPA2 only', ipAssignmentMode='NAT mode', minBitrate=11, bandSelection='Dual band operation', perClientBandwidthLimitUp=0, perClientBandwidthLimitDown=0)
+
+    test2 = meraki.SSID(0, name='Demo Kit WiFi', enabled=True, splashPage=None, ssidAdminAccessible=False, authMode='open-with-radius', radiusServers=[{'host': '10.9.1.99', 'port': 1812, 'secret': 'testtest'}], radiusAccountingEnabled=False, radiusCoaEnabled=True, radiusAttributeForGroupPolicies='Filter-Id', ipAssignmentMode='VPN', concentratorNetworkId='NET_ID', vlanId=0, radiusOverride=False, walledGardenEnabled=True, walledGardenRanges='10.140.0.22/32\n10.140.0.23/32\n10.9.1.183/32\n10.9.1.184/32', minBitrate=11, bandSelection='Dual band operation', perClientBandwidthLimitUp=0, perClientBandwidthLimitDown=0)
+
     """
-    validparams = ['name', 'enabled', 'authMode', 'encryptionMode', 'psk', 'splashPage', 'radiusServers',
-                    'radiusCoaEnabled', 'radiusAccountingEnabled', 'radiusAccountingServers',
-                    'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging',
-                    'concentratorNetworkId', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 
-                    'walledGardenEnabled', 'walledGardenRanges', 'radiusOverride', 'minBitRate',
-                    'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown'
-                    ]
+    validparams = ['name', 'enabled', 'authMode', 'encryptionMode', 'psk', 'wpaEncryptionMode',
+                    'splashPage', 'radiusServers', 'radiusCoaEnabled', 'radiusAccountingEnabled',
+                    'radiusAccountingServers', 'ipAssignmentMode', 'useVlanTagging',
+                    'concentratorNetworkId', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds',
+                    'walledGardenEnabled', 'walledGardenRanges', 'minBitrate', 'bandSelection',
+                    'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'radiusOverride',
+                    'radiusAttributeForGroupPolicies', 'ssidAdminAccessible']
     type = 'ssid'
 
 
@@ -3281,7 +3285,10 @@ def updatessidobject(apikey, networkid, newssid: SSID, suppressprint=False):
     if newssid.type == 'ssid':
         puturl = '{0}/networks/{1}/ssids/{2}'.format(str(base_url), str(networkid), newssid.ssidnum)
 
-    putdata = json.dumps(newssid.__dict__)
+    #putdata = json.dumps(newssid.__dict__)
+    params = newssid.__dict__
+    params.pop('ssidnum')
+    putdata = json.dumps(params)
     dashboard = requests.put(puturl, data=putdata, headers=headers)
     #
     # Call return handler function to parse Dashboard response
