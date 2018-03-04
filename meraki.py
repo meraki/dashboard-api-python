@@ -1946,7 +1946,7 @@ def updatenetwork(apikey, networkid, name=None, tz=None, tags=None, suppressprin
 
 # Create a network
 # https://api.meraki.com/api_docs#create-a-network
-def addnetwork(apikey, orgid, name, nettype, tags, tz, suppressprint=False, proxies=None, session=None,
+def addnetwork(apikey, orgid, name, nettype, tags, tz, cloneid=None, suppressprint=False, proxies=None, session=None,
                verify_access=True):
     """
     Action:     Adds new network to Meraki Dashboard with passed parameters
@@ -1971,6 +1971,8 @@ def addnetwork(apikey, orgid, name, nettype, tags, tz, suppressprint=False, prox
         'tags': format(str(tags)),
         'timeZone': format(str(tz))
     }
+    if cloneid:
+        postdata['copyFromNetworkId'] = format(str(cloneid))
     postdata = json.dumps(postdata)
 
     if session:
