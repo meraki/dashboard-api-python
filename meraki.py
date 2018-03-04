@@ -1825,7 +1825,7 @@ def updatenetwork(apikey, networkid, name, tz, tags, suppressprint=False):
 
 # Create a network
 # https://api.meraki.com/api_docs#create-a-network
-def addnetwork(apikey, orgid, name, nettype, tags, tz, suppressprint=False):
+def addnetwork(apikey, orgid, name, nettype, tags, tz, cloneid=None, suppressprint=False):
     """
     Action:     Adds new network to Meraki Dashboard with passed parameters
     Call to:    https://api.meraki.com/api/v0
@@ -1840,7 +1840,7 @@ def addnetwork(apikey, orgid, name, nettype, tags, tz, suppressprint=False):
         'x-cisco-meraki-api-key': format(str(apikey)),
         'Content-Type': 'application/json'
     }
-
+    
     __isvalidtz(tz)
     postdata = {
         'name': format(str(name)),
@@ -1848,6 +1848,8 @@ def addnetwork(apikey, orgid, name, nettype, tags, tz, suppressprint=False):
         'tags': format(str(tags)),
         'timeZone': format(str(tz))
     }
+    if cloneid:
+        postdata['copyFromNetworkId'] = format(str(cloneid))
     postdata = json.dumps(postdata)
     dashboard = requests.post(posturl, data=postdata, headers=headers)
     result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
