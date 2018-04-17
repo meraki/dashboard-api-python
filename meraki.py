@@ -3266,7 +3266,7 @@ def updatessid(apikey, networkid, ssidnum, name, enabled, authmode, encryptionmo
 
 # Update the attributes of an SSID
 # https://api.meraki.com/api_docs#update-the-attributes-of-an-ssid
-def updatessidobject(apikey, networkid, newssid: SSID, suppressprint=False):
+def updatessidobject(apikey, networkid, newssid, suppressprint=False):
     '''
 
     Args:
