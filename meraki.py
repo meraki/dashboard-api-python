@@ -2218,8 +2218,8 @@ def claim(apikey, orgid, serial=None, licensekey=None, licensemode=None, orderid
     if serial is not None:
         postdata['serial'] = serial
     elif licensekey is not None and licensemode is not None:
-        postdata['license'] = serial
-        postdata['licenseMode'] = serial
+        postdata['licenseKey'] = licensekey
+        postdata['licenseMode'] = licensemode
     elif orderid is not None:
         postdata['orderId'] = orderid
     dashboard = requests.post(posturl, data=json.dumps(postdata), headers=headers)
