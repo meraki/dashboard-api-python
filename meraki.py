@@ -2221,7 +2221,7 @@ def claim(apikey, orgid, serial=None, licensekey=None, licensemode=None, orderid
         postdata['licenseKey'] = licensekey
         postdata['licenseMode'] = licensemode
     elif orderid is not None:
-        postdata['orderId'] = orderid
+        postdata['order'] = orderid
     dashboard = requests.post(posturl, data=json.dumps(postdata), headers=headers)
     #
     # Call return handler function to parse Dashboard response
