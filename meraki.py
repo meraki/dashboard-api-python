@@ -1577,6 +1577,22 @@ def getlldpcdp(apikey, networkid, serial, timespan=10800, suppressprint=False):
     result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
     return result
 
+# List the status of every Meraki device in the organization
+# https://documenter.getpostman.com/view/897512/2To9xm#f45ffad7-ad71-44d9-a4b3-c9ad74bfd9cc
+def getorgdevicestatuses(orgid)
+     call_type = 'Devices'
+     geturl = '{0}/organizations/{1}/deviceStatuses'.format(base_url, orgid)
+     headers = {
+        'x-cisco-meraki-api-key': format(str(apikey)),
+        'Content-Type': 'application/json'
+    }
+    dashboard = requests.get(geturl, headers=headers)
+    #
+    # Call return handler function to parse Dashboard response
+    #
+    result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
+    return result
+
 
 ### MX cellular firewall###
 
