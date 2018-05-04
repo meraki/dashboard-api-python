@@ -1328,7 +1328,7 @@ def updateclientpolicy(apikey, networkid, clientmac, policy, policyid=None, supp
         raise ValueError('Parameter policy must be either whitelisted, blocked, normal, or group with ID specified')
     if policy == 'group' and policyid == None:
         raise ValueError('Parameter policy must be either whitelisted, blocked, normal, or group with ID specified')
-    
+
     putdata = {'devicePolicy': policy, 'groupPolicyId': policyid}
     dashboard = requests.put(puturl, data=json.dumps(putdata), headers=headers)
     result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
@@ -1562,7 +1562,7 @@ def getlldpcdp(apikey, networkid, serial, timespan=10800, suppressprint=False):
     '''
     if timespan > 2592000:
         timespan = 2592000
-    
+
     calltype = 'Devices'
     geturl = '{0}/networks/{1}/devices/{2}/lldp_cdp?timespan={3}'.format(base_url, networkid, serial, timespan)
     headers = {
@@ -1605,9 +1605,9 @@ def updatemxcellularfwrules(apikey, networkid, cellularrules, suppressprint=Fals
         'x-cisco-meraki-api-key': format(str(apikey)),
         'Content-Type': 'application/json'
     }
-    
+
     putdata = {'rules': cellularrules}
-    
+
     dashboard = requests.put(puturl, data=json.dumps(putdata), headers=headers)
     result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
     return result
@@ -1640,12 +1640,12 @@ def updatemxl3fwrules(apikey, networkid, fwrules, syslogDefaultRule=False, suppr
         'x-cisco-meraki-api-key': format(str(apikey)),
         'Content-Type': 'application/json'
     }
-    
+
     putdata = {'rules': fwrules}
 
     # Log the special default rule (boolean value - enable only if you've configured a syslog server) (optional)
     putdata['syslogDefaultRule'] = syslogDefaultRule
-    
+
     dashboard = requests.put(puturl, data=json.dumps(putdata), headers=headers)
     result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
     return result
@@ -1678,12 +1678,12 @@ def updatemxvpnfwrules(apikey, orgid, vpnrules, syslogDefaultRule=False, suppres
         'x-cisco-meraki-api-key': format(str(apikey)),
         'Content-Type': 'application/json'
     }
-    
+
     putdata = {'rules': vpnrules}
 
     # Log the special default rule (boolean value - enable only if you've configured a syslog server) (optional)
     putdata['syslogDefaultRule'] = syslogDefaultRule
-    
+
     dashboard = requests.put(puturl, data=json.dumps(putdata), headers=headers)
     result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
     return result
@@ -1716,7 +1716,7 @@ def updatessidl3fwrules(apikey, networkid, ssidnum, fwrules, allowlan=None, supp
         'x-cisco-meraki-api-key': format(str(apikey)),
         'Content-Type': 'application/json'
     }
-    
+
     putdata = {'rules': fwrules}
 
     if allowlan == None:
@@ -1840,7 +1840,7 @@ def addnetwork(apikey, orgid, name, nettype, tags, tz, cloneid=None, suppresspri
         'x-cisco-meraki-api-key': format(str(apikey)),
         'Content-Type': 'application/json'
     }
-    
+
     __isvalidtz(tz)
     postdata = {
         'name': format(str(name)),
@@ -1883,7 +1883,7 @@ def bindtotemplate(apikey, networkid, templateid, autobind=False, suppressprint=
         'x-cisco-meraki-api-key': format(str(apikey)),
         'Content-Type': 'application/json'
     }
-    
+
     postdata['configTemplateId'] = format(str(templateid))
     if autobind:
         postdata['autoBind'] = autobind
@@ -2218,8 +2218,8 @@ def claim(apikey, orgid, serial=None, licensekey=None, licensemode=None, orderid
     if serial is not None:
         postdata['serial'] = serial
     elif licensekey is not None and licensemode is not None:
-        postdata['license'] = serial
-        postdata['licenseMode'] = serial
+        postdata['license'] = licensekey
+        postdata['licenseMode'] = licensemode
     elif orderid is not None:
         postdata['orderId'] = orderid
     dashboard = requests.post(posturl, data=json.dumps(postdata), headers=headers)
@@ -2278,6 +2278,25 @@ def getorginventory(apikey, orgid, suppressprint=False):
     # Call return handler function to parse Dashboard response
     #
     result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
+    return result
+
+
+# List the status of every Meraki device in the organization
+# https://api.meraki.com/api_docs#list-the-status-of-every-meraki-device-in-the-organization
+def get_device_statuses(api_key, org_id, suppress_print=False):
+    __hasorgaccess(api_key, org_id)
+    call_type = 'Device Statuses'
+
+    get_url = '{0}/organizations/{1}/deviceStatuses'.format(str(base_url), str(org_id))
+    headers = {
+        'x-cisco-meraki-api-key': format(str(api_key)),
+        'Content-Type': 'application/json'
+    }
+    dashboard = requests.get(get_url, headers=headers)
+    #
+    # Call return handler function to parse Dashboard response
+    #
+    result = __returnhandler(dashboard.status_code, dashboard.text, call_type, suppress_print)
     return result
 
 
@@ -2561,7 +2580,7 @@ def updatephonedetails(apikey, networkid, serial, contactid, contacttype, public
         'x-cisco-meraki-api-key': format(str(apikey)),
         'Content-Type': 'application/json'
     }
-    
+
     if contacttype not in ('Dashboard', 'Google'):
         raise ValueError('Parameter contacttype must be either "Dashboard" or "Google"')
 
@@ -2620,7 +2639,7 @@ def addcontact(apikey, networkid, name, suppressprint=False):
     }
 
     postdata = {'name': name}
-    
+
     dashboard = requests.post(posturl, data=json.dumps(postdata), headers=headers)
     result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
     return result
@@ -2637,7 +2656,7 @@ def updatecontact(apikey, networkid, contactid, name, suppressprint=False):
     }
 
     putdata = {'name': name}
-    
+
     dashboard = requests.put(puturl, data=json.dumps(putdata), headers=headers)
     result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
     return result
@@ -2652,7 +2671,7 @@ def delcontact(apikey, networkid, contactid, suppressprint=False):
         'x-cisco-meraki-api-key': format(str(apikey)),
         'Content-Type': 'application/json'
     }
-    
+
     dashboard = requests.delete(delurl, headers=headers)
     result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
     return result
@@ -3012,7 +3031,7 @@ def updatesmtags(apikey, networkid, tags, action, wifimacs=None, ids=None, seria
         if scope.split(',')[0] not in ('all', 'none', 'withAny', 'withAll', 'withoutAny', 'withoutAll'):
             raise ValueError('Parameter scope (one of all, none, withAny, withAll, withoutAny, or withoutAll) must be specified')
         putdata['scope'] = scope
-    
+
     dashboard = requests.put(puturl, data=json.dumps(putdata), headers=headers)
     result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
     return result
@@ -3266,7 +3285,7 @@ def updatessid(apikey, networkid, ssidnum, name, enabled, authmode, encryptionmo
 
 # Update the attributes of an SSID
 # https://api.meraki.com/api_docs#update-the-attributes-of-an-ssid
-def updatessidobject(apikey, networkid, newssid: SSID, suppressprint=False):
+def updatessidobject(apikey, networkid, newssid, suppressprint=False):
     '''
 
     Args:
@@ -3374,7 +3393,7 @@ def addstaticroute(apikey, networkid, name, subnet, ip, suppressprint=False):
         'subnet': format(str(subnet)),
         'gatewayIp': format(str(ip))
     }
-    
+
     dashboard = requests.post(posturl, data=json.dumps(postdata), headers=headers)
     result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
     return result
@@ -3496,14 +3515,14 @@ def updateswitchport(apikey, serialnum, portnum, name=None, tags=None, enabled=N
 
     if stpguard is None:
         pass
-    elif stpguard in ('disabled', 'Root guard', 'BPDU guard', 'Loop guard'):
+    elif stpguard.lower() in ('disabled', 'root guard', 'bpdu guard', 'loop guard'):
         putdata['stpGuard'] = stpguard
     else:
         raise ValueError('Valid values for STP Guard are "disabled", "Root guard", "BPDU guard", or "Loop guard"')
 
     if accesspolicynum is not None:
         putdata['accessPolicyNumber'] = accesspolicynum
-    
+
     dashboard = requests.put(puturl, data=json.dumps(putdata), headers=headers)
     #
     # Call return handler function to parse Dashboard response
@@ -3602,7 +3621,7 @@ def addvlan(apikey, networkid, vlanid, name, subnet, mxip, suppressprint=False):
         'name': format(str(name)),
         'subnet': format(str(subnet)),
         'applianceIp': format(str(mxip))
-        
+
     }
     postdata = json.dumps(postdata)
     dashboard = requests.post(posturl, data=postdata, headers=headers)
