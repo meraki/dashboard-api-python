@@ -1845,7 +1845,7 @@ def addnetwork(apikey, orgid, name, nettype, tags, tz, cloneid=None, suppresspri
     postdata = {
         'name': format(str(name)),
         'type': format(str(nettype)),
-        'tags': format(str(tags)),
+        'tags': __listtotag(tags),
         'timeZone': format(str(tz))
     }
     if cloneid:
