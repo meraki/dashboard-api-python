@@ -2541,6 +2541,56 @@ def appendnonmerakivpn(apikey, orgid, names, ips, secrets, remotenets, tags=None
     return result
 
 
+# Update the third party VPN peers for an organization
+# https://api.meraki.com/api_docs#update-the-third-party-vpn-peers-for-an-organization
+def deletenonmerakivpn(apikey, orgid, names, suppressprint=False):
+    #
+    # Function to update non-Meraki VPN peer information for an organization.  This function will desctructively
+    # overwrite ALL existing peer information.  If you only wish to add/update an existing peer you must download
+    # all current peer information and make re-upload the modified array of all peers
+    #
+
+    #
+    # Confirm API Key has Admin Access Otherwise Raise Error
+    #
+    __hasorgaccess(apikey, orgid)
+    calltype = 'Non-Meraki VPN'
+
+    puturl = '{0}/organizations/{1}/thirdPartyVPNPeers'.format(str(base_url), str(orgid))
+    geturl = '{0}/organizations/{1}/thirdPartyVPNPeers'.format(str(base_url), str(orgid))
+    headers = {
+        'x-cisco-meraki-api-key': format(str(apikey)),
+        'Content-Type': 'application/json'
+    }
+
+    currentpeers = json.loads(requests.get(geturl, headers=headers).text)
+
+    #
+    # Will only upload peer information if lists are passed to the function, otherwise will fail.
+    #
+    if isinstance(names, list):
+        putdata = []
+        peer = {}
+        for x in currentpeers:
+            if x['name'] not in names:
+                peer['name'] = x['name']
+                peer['publicIp'] = x['publicIp']
+                peer['privateSubnets'] = x['privateSubnets']
+                peer['secret'] = x['secret']
+                peer['tags'] = x['tags']
+                putdata.append((peer.copy()))
+                peer.clear()
+    else:
+        raise TypeError('All peer arguments must be passed as lists')
+    putdata = json.dumps(putdata)
+    dashboard = requests.put(puturl, data=putdata, headers=headers)
+    #
+    # Call return handler function to parse Dashboard response
+    #
+    result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
+    return result
+
+
 ### PHONE ASSIGNMENTS ###
 
 # List all phones in a network and their contact assignment
