@@ -1,2 +1,4 @@
-
 .DS_Store
+# No PyCharm config files
+.idea/
+venv/
