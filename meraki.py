@@ -793,26 +793,28 @@ def __hasorgaccess(apikey, targetorg):
     Returns: None, raises OrgPermissionError if API Key does not have access to the specified Meraki Organization
 
     """
-    geturl = '{0}/organizations'.format(str(base_url))
+    geturl = '{0}/organizations/{1}'.format(str(base_url), str(targetorg))
     headers = {
         'x-cisco-meraki-api-key': format(str(apikey)),
         'Content-Type': 'application/json'
     }
 
     dashboard = requests.get(geturl, headers=headers)
-    currentorgs = json.loads(dashboard.text)
-    orgs = []
-    validjson = __isjson(dashboard.text)
-    if validjson is True:
-        for org in currentorgs:
-            if int(org['id']) == int(targetorg):
-                orgs.append(org['id'])
-                return None
-            else:
-                pass
-        raise OrgPermissionError
-    return None
 
+    validjson = __isjson(dashboard.text)
+
+    if validjson is True:
+        currentorg = json.loads(dashboard.text)
+
+        if int(currentorg['id']) == int(targetorg):
+            return None
+        else:
+            raise OrgPermissionError
+
+    else:
+        raise OrgPermissionError
+
+    return None
 
 def __validemail(emailaddress):
 
@@ -1286,23 +1288,6 @@ def getclients(apikey, serialnum, timestamp=86400, suppressprint=False):
     if timestamp > 2592000:
         timestamp = 2592000
     geturl = '{0}/devices/{1}/clients?timespan={2}'.format(str(base_url), str(serialnum), str(timestamp))
-    headers = {
-        'x-cisco-meraki-api-key': format(str(apikey)),
-        'Content-Type': 'application/json'
-    }
-    dashboard = requests.get(geturl, headers=headers)
-    #
-    # Call return handler function to parse Dashboard response
-    #
-    result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
-    return result
-
-
-# Return the client associated with the given identifier. This endpoint will lookup by client ID or either the MAC or IP depending on whether the network uses Track-by-IP.
-# https://api.meraki.com/api_doc#return-the-client-associated-with-the-given-identifier
-def getclient(apikey, networkid, identifier, suppressprint=False):
-    calltype = 'Device Clients'
-    geturl = '{0}/networks/{1}/clients/{2}'.format(str(base_url), str(networkid), str(identifier))
     headers = {
         'x-cisco-meraki-api-key': format(str(apikey)),
         'Content-Type': 'application/json'
