@@ -3680,3 +3680,27 @@ def getmxperf(apikey, networkid, serial, suppressprint=False):
     dashboard = requests.get(geturl, headers=headers)
     result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
     return result
+
+def get_video_link(apikey, serial, timestamp=None, suppressprint=False):
+    '''
+    Takes the serial number of an MV camera and a timestamp (optional), returns
+    a video URL.
+    
+    '''
+    calltype = 'MV Video Link'
+    get_url = '{0}/devices/{1}/cameras/video_link'.format(str(base_url), str(serial))
+    headers = {
+        'x-cisco-meraki-api-key': format(str(apikey)),
+        'Content-Type': 'application/json'
+    }
+    if timestamp:
+        parameters = {
+            'timestamp': format(str(timestamp))
+        }
+    else:
+        parameters = None
+
+    dashboard = requests.get(get_url, params=parameters, headers=headers)
+    result = __returnhandler(
+        dashboard.status_code, dashboard.text, calltype, suppressprint)
+    return result
