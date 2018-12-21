@@ -2093,6 +2093,28 @@ def updatebluetooth(apikey, networkid, scanning=False, advertising=False, uuid=N
     result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
     return result
 
+# List the Bluetooth clients seen by APs in this network.
+# https://api.meraki.com/api_docs#list-the-bluetooth-clients-seen-by-aps-in-this-network
+def getbtclients(apikey, networkid, perPage=1000, timespan=7200, suppressprint=False):
+    """
+    Args:
+        apikey: User's Meraki API Key
+        networkId: Network ID
+        perPage: Number of clients per page to return Max = 1000
+        timespan: Timespan - default 7200 (2 hours)
+        suppressprint: Suppress any print output from function (Default: False)
+
+    """
+    calltype = 'BT Clients'
+    geturl = '{0}/networks/{1}/bluetoothClients?perPage={2}timespan={3}'.format(str(base_url), str(networkid), str(perPage), str(timespan))
+    headers = {
+        'x-cisco-meraki-api-key': format(str(apikey)),
+        'Content-Type': 'application/json'
+    }
+    dashboard = requests.get(geturl, headers=headers)
+    result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
+    return result
+
 
 ### ORGANIZATIONS ###
 
