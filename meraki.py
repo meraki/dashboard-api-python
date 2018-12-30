@@ -21,6 +21,7 @@ import re
 import warnings
 
 
+
 base_url = 'https://api.meraki.com/api/v0'
 
 tzlist = ['Africa/Abidjan',
@@ -3642,6 +3643,28 @@ def addvlan(apikey, networkid, vlanid, name, subnet, mxip, suppressprint=False):
     }
     postdata = json.dumps(postdata)
     dashboard = requests.post(posturl, data=postdata, headers=headers)
+    #
+    # Call return handler function to parse Dashboard response
+    #
+    result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
+    return result
+
+
+# Enables VLAN on the Meraki MX
+# https://dashboard.meraki.com/api_docs#enable/disable-vlans-for-the-given-network
+def enablevlan(apikey, networkid, enable=True, suppressprint=False):
+    calltype = 'VLAN'
+    posturl = '{0}/networks/{1}/vlansEnableState'.format(str(base_url), str(networkid))
+    headers = {
+        'x-cisco-meraki-api-key': format(str(apikey)),
+        'Content-Type': 'application/json'
+    }
+
+    putdata = {
+        'enabled': enable
+    }
+    putdata = json.dumps(putdata)
+    dashboard = requests.put(posturl, data=putdata, headers=headers)
     #
     # Call return handler function to parse Dashboard response
     #
