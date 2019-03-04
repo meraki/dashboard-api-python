@@ -4179,3 +4179,43 @@ def delhttpserver(apikey, networkid, httpserverid, suppressprint=False):
     #
     result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
     return result
+
+# Alerts #
+# Return Alert Config
+def getalertsettings(apikey, networkid, suppressprint=False):
+    calltype = 'Get Alert settings'
+    geturl = '{0}/networks/{1}/alertSettings'.format(str(base_url), str(networkid))
+    headers = {
+        'x-cisco-meraki-api-key': format(str(apikey)),
+        'Content-Type': 'application/json'
+    }
+    dashboard = requests.get(geturl, headers=headers)
+    #
+    # Call return handler function to parse Dashboard response
+    #
+    result = __returnhandler(
+        dashboard.status_code, dashboard.text, calltype, suppressprint)
+    return result
+
+## Only has function for now to add webhook as a recipient ##
+def updatealertsettings(apikey, networkid, httpserverid, suppressprint=False):
+    calltype = 'Update Alert Settings'
+    puturl = '{0}/networks/{1}/alertSettings'.format(str(base_url), str(networkid))
+    headers = {
+        'x-cisco-meraki-api-key': format(str(apikey)),
+        'Content-Type': 'application/json'
+    }
+    putdata = {
+        "defaultDestinations": {
+        'httpServerIds': [format(str(httpserverid))],
+        }
+    }	
+    putdata = json.dumps(putdata)
+    print(putdata)
+    dashboard = requests.put(puturl, data=putdata, headers=headers)
+    #
+    # Call return handler function to parse Dashboard response
+    #
+    result = __returnhandler(
+        dashboard.status_code, dashboard.text, calltype, suppressprint)
+    return result
