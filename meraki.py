@@ -4117,6 +4117,30 @@ def gethttpserverdetail(apikey, networkid, httpserverid, suppressprint=False):
         dashboard.status_code, dashboard.text, calltype, suppressprint)
     return result
 
+# Update a HTTP Server
+def updatehttpsserver(apikey, networkid, httpserverid ,name, url, sharedSecret, suppressprint=False):
+    calltype = 'Update HTTP Server'
+    puturl = '{0}/networks/{1}/httpServers/{2}'.format(str(base_url), str(networkid), str(httpserverid))
+    headers = {
+        'x-cisco-meraki-api-key': format(str(apikey)),
+        'Content-Type': 'application/json'
+    }
+    putdata = {
+        'id': format(str(httpserverid)),
+        'networkId': format(str(networkid)),
+        'name': format(str(name)),
+        'url': format(str(url)),
+        'sharedSecret': format(str(sharedSecret))
+    }
+    putdata = json.dumps(putdata)
+    dashboard = requests.put(puturl, data=putdata, headers=headers)
+    #
+    # Call return handler function to parse Dashboard response
+    #
+    result = __returnhandler(
+        dashboard.status_code, dashboard.text, calltype, suppressprint)
+    return result
+
 # Add a HTTP Server
 def addhttpsserver(apikey, networkid, id, name, url, sharedSecret, suppressprint=False):
     calltype = 'Add HTTP Server'
@@ -4133,7 +4157,6 @@ def addhttpsserver(apikey, networkid, id, name, url, sharedSecret, suppressprint
         'sharedSecret': format(str(sharedSecret))
     }
     postdata = json.dumps(postdata)
-    print(postdata)
     dashboard = requests.post(posturl, data=postdata, headers=headers)
     #
     # Call return handler function to parse Dashboard response
