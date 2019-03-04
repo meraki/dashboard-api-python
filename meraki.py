@@ -4083,6 +4083,7 @@ def getmxperf(apikey, networkid, serial, suppressprint=False):
         dashboard.status_code, dashboard.text, calltype, suppressprint)
     return result
 
+# HTTP SERVER SECTION #
 # Lists the HTTPServers for a network. Only valid for MX networks.
 def gethttpsserver(apikey, networkid, suppressprint=False):
     calltype = 'httpServers'
@@ -4100,7 +4101,6 @@ def gethttpsserver(apikey, networkid, suppressprint=False):
     return result
 
 # Return a HTTPServer
-
 def gethttpserverdetail(apikey, networkid, httpserverid, suppressprint=False):
     calltype = 'HTTP Detail'
     geturl = '{0}/networks/{1}/httpServers/{2}'.format(
