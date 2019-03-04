@@ -4132,6 +4132,27 @@ def addhttpsserver(apikey, networkid, id, name, url, sharedSecret, suppressprint
         'url': format(str(url)),
         'sharedSecret': format(str(sharedSecret))
     }
+    postdata = json.dumps(postdata)
+    print(postdata)
+    dashboard = requests.post(posturl, data=postdata, headers=headers)
+    #
+    # Call return handler function to parse Dashboard response
+    #
     result = __returnhandler(
         dashboard.status_code, dashboard.text, calltype, suppressprint)
+    return result
+
+# Delete a HTTP Server
+def delhttpserver(apikey, networkid, httpserverid, suppressprint=False):
+    calltype = 'Delete HTTP Server'
+    delurl = '{0}/networks/{1}/httpServers/{2}'.format(str(base_url), str(networkid), str(httpserverid))
+    headers = {
+        'x-cisco-meraki-api-key': format(str(apikey)),
+        'Content-Type': 'application/json'
+    }
+    dashboard = requests.delete(delurl, headers=headers)
+    #
+    # Call return handler function to parse Dashboard response
+    #
+    result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
     return result
