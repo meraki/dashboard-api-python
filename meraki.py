@@ -971,7 +971,8 @@ def __returnhandler(
                   '\n'.format(str(objtype)))
         return returntext
     elif str(statuscode) == '204':
-        print('{0} Deleted Successfully\n'.format(str(objtype)))
+        if suppressprint is False:
+            print('{0} Deleted Successfully\n'.format(str(objtype)))
         return None
     elif str(statuscode) == '400' and validreturn and noerr is False:
         if suppressprint is False:
