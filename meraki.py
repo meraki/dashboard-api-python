@@ -3977,10 +3977,12 @@ def getvlandetail(apikey, networkid, vlanid, suppressprint=False):
 # https://api.meraki.com/api_docs#update-a-vlan
 def updatevlan(apikey, networkid, vlanid, name=None, subnet=None, mxip=None,
                fixedipassignments=None, reservedipranges=None,
-               vpnnatsubnet=None, dnsnameservers=None, suppressprint=False):
+               vpnnatsubnet=None, dnsnameservers=None,
+               dhcphandling=None, dhcprelayserverips=None, suppressprint=False):
     # fixedipassignments = {'13:37:de:ad:be:ef': {'ip': '192.168.1.5',
     # 'name': 'fixed'}} reservedipranges = [{'start': '192.168.1.20',
     # 'end': '192.168.1.30', 'comment': 'reserved'}]
+    # dhcprelayserverips = ['192.168.2.6', '172.27.29.3']
     calltype = 'VLAN'
     puturl = '{0}/networks/{1}/vlans/{2}'.format(
         str(base_url), str(networkid), str(vlanid))
@@ -4003,6 +4005,10 @@ def updatevlan(apikey, networkid, vlanid, name=None, subnet=None, mxip=None,
         putdata['vpnNatSubnet'] = format(str(vpnnatsubnet))
     if dnsnameservers is not None:
         putdata['dnsNameservers'] = format(str(dnsnameservers))
+    if dhcphandling is not None:
+        putdata['dhcpHandling'] = format(str(dhcphandling))
+    if dhcprelayserverips is not None:
+        putdata['dhcpRelayServerIps'] = dhcprelayserverips
 
     putdata = json.dumps(putdata)
     dashboard = requests.put(puturl, data=putdata, headers=headers)
