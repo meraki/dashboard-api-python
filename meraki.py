@@ -1555,6 +1555,34 @@ def deltemplate(apikey, orgid, templateid, suppressprint=False):
     return result
 
 
+# Provisions a client with a name and policy. Clients can be provisioned
+# before they associate to the network.
+# https://dashboard.meraki.com/api_docs#provisions-a-client-with-a-name-and-policy
+def provisionclient(apikey, networkid, clientmac, policy, policyid=None,
+                    name=None, suppressprint=False):
+    calltype = 'Device Clients'
+    url = '{0}/networks/{1}/clients/provision'.format(
+        str(base_url), str(networkid))
+    headers = {
+        'x-cisco-meraki-api-key': format(str(apikey)),
+        'Content-Type': 'application/json'
+    }
+
+    if policy not in ('whitelisted', 'blocked', 'normal', 'group'):
+        raise ValueError('Parameter policy must be either whitelisted, blocked, normal, or group with ID specified')
+    if policy == 'group' and policyid == None:
+        raise ValueError('Parameter policy must be either whitelisted, blocked, normal, or group with ID specified')
+
+    data = {'mac': clientmac, 'devicePolicy': policy, 'groupPolicyId': policyid}
+
+    if name is not None:
+        data.update({'name': name})
+
+    dashboard = requests.post(url, data=json.dumps(data), headers=headers)
+    result = __returnhandler(dashboard.status_code, dashboard.text, calltype, suppressprint)
+    return result
+
+
 # ### DEVICES ###
 # List the devices in a network
 # https://api.meraki.com/api_docs#list-the-devices-in-a-network
