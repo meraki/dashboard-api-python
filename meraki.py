@@ -1388,6 +1388,38 @@ def getclient(apikey, networkid, identifier, suppressprint=False):
     return result
 
 
+# List the clients that have used this network in the timespan
+# https://dashboard.meraki.com/api_docs#list-the-clients-that-have-used-this-network-in-the-timespan
+def getnetworkclients(apikey, networkid, timespan=86400, t0=False,
+                      perpage=10, suppressprint=False):
+    calltype = 'Network Clients'
+    if timespan > 2678400:
+        timespan = 2678400
+
+    # If specifying timespan, do not specify parameter t0
+    if t0 is not False:
+        timeparam = 't0={0}'.format(str(t0))
+    else:
+        timeparam = 'timespan={0}'.format(str(timespan))
+
+    geturl = '{0}/networks/{1}/clients?{2}&perPage={3}'.format(
+        str(base_url),
+        str(networkid),
+        str(timeparam),
+        str(perpage))
+    headers = {
+        'x-cisco-meraki-api-key': format(str(apikey)),
+        'Content-Type': 'application/json'
+    }
+    dashboard = requests.get(geturl, headers=headers)
+    #
+    # Call return handler function to parse Dashboard response
+    #
+    result = __returnhandler(
+        dashboard.status_code, dashboard.text, calltype, suppressprint)
+    return result
+
+
 # Return the policy assigned to a client on the network.
 # https://api.meraki.com/api_docs#return-the-policy-assigned-to-a-client-on-the-network
 def getclientpolicy(apikey, networkid, clientmac,
