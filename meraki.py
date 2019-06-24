@@ -1046,6 +1046,56 @@ def getorgadmins(apikey, orgid, suppressprint=False):
         dashboard.status_code, dashboard.text, calltype, suppressprint)
     return result
 
+# ### Mgmt Interface ###
+
+# https://dashboard.meraki.com/api_docs#return-the-management-interface-settings-for-a-device
+
+def getdevmgmt(apikey, networkid,serial, suppressprint=False):
+    calltype = "Managment Interface"
+    geturl = "{0}/networks/{1}/devices/{2}/managementInterfaceSettings".format(
+        str(base_url), str(networkid), str(serial)
+    )
+    headers = {
+        "x-cisco-meraki-api-key": format(str(apikey)),
+        "Content-Type": "application/json",
+    }
+    dashboard = requests.get(geturl, headers=headers)
+    result = __returnhandler(
+        dashboard.status_code, dashboard.text, calltype, suppressprint
+    )
+    return result
+
+
+
+# Update the Managment interface configuration
+# https://dashboard.meraki.com/api_docs#update-the-management-interface-settings-for-a-device
+def updatedevmgmt(
+    apikey, networkid,serial, mgmtsettings, suppressprint=False
+):
+    # mgmtsettings = {'wan1': {'0': {'wanEnabled': 'enabled'},
+    #                                 '2': {'usingStaticIp': False}}}
+    # mgmtsettings = {'wan2': {'0': {'wanEnabled': 'enabled'},
+    #                                 '2': {'usingStaticIp': True}}}
+    # mgmtsettings = {'wan1': {'usingStaticIp': True, 'staticIp': '10.0.0.2', 'staticSubnetMask': '255.255.255.0', 'staticGatewayIp': '10.0.0.1', 'staticDns': ['192.168.1.1', '192.168.1.2'], 'vlan': 2}}
+
+    calltype = "Managment Interface"
+    puturl = "{0}/networks/{1}/devices/{2}/managementInterfaceSettings".format(
+        str(base_url), str(networkid), str(serial)
+    )
+    
+    headers = {
+        "x-cisco-meraki-api-key": format(str(apikey)),
+        "Content-Type": "application/json",
+    }
+
+    putdata = mgmtsettings
+    dashboard = requests.put(puturl, data=json.dumps(putdata), headers=headers)
+    result = __returnhandler(
+        dashboard.status_code, dashboard.text, calltype, suppressprint
+    )
+    return result
+
+
 
 # Create a new dashboard administrator
 # https://api.meraki.com/api_docs#create-a-new-dashboard-administrator
