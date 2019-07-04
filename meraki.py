@@ -1535,7 +1535,7 @@ def getorgdevices(apikey, orgid, suppressprint=False):
 /organizations/{organizationId}/devices
     """
     calltype = 'Network'
-    geturl = '{0}/{1}/devices'.format(str(base_url), str(orgid))
+    geturl = '{0}/organizations/{1}/devices'.format(str(base_url), str(orgid))
     headers = {
         'x-cisco-meraki-api-key': format(str(apikey)),
         'Content-Type': 'application/json'
