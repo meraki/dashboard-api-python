@@ -4066,6 +4066,53 @@ def delvlan(apikey, networkid, vlanid, suppressprint=False):
         dashboard.status_code, dashboard.text, calltype, suppressprint)
     return result
 
+# ### Network Alert Settings ###
+
+# Return network alert settings
+# https://api.meraki.com/api_docs#return-the-alert-configuration-for-this-network
+def getnetworkalerts(apikey, networkid, suppressprint=False):
+    """
+    Args:
+        apikey: User's Meraki API Key
+        netid: NetworkId for operation to be performed against
+        suppressprint:
+    Returns:
+    """
+    calltype = 'Network'
+
+    geturl = '{0}/networks/{1}/alertSettings'.format(str(base_url), str(networkid))
+    headers = {
+        'x-cisco-meraki-api-key': format(str(apikey)),
+        'Content-Type': 'application/json'
+    }
+    dashboard = requests.get(geturl, headers=headers)
+    #
+    # Call return handler function to parse Dashboard response
+    #
+    result = meraki.__returnhandler(
+        dashboard.status_code, dashboard.text, calltype, suppressprint)
+    return result
+
+# Update a network alert
+# https://api.meraki.com/api_docs#update-the-alert-configuration-for-this-network
+def updatenetworkalert(apikey, networkid, alerts, suppressprint=False):
+    calltype = 'Network'
+    puturl = '{0}/networks/{1}/alertSettings'.format(str(base_url), str(networkid))
+    headers = {
+        'x-cisco-meraki-api-key': format(str(apikey)),
+        'Content-Type': 'application/json'
+    }
+    putdata = {}
+    if alerts['defaultDestinations'] is not None:
+        putdata['defaultDestinations'] = alerts['defaultDestinations']
+    if alerts['alerts'] is not []:
+        putdata['alerts'] = alerts['alerts']
+
+    putdata = json.dumps(putdata)
+    dashboard = requests.put(puturl, data=putdata, headers=headers)
+    result = meraki.__returnhandler(
+        dashboard.status_code, dashboard.text, calltype, suppressprint)
+    return result
 
 # ### OTHER ###
 
