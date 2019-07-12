@@ -4089,7 +4089,7 @@ def getnetworkalerts(apikey, networkid, suppressprint=False):
     #
     # Call return handler function to parse Dashboard response
     #
-    result = meraki.__returnhandler(
+    result = __returnhandler(
         dashboard.status_code, dashboard.text, calltype, suppressprint)
     return result
 
@@ -4110,7 +4110,7 @@ def updatenetworkalert(apikey, networkid, alerts, suppressprint=False):
 
     putdata = json.dumps(putdata)
     dashboard = requests.put(puturl, data=putdata, headers=headers)
-    result = meraki.__returnhandler(
+    result = __returnhandler(
         dashboard.status_code, dashboard.text, calltype, suppressprint)
     return result
 
