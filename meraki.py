@@ -1679,6 +1679,25 @@ def removedevfromnet(apikey, networkid, serial, suppressprint=False):
     return result
 
 
+# Reboot a single device
+# https://api.meraki.com/api_docs#reboot-a-device
+def rebootdevice(apikey, networkid, serial, suppressprint=False):
+    calltype = 'Device'
+    posturl = '{0}/networks/{1}/devices/{2}/reboot'.format(
+        str(base_url), str(networkid), str(serial))
+    headers = {
+        'x-cisco-meraki-api-key': format(str(apikey)),
+        'Content-Type': 'application/json'
+    }
+    dashboard = requests.post(posturl, headers=headers)
+    #
+    # Call return handler function to parse Dashboard response
+    #
+    result = __returnhandler(
+        dashboard.status_code, dashboard.text, calltype, suppressprint)
+    return result
+
+
 # List LLDP and CDP information for a device
 # https://dashboard.meraki.com/api_docs#list-lldp-and-cdp-information-for-a-device
 def getlldpcdp(apikey, networkid, serial, timespan=10800, suppressprint=False):
