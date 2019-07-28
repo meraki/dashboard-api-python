@@ -1681,7 +1681,7 @@ def removedevfromnet(apikey, networkid, serial, suppressprint=False):
 
 # Reboot a single device
 # https://api.meraki.com/api_docs#reboot-a-device
-def rebootdevice(apikey, networkid, serial, suppressprint=False):
+def reboot_device(apikey, networkid, serial, suppressprint=False):
     calltype = 'Device'
     posturl = '{0}/networks/{1}/devices/{2}/reboot'.format(
         str(base_url), str(networkid), str(serial))
