@@ -2,4 +2,3 @@
 # No PyCharm config files
 .idea/
 venv/
-test.py
