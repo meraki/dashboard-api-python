@@ -2555,6 +2555,44 @@ def get_device_statuses(api_key, org_id, suppress_print=False):
     return result
 
 
+# Return the uplink loss and latency for every MX in the organization from at latest 2 minutes ago
+# https://dashboard.meraki.com/api_docs#return-the-uplink-loss-and-latency-for-every-mx-in-the-organization-from-at-latest-2-minutes-ago
+def get_uplinks_loss_and_latency(api_key, org_id, params_dict=None, suppress_print=False):
+    __hasorgaccess(api_key, org_id)
+
+    """
+    Args:
+        apikey: User's Meraki API Key
+        orgid: OrganizationId for operation to be performed against
+        params_dict (optional): A dictionary of parameters to include in the request. See the dashboard API docs for more details on the available parameters. Below is an example dictionary to include with this function call to return uplink stats for all MXs, for the most recent 60 seconds, for WAN 2:
+            {'timespan':60, 'uplink':'wan2'}
+        suppressprint: Suppress any print output from function (Default: False)
+
+    Returns: JSON formatted string of uplink stats for each MX in the organization
+    """
+
+    call_type = 'Device Statuses'
+    
+    params_string = ''
+    if params_dict is not None:
+        for param in params_dict:
+            params_string += f'{param}={params_dict[param]}&'
+
+    get_url = '{0}/organizations/{1}/uplinksLossAndLatency?{2}'.format(
+        str(base_url), str(org_id), params_string)
+    headers = {
+        'x-cisco-meraki-api-key': format(str(api_key)),
+        'Content-Type': 'application/json'
+    }
+    dashboard = requests.get(get_url, headers=headers)
+    #
+    # Call return handler function to parse Dashboard response
+    #
+    result = __returnhandler(
+        dashboard.status_code, dashboard.text, call_type, suppress_print)
+    return result
+
+
 # Return the SNMP settings for an organization
 # https://api.meraki.com/api_docs#return-the-snmp-settings-for-an-organization
 def getsnmpsettings(apikey, orgid, suppressprint=False):
