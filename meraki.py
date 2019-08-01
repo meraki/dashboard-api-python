@@ -1711,6 +1711,40 @@ def getlldpcdp(apikey, networkid, serial, timespan=10800, suppressprint=False):
         dashboard.status_code, dashboard.text, calltype, suppressprint)
     return result
 
+# Blink the LEDs on a device
+# https://dashboard.meraki.com/api_docs#blink-the-leds-on-a-device
+def blink_leds(apikey, networkid, serial, params_dict=None, suppressprint=False):
+    """
+    Args:
+        apikey: User's Meraki API Key
+        orgid: OrganizationId for operation to be performed against
+        params_dict (optional): A dictionary of parameters to include in the request. See the dashboard API docs for more details on the available parameters. Below is an example dictionary to include with this function call to blink device LEDs
+            {'duration':60, 'period':100, 'duty':90}
+        suppressprint: Suppress any print output from function (Default: False)
+    Returns: The result of the request.
+    """
+    
+    calltype = 'Device'
+    
+    params_string = ''
+    if params_dict is not None:
+        for param in params_dict:
+            params_string += f'{param}={params_dict[param]}&'
+    
+    posturl = '{0}/networks/{1}/devices/{2}/blinkLeds?{3}'.format(
+        str(base_url), str(networkid), str(serial), params_string)
+    headers = {
+        'x-cisco-meraki-api-key': format(str(apikey)),
+        'Content-Type': 'application/json'
+    }
+    dashboard = requests.post(posturl, headers=headers)
+    #
+    # Call return handler function to parse Dashboard response
+    #
+    result = __returnhandler(
+        dashboard.status_code, dashboard.text, calltype, suppressprint)
+    return result
+
 
 # ### MX cellular firewall###
 
