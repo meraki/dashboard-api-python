@@ -1595,7 +1595,7 @@ def getdeviceuplink(apikey, networkid, serialnumber, suppressprint=False):
 # Update the attributes of a device
 # https://api.meraki.com/api_docs#update-the-attributes-of-a-device
 def updatedevice(apikey, networkid, serial, name=None, tags=None, lat=None,
-                 lng=None, address=None, move=None, suppressprint=False):
+                 lng=None, address=None, notes=None, move=None, suppressprint=False):
     # move needs to be str and not boolean 'true' or 'false' to work
     calltype = 'Device'
     posturl = '{0}/networks/{1}/devices/{2}'.format(
@@ -1625,6 +1625,9 @@ def updatedevice(apikey, networkid, serial, name=None, tags=None, lat=None,
 
     if address is not None:
         putdata['address'] = address
+
+    if notes is not None:
+        putdata['notes'] = notes
 
     if move:
         putdata['moveMapMarker'] = move
