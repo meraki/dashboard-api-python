@@ -1366,6 +1366,40 @@ def getclients(apikey, serialnum, timestamp=86400, suppressprint=False):
     return result
 
 
+# Return all the clients associated with the given network up to a maximum of 
+# one moth ago. The usage of each client is returned in kilobytes. 
+# https://dashboard.meraki.com/api_docs#list-the-clients-that-have-used-this-network-in-the-timespan
+def getallclients(apikey, networkid, suppressprint=False):
+    calltype = 'Device Clients'
+    geturl = '{0}/networks/{1}/clients'.format(str(base_url),
+                                                   str(networkid))
+    headers = {
+        'x-cisco-meraki-api-key': format(str(apikey)),
+        'Content-Type': 'application/json'
+    }
+    querylength = 1000
+    querystring = {
+        'perPage': querylength
+    }
+    dashboard = requests.get(geturl, headers=headers, params=querystring)
+    #
+    # Handle case where there are more than 1000 clients on a network
+    #
+    aggregatedclients = json.loads(dashboard.text)
+    while len(json.loads(dashboard.text)) >= querylength:
+        querystring['startingAfter'] = aggregatedclients[-1]['id']
+        dashboard = requests.get(geturl, headers=headers, params=querystring)
+        aggregatedclients = aggregatedclients + json.loads(dashboard.text)
+    jsonresponse = json.dumps(aggregatedclients)
+    #
+    # Call return handler function to parse Dashboard response
+    #
+    result = __returnhandler(
+        dashboard.status_code, jsonresponse, calltype, suppressprint
+    )
+    return result
+
+
 # Return the client associated with the given identifier. This endpoint will
 # lookup by client ID or either the MAC or IP depending on whether the network
 # uses Track-by-IP.
