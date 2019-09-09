@@ -1369,7 +1369,7 @@ def getclients(apikey, serialnum, timestamp=86400, suppressprint=False):
 # Return all the clients associated with the given network up to a maximum of 
 # one moth ago. The usage of each client is returned in kilobytes. 
 # https://dashboard.meraki.com/api_docs#list-the-clients-that-have-used-this-network-in-the-timespan
-def getallclients(apikey, networkid, suppressprint=False):
+def getallclients(apikey, networkid, timespan=86400, suppressprint=False):
     calltype = 'Device Clients'
     geturl = '{0}/networks/{1}/clients'.format(str(base_url),
                                                    str(networkid))
@@ -1379,7 +1379,8 @@ def getallclients(apikey, networkid, suppressprint=False):
     }
     querylength = 1000
     querystring = {
-        'perPage': querylength
+        'perPage': querylength,
+        'timespan': timespan
     }
     dashboard = requests.get(geturl, headers=headers, params=querystring)
     #
