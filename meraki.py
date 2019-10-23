@@ -1587,6 +1587,35 @@ def getnetworkdevices(apikey, networkid, suppressprint=False):
     return result
 
 
+# Return all devices in the organization
+# https://dashboard.meraki.com/api_docs
+def getorgdevices(apikey, orgid, suppressprint=False):
+    """
+    
+    Args:
+        apikey: User's Meraki API Key
+        orgid: ID field of the target organization.
+    
+    Returns:
+        Returns a list of dictionaries containing all devices in the 
+        current organization.
+
+    """
+    calltype = 'Network'
+    geturl = '{0}/organizations/{1}/inventory'.format(str(base_url), str(orgid))
+    headers = {
+        'x-cisco-meraki-api-key': format(str(apikey)),
+        'Content-Type': 'application/json'
+    }
+    dashboard = requests.get(geturl, headers=headers)
+    #
+    # Call return handler function to parse Dashboard response
+    #
+    result = __returnhandler(
+        dashboard.status_code, dashboard.text, calltype, suppressprint)
+    return result
+
+
 # Return a single device
 # https://api.meraki.com/api_docs#return-a-single-device
 def getdevicedetail(apikey, networkid, serialnumber, suppressprint=False):
