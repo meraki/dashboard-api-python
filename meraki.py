@@ -695,7 +695,7 @@ class SSID(DashboardObject):
     """
 
     SSID Object Class
-    Refer to https://api.meraki.com/manage/support/api_docs#ssids for details
+    Refer to https://dashboard.merak.com/manage/support/api_docs#ssids for details
     on accepted parameters
 
     Provides a simplified object for downloading and manipulating SSID
@@ -741,7 +741,7 @@ class SSID(DashboardObject):
                 self.__setattr__(p, params[p])
             else:
                 raise ValueError('Invalid parameter {0}, please refer to '
-                                 'https://api.meraki.com/api_docs#ssids '
+                                 'https://dashboard.merak.com/api_docs#ssids '
                                  'for valid parameters'.format(str(p)))
 
 
@@ -1018,7 +1018,7 @@ def __returnhandler(
 
 # ### ADMINS ###
 # List the dashboard administrators in this organization
-# https://api.meraki.com/api_docs#list-the-dashboard-administrators-in-this-organization
+# https://dashboard.merak.com/api_docs#list-the-dashboard-administrators-in-this-organization
 def getorgadmins(apikey, orgid, suppressprint=False):
     """"
 
@@ -1048,7 +1048,7 @@ def getorgadmins(apikey, orgid, suppressprint=False):
 
 
 # Create a new dashboard administrator
-# https://api.meraki.com/api_docs#create-a-new-dashboard-administrator
+# https://dashboard.merak.com/api_docs#create-a-new-dashboard-administrator
 def addadmin(apikey, orgid, email, name, orgaccess=None, tags=None,
              tagaccess=None, networks=None, netaccess=None,
              suppressprint=False):
@@ -1166,7 +1166,7 @@ def addadmin(apikey, orgid, email, name, orgaccess=None, tags=None,
 
 
 # Update an administrator
-# https://api.meraki.com/api_docs#update-an-administrator
+# https://dashboard.merak.com/api_docs#update-an-administrator
 def updateadmin(apikey, orgid, adminid, email, name=None, orgaccess=None,
                 tags=None, tagaccess=None, networks=None, netaccess=None,
                 suppressprint=False):
@@ -1314,7 +1314,7 @@ def updateadmin(apikey, orgid, adminid, email, name=None, orgaccess=None,
 
 
 # Revoke all access for a dashboard administrator within this organization
-# https://api.meraki.com/api_docs#revoke-all-access-for-a-dashboard-administrator-within-this-organization
+# https://dashboard.merak.com/api_docs#revoke-all-access-for-a-dashboard-administrator-within-this-organization
 def deladmin(apikey, orgid, adminid, suppressprint=False):
     #
     # Confirm API Key has Admin Access Otherwise Raise Error
@@ -1345,7 +1345,7 @@ def deladmin(apikey, orgid, adminid, suppressprint=False):
 # List the clients of a device, up to a maximum of a month ago.
 # The usage of each client is returned in kilobytes. If the device is a switch,
 # the switchport is returned; otherwise the switchport field is null.
-# https://api.meraki.com/api_docs#list-the-clients-of-a-device-up-to-a-maximum-of-a-month-ago
+# https://dashboard.merak.com/api_docs#list-the-clients-of-a-device-up-to-a-maximum-of-a-month-ago
 def getclients(apikey, serialnum, timestamp=86400, suppressprint=False):
     calltype = 'Device Clients'
     if timestamp > 2592000:
@@ -1404,7 +1404,7 @@ def getallclients(apikey, networkid, timespan=86400, suppressprint=False):
 # Return the client associated with the given identifier. This endpoint will
 # lookup by client ID or either the MAC or IP depending on whether the network
 # uses Track-by-IP.
-# https://api.meraki.com/api_doc#return-the-client-associated-with-the-given-identifier
+# https://dashboard.merak.com/api_doc#return-the-client-associated-with-the-given-identifier
 def getclient(apikey, networkid, identifier, suppressprint=False):
     calltype = 'Device Clients'
     geturl = '{0}/networks/{1}/clients/{2}'.format(str(base_url),
@@ -1424,7 +1424,7 @@ def getclient(apikey, networkid, identifier, suppressprint=False):
 
 
 # Return the policy assigned to a client on the network.
-# https://api.meraki.com/api_docs#return-the-policy-assigned-to-a-client-on-the-network
+# https://dashboard.merak.com/api_docs#return-the-policy-assigned-to-a-client-on-the-network
 def getclientpolicy(apikey, networkid, clientmac,
                     timestamp=86400, suppressprint=False):
     calltype = 'Device Clients'
@@ -1446,7 +1446,7 @@ def getclientpolicy(apikey, networkid, clientmac,
 
 
 # Update the policy assigned to a client on the network.
-# https://api.meraki.com/api_docs#update-the-policy-assigned-to-a-client-on-the-network
+# https://dashboard.merak.com/api_docs#update-the-policy-assigned-to-a-client-on-the-network
 def updateclientpolicy(apikey, networkid, clientmac,
                        policy, policyid=None, suppressprint=False):
     calltype = 'Device Clients'
@@ -1473,7 +1473,7 @@ def updateclientpolicy(apikey, networkid, clientmac,
 
 # Return the splash authorization for a client, for each SSID they've
 # associated with through splash.
-# https://api.meraki.com/api_docs#return-the-splash-authorization-for-a-client-for-each-ssid-theyve-associated-with-through-splash
+# https://dashboard.merak.com/api_docs#return-the-splash-authorization-for-a-client-for-each-ssid-theyve-associated-with-through-splash
 def getclientsplash(apikey, networkid, clientmac, suppressprint=False):
     calltype = 'Device Clients'
     geturl = '{0}/networks/{1}/clients/{2}/splashAuthorizationStatus'.format(
@@ -1489,7 +1489,7 @@ def getclientsplash(apikey, networkid, clientmac, suppressprint=False):
 
 
 # Update a client's splash authorization.
-# https://api.meraki.com/api_docs#update-a-clients-splash-authorization
+# https://dashboard.merak.com/api_docs#update-a-clients-splash-authorization
 def updateclientsplash(apikey, networkid, clientmac, ssid_authorization,
                        suppressprint=False):
     # ssid_authorization = {'ssids': {'0': {'isAuthorized': True},
@@ -1511,7 +1511,7 @@ def updateclientsplash(apikey, networkid, clientmac, ssid_authorization,
 
 # ### CONFIG TEMPLATES ###
 # List the configuration templates for this organization
-# https://api.meraki.com/api_docs#list-the-configuration-templates-for-this-organization
+# https://dashboard.merak.com/api_docs#list-the-configuration-templates-for-this-organization
 def gettemplates(apikey, orgid, suppressprint=False):
     #
     # Confirm API Key has Admin Access Otherwise Raise Error
@@ -1535,7 +1535,7 @@ def gettemplates(apikey, orgid, suppressprint=False):
 
 
 # Remove a configuration template
-# https://api.meraki.com/api_docs#remove-a-configuration-template
+# https://dashboard.merak.com/api_docs#remove-a-configuration-template
 def deltemplate(apikey, orgid, templateid, suppressprint=False):
     #
     # Confirm API Key has Admin Access Otherwise Raise Error
@@ -1560,7 +1560,7 @@ def deltemplate(apikey, orgid, templateid, suppressprint=False):
 
 # ### DEVICES ###
 # List the devices in a network
-# https://api.meraki.com/api_docs#list-the-devices-in-a-network
+# https://dashboard.merak.com/api_docs#list-the-devices-in-a-network
 def getnetworkdevices(apikey, networkid, suppressprint=False):
     """
 
@@ -1617,7 +1617,7 @@ def getorgdevices(apikey, orgid, suppressprint=False):
 
 
 # Return a single device
-# https://api.meraki.com/api_docs#return-a-single-device
+# https://dashboard.meraki.com/api_docs#return-a-single-device
 def getdevicedetail(apikey, networkid, serialnumber, suppressprint=False):
     calltype = 'Device Detail'
     geturl = '{0}/networks/{1}/devices/{2}'.format(
@@ -1637,7 +1637,7 @@ def getdevicedetail(apikey, networkid, serialnumber, suppressprint=False):
 
 
 # Return an array containing the uplink information for a device.
-# https://api.meraki.com/api_docs#return-an-array-containing-the-uplink-information-for-a-device
+# https://dashboard.meraki.com/api_docs#return-an-array-containing-the-uplink-information-for-a-device
 def getdeviceuplink(apikey, networkid, serialnumber, suppressprint=False):
     calltype = 'Device Uplink'
     geturl = '{0}/networks/{1}/devices/{2}/uplink'.format(
@@ -1657,7 +1657,7 @@ def getdeviceuplink(apikey, networkid, serialnumber, suppressprint=False):
 
 
 # Update the attributes of a device
-# https://api.meraki.com/api_docs#update-the-attributes-of-a-device
+# https://dashboard.meraki.com/api_docs#update-the-attributes-of-a-device
 def updatedevice(apikey, networkid, serial, name=None, tags=None, lat=None,
                  lng=None, address=None, move=None, suppressprint=False):
     # move needs to be str and not boolean 'true' or 'false' to work
@@ -1702,7 +1702,7 @@ def updatedevice(apikey, networkid, serial, name=None, tags=None, lat=None,
 
 
 # Claim a device into a network
-# https://api.meraki.com/api_docs#claim-a-device-into-a-network
+# https://dashboard.meraki.com/api_docs#claim-a-device-into-a-network
 def adddevtonet(apikey, networkid, serial, suppressprint=False):
     calltype = 'Device'
     posturl = '{0}/networks/{1}/devices/claim'.format(
@@ -1725,7 +1725,7 @@ def adddevtonet(apikey, networkid, serial, suppressprint=False):
 
 
 # Remove a single device
-# https://api.meraki.com/api_docs#remove-a-single-device
+# https://dashboard.meraki.com/api_docs#remove-a-single-device
 def removedevfromnet(apikey, networkid, serial, suppressprint=False):
     calltype = 'Device'
     posturl = '{0}/networks/{1}/devices/{2}/remove'.format(
@@ -1795,7 +1795,7 @@ def getmxcellularfwrules(apikey, networkid, suppressprint=False):
 
 
 # Update the cellular firewall rules of an MX network
-# https://api.meraki.com/api_docs#update-the-cellular-firewall-rules-of-an-mx-network
+# https://dashboard.meraki.com/api_docs#update-the-cellular-firewall-rules-of-an-mx-network
 def updatemxcellularfwrules(apikey, networkid,
                             cellularrules, suppressprint=False):
     # cellularrules = [{'comment': 'A note about the rule', 'policy': 'deny',
@@ -1822,7 +1822,7 @@ def updatemxcellularfwrules(apikey, networkid,
 # ### MX L3 FIREWALL ###
 
 # Return the L3 firewall rules for an MX network
-# https://api.meraki.com/api_docs#return-the-l3-firewall-rules-for-an-mx-network
+# https://dashboard.meraki.com/api_docs#return-the-l3-firewall-rules-for-an-mx-network
 def getmxl3fwrules(apikey, networkid, suppressprint=False):
     calltype = 'MX L3 Firewall'
     geturl = '{0}/networks/{1}/l3FirewallRules'.format(
@@ -1838,7 +1838,7 @@ def getmxl3fwrules(apikey, networkid, suppressprint=False):
 
 
 # Update the L3 firewall rules of an MX network
-# https://api.meraki.com/api_docs#update-the-l3-firewall-rules-of-an-mx-network
+# https://dashboard.meraki.com/api_docs#update-the-l3-firewall-rules-of-an-mx-network
 def updatemxl3fwrules(apikey, networkid, fwrules,
                       syslog_default_rule=False, suppressprint=False):
     # fwrules = [{'comment': 'A note about the rule', 'policy': 'deny',
@@ -1870,7 +1870,7 @@ def updatemxl3fwrules(apikey, networkid, fwrules,
 # ### MX VPN Firewall ###
 
 # Return the firewall rules for an organization's site-to-site VPN
-# https://api.meraki.com/api_docs#return-the-firewall-rules-for-an-organizations-site-to-site-vpn
+# https://dashboard.meraki.com/api_docs#return-the-firewall-rules-for-an-organizations-site-to-site-vpn
 def getmxvpnfwrules(apikey, orgid, suppressprint=False):
     calltype = 'MX VPN Firewall'
     geturl = '{0}/organizations/{1}/vpnFirewallRules'.format(
@@ -1886,7 +1886,7 @@ def getmxvpnfwrules(apikey, orgid, suppressprint=False):
 
 
 # Update firewall rules of an organization's site-to-site VPN
-# https://api.meraki.com/api_docs#update-firewall-rules-of-an-organizations-site-to-site-vpn
+# https://dashboard.meraki.com/api_docs#update-firewall-rules-of-an-organizations-site-to-site-vpn
 def updatemxvpnfwrules(apikey, orgid, vpnrules,
                        syslog_default_rule=False, suppressprint=False):
     # vpnrules = [{'comment': 'A note about the rule', 'policy': 'deny',
@@ -1920,7 +1920,7 @@ def updatemxvpnfwrules(apikey, orgid, vpnrules,
 # ### MR L3 FIREWALL ###
 
 # Return the L3 firewall rules for an SSID on an MR network
-# https://api.meraki.com/api_docs#return-the-l3-firewall-rules-for-an-ssid-on-an-mr-network
+# https://dashboard.meraki.com/api_docs#return-the-l3-firewall-rules-for-an-ssid-on-an-mr-network
 def getssidl3fwrules(apikey, networkid, ssidnum, suppressprint=False):
     calltype = 'MR L3 Firewall'
     geturl = '{0}/networks/{1}/ssids/{2}/l3FirewallRules'.format(
@@ -1936,7 +1936,7 @@ def getssidl3fwrules(apikey, networkid, ssidnum, suppressprint=False):
 
 
 # Update the L3 firewall rules of an SSID on an MR network
-# https://api.meraki.com/api_docs#update-the-l3-firewall-rules-of-an-ssid-on-an-mr-network
+# https://dashboard.meraki.com/api_docs#update-the-l3-firewall-rules-of-an-ssid-on-an-mr-network
 def updatessidl3fwrules(apikey, networkid, ssidnum, fwrules,
                         allowlan=None, suppressprint=False):
     # fwrules = [{'comment': 'A note about the rule', 'policy': 'deny',
@@ -1970,7 +1970,7 @@ def updatessidl3fwrules(apikey, networkid, ssidnum, fwrules,
 # ### GROUP POLICIES ###
 
 # List the group policies in a network
-# https://api.meraki.com/api_docs#list-the-group-policies-in-a-network
+# https://dashboard.meraki.com/api_docs#list-the-group-policies-in-a-network
 def getgrouppolicies(apikey, networkid, suppressprint=False):
     calltype = 'Group Policies'
 
@@ -1989,7 +1989,7 @@ def getgrouppolicies(apikey, networkid, suppressprint=False):
 # ### NETWORKS ###
 
 # List the networks in an organization
-# https://api.meraki.com/api_docs#list-the-networks-in-an-organization
+# https://dashboard.meraki.com/api_docs#list-the-networks-in-an-organization
 def getnetworklist(apikey, orgid, templateid=None, suppressprint=False):
     #
     # Confirm API Key has Admin Access Otherwise Raise Error
@@ -2015,7 +2015,7 @@ def getnetworklist(apikey, orgid, templateid=None, suppressprint=False):
 
 
 # Return a network
-# https://api.meraki.com/api_docs#return-a-network
+# https://dashboard.meraki.com/api_docs#return-a-network
 def getnetworkdetail(apikey, networkid, suppressprint=False):
     calltype = 'Network Detail'
     geturl = '{0}/networks/{1}'.format(
@@ -2034,7 +2034,7 @@ def getnetworkdetail(apikey, networkid, suppressprint=False):
 
 
 # Update a network
-# https://api.meraki.com/api_docs#update-a-network
+# https://dashboard.meraki.com/api_docs#update-a-network
 def updatenetwork(apikey, networkid, name, tz, tags, suppressprint=False):
 
     calltype = 'Network'
@@ -2066,7 +2066,7 @@ def updatenetwork(apikey, networkid, name, tz, tags, suppressprint=False):
 
 
 # Create a network
-# https://api.meraki.com/api_docs#create-a-network
+# https://dashboard.merak.com/api_docs#create-a-network
 def addnetwork(apikey, orgid, name, nettype, tags, tz, cloneid=None,
                suppressprint=False):
     """
@@ -2102,7 +2102,7 @@ def addnetwork(apikey, orgid, name, nettype, tags, tz, cloneid=None,
 
 
 # Delete a network
-# https://api.meraki.com/api_docs#delete-a-network
+# https://dashboard.merak.com/api_docs#delete-a-network
 def delnetwork(apikey, networkid, suppressprint=False):
     calltype = 'Network'
     delurl = '{0}/networks/{1}'.format(str(base_url), str(networkid))
@@ -2120,7 +2120,7 @@ def delnetwork(apikey, networkid, suppressprint=False):
 
 
 # Bind a network to a template.
-# https://api.meraki.com/api_docs#bind-a-network-to-a-template
+# https://dashboard.merak.com/api_docs#bind-a-network-to-a-template
 def bindtotemplate(apikey, networkid, templateid, autobind=False,
                    suppressprint=False):
     calltype = 'Template Bind'
@@ -2146,7 +2146,7 @@ def bindtotemplate(apikey, networkid, templateid, autobind=False,
 
 
 # Unbind a network from a template.
-# https://api.meraki.com/api_docs#unbind-a-network-from-a-template
+# https://dashboard.merak.com/api_docs#unbind-a-network-from-a-template
 def unbindfromtemplate(apikey, networkid, suppressprint=False):
     calltype = 'Network Unbind'
     posturl = '{0}/networks/{1}/unbind'.format(str(base_url), str(networkid))
@@ -2164,7 +2164,7 @@ def unbindfromtemplate(apikey, networkid, suppressprint=False):
 
 
 # Return the site-to-site VPN settings of a network. Only valid for MX networks
-# https://api.meraki.com/api_docs#return-the-site-to-site-vpn-settings-of-a-network
+# https://dashboard.merak.com/api_docs#return-the-site-to-site-vpn-settings-of-a-network
 def getvpnsettings(apikey, networkid, suppressprint=False):
     calltype = 'AutoVPN'
     geturl = '{0}/networks/{1}/siteToSiteVpn'.format(
@@ -2184,7 +2184,7 @@ def getvpnsettings(apikey, networkid, suppressprint=False):
 
 # Update the site-to-site VPN settings of a network.
 # Only valid for MX networks in NAT mode.
-# https://api.meraki.com/api_docs#update-the-site-to-site-vpn-settings-of-a-network
+# https://dashboard.merak.com/api_docs#update-the-site-to-site-vpn-settings-of-a-network
 def updatevpnsettings(apikey, networkid, mode='none', subnets=None,
                       usevpn=None, hubnetworks=None, defaultroute=None,
                       suppressprint=False):
@@ -2228,7 +2228,7 @@ def updatevpnsettings(apikey, networkid, mode='none', subnets=None,
 
 # The traffic analysis data for this network.
 # Traffic Analysis with Hostname Visibility must be enabled on the network.
-# https://api.meraki.com/api_docs#the-traffic-analysis-data-for-this-network
+# https://dashboard.merak.com/api_docs#the-traffic-analysis-data-for-this-network
 def getnetworktrafficstats(apikey, networkid, timespan=86400,
                            devicetype='combined', suppressprint=False):
     calltype = 'Network Detail'
@@ -2248,7 +2248,7 @@ def getnetworktrafficstats(apikey, networkid, timespan=86400,
 
 
 # List the access policies for this network. Only valid for MS networks.
-# https://api.meraki.com/api_docs#list-the-access-policies-for-this-network
+# https://dashboard.merak.com/api_docs#list-the-access-policies-for-this-network
 def getaccesspolicies(apikey, networkid, suppressprint=False):
     calltype = 'Network Detail'
     geturl = '{0}/networks/{1}/accessPolicies'.format(
@@ -2264,7 +2264,7 @@ def getaccesspolicies(apikey, networkid, suppressprint=False):
 
 
 # List Air Marshal scan results from a network
-# https://api.meraki.com/api_docs#list-air-marshal-scan-results-from-a-network
+# https://dashboard.merak.com/api_docs#list-air-marshal-scan-results-from-a-network
 def getairmarshal(apikey, networkid, timespan=3600, suppressprint=False):
     # Parameter timespan for which results will be fetched.
     # Must be at most one month in seconds.
@@ -2286,7 +2286,7 @@ def getairmarshal(apikey, networkid, timespan=3600, suppressprint=False):
 
 # Return the Bluetooth settings for a network.
 # Bluetooth settings must be enabled on the network.
-# https://api.meraki.com/api_docs#return-the-bluetooth-settings-for-a-network
+# https://dashboard.merak.com/api_docs#return-the-bluetooth-settings-for-a-network
 def getbluetooth(apikey, networkid, suppressprint=False):
     calltype = 'Network Detail'
     geturl = '{0}/networks/{1}/bluetoothSettings'.format(
@@ -2303,7 +2303,7 @@ def getbluetooth(apikey, networkid, suppressprint=False):
 
 # Update the Bluetooth settings for a network.
 # See the docs page for Bluetooth settings.
-# https://api.meraki.com/api_docs#update-the-bluetooth-settings-for-a-network
+# https://dashboard.merak.com/api_docs#update-the-bluetooth-settings-for-a-network
 def updatebluetooth(apikey, networkid, scanning=False, advertising=False,
                     uuid=None, nonunique=False, major=None, minor=None,
                     suppressprint=False):
@@ -2356,7 +2356,7 @@ def updatebluetooth(apikey, networkid, scanning=False, advertising=False,
 # ### ORGANIZATIONS ###
 
 # List the organizations that the user has privileges on
-# https://api.meraki.com/api_docs#list-the-organizations-that-the-user-has-privileges-on
+# https://dashboard.merak.com/api_docs#list-the-organizations-that-the-user-has-privileges-on
 def myorgaccess(apikey, suppressprint=False):
     """
 
@@ -2384,7 +2384,7 @@ def myorgaccess(apikey, suppressprint=False):
 
 
 # Return an organization
-# https://api.meraki.com/api_docs#return-an-organization
+# https://dashboard.merak.com/api_docs#return-an-organization
 def getorg(apikey, orgid, suppressprint=False):
     """
 
@@ -2412,7 +2412,7 @@ def getorg(apikey, orgid, suppressprint=False):
 
 
 # Update an organization
-# https://api.meraki.com/api_docs#update-an-organization
+# https://dashboard.merak.com/api_docs#update-an-organization
 def renameorg(apikey, orgid, neworgname, suppressprint=False):
     __hasorgaccess(apikey, orgid)
     calltype = 'Organization Rename'
@@ -2434,7 +2434,7 @@ def renameorg(apikey, orgid, neworgname, suppressprint=False):
 
 
 # Create a new organization
-# https://api.meraki.com/api_docs#create-a-new-organization
+# https://dashboard.merak.com/api_docs#create-a-new-organization
 def addorg(apikey, neworgname, suppressprint=False):
     calltype = 'Organization'
     posturl = '{0}/organizations/'.format(str(base_url))
@@ -2456,7 +2456,7 @@ def addorg(apikey, neworgname, suppressprint=False):
 
 
 # Create a new organization by cloning the addressed organization
-# https://api.meraki.com/api_docs#create-a-new-organization-by-cloning-the-addressed-organization
+# https://dashboard.merak.com/api_docs#create-a-new-organization-by-cloning-the-addressed-organization
 def cloneorg(apikey, orgid, neworgname, suppressprint=False):
     __hasorgaccess(apikey, orgid)
     calltype = 'Organization Clone'
@@ -2483,7 +2483,7 @@ def cloneorg(apikey, orgid, neworgname, suppressprint=False):
 #  will be added to the organization and devices will be placed in the
 #  organization's inventory. These three types of claims are mutually
 #  exclusive and cannot be performed in one request.
-# https://api.meraki.com/api_docs#claim-a-device-license-key-or-order-into-an-organization
+# https://dashboard.merak.com/api_docs#claim-a-device-license-key-or-order-into-an-organization
 def claim(apikey, orgid, serial=None, licensekey=None,
           licensemode=None, orderid=None, suppressprint=False):
     calltype = 'Claim'
@@ -2525,7 +2525,7 @@ def claim(apikey, orgid, serial=None, licensekey=None,
 
 
 # Return the license state for an organization
-# https://api.meraki.com/api_docs#return-the-license-state-for-an-organization
+# https://dashboard.merak.com/api_docs#return-the-license-state-for-an-organization
 def getlicensestate(apikey, orgid, suppressprint=False):
     #
     # Confirm API Key has Admin Access Otherwise Raise Error
@@ -2549,7 +2549,7 @@ def getlicensestate(apikey, orgid, suppressprint=False):
 
 
 # Return the inventory for an organization
-# https://api.meraki.com/api_docs#return-the-inventory-for-an-organization
+# https://dashboard.merak.com/api_docs#return-the-inventory-for-an-organization
 def getorginventory(apikey, orgid, suppressprint=False):
     """
 
@@ -2580,7 +2580,7 @@ def getorginventory(apikey, orgid, suppressprint=False):
 
 
 # List the status of every Meraki device in the organization
-# https://api.meraki.com/api_docs#list-the-status-of-every-meraki-device-in-the-organization
+# https://dashboard.merak.com/api_docs#list-the-status-of-every-meraki-device-in-the-organization
 def get_device_statuses(api_key, org_id, suppress_print=False):
     __hasorgaccess(api_key, org_id)
     call_type = 'Device Statuses'
@@ -2601,7 +2601,7 @@ def get_device_statuses(api_key, org_id, suppress_print=False):
 
 
 # Return the SNMP settings for an organization
-# https://api.meraki.com/api_docs#return-the-snmp-settings-for-an-organization
+# https://dashboard.merak.com/api_docs#return-the-snmp-settings-for-an-organization
 def getsnmpsettings(apikey, orgid, suppressprint=False):
     #
     # Confirm API Key has Admin Access Otherwise Raise Error
@@ -2624,7 +2624,7 @@ def getsnmpsettings(apikey, orgid, suppressprint=False):
 
 
 # Update the SNMP settings for an organization
-# https://api.meraki.com/api_docs#update-the-snmp-settings-for-an-organization
+# https://dashboard.merak.com/api_docs#update-the-snmp-settings-for-an-organization
 def updatesnmpsettings(apikey, orgid, v2c=False, v3=False, v3authmode='SHA',
                        v3authpw=None, v3privmode='AES128', v3privpw=None,
                        allowedips=None, suppressprint=False):
@@ -2686,7 +2686,7 @@ def updatesnmpsettings(apikey, orgid, v2c=False, v3=False, v3authmode='SHA',
 
 
 # Return the third party VPN peers for an organization
-# https://api.meraki.com/api_docs#return-the-third-party-vpn-peers-for-an-organization
+# https://dashboard.merak.com/api_docs#return-the-third-party-vpn-peers-for-an-organization
 def getnonmerakivpnpeers(apikey, orgid, suppressprint=False):
     #
     # Confirm API Key has Admin Access Otherwise Raise Error
@@ -2710,7 +2710,7 @@ def getnonmerakivpnpeers(apikey, orgid, suppressprint=False):
 
 
 # Update the third party VPN peers for an organization
-# https://api.meraki.com/api_docs#update-the-third-party-vpn-peers-for-an-organization
+# https://dashboard.merak.com/api_docs#update-the-third-party-vpn-peers-for-an-organization
 def updatenonmerakivpn(apikey, orgid, names, ips, secrets, remotenets,
                        tags=None, suppressprint=False):
     # Function to update non-Meraki VPN peer information for an
@@ -2777,7 +2777,7 @@ def updatenonmerakivpn(apikey, orgid, names, ips, secrets, remotenets,
 
 
 # Update the third party VPN peers for an organization
-# https://api.meraki.com/api_docs#update-the-third-party-vpn-peers-for-an-organization
+# https://dashboard.merak.com/api_docs#update-the-third-party-vpn-peers-for-an-organization
 def appendnonmerakivpn(apikey, orgid, names, ips, secrets, remotenets,
                        tags=None, suppressprint=False):
     #
@@ -2864,7 +2864,7 @@ def appendnonmerakivpn(apikey, orgid, names, ips, secrets, remotenets,
 # ### PHONE ASSIGNMENTS ###
 
 # List all phones in a network and their contact assignment
-# https://api.meraki.com/api_docs#list-all-phones-in-a-network-and-their-contact-assignment
+# https://dashboard.merak.com/api_docs#list-all-phones-in-a-network-and-their-contact-assignment
 def getphones(apikey, networkid, suppressprint=False):
     calltype = 'Phone Assignments'
     geturl = '{0}/networks/{1}/phoneAssignments'.format(
@@ -2880,7 +2880,7 @@ def getphones(apikey, networkid, suppressprint=False):
 
 
 # Return a phone's contact assignment
-# https://api.meraki.com/api_docs#return-a-phones-contact-assignment
+# https://dashboard.merak.com/api_docs#return-a-phones-contact-assignment
 def getphonedetails(apikey, networkid, serial, suppressprint=False):
     calltype = 'Phone Assignment Detail'
     geturl = '{0}/networks/{1}/phoneAssignments/{2}'.format(
@@ -2896,7 +2896,7 @@ def getphonedetails(apikey, networkid, serial, suppressprint=False):
 
 
 # Assign a contact and number(s) to a phone
-# https://api.meraki.com/api_docs#assign-a-contact-and-numbers-to-a-phone
+# https://dashboard.merak.com/api_docs#assign-a-contact-and-numbers-to-a-phone
 def updatephonedetails(apikey, networkid, serial, contactid, contacttype,
                        publicnumber=None, ext=None, suppressprint=False):
     calltype = 'Phone Assignment'
@@ -2928,7 +2928,7 @@ def updatephonedetails(apikey, networkid, serial, contactid, contacttype,
 
 
 # Remove a phone assignment (unprovision a phone)
-# https://api.meraki.com/api_docs#remove-a-phone-assignment-unprovision-a-phone
+# https://dashboard.merak.com/api_docs#remove-a-phone-assignment-unprovision-a-phone
 def delphone(apikey, networkid, serial, suppressprint=False):
     calltype = 'Phone Assignment'
     delurl = '{0}/networks/{1}/phoneAssignments/{2}'.format(
@@ -2946,7 +2946,7 @@ def delphone(apikey, networkid, serial, suppressprint=False):
 # ### PHONE CONTACTS ###
 
 # List the phone contacts in a network
-# https://api.meraki.com/api_docs#list-the-phone-contacts-in-a-network
+# https://dashboard.merak.com/api_docs#list-the-phone-contacts-in-a-network
 def getcontacts(apikey, networkid, suppressprint=False):
     calltype = 'Phone Contacts'
     geturl = '{0}/networks/{1}/phoneContacts'.format(
@@ -2963,7 +2963,7 @@ def getcontacts(apikey, networkid, suppressprint=False):
 
 
 # Add a contact
-# https://api.meraki.com/api_docs#add-a-contact
+# https://dashboard.merak.com/api_docs#add-a-contact
 def addcontact(apikey, networkid, name, suppressprint=False):
     calltype = 'Phone Contact'
     posturl = '{0}/networks/{1}/phoneContacts'.format(
@@ -2983,7 +2983,7 @@ def addcontact(apikey, networkid, name, suppressprint=False):
 
 
 # Update a phone contact. Google Directory contacts cannot be modified.
-# https://api.meraki.com/api_docs#update-a-phone-contact
+# https://dashboard.merak.com/api_docs#update-a-phone-contact
 def updatecontact(apikey, networkid, contactid, name, suppressprint=False):
     calltype = 'Phone Contact'
     puturl = '{0}/networks/{1}/phoneContacts/{2}'.format(
@@ -3002,7 +3002,7 @@ def updatecontact(apikey, networkid, contactid, name, suppressprint=False):
 
 
 # Delete a phone contact. Google Directory contacts cannot be removed.
-# https://api.meraki.com/api_docs#delete-a-phone-contact
+# https://dashboard.merak.com/api_docs#delete-a-phone-contact
 def delcontact(apikey, networkid, contactid, suppressprint=False):
     calltype = 'Phone Contact'
     delurl = '{0}/networks/{1}/phoneContacts/{2}'.format(
@@ -3021,7 +3021,7 @@ def delcontact(apikey, networkid, contactid, suppressprint=False):
 # ### PHONE NUMBERS ###
 
 # List all the phone numbers in a network
-# https://api.meraki.com/api_docs#list-all-the-phone-numbers-in-a-network
+# https://dashboard.merak.com/api_docs#list-all-the-phone-numbers-in-a-network
 def getallnumbers(apikey, networkid, suppressprint=False):
     calltype = 'Phone Numbers'
     geturl = '{0}/networks/{1}/phoneNumbers'.format(
@@ -3038,7 +3038,7 @@ def getallnumbers(apikey, networkid, suppressprint=False):
 
 
 # List the available phone numbers in a network
-# https://api.meraki.com/api_docs#list-the-available-phone-numbers-in-a-network
+# https://dashboard.merak.com/api_docs#list-the-available-phone-numbers-in-a-network
 def getavailablenumbers(apikey, networkid, suppressprint=False):
     calltype = 'Phone Numbers'
     geturl = '{0}/networks/{1}/phoneNumbers/available'.format(
@@ -3057,7 +3057,7 @@ def getavailablenumbers(apikey, networkid, suppressprint=False):
 # ### SAML ROLES ###
 
 # List the SAML roles for this organization
-# https://api.meraki.com/api_docs#list-the-saml-roles-for-this-organization
+# https://dashboard.merak.com/api_docs#list-the-saml-roles-for-this-organization
 def getsamlroles(apikey, orgid, suppressprint=False):
     #
     # Confirm API Key has Admin Access Otherwise Raise Error
@@ -3081,7 +3081,7 @@ def getsamlroles(apikey, orgid, suppressprint=False):
 
 
 # Return a SAML role
-# https://api.meraki.com/api_docs#return-a-saml-role
+# https://dashboard.merak.com/api_docs#return-a-saml-role
 def getsamlroledetail(apikey, orgid, roleid, suppressprint=False):
     #
     # Confirm API Key has Admin Access Otherwise Raise Error
@@ -3105,7 +3105,7 @@ def getsamlroledetail(apikey, orgid, roleid, suppressprint=False):
 
 
 # Update a SAML role
-# https://api.meraki.com/api_docs#update-a-saml-role
+# https://dashboard.merak.com/api_docs#update-a-saml-role
 def updatesamlrole(apikey, orgid, roleid, rolename, orgaccess, tags,
                    tagaccess, networks, netaccess,
                    suppressprint=False):
@@ -3206,7 +3206,7 @@ def updatesamlrole(apikey, orgid, roleid, rolename, orgaccess, tags,
 
 
 # Create a SAML role
-# https://api.meraki.com/api_docs#create-a-saml-role
+# https://dashboard.merak.com/api_docs#create-a-saml-role
 def addsamlrole(apikey, orgid, rolename, orgaccess, tags, tagaccess,
                 networks, netaccess, suppressprint=False):
     #
@@ -3309,7 +3309,7 @@ def addsamlrole(apikey, orgid, rolename, orgaccess, tags, tagaccess,
 
 
 # Remove a SAML role
-# https://api.meraki.com/api_docs#remove-a-saml-role
+# https://dashboard.merak.com/api_docs#remove-a-saml-role
 def delsamlrole(apikey, orgid, roleid, suppressprint=False):
     #
     # Confirm API Key has Admin Access Otherwise Raise Error
@@ -3336,7 +3336,7 @@ def delsamlrole(apikey, orgid, roleid, suppressprint=False):
 
 # List the devices enrolled in an SM network
 # with various specified fields and filters
-# https://api.meraki.com/api_docs#list-the-devices-enrolled-in-an-sm-network-with-various-specified-fields-and-filters
+# https://dashboard.merak.com/api_docs#list-the-devices-enrolled-in-an-sm-network-with-various-specified-fields-and-filters
 def getsmdevices(apikey, networkid, fields=None, wifimacs=None, serials=None,
                  ids=None, scope=None, token=None, suppressprint=False):
     defaultfields = ['id', 'name', 'tags', 'ssid', 'wifiMac', 'osName',
@@ -3393,7 +3393,7 @@ def getsmdevices(apikey, networkid, fields=None, wifimacs=None, serials=None,
 
 
 # Add, delete, or update the tags of a set of devices
-# https://api.meraki.com/api_docs#add-delete-or-update-the-tags-of-a-set-of-devices
+# https://dashboard.merak.com/api_docs#add-delete-or-update-the-tags-of-a-set-of-devices
 def updatesmtags(apikey, networkid, tags, action, wifimacs=None, ids=None,
                  serials=None, scope=None, suppressprint=False):
     calltype = 'Systems Manager'
@@ -3433,7 +3433,7 @@ def updatesmtags(apikey, networkid, tags, action, wifimacs=None, ids=None,
 
 
 # Modify the fields of a device
-# https://api.meraki.com/api_docs#modify-the-fields-of-a-device
+# https://dashboard.merak.com/api_docs#modify-the-fields-of-a-device
 def updatesmfields(apikey, networkid, wifimac=None, deviceid=None,
                    serial=None, name=None, notes=None, suppressprint=False):
     calltype = 'Systems Manager'
@@ -3466,7 +3466,7 @@ def updatesmfields(apikey, networkid, wifimac=None, deviceid=None,
 
 
 # Lock a set of devices
-# https://api.meraki.com/api_docs#lock-a-set-of-devices
+# https://dashboard.merak.com/api_docs#lock-a-set-of-devices
 def lockdevices(apikey, networkid, wifimacs=None, ids=None, serials=None,
                 scope=None, pin=None, suppressprint=False):
     calltype = 'Systems Manager'
@@ -3507,7 +3507,7 @@ def lockdevices(apikey, networkid, wifimacs=None, ids=None, serials=None,
 
 
 # Wipe a device
-# https://api.meraki.com/api_docs#wipe-a-device
+# https://dashboard.merak.com/api_docs#wipe-a-device
 def wipedevices(apikey, networkid, wifimacs=None, ids=None, serials=None,
                 scope=None, pin=None, suppressprint=False):
     calltype = 'Systems Manager'
@@ -3548,7 +3548,7 @@ def wipedevices(apikey, networkid, wifimacs=None, ids=None, serials=None,
 
 
 # Force check-in a set of devices
-# https://api.meraki.com/api_docs#force-check-in-a-set-of-devices
+# https://dashboard.merak.com/api_docs#force-check-in-a-set-of-devices
 def checkindevices(apikey, networkid, wifimacs=None, ids=None, serials=None,
                    scope=None, suppressprint=False):
     calltype = 'Systems Manager'
@@ -3584,7 +3584,7 @@ def checkindevices(apikey, networkid, wifimacs=None, ids=None, serials=None,
 
 
 # Move a set of devices to a new network
-# https://api.meraki.com/api_docs#move-a-set-of-devices-to-a-new-network
+# https://dashboard.merak.com/api_docs#move-a-set-of-devices-to-a-new-network
 def movedevices(apikey, networkid, newnetid, wifimacs=None, ids=None,
                 serials=None, scope=None, suppressprint=False):
     calltype = 'Systems Manager'
@@ -3622,7 +3622,7 @@ def movedevices(apikey, networkid, newnetid, wifimacs=None, ids=None,
 # ### SSIDs ###
 
 # List the SSIDs in a network
-# https://api.meraki.com/api_docs#list-the-ssids-in-a-network
+# https://dashboard.merak.com/api_docs#list-the-ssids-in-a-network
 def getssids(apikey, networkid, suppressprint=False):
     calltype = 'SSID'
     geturl = '{0}/networks/{1}/ssids'.format(str(base_url), str(networkid))
@@ -3640,7 +3640,7 @@ def getssids(apikey, networkid, suppressprint=False):
 
 
 # Return a single SSID
-# https://api.meraki.com/api_docs#return-a-single-ssid
+# https://dashboard.merak.com/api_docs#return-a-single-ssid
 def getssiddetail(apikey, networkid, ssidnum, suppressprint=False):
     calltype = 'SSID Detail'
     geturl = '{0}/networks/{1}/ssids/{2}'.format(
@@ -3659,7 +3659,7 @@ def getssiddetail(apikey, networkid, ssidnum, suppressprint=False):
 
 
 # Update the attributes of an SSID
-# https://api.meraki.com/api_docs#update-the-attributes-of-an-ssid
+# https://dashboard.merak.com/api_docs#update-the-attributes-of-an-ssid
 def updatessid(apikey, networkid, ssidnum, name, enabled, authmode,
                encryptionmode, psk, suppressprint=False):
 
@@ -3723,7 +3723,7 @@ def updatessid(apikey, networkid, ssidnum, name, enabled, authmode,
 
 
 # Update the attributes of an SSID
-# https://api.meraki.com/api_docs#update-the-attributes-of-an-ssid
+# https://dashboard.merak.com/api_docs#update-the-attributes-of-an-ssid
 def updatessidobject(apikey, networkid, newssid, suppressprint=False):
     """
 
@@ -3765,7 +3765,7 @@ def updatessidobject(apikey, networkid, newssid, suppressprint=False):
 # ### STATIC ROUTES ###
 
 # List the static routes for this network
-# https://api.meraki.com/api_docs#list-the-static-routes-for-this-network
+# https://dashboard.merak.com/api_docs#list-the-static-routes-for-this-network
 def getstaticroutes(apikey, networkid, suppressprint=False):
     calltype = 'Static Routes'
     geturl = '{0}/networks/{1}/staticRoutes'.format(
@@ -3782,7 +3782,7 @@ def getstaticroutes(apikey, networkid, suppressprint=False):
 
 
 # Return a static route
-# https://api.meraki.com/api_docs#return-a-static-route
+# https://dashboard.merak.com/api_docs#return-a-static-route
 def getstaticroutedetail(apikey, networkid, routeid, suppressprint=False):
     calltype = 'Static Route Detail'
     geturl = '{0}/networks/{1}/staticRoutes/{2}'.format(
@@ -3799,7 +3799,7 @@ def getstaticroutedetail(apikey, networkid, routeid, suppressprint=False):
 
 
 # Update a static route
-# https://api.meraki.com/api_docs#update-a-static-route
+# https://dashboard.merak.com/api_docs#update-a-static-route
 def updatestaticroute(apikey, networkid, routeid, name=None, subnet=None,
                       gatewayip=None, enabled=None, fixedipassignments=None,
                       reservedipranges=None, suppressprint=False):
@@ -3832,7 +3832,7 @@ def updatestaticroute(apikey, networkid, routeid, name=None, subnet=None,
 
 
 # Add a static route
-# https://api.meraki.com/api_docs#add-a-static-route
+# https://dashboard.merak.com/api_docs#add-a-static-route
 def addstaticroute(apikey, networkid, name, subnet, ip, suppressprint=False):
     calltype = 'Static Route'
     posturl = '{0}/networks/{1}/staticRoutes'.format(
@@ -3855,7 +3855,7 @@ def addstaticroute(apikey, networkid, name, subnet, ip, suppressprint=False):
 
 
 # Delete a static route from a network
-# https://api.meraki.com/api_docs#delete-a-static-route-from-a-network
+# https://dashboard.merak.com/api_docs#delete-a-static-route-from-a-network
 def delstaticroute(apikey, networkid, routeid, suppressprint=False):
     calltype = 'Static Route'
     delurl = '{0}/networks/{1}/staticRoutes/{2}'.format(
@@ -3874,7 +3874,7 @@ def delstaticroute(apikey, networkid, routeid, suppressprint=False):
 # ### SWITCH PORTS ###
 
 # List the switch ports for a switch
-# https://api.meraki.com/api_docs#list-the-switch-ports-for-a-switch
+# https://dashboard.merak.com/api_docs#list-the-switch-ports-for-a-switch
 def getswitchports(apikey, serialnum, suppressprint=False):
     calltype = 'Switch Port'
     geturl = '{0}/devices/{1}/switchPorts'.format(
@@ -3893,7 +3893,7 @@ def getswitchports(apikey, serialnum, suppressprint=False):
 
 
 # Return a switch port
-# https://api.meraki.com/api_docs#return-a-switch-port
+# https://dashboard.merak.com/api_docs#return-a-switch-port
 def getswitchportdetail(apikey, serialnum, portnum, suppressprint=False):
     calltype = 'Switch Port Detail'
     geturl = '{0}/devices/{1}/switchPorts/{2}'.format(
@@ -3912,7 +3912,7 @@ def getswitchportdetail(apikey, serialnum, portnum, suppressprint=False):
 
 
 # Update a switch port
-# https://api.meraki.com/api_docs#update-a-switch-port
+# https://dashboard.merak.com/api_docs#update-a-switch-port
 def updateswitchport(apikey, serialnum, portnum, name=None, tags=None,
                      enabled=None, porttype=None, vlan=None, voicevlan=None,
                      allowedvlans=None, poe=None, isolation=None, rstp=None,
@@ -4002,7 +4002,7 @@ def updateswitchport(apikey, serialnum, portnum, name=None, tags=None,
 # ### VLANs ###
 
 # List the VLANs for this network
-# https://api.meraki.com/api_docs#list-the-vlans-for-this-network
+# https://dashboard.merak.com/api_docs#list-the-vlans-for-this-network
 def getvlans(apikey, networkid, suppressprint=False):
     calltype = 'VLANs'
     geturl = '{0}/networks/{1}/vlans'.format(str(base_url), str(networkid))
@@ -4020,7 +4020,7 @@ def getvlans(apikey, networkid, suppressprint=False):
 
 
 # Return a VLAN
-# https://api.meraki.com/api_docs#return-a-vlan
+# https://dashboard.merak.com/api_docs#return-a-vlan
 def getvlandetail(apikey, networkid, vlanid, suppressprint=False):
     calltype = 'VLAN Detail'
     geturl = '{0}/networks/{1}/vlans/{2}'.format(
@@ -4039,7 +4039,7 @@ def getvlandetail(apikey, networkid, vlanid, suppressprint=False):
 
 
 # Update a VLAN
-# https://api.meraki.com/api_docs#update-a-vlan
+# https://dashboard.merak.com/api_docs#update-a-vlan
 def updatevlan(apikey, networkid, vlanid, name=None, subnet=None, mxip=None,
                fixedipassignments=None, reservedipranges=None,
                vpnnatsubnet=None, dnsnameservers=None, suppressprint=False):
@@ -4080,7 +4080,7 @@ def updatevlan(apikey, networkid, vlanid, name=None, subnet=None, mxip=None,
 
 
 # Add a VLAN
-# https://api.meraki.com/api_docs#add-a-vlan
+# https://dashboard.merak.com/api_docs#add-a-vlan
 def addvlan(apikey, networkid, vlanid, name, subnet, mxip,
             suppressprint=False):
     calltype = 'VLAN'
@@ -4113,7 +4113,7 @@ def addvlan(apikey, networkid, vlanid, name, subnet, mxip,
 
 
 # Delete a VLAN from a network
-# https://api.meraki.com/api_docs#delete-a-vlan-from-a-network
+# https://dashboard.merak.com/api_docs#delete-a-vlan-from-a-network
 def delvlan(apikey, networkid, vlanid, suppressprint=False):
     calltype = 'VLAN'
     delurl = '{0}/networks/{1}/vlans/{2}'.format(
