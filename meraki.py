@@ -4131,6 +4131,30 @@ def delvlan(apikey, networkid, vlanid, suppressprint=False):
     return result
 
 
+# Enable a VLAN use on an MX
+# https://dashboard.meraki.com/api_docs#enable/disable-vlans-for-the-given-network
+def enablevlans(apikey, networkid, suppressprint=False):
+    calltype = 'VLAN'
+    puturl = '{0}/networks/{1}/vlansEnabledState'.format(
+        str(base_url), str(networkid)
+    )
+    headers = {
+        'x-cisco-meraki-api-key': format(str(apikey)),
+        'Content-Type': 'application/json'
+    }
+    postdata = {
+        "enabled": True
+    }
+    postdata = json.dumps(postdata)
+    dashboard = requests.put(puturl, data=postdata, headers=headers)
+    #
+    # Call return handler function to parse Dashboard response
+    #
+    result = __returnhandler(
+        dashboard.status_code, dashboard.text, calltype, suppressprint)
+    return result
+
+
 # ### OTHER ###
 
 # MX performance score for load monitoring
