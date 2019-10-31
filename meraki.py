@@ -4041,11 +4041,11 @@ def getvlandetail(apikey, networkid, vlanid, suppressprint=False):
 # Update a VLAN
 # https://dashboard.merak.com/api_docs#update-a-vlan
 def updatevlan(apikey, networkid, vlanid, name=None, subnet=None, mxip=None,
-               fixedipassignments=None, reservedipranges=None,
-               vpnnatsubnet=None, dnsnameservers=None, suppressprint=False):
-    # fixedipassignments = {'13:37:de:ad:be:ef': {'ip': '192.168.1.5',
-    # 'name': 'fixed'}} reservedipranges = [{'start': '192.168.1.20',
-    # 'end': '192.168.1.30', 'comment': 'reserved'}]
+               fixedipassignments=None, reservedipranges=None, vpnnatsubnet=None,
+               dnsnameservers=None, dhcpleasetime=None, dhcpoptions=None, suppressprint=False):
+    # fixedipassignments = {'13:37:de:ad:be:ef': {'ip': '192.168.1.5', 'name': 'fixed'}} 
+    # reservedipranges = [{'start': '192.168.1.20', 'end': '192.168.1.30', 'comment': 'reserved'}]
+    # dhcpoptions = [{'code': 5, 'type': 'text', 'value':'five'}]
     calltype = 'VLAN'
     puturl = '{0}/networks/{1}/vlans/{2}'.format(
         str(base_url), str(networkid), str(vlanid))
@@ -4068,6 +4068,10 @@ def updatevlan(apikey, networkid, vlanid, name=None, subnet=None, mxip=None,
         putdata['vpnNatSubnet'] = format(str(vpnnatsubnet))
     if dnsnameservers is not None:
         putdata['dnsNameservers'] = format(str(dnsnameservers))
+    if dhcpleasetime is not None:
+        putdata['dhcpLeaseTime'] = format(str(dhcpleasetime))
+    if dhcpoptions is not None:
+        putdata['dhcpOptions'] = dhcpoptions
 
     putdata = json.dumps(putdata)
     dashboard = requests.put(puturl, data=putdata, headers=headers)
