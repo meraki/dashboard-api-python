@@ -10,4 +10,5 @@ setup(
   download_url = 'https://github.com/meraki/dashboard-api-python/',
   keywords = ['meraki', 'dashboard', 'cisco'],
   classifiers = [],
+  install_requires = [requests]
 )
