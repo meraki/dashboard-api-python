@@ -27,6 +27,7 @@ This library's goal is to refresh and supplant the legacy module (this repositor
 4. After Python 3 is installed, use _pip_ (or an alternative such as _easy_install_) to install the library:
     * `pip install meraki`
     * If you have both Python3 and Python2 installed, you may need to use `pip3 install meraki`
+    * If _meraki_ was previously installed, you can upgrade with `pip install --upgrade meraki` or `pip3 install --upgrade meraki`
 
 ## Usage
 1. Export your API key as an [environment variable](https://www.twilio.com/blog/2017/01/how-to-set-environment-variables.html), for example:
