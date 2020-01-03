@@ -1,13 +1,29 @@
-from distutils.core import setup
+"""Setup script for meraki"""
+
+import os.path
+from setuptools import setup, find_packages
+
+HERE = os.path.abspath(os.path.dirname(__file__))
+
+with open(os.path.join(HERE, 'README.md')) as fid:
+    README = fid.read()
+
 setup(
-  name = 'meraki',
-  packages = ['meraki'],
-  version = '0.34',
-  description = 'Cisco Meraki Dashboard API Python 3.6 Module',
-  author = 'Shiyue Cheng',
-  author_email = 'shiychen@cisco.com',
-  url = 'https://github.com/meraki/dashboard-api-python',
-  download_url = 'https://github.com/meraki/dashboard-api-python/',
-  keywords = ['meraki', 'dashboard', 'cisco'],
-  classifiers = [],
+    name='meraki',
+    version='0.70.0',
+    packages=find_packages(),
+    include_package_data=True,
+    install_requires=['requests'],
+    keywords = ['meraki', 'dashboard', 'cisco'],
+    description='Cisco Meraki Dashboard API library',
+    long_description=README,
+    long_description_content_type='text/markdown',
+    url='https://github.com/meraki/dashboard-api-python',
+    author='Cisco Meraki',
+    author_email='api-feedback@meraki.net',
+    license='MIT',
+    classifiers=[
+        'License :: OSI Approved :: MIT License',
+        'Programming Language :: Python :: 3',
+    ],
 )
