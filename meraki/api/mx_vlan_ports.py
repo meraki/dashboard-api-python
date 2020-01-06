@@ -7,6 +7,7 @@ class MXVLANPorts(object):
         """
         **List per-port VLAN settings for all ports of a MX.**
         https://api.meraki.com/api_docs#list-per-port-vlan-settings-for-all-ports-of-a-mx
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class MXVLANPorts(object):
         """
         **Return per-port VLAN settings for a single MX port.**
         https://api.meraki.com/api_docs#return-per-port-vlan-settings-for-a-single-mx-port
+        
         - networkId (string)
         - appliancePortId (string)
         """
@@ -38,6 +40,7 @@ class MXVLANPorts(object):
         """
         **Update the per-port VLAN settings for a single MX port.**
         https://api.meraki.com/api_docs#update-the-per-port-vlan-settings-for-a-single-mx-port
+        
         - networkId (string)
         - appliancePortId (string)
         - enabled (boolean): The status of the port

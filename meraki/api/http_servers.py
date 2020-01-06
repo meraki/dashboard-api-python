@@ -7,6 +7,7 @@ class HTTPServers(object):
         """
         **List the HTTP servers for a network**
         https://api.meraki.com/api_docs#list-the-http-servers-for-a-network
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class HTTPServers(object):
         """
         **Add an HTTP server to a network**
         https://api.meraki.com/api_docs#add-an-http-server-to-a-network
+        
         - networkId (string)
         - name (string): A name for easy reference to the HTTP server
         - url (string): The URL of the HTTP server
@@ -45,6 +47,7 @@ class HTTPServers(object):
         """
         **Send a test webhook for a network**
         https://api.meraki.com/api_docs#send-a-test-webhook-for-a-network
+        
         - networkId (string)
         - url (string): The URL where the test webhook will be sent
         """
@@ -66,6 +69,7 @@ class HTTPServers(object):
         """
         **Return the status of a webhook test for a network**
         https://api.meraki.com/api_docs#return-the-status-of-a-webhook-test-for-a-network
+        
         - networkId (string)
         - id (string)
         """
@@ -82,6 +86,7 @@ class HTTPServers(object):
         """
         **Return an HTTP server for a network**
         https://api.meraki.com/api_docs#return-an-http-server-for-a-network
+        
         - networkId (string)
         - id (string)
         """
@@ -98,6 +103,7 @@ class HTTPServers(object):
         """
         **Update an HTTP server**
         https://api.meraki.com/api_docs#update-an-http-server
+        
         - networkId (string)
         - id (string)
         - name (string): A name for easy reference to the HTTP server
@@ -122,6 +128,7 @@ class HTTPServers(object):
         """
         **Delete an HTTP server from a network**
         https://api.meraki.com/api_docs#delete-an-http-server-from-a-network
+        
         - networkId (string)
         - id (string)
         """

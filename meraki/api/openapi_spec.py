@@ -7,6 +7,7 @@ class OpenAPISpec(object):
         """
         **Return the OpenAPI 2.0 Specification of the organization's API documentation in JSON**
         https://api.meraki.com/api_docs#return-the-openapi-2
+        
         - organizationId (string)
         """
 

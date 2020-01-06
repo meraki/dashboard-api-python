@@ -7,6 +7,7 @@ class NetFlowSettings(object):
         """
         **Return the NetFlow traffic reporting settings for a network**
         https://api.meraki.com/api_docs#return-the-netflow-traffic-reporting-settings-for-a-network
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class NetFlowSettings(object):
         """
         **Update the NetFlow traffic reporting settings for a network**
         https://api.meraki.com/api_docs#update-the-netflow-traffic-reporting-settings-for-a-network
+        
         - networkId (string)
         - reportingEnabled (boolean): Boolean indicating whether NetFlow traffic reporting is enabled (true) or disabled (false).
         - collectorIp (string): The IPv4 address of the NetFlow collector.

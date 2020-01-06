@@ -7,6 +7,7 @@ class APIUsage(object):
         """
         **List the API requests made by an organization**
         https://api.meraki.com/api_docs#list-the-api-requests-made-by-an-organization
+        
         - organizationId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page

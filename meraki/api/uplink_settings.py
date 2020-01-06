@@ -7,6 +7,7 @@ class UplinkSettings(object):
         """
         **Returns the uplink settings for your MX network.**
         https://api.meraki.com/api_docs#returns-the-uplink-settings-for-your-mx-network
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class UplinkSettings(object):
         """
         **Updates the uplink settings for your MX network.**
         https://api.meraki.com/api_docs#updates-the-uplink-settings-for-your-mx-network
+        
         - networkId (string)
         - bandwidthLimits (object): A mapping of uplinks to their bandwidth settings (be sure to check which uplinks are supported for your network)
         """

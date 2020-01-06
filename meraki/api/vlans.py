@@ -7,6 +7,7 @@ class VLANs(object):
         """
         **List the VLANs for an MX network**
         https://api.meraki.com/api_docs#list-the-vlans-for-an-mx-network
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class VLANs(object):
         """
         **Add a VLAN**
         https://api.meraki.com/api_docs#add-a-vlan
+        
         - networkId (string)
         - id (string): The VLAN ID of the new VLAN (must be between 1 and 4094)
         - name (string): The name of the new VLAN
@@ -46,6 +48,7 @@ class VLANs(object):
         """
         **Return a VLAN**
         https://api.meraki.com/api_docs#return-a-vlan
+        
         - networkId (string)
         - vlanId (string)
         """
@@ -62,6 +65,7 @@ class VLANs(object):
         """
         **Update a VLAN**
         https://api.meraki.com/api_docs#update-a-vlan
+        
         - networkId (string)
         - vlanId (string)
         - name (string): The name of the VLAN
@@ -104,6 +108,7 @@ class VLANs(object):
         """
         **Delete a VLAN from a network**
         https://api.meraki.com/api_docs#delete-a-vlan-from-a-network
+        
         - networkId (string)
         - vlanId (string)
         """
@@ -120,6 +125,7 @@ class VLANs(object):
         """
         **Returns the enabled status of VLANs for the network**
         https://api.meraki.com/api_docs#returns-the-enabled-status-of-vlans-for-the-network
+        
         - networkId (string)
         """
 
@@ -135,6 +141,7 @@ class VLANs(object):
         """
         **Enable/Disable VLANs for the given network**
         https://api.meraki.com/api_docs#enable/disable-vlans-for-the-given-network
+        
         - networkId (string)
         - enabled (boolean): Boolean indicating whether to enable (true) or disable (false) VLANs for the network
         """

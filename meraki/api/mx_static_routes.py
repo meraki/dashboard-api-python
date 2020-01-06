@@ -7,6 +7,7 @@ class MXStaticRoutes(object):
         """
         **List the static routes for an MX or teleworker network**
         https://api.meraki.com/api_docs#list-the-static-routes-for-an-mx-or-teleworker-network
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class MXStaticRoutes(object):
         """
         **Add a static route for an MX or teleworker network**
         https://api.meraki.com/api_docs#add-a-static-route-for-an-mx-or-teleworker-network
+        
         - networkId (string)
         - name (string): The name of the new static route
         - subnet (string): The subnet of the static route
@@ -45,6 +47,7 @@ class MXStaticRoutes(object):
         """
         **Return a static route for an MX or teleworker network**
         https://api.meraki.com/api_docs#return-a-static-route-for-an-mx-or-teleworker-network
+        
         - networkId (string)
         - srId (string)
         """
@@ -61,6 +64,7 @@ class MXStaticRoutes(object):
         """
         **Update a static route for an MX or teleworker network**
         https://api.meraki.com/api_docs#update-a-static-route-for-an-mx-or-teleworker-network
+        
         - networkId (string)
         - srId (string)
         - name (string): The name of the static route
@@ -88,6 +92,7 @@ class MXStaticRoutes(object):
         """
         **Delete a static route from an MX or teleworker network**
         https://api.meraki.com/api_docs#delete-a-static-route-from-an-mx-or-teleworker-network
+        
         - networkId (string)
         - srId (string)
         """

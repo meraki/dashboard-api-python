@@ -7,6 +7,7 @@ class SNMPSettings(object):
         """
         **Return the SNMP settings for a network**
         https://api.meraki.com/api_docs#return-the-snmp-settings-for-a-network
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class SNMPSettings(object):
         """
         **Update the SNMP settings for a network**
         https://api.meraki.com/api_docs#update-the-snmp-settings-for-a-network
+        
         - networkId (string)
         - access (string): The type of SNMP access. Can be one of 'none' (disabled), 'community' (V1/V2c), or 'users' (V3).
         - communityString (string): The SNMP community string. Only relevant if 'access' is set to 'community'.
@@ -49,6 +51,7 @@ class SNMPSettings(object):
         """
         **Return the SNMP settings for an organization**
         https://api.meraki.com/api_docs#return-the-snmp-settings-for-an-organization
+        
         - organizationId (string)
         """
 
@@ -64,6 +67,7 @@ class SNMPSettings(object):
         """
         **Update the SNMP settings for an organization**
         https://api.meraki.com/api_docs#update-the-snmp-settings-for-an-organization
+        
         - organizationId (string)
         - v2cEnabled (boolean): Boolean indicating whether SNMP version 2c is enabled for the organization.
         - v3Enabled (boolean): Boolean indicating whether SNMP version 3 is enabled for the organization.

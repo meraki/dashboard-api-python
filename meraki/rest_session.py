@@ -87,8 +87,10 @@ class RestSession(object):
                         self._logger.info(f'{tag}, {operation}; page {counter} - {status} {reason}')
                     else:
                         self._logger.info(f'{tag}, {operation} - {status} {reason}')
+                    # For non-empty response to GET, ensure valid JSON
                     try:
-                        response.json()
+                        if method == 'GET' and response.text.strip():
+                            response.json()
                         return response
                     except json.decoder.JSONDecodeError as e:
                         self._logger.warning(f'{tag}, {operation} - {e}, retrying in 1 second')

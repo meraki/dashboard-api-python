@@ -7,6 +7,7 @@ class ManagementInterfaceSettings(object):
         """
         **Return the management interface settings for a device**
         https://api.meraki.com/api_docs#return-the-management-interface-settings-for-a-device
+        
         - networkId (string)
         - serial (string)
         """
@@ -23,6 +24,7 @@ class ManagementInterfaceSettings(object):
         """
         **Update the management interface settings for a device**
         https://api.meraki.com/api_docs#update-the-management-interface-settings-for-a-device
+        
         - networkId (string)
         - serial (string)
         - wan1 (object): WAN 1 settings

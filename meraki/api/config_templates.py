@@ -7,6 +7,7 @@ class ConfigTemplates(object):
         """
         **List the configuration templates for this organization**
         https://api.meraki.com/api_docs#list-the-configuration-templates-for-this-organization
+        
         - organizationId (string)
         """
 
@@ -22,6 +23,7 @@ class ConfigTemplates(object):
         """
         **Remove a configuration template**
         https://api.meraki.com/api_docs#remove-a-configuration-template
+        
         - organizationId (string)
         - configTemplateId (string)
         """

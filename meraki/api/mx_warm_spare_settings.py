@@ -7,6 +7,7 @@ class MXWarmSpareSettings(object):
         """
         **Swap MX primary and warm spare appliances**
         https://api.meraki.com/api_docs#swap-mx-primary-and-warm-spare-appliances
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class MXWarmSpareSettings(object):
         """
         **Return MX warm spare settings**
         https://api.meraki.com/api_docs#return-mx-warm-spare-settings
+        
         - networkId (string)
         """
 
@@ -37,6 +39,7 @@ class MXWarmSpareSettings(object):
         """
         **Update MX warm spare settings**
         https://api.meraki.com/api_docs#update-mx-warm-spare-settings
+        
         - networkId (string)
         - enabled (boolean): Enable warm spare
         - spareSerial (string): Serial number of the warm spare appliance

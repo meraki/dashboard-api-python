@@ -7,6 +7,7 @@ class MGPortForwardingRules(object):
         """
         **Returns the port forwarding rules for a single MG.**
         https://api.meraki.com/api_docs#returns-the-port-forwarding-rules-for-a-single-mg
+        
         - serial (string)
         """
 
@@ -22,6 +23,7 @@ class MGPortForwardingRules(object):
         """
         **Updates the port forwarding rules for a single MG.**
         https://api.meraki.com/api_docs#updates-the-port-forwarding-rules-for-a-single-mg
+        
         - serial (string)
         - rules (array): An array of port forwarding params
         """

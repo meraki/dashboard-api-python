@@ -7,6 +7,7 @@ class MXCellularFirewall(object):
         """
         **Return the cellular firewall rules for an MX network**
         https://api.meraki.com/api_docs#return-the-cellular-firewall-rules-for-an-mx-network
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class MXCellularFirewall(object):
         """
         **Update the cellular firewall rules of an MX network**
         https://api.meraki.com/api_docs#update-the-cellular-firewall-rules-of-an-mx-network
+        
         - networkId (string)
         - rules (array): An ordered array of the firewall rules (not including the default rule)
         """

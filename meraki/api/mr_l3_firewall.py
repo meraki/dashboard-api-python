@@ -7,6 +7,7 @@ class MRL3Firewall(object):
         """
         **Return the L3 firewall rules for an SSID on an MR network**
         https://api.meraki.com/api_docs#return-the-l3-firewall-rules-for-an-ssid-on-an-mr-network
+        
         - networkId (string)
         - number (string)
         """
@@ -23,6 +24,7 @@ class MRL3Firewall(object):
         """
         **Update the L3 firewall rules of an SSID on an MR network**
         https://api.meraki.com/api_docs#update-the-l3-firewall-rules-of-an-ssid-on-an-mr-network
+        
         - networkId (string)
         - number (string)
         - rules (array): An ordered array of the firewall rules for this SSID (not including the local LAN access rule or the default rule)

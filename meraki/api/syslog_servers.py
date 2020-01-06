@@ -7,6 +7,7 @@ class SyslogServers(object):
         """
         **List the syslog servers for a network**
         https://api.meraki.com/api_docs#list-the-syslog-servers-for-a-network
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class SyslogServers(object):
         """
         **Update the syslog servers for a network**
         https://api.meraki.com/api_docs#update-the-syslog-servers-for-a-network
+        
         - networkId (string)
         - servers (array): A list of the syslog servers for this network
         """

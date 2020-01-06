@@ -7,6 +7,7 @@ class MGConnectivityMonitoringDestinations(object):
         """
         **Return the connectivity testing destinations for an MG network**
         https://api.meraki.com/api_docs#return-the-connectivity-testing-destinations-for-an-mg-network
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class MGConnectivityMonitoringDestinations(object):
         """
         **Update the connectivity testing destinations for an MG network**
         https://api.meraki.com/api_docs#update-the-connectivity-testing-destinations-for-an-mg-network
+        
         - networkId (string)
         - destinations (array): The list of connectivity monitoring destinations
         """

@@ -7,6 +7,7 @@ class FirewalledServices(object):
         """
         **List the appliance services and their accessibility rules**
         https://api.meraki.com/api_docs#list-the-appliance-services-and-their-accessibility-rules
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class FirewalledServices(object):
         """
         **Return the accessibility settings of the given service ('ICMP', 'web', or 'SNMP')**
         https://api.meraki.com/api_docs#return-the-accessibility-settings-of-the-given-service-icmp-web-or-snmp
+        
         - networkId (string)
         - service (string)
         """
@@ -38,6 +40,7 @@ class FirewalledServices(object):
         """
         **Updates the accessibility settings for the given service ('ICMP', 'web', or 'SNMP')**
         https://api.meraki.com/api_docs#updates-the-accessibility-settings-for-the-given-service-icmp-web-or-snmp
+        
         - networkId (string)
         - service (string)
         - access (string): A string indicating the rule for which IPs are allowed to use the specified service. Acceptable values are "blocked" (no remote IPs can access the service), "restricted" (only whitelisted IPs can access the service), and "unrestriced" (any remote IP can access the service). This field is required

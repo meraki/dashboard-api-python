@@ -7,6 +7,7 @@ class ContentFilteringCategories(object):
         """
         **List all available content filtering categories for an MX network**
         https://api.meraki.com/api_docs#list-all-available-content-filtering-categories-for-an-mx-network
+        
         - networkId (string)
         """
 

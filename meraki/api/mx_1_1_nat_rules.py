@@ -7,6 +7,7 @@ class MX11NATRules(object):
         """
         **Return the 1:1 NAT mapping rules for an MX network**
         https://api.meraki.com/api_docs#return-the-11-nat-mapping-rules-for-an-mx-network
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class MX11NATRules(object):
         """
         **Set the 1:1 NAT mapping rules for an MX network**
         https://api.meraki.com/api_docs#set-the-11-nat-mapping-rules-for-an-mx-network
+        
         - networkId (string)
         - rules (array): An array of 1:1 nat rules
         """

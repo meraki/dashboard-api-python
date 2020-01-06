@@ -7,6 +7,7 @@ class MXPortForwardingRules(object):
         """
         **Return the port forwarding rules for an MX network**
         https://api.meraki.com/api_docs#return-the-port-forwarding-rules-for-an-mx-network
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class MXPortForwardingRules(object):
         """
         **Update the port forwarding rules for an MX network**
         https://api.meraki.com/api_docs#update-the-port-forwarding-rules-for-an-mx-network
+        
         - networkId (string)
         - rules (array): An array of port forwarding params
         """

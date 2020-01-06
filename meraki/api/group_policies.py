@@ -7,6 +7,7 @@ class GroupPolicies(object):
         """
         **List the group policies in a network**
         https://api.meraki.com/api_docs#list-the-group-policies-in-a-network
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class GroupPolicies(object):
         """
         **Create a group policy**
         https://api.meraki.com/api_docs#create-a-group-policy
+        
         - networkId (string)
         - name (string): The name for your group policy. Required.
         - scheduling (object):     The schedule for the group policy. Schedules are applied to days of the week.
@@ -57,6 +59,7 @@ class GroupPolicies(object):
         """
         **Display a group policy**
         https://api.meraki.com/api_docs#display-a-group-policy
+        
         - networkId (string)
         - groupPolicyId (string)
         """
@@ -73,6 +76,7 @@ class GroupPolicies(object):
         """
         **Update a group policy**
         https://api.meraki.com/api_docs#update-a-group-policy
+        
         - networkId (string)
         - groupPolicyId (string)
         - name (string): The name for your group policy.
@@ -109,6 +113,7 @@ class GroupPolicies(object):
         """
         **Delete a group policy**
         https://api.meraki.com/api_docs#delete-a-group-policy
+        
         - networkId (string)
         - groupPolicyId (string)
         """

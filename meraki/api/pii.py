@@ -7,6 +7,7 @@ class PII(object):
         """
         **List the keys required to access Personally Identifiable Information (PII) for a given identifier. Exactly one identifier will be accepted. If the organization contains org-wide Systems Manager users matching the key provided then there will be an entry with the key "0" containing the applicable keys.**
         https://api.meraki.com/api_docs#list-the-keys-required-to-access-personally-identifiable-information-pii-for-a-given-identifier
+        
         - networkId (string)
         - username (string): The username of a Systems Manager user
         - email (string): The email of a network user account or a Systems Manager device
@@ -33,6 +34,7 @@ class PII(object):
         """
         **List the PII requests for this network or organization**
         https://api.meraki.com/api_docs#list-the-pii-requests-for-this-network-or-organization
+        
         - networkId (string)
         """
 
@@ -48,6 +50,7 @@ class PII(object):
         """
         **Submit a new delete or restrict processing PII request**
         https://api.meraki.com/api_docs#submit-a-new-delete-or-restrict-processing-pii-request
+        
         - networkId (string)
         - type (string): One of "delete" or "restrict processing"
         - datasets (array): The datasets related to the provided key that should be deleted. Only applies to "delete" requests. The value "all" will be expanded to all datasets applicable to this type. The datasets by applicable to each type are: mac (usage, events, traffic), email (users, loginAttempts), username (users, loginAttempts), bluetoothMac (client, connectivity), smDeviceId (device), smUserId (user)
@@ -79,6 +82,7 @@ class PII(object):
         """
         **Return a PII request**
         https://api.meraki.com/api_docs#return-a-pii-request
+        
         - networkId (string)
         - requestId (string)
         """
@@ -95,6 +99,7 @@ class PII(object):
         """
         **Delete a restrict processing PII request**
         https://api.meraki.com/api_docs#delete-a-restrict-processing-pii-request
+        
         - networkId (string)
         - requestId (string)
         """
@@ -111,6 +116,7 @@ class PII(object):
         """
         **Given a piece of Personally Identifiable Information (PII), return the Systems Manager device ID(s) associated with that identifier. These device IDs can be used with the Systems Manager API endpoints to retrieve device details. Exactly one identifier will be accepted.**
         https://api.meraki.com/api_docs#given-a-piece-of-personally-identifiable-information-pii-return-the-systems-manager-device-ids-associated-with-that-identifier
+        
         - networkId (string)
         - username (string): The username of a Systems Manager user
         - email (string): The email of a network user account or a Systems Manager device
@@ -137,6 +143,7 @@ class PII(object):
         """
         **Given a piece of Personally Identifiable Information (PII), return the Systems Manager owner ID(s) associated with that identifier. These owner IDs can be used with the Systems Manager API endpoints to retrieve owner details. Exactly one identifier will be accepted.**
         https://api.meraki.com/api_docs#given-a-piece-of-personally-identifiable-information-pii-return-the-systems-manager-owner-ids-associated-with-that-identifier
+        
         - networkId (string)
         - username (string): The username of a Systems Manager user
         - email (string): The email of a network user account or a Systems Manager device

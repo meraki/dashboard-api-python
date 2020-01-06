@@ -7,6 +7,7 @@ class SecurityEvents(object):
         """
         **List the security events for a client. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
         https://api.meraki.com/api_docs#list-the-security-events-for-a-client
+        
         - networkId (string)
         - clientId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
@@ -37,6 +38,7 @@ class SecurityEvents(object):
         """
         **List the security events for a network**
         https://api.meraki.com/api_docs#list-the-security-events-for-a-network
+        
         - networkId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
@@ -66,6 +68,7 @@ class SecurityEvents(object):
         """
         **List the security events for an organization**
         https://api.meraki.com/api_docs#list-the-security-events-for-an-organization
+        
         - organizationId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page

@@ -7,6 +7,7 @@ class ContentFilteringRules(object):
         """
         **Return the content filtering settings for an MX network**
         https://api.meraki.com/api_docs#return-the-content-filtering-settings-for-an-mx-network
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class ContentFilteringRules(object):
         """
         **Update the content filtering settings for an MX network**
         https://api.meraki.com/api_docs#update-the-content-filtering-settings-for-an-mx-network
+        
         - networkId (string)
         - allowedUrlPatterns (array): A whitelist of URL patterns to allow
         - blockedUrlPatterns (array): A blacklist of URL patterns to block

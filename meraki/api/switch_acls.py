@@ -7,6 +7,7 @@ class SwitchACLs(object):
         """
         **Return the access control lists for a MS network**
         https://api.meraki.com/api_docs#return-the-access-control-lists-for-a-ms-network
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class SwitchACLs(object):
         """
         **Update the access control lists for a MS network**
         https://api.meraki.com/api_docs#update-the-access-control-lists-for-a-ms-network
+        
         - networkId (string)
         - rules (array): An ordered array of the access control list rules (not including the default rule). An empty array will clear the rules.
         """

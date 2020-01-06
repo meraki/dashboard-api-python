@@ -7,6 +7,7 @@ class MGLANSettings(object):
         """
         **Show the LAN Settings of a MG**
         https://api.meraki.com/api_docs#show-the-lan-settings-of-a-mg
+        
         - serial (string)
         """
 
@@ -22,6 +23,7 @@ class MGLANSettings(object):
         """
         **Update the LAN Settings for a single MG.**
         https://api.meraki.com/api_docs#update-the-lan-settings-for-a-single-mg
+        
         - serial (string)
         - reservedIpRanges (array): list of all reserved IP ranges for a single MG
         - fixedIpAssignments (array): list of all fixed IP assignments for a single MG

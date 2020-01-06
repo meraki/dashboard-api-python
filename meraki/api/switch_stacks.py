@@ -7,6 +7,7 @@ class SwitchStacks(object):
         """
         **List the switch stacks in a network**
         https://api.meraki.com/api_docs#list-the-switch-stacks-in-a-network
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class SwitchStacks(object):
         """
         **Create a stack**
         https://api.meraki.com/api_docs#create-a-stack
+        
         - networkId (string)
         - name (string): The name of the new stack
         - serials (array): An array of switch serials to be added into the new stack
@@ -44,6 +46,7 @@ class SwitchStacks(object):
         """
         **Show a switch stack**
         https://api.meraki.com/api_docs#show-a-switch-stack
+        
         - networkId (string)
         - switchStackId (string)
         """
@@ -60,6 +63,7 @@ class SwitchStacks(object):
         """
         **Delete a stack**
         https://api.meraki.com/api_docs#delete-a-stack
+        
         - networkId (string)
         - switchStackId (string)
         """
@@ -76,6 +80,7 @@ class SwitchStacks(object):
         """
         **Add a switch to a stack**
         https://api.meraki.com/api_docs#add-a-switch-to-a-stack
+        
         - networkId (string)
         - switchStackId (string)
         - serial (string): The serial of the switch to be added
@@ -98,6 +103,7 @@ class SwitchStacks(object):
         """
         **Remove a switch from a stack**
         https://api.meraki.com/api_docs#remove-a-switch-from-a-stack
+        
         - networkId (string)
         - switchStackId (string)
         - serial (string): The serial of the switch to be removed

@@ -3,13 +3,14 @@ class Events(object):
         super(Events, self).__init__()
         self._session = session
     
-    def getNetworkEvents(self, networkId: str, total_pages=1, direction='next', **kwargs):
+    def getNetworkEvents(self, networkId: str, total_pages=1, direction='prev', **kwargs):
         """
         **List the events for the network**
         https://api.meraki.com/api_docs#list-the-events-for-the-network
+        
         - networkId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
-        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - direction (string): direction to paginate, either "prev" (default) or "next" page
         - productType (string): The product type to fetch events for. This parameter is required for networks with multiple device types. Valid types are wireless, appliance, switch, systemsManager, camera, and cellularGateway
         - includedEventTypes (array): A list of event types. The returned events will be filtered to only include events with these types.
         - excludedEventTypes (array): A list of event types. The returned events will be filtered to exclude events with these types.
@@ -49,6 +50,7 @@ class Events(object):
         """
         **List the event type to human-readable description**
         https://api.meraki.com/api_docs#list-the-event-type-to-human-readable-description
+        
         - networkId (string)
         """
 

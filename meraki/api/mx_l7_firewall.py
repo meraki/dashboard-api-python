@@ -7,6 +7,7 @@ class MXL7Firewall(object):
         """
         **List the MX L7 firewall rules for an MX network**
         https://api.meraki.com/api_docs#list-the-mx-l7-firewall-rules-for-an-mx-network
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class MXL7Firewall(object):
         """
         **Update the MX L7 firewall rules for an MX network**
         https://api.meraki.com/api_docs#update-the-mx-l7-firewall-rules-for-an-mx-network
+        
         - networkId (string)
         - rules (array): An ordered array of the MX L7 firewall rules
         """

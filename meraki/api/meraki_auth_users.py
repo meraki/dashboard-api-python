@@ -7,6 +7,7 @@ class MerakiAuthUsers(object):
         """
         **List the splash or RADIUS users configured under Meraki Authentication for a network**
         https://api.meraki.com/api_docs#list-the-splash-or-radius-users-configured-under-meraki-authentication-for-a-network
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class MerakiAuthUsers(object):
         """
         **Return the Meraki Auth splash or RADIUS user**
         https://api.meraki.com/api_docs#return-the-meraki-auth-splash-or-radius-user
+        
         - networkId (string)
         - merakiAuthUserId (string)
         """

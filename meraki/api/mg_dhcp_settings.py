@@ -7,6 +7,7 @@ class MGDHCPSettings(object):
         """
         **List common DHCP settings of MGs**
         https://api.meraki.com/api_docs#list-common-dhcp-settings-of-mgs
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class MGDHCPSettings(object):
         """
         **Update common DHCP settings of MGs**
         https://api.meraki.com/api_docs#update-common-dhcp-settings-of-mgs
+        
         - networkId (string)
         - dhcpLeaseTime (string): DHCP Lease time for all MG of the network. It can be '30 minutes', '1 hour', '4 hours', '12 hours', '1 day' or '1 week'.
         - dnsNameservers (string): DNS name servers mode for all MG of the network. It can take 4 different values: 'upstream_dns', 'google_dns', 'opendns', 'custom'.

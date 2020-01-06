@@ -7,6 +7,7 @@ class MXL7ApplicationCategories(object):
         """
         **Return the L7 firewall application categories and their associated applications for an MX network**
         https://api.meraki.com/api_docs#return-the-l7-firewall-application-categories-and-their-associated-applications-for-an-mx-network
+        
         - networkId (string)
         """
 

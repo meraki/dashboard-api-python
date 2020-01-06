@@ -7,6 +7,7 @@ class Floorplans(object):
         """
         **List the floor plans that belong to your network**
         https://api.meraki.com/api_docs#list-the-floor-plans-that-belong-to-your-network
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class Floorplans(object):
         """
         **Upload a floor plan**
         https://api.meraki.com/api_docs#upload-a-floor-plan
+        
         - networkId (string)
         - name (string): The name of your floor plan.
         - imageContents (string): The file contents (a base 64 encoded string) of your image. Supported formats are PNG, GIF, and JPG. Note that all images are saved as PNG files, regardless of the format they are uploaded in.
@@ -49,6 +51,7 @@ class Floorplans(object):
         """
         **Find a floor plan by ID**
         https://api.meraki.com/api_docs#find-a-floor-plan-by-id
+        
         - networkId (string)
         - floorPlanId (string)
         """
@@ -65,6 +68,7 @@ class Floorplans(object):
         """
         **Update a floor plan's geolocation and other meta data**
         https://api.meraki.com/api_docs#update-a-floor-plans-geolocation-and-other-meta-data
+        
         - networkId (string)
         - floorPlanId (string)
         - name (string): The name of your floor plan.
@@ -93,6 +97,7 @@ class Floorplans(object):
         """
         **Destroy a floor plan**
         https://api.meraki.com/api_docs#destroy-a-floor-plan
+        
         - networkId (string)
         - floorPlanId (string)
         """

@@ -7,6 +7,7 @@ class SwitchPortSchedules(object):
         """
         **List switch port schedules**
         https://api.meraki.com/api_docs#list-switch-port-schedules
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class SwitchPortSchedules(object):
         """
         **Add a switch port schedule**
         https://api.meraki.com/api_docs#add-a-switch-port-schedule
+        
         - networkId (string)
         - name (string): The name for your port schedule. Required
         - portSchedule (object):     The schedule for switch port scheduling. Schedules are applied to days of the week.
@@ -47,6 +49,7 @@ class SwitchPortSchedules(object):
         """
         **Delete a switch port schedule**
         https://api.meraki.com/api_docs#delete-a-switch-port-schedule
+        
         - networkId (string)
         - portScheduleId (string)
         """
@@ -63,6 +66,7 @@ class SwitchPortSchedules(object):
         """
         **Update a switch port schedule**
         https://api.meraki.com/api_docs#update-a-switch-port-schedule
+        
         - networkId (string)
         - portScheduleId (string)
         - name (string): The name for your port schedule.

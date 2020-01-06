@@ -7,6 +7,7 @@ class TrafficAnalysisSettings(object):
         """
         **Return the traffic analysis settings for a network**
         https://api.meraki.com/api_docs#return-the-traffic-analysis-settings-for-a-network
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class TrafficAnalysisSettings(object):
         """
         **Update the traffic analysis settings for a network**
         https://api.meraki.com/api_docs#update-the-traffic-analysis-settings-for-a-network
+        
         - networkId (string)
         - mode (string):     The traffic analysis mode for the network. Can be one of 'disabled' (do not collect traffic types),
     'basic' (collect generic traffic categories), or 'detailed' (collect destination hostnames).

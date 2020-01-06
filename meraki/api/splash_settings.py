@@ -7,6 +7,7 @@ class SplashSettings(object):
         """
         **Display the splash page settings for the given SSID**
         https://api.meraki.com/api_docs#display-the-splash-page-settings-for-the-given-ssid
+        
         - networkId (string)
         - number (string)
         """
@@ -23,6 +24,7 @@ class SplashSettings(object):
         """
         **Modify the splash page settings for the given SSID**
         https://api.meraki.com/api_docs#modify-the-splash-page-settings-for-the-given-ssid
+        
         - networkId (string)
         - number (string)
         - splashUrl (string): [optional] The custom splash URL of the click-through splash page. Note that the URL can be configured without necessarily being used. In order to enable the custom URL, see 'useSplashUrl'

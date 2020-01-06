@@ -7,6 +7,7 @@ class Clients(object):
         """
         **List the clients of a device, up to a maximum of a month ago. The usage of each client is returned in kilobytes. If the device is a switch, the switchport is returned; otherwise the switchport field is null.**
         https://api.meraki.com/api_docs#list-the-clients-of-a-device-up-to-a-maximum-of-a-month-ago
+        
         - serial (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
@@ -29,6 +30,7 @@ class Clients(object):
         """
         **List the clients that have used this network in the timespan**
         https://api.meraki.com/api_docs#list-the-clients-that-have-used-this-network-in-the-timespan
+        
         - networkId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
@@ -57,6 +59,7 @@ class Clients(object):
         """
         **Provisions a client with a name and policy. Clients can be provisioned before they associate to the network.**
         https://api.meraki.com/api_docs#provisions-a-client-with-a-name-and-policy
+        
         - networkId (string)
         - mac (string): The MAC address of the client. Required.
         - name (string): The display name for the client. Optional. Limited to 255 bytes.
@@ -81,6 +84,7 @@ class Clients(object):
         """
         **Return the client associated with the given identifier. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
         https://api.meraki.com/api_docs#return-the-client-associated-with-the-given-identifier
+        
         - networkId (string)
         - clientId (string)
         """
@@ -97,6 +101,7 @@ class Clients(object):
         """
         **Return the events associated with this client. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
         https://api.meraki.com/api_docs#return-the-events-associated-with-this-client
+        
         - networkId (string)
         - clientId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
@@ -124,6 +129,7 @@ class Clients(object):
         """
         **Return the latency history for a client. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP. The latency data is from a sample of 2% of packets and is grouped into 4 traffic categories: background, best effort, video, voice. Within these categories the sampled packet counters are bucketed by latency in milliseconds.**
         https://api.meraki.com/api_docs#return-the-latency-history-for-a-client
+        
         - networkId (string)
         - clientId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 791 days from today.
@@ -149,6 +155,7 @@ class Clients(object):
         """
         **Return the policy assigned to a client on the network. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
         https://api.meraki.com/api_docs#return-the-policy-assigned-to-a-client-on-the-network
+        
         - networkId (string)
         - clientId (string)
         """
@@ -165,6 +172,7 @@ class Clients(object):
         """
         **Update the policy assigned to a client on the network. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
         https://api.meraki.com/api_docs#update-the-policy-assigned-to-a-client-on-the-network
+        
         - networkId (string)
         - clientId (string)
         - devicePolicy (string): The group policy (Whitelisted, Blocked, Normal, Group policy)
@@ -188,6 +196,7 @@ class Clients(object):
         """
         **Return the splash authorization for a client, for each SSID they've associated with through splash. Only enabled SSIDs with Click-through splash enabled will be included. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
         https://api.meraki.com/api_docs#return-the-splash-authorization-for-a-client-for-each-ssid-theyve-associated-with-through-splash
+        
         - networkId (string)
         - clientId (string)
         """
@@ -204,6 +213,7 @@ class Clients(object):
         """
         **Update a client's splash authorization. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
         https://api.meraki.com/api_docs#update-a-clients-splash-authorization
+        
         - networkId (string)
         - clientId (string)
         - ssids (object): The target SSIDs. Each SSID must be enabled and must have Click-through splash enabled. For each SSID where isAuthorized is true, the expiration time will automatically be set according to the SSID's splash frequency.
@@ -226,6 +236,7 @@ class Clients(object):
         """
         **Return the client's network traffic data over time. Usage data is in kilobytes. This endpoint requires detailed traffic analysis to be enabled on the Network-wide > General page. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
         https://api.meraki.com/api_docs#return-the-clients-network-traffic-data-over-time
+        
         - networkId (string)
         - clientId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
@@ -253,6 +264,7 @@ class Clients(object):
         """
         **Return the client's daily usage history. Usage data is in kilobytes. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
         https://api.meraki.com/api_docs#return-the-clients-daily-usage-history
+        
         - networkId (string)
         - clientId (string)
         """

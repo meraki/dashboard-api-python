@@ -7,6 +7,7 @@ class MXVPNFirewall(object):
         """
         **Return the firewall rules for an organization's site-to-site VPN**
         https://api.meraki.com/api_docs#return-the-firewall-rules-for-an-organizations-site-to-site-vpn
+        
         - organizationId (string)
         """
 
@@ -22,6 +23,7 @@ class MXVPNFirewall(object):
         """
         **Update the firewall rules of an organization's site-to-site VPN**
         https://api.meraki.com/api_docs#update-the-firewall-rules-of-an-organizations-site-to-site-vpn
+        
         - organizationId (string)
         - rules (array): An ordered array of the firewall rules (not including the default rule)
         - syslogDefaultRule (boolean): Log the special default rule (boolean value - enable only if you've configured a syslog server) (optional)

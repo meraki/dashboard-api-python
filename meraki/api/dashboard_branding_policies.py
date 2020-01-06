@@ -7,6 +7,7 @@ class DashboardBrandingPolicies(object):
         """
         **List the branding policies of an organization**
         https://api.meraki.com/api_docs#list-the-branding-policies-of-an-organization
+        
         - organizationId (string)
         """
 
@@ -22,6 +23,7 @@ class DashboardBrandingPolicies(object):
         """
         **Add a new branding policy to an organization**
         https://api.meraki.com/api_docs#add-a-new-branding-policy-to-an-organization
+        
         - organizationId (string)
         - name (string): Name of the Dashboard branding policy.
         - enabled (boolean): Boolean indicating whether this policy is enabled.
@@ -50,6 +52,7 @@ class DashboardBrandingPolicies(object):
         """
         **Return the branding policy IDs of an organization in priority order. IDs are ordered in ascending order of priority (IDs later in the array have higher priority).**
         https://api.meraki.com/api_docs#return-the-branding-policy-ids-of-an-organization-in-priority-order
+        
         - organizationId (string)
         """
 
@@ -65,6 +68,7 @@ class DashboardBrandingPolicies(object):
         """
         **Update the priority ordering of an organization's branding policies.**
         https://api.meraki.com/api_docs#update-the-priority-ordering-of-an-organizations-branding-policies
+        
         - organizationId (string)
         - brandingPolicyIds (array): A list of branding policy IDs arranged in ascending priority order (IDs later in the array have higher priority).
         """
@@ -86,6 +90,7 @@ class DashboardBrandingPolicies(object):
         """
         **Return a branding policy**
         https://api.meraki.com/api_docs#return-a-branding-policy
+        
         - organizationId (string)
         - brandingPolicyId (string)
         """
@@ -102,6 +107,7 @@ class DashboardBrandingPolicies(object):
         """
         **Update a branding policy**
         https://api.meraki.com/api_docs#update-a-branding-policy
+        
         - organizationId (string)
         - brandingPolicyId (string)
         - name (string): Name of the Dashboard branding policy.
@@ -131,6 +137,7 @@ class DashboardBrandingPolicies(object):
         """
         **Delete a branding policy**
         https://api.meraki.com/api_docs#delete-a-branding-policy
+        
         - organizationId (string)
         - brandingPolicyId (string)
         """

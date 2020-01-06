@@ -7,6 +7,7 @@ class Devices(object):
         """
         **List the devices in a network**
         https://api.meraki.com/api_docs#list-the-devices-in-a-network
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class Devices(object):
         """
         **Claim a device into a network**
         https://api.meraki.com/api_docs#claim-a-device-into-a-network
+        
         - networkId (string)
         - serial (string): The serial of a device
         """
@@ -43,6 +45,7 @@ class Devices(object):
         """
         **Return a single device**
         https://api.meraki.com/api_docs#return-a-single-device
+        
         - networkId (string)
         - serial (string)
         """
@@ -59,6 +62,7 @@ class Devices(object):
         """
         **Update the attributes of a device**
         https://api.meraki.com/api_docs#update-the-attributes-of-a-device
+        
         - networkId (string)
         - serial (string)
         - name (string): The name of a device
@@ -89,6 +93,7 @@ class Devices(object):
         """
         **Blink the LEDs on a device**
         https://api.meraki.com/api_docs#blink-the-leds-on-a-device
+        
         - networkId (string)
         - serial (string)
         - duration (integer): The duration in seconds. Must be between 5 and 120. Default is 20 seconds
@@ -113,6 +118,7 @@ class Devices(object):
         """
         **List LLDP and CDP information for a device**
         https://api.meraki.com/api_docs#list-lldp-and-cdp-information-for-a-device
+        
         - networkId (string)
         - serial (string)
         - timespan (integer): The timespan for which LLDP and CDP information will be fetched. Must be in seconds and less than or equal to a month (2592000 seconds). LLDP and CDP information is sent to the Meraki dashboard every 10 minutes. In instances where this LLDP and CDP information matches an existing entry in the Meraki dashboard, the data is updated once every two hours. Meraki recommends querying LLDP and CDP information at an interval slightly greater than two hours, to ensure that unchanged CDP / LLDP information can be queried consistently.
@@ -135,6 +141,7 @@ class Devices(object):
         """
         **Get the uplink loss percentage and latency in milliseconds for a wired network device.**
         https://api.meraki.com/api_docs#get-the-uplink-loss-percentage-and-latency-in-milliseconds-for-a-wired-network-device
+        
         - networkId (string)
         - serial (string)
         - ip (string): The destination IP used to obtain the requested stats. This is required.
@@ -166,6 +173,7 @@ class Devices(object):
         """
         **Return the performance score for a single device. Only primary MX devices supported. If no data is available, a 204 error code is returned.**
         https://api.meraki.com/api_docs#return-the-performance-score-for-a-single-device
+        
         - networkId (string)
         - serial (string)
         """
@@ -182,6 +190,7 @@ class Devices(object):
         """
         **Reboot a device**
         https://api.meraki.com/api_docs#reboot-a-device
+        
         - networkId (string)
         - serial (string)
         """
@@ -198,6 +207,7 @@ class Devices(object):
         """
         **Remove a single device**
         https://api.meraki.com/api_docs#remove-a-single-device
+        
         - networkId (string)
         - serial (string)
         """
@@ -214,6 +224,7 @@ class Devices(object):
         """
         **Return the uplink information for a device.**
         https://api.meraki.com/api_docs#return-the-uplink-information-for-a-device
+        
         - networkId (string)
         - serial (string)
         """
@@ -230,6 +241,7 @@ class Devices(object):
         """
         **List the devices in an organization**
         https://api.meraki.com/api_docs#list-the-devices-in-an-organization
+        
         - organizationId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page

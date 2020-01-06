@@ -7,6 +7,7 @@ class SwitchPorts(object):
         """
         **Return the status for all the ports of a switch**
         https://api.meraki.com/api_docs#return-the-status-for-all-the-ports-of-a-switch
+        
         - serial (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
@@ -29,6 +30,7 @@ class SwitchPorts(object):
         """
         **List the switch ports for a switch**
         https://api.meraki.com/api_docs#list-the-switch-ports-for-a-switch
+        
         - serial (string)
         """
 
@@ -44,6 +46,7 @@ class SwitchPorts(object):
         """
         **Return a switch port**
         https://api.meraki.com/api_docs#return-a-switch-port
+        
         - serial (string)
         - number (string)
         """
@@ -60,6 +63,7 @@ class SwitchPorts(object):
         """
         **Update a switch port**
         https://api.meraki.com/api_docs#update-a-switch-port
+        
         - serial (string)
         - number (string)
         - name (string): The name of the switch port

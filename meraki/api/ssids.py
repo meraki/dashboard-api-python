@@ -7,6 +7,7 @@ class SSIDs(object):
         """
         **Return the SSID statuses of an access point**
         https://api.meraki.com/api_docs#return-the-ssid-statuses-of-an-access-point
+        
         - networkId (string)
         - serial (string)
         """
@@ -23,6 +24,7 @@ class SSIDs(object):
         """
         **List the SSIDs in a network. Supports networks with access points or wireless-enabled security appliances and teleworker gateways.**
         https://api.meraki.com/api_docs#list-the-ssids-in-a-network
+        
         - networkId (string)
         """
 
@@ -38,6 +40,7 @@ class SSIDs(object):
         """
         **Return a single SSID**
         https://api.meraki.com/api_docs#return-a-single-ssid
+        
         - networkId (string)
         - number (string)
         """
@@ -54,6 +57,7 @@ class SSIDs(object):
         """
         **Update the attributes of an SSID**
         https://api.meraki.com/api_docs#update-the-attributes-of-an-ssid
+        
         - networkId (string)
         - number (string)
         - name (string): The name of the SSID

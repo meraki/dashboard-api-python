@@ -7,6 +7,7 @@ class WebhookLogs(object):
         """
         **Return the log of webhook POSTs sent**
         https://api.meraki.com/api_docs#return-the-log-of-webhook-posts-sent
+        
         - organizationId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page

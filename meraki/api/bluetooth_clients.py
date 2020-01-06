@@ -7,6 +7,7 @@ class BluetoothClients(object):
         """
         **List the Bluetooth clients seen by APs in this network**
         https://api.meraki.com/api_docs#list-the-bluetooth-clients-seen-by-aps-in-this-network
+        
         - networkId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
@@ -36,6 +37,7 @@ class BluetoothClients(object):
         """
         **Return a Bluetooth client. Bluetooth clients can be identified by their ID or their MAC.**
         https://api.meraki.com/api_docs#return-a-bluetooth-client
+        
         - networkId (string)
         - bluetoothClientId (string)
         - includeConnectivityHistory (boolean): Include the connectivity history for this client

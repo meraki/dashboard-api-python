@@ -7,6 +7,7 @@ class SplashLoginAttempts(object):
         """
         **List the splash login attempts for a network**
         https://api.meraki.com/api_docs#list-the-splash-login-attempts-for-a-network
+        
         - networkId (string)
         - ssidNumber (integer): Only return the login attempts for the specified SSID
         - loginIdentifier (string): The username, email, or phone number used during login

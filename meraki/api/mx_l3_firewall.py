@@ -7,6 +7,7 @@ class MXL3Firewall(object):
         """
         **Return the L3 firewall rules for an MX network**
         https://api.meraki.com/api_docs#return-the-l3-firewall-rules-for-an-mx-network
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class MXL3Firewall(object):
         """
         **Update the L3 firewall rules of an MX network**
         https://api.meraki.com/api_docs#update-the-l3-firewall-rules-of-an-mx-network
+        
         - networkId (string)
         - rules (array): An ordered array of the firewall rules (not including the default rule)
         - syslogDefaultRule (boolean): Log the special default rule (boolean value - enable only if you've configured a syslog server) (optional)

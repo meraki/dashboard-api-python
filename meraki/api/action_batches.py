@@ -7,6 +7,7 @@ class ActionBatches(object):
         """
         **Create an action batch**
         https://api.meraki.com/api_docs#create-an-action-batch
+        
         - organizationId (string)
         - actions (array): A set of changes to make as part of this action (<a href='https://developer.cisco.com/meraki/api/#/rest/guides/action-batches/'>more details</a>)
         - confirmed (boolean): Set to true for immediate execution. Set to false if the action should be previewed before executing. This property cannot be unset once it is true. Defaults to false.
@@ -30,6 +31,7 @@ class ActionBatches(object):
         """
         **Return the list of action batches in the organization**
         https://api.meraki.com/api_docs#return-the-list-of-action-batches-in-the-organization
+        
         - organizationId (string)
         """
 
@@ -45,6 +47,7 @@ class ActionBatches(object):
         """
         **Return an action batch**
         https://api.meraki.com/api_docs#return-an-action-batch
+        
         - organizationId (string)
         - actionBatchId (string)
         """
@@ -61,6 +64,7 @@ class ActionBatches(object):
         """
         **Delete an action batch**
         https://api.meraki.com/api_docs#delete-an-action-batch
+        
         - organizationId (string)
         - actionBatchId (string)
         """
@@ -77,6 +81,7 @@ class ActionBatches(object):
         """
         **Update an action batch**
         https://api.meraki.com/api_docs#update-an-action-batch
+        
         - organizationId (string)
         - actionBatchId (string)
         - confirmed (boolean): A boolean representing whether or not the batch has been confirmed. This property cannot be unset once it is true.

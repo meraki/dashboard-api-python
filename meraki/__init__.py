@@ -93,6 +93,7 @@ class DashboardAPI(object):
     - print_console (boolean): if output log used, output to console too?
     - simulate (boolean): simulate POST/PUT/DELETE calls to prevent changes?
     """
+
     def __init__(self, api_key=None, base_url=DEFAULT_BASE_URL, single_request_timeout=DEFAULT_SINGLE_REQUEST_TIMEOUT,
                  wait_on_rate_limit=DEFAULT_WAIT_ON_RATE_LIMIT, maximum_retries=MAXIMUM_RETRIES, output_log=OUTPUT_LOG,
                  log_file_prefix=LOG_FILE_PREFIX, print_console=PRINT_TO_CONSOLE, simulate=SIMULATE_API_CALLS):
@@ -100,7 +101,7 @@ class DashboardAPI(object):
         api_key = api_key or os.environ.get(API_KEY_ENVIRONMENT_VARIABLE)
         if not api_key:
             raise APIKeyError()
-        
+
         # Configure logging
         self._logger = logging.getLogger(__name__)
         self._log_file = f'{log_file_prefix}_log__{datetime.now():%Y-%m-%d_%H-%M-%S}.txt'

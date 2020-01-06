@@ -7,6 +7,7 @@ class SM(object):
         """
         **Create a new Polaris app**
         https://api.meraki.com/api_docs#create-a-new-polaris-app
+        
         - networkId (string)
         - scope (string): The scope (one of all, none, automatic, withAny, withAll, withoutAny, or withoutAll) and a set of tags of the devices to be assigned
         - manifestUrl (string): The manifest URL of the Polaris app (one of manifestUrl and bundleId must be provided)
@@ -32,6 +33,7 @@ class SM(object):
         """
         **Get details for a Cisco Polaris app if it exists**
         https://api.meraki.com/api_docs#get-details-for-a-cisco-polaris-app-if-it-exists
+        
         - networkId (string)
         - bundleId (string): The bundle ID of the app to be found, defaults to com.cisco.ciscosecurity.app
         """
@@ -53,6 +55,7 @@ class SM(object):
         """
         **Update an existing Polaris app**
         https://api.meraki.com/api_docs#update-an-existing-polaris-app
+        
         - networkId (string)
         - appId (string)
         - scope (string): optional: The scope (one of all, none, automatic, withAny, withAll, withoutAny, or withoutAll) and a set of tags of the devices to be assigned
@@ -77,6 +80,7 @@ class SM(object):
         """
         **Delete a Cisco Polaris app**
         https://api.meraki.com/api_docs#delete-a-cisco-polaris-app
+        
         - networkId (string)
         - appId (string)
         """
@@ -93,6 +97,7 @@ class SM(object):
         """
         **Bypass activation lock attempt**
         https://api.meraki.com/api_docs#bypass-activation-lock-attempt
+        
         - networkId (string)
         - ids (array): The ids of the devices to attempt activation lock bypass.
         """
@@ -114,6 +119,7 @@ class SM(object):
         """
         **Bypass activation lock attempt status**
         https://api.meraki.com/api_docs#bypass-activation-lock-attempt-status
+        
         - networkId (string)
         - attemptId (string)
         """
@@ -130,6 +136,7 @@ class SM(object):
         """
         **Modify the fields of a device**
         https://api.meraki.com/api_docs#modify-the-fields-of-a-device
+        
         - networkId (string)
         - deviceFields (object): The new fields of the device. Each field of this object is optional.
         - wifiMac (string): The wifiMac of the device to be modified.
@@ -154,6 +161,7 @@ class SM(object):
         """
         **Wipe a device**
         https://api.meraki.com/api_docs#wipe-a-device
+        
         - networkId (string)
         - wifiMac (string): The wifiMac of the device to be wiped.
         - id (string): The id of the device to be wiped.
@@ -178,6 +186,7 @@ class SM(object):
         """
         **Refresh the details of a device**
         https://api.meraki.com/api_docs#refresh-the-details-of-a-device
+        
         - networkId (string)
         - deviceId (string)
         """
@@ -194,6 +203,7 @@ class SM(object):
         """
         **List the devices enrolled in an SM network with various specified fields and filters**
         https://api.meraki.com/api_docs#list-the-devices-enrolled-in-an-sm-network-with-various-specified-fields-and-filters
+        
         - networkId (string)
         - fields (string): Additional fields that will be displayed for each device. Multiple fields can be passed in as comma separated values.
     The default fields are: id, name, tags, ssid, wifiMac, osName, systemModel, uuid, and serialNumber. The additional fields are: ip,
@@ -230,6 +240,7 @@ class SM(object):
         """
         **Force check-in a set of devices**
         https://api.meraki.com/api_docs#force-check-in-a-set-of-devices
+        
         - networkId (string)
         - wifiMacs (string): The wifiMacs of the devices to be checked-in.
         - ids (string): The ids of the devices to be checked-in.
@@ -254,6 +265,7 @@ class SM(object):
         """
         **Move a set of devices to a new network**
         https://api.meraki.com/api_docs#move-a-set-of-devices-to-a-new-network
+        
         - networkId (string)
         - newNetwork (string): The new network to which the devices will be moved.
         - wifiMacs (string): The wifiMacs of the devices to be moved.
@@ -279,6 +291,7 @@ class SM(object):
         """
         **Add, delete, or update the tags of a set of devices**
         https://api.meraki.com/api_docs#add-delete-or-update-the-tags-of-a-set-of-devices
+        
         - networkId (string)
         - tags (string): The tags to be added, deleted, or updated.
         - updateAction (string): One of add, delete, or update. Only devices that have been modified will be returned.
@@ -305,6 +318,7 @@ class SM(object):
         """
         **Unenroll a device**
         https://api.meraki.com/api_docs#unenroll-a-device
+        
         - networkId (string)
         - deviceId (string)
         """
@@ -321,6 +335,7 @@ class SM(object):
         """
         **Create a new profile containing a Cisco Clarity payload**
         https://api.meraki.com/api_docs#create-a-new-profile-containing-a-cisco-clarity-payload
+        
         - networkId (string)
         - name (string): The name to be given to the new profile
         - scope (string): The scope (one of all, none, withAny, withAll, withoutAny, or withoutAll) and a set of tags of the devices to be assigned
@@ -347,6 +362,7 @@ class SM(object):
         """
         **Update an existing profile containing a Cisco Clarity payload**
         https://api.meraki.com/api_docs#update-an-existing-profile-containing-a-cisco-clarity-payload
+        
         - networkId (string)
         - profileId (string)
         - name (string): optional: A new name for the profile
@@ -374,6 +390,7 @@ class SM(object):
         """
         **Add a Cisco Clarity payload to an existing profile**
         https://api.meraki.com/api_docs#add-a-cisco-clarity-payload-to-an-existing-profile
+        
         - networkId (string)
         - profileId (string)
         - VendorConfig (array): The specific VendorConfig to be passed to the filtering framework, in the form of an array of objects (as JSON).
@@ -399,6 +416,7 @@ class SM(object):
         """
         **Get details for a Cisco Clarity payload**
         https://api.meraki.com/api_docs#get-details-for-a-cisco-clarity-payload
+        
         - networkId (string)
         - profileId (string)
         """
@@ -415,6 +433,7 @@ class SM(object):
         """
         **Delete a Cisco Clarity payload. Deletes the entire profile if it's empty after removing the payload.**
         https://api.meraki.com/api_docs#delete-a-cisco-clarity-payload
+        
         - networkId (string)
         - profileId (string)
         """
@@ -431,6 +450,7 @@ class SM(object):
         """
         **Create a new profile containing a Cisco Umbrella payload**
         https://api.meraki.com/api_docs#create-a-new-profile-containing-a-cisco-umbrella-payload
+        
         - networkId (string)
         - name (string): The name to be given to the new profile
         - scope (string): The scope (one of all, none, withAny, withAll, withoutAny, or withoutAll) and a set of tags of the devices to be assigned
@@ -457,6 +477,7 @@ class SM(object):
         """
         **Update an existing profile containing a Cisco Umbrella payload**
         https://api.meraki.com/api_docs#update-an-existing-profile-containing-a-cisco-umbrella-payload
+        
         - networkId (string)
         - profileId (string)
         - name (string): optional: A new name for the profile
@@ -484,6 +505,7 @@ class SM(object):
         """
         **Add a Cisco Umbrella payload to an existing profile**
         https://api.meraki.com/api_docs#add-a-cisco-umbrella-payload-to-an-existing-profile
+        
         - networkId (string)
         - profileId (string)
         - ProviderConfiguration (array): The specific ProviderConfiguration to be passed to the filtering framework, in the form of an array of objects (as JSON).
@@ -509,6 +531,7 @@ class SM(object):
         """
         **Get details for a Cisco Umbrella payload**
         https://api.meraki.com/api_docs#get-details-for-a-cisco-umbrella-payload
+        
         - networkId (string)
         - profileId (string)
         """
@@ -525,6 +548,7 @@ class SM(object):
         """
         **Delete a Cisco Umbrella payload. Deletes the entire profile if it's empty after removing the payload**
         https://api.meraki.com/api_docs#delete-a-cisco-umbrella-payload
+        
         - networkId (string)
         - profileId (string)
         """
@@ -541,6 +565,7 @@ class SM(object):
         """
         **List all the profiles in the network**
         https://api.meraki.com/api_docs#list-all-the-profiles-in-the-network
+        
         - networkId (string)
         """
 
@@ -556,6 +581,7 @@ class SM(object):
         """
         **Get the profiles associated with a user**
         https://api.meraki.com/api_docs#get-the-profiles-associated-with-a-user
+        
         - networkId (string)
         - userId (string)
         """
@@ -572,6 +598,7 @@ class SM(object):
         """
         **Get a list of softwares associated with a user**
         https://api.meraki.com/api_docs#get-a-list-of-softwares-associated-with-a-user
+        
         - networkId (string)
         - userId (string)
         """
@@ -588,6 +615,7 @@ class SM(object):
         """
         **List the owners in an SM network with various specified fields and filters**
         https://api.meraki.com/api_docs#list-the-owners-in-an-sm-network-with-various-specified-fields-and-filters
+        
         - networkId (string)
         - ids (string): Filter users by id(s). Multiple ids can be passed in as comma separated values.
         - usernames (string): Filter users by username(s). Multiple usernames can be passed in as comma separated values.
@@ -612,6 +640,7 @@ class SM(object):
         """
         **Return the client's daily cellular data usage history. Usage data is in kilobytes.**
         https://api.meraki.com/api_docs#return-the-clients-daily-cellular-data-usage-history
+        
         - networkId (string)
         - deviceId (string)
         """
@@ -628,6 +657,7 @@ class SM(object):
         """
         **List the certs on a device**
         https://api.meraki.com/api_docs#list-the-certs-on-a-device
+        
         - networkId (string)
         - deviceId (string)
         """
@@ -644,6 +674,7 @@ class SM(object):
         """
         **Get the profiles associated with a device**
         https://api.meraki.com/api_docs#get-the-profiles-associated-with-a-device
+        
         - networkId (string)
         - deviceId (string)
         """
@@ -660,6 +691,7 @@ class SM(object):
         """
         **List the network adapters of a device**
         https://api.meraki.com/api_docs#list-the-network-adapters-of-a-device
+        
         - networkId (string)
         - deviceId (string)
         """
@@ -676,6 +708,7 @@ class SM(object):
         """
         **List the restrictions on a device**
         https://api.meraki.com/api_docs#list-the-restrictions-on-a-device
+        
         - networkId (string)
         - deviceId (string)
         """
@@ -692,6 +725,7 @@ class SM(object):
         """
         **List the security centers on a device**
         https://api.meraki.com/api_docs#list-the-security-centers-on-a-device
+        
         - networkId (string)
         - deviceId (string)
         """
@@ -708,6 +742,7 @@ class SM(object):
         """
         **Get a list of softwares associated with a device**
         https://api.meraki.com/api_docs#get-a-list-of-softwares-associated-with-a-device
+        
         - networkId (string)
         - deviceId (string)
         """
@@ -724,6 +759,7 @@ class SM(object):
         """
         **List the saved SSID names on a device**
         https://api.meraki.com/api_docs#list-the-saved-ssid-names-on-a-device
+        
         - networkId (string)
         - deviceId (string)
         """
@@ -740,6 +776,7 @@ class SM(object):
         """
         **Lock a set of devices**
         https://api.meraki.com/api_docs#lock-a-set-of-devices
+        
         - network_id (string)
         - wifiMacs (string): The wifiMacs of the devices to be locked.
         - ids (string): The ids of the devices to be locked.
@@ -765,6 +802,7 @@ class SM(object):
         """
         **Returns historical connectivity data (whether a device is regularly checking in to Dashboard).**
         https://api.meraki.com/api_docs#returns-historical-connectivity-data-whether-a-device-is-regularly-checking-in-to-dashboard
+        
         - network_id (string)
         - id (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
@@ -792,6 +830,7 @@ class SM(object):
         """
         **Return historical records of various Systems Manager network connection details for desktop devices.**
         https://api.meraki.com/api_docs#return-historical-records-of-various-systems-manager-network-connection-details-for-desktop-devices
+        
         - network_id (string)
         - id (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
@@ -823,6 +862,7 @@ class SM(object):
     of any reports.</p>
 **
         https://api.meraki.com/api_docs#----return-historical-records-of-commands-sent-to-systems-manager-devices
+        
         - network_id (string)
         - id (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
@@ -850,6 +890,7 @@ class SM(object):
         """
         **Return historical records of various Systems Manager client metrics for desktop devices.**
         https://api.meraki.com/api_docs#return-historical-records-of-various-systems-manager-client-metrics-for-desktop-devices
+        
         - network_id (string)
         - id (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages

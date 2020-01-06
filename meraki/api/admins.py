@@ -7,6 +7,7 @@ class Admins(object):
         """
         **List the dashboard administrators in this organization**
         https://api.meraki.com/api_docs#list-the-dashboard-administrators-in-this-organization
+        
         - organizationId (string)
         """
 
@@ -22,6 +23,7 @@ class Admins(object):
         """
         **Create a new dashboard administrator**
         https://api.meraki.com/api_docs#create-a-new-dashboard-administrator
+        
         - organizationId (string)
         - email (string): The email of the dashboard administrator. This attribute can not be updated.
         - name (string): The name of the dashboard administrator
@@ -51,6 +53,7 @@ class Admins(object):
         """
         **Update an administrator**
         https://api.meraki.com/api_docs#update-an-administrator
+        
         - organizationId (string)
         - id (string)
         - name (string): The name of the dashboard administrator
@@ -80,6 +83,7 @@ class Admins(object):
         """
         **Revoke all access for a dashboard administrator within this organization**
         https://api.meraki.com/api_docs#revoke-all-access-for-a-dashboard-administrator-within-this-organization
+        
         - organizationId (string)
         - id (string)
         """

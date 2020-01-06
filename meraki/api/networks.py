@@ -7,6 +7,7 @@ class Networks(object):
         """
         **Return a network**
         https://api.meraki.com/api_docs#return-a-network
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class Networks(object):
         """
         **Update a network**
         https://api.meraki.com/api_docs#update-a-network
+        
         - networkId (string)
         - name (string): The name of the network
         - timeZone (string): The timezone of the network. For a list of allowed timezones, please see the 'TZ' column in the table in <a target='_blank' href='https://en.wikipedia.org/wiki/List_of_tz_database_time_zones'>this article.</a>
@@ -48,6 +50,7 @@ class Networks(object):
         """
         **Delete a network**
         https://api.meraki.com/api_docs#delete-a-network
+        
         - networkId (string)
         """
 
@@ -63,6 +66,7 @@ class Networks(object):
         """
         **List the access policies for this network. Only valid for MS networks.**
         https://api.meraki.com/api_docs#list-the-access-policies-for-this-network
+        
         - networkId (string)
         """
 
@@ -78,6 +82,7 @@ class Networks(object):
         """
         **List Air Marshal scan results from a network**
         https://api.meraki.com/api_docs#list-air-marshal-scan-results-from-a-network
+        
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 31 days. The default is 7 days.
@@ -100,6 +105,7 @@ class Networks(object):
         """
         **Bind a network to a template.**
         https://api.meraki.com/api_docs#bind-a-network-to-a-template
+        
         - networkId (string)
         - configTemplateId (string): The ID of the template to which the network should be bound.
         - autoBind (boolean): Optional boolean indicating whether the network's switches should automatically bind to profiles of the same model. Defaults to false if left unspecified. This option only affects switch networks and switch templates. Auto-bind is not valid unless the switch template has at least one profile and has at most one profile per switch model.
@@ -122,6 +128,7 @@ class Networks(object):
         """
         **Return the Bluetooth settings for a network. <a href="https://documentation.meraki.com/MR/Bluetooth/Bluetooth_Low_Energy_(BLE)">Bluetooth settings</a> must be enabled on the network.**
         https://api.meraki.com/api_docs#return-the-bluetooth-settings-for-a-network
+        
         - networkId (string)
         """
 
@@ -137,6 +144,7 @@ class Networks(object):
         """
         **Update the Bluetooth settings for a network. See the docs page for <a href="https://documentation.meraki.com/MR/Bluetooth/Bluetooth_Low_Energy_(BLE)">Bluetooth settings</a>.**
         https://api.meraki.com/api_docs#update-the-bluetooth-settings-for-a-network
+        
         - networkId (string)
         - scanningEnabled (boolean): Whether APs will scan for Bluetooth enabled clients. (true, false)
         - advertisingEnabled (boolean): Whether APs will advertise beacons. (true, false)
@@ -167,6 +175,7 @@ class Networks(object):
         """
         **Return the site-to-site VPN settings of a network. Only valid for MX networks.**
         https://api.meraki.com/api_docs#return-the-site-to-site-vpn-settings-of-a-network
+        
         - networkId (string)
         """
 
@@ -182,6 +191,7 @@ class Networks(object):
         """
         **Update the site-to-site VPN settings of a network. Only valid for MX networks in NAT mode.**
         https://api.meraki.com/api_docs#update-the-site-to-site-vpn-settings-of-a-network
+        
         - networkId (string)
         - mode (string): The site-to-site VPN mode. Can be one of 'none', 'spoke' or 'hub'
         - hubs (array): The list of VPN hubs, in order of preference. In spoke mode, at least 1 hub is required.
@@ -209,6 +219,7 @@ class Networks(object):
         """
         **Split a combined network into individual networks for each type of device**
         https://api.meraki.com/api_docs#split-a-combined-network-into-individual-networks-for-each-type-of-device
+        
         - networkId (string)
         """
 
@@ -226,6 +237,7 @@ class Networks(object):
     <a href="https://documentation.meraki.com/MR/Monitoring_and_Reporting/Hostname_Visibility">Traffic Analysis with Hostname Visibility</a> must be enabled on the network.
 **
         https://api.meraki.com/api_docs#----the-traffic-analysis-data-for-this-network
+        
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 30 days from today.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 30 days.
@@ -251,6 +263,7 @@ class Networks(object):
         """
         **Unbind a network from a template.**
         https://api.meraki.com/api_docs#unbind-a-network-from-a-template
+        
         - networkId (string)
         """
 
@@ -266,6 +279,7 @@ class Networks(object):
         """
         **List the networks in an organization**
         https://api.meraki.com/api_docs#list-the-networks-in-an-organization
+        
         - organizationId (string)
         - configTemplateId (string): An optional parameter that is the ID of a config template. Will return all networks bound to that template.
         """
@@ -287,6 +301,7 @@ class Networks(object):
         """
         **Create a network**
         https://api.meraki.com/api_docs#create-a-network
+        
         - organizationId (string)
         - name (string): The name of the new network
         - type (string): The type of the new network. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, or a space-separated list of those for a combined network.
@@ -314,6 +329,7 @@ class Networks(object):
         """
         **Combine multiple networks into a single network**
         https://api.meraki.com/api_docs#combine-multiple-networks-into-a-single-network
+        
         - organizationId (string)
         - name (string): The name of the combined network
         - networkIds (array): A list of the network IDs that will be combined. If an ID of a combined network is included in this list, the other networks in the list will be grouped into that network

@@ -7,6 +7,7 @@ class RadioSettings(object):
         """
         **Return the radio settings of a device**
         https://api.meraki.com/api_docs#return-the-radio-settings-of-a-device
+        
         - networkId (string)
         - serial (string)
         """
@@ -23,6 +24,7 @@ class RadioSettings(object):
         """
         **Update the radio settings of a device**
         https://api.meraki.com/api_docs#update-the-radio-settings-of-a-device
+        
         - networkId (string)
         - serial (string)
         - rfProfileId (integer):     The ID of an RF profile to assign to the device. If the value of this parameter is null, the appropriate basic RF profile
@@ -48,6 +50,7 @@ class RadioSettings(object):
         """
         **List the non-basic RF profiles for this network**
         https://api.meraki.com/api_docs#list-the-non-basic-rf-profiles-for-this-network
+        
         - networkId (string)
         - includeTemplateProfiles (boolean):     If the network is bound to a template, this parameter controls whether or not the non-basic RF profiles defined on the template
     should be included in the response alongside the non-basic profiles defined on the bound network. Defaults to false.
@@ -71,6 +74,7 @@ class RadioSettings(object):
         """
         **Creates new RF profile for this network**
         https://api.meraki.com/api_docs#creates-new-rf-profile-for-this-network
+        
         - networkId (string)
         - name (string): The name of the new profile. Must be unique. This param is required on creation.
         - bandSelectionType (string): Band selection can be set to either 'ssid' or 'ap'. This param is required on creation.
@@ -105,6 +109,7 @@ class RadioSettings(object):
         """
         **Updates specified RF profile for this network**
         https://api.meraki.com/api_docs#updates-specified-rf-profile-for-this-network
+        
         - networkId (string)
         - rfProfileId (string)
         - name (string): The name of the new profile. Must be unique.
@@ -140,6 +145,7 @@ class RadioSettings(object):
         """
         **Delete a RF Profile**
         https://api.meraki.com/api_docs#delete-a-rf-profile
+        
         - networkId (string)
         - rfProfileId (string)
         """
@@ -156,6 +162,7 @@ class RadioSettings(object):
         """
         **Return a RF profile**
         https://api.meraki.com/api_docs#return-a-rf-profile
+        
         - networkId (string)
         - rfProfileId (string)
         """

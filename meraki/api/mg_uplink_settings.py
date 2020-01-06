@@ -7,6 +7,7 @@ class MGUplinkSettings(object):
         """
         **Returns the uplink settings for your MG network.**
         https://api.meraki.com/api_docs#returns-the-uplink-settings-for-your-mg-network
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class MGUplinkSettings(object):
         """
         **Updates the uplink settings for your MG network.**
         https://api.meraki.com/api_docs#updates-the-uplink-settings-for-your-mg-network
+        
         - networkId (string)
         - bandwidthLimits (object): The bandwidth settings for the 'cellular' uplink
         """

@@ -7,6 +7,7 @@ class MVSense(object):
         """
         **Returns live state from camera of analytics zones**
         https://api.meraki.com/api_docs#returns-live-state-from-camera-of-analytics-zones
+        
         - serial (string)
         """
 
@@ -22,6 +23,7 @@ class MVSense(object):
         """
         **Returns an overview of aggregate analytics data for a timespan**
         https://api.meraki.com/api_docs#returns-an-overview-of-aggregate-analytics-data-for-a-timespan
+        
         - serial (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
@@ -50,6 +52,7 @@ class MVSense(object):
         """
         **Returns most recent record for analytics zones**
         https://api.meraki.com/api_docs#returns-most-recent-record-for-analytics-zones
+        
         - serial (string)
         - objectType (string): [optional] The object type for which analytics will be retrieved. The default object type is person. The available types are [person, vehicle].
         """
@@ -75,6 +78,7 @@ class MVSense(object):
         """
         **Returns all configured analytic zones for this camera**
         https://api.meraki.com/api_docs#returns-all-configured-analytic-zones-for-this-camera
+        
         - serial (string)
         """
 
@@ -90,6 +94,7 @@ class MVSense(object):
         """
         **Return historical records for analytic zones**
         https://api.meraki.com/api_docs#return-historical-records-for-analytic-zones
+        
         - serial (string)
         - zoneId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.

@@ -7,6 +7,7 @@ class NamedTagScope(object):
         """
         **List the target groups in this network**
         https://api.meraki.com/api_docs#list-the-target-groups-in-this-network
+        
         - networkId (string)
         - withDetails (boolean): Boolean indicating if the the ids of the devices or users scoped by the target group should be included in the response
         """
@@ -28,6 +29,7 @@ class NamedTagScope(object):
         """
         **Add a target group**
         https://api.meraki.com/api_docs#add-a-target-group
+        
         - networkId (string)
         - name (string): The name of this target group
         - scope (string): The scope and tag options of the target group. Comma separated values beginning with one of withAny, withAll, withoutAny, withoutAll, all, none, followed by tags. Default to none if empty.
@@ -50,6 +52,7 @@ class NamedTagScope(object):
         """
         **Return a target group**
         https://api.meraki.com/api_docs#return-a-target-group
+        
         - networkId (string)
         - targetGroupId (string)
         - withDetails (boolean): Boolean indicating if the the ids of the devices or users scoped by the target group should be included in the response
@@ -72,6 +75,7 @@ class NamedTagScope(object):
         """
         **Update a target group**
         https://api.meraki.com/api_docs#update-a-target-group
+        
         - networkId (string)
         - targetGroupId (string)
         - name (string): The name of this target group
@@ -95,6 +99,7 @@ class NamedTagScope(object):
         """
         **Delete a target group from a network**
         https://api.meraki.com/api_docs#delete-a-target-group-from-a-network
+        
         - networkId (string)
         - targetGroupId (string)
         """

@@ -7,6 +7,7 @@ class WirelessHealth(object):
         """
         **Aggregated connectivity info for this network, grouped by clients**
         https://api.meraki.com/api_docs#aggregated-connectivity-info-for-this-network-grouped-by-clients
+        
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
@@ -33,6 +34,7 @@ class WirelessHealth(object):
         """
         **Aggregated latency info for this network, grouped by clients**
         https://api.meraki.com/api_docs#aggregated-latency-info-for-this-network-grouped-by-clients
+        
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
@@ -60,6 +62,7 @@ class WirelessHealth(object):
         """
         **Aggregated connectivity info for a given client on this network. Clients are identified by their MAC.**
         https://api.meraki.com/api_docs#aggregated-connectivity-info-for-a-given-client-on-this-network
+        
         - networkId (string)
         - clientId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
@@ -87,6 +90,7 @@ class WirelessHealth(object):
         """
         **Aggregated latency info for a given client on this network. Clients are identified by their MAC.**
         https://api.meraki.com/api_docs#aggregated-latency-info-for-a-given-client-on-this-network
+        
         - networkId (string)
         - clientId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
@@ -115,6 +119,7 @@ class WirelessHealth(object):
         """
         **Aggregated connectivity info for this network**
         https://api.meraki.com/api_docs#aggregated-connectivity-info-for-this-network
+        
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
@@ -141,6 +146,7 @@ class WirelessHealth(object):
         """
         **Aggregated connectivity info for this network, grouped by node**
         https://api.meraki.com/api_docs#aggregated-connectivity-info-for-this-network-grouped-by-node
+        
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
@@ -167,6 +173,7 @@ class WirelessHealth(object):
         """
         **Aggregated latency info for this network, grouped by node**
         https://api.meraki.com/api_docs#aggregated-latency-info-for-this-network-grouped-by-node
+        
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
@@ -194,6 +201,7 @@ class WirelessHealth(object):
         """
         **Aggregated connectivity info for a given AP on this network**
         https://api.meraki.com/api_docs#aggregated-connectivity-info-for-a-given-ap-on-this-network
+        
         - networkId (string)
         - serial (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
@@ -221,6 +229,7 @@ class WirelessHealth(object):
         """
         **Aggregated latency info for a given AP on this network**
         https://api.meraki.com/api_docs#aggregated-latency-info-for-a-given-ap-on-this-network
+        
         - networkId (string)
         - serial (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
@@ -249,6 +258,7 @@ class WirelessHealth(object):
         """
         **List of all failed client connection events on this network in a given time range**
         https://api.meraki.com/api_docs#list-of-all-failed-client-connection-events-on-this-network-in-a-given-time-range
+        
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
@@ -277,6 +287,7 @@ class WirelessHealth(object):
         """
         **Aggregated latency info for this network**
         https://api.meraki.com/api_docs#aggregated-latency-info-for-this-network
+        
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.

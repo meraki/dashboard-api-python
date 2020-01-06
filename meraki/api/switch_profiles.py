@@ -7,6 +7,7 @@ class SwitchProfiles(object):
         """
         **List the switch profiles for your switch template configuration**
         https://api.meraki.com/api_docs#list-the-switch-profiles-for-your-switch-template-configuration
+        
         - organizationId (string)
         - configTemplateId (string)
         """

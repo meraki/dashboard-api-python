@@ -7,6 +7,7 @@ class MGSubnetPoolSettings(object):
         """
         **Return the subnet pool and mask configured for MGs in the network.**
         https://api.meraki.com/api_docs#return-the-subnet-pool-and-mask-configured-for-mgs-in-the-network
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class MGSubnetPoolSettings(object):
         """
         **Update the subnet pool and mask configuration for MGs in the network.**
         https://api.meraki.com/api_docs#update-the-subnet-pool-and-mask-configuration-for-mgs-in-the-network
+        
         - networkId (string)
         - mask (integer): Mask used for the subnet of all MGs in  this network.
         - cidr (string): CIDR of the pool of subnets. Each MG in this network will automatically pick a subnet from this pool.

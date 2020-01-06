@@ -7,6 +7,7 @@ class TrafficShaping(object):
         """
         **Update the traffic shaping settings for an SSID on an MR network**
         https://api.meraki.com/api_docs#update-the-traffic-shaping-settings-for-an-ssid-on-an-mr-network
+        
         - networkId (string)
         - number (string)
         - trafficShapingEnabled (boolean): Whether traffic shaping rules are applied to clients on your SSID.
@@ -38,6 +39,7 @@ class TrafficShaping(object):
         """
         **Display the traffic shaping settings for a SSID on an MR network**
         https://api.meraki.com/api_docs#display-the-traffic-shaping-settings-for-a-ssid-on-an-mr-network
+        
         - networkId (string)
         - number (string)
         """
@@ -54,6 +56,7 @@ class TrafficShaping(object):
         """
         **Update the traffic shaping settings for an MX network**
         https://api.meraki.com/api_docs#update-the-traffic-shaping-settings-for-an-mx-network
+        
         - networkId (string)
         - defaultRulesEnabled (boolean):     Whether default traffic shaping rules are enabled (true) or disabled (false).
     There are 4 default rules, which can
@@ -83,6 +86,7 @@ class TrafficShaping(object):
         """
         **Display the traffic shaping settings for an MX network**
         https://api.meraki.com/api_docs#display-the-traffic-shaping-settings-for-an-mx-network
+        
         - networkId (string)
         """
 
@@ -98,6 +102,7 @@ class TrafficShaping(object):
         """
         **Returns the application categories for traffic shaping rules.**
         https://api.meraki.com/api_docs#returns-the-application-categories-for-traffic-shaping-rules
+        
         - networkId (string)
         """
 
@@ -113,6 +118,7 @@ class TrafficShaping(object):
         """
         **Returns the available DSCP tagging options for your traffic shaping rules.**
         https://api.meraki.com/api_docs#returns-the-available-dscp-tagging-options-for-your-traffic-shaping-rules
+        
         - networkId (string)
         """
 

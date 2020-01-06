@@ -7,6 +7,7 @@ class SAMLRoles(object):
         """
         **List the SAML roles for this organization**
         https://api.meraki.com/api_docs#list-the-saml-roles-for-this-organization
+        
         - organizationId (string)
         """
 
@@ -22,6 +23,7 @@ class SAMLRoles(object):
         """
         **Create a SAML role**
         https://api.meraki.com/api_docs#create-a-saml-role
+        
         - organizationId (string)
         - role (string): The role of the SAML administrator
         - orgAccess (string): The privilege of the SAML administrator on the organization
@@ -46,6 +48,7 @@ class SAMLRoles(object):
         """
         **Return a SAML role**
         https://api.meraki.com/api_docs#return-a-saml-role
+        
         - organizationId (string)
         - samlRoleId (string)
         """
@@ -62,6 +65,7 @@ class SAMLRoles(object):
         """
         **Update a SAML role**
         https://api.meraki.com/api_docs#update-a-saml-role
+        
         - organizationId (string)
         - samlRoleId (string)
         - role (string): The role of the SAML administrator
@@ -87,6 +91,7 @@ class SAMLRoles(object):
         """
         **Remove a SAML role**
         https://api.meraki.com/api_docs#remove-a-saml-role
+        
         - organizationId (string)
         - samlRoleId (string)
         """

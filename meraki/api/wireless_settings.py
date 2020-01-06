@@ -7,6 +7,7 @@ class WirelessSettings(object):
         """
         **Return the wireless settings for a network**
         https://api.meraki.com/api_docs#return-the-wireless-settings-for-a-network
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class WirelessSettings(object):
         """
         **Update the wireless settings for a network**
         https://api.meraki.com/api_docs#update-the-wireless-settings-for-a-network
+        
         - networkId (string)
         - meshingEnabled (boolean): Toggle for enabling or disabling meshing in a network
         - ipv6BridgeEnabled (boolean): Toggle for enabling or disabling IPv6 bridging in a network (Note: if enabled, SSIDs must also be configured to use bridge mode)

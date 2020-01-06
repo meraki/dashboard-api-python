@@ -7,6 +7,7 @@ class IntrusionSettings(object):
         """
         **Returns all supported intrusion settings for an MX network**
         https://api.meraki.com/api_docs#returns-all-supported-intrusion-settings-for-an-mx-network
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class IntrusionSettings(object):
         """
         **Set the supported intrusion settings for an MX network**
         https://api.meraki.com/api_docs#set-the-supported-intrusion-settings-for-an-mx-network
+        
         - networkId (string)
         - mode (string): Set mode to 'disabled'/'detection'/'prevention' (optional - omitting will leave current config unchanged)
         - idsRulesets (string): Set the detection ruleset 'connectivity'/'balanced'/'security' (optional - omitting will leave current config unchanged). Default value is 'balanced' if none currently saved
@@ -45,6 +47,7 @@ class IntrusionSettings(object):
         """
         **Returns all supported intrusion settings for an organization**
         https://api.meraki.com/api_docs#returns-all-supported-intrusion-settings-for-an-organization
+        
         - organizationId (string)
         """
 
@@ -60,6 +63,7 @@ class IntrusionSettings(object):
         """
         **Sets supported intrusion settings for an organization**
         https://api.meraki.com/api_docs#sets-supported-intrusion-settings-for-an-organization
+        
         - organizationId (string)
         - whitelistedRules (array): Sets a list of specific SNORT® signatures to whitelist
         """

@@ -7,6 +7,7 @@ class SwitchSettings(object):
         """
         **Returns the switch network settings**
         https://api.meraki.com/api_docs#returns-the-switch-network-settings
+        
         - networkId (string)
         """
 
@@ -22,6 +23,7 @@ class SwitchSettings(object):
         """
         **Update switch network settings**
         https://api.meraki.com/api_docs#update-switch-network-settings
+        
         - networkId (string)
         - vlan (integer): Management VLAN
         - useCombinedPower (boolean): The use Combined Power as the default behavior of secondary power supplies on supported devices.
@@ -45,6 +47,7 @@ class SwitchSettings(object):
         """
         **Return the DHCP server policy**
         https://api.meraki.com/api_docs#return-the-dhcp-server-policy
+        
         - networkId (string)
         """
 
@@ -60,6 +63,7 @@ class SwitchSettings(object):
         """
         **Update the DHCP server policy**
         https://api.meraki.com/api_docs#update-the-dhcp-server-policy
+        
         - networkId (string)
         - defaultPolicy (string): 'allow' or 'block' new DHCP servers. Default value is 'allow'.
         - allowedServers (array): List the MAC addresses of DHCP servers to permit on the network. Applicable only if defaultPolicy is set to block. An empty array will clear the entries.
@@ -87,6 +91,7 @@ class SwitchSettings(object):
         """
         **Return the DSCP to CoS mappings**
         https://api.meraki.com/api_docs#return-the-dscp-to-cos-mappings
+        
         - networkId (string)
         """
 
@@ -102,6 +107,7 @@ class SwitchSettings(object):
         """
         **Update the DSCP to CoS mappings**
         https://api.meraki.com/api_docs#update-the-dscp-to-cos-mappings
+        
         - networkId (string)
         - mappings (array): An array of DSCP to CoS mappings. An empty array will reset the mappings to default.
         """
@@ -123,6 +129,7 @@ class SwitchSettings(object):
         """
         **Return the MTU configuration**
         https://api.meraki.com/api_docs#return-the-mtu-configuration
+        
         - networkId (string)
         """
 
@@ -138,6 +145,7 @@ class SwitchSettings(object):
         """
         **Update the MTU configuration**
         https://api.meraki.com/api_docs#update-the-mtu-configuration
+        
         - networkId (string)
         - defaultMtuSize (integer): MTU size for the entire network. Default value is 9578.
         - overrides (array): Override MTU size for individual switches or switch profiles. An empty array will clear overrides.
@@ -160,6 +168,7 @@ class SwitchSettings(object):
         """
         **List quality of service rules**
         https://api.meraki.com/api_docs#list-quality-of-service-rules
+        
         - networkId (string)
         """
 
@@ -175,6 +184,7 @@ class SwitchSettings(object):
         """
         **Add a quality of service rule**
         https://api.meraki.com/api_docs#add-a-quality-of-service-rule
+        
         - networkId (string)
         - vlan (integer): The VLAN of the incoming packet. A null value will match any VLAN.
         - protocol (string): The protocol of the incoming packet. Can be one of "ANY", "TCP" or "UDP". Default value is "ANY"
@@ -206,6 +216,7 @@ class SwitchSettings(object):
         """
         **Return the quality of service rule IDs by order in which they will be processed by the switch**
         https://api.meraki.com/api_docs#return-the-quality-of-service-rule-ids-by-order-in-which-they-will-be-processed-by-the-switch
+        
         - networkId (string)
         """
 
@@ -221,6 +232,7 @@ class SwitchSettings(object):
         """
         **Update the order in which the rules should be processed by the switch**
         https://api.meraki.com/api_docs#update-the-order-in-which-the-rules-should-be-processed-by-the-switch
+        
         - networkId (string)
         - ruleIds (array): A list of quality of service rule IDs arranged in order in which they should be processed by the switch.
         """
@@ -242,6 +254,7 @@ class SwitchSettings(object):
         """
         **Return a quality of service rule**
         https://api.meraki.com/api_docs#return-a-quality-of-service-rule
+        
         - networkId (string)
         - qosRuleId (string)
         """
@@ -258,6 +271,7 @@ class SwitchSettings(object):
         """
         **Delete a quality of service rule**
         https://api.meraki.com/api_docs#delete-a-quality-of-service-rule
+        
         - networkId (string)
         - qosRuleId (string)
         """
@@ -274,6 +288,7 @@ class SwitchSettings(object):
         """
         **Update a quality of service rule**
         https://api.meraki.com/api_docs#update-a-quality-of-service-rule
+        
         - networkId (string)
         - qosRuleId (string)
         - vlan (integer): The VLAN of the incoming packet. A null value will match any VLAN.
@@ -306,6 +321,7 @@ class SwitchSettings(object):
         """
         **Return the storm control configuration for a switch network**
         https://api.meraki.com/api_docs#return-the-storm-control-configuration-for-a-switch-network
+        
         - networkId (string)
         """
 
@@ -321,6 +337,7 @@ class SwitchSettings(object):
         """
         **Update the storm control configuration for a switch network**
         https://api.meraki.com/api_docs#update-the-storm-control-configuration-for-a-switch-network
+        
         - networkId (string)
         - broadcastThreshold (integer): Percentage (1 to 99) of total available port bandwidth for broadcast traffic type. Default value 100 percent rate is to clear the configuration.
         - multicastThreshold (integer): Percentage (1 to 99) of total available port bandwidth for multicast traffic type. Default value 100 percent rate is to clear the configuration.
@@ -344,6 +361,7 @@ class SwitchSettings(object):
         """
         **Returns STP settings**
         https://api.meraki.com/api_docs#returns-stp-settings
+        
         - networkId (string)
         """
 
@@ -359,6 +377,7 @@ class SwitchSettings(object):
         """
         **Updates STP settings**
         https://api.meraki.com/api_docs#updates-stp-settings
+        
         - networkId (string)
         - rstpEnabled (boolean): The spanning tree protocol status in network
         - stpBridgePriority (array): STP bridge priority for switches/stacks or switch profiles. An empty array will clear the STP bridge priority settings.

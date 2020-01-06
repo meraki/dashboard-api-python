@@ -7,6 +7,7 @@ class Licenses(object):
         """
         **List the licenses for an organization**
         https://api.meraki.com/api_docs#list-the-licenses-for-an-organization
+        
         - organizationId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
@@ -40,6 +41,7 @@ class Licenses(object):
         """
         **Assign SM seats to a network. This will increase the managed SM device limit of the network**
         https://api.meraki.com/api_docs#assign-sm-seats-to-a-network
+        
         - organizationId (string)
         - licenseId (string): The ID of the SM license to assign seats from
         - networkId (string): The ID of the SM network to assign the seats to
@@ -63,6 +65,7 @@ class Licenses(object):
         """
         **Move licenses to another organization. This will also move any devices that the licenses are assigned to**
         https://api.meraki.com/api_docs#move-licenses-to-another-organization
+        
         - organizationId (string)
         - destOrganizationId (string): The ID of the organization to move the licenses to
         - licenseIds (array): A list of IDs of licenses to move to the new organization
@@ -85,6 +88,7 @@ class Licenses(object):
         """
         **Move SM seats to another organization**
         https://api.meraki.com/api_docs#move-sm-seats-to-another-organization
+        
         - organizationId (string)
         - destOrganizationId (string): The ID of the organization to move the SM seats to
         - licenseId (string): The ID of the SM license to move the seats from
@@ -108,6 +112,7 @@ class Licenses(object):
         """
         **Renew SM seats of a license. This will extend the license expiration date of managed SM devices covered by this license**
         https://api.meraki.com/api_docs#renew-sm-seats-of-a-license
+        
         - organizationId (string)
         - licenseIdToRenew (string): The ID of the SM license to renew. This license must already be assigned to an SM network
         - unusedLicenseId (string): The SM license to use to renew the seats on 'licenseIdToRenew'. This license must have at least as many seats available as there are seats on 'licenseIdToRenew'
@@ -130,6 +135,7 @@ class Licenses(object):
         """
         **Display a license**
         https://api.meraki.com/api_docs#display-a-license
+        
         - organizationId (string)
         - licenseId (string)
         """
@@ -146,6 +152,7 @@ class Licenses(object):
         """
         **Update a license**
         https://api.meraki.com/api_docs#update-a-license
+        
         - organizationId (string)
         - licenseId (string)
         - deviceSerial (string): The serial number of the device to assign this license to. Set this to null to unassign the license. If a different license is already active on the device, this parameter will control queueing/dequeuing this license.
