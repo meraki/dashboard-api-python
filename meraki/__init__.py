@@ -98,7 +98,7 @@ class DashboardAPI(object):
                  wait_on_rate_limit=DEFAULT_WAIT_ON_RATE_LIMIT, maximum_retries=MAXIMUM_RETRIES, output_log=OUTPUT_LOG,
                  log_file_prefix=LOG_FILE_PREFIX, print_console=PRINT_TO_CONSOLE, simulate=SIMULATE_API_CALLS):
         # Check API key
-        api_key = api_key or os.environ.get(API_KEY_ENVIRONMENT_VARIABLE)
+        api_key = api_key or os.environ.get('API_KEY_ENVIRONMENT_VARIABLE')
         if not api_key:
             raise APIKeyError()
 
