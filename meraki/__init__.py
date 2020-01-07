@@ -83,6 +83,7 @@ from .config import (
 class DashboardAPI(object):
     """
     **Creates a persistent Meraki dashboard API session**
+
     - api_key (string): API key generated in dashboard; can also be set as an environment variable MERAKI_DASHBOARD_API_KEY
     - base_url (string): preceding all endpoint resources
     - single_request_timeout (integer): maximum number of seconds for each API call
@@ -104,7 +105,7 @@ class DashboardAPI(object):
 
         # Configure logging
         self._logger = logging.getLogger(__name__)
-        self._log_file = f'{log_file_prefix}_log__{datetime.now():%Y-%m-%d_%H-%M-%S}.txt'
+        self._log_file = f'{log_file_prefix}_log__{datetime.now():%Y-%m-%d_%H-%M-%S}.log'
         if output_log:
             logging.basicConfig(
                 filename=self._log_file,
