@@ -10,7 +10,7 @@ with open(os.path.join(HERE, 'README.md')) as fid:
 
 setup(
     name='meraki',
-    version='0.70.3',
+    version='0.70.4',
     packages=find_packages(),
     include_package_data=True,
     install_requires=['requests'],

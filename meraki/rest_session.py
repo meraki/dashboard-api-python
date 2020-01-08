@@ -132,8 +132,7 @@ class RestSession(object):
         metadata['url'] = url
         metadata['params'] = params
         response = self.request(metadata, 'GET', url, params=params)
-        text = response.text.strip()
-        return response.json() if response and text else None
+        return response.json() if response and response.text.strip() else None
 
     def get_pages(self, metadata, url, params=None, total_pages=-1, direction='next'):
         if type(total_pages) == str and total_pages.lower() == 'all':
@@ -193,16 +192,14 @@ class RestSession(object):
         metadata['url'] = url
         metadata['json'] = json
         response = self.request(metadata, 'POST', url, json=json)
-        text = response.text.strip()
-        return response.json() if response and text else None
+        return response.json() if response and response.text.strip() else None
 
     def put(self, metadata, url, json=None):
         metadata['method'] = 'PUT'
         metadata['url'] = url
         metadata['json'] = json
         response = self.request(metadata, 'PUT', url, json=json)
-        text = response.text.strip()
-        return response.json() if response and text else None
+        return response.json() if response and response.text.strip() else None
 
     def delete(self, metadata, url):
         metadata['method'] = 'DELETE'
