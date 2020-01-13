@@ -48,5 +48,7 @@ This library's goal is to refresh and supplant the legacy module (this repositor
 
     `my_orgs = dashboard.organizations.getOrganizations()`
 
+6. If you were using this module versions 0.34 and prior, that file's functions are included in the _legacy.py_ file, and you can adapt your existing scripts by replacing their `from meraki import meraki` line to `import meraki`
+
 
 For a full working script that demos this library, please see and run the **org_wide_clients.py** file included (in **examples** folder). That code collects the clients of all networks, in all orgs to which the key has access. No changes are made, since only GET endpoints are called, and the data is written to local CSV output files.

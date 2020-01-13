@@ -7,10 +7,13 @@ API_KEY_ENVIRONMENT_VARIABLE = 'MERAKI_DASHBOARD_API_KEY'
 DEFAULT_BASE_URL = 'https://api.meraki.com/api/v0'
 
 # Maximum number of seconds for each API call
-DEFAULT_SINGLE_REQUEST_TIMEOUT = 60
+SINGLE_REQUEST_TIMEOUT = 60
+
+# Path for TLS/SSL certificate verification if behind local proxy
+CERTIFICATE_PATH = ''
 
 # Retry if 429 rate limit error encountered?
-DEFAULT_WAIT_ON_RATE_LIMIT = True
+WAIT_ON_RATE_LIMIT = True
 
 # Retry up to this many times when encountering 429s or other server-side errors
 MAXIMUM_RETRIES = 2

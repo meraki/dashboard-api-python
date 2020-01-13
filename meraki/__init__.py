@@ -9,6 +9,7 @@ from .api.action_batches import ActionBatches
 from .api.admins import Admins
 from .api.alert_settings import AlertSettings
 from .api.bluetooth_clients import BluetoothClients
+from .api.camera_quality_retention_profiles import CameraQualityRetentionProfiles
 from .api.cameras import Cameras
 from .api.clients import Clients
 from .api.config_templates import ConfigTemplates
@@ -24,6 +25,7 @@ from .api.group_policies import GroupPolicies
 from .api.http_servers import HTTPServers
 from .api.intrusion_settings import IntrusionSettings
 from .api.licenses import Licenses
+from .api.link_aggregations import LinkAggregations
 from .api.mg_dhcp_settings import MGDHCPSettings
 from .api.mg_lan_settings import MGLANSettings
 from .api.mg_connectivity_monitoring_destinations import MGConnectivityMonitoringDestinations
@@ -40,6 +42,7 @@ from .api.mx_l7_firewall import MXL7Firewall
 from .api.mx_vlan_ports import MXVLANPorts
 from .api.mx_vpn_firewall import MXVPNFirewall
 from .api.mx_cellular_firewall import MXCellularFirewall
+from .api.mx_inbound_firewall import MXInboundFirewall
 from .api.mx_port_forwarding_rules import MXPortForwardingRules
 from .api.mx_static_routes import MXStaticRoutes
 from .api.mx_warm_spare_settings import MXWarmSpareSettings
@@ -75,7 +78,7 @@ from .api.webhook_logs import WebhookLogs
 from .api.wireless_health import WirelessHealth
 from .api.wireless_settings import WirelessSettings
 from .config import (
-    API_KEY_ENVIRONMENT_VARIABLE, DEFAULT_BASE_URL, DEFAULT_SINGLE_REQUEST_TIMEOUT, DEFAULT_WAIT_ON_RATE_LIMIT,
+    API_KEY_ENVIRONMENT_VARIABLE, DEFAULT_BASE_URL, SINGLE_REQUEST_TIMEOUT, CERTIFICATE_PATH, WAIT_ON_RATE_LIMIT,
     MAXIMUM_RETRIES, OUTPUT_LOG, LOG_FILE_PREFIX, PRINT_TO_CONSOLE, SIMULATE_API_CALLS
 )
 
@@ -87,6 +90,7 @@ class DashboardAPI(object):
     - api_key (string): API key generated in dashboard; can also be set as an environment variable MERAKI_DASHBOARD_API_KEY
     - base_url (string): preceding all endpoint resources
     - single_request_timeout (integer): maximum number of seconds for each API call
+    - certificate_path (string): path for TLS/SSL certificate verification if behind local proxy
     - wait_on_rate_limit (boolean): retry if 429 rate limit error encountered?
     - maximum_retries_on_rate_limit (integer): retry up to this many times when encountering 429s or other server-side errors
     - output_log (boolean): create an output log file?
@@ -95,9 +99,10 @@ class DashboardAPI(object):
     - simulate (boolean): simulate POST/PUT/DELETE calls to prevent changes?
     """
 
-    def __init__(self, api_key=None, base_url=DEFAULT_BASE_URL, single_request_timeout=DEFAULT_SINGLE_REQUEST_TIMEOUT,
-                 wait_on_rate_limit=DEFAULT_WAIT_ON_RATE_LIMIT, maximum_retries=MAXIMUM_RETRIES, output_log=OUTPUT_LOG,
-                 log_file_prefix=LOG_FILE_PREFIX, print_console=PRINT_TO_CONSOLE, simulate=SIMULATE_API_CALLS):
+    def __init__(self, api_key=None, base_url=DEFAULT_BASE_URL, single_request_timeout=SINGLE_REQUEST_TIMEOUT,
+                 certificate_path=CERTIFICATE_PATH, wait_on_rate_limit=WAIT_ON_RATE_LIMIT,
+                 maximum_retries=MAXIMUM_RETRIES, output_log=OUTPUT_LOG, log_file_prefix=LOG_FILE_PREFIX,
+                 print_console=PRINT_TO_CONSOLE, simulate=SIMULATE_API_CALLS):
         # Check API key
         api_key = api_key or os.environ.get(API_KEY_ENVIRONMENT_VARIABLE)
         if not api_key:
@@ -126,6 +131,7 @@ class DashboardAPI(object):
             api_key=api_key,
             base_url=base_url,
             single_request_timeout=single_request_timeout,
+            certificate_path=certificate_path,
             wait_on_rate_limit=wait_on_rate_limit,
             maximum_retries=maximum_retries,
             simulate=simulate,
@@ -137,6 +143,7 @@ class DashboardAPI(object):
         self.admins = Admins(self._session)
         self.alert_settings = AlertSettings(self._session)
         self.bluetooth_clients = BluetoothClients(self._session)
+        self.camera_quality_retention_profiles = CameraQualityRetentionProfiles(self._session)
         self.cameras = Cameras(self._session)
         self.clients = Clients(self._session)
         self.config_templates = ConfigTemplates(self._session)
@@ -152,6 +159,7 @@ class DashboardAPI(object):
         self.http_servers = HTTPServers(self._session)
         self.intrusion_settings = IntrusionSettings(self._session)
         self.licenses = Licenses(self._session)
+        self.link_aggregations = LinkAggregations(self._session)
         self.mg_dhcp_settings = MGDHCPSettings(self._session)
         self.mg_lan_settings = MGLANSettings(self._session)
         self.mg_connectivity_monitoring_destinations = MGConnectivityMonitoringDestinations(self._session)
@@ -168,6 +176,7 @@ class DashboardAPI(object):
         self.mx_vlan_ports = MXVLANPorts(self._session)
         self.mx_vpn_firewall = MXVPNFirewall(self._session)
         self.mx_cellular_firewall = MXCellularFirewall(self._session)
+        self.mx_inbound_firewall = MXInboundFirewall(self._session)
         self.mx_port_forwarding_rules = MXPortForwardingRules(self._session)
         self.mx_static_routes = MXStaticRoutes(self._session)
         self.mx_warm_spare_settings = MXWarmSpareSettings(self._session)

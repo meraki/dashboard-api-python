@@ -9,14 +9,16 @@ from .exceptions import *
 
 # Main module interface
 class RestSession(object):
-    def __init__(self, logger, api_key, base_url=DEFAULT_BASE_URL, single_request_timeout=DEFAULT_SINGLE_REQUEST_TIMEOUT,
-                 wait_on_rate_limit=DEFAULT_WAIT_ON_RATE_LIMIT, maximum_retries=MAXIMUM_RETRIES, simulate=SIMULATE_API_CALLS):
+    def __init__(self, logger, api_key, base_url=DEFAULT_BASE_URL, single_request_timeout=SINGLE_REQUEST_TIMEOUT,
+                 certificate_path=CERTIFICATE_PATH, wait_on_rate_limit=WAIT_ON_RATE_LIMIT,
+                 maximum_retries=MAXIMUM_RETRIES, simulate=SIMULATE_API_CALLS):
         super(RestSession, self).__init__()
 
         # Initialize attributes and properties
         self._api_key = str(api_key)
         self._base_url = str(base_url)
         self._single_request_timeout = single_request_timeout
+        self._certificate_path = certificate_path
         self._wait_on_rate_limit = wait_on_rate_limit
         self._maximum_retries = maximum_retries
         self._simulate = simulate
@@ -46,11 +48,17 @@ class RestSession(object):
         operation = metadata['operation']
 
         # Update request kwargs with session defaults
+        if self._certificate_path:
+            kwargs.setdefault('verify', self._certificate_path)
         kwargs.setdefault('timeout', self._single_request_timeout)
+
+        # Ensure proper base URL
         if 'meraki.com' in url:
             abs_url = url
         else:
             abs_url = self._base_url + url
+
+        # Set maximum number of retries
         retries = self._maximum_retries
 
         # Option to simulate non-safe API calls without actually sending them
