@@ -2,7 +2,7 @@ class SwitchSettings(object):
     def __init__(self, session):
         super(SwitchSettings, self).__init__()
         self._session = session
-    
+
     def getNetworkSwitchSettings(self, networkId: str):
         """
         **Returns the switch network settings**
@@ -12,10 +12,10 @@ class SwitchSettings(object):
         """
 
         metadata = {
-            'tags': ['Switch settings'],
-            'operation': 'getNetworkSwitchSettings',
+            "tags": ["Switch settings"],
+            "operation": "getNetworkSwitchSettings",
         }
-        resource = f'/networks/{networkId}/switch/settings'
+        resource = f"/networks/{networkId}/switch/settings"
 
         return self._session.get(metadata, resource)
 
@@ -33,12 +33,12 @@ class SwitchSettings(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Switch settings'],
-            'operation': 'updateNetworkSwitchSettings',
+            "tags": ["Switch settings"],
+            "operation": "updateNetworkSwitchSettings",
         }
-        resource = f'/networks/{networkId}/switch/settings'
+        resource = f"/networks/{networkId}/switch/settings"
 
-        body_params = ['vlan', 'useCombinedPower', 'powerExceptions']
+        body_params = ["vlan", "useCombinedPower", "powerExceptions"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -52,10 +52,10 @@ class SwitchSettings(object):
         """
 
         metadata = {
-            'tags': ['Switch settings'],
-            'operation': 'getNetworkSwitchSettingsDhcpServerPolicy',
+            "tags": ["Switch settings"],
+            "operation": "getNetworkSwitchSettingsDhcpServerPolicy",
         }
-        resource = f'/networks/{networkId}/switch/settings/dhcpServerPolicy'
+        resource = f"/networks/{networkId}/switch/settings/dhcpServerPolicy"
 
         return self._session.get(metadata, resource)
 
@@ -72,17 +72,19 @@ class SwitchSettings(object):
 
         kwargs.update(locals())
 
-        if 'defaultPolicy' in kwargs:
-            options = ['allow', 'block']
-            assert kwargs['defaultPolicy'] in options, f'''"defaultPolicy" cannot be "{kwargs['defaultPolicy']}", & must be set to one of: {options}'''
+        if "defaultPolicy" in kwargs:
+            options = ["allow", "block"]
+            assert (
+                kwargs["defaultPolicy"] in options
+            ), f""""defaultPolicy" cannot be "{kwargs['defaultPolicy']}", & must be set to one of: {options}"""
 
         metadata = {
-            'tags': ['Switch settings'],
-            'operation': 'updateNetworkSwitchSettingsDhcpServerPolicy',
+            "tags": ["Switch settings"],
+            "operation": "updateNetworkSwitchSettingsDhcpServerPolicy",
         }
-        resource = f'/networks/{networkId}/switch/settings/dhcpServerPolicy'
+        resource = f"/networks/{networkId}/switch/settings/dhcpServerPolicy"
 
-        body_params = ['defaultPolicy', 'allowedServers', 'blockedServers']
+        body_params = ["defaultPolicy", "allowedServers", "blockedServers"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -96,14 +98,16 @@ class SwitchSettings(object):
         """
 
         metadata = {
-            'tags': ['Switch settings'],
-            'operation': 'getNetworkSwitchSettingsDscpToCosMappings',
+            "tags": ["Switch settings"],
+            "operation": "getNetworkSwitchSettingsDscpToCosMappings",
         }
-        resource = f'/networks/{networkId}/switch/settings/dscpToCosMappings'
+        resource = f"/networks/{networkId}/switch/settings/dscpToCosMappings"
 
         return self._session.get(metadata, resource)
 
-    def updateNetworkSwitchSettingsDscpToCosMappings(self, networkId: str, mappings: list):
+    def updateNetworkSwitchSettingsDscpToCosMappings(
+        self, networkId: str, mappings: list
+    ):
         """
         **Update the DSCP to CoS mappings**
         https://api.meraki.com/api_docs#update-the-dscp-to-cos-mappings
@@ -115,12 +119,12 @@ class SwitchSettings(object):
         kwargs = locals()
 
         metadata = {
-            'tags': ['Switch settings'],
-            'operation': 'updateNetworkSwitchSettingsDscpToCosMappings',
+            "tags": ["Switch settings"],
+            "operation": "updateNetworkSwitchSettingsDscpToCosMappings",
         }
-        resource = f'/networks/{networkId}/switch/settings/dscpToCosMappings'
+        resource = f"/networks/{networkId}/switch/settings/dscpToCosMappings"
 
-        body_params = ['mappings']
+        body_params = ["mappings"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -134,10 +138,10 @@ class SwitchSettings(object):
         """
 
         metadata = {
-            'tags': ['Switch settings'],
-            'operation': 'getNetworkSwitchSettingsMtu',
+            "tags": ["Switch settings"],
+            "operation": "getNetworkSwitchSettingsMtu",
         }
-        resource = f'/networks/{networkId}/switch/settings/mtu'
+        resource = f"/networks/{networkId}/switch/settings/mtu"
 
         return self._session.get(metadata, resource)
 
@@ -154,12 +158,12 @@ class SwitchSettings(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Switch settings'],
-            'operation': 'updateNetworkSwitchSettingsMtu',
+            "tags": ["Switch settings"],
+            "operation": "updateNetworkSwitchSettingsMtu",
         }
-        resource = f'/networks/{networkId}/switch/settings/mtu'
+        resource = f"/networks/{networkId}/switch/settings/mtu"
 
-        body_params = ['defaultMtuSize', 'overrides']
+        body_params = ["defaultMtuSize", "overrides"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -173,10 +177,10 @@ class SwitchSettings(object):
         """
 
         metadata = {
-            'tags': ['Switch settings'],
-            'operation': 'getNetworkSwitchSettingsQosRules',
+            "tags": ["Switch settings"],
+            "operation": "getNetworkSwitchSettingsQosRules",
         }
-        resource = f'/networks/{networkId}/switch/settings/qosRules'
+        resource = f"/networks/{networkId}/switch/settings/qosRules"
 
         return self._session.get(metadata, resource)
 
@@ -197,17 +201,27 @@ class SwitchSettings(object):
 
         kwargs.update(locals())
 
-        if 'protocol' in kwargs:
-            options = ['ANY', 'TCP', 'UDP']
-            assert kwargs['protocol'] in options, f'''"protocol" cannot be "{kwargs['protocol']}", & must be set to one of: {options}'''
+        if "protocol" in kwargs:
+            options = ["ANY", "TCP", "UDP"]
+            assert (
+                kwargs["protocol"] in options
+            ), f""""protocol" cannot be "{kwargs['protocol']}", & must be set to one of: {options}"""
 
         metadata = {
-            'tags': ['Switch settings'],
-            'operation': 'createNetworkSwitchSettingsQosRule',
+            "tags": ["Switch settings"],
+            "operation": "createNetworkSwitchSettingsQosRule",
         }
-        resource = f'/networks/{networkId}/switch/settings/qosRules'
+        resource = f"/networks/{networkId}/switch/settings/qosRules"
 
-        body_params = ['vlan', 'protocol', 'srcPort', 'srcPortRange', 'dstPort', 'dstPortRange', 'dscp']
+        body_params = [
+            "vlan",
+            "protocol",
+            "srcPort",
+            "srcPortRange",
+            "dstPort",
+            "dstPortRange",
+            "dscp",
+        ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -221,10 +235,10 @@ class SwitchSettings(object):
         """
 
         metadata = {
-            'tags': ['Switch settings'],
-            'operation': 'getNetworkSwitchSettingsQosRulesOrder',
+            "tags": ["Switch settings"],
+            "operation": "getNetworkSwitchSettingsQosRulesOrder",
         }
-        resource = f'/networks/{networkId}/switch/settings/qosRules/order'
+        resource = f"/networks/{networkId}/switch/settings/qosRules/order"
 
         return self._session.get(metadata, resource)
 
@@ -240,12 +254,12 @@ class SwitchSettings(object):
         kwargs = locals()
 
         metadata = {
-            'tags': ['Switch settings'],
-            'operation': 'updateNetworkSwitchSettingsQosRulesOrder',
+            "tags": ["Switch settings"],
+            "operation": "updateNetworkSwitchSettingsQosRulesOrder",
         }
-        resource = f'/networks/{networkId}/switch/settings/qosRules/order'
+        resource = f"/networks/{networkId}/switch/settings/qosRules/order"
 
-        body_params = ['ruleIds']
+        body_params = ["ruleIds"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -260,10 +274,10 @@ class SwitchSettings(object):
         """
 
         metadata = {
-            'tags': ['Switch settings'],
-            'operation': 'getNetworkSwitchSettingsQosRule',
+            "tags": ["Switch settings"],
+            "operation": "getNetworkSwitchSettingsQosRule",
         }
-        resource = f'/networks/{networkId}/switch/settings/qosRules/{qosRuleId}'
+        resource = f"/networks/{networkId}/switch/settings/qosRules/{qosRuleId}"
 
         return self._session.get(metadata, resource)
 
@@ -277,14 +291,16 @@ class SwitchSettings(object):
         """
 
         metadata = {
-            'tags': ['Switch settings'],
-            'operation': 'deleteNetworkSwitchSettingsQosRule',
+            "tags": ["Switch settings"],
+            "operation": "deleteNetworkSwitchSettingsQosRule",
         }
-        resource = f'/networks/{networkId}/switch/settings/qosRules/{qosRuleId}'
+        resource = f"/networks/{networkId}/switch/settings/qosRules/{qosRuleId}"
 
         return self._session.delete(metadata, resource)
 
-    def updateNetworkSwitchSettingsQosRule(self, networkId: str, qosRuleId: str, **kwargs):
+    def updateNetworkSwitchSettingsQosRule(
+        self, networkId: str, qosRuleId: str, **kwargs
+    ):
         """
         **Update a quality of service rule**
         https://api.meraki.com/api_docs#update-a-quality-of-service-rule
@@ -302,17 +318,27 @@ class SwitchSettings(object):
 
         kwargs.update(locals())
 
-        if 'protocol' in kwargs:
-            options = ['ANY', 'TCP', 'UDP']
-            assert kwargs['protocol'] in options, f'''"protocol" cannot be "{kwargs['protocol']}", & must be set to one of: {options}'''
+        if "protocol" in kwargs:
+            options = ["ANY", "TCP", "UDP"]
+            assert (
+                kwargs["protocol"] in options
+            ), f""""protocol" cannot be "{kwargs['protocol']}", & must be set to one of: {options}"""
 
         metadata = {
-            'tags': ['Switch settings'],
-            'operation': 'updateNetworkSwitchSettingsQosRule',
+            "tags": ["Switch settings"],
+            "operation": "updateNetworkSwitchSettingsQosRule",
         }
-        resource = f'/networks/{networkId}/switch/settings/qosRules/{qosRuleId}'
+        resource = f"/networks/{networkId}/switch/settings/qosRules/{qosRuleId}"
 
-        body_params = ['vlan', 'protocol', 'srcPort', 'srcPortRange', 'dstPort', 'dstPortRange', 'dscp']
+        body_params = [
+            "vlan",
+            "protocol",
+            "srcPort",
+            "srcPortRange",
+            "dstPort",
+            "dstPortRange",
+            "dscp",
+        ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -326,10 +352,10 @@ class SwitchSettings(object):
         """
 
         metadata = {
-            'tags': ['Switch settings'],
-            'operation': 'getNetworkSwitchSettingsStormControl',
+            "tags": ["Switch settings"],
+            "operation": "getNetworkSwitchSettingsStormControl",
         }
-        resource = f'/networks/{networkId}/switch/settings/stormControl'
+        resource = f"/networks/{networkId}/switch/settings/stormControl"
 
         return self._session.get(metadata, resource)
 
@@ -347,12 +373,16 @@ class SwitchSettings(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Switch settings'],
-            'operation': 'updateNetworkSwitchSettingsStormControl',
+            "tags": ["Switch settings"],
+            "operation": "updateNetworkSwitchSettingsStormControl",
         }
-        resource = f'/networks/{networkId}/switch/settings/stormControl'
+        resource = f"/networks/{networkId}/switch/settings/stormControl"
 
-        body_params = ['broadcastThreshold', 'multicastThreshold', 'unknownUnicastThreshold']
+        body_params = [
+            "broadcastThreshold",
+            "multicastThreshold",
+            "unknownUnicastThreshold",
+        ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -366,10 +396,10 @@ class SwitchSettings(object):
         """
 
         metadata = {
-            'tags': ['Switch settings'],
-            'operation': 'getNetworkSwitchSettingsStp',
+            "tags": ["Switch settings"],
+            "operation": "getNetworkSwitchSettingsStp",
         }
-        resource = f'/networks/{networkId}/switch/settings/stp'
+        resource = f"/networks/{networkId}/switch/settings/stp"
 
         return self._session.get(metadata, resource)
 
@@ -386,13 +416,12 @@ class SwitchSettings(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Switch settings'],
-            'operation': 'updateNetworkSwitchSettingsStp',
+            "tags": ["Switch settings"],
+            "operation": "updateNetworkSwitchSettingsStp",
         }
-        resource = f'/networks/{networkId}/switch/settings/stp'
+        resource = f"/networks/{networkId}/switch/settings/stp"
 
-        body_params = ['rstpEnabled', 'stpBridgePriority']
+        body_params = ["rstpEnabled", "stpBridgePriority"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
-

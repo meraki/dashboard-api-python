@@ -2,8 +2,10 @@ class Licenses(object):
     def __init__(self, session):
         super(Licenses, self).__init__()
         self._session = session
-    
-    def getOrganizationLicenses(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+
+    def getOrganizationLicenses(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
         """
         **List the licenses for an organization**
         https://api.meraki.com/api_docs#list-the-licenses-for-an-organization
@@ -21,23 +23,42 @@ class Licenses(object):
 
         kwargs.update(locals())
 
-        if 'state' in kwargs:
-            options = ['active', 'expired', 'expiring', 'unused', 'unusedActive', 'recentlyQueued']
-            assert kwargs['state'] in options, f'''"state" cannot be "{kwargs['state']}", & must be set to one of: {options}'''
+        if "state" in kwargs:
+            options = [
+                "active",
+                "expired",
+                "expiring",
+                "unused",
+                "unusedActive",
+                "recentlyQueued",
+            ]
+            assert (
+                kwargs["state"] in options
+            ), f""""state" cannot be "{kwargs['state']}", & must be set to one of: {options}"""
 
         metadata = {
-            'tags': ['Licenses'],
-            'operation': 'getOrganizationLicenses',
+            "tags": ["Licenses"],
+            "operation": "getOrganizationLicenses",
         }
-        resource = f'/organizations/{organizationId}/licenses'
+        resource = f"/organizations/{organizationId}/licenses"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'deviceSerial', 'networkId', 'state']
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "deviceSerial",
+            "networkId",
+            "state",
+        ]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        return self._session.get_pages(
+            metadata, resource, params, total_pages, direction
+        )
 
-
-    def assignOrganizationLicensesSeats(self, organizationId: str, licenseId: str, networkId: str, seatCount: int):
+    def assignOrganizationLicensesSeats(
+        self, organizationId: str, licenseId: str, networkId: str, seatCount: int
+    ):
         """
         **Assign SM seats to a network. This will increase the managed SM device limit of the network**
         https://api.meraki.com/api_docs#assign-sm-seats-to-a-network
@@ -51,17 +72,19 @@ class Licenses(object):
         kwargs = locals()
 
         metadata = {
-            'tags': ['Licenses'],
-            'operation': 'assignOrganizationLicensesSeats',
+            "tags": ["Licenses"],
+            "operation": "assignOrganizationLicensesSeats",
         }
-        resource = f'/organizations/{organizationId}/licenses/assignSeats'
+        resource = f"/organizations/{organizationId}/licenses/assignSeats"
 
-        body_params = ['licenseId', 'networkId', 'seatCount']
+        body_params = ["licenseId", "networkId", "seatCount"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.post(metadata, resource, payload)
 
-    def moveOrganizationLicenses(self, organizationId: str, destOrganizationId: str, licenseIds: list):
+    def moveOrganizationLicenses(
+        self, organizationId: str, destOrganizationId: str, licenseIds: list
+    ):
         """
         **Move licenses to another organization. This will also move any devices that the licenses are assigned to**
         https://api.meraki.com/api_docs#move-licenses-to-another-organization
@@ -74,17 +97,23 @@ class Licenses(object):
         kwargs = locals()
 
         metadata = {
-            'tags': ['Licenses'],
-            'operation': 'moveOrganizationLicenses',
+            "tags": ["Licenses"],
+            "operation": "moveOrganizationLicenses",
         }
-        resource = f'/organizations/{organizationId}/licenses/move'
+        resource = f"/organizations/{organizationId}/licenses/move"
 
-        body_params = ['destOrganizationId', 'licenseIds']
+        body_params = ["destOrganizationId", "licenseIds"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.post(metadata, resource, payload)
 
-    def moveOrganizationLicensesSeats(self, organizationId: str, destOrganizationId: str, licenseId: str, seatCount: int):
+    def moveOrganizationLicensesSeats(
+        self,
+        organizationId: str,
+        destOrganizationId: str,
+        licenseId: str,
+        seatCount: int,
+    ):
         """
         **Move SM seats to another organization**
         https://api.meraki.com/api_docs#move-sm-seats-to-another-organization
@@ -98,17 +127,19 @@ class Licenses(object):
         kwargs = locals()
 
         metadata = {
-            'tags': ['Licenses'],
-            'operation': 'moveOrganizationLicensesSeats',
+            "tags": ["Licenses"],
+            "operation": "moveOrganizationLicensesSeats",
         }
-        resource = f'/organizations/{organizationId}/licenses/moveSeats'
+        resource = f"/organizations/{organizationId}/licenses/moveSeats"
 
-        body_params = ['destOrganizationId', 'licenseId', 'seatCount']
+        body_params = ["destOrganizationId", "licenseId", "seatCount"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.post(metadata, resource, payload)
 
-    def renewOrganizationLicensesSeats(self, organizationId: str, licenseIdToRenew: str, unusedLicenseId: str):
+    def renewOrganizationLicensesSeats(
+        self, organizationId: str, licenseIdToRenew: str, unusedLicenseId: str
+    ):
         """
         **Renew SM seats of a license. This will extend the license expiration date of managed SM devices covered by this license**
         https://api.meraki.com/api_docs#renew-sm-seats-of-a-license
@@ -121,12 +152,12 @@ class Licenses(object):
         kwargs = locals()
 
         metadata = {
-            'tags': ['Licenses'],
-            'operation': 'renewOrganizationLicensesSeats',
+            "tags": ["Licenses"],
+            "operation": "renewOrganizationLicensesSeats",
         }
-        resource = f'/organizations/{organizationId}/licenses/renewSeats'
+        resource = f"/organizations/{organizationId}/licenses/renewSeats"
 
-        body_params = ['licenseIdToRenew', 'unusedLicenseId']
+        body_params = ["licenseIdToRenew", "unusedLicenseId"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -141,10 +172,10 @@ class Licenses(object):
         """
 
         metadata = {
-            'tags': ['Licenses'],
-            'operation': 'getOrganizationLicense',
+            "tags": ["Licenses"],
+            "operation": "getOrganizationLicense",
         }
-        resource = f'/organizations/{organizationId}/licenses/{licenseId}'
+        resource = f"/organizations/{organizationId}/licenses/{licenseId}"
 
         return self._session.get(metadata, resource)
 
@@ -161,13 +192,12 @@ class Licenses(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Licenses'],
-            'operation': 'updateOrganizationLicense',
+            "tags": ["Licenses"],
+            "operation": "updateOrganizationLicense",
         }
-        resource = f'/organizations/{organizationId}/licenses/{licenseId}'
+        resource = f"/organizations/{organizationId}/licenses/{licenseId}"
 
-        body_params = ['deviceSerial']
+        body_params = ["deviceSerial"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
-

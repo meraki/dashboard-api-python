@@ -2,7 +2,7 @@ class ContentFilteringRules(object):
     def __init__(self, session):
         super(ContentFilteringRules, self).__init__()
         self._session = session
-    
+
     def getNetworkContentFiltering(self, networkId: str):
         """
         **Return the content filtering settings for an MX network**
@@ -12,10 +12,10 @@ class ContentFilteringRules(object):
         """
 
         metadata = {
-            'tags': ['Content filtering rules'],
-            'operation': 'getNetworkContentFiltering',
+            "tags": ["Content filtering rules"],
+            "operation": "getNetworkContentFiltering",
         }
-        resource = f'/networks/{networkId}/contentFiltering'
+        resource = f"/networks/{networkId}/contentFiltering"
 
         return self._session.get(metadata, resource)
 
@@ -34,13 +34,17 @@ class ContentFilteringRules(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Content filtering rules'],
-            'operation': 'updateNetworkContentFiltering',
+            "tags": ["Content filtering rules"],
+            "operation": "updateNetworkContentFiltering",
         }
-        resource = f'/networks/{networkId}/contentFiltering'
+        resource = f"/networks/{networkId}/contentFiltering"
 
-        body_params = ['allowedUrlPatterns', 'blockedUrlPatterns', 'blockedUrlCategories', 'urlCategoryListSize']
+        body_params = [
+            "allowedUrlPatterns",
+            "blockedUrlPatterns",
+            "blockedUrlCategories",
+            "urlCategoryListSize",
+        ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
-

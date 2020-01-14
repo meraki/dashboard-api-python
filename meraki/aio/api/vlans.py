@@ -2,7 +2,7 @@ class VLANs(object):
     def __init__(self, session):
         super(VLANs, self).__init__()
         self._session = session
-    
+
     def getNetworkVlans(self, networkId: str):
         """
         **List the VLANs for an MX network**
@@ -12,14 +12,16 @@ class VLANs(object):
         """
 
         metadata = {
-            'tags': ['VLANs'],
-            'operation': 'getNetworkVlans',
+            "tags": ["VLANs"],
+            "operation": "getNetworkVlans",
         }
-        resource = f'/networks/{networkId}/vlans'
+        resource = f"/networks/{networkId}/vlans"
 
         return self._session.get(metadata, resource)
 
-    def createNetworkVlan(self, networkId: str, id: str, name: str, subnet: str, applianceIp: str):
+    def createNetworkVlan(
+        self, networkId: str, id: str, name: str, subnet: str, applianceIp: str
+    ):
         """
         **Add a VLAN**
         https://api.meraki.com/api_docs#add-a-vlan
@@ -34,12 +36,12 @@ class VLANs(object):
         kwargs = locals()
 
         metadata = {
-            'tags': ['VLANs'],
-            'operation': 'createNetworkVlan',
+            "tags": ["VLANs"],
+            "operation": "createNetworkVlan",
         }
-        resource = f'/networks/{networkId}/vlans'
+        resource = f"/networks/{networkId}/vlans"
 
-        body_params = ['id', 'name', 'subnet', 'applianceIp']
+        body_params = ["id", "name", "subnet", "applianceIp"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -54,10 +56,10 @@ class VLANs(object):
         """
 
         metadata = {
-            'tags': ['VLANs'],
-            'operation': 'getNetworkVlan',
+            "tags": ["VLANs"],
+            "operation": "getNetworkVlan",
         }
-        resource = f'/networks/{networkId}/vlans/{vlanId}'
+        resource = f"/networks/{networkId}/vlans/{vlanId}"
 
         return self._session.get(metadata, resource)
 
@@ -86,20 +88,43 @@ class VLANs(object):
 
         kwargs.update(locals())
 
-        if 'dhcpHandling' in kwargs:
-            options = ['Run a DHCP server', 'Relay DHCP to another server', 'Do not respond to DHCP requests']
-            assert kwargs['dhcpHandling'] in options, f'''"dhcpHandling" cannot be "{kwargs['dhcpHandling']}", & must be set to one of: {options}'''
-        if 'dhcpLeaseTime' in kwargs:
-            options = ['30 minutes', '1 hour', '4 hours', '12 hours', '1 day', '1 week']
-            assert kwargs['dhcpLeaseTime'] in options, f'''"dhcpLeaseTime" cannot be "{kwargs['dhcpLeaseTime']}", & must be set to one of: {options}'''
+        if "dhcpHandling" in kwargs:
+            options = [
+                "Run a DHCP server",
+                "Relay DHCP to another server",
+                "Do not respond to DHCP requests",
+            ]
+            assert (
+                kwargs["dhcpHandling"] in options
+            ), f""""dhcpHandling" cannot be "{kwargs['dhcpHandling']}", & must be set to one of: {options}"""
+        if "dhcpLeaseTime" in kwargs:
+            options = ["30 minutes", "1 hour", "4 hours", "12 hours", "1 day", "1 week"]
+            assert (
+                kwargs["dhcpLeaseTime"] in options
+            ), f""""dhcpLeaseTime" cannot be "{kwargs['dhcpLeaseTime']}", & must be set to one of: {options}"""
 
         metadata = {
-            'tags': ['VLANs'],
-            'operation': 'updateNetworkVlan',
+            "tags": ["VLANs"],
+            "operation": "updateNetworkVlan",
         }
-        resource = f'/networks/{networkId}/vlans/{vlanId}'
+        resource = f"/networks/{networkId}/vlans/{vlanId}"
 
-        body_params = ['name', 'subnet', 'applianceIp', 'vpnNatSubnet', 'dhcpHandling', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dhcpBootOptionsEnabled', 'dhcpBootNextServer', 'dhcpBootFilename', 'fixedIpAssignments', 'reservedIpRanges', 'dnsNameservers', 'dhcpOptions']
+        body_params = [
+            "name",
+            "subnet",
+            "applianceIp",
+            "vpnNatSubnet",
+            "dhcpHandling",
+            "dhcpRelayServerIps",
+            "dhcpLeaseTime",
+            "dhcpBootOptionsEnabled",
+            "dhcpBootNextServer",
+            "dhcpBootFilename",
+            "fixedIpAssignments",
+            "reservedIpRanges",
+            "dnsNameservers",
+            "dhcpOptions",
+        ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -114,10 +139,10 @@ class VLANs(object):
         """
 
         metadata = {
-            'tags': ['VLANs'],
-            'operation': 'deleteNetworkVlan',
+            "tags": ["VLANs"],
+            "operation": "deleteNetworkVlan",
         }
-        resource = f'/networks/{networkId}/vlans/{vlanId}'
+        resource = f"/networks/{networkId}/vlans/{vlanId}"
 
         return self._session.delete(metadata, resource)
 
@@ -130,10 +155,10 @@ class VLANs(object):
         """
 
         metadata = {
-            'tags': ['VLANs'],
-            'operation': 'getNetworkVlansEnabledState',
+            "tags": ["VLANs"],
+            "operation": "getNetworkVlansEnabledState",
         }
-        resource = f'/networks/{networkId}/vlansEnabledState'
+        resource = f"/networks/{networkId}/vlansEnabledState"
 
         return self._session.get(metadata, resource)
 
@@ -149,13 +174,12 @@ class VLANs(object):
         kwargs = locals()
 
         metadata = {
-            'tags': ['VLANs'],
-            'operation': 'updateNetworkVlansEnabledState',
+            "tags": ["VLANs"],
+            "operation": "updateNetworkVlansEnabledState",
         }
-        resource = f'/networks/{networkId}/vlansEnabledState'
+        resource = f"/networks/{networkId}/vlansEnabledState"
 
-        body_params = ['enabled']
+        body_params = ["enabled"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
-

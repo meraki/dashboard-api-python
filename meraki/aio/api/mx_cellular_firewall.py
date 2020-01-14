@@ -2,7 +2,7 @@ class MXCellularFirewall(object):
     def __init__(self, session):
         super(MXCellularFirewall, self).__init__()
         self._session = session
-    
+
     def getNetworkCellularFirewallRules(self, networkId: str):
         """
         **Return the cellular firewall rules for an MX network**
@@ -12,10 +12,10 @@ class MXCellularFirewall(object):
         """
 
         metadata = {
-            'tags': ['MX cellular firewall'],
-            'operation': 'getNetworkCellularFirewallRules',
+            "tags": ["MX cellular firewall"],
+            "operation": "getNetworkCellularFirewallRules",
         }
-        resource = f'/networks/{networkId}/cellularFirewallRules'
+        resource = f"/networks/{networkId}/cellularFirewallRules"
 
         return self._session.get(metadata, resource)
 
@@ -31,13 +31,12 @@ class MXCellularFirewall(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['MX cellular firewall'],
-            'operation': 'updateNetworkCellularFirewallRules',
+            "tags": ["MX cellular firewall"],
+            "operation": "updateNetworkCellularFirewallRules",
         }
-        resource = f'/networks/{networkId}/cellularFirewallRules'
+        resource = f"/networks/{networkId}/cellularFirewallRules"
 
-        body_params = ['rules']
+        body_params = ["rules"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
-

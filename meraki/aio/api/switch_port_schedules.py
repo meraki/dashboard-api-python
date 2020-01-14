@@ -2,7 +2,7 @@ class SwitchPortSchedules(object):
     def __init__(self, session):
         super(SwitchPortSchedules, self).__init__()
         self._session = session
-    
+
     def getNetworkSwitchPortSchedules(self, networkId: str):
         """
         **List switch port schedules**
@@ -12,10 +12,10 @@ class SwitchPortSchedules(object):
         """
 
         metadata = {
-            'tags': ['Switch port schedules'],
-            'operation': 'getNetworkSwitchPortSchedules',
+            "tags": ["Switch port schedules"],
+            "operation": "getNetworkSwitchPortSchedules",
         }
-        resource = f'/networks/{networkId}/switch/portSchedules'
+        resource = f"/networks/{networkId}/switch/portSchedules"
 
         return self._session.get(metadata, resource)
 
@@ -35,12 +35,12 @@ class SwitchPortSchedules(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Switch port schedules'],
-            'operation': 'createNetworkSwitchPortSchedule',
+            "tags": ["Switch port schedules"],
+            "operation": "createNetworkSwitchPortSchedule",
         }
-        resource = f'/networks/{networkId}/switch/portSchedules'
+        resource = f"/networks/{networkId}/switch/portSchedules"
 
-        body_params = ['name', 'portSchedule']
+        body_params = ["name", "portSchedule"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -55,14 +55,16 @@ class SwitchPortSchedules(object):
         """
 
         metadata = {
-            'tags': ['Switch port schedules'],
-            'operation': 'deleteNetworkSwitchPortSchedule',
+            "tags": ["Switch port schedules"],
+            "operation": "deleteNetworkSwitchPortSchedule",
         }
-        resource = f'/networks/{networkId}/switch/portSchedules/{portScheduleId}'
+        resource = f"/networks/{networkId}/switch/portSchedules/{portScheduleId}"
 
         return self._session.delete(metadata, resource)
 
-    def updateNetworkSwitchPortSchedule(self, networkId: str, portScheduleId: str, **kwargs):
+    def updateNetworkSwitchPortSchedule(
+        self, networkId: str, portScheduleId: str, **kwargs
+    ):
         """
         **Update a switch port schedule**
         https://api.meraki.com/api_docs#update-a-switch-port-schedule
@@ -79,13 +81,12 @@ class SwitchPortSchedules(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Switch port schedules'],
-            'operation': 'updateNetworkSwitchPortSchedule',
+            "tags": ["Switch port schedules"],
+            "operation": "updateNetworkSwitchPortSchedule",
         }
-        resource = f'/networks/{networkId}/switch/portSchedules/{portScheduleId}'
+        resource = f"/networks/{networkId}/switch/portSchedules/{portScheduleId}"
 
-        body_params = ['name', 'portSchedule']
+        body_params = ["name", "portSchedule"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
-

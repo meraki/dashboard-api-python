@@ -2,7 +2,7 @@ class NamedTagScope(object):
     def __init__(self, session):
         super(NamedTagScope, self).__init__()
         self._session = session
-    
+
     def getNetworkSmTargetGroups(self, networkId: str, **kwargs):
         """
         **List the target groups in this network**
@@ -15,12 +15,12 @@ class NamedTagScope(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Named tag scope'],
-            'operation': 'getNetworkSmTargetGroups',
+            "tags": ["Named tag scope"],
+            "operation": "getNetworkSmTargetGroups",
         }
-        resource = f'/networks/{networkId}/sm/targetGroups'
+        resource = f"/networks/{networkId}/sm/targetGroups"
 
-        query_params = ['withDetails']
+        query_params = ["withDetails"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -38,12 +38,12 @@ class NamedTagScope(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Named tag scope'],
-            'operation': 'createNetworkSmTargetGroup',
+            "tags": ["Named tag scope"],
+            "operation": "createNetworkSmTargetGroup",
         }
-        resource = f'/networks/{networkId}/sm/targetGroups'
+        resource = f"/networks/{networkId}/sm/targetGroups"
 
-        body_params = ['name', 'scope']
+        body_params = ["name", "scope"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -61,12 +61,12 @@ class NamedTagScope(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Named tag scope'],
-            'operation': 'getNetworkSmTargetGroup',
+            "tags": ["Named tag scope"],
+            "operation": "getNetworkSmTargetGroup",
         }
-        resource = f'/networks/{networkId}/sm/targetGroups/{targetGroupId}'
+        resource = f"/networks/{networkId}/sm/targetGroups/{targetGroupId}"
 
-        query_params = ['withDetails']
+        query_params = ["withDetails"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -85,12 +85,12 @@ class NamedTagScope(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Named tag scope'],
-            'operation': 'updateNetworkSmTargetGroup',
+            "tags": ["Named tag scope"],
+            "operation": "updateNetworkSmTargetGroup",
         }
-        resource = f'/networks/{networkId}/sm/targetGroups/{targetGroupId}'
+        resource = f"/networks/{networkId}/sm/targetGroups/{targetGroupId}"
 
-        body_params = ['name', 'scope']
+        body_params = ["name", "scope"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -105,10 +105,9 @@ class NamedTagScope(object):
         """
 
         metadata = {
-            'tags': ['Named tag scope'],
-            'operation': 'deleteNetworkSmTargetGroup',
+            "tags": ["Named tag scope"],
+            "operation": "deleteNetworkSmTargetGroup",
         }
-        resource = f'/networks/{networkId}/sm/targetGroups/{targetGroupId}'
+        resource = f"/networks/{networkId}/sm/targetGroups/{targetGroupId}"
 
         return self._session.delete(metadata, resource)
-

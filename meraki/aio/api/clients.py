@@ -2,7 +2,7 @@ class Clients(object):
     def __init__(self, session):
         super(Clients, self).__init__()
         self._session = session
-    
+
     def getDeviceClients(self, serial: str, **kwargs):
         """
         **List the clients of a device, up to a maximum of a month ago. The usage of each client is returned in kilobytes. If the device is a switch, the switchport is returned; otherwise the switchport field is null.**
@@ -16,17 +16,19 @@ class Clients(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Clients'],
-            'operation': 'getDeviceClients',
+            "tags": ["Clients"],
+            "operation": "getDeviceClients",
         }
-        resource = f'/devices/{serial}/clients'
+        resource = f"/devices/{serial}/clients"
 
-        query_params = ['t0', 'timespan']
+        query_params = ["t0", "timespan"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
 
-    def getNetworkClients(self, networkId: str, total_pages=1, direction='next', **kwargs):
+    def getNetworkClients(
+        self, networkId: str, total_pages=1, direction="next", **kwargs
+    ):
         """
         **List the clients that have used this network in the timespan**
         https://api.meraki.com/api_docs#list-the-clients-that-have-used-this-network-in-the-timespan
@@ -44,16 +46,17 @@ class Clients(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Clients'],
-            'operation': 'getNetworkClients',
+            "tags": ["Clients"],
+            "operation": "getNetworkClients",
         }
-        resource = f'/networks/{networkId}/clients'
+        resource = f"/networks/{networkId}/clients"
 
-        query_params = ['t0', 'timespan', 'perPage', 'startingAfter', 'endingBefore']
+        query_params = ["t0", "timespan", "perPage", "startingAfter", "endingBefore"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get_pages(metadata, resource, params, total_pages, direction)
-
+        return self._session.get_pages(
+            metadata, resource, params, total_pages, direction
+        )
 
     def provisionNetworkClients(self, networkId: str, **kwargs):
         """
@@ -70,12 +73,12 @@ class Clients(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Clients'],
-            'operation': 'provisionNetworkClients',
+            "tags": ["Clients"],
+            "operation": "provisionNetworkClients",
         }
-        resource = f'/networks/{networkId}/clients/provision'
+        resource = f"/networks/{networkId}/clients/provision"
 
-        body_params = ['mac', 'name', 'devicePolicy', 'groupPolicyId']
+        body_params = ["mac", "name", "devicePolicy", "groupPolicyId"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -90,14 +93,16 @@ class Clients(object):
         """
 
         metadata = {
-            'tags': ['Clients'],
-            'operation': 'getNetworkClient',
+            "tags": ["Clients"],
+            "operation": "getNetworkClient",
         }
-        resource = f'/networks/{networkId}/clients/{clientId}'
+        resource = f"/networks/{networkId}/clients/{clientId}"
 
         return self._session.get(metadata, resource)
 
-    def getNetworkClientEvents(self, networkId: str, clientId: str, total_pages=1, direction='next', **kwargs):
+    def getNetworkClientEvents(
+        self, networkId: str, clientId: str, total_pages=1, direction="next", **kwargs
+    ):
         """
         **Return the events associated with this client. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
         https://api.meraki.com/api_docs#return-the-events-associated-with-this-client
@@ -114,16 +119,17 @@ class Clients(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Clients'],
-            'operation': 'getNetworkClientEvents',
+            "tags": ["Clients"],
+            "operation": "getNetworkClientEvents",
         }
-        resource = f'/networks/{networkId}/clients/{clientId}/events'
+        resource = f"/networks/{networkId}/clients/{clientId}/events"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore']
+        query_params = ["perPage", "startingAfter", "endingBefore"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get_pages(metadata, resource, params, total_pages, direction)
-
+        return self._session.get_pages(
+            metadata, resource, params, total_pages, direction
+        )
 
     def getNetworkClientLatencyHistory(self, networkId: str, clientId: str, **kwargs):
         """
@@ -141,12 +147,12 @@ class Clients(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Clients'],
-            'operation': 'getNetworkClientLatencyHistory',
+            "tags": ["Clients"],
+            "operation": "getNetworkClientLatencyHistory",
         }
-        resource = f'/networks/{networkId}/clients/{clientId}/latencyHistory'
+        resource = f"/networks/{networkId}/clients/{clientId}/latencyHistory"
 
-        query_params = ['t0', 't1', 'timespan', 'resolution']
+        query_params = ["t0", "t1", "timespan", "resolution"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -161,10 +167,10 @@ class Clients(object):
         """
 
         metadata = {
-            'tags': ['Clients'],
-            'operation': 'getNetworkClientPolicy',
+            "tags": ["Clients"],
+            "operation": "getNetworkClientPolicy",
         }
-        resource = f'/networks/{networkId}/clients/{clientId}/policy'
+        resource = f"/networks/{networkId}/clients/{clientId}/policy"
 
         return self._session.get(metadata, resource)
 
@@ -182,12 +188,12 @@ class Clients(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Clients'],
-            'operation': 'updateNetworkClientPolicy',
+            "tags": ["Clients"],
+            "operation": "updateNetworkClientPolicy",
         }
-        resource = f'/networks/{networkId}/clients/{clientId}/policy'
+        resource = f"/networks/{networkId}/clients/{clientId}/policy"
 
-        body_params = ['devicePolicy', 'groupPolicyId']
+        body_params = ["devicePolicy", "groupPolicyId"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -202,14 +208,16 @@ class Clients(object):
         """
 
         metadata = {
-            'tags': ['Clients'],
-            'operation': 'getNetworkClientSplashAuthorizationStatus',
+            "tags": ["Clients"],
+            "operation": "getNetworkClientSplashAuthorizationStatus",
         }
-        resource = f'/networks/{networkId}/clients/{clientId}/splashAuthorizationStatus'
+        resource = f"/networks/{networkId}/clients/{clientId}/splashAuthorizationStatus"
 
         return self._session.get(metadata, resource)
 
-    def updateNetworkClientSplashAuthorizationStatus(self, networkId: str, clientId: str, **kwargs):
+    def updateNetworkClientSplashAuthorizationStatus(
+        self, networkId: str, clientId: str, **kwargs
+    ):
         """
         **Update a client's splash authorization. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
         https://api.meraki.com/api_docs#update-a-clients-splash-authorization
@@ -222,17 +230,19 @@ class Clients(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Clients'],
-            'operation': 'updateNetworkClientSplashAuthorizationStatus',
+            "tags": ["Clients"],
+            "operation": "updateNetworkClientSplashAuthorizationStatus",
         }
-        resource = f'/networks/{networkId}/clients/{clientId}/splashAuthorizationStatus'
+        resource = f"/networks/{networkId}/clients/{clientId}/splashAuthorizationStatus"
 
-        body_params = ['ssids']
+        body_params = ["ssids"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
 
-    def getNetworkClientTrafficHistory(self, networkId: str, clientId: str, total_pages=1, direction='next', **kwargs):
+    def getNetworkClientTrafficHistory(
+        self, networkId: str, clientId: str, total_pages=1, direction="next", **kwargs
+    ):
         """
         **Return the client's network traffic data over time. Usage data is in kilobytes. This endpoint requires detailed traffic analysis to be enabled on the Network-wide > General page. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
         https://api.meraki.com/api_docs#return-the-clients-network-traffic-data-over-time
@@ -249,16 +259,17 @@ class Clients(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Clients'],
-            'operation': 'getNetworkClientTrafficHistory',
+            "tags": ["Clients"],
+            "operation": "getNetworkClientTrafficHistory",
         }
-        resource = f'/networks/{networkId}/clients/{clientId}/trafficHistory'
+        resource = f"/networks/{networkId}/clients/{clientId}/trafficHistory"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore']
+        query_params = ["perPage", "startingAfter", "endingBefore"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get_pages(metadata, resource, params, total_pages, direction)
-
+        return self._session.get_pages(
+            metadata, resource, params, total_pages, direction
+        )
 
     def getNetworkClientUsageHistory(self, networkId: str, clientId: str):
         """
@@ -270,10 +281,9 @@ class Clients(object):
         """
 
         metadata = {
-            'tags': ['Clients'],
-            'operation': 'getNetworkClientUsageHistory',
+            "tags": ["Clients"],
+            "operation": "getNetworkClientUsageHistory",
         }
-        resource = f'/networks/{networkId}/clients/{clientId}/usageHistory'
+        resource = f"/networks/{networkId}/clients/{clientId}/usageHistory"
 
         return self._session.get(metadata, resource)
-

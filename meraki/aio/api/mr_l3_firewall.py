@@ -2,7 +2,7 @@ class MRL3Firewall(object):
     def __init__(self, session):
         super(MRL3Firewall, self).__init__()
         self._session = session
-    
+
     def getNetworkSsidL3FirewallRules(self, networkId: str, number: str):
         """
         **Return the L3 firewall rules for an SSID on an MR network**
@@ -13,10 +13,10 @@ class MRL3Firewall(object):
         """
 
         metadata = {
-            'tags': ['MR L3 firewall'],
-            'operation': 'getNetworkSsidL3FirewallRules',
+            "tags": ["MR L3 firewall"],
+            "operation": "getNetworkSsidL3FirewallRules",
         }
-        resource = f'/networks/{networkId}/ssids/{number}/l3FirewallRules'
+        resource = f"/networks/{networkId}/ssids/{number}/l3FirewallRules"
 
         return self._session.get(metadata, resource)
 
@@ -34,13 +34,12 @@ class MRL3Firewall(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['MR L3 firewall'],
-            'operation': 'updateNetworkSsidL3FirewallRules',
+            "tags": ["MR L3 firewall"],
+            "operation": "updateNetworkSsidL3FirewallRules",
         }
-        resource = f'/networks/{networkId}/ssids/{number}/l3FirewallRules'
+        resource = f"/networks/{networkId}/ssids/{number}/l3FirewallRules"
 
-        body_params = ['rules', 'allowLanAccess']
+        body_params = ["rules", "allowLanAccess"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
-

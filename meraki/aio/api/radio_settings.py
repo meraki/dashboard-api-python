@@ -2,7 +2,7 @@ class RadioSettings(object):
     def __init__(self, session):
         super(RadioSettings, self).__init__()
         self._session = session
-    
+
     def getNetworkDeviceWirelessRadioSettings(self, networkId: str, serial: str):
         """
         **Return the radio settings of a device**
@@ -13,14 +13,16 @@ class RadioSettings(object):
         """
 
         metadata = {
-            'tags': ['Radio settings'],
-            'operation': 'getNetworkDeviceWirelessRadioSettings',
+            "tags": ["Radio settings"],
+            "operation": "getNetworkDeviceWirelessRadioSettings",
         }
-        resource = f'/networks/{networkId}/devices/{serial}/wireless/radioSettings'
+        resource = f"/networks/{networkId}/devices/{serial}/wireless/radioSettings"
 
         return self._session.get(metadata, resource)
 
-    def updateNetworkDeviceWirelessRadioSettings(self, networkId: str, serial: str, **kwargs):
+    def updateNetworkDeviceWirelessRadioSettings(
+        self, networkId: str, serial: str, **kwargs
+    ):
         """
         **Update the radio settings of a device**
         https://api.meraki.com/api_docs#update-the-radio-settings-of-a-device
@@ -36,12 +38,12 @@ class RadioSettings(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Radio settings'],
-            'operation': 'updateNetworkDeviceWirelessRadioSettings',
+            "tags": ["Radio settings"],
+            "operation": "updateNetworkDeviceWirelessRadioSettings",
         }
-        resource = f'/networks/{networkId}/devices/{serial}/wireless/radioSettings'
+        resource = f"/networks/{networkId}/devices/{serial}/wireless/radioSettings"
 
-        body_params = ['rfProfileId']
+        body_params = ["rfProfileId"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -60,17 +62,19 @@ class RadioSettings(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Radio settings'],
-            'operation': 'getNetworkWirelessRfProfiles',
+            "tags": ["Radio settings"],
+            "operation": "getNetworkWirelessRfProfiles",
         }
-        resource = f'/networks/{networkId}/wireless/rfProfiles'
+        resource = f"/networks/{networkId}/wireless/rfProfiles"
 
-        query_params = ['includeTemplateProfiles']
+        query_params = ["includeTemplateProfiles"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
 
-    def createNetworkWirelessRfProfile(self, networkId: str, name: str, bandSelectionType: str, **kwargs):
+    def createNetworkWirelessRfProfile(
+        self, networkId: str, name: str, bandSelectionType: str, **kwargs
+    ):
         """
         **Creates new RF profile for this network**
         https://api.meraki.com/api_docs#creates-new-rf-profile-for-this-network
@@ -87,25 +91,39 @@ class RadioSettings(object):
 
         kwargs.update(locals())
 
-        if 'minBitrateType' in kwargs:
-            options = ['band', 'ssid']
-            assert kwargs['minBitrateType'] in options, f'''"minBitrateType" cannot be "{kwargs['minBitrateType']}", & must be set to one of: {options}'''
-        if 'bandSelectionType' in kwargs:
-            options = ['ssid', 'ap']
-            assert kwargs['bandSelectionType'] in options, f'''"bandSelectionType" cannot be "{kwargs['bandSelectionType']}", & must be set to one of: {options}'''
+        if "minBitrateType" in kwargs:
+            options = ["band", "ssid"]
+            assert (
+                kwargs["minBitrateType"] in options
+            ), f""""minBitrateType" cannot be "{kwargs['minBitrateType']}", & must be set to one of: {options}"""
+        if "bandSelectionType" in kwargs:
+            options = ["ssid", "ap"]
+            assert (
+                kwargs["bandSelectionType"] in options
+            ), f""""bandSelectionType" cannot be "{kwargs['bandSelectionType']}", & must be set to one of: {options}"""
 
         metadata = {
-            'tags': ['Radio settings'],
-            'operation': 'createNetworkWirelessRfProfile',
+            "tags": ["Radio settings"],
+            "operation": "createNetworkWirelessRfProfile",
         }
-        resource = f'/networks/{networkId}/wireless/rfProfiles'
+        resource = f"/networks/{networkId}/wireless/rfProfiles"
 
-        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings']
+        body_params = [
+            "name",
+            "clientBalancingEnabled",
+            "minBitrateType",
+            "bandSelectionType",
+            "apBandSettings",
+            "twoFourGhzSettings",
+            "fiveGhzSettings",
+        ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.post(metadata, resource, payload)
 
-    def updateNetworkWirelessRfProfile(self, networkId: str, rfProfileId: str, **kwargs):
+    def updateNetworkWirelessRfProfile(
+        self, networkId: str, rfProfileId: str, **kwargs
+    ):
         """
         **Updates specified RF profile for this network**
         https://api.meraki.com/api_docs#updates-specified-rf-profile-for-this-network
@@ -123,20 +141,32 @@ class RadioSettings(object):
 
         kwargs.update(locals())
 
-        if 'minBitrateType' in kwargs:
-            options = ['band', 'ssid']
-            assert kwargs['minBitrateType'] in options, f'''"minBitrateType" cannot be "{kwargs['minBitrateType']}", & must be set to one of: {options}'''
-        if 'bandSelectionType' in kwargs:
-            options = ['ssid', 'ap']
-            assert kwargs['bandSelectionType'] in options, f'''"bandSelectionType" cannot be "{kwargs['bandSelectionType']}", & must be set to one of: {options}'''
+        if "minBitrateType" in kwargs:
+            options = ["band", "ssid"]
+            assert (
+                kwargs["minBitrateType"] in options
+            ), f""""minBitrateType" cannot be "{kwargs['minBitrateType']}", & must be set to one of: {options}"""
+        if "bandSelectionType" in kwargs:
+            options = ["ssid", "ap"]
+            assert (
+                kwargs["bandSelectionType"] in options
+            ), f""""bandSelectionType" cannot be "{kwargs['bandSelectionType']}", & must be set to one of: {options}"""
 
         metadata = {
-            'tags': ['Radio settings'],
-            'operation': 'updateNetworkWirelessRfProfile',
+            "tags": ["Radio settings"],
+            "operation": "updateNetworkWirelessRfProfile",
         }
-        resource = f'/networks/{networkId}/wireless/rfProfiles/{rfProfileId}'
+        resource = f"/networks/{networkId}/wireless/rfProfiles/{rfProfileId}"
 
-        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings']
+        body_params = [
+            "name",
+            "clientBalancingEnabled",
+            "minBitrateType",
+            "bandSelectionType",
+            "apBandSettings",
+            "twoFourGhzSettings",
+            "fiveGhzSettings",
+        ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -151,10 +181,10 @@ class RadioSettings(object):
         """
 
         metadata = {
-            'tags': ['Radio settings'],
-            'operation': 'deleteNetworkWirelessRfProfile',
+            "tags": ["Radio settings"],
+            "operation": "deleteNetworkWirelessRfProfile",
         }
-        resource = f'/networks/{networkId}/wireless/rfProfiles/{rfProfileId}'
+        resource = f"/networks/{networkId}/wireless/rfProfiles/{rfProfileId}"
 
         return self._session.delete(metadata, resource)
 
@@ -168,10 +198,9 @@ class RadioSettings(object):
         """
 
         metadata = {
-            'tags': ['Radio settings'],
-            'operation': 'getNetworkWirelessRfProfile',
+            "tags": ["Radio settings"],
+            "operation": "getNetworkWirelessRfProfile",
         }
-        resource = f'/networks/{networkId}/wireless/rfProfiles/{rfProfileId}'
+        resource = f"/networks/{networkId}/wireless/rfProfiles/{rfProfileId}"
 
         return self._session.get(metadata, resource)
-

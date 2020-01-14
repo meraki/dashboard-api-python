@@ -2,7 +2,7 @@ class MXVLANPorts(object):
     def __init__(self, session):
         super(MXVLANPorts, self).__init__()
         self._session = session
-    
+
     def getNetworkAppliancePorts(self, networkId: str):
         """
         **List per-port VLAN settings for all ports of a MX.**
@@ -12,10 +12,10 @@ class MXVLANPorts(object):
         """
 
         metadata = {
-            'tags': ['MX VLAN ports'],
-            'operation': 'getNetworkAppliancePorts',
+            "tags": ["MX VLAN ports"],
+            "operation": "getNetworkAppliancePorts",
         }
-        resource = f'/networks/{networkId}/appliancePorts'
+        resource = f"/networks/{networkId}/appliancePorts"
 
         return self._session.get(metadata, resource)
 
@@ -29,14 +29,16 @@ class MXVLANPorts(object):
         """
 
         metadata = {
-            'tags': ['MX VLAN ports'],
-            'operation': 'getNetworkAppliancePort',
+            "tags": ["MX VLAN ports"],
+            "operation": "getNetworkAppliancePort",
         }
-        resource = f'/networks/{networkId}/appliancePorts/{appliancePortId}'
+        resource = f"/networks/{networkId}/appliancePorts/{appliancePortId}"
 
         return self._session.get(metadata, resource)
 
-    def updateNetworkAppliancePort(self, networkId: str, appliancePortId: str, **kwargs):
+    def updateNetworkAppliancePort(
+        self, networkId: str, appliancePortId: str, **kwargs
+    ):
         """
         **Update the per-port VLAN settings for a single MX port.**
         https://api.meraki.com/api_docs#update-the-per-port-vlan-settings-for-a-single-mx-port
@@ -54,13 +56,19 @@ class MXVLANPorts(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['MX VLAN ports'],
-            'operation': 'updateNetworkAppliancePort',
+            "tags": ["MX VLAN ports"],
+            "operation": "updateNetworkAppliancePort",
         }
-        resource = f'/networks/{networkId}/appliancePorts/{appliancePortId}'
+        resource = f"/networks/{networkId}/appliancePorts/{appliancePortId}"
 
-        body_params = ['enabled', 'dropUntaggedTraffic', 'type', 'vlan', 'allowedVlans', 'accessPolicy']
+        body_params = [
+            "enabled",
+            "dropUntaggedTraffic",
+            "type",
+            "vlan",
+            "allowedVlans",
+            "accessPolicy",
+        ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
-
