@@ -1,9 +1,9 @@
-class MXL7ApplicationCategories(object):
+class AsyncMXL7ApplicationCategories(object):
     def __init__(self, session):
         super(MXL7ApplicationCategories, self).__init__()
         self._session = session
 
-    def getNetworkL7FirewallRulesApplicationCategories(self, networkId: str):
+    async def getNetworkL7FirewallRulesApplicationCategories(self, networkId: str):
         """
         **Return the L7 firewall application categories and their associated applications for an MX network**
         https://api.meraki.com/api_docs#return-the-l7-firewall-application-categories-and-their-associated-applications-for-an-mx-network
@@ -17,4 +17,4 @@ class MXL7ApplicationCategories(object):
         }
         resource = f"/networks/{networkId}/l7FirewallRules/applicationCategories"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)

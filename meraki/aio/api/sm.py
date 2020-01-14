@@ -1,9 +1,9 @@
-class SM(object):
+class AsyncSM(object):
     def __init__(self, session):
         super(SM, self).__init__()
         self._session = session
 
-    def createNetworkSmAppPolaris(self, networkId: str, scope: str, **kwargs):
+    async def createNetworkSmAppPolaris(self, networkId: str, scope: str, **kwargs):
         """
         **Create a new Polaris app**
         https://api.meraki.com/api_docs#create-a-new-polaris-app
@@ -33,9 +33,9 @@ class SM(object):
         ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def getNetworkSmAppPolaris(self, networkId: str, **kwargs):
+    async def getNetworkSmAppPolaris(self, networkId: str, **kwargs):
         """
         **Get details for a Cisco Polaris app if it exists**
         https://api.meraki.com/api_docs#get-details-for-a-cisco-polaris-app-if-it-exists
@@ -55,9 +55,9 @@ class SM(object):
         query_params = ["bundleId"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)
 
-    def updateNetworkSmAppPolaris(self, networkId: str, appId: str, **kwargs):
+    async def updateNetworkSmAppPolaris(self, networkId: str, appId: str, **kwargs):
         """
         **Update an existing Polaris app**
         https://api.meraki.com/api_docs#update-an-existing-polaris-app
@@ -80,9 +80,9 @@ class SM(object):
         body_params = ["scope", "preventAutoInstall", "usesVPP"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def deleteNetworkSmAppPolaris(self, networkId: str, appId: str):
+    async def deleteNetworkSmAppPolaris(self, networkId: str, appId: str):
         """
         **Delete a Cisco Polaris app**
         https://api.meraki.com/api_docs#delete-a-cisco-polaris-app
@@ -97,9 +97,9 @@ class SM(object):
         }
         resource = f"/networks/{networkId}/sm/app/polaris/{appId}"
 
-        return self._session.delete(metadata, resource)
+        return await self._session.delete(metadata, resource)
 
-    def createNetworkSmBypassActivationLockAttempt(self, networkId: str, ids: list):
+    async def createNetworkSmBypassActivationLockAttempt(self, networkId: str, ids: list):
         """
         **Bypass activation lock attempt**
         https://api.meraki.com/api_docs#bypass-activation-lock-attempt
@@ -119,9 +119,9 @@ class SM(object):
         body_params = ["ids"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def getNetworkSmBypassActivationLockAttempt(self, networkId: str, attemptId: str):
+    async def getNetworkSmBypassActivationLockAttempt(self, networkId: str, attemptId: str):
         """
         **Bypass activation lock attempt status**
         https://api.meraki.com/api_docs#bypass-activation-lock-attempt-status
@@ -136,9 +136,9 @@ class SM(object):
         }
         resource = f"/networks/{networkId}/sm/bypassActivationLockAttempts/{attemptId}"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkSmDeviceFields(self, networkId: str, deviceFields: dict, **kwargs):
+    async def updateNetworkSmDeviceFields(self, networkId: str, deviceFields: dict, **kwargs):
         """
         **Modify the fields of a device**
         https://api.meraki.com/api_docs#modify-the-fields-of-a-device
@@ -161,7 +161,7 @@ class SM(object):
         body_params = ["wifiMac", "id", "serial", "deviceFields"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
     def wipeNetworkSmDevice(self, networkId: str, **kwargs):
         """
@@ -186,7 +186,7 @@ class SM(object):
         body_params = ["wifiMac", "id", "serial", "pin"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
     def refreshNetworkSmDeviceDetails(self, networkId: str, deviceId: str):
         """
@@ -203,9 +203,9 @@ class SM(object):
         }
         resource = f"/networks/{networkId}/sm/device/{deviceId}/refreshDetails"
 
-        return self._session.post(metadata, resource)
+        return await self._session.post(metadata, resource)
 
-    def getNetworkSmDevices(self, networkId: str, **kwargs):
+    async def getNetworkSmDevices(self, networkId: str, **kwargs):
         """
         **List the devices enrolled in an SM network with various specified fields and filters**
         https://api.meraki.com/api_docs#list-the-devices-enrolled-in-an-sm-network-with-various-specified-fields-and-filters
@@ -248,7 +248,7 @@ class SM(object):
         ]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)
 
     def checkinNetworkSmDevices(self, networkId: str, **kwargs):
         """
@@ -273,7 +273,7 @@ class SM(object):
         body_params = ["wifiMacs", "ids", "serials", "scope"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
     def moveNetworkSmDevices(self, networkId: str, newNetwork: str, **kwargs):
         """
@@ -299,9 +299,9 @@ class SM(object):
         body_params = ["wifiMacs", "ids", "serials", "scope", "newNetwork"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def updateNetworkSmDevicesTags(
+    async def updateNetworkSmDevicesTags(
         self, networkId: str, tags: str, updateAction: str, **kwargs
     ):
         """
@@ -328,7 +328,7 @@ class SM(object):
         body_params = ["wifiMacs", "ids", "serials", "scope", "tags", "updateAction"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
     def unenrollNetworkSmDevice(self, networkId: str, deviceId: str):
         """
@@ -345,9 +345,9 @@ class SM(object):
         }
         resource = f"/networks/{networkId}/sm/devices/{deviceId}/unenroll"
 
-        return self._session.post(metadata, resource)
+        return await self._session.post(metadata, resource)
 
-    def createNetworkSmProfileClarity(
+    async def createNetworkSmProfileClarity(
         self, networkId: str, name: str, scope: str, VendorConfig: list, **kwargs
     ):
         """
@@ -381,9 +381,9 @@ class SM(object):
         ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def updateNetworkSmProfileClarity(self, networkId: str, profileId: str, **kwargs):
+    async def updateNetworkSmProfileClarity(self, networkId: str, profileId: str, **kwargs):
         """
         **Update an existing profile containing a Cisco Clarity payload**
         https://api.meraki.com/api_docs#update-an-existing-profile-containing-a-cisco-clarity-payload
@@ -416,7 +416,7 @@ class SM(object):
         ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
     def addNetworkSmProfileClarity(
         self, networkId: str, profileId: str, VendorConfig: list, **kwargs
@@ -449,9 +449,9 @@ class SM(object):
         ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def getNetworkSmProfileClarity(self, networkId: str, profileId: str):
+    async def getNetworkSmProfileClarity(self, networkId: str, profileId: str):
         """
         **Get details for a Cisco Clarity payload**
         https://api.meraki.com/api_docs#get-details-for-a-cisco-clarity-payload
@@ -466,9 +466,9 @@ class SM(object):
         }
         resource = f"/networks/{networkId}/sm/profile/clarity/{profileId}"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def deleteNetworkSmProfileClarity(self, networkId: str, profileId: str):
+    async def deleteNetworkSmProfileClarity(self, networkId: str, profileId: str):
         """
         **Delete a Cisco Clarity payload. Deletes the entire profile if it's empty after removing the payload.**
         https://api.meraki.com/api_docs#delete-a-cisco-clarity-payload
@@ -483,9 +483,9 @@ class SM(object):
         }
         resource = f"/networks/{networkId}/sm/profile/clarity/{profileId}"
 
-        return self._session.delete(metadata, resource)
+        return await self._session.delete(metadata, resource)
 
-    def createNetworkSmProfileUmbrella(
+    async def createNetworkSmProfileUmbrella(
         self,
         networkId: str,
         name: str,
@@ -524,9 +524,9 @@ class SM(object):
         ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def updateNetworkSmProfileUmbrella(self, networkId: str, profileId: str, **kwargs):
+    async def updateNetworkSmProfileUmbrella(self, networkId: str, profileId: str, **kwargs):
         """
         **Update an existing profile containing a Cisco Umbrella payload**
         https://api.meraki.com/api_docs#update-an-existing-profile-containing-a-cisco-umbrella-payload
@@ -559,7 +559,7 @@ class SM(object):
         ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
     def addNetworkSmProfileUmbrella(
         self, networkId: str, profileId: str, ProviderConfiguration: list, **kwargs
@@ -592,9 +592,9 @@ class SM(object):
         ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def getNetworkSmProfileUmbrella(self, networkId: str, profileId: str):
+    async def getNetworkSmProfileUmbrella(self, networkId: str, profileId: str):
         """
         **Get details for a Cisco Umbrella payload**
         https://api.meraki.com/api_docs#get-details-for-a-cisco-umbrella-payload
@@ -609,9 +609,9 @@ class SM(object):
         }
         resource = f"/networks/{networkId}/sm/profile/umbrella/{profileId}"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def deleteNetworkSmProfileUmbrella(self, networkId: str, profileId: str):
+    async def deleteNetworkSmProfileUmbrella(self, networkId: str, profileId: str):
         """
         **Delete a Cisco Umbrella payload. Deletes the entire profile if it's empty after removing the payload**
         https://api.meraki.com/api_docs#delete-a-cisco-umbrella-payload
@@ -626,9 +626,9 @@ class SM(object):
         }
         resource = f"/networks/{networkId}/sm/profile/umbrella/{profileId}"
 
-        return self._session.delete(metadata, resource)
+        return await self._session.delete(metadata, resource)
 
-    def getNetworkSmProfiles(self, networkId: str):
+    async def getNetworkSmProfiles(self, networkId: str):
         """
         **List all the profiles in the network**
         https://api.meraki.com/api_docs#list-all-the-profiles-in-the-network
@@ -642,9 +642,9 @@ class SM(object):
         }
         resource = f"/networks/{networkId}/sm/profiles"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def getNetworkSmUserDeviceProfiles(self, networkId: str, userId: str):
+    async def getNetworkSmUserDeviceProfiles(self, networkId: str, userId: str):
         """
         **Get the profiles associated with a user**
         https://api.meraki.com/api_docs#get-the-profiles-associated-with-a-user
@@ -659,9 +659,9 @@ class SM(object):
         }
         resource = f"/networks/{networkId}/sm/user/{userId}/deviceProfiles"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def getNetworkSmUserSoftwares(self, networkId: str, userId: str):
+    async def getNetworkSmUserSoftwares(self, networkId: str, userId: str):
         """
         **Get a list of softwares associated with a user**
         https://api.meraki.com/api_docs#get-a-list-of-softwares-associated-with-a-user
@@ -676,9 +676,9 @@ class SM(object):
         }
         resource = f"/networks/{networkId}/sm/user/{userId}/softwares"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def getNetworkSmUsers(self, networkId: str, **kwargs):
+    async def getNetworkSmUsers(self, networkId: str, **kwargs):
         """
         **List the owners in an SM network with various specified fields and filters**
         https://api.meraki.com/api_docs#list-the-owners-in-an-sm-network-with-various-specified-fields-and-filters
@@ -701,9 +701,9 @@ class SM(object):
         query_params = ["ids", "usernames", "emails", "scope"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)
 
-    def getNetworkSmCellularUsageHistory(self, networkId: str, deviceId: str):
+    async def getNetworkSmCellularUsageHistory(self, networkId: str, deviceId: str):
         """
         **Return the client's daily cellular data usage history. Usage data is in kilobytes.**
         https://api.meraki.com/api_docs#return-the-clients-daily-cellular-data-usage-history
@@ -718,9 +718,9 @@ class SM(object):
         }
         resource = f"/networks/{networkId}/sm/{deviceId}/cellularUsageHistory"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def getNetworkSmCerts(self, networkId: str, deviceId: str):
+    async def getNetworkSmCerts(self, networkId: str, deviceId: str):
         """
         **List the certs on a device**
         https://api.meraki.com/api_docs#list-the-certs-on-a-device
@@ -735,9 +735,9 @@ class SM(object):
         }
         resource = f"/networks/{networkId}/sm/{deviceId}/certs"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def getNetworkSmDeviceProfiles(self, networkId: str, deviceId: str):
+    async def getNetworkSmDeviceProfiles(self, networkId: str, deviceId: str):
         """
         **Get the profiles associated with a device**
         https://api.meraki.com/api_docs#get-the-profiles-associated-with-a-device
@@ -752,9 +752,9 @@ class SM(object):
         }
         resource = f"/networks/{networkId}/sm/{deviceId}/deviceProfiles"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def getNetworkSmNetworkAdapters(self, networkId: str, deviceId: str):
+    async def getNetworkSmNetworkAdapters(self, networkId: str, deviceId: str):
         """
         **List the network adapters of a device**
         https://api.meraki.com/api_docs#list-the-network-adapters-of-a-device
@@ -769,9 +769,9 @@ class SM(object):
         }
         resource = f"/networks/{networkId}/sm/{deviceId}/networkAdapters"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def getNetworkSmRestrictions(self, networkId: str, deviceId: str):
+    async def getNetworkSmRestrictions(self, networkId: str, deviceId: str):
         """
         **List the restrictions on a device**
         https://api.meraki.com/api_docs#list-the-restrictions-on-a-device
@@ -786,9 +786,9 @@ class SM(object):
         }
         resource = f"/networks/{networkId}/sm/{deviceId}/restrictions"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def getNetworkSmSecurityCenters(self, networkId: str, deviceId: str):
+    async def getNetworkSmSecurityCenters(self, networkId: str, deviceId: str):
         """
         **List the security centers on a device**
         https://api.meraki.com/api_docs#list-the-security-centers-on-a-device
@@ -803,9 +803,9 @@ class SM(object):
         }
         resource = f"/networks/{networkId}/sm/{deviceId}/securityCenters"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def getNetworkSmSoftwares(self, networkId: str, deviceId: str):
+    async def getNetworkSmSoftwares(self, networkId: str, deviceId: str):
         """
         **Get a list of softwares associated with a device**
         https://api.meraki.com/api_docs#get-a-list-of-softwares-associated-with-a-device
@@ -820,9 +820,9 @@ class SM(object):
         }
         resource = f"/networks/{networkId}/sm/{deviceId}/softwares"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def getNetworkSmWlanLists(self, networkId: str, deviceId: str):
+    async def getNetworkSmWlanLists(self, networkId: str, deviceId: str):
         """
         **List the saved SSID names on a device**
         https://api.meraki.com/api_docs#list-the-saved-ssid-names-on-a-device
@@ -837,7 +837,7 @@ class SM(object):
         }
         resource = f"/networks/{networkId}/sm/{deviceId}/wlanLists"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
     def lockNetworkSmDevices(self, network_id: str, **kwargs):
         """
@@ -863,9 +863,9 @@ class SM(object):
         body_params = ["wifiMacs", "ids", "serials", "scope", "pin"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def getNetworkSmConnectivity(
+    async def getNetworkSmConnectivity(
         self, network_id: str, id: str, total_pages=1, direction="next", **kwargs
     ):
         """
@@ -892,11 +892,11 @@ class SM(object):
         query_params = ["perPage", "startingAfter", "endingBefore"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get_pages(
+        return await self._session.get_pages(
             metadata, resource, params, total_pages, direction
         )
 
-    def getNetworkSmDesktopLogs(
+    async def getNetworkSmDesktopLogs(
         self, network_id: str, id: str, total_pages=1, direction="next", **kwargs
     ):
         """
@@ -923,11 +923,11 @@ class SM(object):
         query_params = ["perPage", "startingAfter", "endingBefore"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get_pages(
+        return await self._session.get_pages(
             metadata, resource, params, total_pages, direction
         )
 
-    def getNetworkSmDeviceCommandLogs(
+    async def getNetworkSmDeviceCommandLogs(
         self, network_id: str, id: str, total_pages=1, direction="next", **kwargs
     ):
         """
@@ -958,11 +958,11 @@ class SM(object):
         query_params = ["perPage", "startingAfter", "endingBefore"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get_pages(
+        return await self._session.get_pages(
             metadata, resource, params, total_pages, direction
         )
 
-    def getNetworkSmPerformanceHistory(
+    async def getNetworkSmPerformanceHistory(
         self, network_id: str, id: str, total_pages=1, direction="next", **kwargs
     ):
         """
@@ -989,6 +989,6 @@ class SM(object):
         query_params = ["perPage", "startingAfter", "endingBefore"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get_pages(
+        return await self._session.get_pages(
             metadata, resource, params, total_pages, direction
         )

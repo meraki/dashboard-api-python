@@ -1,9 +1,9 @@
-class MGUplinkSettings(object):
+class AsyncMGUplinkSettings(object):
     def __init__(self, session):
         super(MGUplinkSettings, self).__init__()
         self._session = session
 
-    def getNetworkCellularGatewaySettingsUplink(self, networkId: str):
+    async def getNetworkCellularGatewaySettingsUplink(self, networkId: str):
         """
         **Returns the uplink settings for your MG network.**
         https://api.meraki.com/api_docs#returns-the-uplink-settings-for-your-mg-network
@@ -17,9 +17,9 @@ class MGUplinkSettings(object):
         }
         resource = f"/networks/{networkId}/cellularGateway/settings/uplink"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkCellularGatewaySettingsUplink(self, networkId: str, **kwargs):
+    async def updateNetworkCellularGatewaySettingsUplink(self, networkId: str, **kwargs):
         """
         **Updates the uplink settings for your MG network.**
         https://api.meraki.com/api_docs#updates-the-uplink-settings-for-your-mg-network
@@ -39,4 +39,4 @@ class MGUplinkSettings(object):
         body_params = ["bandwidthLimits"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)

@@ -1,9 +1,9 @@
-class Admins(object):
+class AsyncAdmins(object):
     def __init__(self, session):
         super(Admins, self).__init__()
         self._session = session
 
-    def getOrganizationAdmins(self, organizationId: str):
+    async def getOrganizationAdmins(self, organizationId: str):
         """
         **List the dashboard administrators in this organization**
         https://api.meraki.com/api_docs#list-the-dashboard-administrators-in-this-organization
@@ -17,9 +17,9 @@ class Admins(object):
         }
         resource = f"/organizations/{organizationId}/admins"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def createOrganizationAdmin(
+    async def createOrganizationAdmin(
         self, organizationId: str, email: str, name: str, orgAccess: str, **kwargs
     ):
         """
@@ -51,9 +51,9 @@ class Admins(object):
         body_params = ["email", "name", "orgAccess", "tags", "networks"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def updateOrganizationAdmin(self, organizationId: str, id: str, **kwargs):
+    async def updateOrganizationAdmin(self, organizationId: str, id: str, **kwargs):
         """
         **Update an administrator**
         https://api.meraki.com/api_docs#update-an-administrator
@@ -83,9 +83,9 @@ class Admins(object):
         body_params = ["name", "orgAccess", "tags", "networks"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def deleteOrganizationAdmin(self, organizationId: str, id: str):
+    async def deleteOrganizationAdmin(self, organizationId: str, id: str):
         """
         **Revoke all access for a dashboard administrator within this organization**
         https://api.meraki.com/api_docs#revoke-all-access-for-a-dashboard-administrator-within-this-organization
@@ -100,4 +100,4 @@ class Admins(object):
         }
         resource = f"/organizations/{organizationId}/admins/{id}"
 
-        return self._session.delete(metadata, resource)
+        return await self._session.delete(metadata, resource)

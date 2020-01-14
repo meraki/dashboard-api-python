@@ -1,9 +1,9 @@
-class SecurityEvents(object):
+class AsyncSecurityEvents(object):
     def __init__(self, session):
         super(SecurityEvents, self).__init__()
         self._session = session
 
-    def getNetworkClientSecurityEvents(
+    async def getNetworkClientSecurityEvents(
         self, networkId: str, clientId: str, total_pages=1, direction="next", **kwargs
     ):
         """
@@ -40,11 +40,11 @@ class SecurityEvents(object):
         ]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get_pages(
+        return await self._session.get_pages(
             metadata, resource, params, total_pages, direction
         )
 
-    def getNetworkSecurityEvents(
+    async def getNetworkSecurityEvents(
         self, networkId: str, total_pages=1, direction="next", **kwargs
     ):
         """
@@ -80,11 +80,11 @@ class SecurityEvents(object):
         ]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get_pages(
+        return await self._session.get_pages(
             metadata, resource, params, total_pages, direction
         )
 
-    def getOrganizationSecurityEvents(
+    async def getOrganizationSecurityEvents(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):
         """
@@ -120,6 +120,6 @@ class SecurityEvents(object):
         ]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get_pages(
+        return await self._session.get_pages(
             metadata, resource, params, total_pages, direction
         )

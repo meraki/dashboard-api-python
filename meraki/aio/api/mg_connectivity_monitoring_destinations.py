@@ -1,9 +1,9 @@
-class MGConnectivityMonitoringDestinations(object):
+class AsyncMGConnectivityMonitoringDestinations(object):
     def __init__(self, session):
         super(MGConnectivityMonitoringDestinations, self).__init__()
         self._session = session
 
-    def getNetworkCellularGatewaySettingsConnectivityMonitoringDestinations(
+    async def getNetworkCellularGatewaySettingsConnectivityMonitoringDestinations(
         self, networkId: str
     ):
         """
@@ -19,9 +19,9 @@ class MGConnectivityMonitoringDestinations(object):
         }
         resource = f"/networks/{networkId}/cellularGateway/settings/connectivityMonitoringDestinations"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkCellularGatewaySettingsConnectivityMonitoringDestinations(
+    async def updateNetworkCellularGatewaySettingsConnectivityMonitoringDestinations(
         self, networkId: str, **kwargs
     ):
         """
@@ -43,4 +43,4 @@ class MGConnectivityMonitoringDestinations(object):
         body_params = ["destinations"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)

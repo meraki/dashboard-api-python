@@ -1,9 +1,9 @@
-class BluetoothClients(object):
+class AsyncBluetoothClients(object):
     def __init__(self, session):
         super(BluetoothClients, self).__init__()
         self._session = session
 
-    def getNetworkBluetoothClients(
+    async def getNetworkBluetoothClients(
         self, networkId: str, total_pages=1, direction="next", **kwargs
     ):
         """
@@ -39,11 +39,11 @@ class BluetoothClients(object):
         ]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get_pages(
+        return await self._session.get_pages(
             metadata, resource, params, total_pages, direction
         )
 
-    def getNetworkBluetoothClient(
+    async def getNetworkBluetoothClient(
         self, networkId: str, bluetoothClientId: str, **kwargs
     ):
         """
@@ -67,4 +67,4 @@ class BluetoothClients(object):
         query_params = ["includeConnectivityHistory", "connectivityHistoryTimespan"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)

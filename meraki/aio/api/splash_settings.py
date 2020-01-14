@@ -1,9 +1,9 @@
-class SplashSettings(object):
+class AsyncSplashSettings(object):
     def __init__(self, session):
         super(SplashSettings, self).__init__()
         self._session = session
 
-    def getNetworkSsidSplashSettings(self, networkId: str, number: str):
+    async def getNetworkSsidSplashSettings(self, networkId: str, number: str):
         """
         **Display the splash page settings for the given SSID**
         https://api.meraki.com/api_docs#display-the-splash-page-settings-for-the-given-ssid
@@ -18,9 +18,9 @@ class SplashSettings(object):
         }
         resource = f"/networks/{networkId}/ssids/{number}/splashSettings"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkSsidSplashSettings(self, networkId: str, number: str, **kwargs):
+    async def updateNetworkSsidSplashSettings(self, networkId: str, number: str, **kwargs):
         """
         **Modify the splash page settings for the given SSID**
         https://api.meraki.com/api_docs#modify-the-splash-page-settings-for-the-given-ssid
@@ -42,4 +42,4 @@ class SplashSettings(object):
         body_params = ["splashUrl", "useSplashUrl"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)

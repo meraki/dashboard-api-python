@@ -1,9 +1,9 @@
-class ActionBatches(object):
+class AsyncActionBatches(object):
     def __init__(self, session):
         super(ActionBatches, self).__init__()
         self._session = session
 
-    def createOrganizationActionBatch(
+    async def createOrganizationActionBatch(
         self, organizationId: str, actions: list, **kwargs
     ):
         """
@@ -27,9 +27,9 @@ class ActionBatches(object):
         body_params = ["confirmed", "synchronous", "actions"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def getOrganizationActionBatches(self, organizationId: str):
+    async def getOrganizationActionBatches(self, organizationId: str):
         """
         **Return the list of action batches in the organization**
         https://api.meraki.com/api_docs#return-the-list-of-action-batches-in-the-organization
@@ -43,9 +43,9 @@ class ActionBatches(object):
         }
         resource = f"/organizations/{organizationId}/actionBatches"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def getOrganizationActionBatch(self, organizationId: str, actionBatchId: str):
+    async def getOrganizationActionBatch(self, organizationId: str, actionBatchId: str):
         """
         **Return an action batch**
         https://api.meraki.com/api_docs#return-an-action-batch
@@ -60,9 +60,9 @@ class ActionBatches(object):
         }
         resource = f"/organizations/{organizationId}/actionBatches/{actionBatchId}"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def deleteOrganizationActionBatch(self, organizationId: str, actionBatchId: str):
+    async def deleteOrganizationActionBatch(self, organizationId: str, actionBatchId: str):
         """
         **Delete an action batch**
         https://api.meraki.com/api_docs#delete-an-action-batch
@@ -77,9 +77,9 @@ class ActionBatches(object):
         }
         resource = f"/organizations/{organizationId}/actionBatches/{actionBatchId}"
 
-        return self._session.delete(metadata, resource)
+        return await self._session.delete(metadata, resource)
 
-    def updateOrganizationActionBatch(
+    async def updateOrganizationActionBatch(
         self, organizationId: str, actionBatchId: str, **kwargs
     ):
         """
@@ -103,4 +103,4 @@ class ActionBatches(object):
         body_params = ["confirmed", "synchronous"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)

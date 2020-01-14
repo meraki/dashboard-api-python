@@ -1,9 +1,9 @@
-class SAMLRoles(object):
+class AsyncSAMLRoles(object):
     def __init__(self, session):
         super(SAMLRoles, self).__init__()
         self._session = session
 
-    def getOrganizationSamlRoles(self, organizationId: str):
+    async def getOrganizationSamlRoles(self, organizationId: str):
         """
         **List the SAML roles for this organization**
         https://api.meraki.com/api_docs#list-the-saml-roles-for-this-organization
@@ -17,9 +17,9 @@ class SAMLRoles(object):
         }
         resource = f"/organizations/{organizationId}/samlRoles"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def createOrganizationSamlRole(self, organizationId: str, **kwargs):
+    async def createOrganizationSamlRole(self, organizationId: str, **kwargs):
         """
         **Create a SAML role**
         https://api.meraki.com/api_docs#create-a-saml-role
@@ -42,9 +42,9 @@ class SAMLRoles(object):
         body_params = ["role", "orgAccess", "tags", "networks"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def getOrganizationSamlRole(self, organizationId: str, samlRoleId: str):
+    async def getOrganizationSamlRole(self, organizationId: str, samlRoleId: str):
         """
         **Return a SAML role**
         https://api.meraki.com/api_docs#return-a-saml-role
@@ -59,9 +59,9 @@ class SAMLRoles(object):
         }
         resource = f"/organizations/{organizationId}/samlRoles/{samlRoleId}"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateOrganizationSamlRole(
+    async def updateOrganizationSamlRole(
         self, organizationId: str, samlRoleId: str, **kwargs
     ):
         """
@@ -87,9 +87,9 @@ class SAMLRoles(object):
         body_params = ["role", "orgAccess", "tags", "networks"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def deleteOrganizationSamlRole(self, organizationId: str, samlRoleId: str):
+    async def deleteOrganizationSamlRole(self, organizationId: str, samlRoleId: str):
         """
         **Remove a SAML role**
         https://api.meraki.com/api_docs#remove-a-saml-role
@@ -104,4 +104,4 @@ class SAMLRoles(object):
         }
         resource = f"/organizations/{organizationId}/samlRoles/{samlRoleId}"
 
-        return self._session.delete(metadata, resource)
+        return await self._session.delete(metadata, resource)

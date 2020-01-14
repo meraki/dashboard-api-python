@@ -1,9 +1,9 @@
-class MXVLANPorts(object):
+class AsyncMXVLANPorts(object):
     def __init__(self, session):
         super(MXVLANPorts, self).__init__()
         self._session = session
 
-    def getNetworkAppliancePorts(self, networkId: str):
+    async def getNetworkAppliancePorts(self, networkId: str):
         """
         **List per-port VLAN settings for all ports of a MX.**
         https://api.meraki.com/api_docs#list-per-port-vlan-settings-for-all-ports-of-a-mx
@@ -17,9 +17,9 @@ class MXVLANPorts(object):
         }
         resource = f"/networks/{networkId}/appliancePorts"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def getNetworkAppliancePort(self, networkId: str, appliancePortId: str):
+    async def getNetworkAppliancePort(self, networkId: str, appliancePortId: str):
         """
         **Return per-port VLAN settings for a single MX port.**
         https://api.meraki.com/api_docs#return-per-port-vlan-settings-for-a-single-mx-port
@@ -34,9 +34,9 @@ class MXVLANPorts(object):
         }
         resource = f"/networks/{networkId}/appliancePorts/{appliancePortId}"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkAppliancePort(
+    async def updateNetworkAppliancePort(
         self, networkId: str, appliancePortId: str, **kwargs
     ):
         """
@@ -71,4 +71,4 @@ class MXVLANPorts(object):
         ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)

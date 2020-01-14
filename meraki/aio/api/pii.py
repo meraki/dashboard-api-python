@@ -1,9 +1,9 @@
-class PII(object):
+class AsyncPII(object):
     def __init__(self, session):
         super(PII, self).__init__()
         self._session = session
 
-    def getNetworkPiiPiiKeys(self, networkId: str, **kwargs):
+    async def getNetworkPiiPiiKeys(self, networkId: str, **kwargs):
         """
         **List the keys required to access Personally Identifiable Information (PII) for a given identifier. Exactly one identifier will be accepted. If the organization contains org-wide Systems Manager users matching the key provided then there will be an entry with the key "0" containing the applicable keys.**
         https://api.meraki.com/api_docs#list-the-keys-required-to-access-personally-identifiable-information-pii-for-a-given-identifier
@@ -28,9 +28,9 @@ class PII(object):
         query_params = ["username", "email", "mac", "serial", "imei", "bluetoothMac"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)
 
-    def getNetworkPiiRequests(self, networkId: str):
+    async def getNetworkPiiRequests(self, networkId: str):
         """
         **List the PII requests for this network or organization**
         https://api.meraki.com/api_docs#list-the-pii-requests-for-this-network-or-organization
@@ -44,9 +44,9 @@ class PII(object):
         }
         resource = f"/networks/{networkId}/pii/requests"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def createNetworkPiiRequest(self, networkId: str, **kwargs):
+    async def createNetworkPiiRequest(self, networkId: str, **kwargs):
         """
         **Submit a new delete or restrict processing PII request**
         https://api.meraki.com/api_docs#submit-a-new-delete-or-restrict-processing-pii-request
@@ -86,9 +86,9 @@ class PII(object):
         ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def getNetworkPiiRequest(self, networkId: str, requestId: str):
+    async def getNetworkPiiRequest(self, networkId: str, requestId: str):
         """
         **Return a PII request**
         https://api.meraki.com/api_docs#return-a-pii-request
@@ -103,9 +103,9 @@ class PII(object):
         }
         resource = f"/networks/{networkId}/pii/requests/{requestId}"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def deleteNetworkPiiRequest(self, networkId: str, requestId: str):
+    async def deleteNetworkPiiRequest(self, networkId: str, requestId: str):
         """
         **Delete a restrict processing PII request**
         https://api.meraki.com/api_docs#delete-a-restrict-processing-pii-request
@@ -120,9 +120,9 @@ class PII(object):
         }
         resource = f"/networks/{networkId}/pii/requests/{requestId}"
 
-        return self._session.delete(metadata, resource)
+        return await self._session.delete(metadata, resource)
 
-    def getNetworkPiiSmDevicesForKey(self, networkId: str, **kwargs):
+    async def getNetworkPiiSmDevicesForKey(self, networkId: str, **kwargs):
         """
         **Given a piece of Personally Identifiable Information (PII), return the Systems Manager device ID(s) associated with that identifier. These device IDs can be used with the Systems Manager API endpoints to retrieve device details. Exactly one identifier will be accepted.**
         https://api.meraki.com/api_docs#given-a-piece-of-personally-identifiable-information-pii-return-the-systems-manager-device-ids-associated-with-that-identifier
@@ -147,9 +147,9 @@ class PII(object):
         query_params = ["username", "email", "mac", "serial", "imei", "bluetoothMac"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)
 
-    def getNetworkPiiSmOwnersForKey(self, networkId: str, **kwargs):
+    async def getNetworkPiiSmOwnersForKey(self, networkId: str, **kwargs):
         """
         **Given a piece of Personally Identifiable Information (PII), return the Systems Manager owner ID(s) associated with that identifier. These owner IDs can be used with the Systems Manager API endpoints to retrieve owner details. Exactly one identifier will be accepted.**
         https://api.meraki.com/api_docs#given-a-piece-of-personally-identifiable-information-pii-return-the-systems-manager-owner-ids-associated-with-that-identifier
@@ -174,4 +174,4 @@ class PII(object):
         query_params = ["username", "email", "mac", "serial", "imei", "bluetoothMac"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)

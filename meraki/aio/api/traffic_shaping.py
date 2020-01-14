@@ -1,9 +1,9 @@
-class TrafficShaping(object):
+class AsyncTrafficShaping(object):
     def __init__(self, session):
         super(TrafficShaping, self).__init__()
         self._session = session
 
-    def updateNetworkSsidTrafficShaping(self, networkId: str, number: str, **kwargs):
+    async def updateNetworkSsidTrafficShaping(self, networkId: str, number: str, **kwargs):
         """
         **Update the traffic shaping settings for an SSID on an MR network**
         https://api.meraki.com/api_docs#update-the-traffic-shaping-settings-for-an-ssid-on-an-mr-network
@@ -33,9 +33,9 @@ class TrafficShaping(object):
         body_params = ["trafficShapingEnabled", "defaultRulesEnabled", "rules"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def getNetworkSsidTrafficShaping(self, networkId: str, number: str):
+    async def getNetworkSsidTrafficShaping(self, networkId: str, number: str):
         """
         **Display the traffic shaping settings for a SSID on an MR network**
         https://api.meraki.com/api_docs#display-the-traffic-shaping-settings-for-a-ssid-on-an-mr-network
@@ -50,9 +50,9 @@ class TrafficShaping(object):
         }
         resource = f"/networks/{networkId}/ssids/{number}/trafficShaping"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkTrafficShaping(self, networkId: str, **kwargs):
+    async def updateNetworkTrafficShaping(self, networkId: str, **kwargs):
         """
         **Update the traffic shaping settings for an MX network**
         https://api.meraki.com/api_docs#update-the-traffic-shaping-settings-for-an-mx-network
@@ -80,9 +80,9 @@ class TrafficShaping(object):
         body_params = ["defaultRulesEnabled", "rules"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def getNetworkTrafficShaping(self, networkId: str):
+    async def getNetworkTrafficShaping(self, networkId: str):
         """
         **Display the traffic shaping settings for an MX network**
         https://api.meraki.com/api_docs#display-the-traffic-shaping-settings-for-an-mx-network
@@ -96,9 +96,9 @@ class TrafficShaping(object):
         }
         resource = f"/networks/{networkId}/trafficShaping"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def getNetworkTrafficShapingApplicationCategories(self, networkId: str):
+    async def getNetworkTrafficShapingApplicationCategories(self, networkId: str):
         """
         **Returns the application categories for traffic shaping rules.**
         https://api.meraki.com/api_docs#returns-the-application-categories-for-traffic-shaping-rules
@@ -112,9 +112,9 @@ class TrafficShaping(object):
         }
         resource = f"/networks/{networkId}/trafficShaping/applicationCategories"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def getNetworkTrafficShapingDscpTaggingOptions(self, networkId: str):
+    async def getNetworkTrafficShapingDscpTaggingOptions(self, networkId: str):
         """
         **Returns the available DSCP tagging options for your traffic shaping rules.**
         https://api.meraki.com/api_docs#returns-the-available-dscp-tagging-options-for-your-traffic-shaping-rules
@@ -128,4 +128,4 @@ class TrafficShaping(object):
         }
         resource = f"/networks/{networkId}/trafficShaping/dscpTaggingOptions"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)

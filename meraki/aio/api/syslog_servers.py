@@ -1,9 +1,9 @@
-class SyslogServers(object):
+class AsyncSyslogServers(object):
     def __init__(self, session):
         super(SyslogServers, self).__init__()
         self._session = session
 
-    def getNetworkSyslogServers(self, networkId: str):
+    async def getNetworkSyslogServers(self, networkId: str):
         """
         **List the syslog servers for a network**
         https://api.meraki.com/api_docs#list-the-syslog-servers-for-a-network
@@ -17,9 +17,9 @@ class SyslogServers(object):
         }
         resource = f"/networks/{networkId}/syslogServers"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkSyslogServers(self, networkId: str, servers: list):
+    async def updateNetworkSyslogServers(self, networkId: str, servers: list):
         """
         **Update the syslog servers for a network**
         https://api.meraki.com/api_docs#update-the-syslog-servers-for-a-network
@@ -39,4 +39,4 @@ class SyslogServers(object):
         body_params = ["servers"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)

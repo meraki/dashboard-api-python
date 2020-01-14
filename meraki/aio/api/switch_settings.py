@@ -1,9 +1,9 @@
-class SwitchSettings(object):
+class AsyncSwitchSettings(object):
     def __init__(self, session):
         super(SwitchSettings, self).__init__()
         self._session = session
 
-    def getNetworkSwitchSettings(self, networkId: str):
+    async def getNetworkSwitchSettings(self, networkId: str):
         """
         **Returns the switch network settings**
         https://api.meraki.com/api_docs#returns-the-switch-network-settings
@@ -17,9 +17,9 @@ class SwitchSettings(object):
         }
         resource = f"/networks/{networkId}/switch/settings"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkSwitchSettings(self, networkId: str, **kwargs):
+    async def updateNetworkSwitchSettings(self, networkId: str, **kwargs):
         """
         **Update switch network settings**
         https://api.meraki.com/api_docs#update-switch-network-settings
@@ -41,9 +41,9 @@ class SwitchSettings(object):
         body_params = ["vlan", "useCombinedPower", "powerExceptions"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def getNetworkSwitchSettingsDhcpServerPolicy(self, networkId: str):
+    async def getNetworkSwitchSettingsDhcpServerPolicy(self, networkId: str):
         """
         **Return the DHCP server policy**
         https://api.meraki.com/api_docs#return-the-dhcp-server-policy
@@ -57,9 +57,9 @@ class SwitchSettings(object):
         }
         resource = f"/networks/{networkId}/switch/settings/dhcpServerPolicy"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkSwitchSettingsDhcpServerPolicy(self, networkId: str, **kwargs):
+    async def updateNetworkSwitchSettingsDhcpServerPolicy(self, networkId: str, **kwargs):
         """
         **Update the DHCP server policy**
         https://api.meraki.com/api_docs#update-the-dhcp-server-policy
@@ -87,9 +87,9 @@ class SwitchSettings(object):
         body_params = ["defaultPolicy", "allowedServers", "blockedServers"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def getNetworkSwitchSettingsDscpToCosMappings(self, networkId: str):
+    async def getNetworkSwitchSettingsDscpToCosMappings(self, networkId: str):
         """
         **Return the DSCP to CoS mappings**
         https://api.meraki.com/api_docs#return-the-dscp-to-cos-mappings
@@ -103,9 +103,9 @@ class SwitchSettings(object):
         }
         resource = f"/networks/{networkId}/switch/settings/dscpToCosMappings"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkSwitchSettingsDscpToCosMappings(
+    async def updateNetworkSwitchSettingsDscpToCosMappings(
         self, networkId: str, mappings: list
     ):
         """
@@ -127,9 +127,9 @@ class SwitchSettings(object):
         body_params = ["mappings"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def getNetworkSwitchSettingsMtu(self, networkId: str):
+    async def getNetworkSwitchSettingsMtu(self, networkId: str):
         """
         **Return the MTU configuration**
         https://api.meraki.com/api_docs#return-the-mtu-configuration
@@ -143,9 +143,9 @@ class SwitchSettings(object):
         }
         resource = f"/networks/{networkId}/switch/settings/mtu"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkSwitchSettingsMtu(self, networkId: str, **kwargs):
+    async def updateNetworkSwitchSettingsMtu(self, networkId: str, **kwargs):
         """
         **Update the MTU configuration**
         https://api.meraki.com/api_docs#update-the-mtu-configuration
@@ -166,9 +166,9 @@ class SwitchSettings(object):
         body_params = ["defaultMtuSize", "overrides"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def getNetworkSwitchSettingsQosRules(self, networkId: str):
+    async def getNetworkSwitchSettingsQosRules(self, networkId: str):
         """
         **List quality of service rules**
         https://api.meraki.com/api_docs#list-quality-of-service-rules
@@ -182,9 +182,9 @@ class SwitchSettings(object):
         }
         resource = f"/networks/{networkId}/switch/settings/qosRules"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def createNetworkSwitchSettingsQosRule(self, networkId: str, vlan: int, **kwargs):
+    async def createNetworkSwitchSettingsQosRule(self, networkId: str, vlan: int, **kwargs):
         """
         **Add a quality of service rule**
         https://api.meraki.com/api_docs#add-a-quality-of-service-rule
@@ -224,9 +224,9 @@ class SwitchSettings(object):
         ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def getNetworkSwitchSettingsQosRulesOrder(self, networkId: str):
+    async def getNetworkSwitchSettingsQosRulesOrder(self, networkId: str):
         """
         **Return the quality of service rule IDs by order in which they will be processed by the switch**
         https://api.meraki.com/api_docs#return-the-quality-of-service-rule-ids-by-order-in-which-they-will-be-processed-by-the-switch
@@ -240,9 +240,9 @@ class SwitchSettings(object):
         }
         resource = f"/networks/{networkId}/switch/settings/qosRules/order"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkSwitchSettingsQosRulesOrder(self, networkId: str, ruleIds: list):
+    async def updateNetworkSwitchSettingsQosRulesOrder(self, networkId: str, ruleIds: list):
         """
         **Update the order in which the rules should be processed by the switch**
         https://api.meraki.com/api_docs#update-the-order-in-which-the-rules-should-be-processed-by-the-switch
@@ -262,9 +262,9 @@ class SwitchSettings(object):
         body_params = ["ruleIds"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def getNetworkSwitchSettingsQosRule(self, networkId: str, qosRuleId: str):
+    async def getNetworkSwitchSettingsQosRule(self, networkId: str, qosRuleId: str):
         """
         **Return a quality of service rule**
         https://api.meraki.com/api_docs#return-a-quality-of-service-rule
@@ -279,9 +279,9 @@ class SwitchSettings(object):
         }
         resource = f"/networks/{networkId}/switch/settings/qosRules/{qosRuleId}"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def deleteNetworkSwitchSettingsQosRule(self, networkId: str, qosRuleId: str):
+    async def deleteNetworkSwitchSettingsQosRule(self, networkId: str, qosRuleId: str):
         """
         **Delete a quality of service rule**
         https://api.meraki.com/api_docs#delete-a-quality-of-service-rule
@@ -296,9 +296,9 @@ class SwitchSettings(object):
         }
         resource = f"/networks/{networkId}/switch/settings/qosRules/{qosRuleId}"
 
-        return self._session.delete(metadata, resource)
+        return await self._session.delete(metadata, resource)
 
-    def updateNetworkSwitchSettingsQosRule(
+    async def updateNetworkSwitchSettingsQosRule(
         self, networkId: str, qosRuleId: str, **kwargs
     ):
         """
@@ -341,9 +341,9 @@ class SwitchSettings(object):
         ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def getNetworkSwitchSettingsStormControl(self, networkId: str):
+    async def getNetworkSwitchSettingsStormControl(self, networkId: str):
         """
         **Return the storm control configuration for a switch network**
         https://api.meraki.com/api_docs#return-the-storm-control-configuration-for-a-switch-network
@@ -357,9 +357,9 @@ class SwitchSettings(object):
         }
         resource = f"/networks/{networkId}/switch/settings/stormControl"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkSwitchSettingsStormControl(self, networkId: str, **kwargs):
+    async def updateNetworkSwitchSettingsStormControl(self, networkId: str, **kwargs):
         """
         **Update the storm control configuration for a switch network**
         https://api.meraki.com/api_docs#update-the-storm-control-configuration-for-a-switch-network
@@ -385,9 +385,9 @@ class SwitchSettings(object):
         ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def getNetworkSwitchSettingsStp(self, networkId: str):
+    async def getNetworkSwitchSettingsStp(self, networkId: str):
         """
         **Returns STP settings**
         https://api.meraki.com/api_docs#returns-stp-settings
@@ -401,9 +401,9 @@ class SwitchSettings(object):
         }
         resource = f"/networks/{networkId}/switch/settings/stp"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkSwitchSettingsStp(self, networkId: str, **kwargs):
+    async def updateNetworkSwitchSettingsStp(self, networkId: str, **kwargs):
         """
         **Updates STP settings**
         https://api.meraki.com/api_docs#updates-stp-settings
@@ -424,4 +424,4 @@ class SwitchSettings(object):
         body_params = ["rstpEnabled", "stpBridgePriority"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)

@@ -1,9 +1,9 @@
-class APIUsage(object):
+class AsyncAPIUsage(object):
     def __init__(self, session):
         super(APIUsage, self).__init__()
         self._session = session
 
-    def getOrganizationApiRequests(
+    async def getOrganizationApiRequests(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):
         """
@@ -49,6 +49,6 @@ class APIUsage(object):
         ]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get_pages(
+        return await self._session.get_pages(
             metadata, resource, params, total_pages, direction
         )

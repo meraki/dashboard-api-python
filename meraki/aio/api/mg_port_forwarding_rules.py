@@ -1,9 +1,9 @@
-class MGPortForwardingRules(object):
+class AsyncMGPortForwardingRules(object):
     def __init__(self, session):
         super(MGPortForwardingRules, self).__init__()
         self._session = session
 
-    def getDeviceCellularGatewaySettingsPortForwardingRules(self, serial: str):
+    async def getDeviceCellularGatewaySettingsPortForwardingRules(self, serial: str):
         """
         **Returns the port forwarding rules for a single MG.**
         https://api.meraki.com/api_docs#returns-the-port-forwarding-rules-for-a-single-mg
@@ -17,9 +17,9 @@ class MGPortForwardingRules(object):
         }
         resource = f"/devices/{serial}/cellularGateway/settings/portForwardingRules"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateDeviceCellularGatewaySettingsPortForwardingRules(
+    async def updateDeviceCellularGatewaySettingsPortForwardingRules(
         self, serial: str, **kwargs
     ):
         """
@@ -41,4 +41,4 @@ class MGPortForwardingRules(object):
         body_params = ["rules"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)

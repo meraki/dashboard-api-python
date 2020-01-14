@@ -1,9 +1,9 @@
-class RadioSettings(object):
+class AsyncRadioSettings(object):
     def __init__(self, session):
         super(RadioSettings, self).__init__()
         self._session = session
 
-    def getNetworkDeviceWirelessRadioSettings(self, networkId: str, serial: str):
+    async def getNetworkDeviceWirelessRadioSettings(self, networkId: str, serial: str):
         """
         **Return the radio settings of a device**
         https://api.meraki.com/api_docs#return-the-radio-settings-of-a-device
@@ -18,9 +18,9 @@ class RadioSettings(object):
         }
         resource = f"/networks/{networkId}/devices/{serial}/wireless/radioSettings"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkDeviceWirelessRadioSettings(
+    async def updateNetworkDeviceWirelessRadioSettings(
         self, networkId: str, serial: str, **kwargs
     ):
         """
@@ -46,9 +46,9 @@ class RadioSettings(object):
         body_params = ["rfProfileId"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def getNetworkWirelessRfProfiles(self, networkId: str, **kwargs):
+    async def getNetworkWirelessRfProfiles(self, networkId: str, **kwargs):
         """
         **List the non-basic RF profiles for this network**
         https://api.meraki.com/api_docs#list-the-non-basic-rf-profiles-for-this-network
@@ -70,9 +70,9 @@ class RadioSettings(object):
         query_params = ["includeTemplateProfiles"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)
 
-    def createNetworkWirelessRfProfile(
+    async def createNetworkWirelessRfProfile(
         self, networkId: str, name: str, bandSelectionType: str, **kwargs
     ):
         """
@@ -119,9 +119,9 @@ class RadioSettings(object):
         ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def updateNetworkWirelessRfProfile(
+    async def updateNetworkWirelessRfProfile(
         self, networkId: str, rfProfileId: str, **kwargs
     ):
         """
@@ -169,9 +169,9 @@ class RadioSettings(object):
         ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def deleteNetworkWirelessRfProfile(self, networkId: str, rfProfileId: str):
+    async def deleteNetworkWirelessRfProfile(self, networkId: str, rfProfileId: str):
         """
         **Delete a RF Profile**
         https://api.meraki.com/api_docs#delete-a-rf-profile
@@ -186,9 +186,9 @@ class RadioSettings(object):
         }
         resource = f"/networks/{networkId}/wireless/rfProfiles/{rfProfileId}"
 
-        return self._session.delete(metadata, resource)
+        return await self._session.delete(metadata, resource)
 
-    def getNetworkWirelessRfProfile(self, networkId: str, rfProfileId: str):
+    async def getNetworkWirelessRfProfile(self, networkId: str, rfProfileId: str):
         """
         **Return a RF profile**
         https://api.meraki.com/api_docs#return-a-rf-profile
@@ -203,4 +203,4 @@ class RadioSettings(object):
         }
         resource = f"/networks/{networkId}/wireless/rfProfiles/{rfProfileId}"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)

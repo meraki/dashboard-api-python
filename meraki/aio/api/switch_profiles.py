@@ -1,9 +1,9 @@
-class SwitchProfiles(object):
+class AsyncSwitchProfiles(object):
     def __init__(self, session):
         super(SwitchProfiles, self).__init__()
         self._session = session
 
-    def getOrganizationConfigTemplateSwitchProfiles(
+    async def getOrganizationConfigTemplateSwitchProfiles(
         self, organizationId: str, configTemplateId: str
     ):
         """
@@ -20,4 +20,4 @@ class SwitchProfiles(object):
         }
         resource = f"/organizations/{organizationId}/configTemplates/{configTemplateId}/switchProfiles"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)

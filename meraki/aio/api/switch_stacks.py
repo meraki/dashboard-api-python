@@ -1,9 +1,9 @@
-class SwitchStacks(object):
+class AsyncSwitchStacks(object):
     def __init__(self, session):
         super(SwitchStacks, self).__init__()
         self._session = session
 
-    def getNetworkSwitchStacks(self, networkId: str):
+    async def getNetworkSwitchStacks(self, networkId: str):
         """
         **List the switch stacks in a network**
         https://api.meraki.com/api_docs#list-the-switch-stacks-in-a-network
@@ -17,9 +17,9 @@ class SwitchStacks(object):
         }
         resource = f"/networks/{networkId}/switchStacks"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def createNetworkSwitchStack(self, networkId: str, name: str, serials: list):
+    async def createNetworkSwitchStack(self, networkId: str, name: str, serials: list):
         """
         **Create a stack**
         https://api.meraki.com/api_docs#create-a-stack
@@ -40,9 +40,9 @@ class SwitchStacks(object):
         body_params = ["name", "serials"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def getNetworkSwitchStack(self, networkId: str, switchStackId: str):
+    async def getNetworkSwitchStack(self, networkId: str, switchStackId: str):
         """
         **Show a switch stack**
         https://api.meraki.com/api_docs#show-a-switch-stack
@@ -57,9 +57,9 @@ class SwitchStacks(object):
         }
         resource = f"/networks/{networkId}/switchStacks/{switchStackId}"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def deleteNetworkSwitchStack(self, networkId: str, switchStackId: str):
+    async def deleteNetworkSwitchStack(self, networkId: str, switchStackId: str):
         """
         **Delete a stack**
         https://api.meraki.com/api_docs#delete-a-stack
@@ -74,7 +74,7 @@ class SwitchStacks(object):
         }
         resource = f"/networks/{networkId}/switchStacks/{switchStackId}"
 
-        return self._session.delete(metadata, resource)
+        return await self._session.delete(metadata, resource)
 
     def addNetworkSwitchStack(self, networkId: str, switchStackId: str, serial: str):
         """
@@ -97,7 +97,7 @@ class SwitchStacks(object):
         body_params = ["serial"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
     def removeNetworkSwitchStack(self, networkId: str, switchStackId: str, serial: str):
         """
@@ -120,4 +120,4 @@ class SwitchStacks(object):
         body_params = ["serial"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)

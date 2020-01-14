@@ -1,9 +1,9 @@
-class ContentFilteringCategories(object):
+class AsyncContentFilteringCategories(object):
     def __init__(self, session):
         super(ContentFilteringCategories, self).__init__()
         self._session = session
 
-    def getNetworkContentFilteringCategories(self, networkId: str):
+    async def getNetworkContentFilteringCategories(self, networkId: str):
         """
         **List all available content filtering categories for an MX network**
         https://api.meraki.com/api_docs#list-all-available-content-filtering-categories-for-an-mx-network
@@ -17,4 +17,4 @@ class ContentFilteringCategories(object):
         }
         resource = f"/networks/{networkId}/contentFiltering/categories"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)

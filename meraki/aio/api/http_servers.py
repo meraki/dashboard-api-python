@@ -1,9 +1,9 @@
-class HTTPServers(object):
+class AsyncHTTPServers(object):
     def __init__(self, session):
         super(HTTPServers, self).__init__()
         self._session = session
 
-    def getNetworkHttpServers(self, networkId: str):
+    async def getNetworkHttpServers(self, networkId: str):
         """
         **List the HTTP servers for a network**
         https://api.meraki.com/api_docs#list-the-http-servers-for-a-network
@@ -17,9 +17,9 @@ class HTTPServers(object):
         }
         resource = f"/networks/{networkId}/httpServers"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def createNetworkHttpServer(self, networkId: str, name: str, url: str, **kwargs):
+    async def createNetworkHttpServer(self, networkId: str, name: str, url: str, **kwargs):
         """
         **Add an HTTP server to a network**
         https://api.meraki.com/api_docs#add-an-http-server-to-a-network
@@ -41,9 +41,9 @@ class HTTPServers(object):
         body_params = ["name", "url", "sharedSecret"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def createNetworkHttpServersWebhookTest(self, networkId: str, url: str):
+    async def createNetworkHttpServersWebhookTest(self, networkId: str, url: str):
         """
         **Send a test webhook for a network**
         https://api.meraki.com/api_docs#send-a-test-webhook-for-a-network
@@ -63,9 +63,9 @@ class HTTPServers(object):
         body_params = ["url"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def getNetworkHttpServersWebhookTest(self, networkId: str, id: str):
+    async def getNetworkHttpServersWebhookTest(self, networkId: str, id: str):
         """
         **Return the status of a webhook test for a network**
         https://api.meraki.com/api_docs#return-the-status-of-a-webhook-test-for-a-network
@@ -80,9 +80,9 @@ class HTTPServers(object):
         }
         resource = f"/networks/{networkId}/httpServers/webhookTests/{id}"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def getNetworkHttpServer(self, networkId: str, id: str):
+    async def getNetworkHttpServer(self, networkId: str, id: str):
         """
         **Return an HTTP server for a network**
         https://api.meraki.com/api_docs#return-an-http-server-for-a-network
@@ -97,9 +97,9 @@ class HTTPServers(object):
         }
         resource = f"/networks/{networkId}/httpServers/{id}"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkHttpServer(self, networkId: str, id: str, **kwargs):
+    async def updateNetworkHttpServer(self, networkId: str, id: str, **kwargs):
         """
         **Update an HTTP server**
         https://api.meraki.com/api_docs#update-an-http-server
@@ -122,9 +122,9 @@ class HTTPServers(object):
         body_params = ["name", "url", "sharedSecret"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def deleteNetworkHttpServer(self, networkId: str, id: str):
+    async def deleteNetworkHttpServer(self, networkId: str, id: str):
         """
         **Delete an HTTP server from a network**
         https://api.meraki.com/api_docs#delete-an-http-server-from-a-network
@@ -139,4 +139,4 @@ class HTTPServers(object):
         }
         resource = f"/networks/{networkId}/httpServers/{id}"
 
-        return self._session.delete(metadata, resource)
+        return await self._session.delete(metadata, resource)

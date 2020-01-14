@@ -1,9 +1,9 @@
-class NetFlowSettings(object):
+class AsyncNetFlowSettings(object):
     def __init__(self, session):
         super(NetFlowSettings, self).__init__()
         self._session = session
 
-    def getNetworkNetflowSettings(self, networkId: str):
+    async def getNetworkNetflowSettings(self, networkId: str):
         """
         **Return the NetFlow traffic reporting settings for a network**
         https://api.meraki.com/api_docs#return-the-netflow-traffic-reporting-settings-for-a-network
@@ -17,9 +17,9 @@ class NetFlowSettings(object):
         }
         resource = f"/networks/{networkId}/netflowSettings"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkNetflowSettings(self, networkId: str, **kwargs):
+    async def updateNetworkNetflowSettings(self, networkId: str, **kwargs):
         """
         **Update the NetFlow traffic reporting settings for a network**
         https://api.meraki.com/api_docs#update-the-netflow-traffic-reporting-settings-for-a-network
@@ -41,4 +41,4 @@ class NetFlowSettings(object):
         body_params = ["reportingEnabled", "collectorIp", "collectorPort"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)

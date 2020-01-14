@@ -1,9 +1,9 @@
-class WirelessHealth(object):
+class AsyncWirelessHealth(object):
     def __init__(self, session):
         super(WirelessHealth, self).__init__()
         self._session = session
 
-    def getNetworkClientsConnectionStats(self, networkId: str, **kwargs):
+    async def getNetworkClientsConnectionStats(self, networkId: str, **kwargs):
         """
         **Aggregated connectivity info for this network, grouped by clients**
         https://api.meraki.com/api_docs#aggregated-connectivity-info-for-this-network-grouped-by-clients
@@ -28,9 +28,9 @@ class WirelessHealth(object):
         query_params = ["t0", "t1", "timespan", "ssid", "vlan", "apTag"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)
 
-    def getNetworkClientsLatencyStats(self, networkId: str, **kwargs):
+    async def getNetworkClientsLatencyStats(self, networkId: str, **kwargs):
         """
         **Aggregated latency info for this network, grouped by clients**
         https://api.meraki.com/api_docs#aggregated-latency-info-for-this-network-grouped-by-clients
@@ -56,9 +56,9 @@ class WirelessHealth(object):
         query_params = ["t0", "t1", "timespan", "ssid", "vlan", "apTag", "fields"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)
 
-    def getNetworkClientConnectionStats(self, networkId: str, clientId: str, **kwargs):
+    async def getNetworkClientConnectionStats(self, networkId: str, clientId: str, **kwargs):
         """
         **Aggregated connectivity info for a given client on this network. Clients are identified by their MAC.**
         https://api.meraki.com/api_docs#aggregated-connectivity-info-for-a-given-client-on-this-network
@@ -84,9 +84,9 @@ class WirelessHealth(object):
         query_params = ["t0", "t1", "timespan", "ssid", "vlan", "apTag"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)
 
-    def getNetworkClientLatencyStats(self, networkId: str, clientId: str, **kwargs):
+    async def getNetworkClientLatencyStats(self, networkId: str, clientId: str, **kwargs):
         """
         **Aggregated latency info for a given client on this network. Clients are identified by their MAC.**
         https://api.meraki.com/api_docs#aggregated-latency-info-for-a-given-client-on-this-network
@@ -113,9 +113,9 @@ class WirelessHealth(object):
         query_params = ["t0", "t1", "timespan", "ssid", "vlan", "apTag", "fields"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)
 
-    def getNetworkConnectionStats(self, networkId: str, **kwargs):
+    async def getNetworkConnectionStats(self, networkId: str, **kwargs):
         """
         **Aggregated connectivity info for this network**
         https://api.meraki.com/api_docs#aggregated-connectivity-info-for-this-network
@@ -140,9 +140,9 @@ class WirelessHealth(object):
         query_params = ["t0", "t1", "timespan", "ssid", "vlan", "apTag"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)
 
-    def getNetworkDevicesConnectionStats(self, networkId: str, **kwargs):
+    async def getNetworkDevicesConnectionStats(self, networkId: str, **kwargs):
         """
         **Aggregated connectivity info for this network, grouped by node**
         https://api.meraki.com/api_docs#aggregated-connectivity-info-for-this-network-grouped-by-node
@@ -167,9 +167,9 @@ class WirelessHealth(object):
         query_params = ["t0", "t1", "timespan", "ssid", "vlan", "apTag"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)
 
-    def getNetworkDevicesLatencyStats(self, networkId: str, **kwargs):
+    async def getNetworkDevicesLatencyStats(self, networkId: str, **kwargs):
         """
         **Aggregated latency info for this network, grouped by node**
         https://api.meraki.com/api_docs#aggregated-latency-info-for-this-network-grouped-by-node
@@ -195,9 +195,9 @@ class WirelessHealth(object):
         query_params = ["t0", "t1", "timespan", "ssid", "vlan", "apTag", "fields"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)
 
-    def getNetworkDeviceConnectionStats(self, networkId: str, serial: str, **kwargs):
+    async def getNetworkDeviceConnectionStats(self, networkId: str, serial: str, **kwargs):
         """
         **Aggregated connectivity info for a given AP on this network**
         https://api.meraki.com/api_docs#aggregated-connectivity-info-for-a-given-ap-on-this-network
@@ -223,9 +223,9 @@ class WirelessHealth(object):
         query_params = ["t0", "t1", "timespan", "ssid", "vlan", "apTag"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)
 
-    def getNetworkDeviceLatencyStats(self, networkId: str, serial: str, **kwargs):
+    async def getNetworkDeviceLatencyStats(self, networkId: str, serial: str, **kwargs):
         """
         **Aggregated latency info for a given AP on this network**
         https://api.meraki.com/api_docs#aggregated-latency-info-for-a-given-ap-on-this-network
@@ -252,9 +252,9 @@ class WirelessHealth(object):
         query_params = ["t0", "t1", "timespan", "ssid", "vlan", "apTag", "fields"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)
 
-    def getNetworkFailedConnections(self, networkId: str, **kwargs):
+    async def getNetworkFailedConnections(self, networkId: str, **kwargs):
         """
         **List of all failed client connection events on this network in a given time range**
         https://api.meraki.com/api_docs#list-of-all-failed-client-connection-events-on-this-network-in-a-given-time-range
@@ -290,9 +290,9 @@ class WirelessHealth(object):
         ]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)
 
-    def getNetworkLatencyStats(self, networkId: str, **kwargs):
+    async def getNetworkLatencyStats(self, networkId: str, **kwargs):
         """
         **Aggregated latency info for this network**
         https://api.meraki.com/api_docs#aggregated-latency-info-for-this-network
@@ -318,4 +318,4 @@ class WirelessHealth(object):
         query_params = ["t0", "t1", "timespan", "ssid", "vlan", "apTag", "fields"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)

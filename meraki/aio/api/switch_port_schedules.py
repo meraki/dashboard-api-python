@@ -1,9 +1,9 @@
-class SwitchPortSchedules(object):
+class AsyncSwitchPortSchedules(object):
     def __init__(self, session):
         super(SwitchPortSchedules, self).__init__()
         self._session = session
 
-    def getNetworkSwitchPortSchedules(self, networkId: str):
+    async def getNetworkSwitchPortSchedules(self, networkId: str):
         """
         **List switch port schedules**
         https://api.meraki.com/api_docs#list-switch-port-schedules
@@ -17,9 +17,9 @@ class SwitchPortSchedules(object):
         }
         resource = f"/networks/{networkId}/switch/portSchedules"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def createNetworkSwitchPortSchedule(self, networkId: str, name: str, **kwargs):
+    async def createNetworkSwitchPortSchedule(self, networkId: str, name: str, **kwargs):
         """
         **Add a switch port schedule**
         https://api.meraki.com/api_docs#add-a-switch-port-schedule
@@ -43,9 +43,9 @@ class SwitchPortSchedules(object):
         body_params = ["name", "portSchedule"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def deleteNetworkSwitchPortSchedule(self, networkId: str, portScheduleId: str):
+    async def deleteNetworkSwitchPortSchedule(self, networkId: str, portScheduleId: str):
         """
         **Delete a switch port schedule**
         https://api.meraki.com/api_docs#delete-a-switch-port-schedule
@@ -60,9 +60,9 @@ class SwitchPortSchedules(object):
         }
         resource = f"/networks/{networkId}/switch/portSchedules/{portScheduleId}"
 
-        return self._session.delete(metadata, resource)
+        return await self._session.delete(metadata, resource)
 
-    def updateNetworkSwitchPortSchedule(
+    async def updateNetworkSwitchPortSchedule(
         self, networkId: str, portScheduleId: str, **kwargs
     ):
         """
@@ -89,4 +89,4 @@ class SwitchPortSchedules(object):
         body_params = ["name", "portSchedule"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)

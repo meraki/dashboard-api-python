@@ -1,9 +1,9 @@
-class GroupPolicies(object):
+class AsyncGroupPolicies(object):
     def __init__(self, session):
         super(GroupPolicies, self).__init__()
         self._session = session
 
-    def getNetworkGroupPolicies(self, networkId: str):
+    async def getNetworkGroupPolicies(self, networkId: str):
         """
         **List the group policies in a network**
         https://api.meraki.com/api_docs#list-the-group-policies-in-a-network
@@ -17,9 +17,9 @@ class GroupPolicies(object):
         }
         resource = f"/networks/{networkId}/groupPolicies"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def createNetworkGroupPolicy(self, networkId: str, name: str, **kwargs):
+    async def createNetworkGroupPolicy(self, networkId: str, name: str, **kwargs):
         """
         **Create a group policy**
         https://api.meraki.com/api_docs#create-a-group-policy
@@ -64,9 +64,9 @@ class GroupPolicies(object):
         ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def getNetworkGroupPolicy(self, networkId: str, groupPolicyId: str):
+    async def getNetworkGroupPolicy(self, networkId: str, groupPolicyId: str):
         """
         **Display a group policy**
         https://api.meraki.com/api_docs#display-a-group-policy
@@ -81,9 +81,9 @@ class GroupPolicies(object):
         }
         resource = f"/networks/{networkId}/groupPolicies/{groupPolicyId}"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkGroupPolicy(self, networkId: str, groupPolicyId: str, **kwargs):
+    async def updateNetworkGroupPolicy(self, networkId: str, groupPolicyId: str, **kwargs):
         """
         **Update a group policy**
         https://api.meraki.com/api_docs#update-a-group-policy
@@ -129,9 +129,9 @@ class GroupPolicies(object):
         ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def deleteNetworkGroupPolicy(self, networkId: str, groupPolicyId: str):
+    async def deleteNetworkGroupPolicy(self, networkId: str, groupPolicyId: str):
         """
         **Delete a group policy**
         https://api.meraki.com/api_docs#delete-a-group-policy
@@ -146,4 +146,4 @@ class GroupPolicies(object):
         }
         resource = f"/networks/{networkId}/groupPolicies/{groupPolicyId}"
 
-        return self._session.delete(metadata, resource)
+        return await self._session.delete(metadata, resource)

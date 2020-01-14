@@ -1,9 +1,9 @@
-class MXInboundFirewall(object):
+class AsyncMXInboundFirewall(object):
     def __init__(self, session):
         super(MXInboundFirewall, self).__init__()
         self._session = session
 
-    def getNetworkApplianceFirewallInboundFirewallRules(self, networkId: str):
+    async def getNetworkApplianceFirewallInboundFirewallRules(self, networkId: str):
         """
         **Return the inbound firewall rules for an MX network**
         https://api.meraki.com/api_docs#return-the-inbound-firewall-rules-for-an-mx-network
@@ -17,9 +17,9 @@ class MXInboundFirewall(object):
         }
         resource = f"/networks/{networkId}/appliance/firewall/inboundFirewallRules"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkApplianceFirewallInboundFirewallRules(
+    async def updateNetworkApplianceFirewallInboundFirewallRules(
         self, networkId: str, **kwargs
     ):
         """
@@ -42,4 +42,4 @@ class MXInboundFirewall(object):
         body_params = ["rules", "syslogDefaultRule"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)

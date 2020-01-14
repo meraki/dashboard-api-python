@@ -1,9 +1,9 @@
-class SplashLoginAttempts(object):
+class AsyncSplashLoginAttempts(object):
     def __init__(self, session):
         super(SplashLoginAttempts, self).__init__()
         self._session = session
 
-    def getNetworkSplashLoginAttempts(self, networkId: str, **kwargs):
+    async def getNetworkSplashLoginAttempts(self, networkId: str, **kwargs):
         """
         **List the splash login attempts for a network**
         https://api.meraki.com/api_docs#list-the-splash-login-attempts-for-a-network
@@ -31,4 +31,4 @@ class SplashLoginAttempts(object):
         query_params = ["ssidNumber", "loginIdentifier", "timespan"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)

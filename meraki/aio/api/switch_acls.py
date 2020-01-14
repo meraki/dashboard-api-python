@@ -1,9 +1,9 @@
-class SwitchACLs(object):
+class AsyncSwitchACLs(object):
     def __init__(self, session):
         super(SwitchACLs, self).__init__()
         self._session = session
 
-    def getNetworkSwitchAccessControlLists(self, networkId: str):
+    async def getNetworkSwitchAccessControlLists(self, networkId: str):
         """
         **Return the access control lists for a MS network**
         https://api.meraki.com/api_docs#return-the-access-control-lists-for-a-ms-network
@@ -17,9 +17,9 @@ class SwitchACLs(object):
         }
         resource = f"/networks/{networkId}/switch/accessControlLists"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkSwitchAccessControlLists(self, networkId: str, rules: list):
+    async def updateNetworkSwitchAccessControlLists(self, networkId: str, rules: list):
         """
         **Update the access control lists for a MS network**
         https://api.meraki.com/api_docs#update-the-access-control-lists-for-a-ms-network
@@ -39,4 +39,4 @@ class SwitchACLs(object):
         body_params = ["rules"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)

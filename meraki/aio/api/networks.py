@@ -1,9 +1,9 @@
-class Networks(object):
+class AsyncNetworks(object):
     def __init__(self, session):
         super(Networks, self).__init__()
         self._session = session
 
-    def getNetwork(self, networkId: str):
+    async def getNetwork(self, networkId: str):
         """
         **Return a network**
         https://api.meraki.com/api_docs#return-a-network
@@ -17,9 +17,9 @@ class Networks(object):
         }
         resource = f"/networks/{networkId}"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetwork(self, networkId: str, **kwargs):
+    async def updateNetwork(self, networkId: str, **kwargs):
         """
         **Update a network**
         https://api.meraki.com/api_docs#update-a-network
@@ -51,9 +51,9 @@ class Networks(object):
         ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def deleteNetwork(self, networkId: str):
+    async def deleteNetwork(self, networkId: str):
         """
         **Delete a network**
         https://api.meraki.com/api_docs#delete-a-network
@@ -67,9 +67,9 @@ class Networks(object):
         }
         resource = f"/networks/{networkId}"
 
-        return self._session.delete(metadata, resource)
+        return await self._session.delete(metadata, resource)
 
-    def getNetworkAccessPolicies(self, networkId: str):
+    async def getNetworkAccessPolicies(self, networkId: str):
         """
         **List the access policies for this network. Only valid for MS networks.**
         https://api.meraki.com/api_docs#list-the-access-policies-for-this-network
@@ -83,9 +83,9 @@ class Networks(object):
         }
         resource = f"/networks/{networkId}/accessPolicies"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def getNetworkAirMarshal(self, networkId: str, **kwargs):
+    async def getNetworkAirMarshal(self, networkId: str, **kwargs):
         """
         **List Air Marshal scan results from a network**
         https://api.meraki.com/api_docs#list-air-marshal-scan-results-from-a-network
@@ -106,7 +106,7 @@ class Networks(object):
         query_params = ["t0", "timespan"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)
 
     def bindNetwork(self, networkId: str, configTemplateId: str, **kwargs):
         """
@@ -129,9 +129,9 @@ class Networks(object):
         body_params = ["configTemplateId", "autoBind"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def getNetworkBluetoothSettings(self, networkId: str):
+    async def getNetworkBluetoothSettings(self, networkId: str):
         """
         **Return the Bluetooth settings for a network. <a href="https://documentation.meraki.com/MR/Bluetooth/Bluetooth_Low_Energy_(BLE)">Bluetooth settings</a> must be enabled on the network.**
         https://api.meraki.com/api_docs#return-the-bluetooth-settings-for-a-network
@@ -145,9 +145,9 @@ class Networks(object):
         }
         resource = f"/networks/{networkId}/bluetoothSettings"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkBluetoothSettings(self, networkId: str, **kwargs):
+    async def updateNetworkBluetoothSettings(self, networkId: str, **kwargs):
         """
         **Update the Bluetooth settings for a network. See the docs page for <a href="https://documentation.meraki.com/MR/Bluetooth/Bluetooth_Low_Energy_(BLE)">Bluetooth settings</a>.**
         https://api.meraki.com/api_docs#update-the-bluetooth-settings-for-a-network
@@ -185,9 +185,9 @@ class Networks(object):
         ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def getNetworkSiteToSiteVpn(self, networkId: str):
+    async def getNetworkSiteToSiteVpn(self, networkId: str):
         """
         **Return the site-to-site VPN settings of a network. Only valid for MX networks.**
         https://api.meraki.com/api_docs#return-the-site-to-site-vpn-settings-of-a-network
@@ -201,9 +201,9 @@ class Networks(object):
         }
         resource = f"/networks/{networkId}/siteToSiteVpn"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkSiteToSiteVpn(self, networkId: str, mode: str, **kwargs):
+    async def updateNetworkSiteToSiteVpn(self, networkId: str, mode: str, **kwargs):
         """
         **Update the site-to-site VPN settings of a network. Only valid for MX networks in NAT mode.**
         https://api.meraki.com/api_docs#update-the-site-to-site-vpn-settings-of-a-network
@@ -231,7 +231,7 @@ class Networks(object):
         body_params = ["mode", "hubs", "subnets"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
     def splitNetwork(self, networkId: str):
         """
@@ -247,9 +247,9 @@ class Networks(object):
         }
         resource = f"/networks/{networkId}/split"
 
-        return self._session.post(metadata, resource)
+        return await self._session.post(metadata, resource)
 
-    def getNetworkTraffic(self, networkId: str, **kwargs):
+    async def getNetworkTraffic(self, networkId: str, **kwargs):
         """
         **    The traffic analysis data for this network.
     <a href="https://documentation.meraki.com/MR/Monitoring_and_Reporting/Hostname_Visibility">Traffic Analysis with Hostname Visibility</a> must be enabled on the network.
@@ -275,7 +275,7 @@ class Networks(object):
         query_params = ["t0", "timespan", "deviceType"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)
 
     def unbindNetwork(self, networkId: str):
         """
@@ -291,9 +291,9 @@ class Networks(object):
         }
         resource = f"/networks/{networkId}/unbind"
 
-        return self._session.post(metadata, resource)
+        return await self._session.post(metadata, resource)
 
-    def getOrganizationNetworks(self, organizationId: str, **kwargs):
+    async def getOrganizationNetworks(self, organizationId: str, **kwargs):
         """
         **List the networks in an organization**
         https://api.meraki.com/api_docs#list-the-networks-in-an-organization
@@ -313,9 +313,9 @@ class Networks(object):
         query_params = ["configTemplateId"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)
 
-    def createOrganizationNetwork(
+    async def createOrganizationNetwork(
         self, organizationId: str, name: str, type: str, **kwargs
     ):
         """
@@ -351,7 +351,7 @@ class Networks(object):
         ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
     def combineOrganizationNetworks(
         self, organizationId: str, name: str, networkIds: list, **kwargs
@@ -377,4 +377,4 @@ class Networks(object):
         body_params = ["name", "networkIds", "enrollmentString"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)

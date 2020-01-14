@@ -1,9 +1,9 @@
-class MXPortForwardingRules(object):
+class AsyncMXPortForwardingRules(object):
     def __init__(self, session):
         super(MXPortForwardingRules, self).__init__()
         self._session = session
 
-    def getNetworkPortForwardingRules(self, networkId: str):
+    async def getNetworkPortForwardingRules(self, networkId: str):
         """
         **Return the port forwarding rules for an MX network**
         https://api.meraki.com/api_docs#return-the-port-forwarding-rules-for-an-mx-network
@@ -17,9 +17,9 @@ class MXPortForwardingRules(object):
         }
         resource = f"/networks/{networkId}/portForwardingRules"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkPortForwardingRules(self, networkId: str, **kwargs):
+    async def updateNetworkPortForwardingRules(self, networkId: str, **kwargs):
         """
         **Update the port forwarding rules for an MX network**
         https://api.meraki.com/api_docs#update-the-port-forwarding-rules-for-an-mx-network
@@ -39,4 +39,4 @@ class MXPortForwardingRules(object):
         body_params = ["rules"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)

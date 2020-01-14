@@ -1,9 +1,9 @@
-class SNMPSettings(object):
+class AsyncSNMPSettings(object):
     def __init__(self, session):
         super(SNMPSettings, self).__init__()
         self._session = session
 
-    def getNetworkSnmpSettings(self, networkId: str):
+    async def getNetworkSnmpSettings(self, networkId: str):
         """
         **Return the SNMP settings for a network**
         https://api.meraki.com/api_docs#return-the-snmp-settings-for-a-network
@@ -17,9 +17,9 @@ class SNMPSettings(object):
         }
         resource = f"/networks/{networkId}/snmpSettings"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkSnmpSettings(self, networkId: str, **kwargs):
+    async def updateNetworkSnmpSettings(self, networkId: str, **kwargs):
         """
         **Update the SNMP settings for a network**
         https://api.meraki.com/api_docs#update-the-snmp-settings-for-a-network
@@ -47,9 +47,9 @@ class SNMPSettings(object):
         body_params = ["access", "communityString", "users"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def getOrganizationSnmp(self, organizationId: str):
+    async def getOrganizationSnmp(self, organizationId: str):
         """
         **Return the SNMP settings for an organization**
         https://api.meraki.com/api_docs#return-the-snmp-settings-for-an-organization
@@ -63,9 +63,9 @@ class SNMPSettings(object):
         }
         resource = f"/organizations/{organizationId}/snmp"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateOrganizationSnmp(self, organizationId: str, **kwargs):
+    async def updateOrganizationSnmp(self, organizationId: str, **kwargs):
         """
         **Update the SNMP settings for an organization**
         https://api.meraki.com/api_docs#update-the-snmp-settings-for-an-organization
@@ -110,4 +110,4 @@ class SNMPSettings(object):
         ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)

@@ -24,3 +24,19 @@ class APIError(Exception):
 
     def __repr__(self):
         return f'{self.tag}, {self.operation} - {self.status} {self.reason}, {self.message}'
+
+# To catch exceptions while making AIO API calls
+class AsyncAPIError(Exception):
+    def __init__(self, metadata, response, message):
+        self.response = response
+        self.tag = metadata["tags"][0]
+        self.operation = metadata["operation"]
+        self.status = self.response.status
+        self.reason = self.response.reason
+        self.message = message[:100]
+        super().__init__(
+            f"{self.tag}, {self.operation} - {self.status} {self.reason}, {self.message}"
+        )
+
+    def __repr__(self):
+        return f"{self.tag}, {self.operation} - {self.status} {self.reason}, {self.message}"

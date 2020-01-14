@@ -1,9 +1,9 @@
-class MGLANSettings(object):
+class AsyncMGLANSettings(object):
     def __init__(self, session):
         super(MGLANSettings, self).__init__()
         self._session = session
 
-    def getDeviceCellularGatewaySettings(self, serial: str):
+    async def getDeviceCellularGatewaySettings(self, serial: str):
         """
         **Show the LAN Settings of a MG**
         https://api.meraki.com/api_docs#show-the-lan-settings-of-a-mg
@@ -17,9 +17,9 @@ class MGLANSettings(object):
         }
         resource = f"/devices/{serial}/cellularGateway/settings"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateDeviceCellularGatewaySettings(self, serial: str, **kwargs):
+    async def updateDeviceCellularGatewaySettings(self, serial: str, **kwargs):
         """
         **Update the LAN Settings for a single MG.**
         https://api.meraki.com/api_docs#update-the-lan-settings-for-a-single-mg
@@ -40,4 +40,4 @@ class MGLANSettings(object):
         body_params = ["reservedIpRanges", "fixedIpAssignments"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)

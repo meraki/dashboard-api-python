@@ -1,9 +1,9 @@
-class LinkAggregations(object):
+class AsyncLinkAggregations(object):
     def __init__(self, session):
         super(LinkAggregations, self).__init__()
         self._session = session
 
-    def getNetworkSwitchLinkAggregations(self, networkId: str):
+    async def getNetworkSwitchLinkAggregations(self, networkId: str):
         """
         **List link aggregation groups**
         https://api.meraki.com/api_docs#list-link-aggregation-groups
@@ -17,9 +17,9 @@ class LinkAggregations(object):
         }
         resource = f"/networks/{networkId}/switch/linkAggregations"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def createNetworkSwitchLinkAggregation(self, networkId: str, **kwargs):
+    async def createNetworkSwitchLinkAggregation(self, networkId: str, **kwargs):
         """
         **Create a link aggregation group**
         https://api.meraki.com/api_docs#create-a-link-aggregation-group
@@ -40,9 +40,9 @@ class LinkAggregations(object):
         body_params = ["switchPorts", "switchProfilePorts"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def updateNetworkSwitchLinkAggregation(
+    async def updateNetworkSwitchLinkAggregation(
         self, networkId: str, linkAggregationId: str, **kwargs
     ):
         """
@@ -66,9 +66,9 @@ class LinkAggregations(object):
         body_params = ["switchPorts", "switchProfilePorts"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def deleteNetworkSwitchLinkAggregation(
+    async def deleteNetworkSwitchLinkAggregation(
         self, networkId: str, linkAggregationId: str
     ):
         """
@@ -85,4 +85,4 @@ class LinkAggregations(object):
         }
         resource = f"/networks/{networkId}/switch/linkAggregations/{linkAggregationId}"
 
-        return self._session.delete(metadata, resource)
+        return await self._session.delete(metadata, resource)

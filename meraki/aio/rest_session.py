@@ -1,14 +1,15 @@
 import json
 import time
 
-import requests
+import aiohttp
+import asyncio
 
-from .config import *
-from .exceptions import *
+from meraki.config import *
+from meraki.exceptions import *
 
 
 # Main module interface
-class RestSession(object):
+class AsyncRestSession(object):
     def __init__(
         self,
         logger,
@@ -20,7 +21,7 @@ class RestSession(object):
         maximum_retries=MAXIMUM_RETRIES,
         simulate=SIMULATE_API_CALLS,
     ):
-        super(RestSession, self).__init__()
+        super().__init__()
 
         # Initialize attributes and properties
         self._api_key = str(api_key)
@@ -31,24 +32,25 @@ class RestSession(object):
         self._maximum_retries = maximum_retries
         self._simulate = simulate
 
-        # Initialize a new `requests` session
-        self._req_session = requests.session()
-
-        # Remove unneeded trailing slash in base URL if present
-        if self._base_url[-1] == "/":
-            self._base_url = self._base_url[:-1]
-
         # Update the headers of the `requests` session
+        headers = None
         if "v0" in self._base_url:
-            self._req_session.headers = {
+            headers = {
                 "X-Cisco-Meraki-API-Key": self._api_key,
                 "Content-Type": "application/json",
             }
         elif "v1" in self._base_url:
-            self._req_session.headers = {
+            headers = {
                 "Authorization": "Bearer " + self._api_key,
                 "Content-Type": "application/json",
             }
+
+        # Initialize a new `aiohttp` session
+        self._req_session = aiohttp.ClientSession(
+            headers=headers, timeout=aiohttp.ClientTimeout(total=single_request_timeout)
+        )
+
+
 
         # Log API calls
         self._logger = logger
@@ -58,14 +60,13 @@ class RestSession(object):
             f"Meraki dashboard API session initialized with these parameters: {self._parameters}"
         )
 
-    def request(self, metadata, method, url, **kwargs):
+    async def request(self, metadata, method, url, **kwargs):
         # Metadata on endpoint
         tag = metadata["tags"][0]
         operation = metadata["operation"]
 
         # Update request kwargs with session defaults
-        if self._certificate_path:
-            kwargs.setdefault("verify", self._certificate_path)
+        # TODO: CertificationPath
         kwargs.setdefault("timeout", self._single_request_timeout)
 
         # Ensure proper base URL
@@ -73,6 +74,7 @@ class RestSession(object):
             abs_url = url
         else:
             abs_url = self._base_url + url
+
 
         # Set maximum number of retries
         retries = self._maximum_retries
@@ -83,35 +85,20 @@ class RestSession(object):
             self._logger.info(f"{tag}, {operation} - SIMULATED")
             return None
         else:
-            while retries > 0:
+            response = None
+            for _ in range(retries):
                 # Make the HTTP request to the API endpoint
                 try:
-                    response = self._req_session.request(
-                        method, abs_url, allow_redirects=False, **kwargs
-                    )
-                    reason = response.reason if response.reason else ""
-                    status = response.status_code
-                except requests.exceptions.RequestException as e:
+                    response = await self._req_session.request(method, abs_url, **kwargs)
+                    reason = response.reason if response.reason else None
+                    status = response.status
+                except Exception as e:
                     self._logger.warning(
                         f"{tag}, {operation} - {e}, retrying in 1 second"
                     )
-                    time.sleep(1)
-                    retries -= 1
-                    if retries == 0:
-                        raise APIError(metadata, response)
-                    else:
-                        continue
+                    await asyncio.sleep(1)
 
-                # Handle 3XX redirects automatically
-                if str(status)[0] == "3":
-                    abs_url = response.headers["Location"]
-                    substring = "meraki.com/api/v"
-                    self._base_url = abs_url[
-                        : abs_url.find(substring) + len(substring) + 1
-                    ]
-
-                # 2XX success
-                elif response.ok:
+                if status == 200:
                     if "page" in metadata:
                         counter = metadata["page"]
                         self._logger.info(
@@ -122,40 +109,33 @@ class RestSession(object):
                     # For non-empty response to GET, ensure valid JSON
                     try:
                         if method == "GET" and response.text.strip():
-                            response.json()
+                            await response.json()
                         return response
                     except json.decoder.JSONDecodeError as e:
                         self._logger.warning(
                             f"{tag}, {operation} - {e}, retrying in 1 second"
                         )
-                        time.sleep(1)
-                        retries -= 1
-                        if retries == 0:
-                            raise APIError(metadata, response)
-                        else:
-                            continue
-
+                        await asyncio.sleep(1)
+                # Handle 3XX redirects automatically
+                elif 300 <= status < 400:
+                    abs_url = response.headers["Location"]
+                    substring = "meraki.com/api/v"
+                    self._base_url = abs_url[
+                        : abs_url.find(substring) + len(substring) + 1
+                    ] 
                 # Rate limit 429 errors
                 elif status == 429:
                     wait = int(response.headers["Retry-After"])
                     self._logger.warning(
                         f"{tag}, {operation} - {status} {reason}, retrying in {wait} seconds"
                     )
-                    time.sleep(wait)
-                    retries -= 1
-                    if retries == 0:
-                        raise APIError(metadata, response)
-
+                    await asyncio.sleep(wait)
                 # 5XX errors
                 elif status >= 500:
                     self._logger.warning(
                         f"{tag}, {operation} - {status} {reason}, retrying in 1 second"
                     )
-                    time.sleep(1)
-                    retries -= 1
-                    if retries == 0:
-                        raise APIError(metadata, response)
-
+                    await asyncio.sleep(1)
                 # 4XX errors
                 else:
                     try:
@@ -165,24 +145,24 @@ class RestSession(object):
                     self._logger.error(
                         f"{tag}, {operation} - {status} {reason}, {message}"
                     )
-                    raise APIError(metadata, response)
+            raise AsyncAPIError(metadata, response, await response.text())
 
-    def get(self, metadata, url, params=None):
+    async def get(self, metadata, url, params=None):
         metadata["method"] = "GET"
         metadata["url"] = url
         metadata["params"] = params
-        response = self.request(metadata, "GET", url, params=params)
-        return response.json() if response and response.text.strip() else None
+        response = await self.request(metadata, "GET", url, params=params)
+        return await response.json()
 
-    def get_pages(self, metadata, url, params=None, total_pages=-1, direction="next"):
+    async def get_pages(
+        self, metadata, url, params=None, total_pages=-1, direction="next"
+    ):
         if type(total_pages) == str and total_pages.lower() == "all":
             total_pages = -1
-        elif type(total_pages) == str and total_pages.isnumeric():
-            total_pages = int(total_pages)
         metadata["page"] = 1
 
-        response = self.request(metadata, "GET", url, params=params)
-        results = response.json()
+        response = await self.request(metadata, "GET", url, params=params)
+        results = await response.json()
 
         # Get additional pages if more than one requested
         while total_pages != 1:
@@ -202,21 +182,22 @@ class RestSession(object):
             # GET the subsequent page
             if direction == "next" and next:
                 metadata["page"] += 1
-                response = self.request(metadata, "GET", next)
+                response = await self.request(metadata, "GET", next)
             elif direction == "prev" and prev:
                 metadata["page"] += 1
-                response = self.request(metadata, "GET", prev)
+                response = await self.request(metadata, "GET", prev)
             else:
                 break
 
             # Append that page's results, depending on the endpoint
             if type(results) == list:
-                results.extend(response.json())
+                results.extend(await response.json())
             # For event log endpoint
             elif type(results) == dict:
-                start = response.json()["pageStartAt"]
-                end = response.json()["pageEndAt"]
-                events = response.json()["events"]
+                json_response = await response.json()
+                start = json_response["pageStartAt"]
+                end = json_response["pageEndAt"]
+                events = json_response["events"]
                 if start < results["pageStartAt"]:
                     results["pageStartAt"] = start
                 if end > results["pageEndAt"]:
@@ -227,22 +208,25 @@ class RestSession(object):
 
         return results
 
-    def post(self, metadata, url, json=None):
+    async def post(self, metadata, url, json=None):
         metadata["method"] = "POST"
         metadata["url"] = url
         metadata["json"] = json
-        response = self.request(metadata, "POST", url, json=json)
-        return response.json() if response and response.text.strip() else None
+        response = await self.request(metadata, "POST", url, json=json)
+        return await response.json()
 
-    def put(self, metadata, url, json=None):
+    async def put(self, metadata, url, json=None):
         metadata["method"] = "PUT"
         metadata["url"] = url
         metadata["json"] = json
-        response = self.request(metadata, "PUT", url, json=json)
-        return response.json() if response and response.text.strip() else None
+        response = await self.request(metadata, "PUT", url, json=json)
+        return await response.json()
 
-    def delete(self, metadata, url):
+    async def delete(self, metadata, url):
         metadata["method"] = "DELETE"
         metadata["url"] = url
-        self.request(metadata, "DELETE", url)
+        await self.request(metadata, "DELETE", url)
         return None
+
+    async def close(self):
+        await self._req_session.close()

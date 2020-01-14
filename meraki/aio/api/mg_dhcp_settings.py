@@ -1,9 +1,9 @@
-class MGDHCPSettings(object):
+class AsyncMGDHCPSettings(object):
     def __init__(self, session):
         super(MGDHCPSettings, self).__init__()
         self._session = session
 
-    def getNetworkCellularGatewaySettingsDhcp(self, networkId: str):
+    async def getNetworkCellularGatewaySettingsDhcp(self, networkId: str):
         """
         **List common DHCP settings of MGs**
         https://api.meraki.com/api_docs#list-common-dhcp-settings-of-mgs
@@ -17,9 +17,9 @@ class MGDHCPSettings(object):
         }
         resource = f"/networks/{networkId}/cellularGateway/settings/dhcp"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkCellularGatewaySettingsDhcp(self, networkId: str, **kwargs):
+    async def updateNetworkCellularGatewaySettingsDhcp(self, networkId: str, **kwargs):
         """
         **Update common DHCP settings of MGs**
         https://api.meraki.com/api_docs#update-common-dhcp-settings-of-mgs
@@ -41,4 +41,4 @@ class MGDHCPSettings(object):
         body_params = ["dhcpLeaseTime", "dnsNameservers", "dnsCustomNameservers"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)

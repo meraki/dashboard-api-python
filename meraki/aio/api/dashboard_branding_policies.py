@@ -1,9 +1,9 @@
-class DashboardBrandingPolicies(object):
+class AsyncDashboardBrandingPolicies(object):
     def __init__(self, session):
         super(DashboardBrandingPolicies, self).__init__()
         self._session = session
 
-    def getOrganizationBrandingPolicies(self, organizationId: str):
+    async def getOrganizationBrandingPolicies(self, organizationId: str):
         """
         **List the branding policies of an organization**
         https://api.meraki.com/api_docs#list-the-branding-policies-of-an-organization
@@ -17,9 +17,9 @@ class DashboardBrandingPolicies(object):
         }
         resource = f"/organizations/{organizationId}/brandingPolicies"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def createOrganizationBrandingPolicy(
+    async def createOrganizationBrandingPolicy(
         self,
         organizationId: str,
         name: str,
@@ -53,9 +53,9 @@ class DashboardBrandingPolicies(object):
         body_params = ["name", "enabled", "adminSettings", "helpSettings"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def getOrganizationBrandingPoliciesPriorities(self, organizationId: str):
+    async def getOrganizationBrandingPoliciesPriorities(self, organizationId: str):
         """
         **Return the branding policy IDs of an organization in priority order. IDs are ordered in ascending order of priority (IDs later in the array have higher priority).**
         https://api.meraki.com/api_docs#return-the-branding-policy-ids-of-an-organization-in-priority-order
@@ -69,9 +69,9 @@ class DashboardBrandingPolicies(object):
         }
         resource = f"/organizations/{organizationId}/brandingPolicies/priorities"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateOrganizationBrandingPoliciesPriorities(
+    async def updateOrganizationBrandingPoliciesPriorities(
         self, organizationId: str, brandingPolicyIds: list
     ):
         """
@@ -93,9 +93,9 @@ class DashboardBrandingPolicies(object):
         body_params = ["brandingPolicyIds"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def getOrganizationBrandingPolicy(self, organizationId: str, brandingPolicyId: str):
+    async def getOrganizationBrandingPolicy(self, organizationId: str, brandingPolicyId: str):
         """
         **Return a branding policy**
         https://api.meraki.com/api_docs#return-a-branding-policy
@@ -112,9 +112,9 @@ class DashboardBrandingPolicies(object):
             f"/organizations/{organizationId}/brandingPolicies/{brandingPolicyId}"
         )
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateOrganizationBrandingPolicy(
+    async def updateOrganizationBrandingPolicy(
         self, organizationId: str, brandingPolicyId: str, **kwargs
     ):
         """
@@ -146,9 +146,9 @@ class DashboardBrandingPolicies(object):
         body_params = ["name", "enabled", "adminSettings", "helpSettings"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def deleteOrganizationBrandingPolicy(
+    async def deleteOrganizationBrandingPolicy(
         self, organizationId: str, brandingPolicyId: str
     ):
         """
@@ -167,4 +167,4 @@ class DashboardBrandingPolicies(object):
             f"/organizations/{organizationId}/brandingPolicies/{brandingPolicyId}"
         )
 
-        return self._session.delete(metadata, resource)
+        return await self._session.delete(metadata, resource)

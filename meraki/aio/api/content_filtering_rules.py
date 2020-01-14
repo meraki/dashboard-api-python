@@ -1,9 +1,9 @@
-class ContentFilteringRules(object):
+class AsyncContentFilteringRules(object):
     def __init__(self, session):
         super(ContentFilteringRules, self).__init__()
         self._session = session
 
-    def getNetworkContentFiltering(self, networkId: str):
+    async def getNetworkContentFiltering(self, networkId: str):
         """
         **Return the content filtering settings for an MX network**
         https://api.meraki.com/api_docs#return-the-content-filtering-settings-for-an-mx-network
@@ -17,9 +17,9 @@ class ContentFilteringRules(object):
         }
         resource = f"/networks/{networkId}/contentFiltering"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkContentFiltering(self, networkId: str, **kwargs):
+    async def updateNetworkContentFiltering(self, networkId: str, **kwargs):
         """
         **Update the content filtering settings for an MX network**
         https://api.meraki.com/api_docs#update-the-content-filtering-settings-for-an-mx-network
@@ -47,4 +47,4 @@ class ContentFilteringRules(object):
         ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)

@@ -1,9 +1,9 @@
-class ManagementInterfaceSettings(object):
+class AsyncManagementInterfaceSettings(object):
     def __init__(self, session):
         super(ManagementInterfaceSettings, self).__init__()
         self._session = session
 
-    def getNetworkDeviceManagementInterfaceSettings(self, networkId: str, serial: str):
+    async def getNetworkDeviceManagementInterfaceSettings(self, networkId: str, serial: str):
         """
         **Return the management interface settings for a device**
         https://api.meraki.com/api_docs#return-the-management-interface-settings-for-a-device
@@ -18,9 +18,9 @@ class ManagementInterfaceSettings(object):
         }
         resource = f"/networks/{networkId}/devices/{serial}/managementInterfaceSettings"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkDeviceManagementInterfaceSettings(
+    async def updateNetworkDeviceManagementInterfaceSettings(
         self, networkId: str, serial: str, **kwargs
     ):
         """
@@ -44,4 +44,4 @@ class ManagementInterfaceSettings(object):
         body_params = ["wan1", "wan2"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)

@@ -1,9 +1,9 @@
-class UplinkSettings(object):
+class AsyncUplinkSettings(object):
     def __init__(self, session):
         super(UplinkSettings, self).__init__()
         self._session = session
 
-    def getNetworkUplinkSettings(self, networkId: str):
+    async def getNetworkUplinkSettings(self, networkId: str):
         """
         **Returns the uplink settings for your MX network.**
         https://api.meraki.com/api_docs#returns-the-uplink-settings-for-your-mx-network
@@ -17,9 +17,9 @@ class UplinkSettings(object):
         }
         resource = f"/networks/{networkId}/uplinkSettings"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkUplinkSettings(self, networkId: str, **kwargs):
+    async def updateNetworkUplinkSettings(self, networkId: str, **kwargs):
         """
         **Updates the uplink settings for your MX network.**
         https://api.meraki.com/api_docs#updates-the-uplink-settings-for-your-mx-network
@@ -39,4 +39,4 @@ class UplinkSettings(object):
         body_params = ["bandwidthLimits"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)

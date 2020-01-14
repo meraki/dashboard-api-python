@@ -1,9 +1,9 @@
-class NamedTagScope(object):
+class AsyncNamedTagScope(object):
     def __init__(self, session):
         super(NamedTagScope, self).__init__()
         self._session = session
 
-    def getNetworkSmTargetGroups(self, networkId: str, **kwargs):
+    async def getNetworkSmTargetGroups(self, networkId: str, **kwargs):
         """
         **List the target groups in this network**
         https://api.meraki.com/api_docs#list-the-target-groups-in-this-network
@@ -23,9 +23,9 @@ class NamedTagScope(object):
         query_params = ["withDetails"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)
 
-    def createNetworkSmTargetGroup(self, networkId: str, **kwargs):
+    async def createNetworkSmTargetGroup(self, networkId: str, **kwargs):
         """
         **Add a target group**
         https://api.meraki.com/api_docs#add-a-target-group
@@ -46,9 +46,9 @@ class NamedTagScope(object):
         body_params = ["name", "scope"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def getNetworkSmTargetGroup(self, networkId: str, targetGroupId: str, **kwargs):
+    async def getNetworkSmTargetGroup(self, networkId: str, targetGroupId: str, **kwargs):
         """
         **Return a target group**
         https://api.meraki.com/api_docs#return-a-target-group
@@ -69,9 +69,9 @@ class NamedTagScope(object):
         query_params = ["withDetails"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)
 
-    def updateNetworkSmTargetGroup(self, networkId: str, targetGroupId: str, **kwargs):
+    async def updateNetworkSmTargetGroup(self, networkId: str, targetGroupId: str, **kwargs):
         """
         **Update a target group**
         https://api.meraki.com/api_docs#update-a-target-group
@@ -93,9 +93,9 @@ class NamedTagScope(object):
         body_params = ["name", "scope"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def deleteNetworkSmTargetGroup(self, networkId: str, targetGroupId: str):
+    async def deleteNetworkSmTargetGroup(self, networkId: str, targetGroupId: str):
         """
         **Delete a target group from a network**
         https://api.meraki.com/api_docs#delete-a-target-group-from-a-network
@@ -110,4 +110,4 @@ class NamedTagScope(object):
         }
         resource = f"/networks/{networkId}/sm/targetGroups/{targetGroupId}"
 
-        return self._session.delete(metadata, resource)
+        return await self._session.delete(metadata, resource)

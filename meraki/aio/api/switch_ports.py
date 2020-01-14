@@ -1,9 +1,9 @@
-class SwitchPorts(object):
+class AsyncSwitchPorts(object):
     def __init__(self, session):
         super(SwitchPorts, self).__init__()
         self._session = session
 
-    def getDeviceSwitchPortStatuses(self, serial: str, **kwargs):
+    async def getDeviceSwitchPortStatuses(self, serial: str, **kwargs):
         """
         **Return the status for all the ports of a switch**
         https://api.meraki.com/api_docs#return-the-status-for-all-the-ports-of-a-switch
@@ -24,9 +24,9 @@ class SwitchPorts(object):
         query_params = ["t0", "timespan"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)
 
-    def getDeviceSwitchPorts(self, serial: str):
+    async def getDeviceSwitchPorts(self, serial: str):
         """
         **List the switch ports for a switch**
         https://api.meraki.com/api_docs#list-the-switch-ports-for-a-switch
@@ -40,9 +40,9 @@ class SwitchPorts(object):
         }
         resource = f"/devices/{serial}/switchPorts"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def getDeviceSwitchPort(self, serial: str, number: str):
+    async def getDeviceSwitchPort(self, serial: str, number: str):
         """
         **Return a switch port**
         https://api.meraki.com/api_docs#return-a-switch-port
@@ -57,9 +57,9 @@ class SwitchPorts(object):
         }
         resource = f"/devices/{serial}/switchPorts/{number}"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateDeviceSwitchPort(self, serial: str, number: str, **kwargs):
+    async def updateDeviceSwitchPort(self, serial: str, number: str, **kwargs):
         """
         **Update a switch port**
         https://api.meraki.com/api_docs#update-a-switch-port
@@ -124,4 +124,4 @@ class SwitchPorts(object):
         ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)

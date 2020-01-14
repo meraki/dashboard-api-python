@@ -1,9 +1,9 @@
-class TrafficAnalysisSettings(object):
+class AsyncTrafficAnalysisSettings(object):
     def __init__(self, session):
         super(TrafficAnalysisSettings, self).__init__()
         self._session = session
 
-    def getNetworkTrafficAnalysisSettings(self, networkId: str):
+    async def getNetworkTrafficAnalysisSettings(self, networkId: str):
         """
         **Return the traffic analysis settings for a network**
         https://api.meraki.com/api_docs#return-the-traffic-analysis-settings-for-a-network
@@ -17,9 +17,9 @@ class TrafficAnalysisSettings(object):
         }
         resource = f"/networks/{networkId}/trafficAnalysisSettings"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkTrafficAnalysisSettings(self, networkId: str, **kwargs):
+    async def updateNetworkTrafficAnalysisSettings(self, networkId: str, **kwargs):
         """
         **Update the traffic analysis settings for a network**
         https://api.meraki.com/api_docs#update-the-traffic-analysis-settings-for-a-network
@@ -48,4 +48,4 @@ class TrafficAnalysisSettings(object):
         body_params = ["mode", "customPieChartItems"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)

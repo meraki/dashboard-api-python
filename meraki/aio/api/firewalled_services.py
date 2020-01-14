@@ -1,9 +1,9 @@
-class FirewalledServices(object):
+class AsyncFirewalledServices(object):
     def __init__(self, session):
         super(FirewalledServices, self).__init__()
         self._session = session
 
-    def getNetworkFirewalledServices(self, networkId: str):
+    async def getNetworkFirewalledServices(self, networkId: str):
         """
         **List the appliance services and their accessibility rules**
         https://api.meraki.com/api_docs#list-the-appliance-services-and-their-accessibility-rules
@@ -17,9 +17,9 @@ class FirewalledServices(object):
         }
         resource = f"/networks/{networkId}/firewalledServices"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def getNetworkFirewalledService(self, networkId: str, service: str):
+    async def getNetworkFirewalledService(self, networkId: str, service: str):
         """
         **Return the accessibility settings of the given service ('ICMP', 'web', or 'SNMP')**
         https://api.meraki.com/api_docs#return-the-accessibility-settings-of-the-given-service-icmp-web-or-snmp
@@ -34,9 +34,9 @@ class FirewalledServices(object):
         }
         resource = f"/networks/{networkId}/firewalledServices/{service}"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkFirewalledService(
+    async def updateNetworkFirewalledService(
         self, networkId: str, service: str, access: str, **kwargs
     ):
         """
@@ -66,4 +66,4 @@ class FirewalledServices(object):
         body_params = ["access", "allowedIps"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)

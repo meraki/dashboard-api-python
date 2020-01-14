@@ -1,9 +1,9 @@
-class IntrusionSettings(object):
+class AsyncIntrusionSettings(object):
     def __init__(self, session):
         super(IntrusionSettings, self).__init__()
         self._session = session
 
-    def getNetworkSecurityIntrusionSettings(self, networkId: str):
+    async def getNetworkSecurityIntrusionSettings(self, networkId: str):
         """
         **Returns all supported intrusion settings for an MX network**
         https://api.meraki.com/api_docs#returns-all-supported-intrusion-settings-for-an-mx-network
@@ -17,9 +17,9 @@ class IntrusionSettings(object):
         }
         resource = f"/networks/{networkId}/security/intrusionSettings"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkSecurityIntrusionSettings(self, networkId: str, **kwargs):
+    async def updateNetworkSecurityIntrusionSettings(self, networkId: str, **kwargs):
         """
         **Set the supported intrusion settings for an MX network**
         https://api.meraki.com/api_docs#set-the-supported-intrusion-settings-for-an-mx-network
@@ -41,9 +41,9 @@ class IntrusionSettings(object):
         body_params = ["mode", "idsRulesets", "protectedNetworks"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def getOrganizationSecurityIntrusionSettings(self, organizationId: str):
+    async def getOrganizationSecurityIntrusionSettings(self, organizationId: str):
         """
         **Returns all supported intrusion settings for an organization**
         https://api.meraki.com/api_docs#returns-all-supported-intrusion-settings-for-an-organization
@@ -57,9 +57,9 @@ class IntrusionSettings(object):
         }
         resource = f"/organizations/{organizationId}/security/intrusionSettings"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateOrganizationSecurityIntrusionSettings(
+    async def updateOrganizationSecurityIntrusionSettings(
         self, organizationId: str, whitelistedRules: list
     ):
         """
@@ -81,4 +81,4 @@ class IntrusionSettings(object):
         body_params = ["whitelistedRules"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)

@@ -1,9 +1,9 @@
-class MXCellularFirewall(object):
+class AsyncMXCellularFirewall(object):
     def __init__(self, session):
         super(MXCellularFirewall, self).__init__()
         self._session = session
 
-    def getNetworkCellularFirewallRules(self, networkId: str):
+    async def getNetworkCellularFirewallRules(self, networkId: str):
         """
         **Return the cellular firewall rules for an MX network**
         https://api.meraki.com/api_docs#return-the-cellular-firewall-rules-for-an-mx-network
@@ -17,9 +17,9 @@ class MXCellularFirewall(object):
         }
         resource = f"/networks/{networkId}/cellularFirewallRules"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkCellularFirewallRules(self, networkId: str, **kwargs):
+    async def updateNetworkCellularFirewallRules(self, networkId: str, **kwargs):
         """
         **Update the cellular firewall rules of an MX network**
         https://api.meraki.com/api_docs#update-the-cellular-firewall-rules-of-an-mx-network
@@ -39,4 +39,4 @@ class MXCellularFirewall(object):
         body_params = ["rules"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)

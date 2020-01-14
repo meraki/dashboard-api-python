@@ -1,4 +1,4 @@
-class MXWarmSpareSettings(object):
+class AsyncMXWarmSpareSettings(object):
     def __init__(self, session):
         super(MXWarmSpareSettings, self).__init__()
         self._session = session
@@ -17,9 +17,9 @@ class MXWarmSpareSettings(object):
         }
         resource = f"/networks/{networkId}/swapWarmSpare"
 
-        return self._session.post(metadata, resource)
+        return await self._session.post(metadata, resource)
 
-    def getNetworkWarmSpareSettings(self, networkId: str):
+    async def getNetworkWarmSpareSettings(self, networkId: str):
         """
         **Return MX warm spare settings**
         https://api.meraki.com/api_docs#return-mx-warm-spare-settings
@@ -33,9 +33,9 @@ class MXWarmSpareSettings(object):
         }
         resource = f"/networks/{networkId}/warmSpareSettings"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkWarmSpareSettings(self, networkId: str, enabled: bool, **kwargs):
+    async def updateNetworkWarmSpareSettings(self, networkId: str, enabled: bool, **kwargs):
         """
         **Update MX warm spare settings**
         https://api.meraki.com/api_docs#update-mx-warm-spare-settings
@@ -65,4 +65,4 @@ class MXWarmSpareSettings(object):
         ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)

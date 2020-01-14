@@ -1,9 +1,9 @@
-class VLANs(object):
+class AsyncVLANs(object):
     def __init__(self, session):
         super(VLANs, self).__init__()
         self._session = session
 
-    def getNetworkVlans(self, networkId: str):
+    async def getNetworkVlans(self, networkId: str):
         """
         **List the VLANs for an MX network**
         https://api.meraki.com/api_docs#list-the-vlans-for-an-mx-network
@@ -17,9 +17,9 @@ class VLANs(object):
         }
         resource = f"/networks/{networkId}/vlans"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def createNetworkVlan(
+    async def createNetworkVlan(
         self, networkId: str, id: str, name: str, subnet: str, applianceIp: str
     ):
         """
@@ -44,9 +44,9 @@ class VLANs(object):
         body_params = ["id", "name", "subnet", "applianceIp"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def getNetworkVlan(self, networkId: str, vlanId: str):
+    async def getNetworkVlan(self, networkId: str, vlanId: str):
         """
         **Return a VLAN**
         https://api.meraki.com/api_docs#return-a-vlan
@@ -61,9 +61,9 @@ class VLANs(object):
         }
         resource = f"/networks/{networkId}/vlans/{vlanId}"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkVlan(self, networkId: str, vlanId: str, **kwargs):
+    async def updateNetworkVlan(self, networkId: str, vlanId: str, **kwargs):
         """
         **Update a VLAN**
         https://api.meraki.com/api_docs#update-a-vlan
@@ -127,9 +127,9 @@ class VLANs(object):
         ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def deleteNetworkVlan(self, networkId: str, vlanId: str):
+    async def deleteNetworkVlan(self, networkId: str, vlanId: str):
         """
         **Delete a VLAN from a network**
         https://api.meraki.com/api_docs#delete-a-vlan-from-a-network
@@ -144,9 +144,9 @@ class VLANs(object):
         }
         resource = f"/networks/{networkId}/vlans/{vlanId}"
 
-        return self._session.delete(metadata, resource)
+        return await self._session.delete(metadata, resource)
 
-    def getNetworkVlansEnabledState(self, networkId: str):
+    async def getNetworkVlansEnabledState(self, networkId: str):
         """
         **Returns the enabled status of VLANs for the network**
         https://api.meraki.com/api_docs#returns-the-enabled-status-of-vlans-for-the-network
@@ -160,9 +160,9 @@ class VLANs(object):
         }
         resource = f"/networks/{networkId}/vlansEnabledState"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkVlansEnabledState(self, networkId: str, enabled: bool):
+    async def updateNetworkVlansEnabledState(self, networkId: str, enabled: bool):
         """
         **Enable/Disable VLANs for the given network**
         https://api.meraki.com/api_docs#enable/disable-vlans-for-the-given-network
@@ -182,4 +182,4 @@ class VLANs(object):
         body_params = ["enabled"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)

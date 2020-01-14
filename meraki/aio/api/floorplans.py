@@ -1,9 +1,9 @@
-class Floorplans(object):
+class AsyncFloorplans(object):
     def __init__(self, session):
         super(Floorplans, self).__init__()
         self._session = session
 
-    def getNetworkFloorPlans(self, networkId: str):
+    async def getNetworkFloorPlans(self, networkId: str):
         """
         **List the floor plans that belong to your network**
         https://api.meraki.com/api_docs#list-the-floor-plans-that-belong-to-your-network
@@ -17,9 +17,9 @@ class Floorplans(object):
         }
         resource = f"/networks/{networkId}/floorPlans"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def createNetworkFloorPlan(
+    async def createNetworkFloorPlan(
         self, networkId: str, name: str, imageContents: str, **kwargs
     ):
         """
@@ -55,9 +55,9 @@ class Floorplans(object):
         ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def getNetworkFloorPlan(self, networkId: str, floorPlanId: str):
+    async def getNetworkFloorPlan(self, networkId: str, floorPlanId: str):
         """
         **Find a floor plan by ID**
         https://api.meraki.com/api_docs#find-a-floor-plan-by-id
@@ -72,9 +72,9 @@ class Floorplans(object):
         }
         resource = f"/networks/{networkId}/floorPlans/{floorPlanId}"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkFloorPlan(self, networkId: str, floorPlanId: str, **kwargs):
+    async def updateNetworkFloorPlan(self, networkId: str, floorPlanId: str, **kwargs):
         """
         **Update a floor plan's geolocation and other meta data**
         https://api.meraki.com/api_docs#update-a-floor-plans-geolocation-and-other-meta-data
@@ -109,9 +109,9 @@ class Floorplans(object):
         ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def deleteNetworkFloorPlan(self, networkId: str, floorPlanId: str):
+    async def deleteNetworkFloorPlan(self, networkId: str, floorPlanId: str):
         """
         **Destroy a floor plan**
         https://api.meraki.com/api_docs#destroy-a-floor-plan
@@ -126,4 +126,4 @@ class Floorplans(object):
         }
         resource = f"/networks/{networkId}/floorPlans/{floorPlanId}"
 
-        return self._session.delete(metadata, resource)
+        return await self._session.delete(metadata, resource)

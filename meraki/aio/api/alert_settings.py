@@ -1,9 +1,9 @@
-class AlertSettings(object):
+class AsyncAlertSettings(object):
     def __init__(self, session):
         super(AlertSettings, self).__init__()
         self._session = session
 
-    def getNetworkAlertSettings(self, networkId: str):
+    async def getNetworkAlertSettings(self, networkId: str):
         """
         **Return the alert configuration for this network**
         https://api.meraki.com/api_docs#return-the-alert-configuration-for-this-network
@@ -17,9 +17,9 @@ class AlertSettings(object):
         }
         resource = f"/networks/{networkId}/alertSettings"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkAlertSettings(self, networkId: str, **kwargs):
+    async def updateNetworkAlertSettings(self, networkId: str, **kwargs):
         """
         **Update the alert configuration for this network**
         https://api.meraki.com/api_docs#update-the-alert-configuration-for-this-network
@@ -40,4 +40,4 @@ class AlertSettings(object):
         body_params = ["defaultDestinations", "alerts"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)

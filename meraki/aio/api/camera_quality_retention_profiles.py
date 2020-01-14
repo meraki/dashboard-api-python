@@ -1,9 +1,9 @@
-class CameraQualityRetentionProfiles(object):
+class AsyncCameraQualityRetentionProfiles(object):
     def __init__(self, session):
         super(CameraQualityRetentionProfiles, self).__init__()
         self._session = session
 
-    def getNetworkCameraQualityRetentionProfiles(self, networkId: str):
+    async def getNetworkCameraQualityRetentionProfiles(self, networkId: str):
         """
         **List the quality retention profiles for this network**
         https://api.meraki.com/api_docs#list-the-quality-retention-profiles-for-this-network
@@ -17,9 +17,9 @@ class CameraQualityRetentionProfiles(object):
         }
         resource = f"/networks/{networkId}/camera/qualityRetentionProfiles"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def createNetworkCameraQualityRetentionProfile(
+    async def createNetworkCameraQualityRetentionProfile(
         self, networkId: str, name: str, **kwargs
     ):
         """
@@ -57,9 +57,9 @@ class CameraQualityRetentionProfiles(object):
         ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def getNetworkCameraQualityRetentionProfile(
+    async def getNetworkCameraQualityRetentionProfile(
         self, networkId: str, qualityRetentionProfileId: str
     ):
         """
@@ -76,9 +76,9 @@ class CameraQualityRetentionProfiles(object):
         }
         resource = f"/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkCameraQualityRetentionProfile(
+    async def updateNetworkCameraQualityRetentionProfile(
         self, networkId: str, qualityRetentionProfileId: str, **kwargs
     ):
         """
@@ -117,9 +117,9 @@ class CameraQualityRetentionProfiles(object):
         ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def deleteNetworkCameraQualityRetentionProfile(
+    async def deleteNetworkCameraQualityRetentionProfile(
         self, networkId: str, qualityRetentionProfileId: str
     ):
         """
@@ -136,4 +136,4 @@ class CameraQualityRetentionProfiles(object):
         }
         resource = f"/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}"
 
-        return self._session.delete(metadata, resource)
+        return await self._session.delete(metadata, resource)

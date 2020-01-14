@@ -1,9 +1,9 @@
-class MGSubnetPoolSettings(object):
+class AsyncMGSubnetPoolSettings(object):
     def __init__(self, session):
         super(MGSubnetPoolSettings, self).__init__()
         self._session = session
 
-    def getNetworkCellularGatewaySettingsSubnetPool(self, networkId: str):
+    async def getNetworkCellularGatewaySettingsSubnetPool(self, networkId: str):
         """
         **Return the subnet pool and mask configured for MGs in the network.**
         https://api.meraki.com/api_docs#return-the-subnet-pool-and-mask-configured-for-mgs-in-the-network
@@ -17,9 +17,9 @@ class MGSubnetPoolSettings(object):
         }
         resource = f"/networks/{networkId}/cellularGateway/settings/subnetPool"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkCellularGatewaySettingsSubnetPool(self, networkId: str, **kwargs):
+    async def updateNetworkCellularGatewaySettingsSubnetPool(self, networkId: str, **kwargs):
         """
         **Update the subnet pool and mask configuration for MGs in the network.**
         https://api.meraki.com/api_docs#update-the-subnet-pool-and-mask-configuration-for-mgs-in-the-network
@@ -40,4 +40,4 @@ class MGSubnetPoolSettings(object):
         body_params = ["mask", "cidr"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)

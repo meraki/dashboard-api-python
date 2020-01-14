@@ -1,9 +1,9 @@
-class Events(object):
+class AsyncEvents(object):
     def __init__(self, session):
         super(Events, self).__init__()
         self._session = session
 
-    def getNetworkEvents(
+    async def getNetworkEvents(
         self, networkId: str, total_pages=1, direction="prev", **kwargs
     ):
         """
@@ -58,11 +58,11 @@ class Events(object):
             if k in array_params:
                 params[f"{k}[]"] = kwargs[f"{k}"]
 
-        return self._session.get_pages(
+        return await self._session.get_pages(
             metadata, resource, params, total_pages, direction
         )
 
-    def getNetworkEventsEventTypes(self, networkId: str):
+    async def getNetworkEventsEventTypes(self, networkId: str):
         """
         **List the event type to human-readable description**
         https://api.meraki.com/api_docs#list-the-event-type-to-human-readable-description
@@ -76,4 +76,4 @@ class Events(object):
         }
         resource = f"/networks/{networkId}/events/eventTypes"
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)

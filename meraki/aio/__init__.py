@@ -2,83 +2,83 @@ from datetime import datetime
 import logging
 import os
 
-from .legacy import *
 from .rest_session import *
-from .api.api_usage import APIUsage
-from .api.action_batches import ActionBatches
-from .api.admins import Admins
-from .api.alert_settings import AlertSettings
-from .api.bluetooth_clients import BluetoothClients
-from .api.camera_quality_retention_profiles import CameraQualityRetentionProfiles
-from .api.cameras import Cameras
-from .api.clients import Clients
-from .api.config_templates import ConfigTemplates
-from .api.connectivity_monitoring_destinations import ConnectivityMonitoringDestinations
-from .api.content_filtering_categories import ContentFilteringCategories
-from .api.content_filtering_rules import ContentFilteringRules
-from .api.dashboard_branding_policies import DashboardBrandingPolicies
-from .api.devices import Devices
-from .api.events import Events
-from .api.firewalled_services import FirewalledServices
-from .api.floorplans import Floorplans
-from .api.group_policies import GroupPolicies
-from .api.http_servers import HTTPServers
-from .api.intrusion_settings import IntrusionSettings
-from .api.licenses import Licenses
-from .api.link_aggregations import LinkAggregations
-from .api.mg_dhcp_settings import MGDHCPSettings
-from .api.mg_lan_settings import MGLANSettings
+from .api.api_usage import AsyncAPIUsage
+from .api.action_batches import AsyncActionBatches
+from .api.admins import AsyncAdmins
+from .api.alert_settings import AsyncAlertSettings
+from .api.bluetooth_clients import AsyncBluetoothClients
+from .api.camera_quality_retention_profiles import AsyncCameraQualityRetentionProfiles
+from .api.cameras import AsyncCameras
+from .api.clients import AsyncClients
+from .api.config_templates import AsyncConfigTemplates
+from .api.connectivity_monitoring_destinations import AsyncConnectivityMonitoringDestinations
+from .api.content_filtering_categories import AsyncContentFilteringCategories
+from .api.content_filtering_rules import AsyncContentFilteringRules
+from .api.dashboard_branding_policies import AsyncDashboardBrandingPolicies
+from .api.devices import AsyncDevices
+from .api.events import AsyncEvents
+from .api.firewalled_services import AsyncFirewalledServices
+from .api.floorplans import AsyncFloorplans
+from .api.group_policies import AsyncGroupPolicies
+from .api.http_servers import AsyncHTTPServers
+from .api.intrusion_settings import AsyncIntrusionSettings
+from .api.licenses import AsyncLicenses
+from .api.link_aggregations import AsyncLinkAggregations
+from .api.mg_dhcp_settings import AsyncMGDHCPSettings
+from .api.mg_lan_settings import AsyncMGLANSettings
 from .api.mg_connectivity_monitoring_destinations import (
     MGConnectivityMonitoringDestinations,
 )
-from .api.mg_port_forwarding_rules import MGPortForwardingRules
-from .api.mg_subnet_pool_settings import MGSubnetPoolSettings
-from .api.mg_uplink_settings import MGUplinkSettings
-from .api.mr_l3_firewall import MRL3Firewall
-from .api.mv_sense import MVSense
-from .api.mx_1_1_nat_rules import MX11NATRules
-from .api.mx_1_many_nat_rules import MX1ManyNATRules
-from .api.mx_l3_firewall import MXL3Firewall
-from .api.mx_l7_application_categories import MXL7ApplicationCategories
-from .api.mx_l7_firewall import MXL7Firewall
-from .api.mx_vlan_ports import MXVLANPorts
-from .api.mx_vpn_firewall import MXVPNFirewall
-from .api.mx_cellular_firewall import MXCellularFirewall
-from .api.mx_inbound_firewall import MXInboundFirewall
-from .api.mx_port_forwarding_rules import MXPortForwardingRules
-from .api.mx_static_routes import MXStaticRoutes
-from .api.mx_warm_spare_settings import MXWarmSpareSettings
-from .api.malware_settings import MalwareSettings
-from .api.management_interface_settings import ManagementInterfaceSettings
-from .api.meraki_auth_users import MerakiAuthUsers
-from .api.named_tag_scope import NamedTagScope
-from .api.netflow_settings import NetFlowSettings
-from .api.networks import Networks
-from .api.openapi_spec import OpenAPISpec
-from .api.organizations import Organizations
-from .api.pii import PII
-from .api.radio_settings import RadioSettings
-from .api.saml_roles import SAMLRoles
-from .api.sm import SM
-from .api.snmp_settings import SNMPSettings
-from .api.ssids import SSIDs
-from .api.security_events import SecurityEvents
-from .api.splash_login_attempts import SplashLoginAttempts
-from .api.splash_settings import SplashSettings
-from .api.switch_acls import SwitchACLs
-from .api.switch_port_schedules import SwitchPortSchedules
-from .api.switch_ports import SwitchPorts
-from .api.switch_profiles import SwitchProfiles
-from .api.switch_settings import SwitchSettings
-from .api.switch_stacks import SwitchStacks
-from .api.syslog_servers import SyslogServers
-from .api.traffic_analysis_settings import TrafficAnalysisSettings
-from .api.traffic_shaping import TrafficShaping
-from .api.uplink_settings import UplinkSettings
-from .api.vlans import VLANs
-from .api.webhook_logs import WebhookLogs
-from .api.wireless_health import WirelessHealth
-from .api.wireless_settings import WirelessSettings
+from .api.mg_port_forwarding_rules import AsyncMGPortForwardingRules
+from .api.mg_subnet_pool_settings import AsyncMGSubnetPoolSettings
+from .api.mg_uplink_settings import AsyncMGUplinkSettings
+from .api.mr_l3_firewall import AsyncMRL3Firewall
+from .api.mv_sense import AsyncMVSense
+from .api.mx_1_1_nat_rules import AsyncMX11NATRules
+from .api.mx_1_many_nat_rules import AsyncMX1ManyNATRules
+from .api.mx_l3_firewall import AsyncMXL3Firewall
+from .api.mx_l7_application_categories import AsyncMXL7ApplicationCategories
+from .api.mx_l7_firewall import AsyncMXL7Firewall
+from .api.mx_vlan_ports import AsyncMXVLANPorts
+from .api.mx_vpn_firewall import AsyncMXVPNFirewall
+from .api.mx_cellular_firewall import AsyncMXCellularFirewall
+from .api.mx_inbound_firewall import AsyncMXInboundFirewall
+from .api.mx_port_forwarding_rules import AsyncMXPortForwardingRules
+from .api.mx_static_routes import AsyncMXStaticRoutes
+from .api.mx_warm_spare_settings import AsyncMXWarmSpareSettings
+from .api.malware_settings import AsyncMalwareSettings
+from .api.management_interface_settings import AsyncManagementInterfaceSettings
+from .api.meraki_auth_users import AsyncMerakiAuthUsers
+from .api.named_tag_scope import AsyncNamedTagScope
+from .api.netflow_settings import AsyncNetFlowSettings
+from .api.networks import AsyncNetworks
+from .api.openapi_spec import AsyncOpenAPISpec
+from .api.organizations import AsyncOrganizations
+from .api.pii import AsyncPII
+from .api.radio_settings import AsyncRadioSettings
+from .api.saml_roles import AsyncSAMLRoles
+from .api.sm import AsyncSM
+from .api.snmp_settings import AsyncSNMPSettings
+from .api.ssids import AsyncSSIDs
+from .api.security_events import AsyncSecurityEvents
+from .api.splash_login_attempts import AsyncSplashLoginAttempts
+from .api.splash_settings import AsyncSplashSettings
+from .api.switch_acls import AsyncSwitchACLs
+from .api.switch_port_schedules import AsyncSwitchPortSchedules
+from .api.switch_ports import AsyncSwitchPorts
+from .api.switch_profiles import AsyncSwitchProfiles
+from .api.switch_settings import AsyncSwitchSettings
+from .api.switch_stacks import AsyncSwitchStacks
+from .api.syslog_servers import AsyncSyslogServers
+from .api.traffic_analysis_settings import AsyncTrafficAnalysisSettings
+from .api.traffic_shaping import AsyncTrafficShaping
+from .api.uplink_settings import AsyncUplinkSettings
+from .api.vlans import AsyncVLANs
+from .api.webhook_logs import AsyncWebhookLogs
+from .api.wireless_health import AsyncWirelessHealth
+from .api.wireless_settings import AsyncWirelessSettings
+
 from .config import (
     API_KEY_ENVIRONMENT_VARIABLE,
     DEFAULT_BASE_URL,
@@ -93,7 +93,7 @@ from .config import (
 )
 
 
-class DashboardAPI(object):
+class AsyncDashboardAPI(object):
     """
     **Creates a persistent Meraki dashboard API session**
 
@@ -122,7 +122,6 @@ class DashboardAPI(object):
         print_console=PRINT_TO_CONSOLE,
         simulate=SIMULATE_API_CALLS,
     ):
-        # Check API key
         api_key = api_key or os.environ.get(API_KEY_ENVIRONMENT_VARIABLE)
         if not api_key:
             raise APIKeyError()
@@ -150,7 +149,7 @@ class DashboardAPI(object):
                 logging.getLogger("").addHandler(console)
 
         # Creates the API session
-        self._session = RestSession(
+        self._session = AsyncRestSession(
             logger=self._logger,
             api_key=api_key,
             base_url=base_url,
@@ -162,82 +161,88 @@ class DashboardAPI(object):
         )
 
         # API endpoints by section
-        self.api_usage = APIUsage(self._session)
-        self.action_batches = ActionBatches(self._session)
-        self.admins = Admins(self._session)
-        self.alert_settings = AlertSettings(self._session)
-        self.bluetooth_clients = BluetoothClients(self._session)
+        self.api_usage = AsyncAPIUsage(self._session)
+        self.action_batches = AsyncActionBatches(self._session)
+        self.admins = AsyncAdmins(self._session)
+        self.alert_settings = AsyncAlertSettings(self._session)
+        self.bluetooth_clients = AsyncBluetoothClients(self._session)
         self.camera_quality_retention_profiles = CameraQualityRetentionProfiles(
             self._session
         )
-        self.cameras = Cameras(self._session)
-        self.clients = Clients(self._session)
-        self.config_templates = ConfigTemplates(self._session)
+        self.cameras = AsyncCameras(self._session)
+        self.clients = AsyncClients(self._session)
+        self.config_templates = AsyncConfigTemplates(self._session)
         self.connectivity_monitoring_destinations = ConnectivityMonitoringDestinations(
             self._session
         )
-        self.content_filtering_categories = ContentFilteringCategories(self._session)
-        self.content_filtering_rules = ContentFilteringRules(self._session)
-        self.dashboard_branding_policies = DashboardBrandingPolicies(self._session)
-        self.devices = Devices(self._session)
-        self.events = Events(self._session)
-        self.firewalled_services = FirewalledServices(self._session)
-        self.floorplans = Floorplans(self._session)
-        self.group_policies = GroupPolicies(self._session)
-        self.http_servers = HTTPServers(self._session)
-        self.intrusion_settings = IntrusionSettings(self._session)
-        self.licenses = Licenses(self._session)
-        self.link_aggregations = LinkAggregations(self._session)
-        self.mg_dhcp_settings = MGDHCPSettings(self._session)
-        self.mg_lan_settings = MGLANSettings(self._session)
+        self.content_filtering_categories = AsyncContentFilteringCategories(self._session)
+        self.content_filtering_rules = AsyncContentFilteringRules(self._session)
+        self.dashboard_branding_policies = AsyncDashboardBrandingPolicies(self._session)
+        self.devices = AsyncDevices(self._session)
+        self.events = AsyncEvents(self._session)
+        self.firewalled_services = AsyncFirewalledServices(self._session)
+        self.floorplans = AsyncFloorplans(self._session)
+        self.group_policies = AsyncGroupPolicies(self._session)
+        self.http_servers = AsyncHTTPServers(self._session)
+        self.intrusion_settings = AsyncIntrusionSettings(self._session)
+        self.licenses = AsyncLicenses(self._session)
+        self.link_aggregations = AsyncLinkAggregations(self._session)
+        self.mg_dhcp_settings = AsyncMGDHCPSettings(self._session)
+        self.mg_lan_settings = AsyncMGLANSettings(self._session)
         self.mg_connectivity_monitoring_destinations = MGConnectivityMonitoringDestinations(
             self._session
         )
-        self.mg_port_forwarding_rules = MGPortForwardingRules(self._session)
-        self.mg_subnet_pool_settings = MGSubnetPoolSettings(self._session)
-        self.mg_uplink_settings = MGUplinkSettings(self._session)
-        self.mr_l3_firewall = MRL3Firewall(self._session)
-        self.mv_sense = MVSense(self._session)
-        self.mx_1_1_nat_rules = MX11NATRules(self._session)
-        self.mx_1_many_nat_rules = MX1ManyNATRules(self._session)
-        self.mx_l3_firewall = MXL3Firewall(self._session)
-        self.mx_l7_application_categories = MXL7ApplicationCategories(self._session)
-        self.mx_l7_firewall = MXL7Firewall(self._session)
-        self.mx_vlan_ports = MXVLANPorts(self._session)
-        self.mx_vpn_firewall = MXVPNFirewall(self._session)
-        self.mx_cellular_firewall = MXCellularFirewall(self._session)
-        self.mx_inbound_firewall = MXInboundFirewall(self._session)
-        self.mx_port_forwarding_rules = MXPortForwardingRules(self._session)
-        self.mx_static_routes = MXStaticRoutes(self._session)
-        self.mx_warm_spare_settings = MXWarmSpareSettings(self._session)
-        self.malware_settings = MalwareSettings(self._session)
-        self.management_interface_settings = ManagementInterfaceSettings(self._session)
-        self.meraki_auth_users = MerakiAuthUsers(self._session)
-        self.named_tag_scope = NamedTagScope(self._session)
-        self.netflow_settings = NetFlowSettings(self._session)
-        self.networks = Networks(self._session)
-        self.openapi_spec = OpenAPISpec(self._session)
-        self.organizations = Organizations(self._session)
-        self.pii = PII(self._session)
-        self.radio_settings = RadioSettings(self._session)
-        self.saml_roles = SAMLRoles(self._session)
-        self.sm = SM(self._session)
-        self.snmp_settings = SNMPSettings(self._session)
-        self.ssids = SSIDs(self._session)
-        self.security_events = SecurityEvents(self._session)
-        self.splash_login_attempts = SplashLoginAttempts(self._session)
-        self.splash_settings = SplashSettings(self._session)
-        self.switch_acls = SwitchACLs(self._session)
-        self.switch_port_schedules = SwitchPortSchedules(self._session)
-        self.switch_ports = SwitchPorts(self._session)
-        self.switch_profiles = SwitchProfiles(self._session)
-        self.switch_settings = SwitchSettings(self._session)
-        self.switch_stacks = SwitchStacks(self._session)
-        self.syslog_servers = SyslogServers(self._session)
-        self.traffic_analysis_settings = TrafficAnalysisSettings(self._session)
-        self.traffic_shaping = TrafficShaping(self._session)
-        self.uplink_settings = UplinkSettings(self._session)
-        self.vlans = VLANs(self._session)
-        self.webhook_logs = WebhookLogs(self._session)
-        self.wireless_health = WirelessHealth(self._session)
-        self.wireless_settings = WirelessSettings(self._session)
+        self.mg_port_forwarding_rules = AsyncMGPortForwardingRules(self._session)
+        self.mg_subnet_pool_settings = AsyncMGSubnetPoolSettings(self._session)
+        self.mg_uplink_settings = AsyncMGUplinkSettings(self._session)
+        self.mr_l3_firewall = AsyncMRL3Firewall(self._session)
+        self.mv_sense = AsyncMVSense(self._session)
+        self.mx_1_1_nat_rules = AsyncMX11NATRules(self._session)
+        self.mx_1_many_nat_rules = AsyncMX1ManyNATRules(self._session)
+        self.mx_l3_firewall = AsyncMXL3Firewall(self._session)
+        self.mx_l7_application_categories = AsyncMXL7ApplicationCategories(self._session)
+        self.mx_l7_firewall = AsyncMXL7Firewall(self._session)
+        self.mx_vlan_ports = AsyncMXVLANPorts(self._session)
+        self.mx_vpn_firewall = AsyncMXVPNFirewall(self._session)
+        self.mx_cellular_firewall = AsyncMXCellularFirewall(self._session)
+        self.mx_inbound_firewall = AsyncMXInboundFirewall(self._session)
+        self.mx_port_forwarding_rules = AsyncMXPortForwardingRules(self._session)
+        self.mx_static_routes = AsyncMXStaticRoutes(self._session)
+        self.mx_warm_spare_settings = AsyncMXWarmSpareSettings(self._session)
+        self.malware_settings = AsyncMalwareSettings(self._session)
+        self.management_interface_settings = AsyncManagementInterfaceSettings(self._session)
+        self.meraki_auth_users = AsyncMerakiAuthUsers(self._session)
+        self.named_tag_scope = AsyncNamedTagScope(self._session)
+        self.netflow_settings = AsyncNetFlowSettings(self._session)
+        self.networks = AsyncNetworks(self._session)
+        self.openapi_spec = AsyncOpenAPISpec(self._session)
+        self.organizations = AsyncOrganizations(self._session)
+        self.pii = AsyncPII(self._session)
+        self.radio_settings = AsyncRadioSettings(self._session)
+        self.saml_roles = AsyncSAMLRoles(self._session)
+        self.sm = AsyncSM(self._session)
+        self.snmp_settings = AsyncSNMPSettings(self._session)
+        self.ssids = AsyncSSIDs(self._session)
+        self.security_events = AsyncSecurityEvents(self._session)
+        self.splash_login_attempts = AsyncSplashLoginAttempts(self._session)
+        self.splash_settings = AsyncSplashSettings(self._session)
+        self.switch_acls = AsyncSwitchACLs(self._session)
+        self.switch_port_schedules = AsyncSwitchPortSchedules(self._session)
+        self.switch_ports = AsyncSwitchPorts(self._session)
+        self.switch_profiles = AsyncSwitchProfiles(self._session)
+        self.switch_settings = AsyncSwitchSettings(self._session)
+        self.switch_stacks = AsyncSwitchStacks(self._session)
+        self.syslog_servers = AsyncSyslogServers(self._session)
+        self.traffic_analysis_settings = AsyncTrafficAnalysisSettings(self._session)
+        self.traffic_shaping = AsyncTrafficShaping(self._session)
+        self.uplink_settings = AsyncUplinkSettings(self._session)
+        self.vlans = AsyncVLANs(self._session)
+        self.webhook_logs = AsyncWebhookLogs(self._session)
+        self.wireless_health = AsyncWirelessHealth(self._session)
+        self.wireless_settings = AsyncWirelessSettings(self._session)
+        
+    async def __aenter__(self):
+        return self
+
+    async def __aexit__(self, exc_type, exc, tb):
+        await self._session.close()
