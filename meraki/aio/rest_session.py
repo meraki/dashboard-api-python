@@ -1,6 +1,7 @@
 import json
 import time
 
+import ssl
 import aiohttp
 import asyncio
 
@@ -44,10 +45,13 @@ class AsyncRestSession(object):
                 "Authorization": "Bearer " + self._api_key,
                 "Content-Type": "application/json",
             }
-
+        if self._certificate_path:
+            self._sslcontext = ssl.create_default_context()
+            self._sslcontext.load_verify_locations(certificate_path)
+        
         # Initialize a new `aiohttp` session
         self._req_session = aiohttp.ClientSession(
-            headers=headers, timeout=aiohttp.ClientTimeout(total=single_request_timeout)
+            headers=headers, timeout=aiohttp.ClientTimeout(total=single_request_timeout),
         )
 
         # Log API calls
@@ -64,7 +68,8 @@ class AsyncRestSession(object):
         operation = metadata["operation"]
 
         # Update request kwargs with session defaults
-        # TODO: CertificationPath
+        if self._certificate_path:
+            kwargs.setdefault("ssl", self._sslcontext)
         kwargs.setdefault("timeout", self._single_request_timeout)
 
         # Ensure proper base URL
