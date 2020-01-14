@@ -1,6 +1,6 @@
 class AsyncMX11NATRules(object):
     def __init__(self, session):
-        super(MX11NATRules, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkOneToOneNatRules(self, networkId: str):

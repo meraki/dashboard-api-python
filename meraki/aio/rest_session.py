@@ -50,8 +50,6 @@ class AsyncRestSession(object):
             headers=headers, timeout=aiohttp.ClientTimeout(total=single_request_timeout)
         )
 
-
-
         # Log API calls
         self._logger = logger
         self._parameters = locals()
@@ -75,7 +73,6 @@ class AsyncRestSession(object):
         else:
             abs_url = self._base_url + url
 
-
         # Set maximum number of retries
         retries = self._maximum_retries
 
@@ -89,7 +86,9 @@ class AsyncRestSession(object):
             for _ in range(retries):
                 # Make the HTTP request to the API endpoint
                 try:
-                    response = await self._req_session.request(method, abs_url, **kwargs)
+                    response = await self._req_session.request(
+                        method, abs_url, **kwargs
+                    )
                     reason = response.reason if response.reason else None
                     status = response.status
                 except Exception as e:
@@ -108,10 +107,13 @@ class AsyncRestSession(object):
                         self._logger.info(f"{tag}, {operation} - {status} {reason}")
                     # For non-empty response to GET, ensure valid JSON
                     try:
-                        if method == "GET" and response.text.strip():
+                        if method == "GET":
                             await response.json()
                         return response
-                    except json.decoder.JSONDecodeError as e:
+                    except (
+                        json.decoder.JSONDecodeError,
+                        aiohttp.client_exceptions.ContentTypeError,
+                    ) as e:
                         self._logger.warning(
                             f"{tag}, {operation} - {e}, retrying in 1 second"
                         )
@@ -122,7 +124,7 @@ class AsyncRestSession(object):
                     substring = "meraki.com/api/v"
                     self._base_url = abs_url[
                         : abs_url.find(substring) + len(substring) + 1
-                    ] 
+                    ]
                 # Rate limit 429 errors
                 elif status == 429:
                     wait = int(response.headers["Retry-After"])
@@ -139,9 +141,9 @@ class AsyncRestSession(object):
                 # 4XX errors
                 else:
                     try:
-                        message = response.json()
-                    except ValueError:
-                        message = response.text[:100]
+                        message = await response.json()
+                    except aiohttp.client_exceptions.ContentTypeError:
+                        message = (await response.text())[:100]
                     self._logger.error(
                         f"{tag}, {operation} - {status} {reason}, {message}"
                     )

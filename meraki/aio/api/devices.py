@@ -1,6 +1,6 @@
 class AsyncDevices(object):
     def __init__(self, session):
-        super(Devices, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkDevices(self, networkId: str):
@@ -19,7 +19,7 @@ class AsyncDevices(object):
 
         return await self._session.get(metadata, resource)
 
-    def claimNetworkDevices(self, networkId: str, **kwargs):
+    async def claimNetworkDevices(self, networkId: str, **kwargs):
         """
         **Claim a device into a network**
         https://api.meraki.com/api_docs#claim-a-device-into-a-network
@@ -99,7 +99,7 @@ class AsyncDevices(object):
 
         return await self._session.put(metadata, resource, payload)
 
-    def blinkNetworkDeviceLeds(self, networkId: str, serial: str, **kwargs):
+    async def blinkNetworkDeviceLeds(self, networkId: str, serial: str, **kwargs):
         """
         **Blink the LEDs on a device**
         https://api.meraki.com/api_docs#blink-the-leds-on-a-device
@@ -200,7 +200,7 @@ class AsyncDevices(object):
 
         return await self._session.get(metadata, resource)
 
-    def rebootNetworkDevice(self, networkId: str, serial: str):
+    async def rebootNetworkDevice(self, networkId: str, serial: str):
         """
         **Reboot a device**
         https://api.meraki.com/api_docs#reboot-a-device
@@ -217,7 +217,7 @@ class AsyncDevices(object):
 
         return await self._session.post(metadata, resource)
 
-    def removeNetworkDevice(self, networkId: str, serial: str):
+    async def removeNetworkDevice(self, networkId: str, serial: str):
         """
         **Remove a single device**
         https://api.meraki.com/api_docs#remove-a-single-device

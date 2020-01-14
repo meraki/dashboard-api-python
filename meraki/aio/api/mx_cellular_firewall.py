@@ -1,6 +1,6 @@
 class AsyncMXCellularFirewall(object):
     def __init__(self, session):
-        super(MXCellularFirewall, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkCellularFirewallRules(self, networkId: str):

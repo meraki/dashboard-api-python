@@ -1,6 +1,6 @@
 class AsyncMX1ManyNATRules(object):
     def __init__(self, session):
-        super(MX1ManyNATRules, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkOneToManyNatRules(self, networkId: str):

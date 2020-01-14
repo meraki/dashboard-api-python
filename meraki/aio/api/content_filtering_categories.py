@@ -1,6 +1,6 @@
 class AsyncContentFilteringCategories(object):
     def __init__(self, session):
-        super(ContentFilteringCategories, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkContentFilteringCategories(self, networkId: str):

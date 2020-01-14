@@ -1,9 +1,11 @@
 class AsyncManagementInterfaceSettings(object):
     def __init__(self, session):
-        super(ManagementInterfaceSettings, self).__init__()
+        super().__init__()
         self._session = session
 
-    async def getNetworkDeviceManagementInterfaceSettings(self, networkId: str, serial: str):
+    async def getNetworkDeviceManagementInterfaceSettings(
+        self, networkId: str, serial: str
+    ):
         """
         **Return the management interface settings for a device**
         https://api.meraki.com/api_docs#return-the-management-interface-settings-for-a-device

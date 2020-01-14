@@ -1,6 +1,6 @@
 class AsyncIntrusionSettings(object):
     def __init__(self, session):
-        super(IntrusionSettings, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkSecurityIntrusionSettings(self, networkId: str):

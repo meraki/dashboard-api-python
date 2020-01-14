@@ -2,7 +2,7 @@ class TrafficShaping(object):
     def __init__(self, session):
         super(TrafficShaping, self).__init__()
         self._session = session
-    
+
     def updateNetworkSsidTrafficShaping(self, networkId: str, number: str, **kwargs):
         """
         **Update the traffic shaping settings for an SSID on an MR network**
@@ -25,12 +25,12 @@ class TrafficShaping(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Traffic shaping'],
-            'operation': 'updateNetworkSsidTrafficShaping',
+            "tags": ["Traffic shaping"],
+            "operation": "updateNetworkSsidTrafficShaping",
         }
-        resource = f'/networks/{networkId}/ssids/{number}/trafficShaping'
+        resource = f"/networks/{networkId}/ssids/{number}/trafficShaping"
 
-        body_params = ['trafficShapingEnabled', 'defaultRulesEnabled', 'rules']
+        body_params = ["trafficShapingEnabled", "defaultRulesEnabled", "rules"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -45,10 +45,10 @@ class TrafficShaping(object):
         """
 
         metadata = {
-            'tags': ['Traffic shaping'],
-            'operation': 'getNetworkSsidTrafficShaping',
+            "tags": ["Traffic shaping"],
+            "operation": "getNetworkSsidTrafficShaping",
         }
-        resource = f'/networks/{networkId}/ssids/{number}/trafficShaping'
+        resource = f"/networks/{networkId}/ssids/{number}/trafficShaping"
 
         return self._session.get(metadata, resource)
 
@@ -72,12 +72,12 @@ class TrafficShaping(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Traffic shaping'],
-            'operation': 'updateNetworkTrafficShaping',
+            "tags": ["Traffic shaping"],
+            "operation": "updateNetworkTrafficShaping",
         }
-        resource = f'/networks/{networkId}/trafficShaping'
+        resource = f"/networks/{networkId}/trafficShaping"
 
-        body_params = ['defaultRulesEnabled', 'rules']
+        body_params = ["defaultRulesEnabled", "rules"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -91,10 +91,10 @@ class TrafficShaping(object):
         """
 
         metadata = {
-            'tags': ['Traffic shaping'],
-            'operation': 'getNetworkTrafficShaping',
+            "tags": ["Traffic shaping"],
+            "operation": "getNetworkTrafficShaping",
         }
-        resource = f'/networks/{networkId}/trafficShaping'
+        resource = f"/networks/{networkId}/trafficShaping"
 
         return self._session.get(metadata, resource)
 
@@ -107,10 +107,10 @@ class TrafficShaping(object):
         """
 
         metadata = {
-            'tags': ['Traffic shaping'],
-            'operation': 'getNetworkTrafficShapingApplicationCategories',
+            "tags": ["Traffic shaping"],
+            "operation": "getNetworkTrafficShapingApplicationCategories",
         }
-        resource = f'/networks/{networkId}/trafficShaping/applicationCategories'
+        resource = f"/networks/{networkId}/trafficShaping/applicationCategories"
 
         return self._session.get(metadata, resource)
 
@@ -123,10 +123,9 @@ class TrafficShaping(object):
         """
 
         metadata = {
-            'tags': ['Traffic shaping'],
-            'operation': 'getNetworkTrafficShapingDscpTaggingOptions',
+            "tags": ["Traffic shaping"],
+            "operation": "getNetworkTrafficShapingDscpTaggingOptions",
         }
-        resource = f'/networks/{networkId}/trafficShaping/dscpTaggingOptions'
+        resource = f"/networks/{networkId}/trafficShaping/dscpTaggingOptions"
 
         return self._session.get(metadata, resource)
-

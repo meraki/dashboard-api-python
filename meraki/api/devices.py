@@ -2,7 +2,7 @@ class Devices(object):
     def __init__(self, session):
         super(Devices, self).__init__()
         self._session = session
-    
+
     def getNetworkDevices(self, networkId: str):
         """
         **List the devices in a network**
@@ -12,10 +12,10 @@ class Devices(object):
         """
 
         metadata = {
-            'tags': ['Devices'],
-            'operation': 'getNetworkDevices',
+            "tags": ["Devices"],
+            "operation": "getNetworkDevices",
         }
-        resource = f'/networks/{networkId}/devices'
+        resource = f"/networks/{networkId}/devices"
 
         return self._session.get(metadata, resource)
 
@@ -31,12 +31,12 @@ class Devices(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Devices'],
-            'operation': 'claimNetworkDevices',
+            "tags": ["Devices"],
+            "operation": "claimNetworkDevices",
         }
-        resource = f'/networks/{networkId}/devices/claim'
+        resource = f"/networks/{networkId}/devices/claim"
 
-        body_params = ['serial']
+        body_params = ["serial"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -51,10 +51,10 @@ class Devices(object):
         """
 
         metadata = {
-            'tags': ['Devices'],
-            'operation': 'getNetworkDevice',
+            "tags": ["Devices"],
+            "operation": "getNetworkDevice",
         }
-        resource = f'/networks/{networkId}/devices/{serial}'
+        resource = f"/networks/{networkId}/devices/{serial}"
 
         return self._session.get(metadata, resource)
 
@@ -79,12 +79,22 @@ class Devices(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Devices'],
-            'operation': 'updateNetworkDevice',
+            "tags": ["Devices"],
+            "operation": "updateNetworkDevice",
         }
-        resource = f'/networks/{networkId}/devices/{serial}'
+        resource = f"/networks/{networkId}/devices/{serial}"
 
-        body_params = ['name', 'tags', 'lat', 'lng', 'address', 'notes', 'moveMapMarker', 'switchProfileId', 'floorPlanId']
+        body_params = [
+            "name",
+            "tags",
+            "lat",
+            "lng",
+            "address",
+            "notes",
+            "moveMapMarker",
+            "switchProfileId",
+            "floorPlanId",
+        ]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -104,12 +114,12 @@ class Devices(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Devices'],
-            'operation': 'blinkNetworkDeviceLeds',
+            "tags": ["Devices"],
+            "operation": "blinkNetworkDeviceLeds",
         }
-        resource = f'/networks/{networkId}/devices/{serial}/blinkLeds'
+        resource = f"/networks/{networkId}/devices/{serial}/blinkLeds"
 
-        body_params = ['duration', 'period', 'duty']
+        body_params = ["duration", "period", "duty"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -127,17 +137,19 @@ class Devices(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Devices'],
-            'operation': 'getNetworkDeviceLldp_cdp',
+            "tags": ["Devices"],
+            "operation": "getNetworkDeviceLldp_cdp",
         }
-        resource = f'/networks/{networkId}/devices/{serial}/lldp_cdp'
+        resource = f"/networks/{networkId}/devices/{serial}/lldp_cdp"
 
-        query_params = ['timespan']
+        query_params = ["timespan"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
 
-    def getNetworkDeviceLossAndLatencyHistory(self, networkId: str, serial: str, ip: str, **kwargs):
+    def getNetworkDeviceLossAndLatencyHistory(
+        self, networkId: str, serial: str, ip: str, **kwargs
+    ):
         """
         **Get the uplink loss percentage and latency in milliseconds for a wired network device.**
         https://api.meraki.com/api_docs#get-the-uplink-loss-percentage-and-latency-in-milliseconds-for-a-wired-network-device
@@ -154,17 +166,19 @@ class Devices(object):
 
         kwargs.update(locals())
 
-        if 'uplink' in kwargs:
-            options = ['wan1', 'wan2', 'cellular']
-            assert kwargs['uplink'] in options, f'''"uplink" cannot be "{kwargs['uplink']}", & must be set to one of: {options}'''
+        if "uplink" in kwargs:
+            options = ["wan1", "wan2", "cellular"]
+            assert (
+                kwargs["uplink"] in options
+            ), f""""uplink" cannot be "{kwargs['uplink']}", & must be set to one of: {options}"""
 
         metadata = {
-            'tags': ['Devices'],
-            'operation': 'getNetworkDeviceLossAndLatencyHistory',
+            "tags": ["Devices"],
+            "operation": "getNetworkDeviceLossAndLatencyHistory",
         }
-        resource = f'/networks/{networkId}/devices/{serial}/lossAndLatencyHistory'
+        resource = f"/networks/{networkId}/devices/{serial}/lossAndLatencyHistory"
 
-        query_params = ['t0', 't1', 'timespan', 'resolution', 'uplink', 'ip']
+        query_params = ["t0", "t1", "timespan", "resolution", "uplink", "ip"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -179,10 +193,10 @@ class Devices(object):
         """
 
         metadata = {
-            'tags': ['Devices'],
-            'operation': 'getNetworkDevicePerformance',
+            "tags": ["Devices"],
+            "operation": "getNetworkDevicePerformance",
         }
-        resource = f'/networks/{networkId}/devices/{serial}/performance'
+        resource = f"/networks/{networkId}/devices/{serial}/performance"
 
         return self._session.get(metadata, resource)
 
@@ -196,10 +210,10 @@ class Devices(object):
         """
 
         metadata = {
-            'tags': ['Devices'],
-            'operation': 'rebootNetworkDevice',
+            "tags": ["Devices"],
+            "operation": "rebootNetworkDevice",
         }
-        resource = f'/networks/{networkId}/devices/{serial}/reboot'
+        resource = f"/networks/{networkId}/devices/{serial}/reboot"
 
         return self._session.post(metadata, resource)
 
@@ -213,10 +227,10 @@ class Devices(object):
         """
 
         metadata = {
-            'tags': ['Devices'],
-            'operation': 'removeNetworkDevice',
+            "tags": ["Devices"],
+            "operation": "removeNetworkDevice",
         }
-        resource = f'/networks/{networkId}/devices/{serial}/remove'
+        resource = f"/networks/{networkId}/devices/{serial}/remove"
 
         return self._session.post(metadata, resource)
 
@@ -230,14 +244,16 @@ class Devices(object):
         """
 
         metadata = {
-            'tags': ['Devices'],
-            'operation': 'getNetworkDeviceUplink',
+            "tags": ["Devices"],
+            "operation": "getNetworkDeviceUplink",
         }
-        resource = f'/networks/{networkId}/devices/{serial}/uplink'
+        resource = f"/networks/{networkId}/devices/{serial}/uplink"
 
         return self._session.get(metadata, resource)
 
-    def getOrganizationDevices(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationDevices(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
         """
         **List the devices in an organization**
         https://api.meraki.com/api_docs#list-the-devices-in-an-organization
@@ -254,14 +270,19 @@ class Devices(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Devices'],
-            'operation': 'getOrganizationDevices',
+            "tags": ["Devices"],
+            "operation": "getOrganizationDevices",
         }
-        resource = f'/organizations/{organizationId}/devices'
+        resource = f"/organizations/{organizationId}/devices"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'configurationUpdatedAfter']
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "configurationUpdatedAfter",
+        ]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get_pages(metadata, resource, params, total_pages, direction)
-
-
+        return self._session.get_pages(
+            metadata, resource, params, total_pages, direction
+        )

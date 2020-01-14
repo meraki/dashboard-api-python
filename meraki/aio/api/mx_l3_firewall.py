@@ -1,6 +1,6 @@
 class AsyncMXL3Firewall(object):
     def __init__(self, session):
-        super(MXL3Firewall, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkL3FirewallRules(self, networkId: str):

@@ -1,6 +1,6 @@
 class AsyncSwitchPortSchedules(object):
     def __init__(self, session):
-        super(SwitchPortSchedules, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkSwitchPortSchedules(self, networkId: str):
@@ -19,7 +19,9 @@ class AsyncSwitchPortSchedules(object):
 
         return await self._session.get(metadata, resource)
 
-    async def createNetworkSwitchPortSchedule(self, networkId: str, name: str, **kwargs):
+    async def createNetworkSwitchPortSchedule(
+        self, networkId: str, name: str, **kwargs
+    ):
         """
         **Add a switch port schedule**
         https://api.meraki.com/api_docs#add-a-switch-port-schedule
@@ -45,7 +47,9 @@ class AsyncSwitchPortSchedules(object):
 
         return await self._session.post(metadata, resource, payload)
 
-    async def deleteNetworkSwitchPortSchedule(self, networkId: str, portScheduleId: str):
+    async def deleteNetworkSwitchPortSchedule(
+        self, networkId: str, portScheduleId: str
+    ):
         """
         **Delete a switch port schedule**
         https://api.meraki.com/api_docs#delete-a-switch-port-schedule

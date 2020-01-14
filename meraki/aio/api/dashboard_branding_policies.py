@@ -1,6 +1,6 @@
 class AsyncDashboardBrandingPolicies(object):
     def __init__(self, session):
-        super(DashboardBrandingPolicies, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getOrganizationBrandingPolicies(self, organizationId: str):
@@ -95,7 +95,9 @@ class AsyncDashboardBrandingPolicies(object):
 
         return await self._session.put(metadata, resource, payload)
 
-    async def getOrganizationBrandingPolicy(self, organizationId: str, brandingPolicyId: str):
+    async def getOrganizationBrandingPolicy(
+        self, organizationId: str, brandingPolicyId: str
+    ):
         """
         **Return a branding policy**
         https://api.meraki.com/api_docs#return-a-branding-policy

@@ -1,6 +1,6 @@
 class AsyncMGUplinkSettings(object):
     def __init__(self, session):
-        super(MGUplinkSettings, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkCellularGatewaySettingsUplink(self, networkId: str):
@@ -19,7 +19,9 @@ class AsyncMGUplinkSettings(object):
 
         return await self._session.get(metadata, resource)
 
-    async def updateNetworkCellularGatewaySettingsUplink(self, networkId: str, **kwargs):
+    async def updateNetworkCellularGatewaySettingsUplink(
+        self, networkId: str, **kwargs
+    ):
         """
         **Updates the uplink settings for your MG network.**
         https://api.meraki.com/api_docs#updates-the-uplink-settings-for-your-mg-network

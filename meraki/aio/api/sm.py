@@ -1,6 +1,6 @@
 class AsyncSM(object):
     def __init__(self, session):
-        super(SM, self).__init__()
+        super().__init__()
         self._session = session
 
     async def createNetworkSmAppPolaris(self, networkId: str, scope: str, **kwargs):
@@ -99,7 +99,9 @@ class AsyncSM(object):
 
         return await self._session.delete(metadata, resource)
 
-    async def createNetworkSmBypassActivationLockAttempt(self, networkId: str, ids: list):
+    async def createNetworkSmBypassActivationLockAttempt(
+        self, networkId: str, ids: list
+    ):
         """
         **Bypass activation lock attempt**
         https://api.meraki.com/api_docs#bypass-activation-lock-attempt
@@ -121,7 +123,9 @@ class AsyncSM(object):
 
         return await self._session.post(metadata, resource, payload)
 
-    async def getNetworkSmBypassActivationLockAttempt(self, networkId: str, attemptId: str):
+    async def getNetworkSmBypassActivationLockAttempt(
+        self, networkId: str, attemptId: str
+    ):
         """
         **Bypass activation lock attempt status**
         https://api.meraki.com/api_docs#bypass-activation-lock-attempt-status
@@ -138,7 +142,9 @@ class AsyncSM(object):
 
         return await self._session.get(metadata, resource)
 
-    async def updateNetworkSmDeviceFields(self, networkId: str, deviceFields: dict, **kwargs):
+    async def updateNetworkSmDeviceFields(
+        self, networkId: str, deviceFields: dict, **kwargs
+    ):
         """
         **Modify the fields of a device**
         https://api.meraki.com/api_docs#modify-the-fields-of-a-device
@@ -163,7 +169,7 @@ class AsyncSM(object):
 
         return await self._session.put(metadata, resource, payload)
 
-    def wipeNetworkSmDevice(self, networkId: str, **kwargs):
+    async def wipeNetworkSmDevice(self, networkId: str, **kwargs):
         """
         **Wipe a device**
         https://api.meraki.com/api_docs#wipe-a-device
@@ -188,7 +194,7 @@ class AsyncSM(object):
 
         return await self._session.put(metadata, resource, payload)
 
-    def refreshNetworkSmDeviceDetails(self, networkId: str, deviceId: str):
+    async def refreshNetworkSmDeviceDetails(self, networkId: str, deviceId: str):
         """
         **Refresh the details of a device**
         https://api.meraki.com/api_docs#refresh-the-details-of-a-device
@@ -250,7 +256,7 @@ class AsyncSM(object):
 
         return await self._session.get(metadata, resource, params)
 
-    def checkinNetworkSmDevices(self, networkId: str, **kwargs):
+    async def checkinNetworkSmDevices(self, networkId: str, **kwargs):
         """
         **Force check-in a set of devices**
         https://api.meraki.com/api_docs#force-check-in-a-set-of-devices
@@ -275,7 +281,7 @@ class AsyncSM(object):
 
         return await self._session.put(metadata, resource, payload)
 
-    def moveNetworkSmDevices(self, networkId: str, newNetwork: str, **kwargs):
+    async def moveNetworkSmDevices(self, networkId: str, newNetwork: str, **kwargs):
         """
         **Move a set of devices to a new network**
         https://api.meraki.com/api_docs#move-a-set-of-devices-to-a-new-network
@@ -330,7 +336,7 @@ class AsyncSM(object):
 
         return await self._session.put(metadata, resource, payload)
 
-    def unenrollNetworkSmDevice(self, networkId: str, deviceId: str):
+    async def unenrollNetworkSmDevice(self, networkId: str, deviceId: str):
         """
         **Unenroll a device**
         https://api.meraki.com/api_docs#unenroll-a-device
@@ -383,7 +389,9 @@ class AsyncSM(object):
 
         return await self._session.post(metadata, resource, payload)
 
-    async def updateNetworkSmProfileClarity(self, networkId: str, profileId: str, **kwargs):
+    async def updateNetworkSmProfileClarity(
+        self, networkId: str, profileId: str, **kwargs
+    ):
         """
         **Update an existing profile containing a Cisco Clarity payload**
         https://api.meraki.com/api_docs#update-an-existing-profile-containing-a-cisco-clarity-payload
@@ -418,7 +426,7 @@ class AsyncSM(object):
 
         return await self._session.put(metadata, resource, payload)
 
-    def addNetworkSmProfileClarity(
+    async def addNetworkSmProfileClarity(
         self, networkId: str, profileId: str, VendorConfig: list, **kwargs
     ):
         """
@@ -526,7 +534,9 @@ class AsyncSM(object):
 
         return await self._session.post(metadata, resource, payload)
 
-    async def updateNetworkSmProfileUmbrella(self, networkId: str, profileId: str, **kwargs):
+    async def updateNetworkSmProfileUmbrella(
+        self, networkId: str, profileId: str, **kwargs
+    ):
         """
         **Update an existing profile containing a Cisco Umbrella payload**
         https://api.meraki.com/api_docs#update-an-existing-profile-containing-a-cisco-umbrella-payload
@@ -561,7 +571,7 @@ class AsyncSM(object):
 
         return await self._session.put(metadata, resource, payload)
 
-    def addNetworkSmProfileUmbrella(
+    async def addNetworkSmProfileUmbrella(
         self, networkId: str, profileId: str, ProviderConfiguration: list, **kwargs
     ):
         """
@@ -839,7 +849,7 @@ class AsyncSM(object):
 
         return await self._session.get(metadata, resource)
 
-    def lockNetworkSmDevices(self, network_id: str, **kwargs):
+    async def lockNetworkSmDevices(self, network_id: str, **kwargs):
         """
         **Lock a set of devices**
         https://api.meraki.com/api_docs#lock-a-set-of-devices

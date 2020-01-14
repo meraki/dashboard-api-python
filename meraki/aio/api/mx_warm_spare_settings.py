@@ -1,9 +1,9 @@
 class AsyncMXWarmSpareSettings(object):
     def __init__(self, session):
-        super(MXWarmSpareSettings, self).__init__()
+        super().__init__()
         self._session = session
 
-    def swapNetworkWarmspare(self, networkId: str):
+    async def swapNetworkWarmspare(self, networkId: str):
         """
         **Swap MX primary and warm spare appliances**
         https://api.meraki.com/api_docs#swap-mx-primary-and-warm-spare-appliances
@@ -35,7 +35,9 @@ class AsyncMXWarmSpareSettings(object):
 
         return await self._session.get(metadata, resource)
 
-    async def updateNetworkWarmSpareSettings(self, networkId: str, enabled: bool, **kwargs):
+    async def updateNetworkWarmSpareSettings(
+        self, networkId: str, enabled: bool, **kwargs
+    ):
         """
         **Update MX warm spare settings**
         https://api.meraki.com/api_docs#update-mx-warm-spare-settings

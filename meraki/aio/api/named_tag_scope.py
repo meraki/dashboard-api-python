@@ -1,6 +1,6 @@
 class AsyncNamedTagScope(object):
     def __init__(self, session):
-        super(NamedTagScope, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkSmTargetGroups(self, networkId: str, **kwargs):
@@ -48,7 +48,9 @@ class AsyncNamedTagScope(object):
 
         return await self._session.post(metadata, resource, payload)
 
-    async def getNetworkSmTargetGroup(self, networkId: str, targetGroupId: str, **kwargs):
+    async def getNetworkSmTargetGroup(
+        self, networkId: str, targetGroupId: str, **kwargs
+    ):
         """
         **Return a target group**
         https://api.meraki.com/api_docs#return-a-target-group
@@ -71,7 +73,9 @@ class AsyncNamedTagScope(object):
 
         return await self._session.get(metadata, resource, params)
 
-    async def updateNetworkSmTargetGroup(self, networkId: str, targetGroupId: str, **kwargs):
+    async def updateNetworkSmTargetGroup(
+        self, networkId: str, targetGroupId: str, **kwargs
+    ):
         """
         **Update a target group**
         https://api.meraki.com/api_docs#update-a-target-group

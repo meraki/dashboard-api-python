@@ -2,7 +2,7 @@ class HTTPServers(object):
     def __init__(self, session):
         super(HTTPServers, self).__init__()
         self._session = session
-    
+
     def getNetworkHttpServers(self, networkId: str):
         """
         **List the HTTP servers for a network**
@@ -12,10 +12,10 @@ class HTTPServers(object):
         """
 
         metadata = {
-            'tags': ['HTTP servers'],
-            'operation': 'getNetworkHttpServers',
+            "tags": ["HTTP servers"],
+            "operation": "getNetworkHttpServers",
         }
-        resource = f'/networks/{networkId}/httpServers'
+        resource = f"/networks/{networkId}/httpServers"
 
         return self._session.get(metadata, resource)
 
@@ -33,12 +33,12 @@ class HTTPServers(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['HTTP servers'],
-            'operation': 'createNetworkHttpServer',
+            "tags": ["HTTP servers"],
+            "operation": "createNetworkHttpServer",
         }
-        resource = f'/networks/{networkId}/httpServers'
+        resource = f"/networks/{networkId}/httpServers"
 
-        body_params = ['name', 'url', 'sharedSecret']
+        body_params = ["name", "url", "sharedSecret"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -55,12 +55,12 @@ class HTTPServers(object):
         kwargs = locals()
 
         metadata = {
-            'tags': ['HTTP servers'],
-            'operation': 'createNetworkHttpServersWebhookTest',
+            "tags": ["HTTP servers"],
+            "operation": "createNetworkHttpServersWebhookTest",
         }
-        resource = f'/networks/{networkId}/httpServers/webhookTests'
+        resource = f"/networks/{networkId}/httpServers/webhookTests"
 
-        body_params = ['url']
+        body_params = ["url"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -75,10 +75,10 @@ class HTTPServers(object):
         """
 
         metadata = {
-            'tags': ['HTTP servers'],
-            'operation': 'getNetworkHttpServersWebhookTest',
+            "tags": ["HTTP servers"],
+            "operation": "getNetworkHttpServersWebhookTest",
         }
-        resource = f'/networks/{networkId}/httpServers/webhookTests/{id}'
+        resource = f"/networks/{networkId}/httpServers/webhookTests/{id}"
 
         return self._session.get(metadata, resource)
 
@@ -92,10 +92,10 @@ class HTTPServers(object):
         """
 
         metadata = {
-            'tags': ['HTTP servers'],
-            'operation': 'getNetworkHttpServer',
+            "tags": ["HTTP servers"],
+            "operation": "getNetworkHttpServer",
         }
-        resource = f'/networks/{networkId}/httpServers/{id}'
+        resource = f"/networks/{networkId}/httpServers/{id}"
 
         return self._session.get(metadata, resource)
 
@@ -114,12 +114,12 @@ class HTTPServers(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['HTTP servers'],
-            'operation': 'updateNetworkHttpServer',
+            "tags": ["HTTP servers"],
+            "operation": "updateNetworkHttpServer",
         }
-        resource = f'/networks/{networkId}/httpServers/{id}'
+        resource = f"/networks/{networkId}/httpServers/{id}"
 
-        body_params = ['name', 'url', 'sharedSecret']
+        body_params = ["name", "url", "sharedSecret"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -134,10 +134,9 @@ class HTTPServers(object):
         """
 
         metadata = {
-            'tags': ['HTTP servers'],
-            'operation': 'deleteNetworkHttpServer',
+            "tags": ["HTTP servers"],
+            "operation": "deleteNetworkHttpServer",
         }
-        resource = f'/networks/{networkId}/httpServers/{id}'
+        resource = f"/networks/{networkId}/httpServers/{id}"
 
         return self._session.delete(metadata, resource)
-

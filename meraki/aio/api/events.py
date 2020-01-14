@@ -1,6 +1,6 @@
 class AsyncEvents(object):
     def __init__(self, session):
-        super(Events, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkEvents(

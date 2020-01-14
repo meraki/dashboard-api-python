@@ -1,6 +1,6 @@
 class AsyncMXVPNFirewall(object):
     def __init__(self, session):
-        super(MXVPNFirewall, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getOrganizationVpnFirewallRules(self, organizationId: str):

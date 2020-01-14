@@ -1,6 +1,6 @@
 class AsyncSwitchSettings(object):
     def __init__(self, session):
-        super(SwitchSettings, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkSwitchSettings(self, networkId: str):
@@ -59,7 +59,9 @@ class AsyncSwitchSettings(object):
 
         return await self._session.get(metadata, resource)
 
-    async def updateNetworkSwitchSettingsDhcpServerPolicy(self, networkId: str, **kwargs):
+    async def updateNetworkSwitchSettingsDhcpServerPolicy(
+        self, networkId: str, **kwargs
+    ):
         """
         **Update the DHCP server policy**
         https://api.meraki.com/api_docs#update-the-dhcp-server-policy
@@ -184,7 +186,9 @@ class AsyncSwitchSettings(object):
 
         return await self._session.get(metadata, resource)
 
-    async def createNetworkSwitchSettingsQosRule(self, networkId: str, vlan: int, **kwargs):
+    async def createNetworkSwitchSettingsQosRule(
+        self, networkId: str, vlan: int, **kwargs
+    ):
         """
         **Add a quality of service rule**
         https://api.meraki.com/api_docs#add-a-quality-of-service-rule
@@ -242,7 +246,9 @@ class AsyncSwitchSettings(object):
 
         return await self._session.get(metadata, resource)
 
-    async def updateNetworkSwitchSettingsQosRulesOrder(self, networkId: str, ruleIds: list):
+    async def updateNetworkSwitchSettingsQosRulesOrder(
+        self, networkId: str, ruleIds: list
+    ):
         """
         **Update the order in which the rules should be processed by the switch**
         https://api.meraki.com/api_docs#update-the-order-in-which-the-rules-should-be-processed-by-the-switch

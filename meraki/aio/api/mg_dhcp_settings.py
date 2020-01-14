@@ -1,6 +1,6 @@
 class AsyncMGDHCPSettings(object):
     def __init__(self, session):
-        super(MGDHCPSettings, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkCellularGatewaySettingsDhcp(self, networkId: str):

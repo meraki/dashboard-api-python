@@ -1,6 +1,6 @@
 class AsyncCameras(object):
     def __init__(self, session):
-        super(Cameras, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getDeviceCameraQualityAndRetentionSettings(self, serial: str):
@@ -19,7 +19,9 @@ class AsyncCameras(object):
 
         return await self._session.get(metadata, resource)
 
-    async def updateDeviceCameraQualityAndRetentionSettings(self, serial: str, **kwargs):
+    async def updateDeviceCameraQualityAndRetentionSettings(
+        self, serial: str, **kwargs
+    ):
         """
         **Update quality and retention settings for the given camera**
         https://api.meraki.com/api_docs#update-quality-and-retention-settings-for-the-given-camera
@@ -80,7 +82,9 @@ class AsyncCameras(object):
 
         return await self._session.get(metadata, resource)
 
-    def generateNetworkCameraSnapshot(self, networkId: str, serial: str, **kwargs):
+    async def generateNetworkCameraSnapshot(
+        self, networkId: str, serial: str, **kwargs
+    ):
         """
         **Generate a snapshot of what the camera sees at the specified time and return a link to that image.**
         https://api.meraki.com/api_docs#generate-a-snapshot-of-what-the-camera-sees-at-the-specified-time-and-return-a-link-to-that-image

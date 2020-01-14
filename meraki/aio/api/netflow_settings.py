@@ -1,6 +1,6 @@
 class AsyncNetFlowSettings(object):
     def __init__(self, session):
-        super(NetFlowSettings, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkNetflowSettings(self, networkId: str):

@@ -2,8 +2,10 @@ class Events(object):
     def __init__(self, session):
         super(Events, self).__init__()
         self._session = session
-    
-    def getNetworkEvents(self, networkId: str, total_pages=1, direction='prev', **kwargs):
+
+    def getNetworkEvents(
+        self, networkId: str, total_pages=1, direction="prev", **kwargs
+    ):
         """
         **List the events for the network**
         https://api.meraki.com/api_docs#list-the-events-for-the-network
@@ -30,21 +32,35 @@ class Events(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Events'],
-            'operation': 'getNetworkEvents',
+            "tags": ["Events"],
+            "operation": "getNetworkEvents",
         }
-        resource = f'/networks/{networkId}/events'
+        resource = f"/networks/{networkId}/events"
 
-        query_params = ['productType', 'deviceMac', 'deviceSerial', 'deviceName', 'clientIp', 'clientMac', 'clientName', 'smDeviceMac', 'smDeviceName', 'perPage', 'startingAfter', 'endingBefore']
+        query_params = [
+            "productType",
+            "deviceMac",
+            "deviceSerial",
+            "deviceName",
+            "clientIp",
+            "clientMac",
+            "clientName",
+            "smDeviceMac",
+            "smDeviceName",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        array_params = ['includedEventTypes', 'excludedEventTypes']
+        array_params = ["includedEventTypes", "excludedEventTypes"]
         for (k, v) in kwargs.items():
             if k in array_params:
-                params[f'{k}[]'] = kwargs[f'{k}']
+                params[f"{k}[]"] = kwargs[f"{k}"]
 
-        return self._session.get_pages(metadata, resource, params, total_pages, direction)
-
+        return self._session.get_pages(
+            metadata, resource, params, total_pages, direction
+        )
 
     def getNetworkEventsEventTypes(self, networkId: str):
         """
@@ -55,10 +71,9 @@ class Events(object):
         """
 
         metadata = {
-            'tags': ['Events'],
-            'operation': 'getNetworkEventsEventTypes',
+            "tags": ["Events"],
+            "operation": "getNetworkEventsEventTypes",
         }
-        resource = f'/networks/{networkId}/events/eventTypes'
+        resource = f"/networks/{networkId}/events/eventTypes"
 
         return self._session.get(metadata, resource)
-

@@ -1,9 +1,11 @@
 class AsyncTrafficShaping(object):
     def __init__(self, session):
-        super(TrafficShaping, self).__init__()
+        super().__init__()
         self._session = session
 
-    async def updateNetworkSsidTrafficShaping(self, networkId: str, number: str, **kwargs):
+    async def updateNetworkSsidTrafficShaping(
+        self, networkId: str, number: str, **kwargs
+    ):
         """
         **Update the traffic shaping settings for an SSID on an MR network**
         https://api.meraki.com/api_docs#update-the-traffic-shaping-settings-for-an-ssid-on-an-mr-network

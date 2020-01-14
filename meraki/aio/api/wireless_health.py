@@ -1,6 +1,6 @@
 class AsyncWirelessHealth(object):
     def __init__(self, session):
-        super(WirelessHealth, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkClientsConnectionStats(self, networkId: str, **kwargs):
@@ -58,7 +58,9 @@ class AsyncWirelessHealth(object):
 
         return await self._session.get(metadata, resource, params)
 
-    async def getNetworkClientConnectionStats(self, networkId: str, clientId: str, **kwargs):
+    async def getNetworkClientConnectionStats(
+        self, networkId: str, clientId: str, **kwargs
+    ):
         """
         **Aggregated connectivity info for a given client on this network. Clients are identified by their MAC.**
         https://api.meraki.com/api_docs#aggregated-connectivity-info-for-a-given-client-on-this-network
@@ -86,7 +88,9 @@ class AsyncWirelessHealth(object):
 
         return await self._session.get(metadata, resource, params)
 
-    async def getNetworkClientLatencyStats(self, networkId: str, clientId: str, **kwargs):
+    async def getNetworkClientLatencyStats(
+        self, networkId: str, clientId: str, **kwargs
+    ):
         """
         **Aggregated latency info for a given client on this network. Clients are identified by their MAC.**
         https://api.meraki.com/api_docs#aggregated-latency-info-for-a-given-client-on-this-network
@@ -197,7 +201,9 @@ class AsyncWirelessHealth(object):
 
         return await self._session.get(metadata, resource, params)
 
-    async def getNetworkDeviceConnectionStats(self, networkId: str, serial: str, **kwargs):
+    async def getNetworkDeviceConnectionStats(
+        self, networkId: str, serial: str, **kwargs
+    ):
         """
         **Aggregated connectivity info for a given AP on this network**
         https://api.meraki.com/api_docs#aggregated-connectivity-info-for-a-given-ap-on-this-network

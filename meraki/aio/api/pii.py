@@ -1,6 +1,6 @@
 class AsyncPII(object):
     def __init__(self, session):
-        super(PII, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkPiiPiiKeys(self, networkId: str, **kwargs):

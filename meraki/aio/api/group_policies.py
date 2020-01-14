@@ -1,6 +1,6 @@
 class AsyncGroupPolicies(object):
     def __init__(self, session):
-        super(GroupPolicies, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkGroupPolicies(self, networkId: str):
@@ -83,7 +83,9 @@ class AsyncGroupPolicies(object):
 
         return await self._session.get(metadata, resource)
 
-    async def updateNetworkGroupPolicy(self, networkId: str, groupPolicyId: str, **kwargs):
+    async def updateNetworkGroupPolicy(
+        self, networkId: str, groupPolicyId: str, **kwargs
+    ):
         """
         **Update a group policy**
         https://api.meraki.com/api_docs#update-a-group-policy

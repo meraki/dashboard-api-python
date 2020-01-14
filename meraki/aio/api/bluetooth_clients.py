@@ -1,6 +1,6 @@
 class AsyncBluetoothClients(object):
     def __init__(self, session):
-        super(BluetoothClients, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkBluetoothClients(

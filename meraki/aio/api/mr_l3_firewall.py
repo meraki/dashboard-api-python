@@ -1,6 +1,6 @@
 class AsyncMRL3Firewall(object):
     def __init__(self, session):
-        super(MRL3Firewall, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkSsidL3FirewallRules(self, networkId: str, number: str):
@@ -20,7 +20,9 @@ class AsyncMRL3Firewall(object):
 
         return await self._session.get(metadata, resource)
 
-    async def updateNetworkSsidL3FirewallRules(self, networkId: str, number: str, **kwargs):
+    async def updateNetworkSsidL3FirewallRules(
+        self, networkId: str, number: str, **kwargs
+    ):
         """
         **Update the L3 firewall rules of an SSID on an MR network**
         https://api.meraki.com/api_docs#update-the-l3-firewall-rules-of-an-ssid-on-an-mr-network

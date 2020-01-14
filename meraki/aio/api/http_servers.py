@@ -1,6 +1,6 @@
 class AsyncHTTPServers(object):
     def __init__(self, session):
-        super(HTTPServers, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkHttpServers(self, networkId: str):
@@ -19,7 +19,9 @@ class AsyncHTTPServers(object):
 
         return await self._session.get(metadata, resource)
 
-    async def createNetworkHttpServer(self, networkId: str, name: str, url: str, **kwargs):
+    async def createNetworkHttpServer(
+        self, networkId: str, name: str, url: str, **kwargs
+    ):
         """
         **Add an HTTP server to a network**
         https://api.meraki.com/api_docs#add-an-http-server-to-a-network

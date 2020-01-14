@@ -1,6 +1,6 @@
 class AsyncConfigTemplates(object):
     def __init__(self, session):
-        super(ConfigTemplates, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getOrganizationConfigTemplates(self, organizationId: str):

@@ -1,6 +1,6 @@
 class AsyncFloorplans(object):
     def __init__(self, session):
-        super(Floorplans, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkFloorPlans(self, networkId: str):

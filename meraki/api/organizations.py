@@ -2,7 +2,7 @@ class Organizations(object):
     def __init__(self, session):
         super(Organizations, self).__init__()
         self._session = session
-    
+
     def getOrganizations(self):
         """
         **List the organizations that the user has privileges on**
@@ -11,10 +11,10 @@ class Organizations(object):
         """
 
         metadata = {
-            'tags': ['Organizations'],
-            'operation': 'getOrganizations',
+            "tags": ["Organizations"],
+            "operation": "getOrganizations",
         }
-        resource = f'/organizations'
+        resource = f"/organizations"
 
         return self._session.get(metadata, resource)
 
@@ -29,12 +29,12 @@ class Organizations(object):
         kwargs = locals()
 
         metadata = {
-            'tags': ['Organizations'],
-            'operation': 'createOrganization',
+            "tags": ["Organizations"],
+            "operation": "createOrganization",
         }
-        resource = f'/organizations'
+        resource = f"/organizations"
 
-        body_params = ['name']
+        body_params = ["name"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -48,10 +48,10 @@ class Organizations(object):
         """
 
         metadata = {
-            'tags': ['Organizations'],
-            'operation': 'getOrganization',
+            "tags": ["Organizations"],
+            "operation": "getOrganization",
         }
-        resource = f'/organizations/{organizationId}'
+        resource = f"/organizations/{organizationId}"
 
         return self._session.get(metadata, resource)
 
@@ -67,12 +67,12 @@ class Organizations(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Organizations'],
-            'operation': 'updateOrganization',
+            "tags": ["Organizations"],
+            "operation": "updateOrganization",
         }
-        resource = f'/organizations/{organizationId}'
+        resource = f"/organizations/{organizationId}"
 
-        body_params = ['name']
+        body_params = ["name"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -86,10 +86,10 @@ class Organizations(object):
         """
 
         metadata = {
-            'tags': ['Organizations'],
-            'operation': 'deleteOrganization',
+            "tags": ["Organizations"],
+            "operation": "deleteOrganization",
         }
-        resource = f'/organizations/{organizationId}'
+        resource = f"/organizations/{organizationId}"
 
         return self._session.delete(metadata, resource)
 
@@ -107,12 +107,12 @@ class Organizations(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Organizations'],
-            'operation': 'claimOrganization',
+            "tags": ["Organizations"],
+            "operation": "claimOrganization",
         }
-        resource = f'/organizations/{organizationId}/claim'
+        resource = f"/organizations/{organizationId}/claim"
 
-        body_params = ['orders', 'serials', 'licenses']
+        body_params = ["orders", "serials", "licenses"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -129,12 +129,12 @@ class Organizations(object):
         kwargs = locals()
 
         metadata = {
-            'tags': ['Organizations'],
-            'operation': 'cloneOrganization',
+            "tags": ["Organizations"],
+            "operation": "cloneOrganization",
         }
-        resource = f'/organizations/{organizationId}/clone'
+        resource = f"/organizations/{organizationId}/clone"
 
-        body_params = ['name']
+        body_params = ["name"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -148,10 +148,10 @@ class Organizations(object):
         """
 
         metadata = {
-            'tags': ['Organizations'],
-            'operation': 'getOrganizationDeviceStatuses',
+            "tags": ["Organizations"],
+            "operation": "getOrganizationDeviceStatuses",
         }
-        resource = f'/organizations/{organizationId}/deviceStatuses'
+        resource = f"/organizations/{organizationId}/deviceStatuses"
 
         return self._session.get(metadata, resource)
 
@@ -167,12 +167,12 @@ class Organizations(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Organizations'],
-            'operation': 'getOrganizationInventory',
+            "tags": ["Organizations"],
+            "operation": "getOrganizationInventory",
         }
-        resource = f'/organizations/{organizationId}/inventory'
+        resource = f"/organizations/{organizationId}/inventory"
 
-        query_params = ['includeLicenseInfo']
+        query_params = ["includeLicenseInfo"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -186,10 +186,10 @@ class Organizations(object):
         """
 
         metadata = {
-            'tags': ['Organizations'],
-            'operation': 'getOrganizationLicenseState',
+            "tags": ["Organizations"],
+            "operation": "getOrganizationLicenseState",
         }
-        resource = f'/organizations/{organizationId}/licenseState'
+        resource = f"/organizations/{organizationId}/licenseState"
 
         return self._session.get(metadata, resource)
 
@@ -202,10 +202,10 @@ class Organizations(object):
         """
 
         metadata = {
-            'tags': ['Organizations'],
-            'operation': 'getOrganizationThirdPartyVPNPeers',
+            "tags": ["Organizations"],
+            "operation": "getOrganizationThirdPartyVPNPeers",
         }
-        resource = f'/organizations/{organizationId}/thirdPartyVPNPeers'
+        resource = f"/organizations/{organizationId}/thirdPartyVPNPeers"
 
         return self._session.get(metadata, resource)
 
@@ -221,12 +221,12 @@ class Organizations(object):
         kwargs = locals()
 
         metadata = {
-            'tags': ['Organizations'],
-            'operation': 'updateOrganizationThirdPartyVPNPeers',
+            "tags": ["Organizations"],
+            "operation": "updateOrganizationThirdPartyVPNPeers",
         }
-        resource = f'/organizations/{organizationId}/thirdPartyVPNPeers'
+        resource = f"/organizations/{organizationId}/thirdPartyVPNPeers"
 
-        body_params = ['peers']
+        body_params = ["peers"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -246,18 +246,19 @@ class Organizations(object):
 
         kwargs.update(locals())
 
-        if 'uplink' in kwargs:
-            options = ['wan1', 'wan2', 'cellular']
-            assert kwargs['uplink'] in options, f'''"uplink" cannot be "{kwargs['uplink']}", & must be set to one of: {options}'''
+        if "uplink" in kwargs:
+            options = ["wan1", "wan2", "cellular"]
+            assert (
+                kwargs["uplink"] in options
+            ), f""""uplink" cannot be "{kwargs['uplink']}", & must be set to one of: {options}"""
 
         metadata = {
-            'tags': ['Organizations'],
-            'operation': 'getOrganizationUplinksLossAndLatency',
+            "tags": ["Organizations"],
+            "operation": "getOrganizationUplinksLossAndLatency",
         }
-        resource = f'/organizations/{organizationId}/uplinksLossAndLatency'
+        resource = f"/organizations/{organizationId}/uplinksLossAndLatency"
 
-        query_params = ['t0', 't1', 'timespan', 'uplink', 'ip']
+        query_params = ["t0", "t1", "timespan", "uplink", "ip"]
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
-

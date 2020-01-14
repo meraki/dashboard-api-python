@@ -1,6 +1,6 @@
 class AsyncLicenses(object):
     def __init__(self, session):
-        super(Licenses, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getOrganizationLicenses(
@@ -56,7 +56,7 @@ class AsyncLicenses(object):
             metadata, resource, params, total_pages, direction
         )
 
-    def assignOrganizationLicensesSeats(
+    async def assignOrganizationLicensesSeats(
         self, organizationId: str, licenseId: str, networkId: str, seatCount: int
     ):
         """
@@ -82,7 +82,7 @@ class AsyncLicenses(object):
 
         return await self._session.post(metadata, resource, payload)
 
-    def moveOrganizationLicenses(
+    async def moveOrganizationLicenses(
         self, organizationId: str, destOrganizationId: str, licenseIds: list
     ):
         """
@@ -107,7 +107,7 @@ class AsyncLicenses(object):
 
         return await self._session.post(metadata, resource, payload)
 
-    def moveOrganizationLicensesSeats(
+    async def moveOrganizationLicensesSeats(
         self,
         organizationId: str,
         destOrganizationId: str,
@@ -137,7 +137,7 @@ class AsyncLicenses(object):
 
         return await self._session.post(metadata, resource, payload)
 
-    def renewOrganizationLicensesSeats(
+    async def renewOrganizationLicensesSeats(
         self, organizationId: str, licenseIdToRenew: str, unusedLicenseId: str
     ):
         """
@@ -179,7 +179,9 @@ class AsyncLicenses(object):
 
         return await self._session.get(metadata, resource)
 
-    async def updateOrganizationLicense(self, organizationId: str, licenseId: str, **kwargs):
+    async def updateOrganizationLicense(
+        self, organizationId: str, licenseId: str, **kwargs
+    ):
         """
         **Update a license**
         https://api.meraki.com/api_docs#update-a-license

@@ -2,7 +2,7 @@ class MX1ManyNATRules(object):
     def __init__(self, session):
         super(MX1ManyNATRules, self).__init__()
         self._session = session
-    
+
     def getNetworkOneToManyNatRules(self, networkId: str):
         """
         **Return the 1:Many NAT mapping rules for an MX network**
@@ -12,10 +12,10 @@ class MX1ManyNATRules(object):
         """
 
         metadata = {
-            'tags': ['MX 1:Many NAT rules'],
-            'operation': 'getNetworkOneToManyNatRules',
+            "tags": ["MX 1:Many NAT rules"],
+            "operation": "getNetworkOneToManyNatRules",
         }
-        resource = f'/networks/{networkId}/oneToManyNatRules'
+        resource = f"/networks/{networkId}/oneToManyNatRules"
 
         return self._session.get(metadata, resource)
 
@@ -31,13 +31,12 @@ class MX1ManyNATRules(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['MX 1:Many NAT rules'],
-            'operation': 'updateNetworkOneToManyNatRules',
+            "tags": ["MX 1:Many NAT rules"],
+            "operation": "updateNetworkOneToManyNatRules",
         }
-        resource = f'/networks/{networkId}/oneToManyNatRules'
+        resource = f"/networks/{networkId}/oneToManyNatRules"
 
-        body_params = ['rules']
+        body_params = ["rules"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
-

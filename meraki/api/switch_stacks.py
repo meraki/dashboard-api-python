@@ -2,7 +2,7 @@ class SwitchStacks(object):
     def __init__(self, session):
         super(SwitchStacks, self).__init__()
         self._session = session
-    
+
     def getNetworkSwitchStacks(self, networkId: str):
         """
         **List the switch stacks in a network**
@@ -12,10 +12,10 @@ class SwitchStacks(object):
         """
 
         metadata = {
-            'tags': ['Switch stacks'],
-            'operation': 'getNetworkSwitchStacks',
+            "tags": ["Switch stacks"],
+            "operation": "getNetworkSwitchStacks",
         }
-        resource = f'/networks/{networkId}/switchStacks'
+        resource = f"/networks/{networkId}/switchStacks"
 
         return self._session.get(metadata, resource)
 
@@ -32,12 +32,12 @@ class SwitchStacks(object):
         kwargs = locals()
 
         metadata = {
-            'tags': ['Switch stacks'],
-            'operation': 'createNetworkSwitchStack',
+            "tags": ["Switch stacks"],
+            "operation": "createNetworkSwitchStack",
         }
-        resource = f'/networks/{networkId}/switchStacks'
+        resource = f"/networks/{networkId}/switchStacks"
 
-        body_params = ['name', 'serials']
+        body_params = ["name", "serials"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -52,10 +52,10 @@ class SwitchStacks(object):
         """
 
         metadata = {
-            'tags': ['Switch stacks'],
-            'operation': 'getNetworkSwitchStack',
+            "tags": ["Switch stacks"],
+            "operation": "getNetworkSwitchStack",
         }
-        resource = f'/networks/{networkId}/switchStacks/{switchStackId}'
+        resource = f"/networks/{networkId}/switchStacks/{switchStackId}"
 
         return self._session.get(metadata, resource)
 
@@ -69,10 +69,10 @@ class SwitchStacks(object):
         """
 
         metadata = {
-            'tags': ['Switch stacks'],
-            'operation': 'deleteNetworkSwitchStack',
+            "tags": ["Switch stacks"],
+            "operation": "deleteNetworkSwitchStack",
         }
-        resource = f'/networks/{networkId}/switchStacks/{switchStackId}'
+        resource = f"/networks/{networkId}/switchStacks/{switchStackId}"
 
         return self._session.delete(metadata, resource)
 
@@ -89,12 +89,12 @@ class SwitchStacks(object):
         kwargs = locals()
 
         metadata = {
-            'tags': ['Switch stacks'],
-            'operation': 'addNetworkSwitchStack',
+            "tags": ["Switch stacks"],
+            "operation": "addNetworkSwitchStack",
         }
-        resource = f'/networks/{networkId}/switchStacks/{switchStackId}/add'
+        resource = f"/networks/{networkId}/switchStacks/{switchStackId}/add"
 
-        body_params = ['serial']
+        body_params = ["serial"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -112,13 +112,12 @@ class SwitchStacks(object):
         kwargs = locals()
 
         metadata = {
-            'tags': ['Switch stacks'],
-            'operation': 'removeNetworkSwitchStack',
+            "tags": ["Switch stacks"],
+            "operation": "removeNetworkSwitchStack",
         }
-        resource = f'/networks/{networkId}/switchStacks/{switchStackId}/remove'
+        resource = f"/networks/{networkId}/switchStacks/{switchStackId}/remove"
 
-        body_params = ['serial']
+        body_params = ["serial"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.post(metadata, resource, payload)
-

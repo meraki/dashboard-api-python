@@ -2,7 +2,7 @@ class AlertSettings(object):
     def __init__(self, session):
         super(AlertSettings, self).__init__()
         self._session = session
-    
+
     def getNetworkAlertSettings(self, networkId: str):
         """
         **Return the alert configuration for this network**
@@ -12,10 +12,10 @@ class AlertSettings(object):
         """
 
         metadata = {
-            'tags': ['Alert settings'],
-            'operation': 'getNetworkAlertSettings',
+            "tags": ["Alert settings"],
+            "operation": "getNetworkAlertSettings",
         }
-        resource = f'/networks/{networkId}/alertSettings'
+        resource = f"/networks/{networkId}/alertSettings"
 
         return self._session.get(metadata, resource)
 
@@ -32,13 +32,12 @@ class AlertSettings(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['Alert settings'],
-            'operation': 'updateNetworkAlertSettings',
+            "tags": ["Alert settings"],
+            "operation": "updateNetworkAlertSettings",
         }
-        resource = f'/networks/{networkId}/alertSettings'
+        resource = f"/networks/{networkId}/alertSettings"
 
-        body_params = ['defaultDestinations', 'alerts']
+        body_params = ["defaultDestinations", "alerts"]
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
-

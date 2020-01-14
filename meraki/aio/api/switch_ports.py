@@ -1,6 +1,6 @@
 class AsyncSwitchPorts(object):
     def __init__(self, session):
-        super(SwitchPorts, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getDeviceSwitchPortStatuses(self, serial: str, **kwargs):

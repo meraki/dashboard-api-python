@@ -1,6 +1,6 @@
 class AsyncMVSense(object):
     def __init__(self, session):
-        super(MVSense, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getDeviceCameraAnalyticsLive(self, serial: str):
@@ -94,7 +94,9 @@ class AsyncMVSense(object):
 
         return await self._session.get(metadata, resource)
 
-    async def getDeviceCameraAnalyticsZoneHistory(self, serial: str, zoneId: str, **kwargs):
+    async def getDeviceCameraAnalyticsZoneHistory(
+        self, serial: str, zoneId: str, **kwargs
+    ):
         """
         **Return historical records for analytic zones**
         https://api.meraki.com/api_docs#return-historical-records-for-analytic-zones

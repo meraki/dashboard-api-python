@@ -1,6 +1,6 @@
 class AsyncConnectivityMonitoringDestinations(object):
     def __init__(self, session):
-        super(ConnectivityMonitoringDestinations, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkConnectivityMonitoringDestinations(self, networkId: str):
@@ -19,7 +19,9 @@ class AsyncConnectivityMonitoringDestinations(object):
 
         return await self._session.get(metadata, resource)
 
-    async def updateNetworkConnectivityMonitoringDestinations(self, networkId: str, **kwargs):
+    async def updateNetworkConnectivityMonitoringDestinations(
+        self, networkId: str, **kwargs
+    ):
         """
         **Update the connectivity testing destinations for an MX network**
         https://api.meraki.com/api_docs#update-the-connectivity-testing-destinations-for-an-mx-network

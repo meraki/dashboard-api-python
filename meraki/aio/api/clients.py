@@ -1,6 +1,6 @@
 class AsyncClients(object):
     def __init__(self, session):
-        super(Clients, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getDeviceClients(self, serial: str, **kwargs):
@@ -58,7 +58,7 @@ class AsyncClients(object):
             metadata, resource, params, total_pages, direction
         )
 
-    def provisionNetworkClients(self, networkId: str, **kwargs):
+    async def provisionNetworkClients(self, networkId: str, **kwargs):
         """
         **Provisions a client with a name and policy. Clients can be provisioned before they associate to the network.**
         https://api.meraki.com/api_docs#provisions-a-client-with-a-name-and-policy
@@ -131,7 +131,9 @@ class AsyncClients(object):
             metadata, resource, params, total_pages, direction
         )
 
-    async def getNetworkClientLatencyHistory(self, networkId: str, clientId: str, **kwargs):
+    async def getNetworkClientLatencyHistory(
+        self, networkId: str, clientId: str, **kwargs
+    ):
         """
         **Return the latency history for a client. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP. The latency data is from a sample of 2% of packets and is grouped into 4 traffic categories: background, best effort, video, voice. Within these categories the sampled packet counters are bucketed by latency in milliseconds.**
         https://api.meraki.com/api_docs#return-the-latency-history-for-a-client
@@ -198,7 +200,9 @@ class AsyncClients(object):
 
         return await self._session.put(metadata, resource, payload)
 
-    async def getNetworkClientSplashAuthorizationStatus(self, networkId: str, clientId: str):
+    async def getNetworkClientSplashAuthorizationStatus(
+        self, networkId: str, clientId: str
+    ):
         """
         **Return the splash authorization for a client, for each SSID they've associated with through splash. Only enabled SSIDs with Click-through splash enabled will be included. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
         https://api.meraki.com/api_docs#return-the-splash-authorization-for-a-client-for-each-ssid-theyve-associated-with-through-splash

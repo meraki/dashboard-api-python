@@ -1,6 +1,6 @@
 class AsyncTrafficAnalysisSettings(object):
     def __init__(self, session):
-        super(TrafficAnalysisSettings, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkTrafficAnalysisSettings(self, networkId: str):

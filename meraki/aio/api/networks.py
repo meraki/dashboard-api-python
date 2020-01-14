@@ -1,6 +1,6 @@
 class AsyncNetworks(object):
     def __init__(self, session):
-        super(Networks, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetwork(self, networkId: str):
@@ -108,7 +108,7 @@ class AsyncNetworks(object):
 
         return await self._session.get(metadata, resource, params)
 
-    def bindNetwork(self, networkId: str, configTemplateId: str, **kwargs):
+    async def bindNetwork(self, networkId: str, configTemplateId: str, **kwargs):
         """
         **Bind a network to a template.**
         https://api.meraki.com/api_docs#bind-a-network-to-a-template
@@ -233,7 +233,7 @@ class AsyncNetworks(object):
 
         return await self._session.put(metadata, resource, payload)
 
-    def splitNetwork(self, networkId: str):
+    async def splitNetwork(self, networkId: str):
         """
         **Split a combined network into individual networks for each type of device**
         https://api.meraki.com/api_docs#split-a-combined-network-into-individual-networks-for-each-type-of-device
@@ -277,7 +277,7 @@ class AsyncNetworks(object):
 
         return await self._session.get(metadata, resource, params)
 
-    def unbindNetwork(self, networkId: str):
+    async def unbindNetwork(self, networkId: str):
         """
         **Unbind a network from a template.**
         https://api.meraki.com/api_docs#unbind-a-network-from-a-template
@@ -353,7 +353,7 @@ class AsyncNetworks(object):
 
         return await self._session.post(metadata, resource, payload)
 
-    def combineOrganizationNetworks(
+    async def combineOrganizationNetworks(
         self, organizationId: str, name: str, networkIds: list, **kwargs
     ):
         """

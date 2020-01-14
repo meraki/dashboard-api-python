@@ -12,7 +12,9 @@ from .api.camera_quality_retention_profiles import AsyncCameraQualityRetentionPr
 from .api.cameras import AsyncCameras
 from .api.clients import AsyncClients
 from .api.config_templates import AsyncConfigTemplates
-from .api.connectivity_monitoring_destinations import AsyncConnectivityMonitoringDestinations
+from .api.connectivity_monitoring_destinations import (
+    AsyncConnectivityMonitoringDestinations,
+)
 from .api.content_filtering_categories import AsyncContentFilteringCategories
 from .api.content_filtering_rules import AsyncContentFilteringRules
 from .api.dashboard_branding_policies import AsyncDashboardBrandingPolicies
@@ -28,7 +30,7 @@ from .api.link_aggregations import AsyncLinkAggregations
 from .api.mg_dhcp_settings import AsyncMGDHCPSettings
 from .api.mg_lan_settings import AsyncMGLANSettings
 from .api.mg_connectivity_monitoring_destinations import (
-    MGConnectivityMonitoringDestinations,
+    AsyncMGConnectivityMonitoringDestinations,
 )
 from .api.mg_port_forwarding_rules import AsyncMGPortForwardingRules
 from .api.mg_subnet_pool_settings import AsyncMGSubnetPoolSettings
@@ -79,7 +81,7 @@ from .api.webhook_logs import AsyncWebhookLogs
 from .api.wireless_health import AsyncWirelessHealth
 from .api.wireless_settings import AsyncWirelessSettings
 
-from .config import (
+from meraki.config import (
     API_KEY_ENVIRONMENT_VARIABLE,
     DEFAULT_BASE_URL,
     SINGLE_REQUEST_TIMEOUT,
@@ -166,16 +168,18 @@ class AsyncDashboardAPI(object):
         self.admins = AsyncAdmins(self._session)
         self.alert_settings = AsyncAlertSettings(self._session)
         self.bluetooth_clients = AsyncBluetoothClients(self._session)
-        self.camera_quality_retention_profiles = CameraQualityRetentionProfiles(
+        self.camera_quality_retention_profiles = AsyncCameraQualityRetentionProfiles(
             self._session
         )
         self.cameras = AsyncCameras(self._session)
         self.clients = AsyncClients(self._session)
         self.config_templates = AsyncConfigTemplates(self._session)
-        self.connectivity_monitoring_destinations = ConnectivityMonitoringDestinations(
+        self.connectivity_monitoring_destinations = AsyncConnectivityMonitoringDestinations(
             self._session
         )
-        self.content_filtering_categories = AsyncContentFilteringCategories(self._session)
+        self.content_filtering_categories = AsyncContentFilteringCategories(
+            self._session
+        )
         self.content_filtering_rules = AsyncContentFilteringRules(self._session)
         self.dashboard_branding_policies = AsyncDashboardBrandingPolicies(self._session)
         self.devices = AsyncDevices(self._session)
@@ -189,7 +193,7 @@ class AsyncDashboardAPI(object):
         self.link_aggregations = AsyncLinkAggregations(self._session)
         self.mg_dhcp_settings = AsyncMGDHCPSettings(self._session)
         self.mg_lan_settings = AsyncMGLANSettings(self._session)
-        self.mg_connectivity_monitoring_destinations = MGConnectivityMonitoringDestinations(
+        self.mg_connectivity_monitoring_destinations = AsyncMGConnectivityMonitoringDestinations(
             self._session
         )
         self.mg_port_forwarding_rules = AsyncMGPortForwardingRules(self._session)
@@ -200,7 +204,9 @@ class AsyncDashboardAPI(object):
         self.mx_1_1_nat_rules = AsyncMX11NATRules(self._session)
         self.mx_1_many_nat_rules = AsyncMX1ManyNATRules(self._session)
         self.mx_l3_firewall = AsyncMXL3Firewall(self._session)
-        self.mx_l7_application_categories = AsyncMXL7ApplicationCategories(self._session)
+        self.mx_l7_application_categories = AsyncMXL7ApplicationCategories(
+            self._session
+        )
         self.mx_l7_firewall = AsyncMXL7Firewall(self._session)
         self.mx_vlan_ports = AsyncMXVLANPorts(self._session)
         self.mx_vpn_firewall = AsyncMXVPNFirewall(self._session)
@@ -210,7 +216,9 @@ class AsyncDashboardAPI(object):
         self.mx_static_routes = AsyncMXStaticRoutes(self._session)
         self.mx_warm_spare_settings = AsyncMXWarmSpareSettings(self._session)
         self.malware_settings = AsyncMalwareSettings(self._session)
-        self.management_interface_settings = AsyncManagementInterfaceSettings(self._session)
+        self.management_interface_settings = AsyncManagementInterfaceSettings(
+            self._session
+        )
         self.meraki_auth_users = AsyncMerakiAuthUsers(self._session)
         self.named_tag_scope = AsyncNamedTagScope(self._session)
         self.netflow_settings = AsyncNetFlowSettings(self._session)
@@ -240,7 +248,7 @@ class AsyncDashboardAPI(object):
         self.webhook_logs = AsyncWebhookLogs(self._session)
         self.wireless_health = AsyncWirelessHealth(self._session)
         self.wireless_settings = AsyncWirelessSettings(self._session)
-        
+
     async def __aenter__(self):
         return self
 

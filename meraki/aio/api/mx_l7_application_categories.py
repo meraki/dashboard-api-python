@@ -1,6 +1,6 @@
 class AsyncMXL7ApplicationCategories(object):
     def __init__(self, session):
-        super(MXL7ApplicationCategories, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkL7FirewallRulesApplicationCategories(self, networkId: str):

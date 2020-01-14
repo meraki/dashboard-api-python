@@ -1,6 +1,6 @@
 class AsyncFirewalledServices(object):
     def __init__(self, session):
-        super(FirewalledServices, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkFirewalledServices(self, networkId: str):

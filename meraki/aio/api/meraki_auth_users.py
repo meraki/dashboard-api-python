@@ -1,6 +1,6 @@
 class AsyncMerakiAuthUsers(object):
     def __init__(self, session):
-        super(MerakiAuthUsers, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkMerakiAuthUsers(self, networkId: str):

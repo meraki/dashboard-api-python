@@ -1,6 +1,6 @@
 class AsyncMXStaticRoutes(object):
     def __init__(self, session):
-        super(MXStaticRoutes, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkStaticRoutes(self, networkId: str):

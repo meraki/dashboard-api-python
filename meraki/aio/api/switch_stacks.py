@@ -1,6 +1,6 @@
 class AsyncSwitchStacks(object):
     def __init__(self, session):
-        super(SwitchStacks, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkSwitchStacks(self, networkId: str):
@@ -76,7 +76,9 @@ class AsyncSwitchStacks(object):
 
         return await self._session.delete(metadata, resource)
 
-    def addNetworkSwitchStack(self, networkId: str, switchStackId: str, serial: str):
+    async def addNetworkSwitchStack(
+        self, networkId: str, switchStackId: str, serial: str
+    ):
         """
         **Add a switch to a stack**
         https://api.meraki.com/api_docs#add-a-switch-to-a-stack
@@ -99,7 +101,9 @@ class AsyncSwitchStacks(object):
 
         return await self._session.post(metadata, resource, payload)
 
-    def removeNetworkSwitchStack(self, networkId: str, switchStackId: str, serial: str):
+    async def removeNetworkSwitchStack(
+        self, networkId: str, switchStackId: str, serial: str
+    ):
         """
         **Remove a switch from a stack**
         https://api.meraki.com/api_docs#remove-a-switch-from-a-stack

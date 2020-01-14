@@ -1,6 +1,6 @@
 class AsyncAPIUsage(object):
     def __init__(self, session):
-        super(APIUsage, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getOrganizationApiRequests(

@@ -1,6 +1,6 @@
 class AsyncLinkAggregations(object):
     def __init__(self, session):
-        super(LinkAggregations, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkSwitchLinkAggregations(self, networkId: str):

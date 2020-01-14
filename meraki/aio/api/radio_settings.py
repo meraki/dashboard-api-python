@@ -1,6 +1,6 @@
 class AsyncRadioSettings(object):
     def __init__(self, session):
-        super(RadioSettings, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkDeviceWirelessRadioSettings(self, networkId: str, serial: str):

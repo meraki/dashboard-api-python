@@ -28,7 +28,9 @@ from .api.licenses import Licenses
 from .api.link_aggregations import LinkAggregations
 from .api.mg_dhcp_settings import MGDHCPSettings
 from .api.mg_lan_settings import MGLANSettings
-from .api.mg_connectivity_monitoring_destinations import MGConnectivityMonitoringDestinations
+from .api.mg_connectivity_monitoring_destinations import (
+    MGConnectivityMonitoringDestinations,
+)
 from .api.mg_port_forwarding_rules import MGPortForwardingRules
 from .api.mg_subnet_pool_settings import MGSubnetPoolSettings
 from .api.mg_uplink_settings import MGUplinkSettings
@@ -78,8 +80,16 @@ from .api.webhook_logs import WebhookLogs
 from .api.wireless_health import WirelessHealth
 from .api.wireless_settings import WirelessSettings
 from .config import (
-    API_KEY_ENVIRONMENT_VARIABLE, DEFAULT_BASE_URL, SINGLE_REQUEST_TIMEOUT, CERTIFICATE_PATH, WAIT_ON_RATE_LIMIT,
-    MAXIMUM_RETRIES, OUTPUT_LOG, LOG_FILE_PREFIX, PRINT_TO_CONSOLE, SIMULATE_API_CALLS
+    API_KEY_ENVIRONMENT_VARIABLE,
+    DEFAULT_BASE_URL,
+    SINGLE_REQUEST_TIMEOUT,
+    CERTIFICATE_PATH,
+    WAIT_ON_RATE_LIMIT,
+    MAXIMUM_RETRIES,
+    OUTPUT_LOG,
+    LOG_FILE_PREFIX,
+    PRINT_TO_CONSOLE,
+    SIMULATE_API_CALLS,
 )
 
 
@@ -99,10 +109,19 @@ class DashboardAPI(object):
     - simulate (boolean): simulate POST/PUT/DELETE calls to prevent changes?
     """
 
-    def __init__(self, api_key=None, base_url=DEFAULT_BASE_URL, single_request_timeout=SINGLE_REQUEST_TIMEOUT,
-                 certificate_path=CERTIFICATE_PATH, wait_on_rate_limit=WAIT_ON_RATE_LIMIT,
-                 maximum_retries=MAXIMUM_RETRIES, output_log=OUTPUT_LOG, log_file_prefix=LOG_FILE_PREFIX,
-                 print_console=PRINT_TO_CONSOLE, simulate=SIMULATE_API_CALLS):
+    def __init__(
+        self,
+        api_key=None,
+        base_url=DEFAULT_BASE_URL,
+        single_request_timeout=SINGLE_REQUEST_TIMEOUT,
+        certificate_path=CERTIFICATE_PATH,
+        wait_on_rate_limit=WAIT_ON_RATE_LIMIT,
+        maximum_retries=MAXIMUM_RETRIES,
+        output_log=OUTPUT_LOG,
+        log_file_prefix=LOG_FILE_PREFIX,
+        print_console=PRINT_TO_CONSOLE,
+        simulate=SIMULATE_API_CALLS,
+    ):
         # Check API key
         api_key = api_key or os.environ.get(API_KEY_ENVIRONMENT_VARIABLE)
         if not api_key:
@@ -110,20 +129,25 @@ class DashboardAPI(object):
 
         # Configure logging
         self._logger = logging.getLogger(__name__)
-        self._log_file = f'{log_file_prefix}_log__{datetime.now():%Y-%m-%d_%H-%M-%S}.log'
+        self._log_file = (
+            f"{log_file_prefix}_log__{datetime.now():%Y-%m-%d_%H-%M-%S}.log"
+        )
         if output_log:
             logging.basicConfig(
                 filename=self._log_file,
                 level=logging.DEBUG,
-                format='%(asctime)s %(name)12s: %(levelname)8s > %(message)s',
-                datefmt='%Y-%m-%d %H:%M:%S')
+                format="%(asctime)s %(name)12s: %(levelname)8s > %(message)s",
+                datefmt="%Y-%m-%d %H:%M:%S",
+            )
 
             if print_console:
                 console = logging.StreamHandler()
                 console.setLevel(logging.INFO)
-                formatter = logging.Formatter('%(name)12s: %(levelname)8s > %(message)s')
+                formatter = logging.Formatter(
+                    "%(name)12s: %(levelname)8s > %(message)s"
+                )
                 console.setFormatter(formatter)
-                logging.getLogger('').addHandler(console)
+                logging.getLogger("").addHandler(console)
 
         # Creates the API session
         self._session = RestSession(
@@ -143,11 +167,15 @@ class DashboardAPI(object):
         self.admins = Admins(self._session)
         self.alert_settings = AlertSettings(self._session)
         self.bluetooth_clients = BluetoothClients(self._session)
-        self.camera_quality_retention_profiles = CameraQualityRetentionProfiles(self._session)
+        self.camera_quality_retention_profiles = CameraQualityRetentionProfiles(
+            self._session
+        )
         self.cameras = Cameras(self._session)
         self.clients = Clients(self._session)
         self.config_templates = ConfigTemplates(self._session)
-        self.connectivity_monitoring_destinations = ConnectivityMonitoringDestinations(self._session)
+        self.connectivity_monitoring_destinations = ConnectivityMonitoringDestinations(
+            self._session
+        )
         self.content_filtering_categories = ContentFilteringCategories(self._session)
         self.content_filtering_rules = ContentFilteringRules(self._session)
         self.dashboard_branding_policies = DashboardBrandingPolicies(self._session)
@@ -162,7 +190,9 @@ class DashboardAPI(object):
         self.link_aggregations = LinkAggregations(self._session)
         self.mg_dhcp_settings = MGDHCPSettings(self._session)
         self.mg_lan_settings = MGLANSettings(self._session)
-        self.mg_connectivity_monitoring_destinations = MGConnectivityMonitoringDestinations(self._session)
+        self.mg_connectivity_monitoring_destinations = MGConnectivityMonitoringDestinations(
+            self._session
+        )
         self.mg_port_forwarding_rules = MGPortForwardingRules(self._session)
         self.mg_subnet_pool_settings = MGSubnetPoolSettings(self._session)
         self.mg_uplink_settings = MGUplinkSettings(self._session)

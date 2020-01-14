@@ -1,6 +1,6 @@
 class AsyncOrganizations(object):
     def __init__(self, session):
-        super(Organizations, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getOrganizations(self):
@@ -93,7 +93,7 @@ class AsyncOrganizations(object):
 
         return await self._session.delete(metadata, resource)
 
-    def claimOrganization(self, organizationId: str, **kwargs):
+    async def claimOrganization(self, organizationId: str, **kwargs):
         """
         **Claim a list of devices, licenses, and/or orders into an organization. When claiming by order, all devices and licenses in the order will be claimed; licenses will be added to the organization and devices will be placed in the organization's inventory.**
         https://api.meraki.com/api_docs#claim-a-list-of-devices-licenses-and/or-orders-into-an-organization
@@ -117,7 +117,7 @@ class AsyncOrganizations(object):
 
         return await self._session.post(metadata, resource, payload)
 
-    def cloneOrganization(self, organizationId: str, name: str):
+    async def cloneOrganization(self, organizationId: str, name: str):
         """
         **Create a new organization by cloning the addressed organization**
         https://api.meraki.com/api_docs#create-a-new-organization-by-cloning-the-addressed-organization
@@ -209,7 +209,9 @@ class AsyncOrganizations(object):
 
         return await self._session.get(metadata, resource)
 
-    async def updateOrganizationThirdPartyVPNPeers(self, organizationId: str, peers: list):
+    async def updateOrganizationThirdPartyVPNPeers(
+        self, organizationId: str, peers: list
+    ):
         """
         **Update the third party VPN peers for an organization**
         https://api.meraki.com/api_docs#update-the-third-party-vpn-peers-for-an-organization

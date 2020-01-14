@@ -1,6 +1,6 @@
 class AsyncSAMLRoles(object):
     def __init__(self, session):
-        super(SAMLRoles, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getOrganizationSamlRoles(self, organizationId: str):

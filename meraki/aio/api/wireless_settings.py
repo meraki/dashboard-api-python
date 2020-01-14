@@ -1,6 +1,6 @@
 class AsyncWirelessSettings(object):
     def __init__(self, session):
-        super(WirelessSettings, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkWirelessSettings(self, networkId: str):

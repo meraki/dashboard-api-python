@@ -1,6 +1,6 @@
 class AsyncSplashLoginAttempts(object):
     def __init__(self, session):
-        super(SplashLoginAttempts, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkSplashLoginAttempts(self, networkId: str, **kwargs):

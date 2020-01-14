@@ -1,6 +1,6 @@
 class AsyncSyslogServers(object):
     def __init__(self, session):
-        super(SyslogServers, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkSyslogServers(self, networkId: str):

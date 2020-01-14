@@ -1,6 +1,6 @@
 class AsyncActionBatches(object):
     def __init__(self, session):
-        super(ActionBatches, self).__init__()
+        super().__init__()
         self._session = session
 
     async def createOrganizationActionBatch(
@@ -62,7 +62,9 @@ class AsyncActionBatches(object):
 
         return await self._session.get(metadata, resource)
 
-    async def deleteOrganizationActionBatch(self, organizationId: str, actionBatchId: str):
+    async def deleteOrganizationActionBatch(
+        self, organizationId: str, actionBatchId: str
+    ):
         """
         **Delete an action batch**
         https://api.meraki.com/api_docs#delete-an-action-batch

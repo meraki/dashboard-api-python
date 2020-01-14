@@ -1,6 +1,6 @@
 class AsyncMXVLANPorts(object):
     def __init__(self, session):
-        super(MXVLANPorts, self).__init__()
+        super().__init__()
         self._session = session
 
     async def getNetworkAppliancePorts(self, networkId: str):
