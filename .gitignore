@@ -2,3 +2,17 @@
 # No PyCharm config files
 .idea/
 venv/
+
+# dotenv
+.env
+
+# virtualenv
+venv/
+ENV/
+
+__pycache__/
+*.py[cod]
+*$py.class
+/.pytest_cache
+/.vs
+/Backup
