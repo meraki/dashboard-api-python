@@ -45,7 +45,7 @@ async def listNetworkClients(aiomeraki:meraki.aio.AsyncDashboardAPI, folder_name
                 f"Successfully output {len(clients)} clients' data to file {file_name}"
             )
             return network["name"], field_names
-    return net["name"], None
+    return network["name"], None
 
 async def listOrganization(aiomeraki:meraki.aio.AsyncDashboardAPI, org):
     print(f'Analyzing organization {org["name"]}:')
