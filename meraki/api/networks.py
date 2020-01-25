@@ -2,7 +2,7 @@ class Networks(object):
     def __init__(self, session):
         super(Networks, self).__init__()
         self._session = session
-
+    
     def getNetwork(self, networkId: str):
         """
         **Return a network**
@@ -12,10 +12,10 @@ class Networks(object):
         """
 
         metadata = {
-            "tags": ["Networks"],
-            "operation": "getNetwork",
+            'tags': ['Networks'],
+            'operation': 'getNetwork',
         }
-        resource = f"/networks/{networkId}"
+        resource = f'/networks/{networkId}'
 
         return self._session.get(metadata, resource)
 
@@ -36,19 +36,12 @@ class Networks(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Networks"],
-            "operation": "updateNetwork",
+            'tags': ['Networks'],
+            'operation': 'updateNetwork',
         }
-        resource = f"/networks/{networkId}"
+        resource = f'/networks/{networkId}'
 
-        body_params = [
-            "name",
-            "timeZone",
-            "tags",
-            "disableMyMerakiCom",
-            "disableRemoteStatusPage",
-            "enrollmentString",
-        ]
+        body_params = ['name', 'timeZone', 'tags', 'disableMyMerakiCom', 'disableRemoteStatusPage', 'enrollmentString']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -62,10 +55,10 @@ class Networks(object):
         """
 
         metadata = {
-            "tags": ["Networks"],
-            "operation": "deleteNetwork",
+            'tags': ['Networks'],
+            'operation': 'deleteNetwork',
         }
-        resource = f"/networks/{networkId}"
+        resource = f'/networks/{networkId}'
 
         return self._session.delete(metadata, resource)
 
@@ -78,10 +71,10 @@ class Networks(object):
         """
 
         metadata = {
-            "tags": ["Networks"],
-            "operation": "getNetworkAccessPolicies",
+            'tags': ['Networks'],
+            'operation': 'getNetworkAccessPolicies',
         }
-        resource = f"/networks/{networkId}/accessPolicies"
+        resource = f'/networks/{networkId}/accessPolicies'
 
         return self._session.get(metadata, resource)
 
@@ -98,12 +91,12 @@ class Networks(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Networks"],
-            "operation": "getNetworkAirMarshal",
+            'tags': ['Networks'],
+            'operation': 'getNetworkAirMarshal',
         }
-        resource = f"/networks/{networkId}/airMarshal"
+        resource = f'/networks/{networkId}/airMarshal'
 
-        query_params = ["t0", "timespan"]
+        query_params = ['t0', 'timespan']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -121,12 +114,12 @@ class Networks(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Networks"],
-            "operation": "bindNetwork",
+            'tags': ['Networks'],
+            'operation': 'bindNetwork',
         }
-        resource = f"/networks/{networkId}/bind"
+        resource = f'/networks/{networkId}/bind'
 
-        body_params = ["configTemplateId", "autoBind"]
+        body_params = ['configTemplateId', 'autoBind']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -140,10 +133,10 @@ class Networks(object):
         """
 
         metadata = {
-            "tags": ["Networks"],
-            "operation": "getNetworkBluetoothSettings",
+            'tags': ['Networks'],
+            'operation': 'getNetworkBluetoothSettings',
         }
-        resource = f"/networks/{networkId}/bluetoothSettings"
+        resource = f'/networks/{networkId}/bluetoothSettings'
 
         return self._session.get(metadata, resource)
 
@@ -163,26 +156,17 @@ class Networks(object):
 
         kwargs.update(locals())
 
-        if "majorMinorAssignmentMode" in kwargs:
-            options = ["Unique", "Non-unique"]
-            assert (
-                kwargs["majorMinorAssignmentMode"] in options
-            ), f""""majorMinorAssignmentMode" cannot be "{kwargs['majorMinorAssignmentMode']}", & must be set to one of: {options}"""
+        if 'majorMinorAssignmentMode' in kwargs:
+            options = ['Unique', 'Non-unique']
+            assert kwargs['majorMinorAssignmentMode'] in options, f'''"majorMinorAssignmentMode" cannot be "{kwargs['majorMinorAssignmentMode']}", & must be set to one of: {options}'''
 
         metadata = {
-            "tags": ["Networks"],
-            "operation": "updateNetworkBluetoothSettings",
+            'tags': ['Networks'],
+            'operation': 'updateNetworkBluetoothSettings',
         }
-        resource = f"/networks/{networkId}/bluetoothSettings"
+        resource = f'/networks/{networkId}/bluetoothSettings'
 
-        body_params = [
-            "scanningEnabled",
-            "advertisingEnabled",
-            "uuid",
-            "majorMinorAssignmentMode",
-            "major",
-            "minor",
-        ]
+        body_params = ['scanningEnabled', 'advertisingEnabled', 'uuid', 'majorMinorAssignmentMode', 'major', 'minor']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -196,10 +180,10 @@ class Networks(object):
         """
 
         metadata = {
-            "tags": ["Networks"],
-            "operation": "getNetworkSiteToSiteVpn",
+            'tags': ['Networks'],
+            'operation': 'getNetworkSiteToSiteVpn',
         }
-        resource = f"/networks/{networkId}/siteToSiteVpn"
+        resource = f'/networks/{networkId}/siteToSiteVpn'
 
         return self._session.get(metadata, resource)
 
@@ -216,19 +200,17 @@ class Networks(object):
 
         kwargs.update(locals())
 
-        if "mode" in kwargs:
-            options = ["none", "spoke", "hub"]
-            assert (
-                kwargs["mode"] in options
-            ), f""""mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}"""
+        if 'mode' in kwargs:
+            options = ['none', 'spoke', 'hub']
+            assert kwargs['mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
 
         metadata = {
-            "tags": ["Networks"],
-            "operation": "updateNetworkSiteToSiteVpn",
+            'tags': ['Networks'],
+            'operation': 'updateNetworkSiteToSiteVpn',
         }
-        resource = f"/networks/{networkId}/siteToSiteVpn"
+        resource = f'/networks/{networkId}/siteToSiteVpn'
 
-        body_params = ["mode", "hubs", "subnets"]
+        body_params = ['mode', 'hubs', 'subnets']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -242,10 +224,10 @@ class Networks(object):
         """
 
         metadata = {
-            "tags": ["Networks"],
-            "operation": "splitNetwork",
+            'tags': ['Networks'],
+            'operation': 'splitNetwork',
         }
-        resource = f"/networks/{networkId}/split"
+        resource = f'/networks/{networkId}/split'
 
         return self._session.post(metadata, resource)
 
@@ -267,12 +249,12 @@ class Networks(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Networks"],
-            "operation": "getNetworkTraffic",
+            'tags': ['Networks'],
+            'operation': 'getNetworkTraffic',
         }
-        resource = f"/networks/{networkId}/traffic"
+        resource = f'/networks/{networkId}/traffic'
 
-        query_params = ["t0", "timespan", "deviceType"]
+        query_params = ['t0', 'timespan', 'deviceType']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -286,10 +268,10 @@ class Networks(object):
         """
 
         metadata = {
-            "tags": ["Networks"],
-            "operation": "unbindNetwork",
+            'tags': ['Networks'],
+            'operation': 'unbindNetwork',
         }
-        resource = f"/networks/{networkId}/unbind"
+        resource = f'/networks/{networkId}/unbind'
 
         return self._session.post(metadata, resource)
 
@@ -305,19 +287,17 @@ class Networks(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Networks"],
-            "operation": "getOrganizationNetworks",
+            'tags': ['Networks'],
+            'operation': 'getOrganizationNetworks',
         }
-        resource = f"/organizations/{organizationId}/networks"
+        resource = f'/organizations/{organizationId}/networks'
 
-        query_params = ["configTemplateId"]
+        query_params = ['configTemplateId']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
 
-    def createOrganizationNetwork(
-        self, organizationId: str, name: str, type: str, **kwargs
-    ):
+    def createOrganizationNetwork(self, organizationId: str, name: str, type: str, **kwargs):
         """
         **Create a network**
         https://api.meraki.com/api_docs#create-a-network
@@ -335,27 +315,17 @@ class Networks(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Networks"],
-            "operation": "createOrganizationNetwork",
+            'tags': ['Networks'],
+            'operation': 'createOrganizationNetwork',
         }
-        resource = f"/organizations/{organizationId}/networks"
+        resource = f'/organizations/{organizationId}/networks'
 
-        body_params = [
-            "name",
-            "type",
-            "tags",
-            "timeZone",
-            "copyFromNetworkId",
-            "disableMyMerakiCom",
-            "disableRemoteStatusPage",
-        ]
+        body_params = ['name', 'type', 'tags', 'timeZone', 'copyFromNetworkId', 'disableMyMerakiCom', 'disableRemoteStatusPage']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.post(metadata, resource, payload)
 
-    def combineOrganizationNetworks(
-        self, organizationId: str, name: str, networkIds: list, **kwargs
-    ):
+    def combineOrganizationNetworks(self, organizationId: str, name: str, networkIds: list, **kwargs):
         """
         **Combine multiple networks into a single network**
         https://api.meraki.com/api_docs#combine-multiple-networks-into-a-single-network
@@ -369,12 +339,13 @@ class Networks(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Networks"],
-            "operation": "combineOrganizationNetworks",
+            'tags': ['Networks'],
+            'operation': 'combineOrganizationNetworks',
         }
-        resource = f"/organizations/{organizationId}/networks/combine"
+        resource = f'/organizations/{organizationId}/networks/combine'
 
-        body_params = ["name", "networkIds", "enrollmentString"]
+        body_params = ['name', 'networkIds', 'enrollmentString']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.post(metadata, resource, payload)
+

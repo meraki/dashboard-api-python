@@ -2,7 +2,7 @@ class MVSense(object):
     def __init__(self, session):
         super(MVSense, self).__init__()
         self._session = session
-
+    
     def getDeviceCameraAnalyticsLive(self, serial: str):
         """
         **Returns live state from camera of analytics zones**
@@ -12,10 +12,10 @@ class MVSense(object):
         """
 
         metadata = {
-            "tags": ["MV Sense"],
-            "operation": "getDeviceCameraAnalyticsLive",
+            'tags': ['MV Sense'],
+            'operation': 'getDeviceCameraAnalyticsLive',
         }
-        resource = f"/devices/{serial}/camera/analytics/live"
+        resource = f'/devices/{serial}/camera/analytics/live'
 
         return self._session.get(metadata, resource)
 
@@ -33,19 +33,17 @@ class MVSense(object):
 
         kwargs.update(locals())
 
-        if "objectType" in kwargs:
-            options = ["person", "vehicle"]
-            assert (
-                kwargs["objectType"] in options
-            ), f""""objectType" cannot be "{kwargs['objectType']}", & must be set to one of: {options}"""
+        if 'objectType' in kwargs:
+            options = ['person', 'vehicle']
+            assert kwargs['objectType'] in options, f'''"objectType" cannot be "{kwargs['objectType']}", & must be set to one of: {options}'''
 
         metadata = {
-            "tags": ["MV Sense"],
-            "operation": "getDeviceCameraAnalyticsOverview",
+            'tags': ['MV Sense'],
+            'operation': 'getDeviceCameraAnalyticsOverview',
         }
-        resource = f"/devices/{serial}/camera/analytics/overview"
+        resource = f'/devices/{serial}/camera/analytics/overview'
 
-        query_params = ["t0", "t1", "timespan", "objectType"]
+        query_params = ['t0', 't1', 'timespan', 'objectType']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -61,19 +59,17 @@ class MVSense(object):
 
         kwargs.update(locals())
 
-        if "objectType" in kwargs:
-            options = ["person", "vehicle"]
-            assert (
-                kwargs["objectType"] in options
-            ), f""""objectType" cannot be "{kwargs['objectType']}", & must be set to one of: {options}"""
+        if 'objectType' in kwargs:
+            options = ['person', 'vehicle']
+            assert kwargs['objectType'] in options, f'''"objectType" cannot be "{kwargs['objectType']}", & must be set to one of: {options}'''
 
         metadata = {
-            "tags": ["MV Sense"],
-            "operation": "getDeviceCameraAnalyticsRecent",
+            'tags': ['MV Sense'],
+            'operation': 'getDeviceCameraAnalyticsRecent',
         }
-        resource = f"/devices/{serial}/camera/analytics/recent"
+        resource = f'/devices/{serial}/camera/analytics/recent'
 
-        query_params = ["objectType"]
+        query_params = ['objectType']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -87,10 +83,10 @@ class MVSense(object):
         """
 
         metadata = {
-            "tags": ["MV Sense"],
-            "operation": "getDeviceCameraAnalyticsZones",
+            'tags': ['MV Sense'],
+            'operation': 'getDeviceCameraAnalyticsZones',
         }
-        resource = f"/devices/{serial}/camera/analytics/zones"
+        resource = f'/devices/{serial}/camera/analytics/zones'
 
         return self._session.get(metadata, resource)
 
@@ -110,19 +106,18 @@ class MVSense(object):
 
         kwargs.update(locals())
 
-        if "objectType" in kwargs:
-            options = ["person", "vehicle"]
-            assert (
-                kwargs["objectType"] in options
-            ), f""""objectType" cannot be "{kwargs['objectType']}", & must be set to one of: {options}"""
+        if 'objectType' in kwargs:
+            options = ['person', 'vehicle']
+            assert kwargs['objectType'] in options, f'''"objectType" cannot be "{kwargs['objectType']}", & must be set to one of: {options}'''
 
         metadata = {
-            "tags": ["MV Sense"],
-            "operation": "getDeviceCameraAnalyticsZoneHistory",
+            'tags': ['MV Sense'],
+            'operation': 'getDeviceCameraAnalyticsZoneHistory',
         }
-        resource = f"/devices/{serial}/camera/analytics/zones/{zoneId}/history"
+        resource = f'/devices/{serial}/camera/analytics/zones/{zoneId}/history'
 
-        query_params = ["t0", "t1", "timespan", "resolution", "objectType"]
+        query_params = ['t0', 't1', 'timespan', 'resolution', 'objectType']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
+

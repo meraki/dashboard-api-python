@@ -2,7 +2,7 @@ class MXPortForwardingRules(object):
     def __init__(self, session):
         super(MXPortForwardingRules, self).__init__()
         self._session = session
-
+    
     def getNetworkPortForwardingRules(self, networkId: str):
         """
         **Return the port forwarding rules for an MX network**
@@ -12,10 +12,10 @@ class MXPortForwardingRules(object):
         """
 
         metadata = {
-            "tags": ["MX port forwarding rules"],
-            "operation": "getNetworkPortForwardingRules",
+            'tags': ['MX port forwarding rules'],
+            'operation': 'getNetworkPortForwardingRules',
         }
-        resource = f"/networks/{networkId}/portForwardingRules"
+        resource = f'/networks/{networkId}/portForwardingRules'
 
         return self._session.get(metadata, resource)
 
@@ -31,12 +31,13 @@ class MXPortForwardingRules(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["MX port forwarding rules"],
-            "operation": "updateNetworkPortForwardingRules",
+            'tags': ['MX port forwarding rules'],
+            'operation': 'updateNetworkPortForwardingRules',
         }
-        resource = f"/networks/{networkId}/portForwardingRules"
+        resource = f'/networks/{networkId}/portForwardingRules'
 
-        body_params = ["rules"]
+        body_params = ['rules']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
+

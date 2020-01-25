@@ -2,7 +2,7 @@ class MXL3Firewall(object):
     def __init__(self, session):
         super(MXL3Firewall, self).__init__()
         self._session = session
-
+    
     def getNetworkL3FirewallRules(self, networkId: str):
         """
         **Return the L3 firewall rules for an MX network**
@@ -12,10 +12,10 @@ class MXL3Firewall(object):
         """
 
         metadata = {
-            "tags": ["MX L3 firewall"],
-            "operation": "getNetworkL3FirewallRules",
+            'tags': ['MX L3 firewall'],
+            'operation': 'getNetworkL3FirewallRules',
         }
-        resource = f"/networks/{networkId}/l3FirewallRules"
+        resource = f'/networks/{networkId}/l3FirewallRules'
 
         return self._session.get(metadata, resource)
 
@@ -32,12 +32,13 @@ class MXL3Firewall(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["MX L3 firewall"],
-            "operation": "updateNetworkL3FirewallRules",
+            'tags': ['MX L3 firewall'],
+            'operation': 'updateNetworkL3FirewallRules',
         }
-        resource = f"/networks/{networkId}/l3FirewallRules"
+        resource = f'/networks/{networkId}/l3FirewallRules'
 
-        body_params = ["rules", "syslogDefaultRule"]
+        body_params = ['rules', 'syslogDefaultRule']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
+

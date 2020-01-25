@@ -2,10 +2,8 @@ class SecurityEvents(object):
     def __init__(self, session):
         super(SecurityEvents, self).__init__()
         self._session = session
-
-    def getNetworkClientSecurityEvents(
-        self, networkId: str, clientId: str, total_pages=1, direction="next", **kwargs
-    ):
+    
+    def getNetworkClientSecurityEvents(self, networkId: str, clientId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the security events for a client. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
         https://api.meraki.com/api_docs#list-the-security-events-for-a-client
@@ -25,28 +23,18 @@ class SecurityEvents(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Security events"],
-            "operation": "getNetworkClientSecurityEvents",
+            'tags': ['Security events'],
+            'operation': 'getNetworkClientSecurityEvents',
         }
-        resource = f"/networks/{networkId}/clients/{clientId}/securityEvents"
+        resource = f'/networks/{networkId}/clients/{clientId}/securityEvents'
 
-        query_params = [
-            "t0",
-            "t1",
-            "timespan",
-            "perPage",
-            "startingAfter",
-            "endingBefore",
-        ]
+        query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get_pages(
-            metadata, resource, params, total_pages, direction
-        )
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def getNetworkSecurityEvents(
-        self, networkId: str, total_pages=1, direction="next", **kwargs
-    ):
+
+    def getNetworkSecurityEvents(self, networkId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the security events for a network**
         https://api.meraki.com/api_docs#list-the-security-events-for-a-network
@@ -65,28 +53,18 @@ class SecurityEvents(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Security events"],
-            "operation": "getNetworkSecurityEvents",
+            'tags': ['Security events'],
+            'operation': 'getNetworkSecurityEvents',
         }
-        resource = f"/networks/{networkId}/securityEvents"
+        resource = f'/networks/{networkId}/securityEvents'
 
-        query_params = [
-            "t0",
-            "t1",
-            "timespan",
-            "perPage",
-            "startingAfter",
-            "endingBefore",
-        ]
+        query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get_pages(
-            metadata, resource, params, total_pages, direction
-        )
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def getOrganizationSecurityEvents(
-        self, organizationId: str, total_pages=1, direction="next", **kwargs
-    ):
+
+    def getOrganizationSecurityEvents(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the security events for an organization**
         https://api.meraki.com/api_docs#list-the-security-events-for-an-organization
@@ -105,21 +83,14 @@ class SecurityEvents(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Security events"],
-            "operation": "getOrganizationSecurityEvents",
+            'tags': ['Security events'],
+            'operation': 'getOrganizationSecurityEvents',
         }
-        resource = f"/organizations/{organizationId}/securityEvents"
+        resource = f'/organizations/{organizationId}/securityEvents'
 
-        query_params = [
-            "t0",
-            "t1",
-            "timespan",
-            "perPage",
-            "startingAfter",
-            "endingBefore",
-        ]
+        query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get_pages(
-            metadata, resource, params, total_pages, direction
-        )
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+

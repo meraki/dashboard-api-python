@@ -2,7 +2,7 @@ class NetFlowSettings(object):
     def __init__(self, session):
         super(NetFlowSettings, self).__init__()
         self._session = session
-
+    
     def getNetworkNetflowSettings(self, networkId: str):
         """
         **Return the NetFlow traffic reporting settings for a network**
@@ -12,10 +12,10 @@ class NetFlowSettings(object):
         """
 
         metadata = {
-            "tags": ["NetFlow settings"],
-            "operation": "getNetworkNetflowSettings",
+            'tags': ['NetFlow settings'],
+            'operation': 'getNetworkNetflowSettings',
         }
-        resource = f"/networks/{networkId}/netflowSettings"
+        resource = f'/networks/{networkId}/netflowSettings'
 
         return self._session.get(metadata, resource)
 
@@ -33,12 +33,13 @@ class NetFlowSettings(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["NetFlow settings"],
-            "operation": "updateNetworkNetflowSettings",
+            'tags': ['NetFlow settings'],
+            'operation': 'updateNetworkNetflowSettings',
         }
-        resource = f"/networks/{networkId}/netflowSettings"
+        resource = f'/networks/{networkId}/netflowSettings'
 
-        body_params = ["reportingEnabled", "collectorIp", "collectorPort"]
+        body_params = ['reportingEnabled', 'collectorIp', 'collectorPort']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
+

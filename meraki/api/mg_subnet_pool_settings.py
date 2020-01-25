@@ -2,7 +2,7 @@ class MGSubnetPoolSettings(object):
     def __init__(self, session):
         super(MGSubnetPoolSettings, self).__init__()
         self._session = session
-
+    
     def getNetworkCellularGatewaySettingsSubnetPool(self, networkId: str):
         """
         **Return the subnet pool and mask configured for MGs in the network.**
@@ -12,10 +12,10 @@ class MGSubnetPoolSettings(object):
         """
 
         metadata = {
-            "tags": ["MG subnet pool settings"],
-            "operation": "getNetworkCellularGatewaySettingsSubnetPool",
+            'tags': ['MG subnet pool settings'],
+            'operation': 'getNetworkCellularGatewaySettingsSubnetPool',
         }
-        resource = f"/networks/{networkId}/cellularGateway/settings/subnetPool"
+        resource = f'/networks/{networkId}/cellularGateway/settings/subnetPool'
 
         return self._session.get(metadata, resource)
 
@@ -32,12 +32,13 @@ class MGSubnetPoolSettings(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["MG subnet pool settings"],
-            "operation": "updateNetworkCellularGatewaySettingsSubnetPool",
+            'tags': ['MG subnet pool settings'],
+            'operation': 'updateNetworkCellularGatewaySettingsSubnetPool',
         }
-        resource = f"/networks/{networkId}/cellularGateway/settings/subnetPool"
+        resource = f'/networks/{networkId}/cellularGateway/settings/subnetPool'
 
-        body_params = ["mask", "cidr"]
+        body_params = ['mask', 'cidr']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
+

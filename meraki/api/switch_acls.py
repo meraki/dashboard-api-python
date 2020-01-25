@@ -2,7 +2,7 @@ class SwitchACLs(object):
     def __init__(self, session):
         super(SwitchACLs, self).__init__()
         self._session = session
-
+    
     def getNetworkSwitchAccessControlLists(self, networkId: str):
         """
         **Return the access control lists for a MS network**
@@ -12,10 +12,10 @@ class SwitchACLs(object):
         """
 
         metadata = {
-            "tags": ["Switch ACLs"],
-            "operation": "getNetworkSwitchAccessControlLists",
+            'tags': ['Switch ACLs'],
+            'operation': 'getNetworkSwitchAccessControlLists',
         }
-        resource = f"/networks/{networkId}/switch/accessControlLists"
+        resource = f'/networks/{networkId}/switch/accessControlLists'
 
         return self._session.get(metadata, resource)
 
@@ -31,12 +31,13 @@ class SwitchACLs(object):
         kwargs = locals()
 
         metadata = {
-            "tags": ["Switch ACLs"],
-            "operation": "updateNetworkSwitchAccessControlLists",
+            'tags': ['Switch ACLs'],
+            'operation': 'updateNetworkSwitchAccessControlLists',
         }
-        resource = f"/networks/{networkId}/switch/accessControlLists"
+        resource = f'/networks/{networkId}/switch/accessControlLists'
 
-        body_params = ["rules"]
+        body_params = ['rules']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
+

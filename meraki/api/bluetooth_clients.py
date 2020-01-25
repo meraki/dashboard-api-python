@@ -2,10 +2,8 @@ class BluetoothClients(object):
     def __init__(self, session):
         super(BluetoothClients, self).__init__()
         self._session = session
-
-    def getNetworkBluetoothClients(
-        self, networkId: str, total_pages=1, direction="next", **kwargs
-    ):
+    
+    def getNetworkBluetoothClients(self, networkId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the Bluetooth clients seen by APs in this network**
         https://api.meraki.com/api_docs#list-the-bluetooth-clients-seen-by-aps-in-this-network
@@ -24,28 +22,18 @@ class BluetoothClients(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Bluetooth clients"],
-            "operation": "getNetworkBluetoothClients",
+            'tags': ['Bluetooth clients'],
+            'operation': 'getNetworkBluetoothClients',
         }
-        resource = f"/networks/{networkId}/bluetoothClients"
+        resource = f'/networks/{networkId}/bluetoothClients'
 
-        query_params = [
-            "t0",
-            "timespan",
-            "perPage",
-            "startingAfter",
-            "endingBefore",
-            "includeConnectivityHistory",
-        ]
+        query_params = ['t0', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'includeConnectivityHistory']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get_pages(
-            metadata, resource, params, total_pages, direction
-        )
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def getNetworkBluetoothClient(
-        self, networkId: str, bluetoothClientId: str, **kwargs
-    ):
+
+    def getNetworkBluetoothClient(self, networkId: str, bluetoothClientId: str, **kwargs):
         """
         **Return a Bluetooth client. Bluetooth clients can be identified by their ID or their MAC.**
         https://api.meraki.com/api_docs#return-a-bluetooth-client
@@ -59,12 +47,13 @@ class BluetoothClients(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Bluetooth clients"],
-            "operation": "getNetworkBluetoothClient",
+            'tags': ['Bluetooth clients'],
+            'operation': 'getNetworkBluetoothClient',
         }
-        resource = f"/networks/{networkId}/bluetoothClients/{bluetoothClientId}"
+        resource = f'/networks/{networkId}/bluetoothClients/{bluetoothClientId}'
 
-        query_params = ["includeConnectivityHistory", "connectivityHistoryTimespan"]
+        query_params = ['includeConnectivityHistory', 'connectivityHistoryTimespan']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
+

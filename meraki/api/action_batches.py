@@ -2,10 +2,8 @@ class ActionBatches(object):
     def __init__(self, session):
         super(ActionBatches, self).__init__()
         self._session = session
-
-    def createOrganizationActionBatch(
-        self, organizationId: str, actions: list, **kwargs
-    ):
+    
+    def createOrganizationActionBatch(self, organizationId: str, actions: list, **kwargs):
         """
         **Create an action batch**
         https://api.meraki.com/api_docs#create-an-action-batch
@@ -19,12 +17,12 @@ class ActionBatches(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Action batches"],
-            "operation": "createOrganizationActionBatch",
+            'tags': ['Action batches'],
+            'operation': 'createOrganizationActionBatch',
         }
-        resource = f"/organizations/{organizationId}/actionBatches"
+        resource = f'/organizations/{organizationId}/actionBatches'
 
-        body_params = ["confirmed", "synchronous", "actions"]
+        body_params = ['confirmed', 'synchronous', 'actions']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -38,10 +36,10 @@ class ActionBatches(object):
         """
 
         metadata = {
-            "tags": ["Action batches"],
-            "operation": "getOrganizationActionBatches",
+            'tags': ['Action batches'],
+            'operation': 'getOrganizationActionBatches',
         }
-        resource = f"/organizations/{organizationId}/actionBatches"
+        resource = f'/organizations/{organizationId}/actionBatches'
 
         return self._session.get(metadata, resource)
 
@@ -55,10 +53,10 @@ class ActionBatches(object):
         """
 
         metadata = {
-            "tags": ["Action batches"],
-            "operation": "getOrganizationActionBatch",
+            'tags': ['Action batches'],
+            'operation': 'getOrganizationActionBatch',
         }
-        resource = f"/organizations/{organizationId}/actionBatches/{actionBatchId}"
+        resource = f'/organizations/{organizationId}/actionBatches/{actionBatchId}'
 
         return self._session.get(metadata, resource)
 
@@ -72,16 +70,14 @@ class ActionBatches(object):
         """
 
         metadata = {
-            "tags": ["Action batches"],
-            "operation": "deleteOrganizationActionBatch",
+            'tags': ['Action batches'],
+            'operation': 'deleteOrganizationActionBatch',
         }
-        resource = f"/organizations/{organizationId}/actionBatches/{actionBatchId}"
+        resource = f'/organizations/{organizationId}/actionBatches/{actionBatchId}'
 
         return self._session.delete(metadata, resource)
 
-    def updateOrganizationActionBatch(
-        self, organizationId: str, actionBatchId: str, **kwargs
-    ):
+    def updateOrganizationActionBatch(self, organizationId: str, actionBatchId: str, **kwargs):
         """
         **Update an action batch**
         https://api.meraki.com/api_docs#update-an-action-batch
@@ -95,12 +91,13 @@ class ActionBatches(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Action batches"],
-            "operation": "updateOrganizationActionBatch",
+            'tags': ['Action batches'],
+            'operation': 'updateOrganizationActionBatch',
         }
-        resource = f"/organizations/{organizationId}/actionBatches/{actionBatchId}"
+        resource = f'/organizations/{organizationId}/actionBatches/{actionBatchId}'
 
-        body_params = ["confirmed", "synchronous"]
+        body_params = ['confirmed', 'synchronous']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
+

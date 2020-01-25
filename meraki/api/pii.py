@@ -2,7 +2,7 @@ class PII(object):
     def __init__(self, session):
         super(PII, self).__init__()
         self._session = session
-
+    
     def getNetworkPiiPiiKeys(self, networkId: str, **kwargs):
         """
         **List the keys required to access Personally Identifiable Information (PII) for a given identifier. Exactly one identifier will be accepted. If the organization contains org-wide Systems Manager users matching the key provided then there will be an entry with the key "0" containing the applicable keys.**
@@ -20,12 +20,12 @@ class PII(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["PII"],
-            "operation": "getNetworkPiiPiiKeys",
+            'tags': ['PII'],
+            'operation': 'getNetworkPiiPiiKeys',
         }
-        resource = f"/networks/{networkId}/pii/piiKeys"
+        resource = f'/networks/{networkId}/pii/piiKeys'
 
-        query_params = ["username", "email", "mac", "serial", "imei", "bluetoothMac"]
+        query_params = ['username', 'email', 'mac', 'serial', 'imei', 'bluetoothMac']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -39,10 +39,10 @@ class PII(object):
         """
 
         metadata = {
-            "tags": ["PII"],
-            "operation": "getNetworkPiiRequests",
+            'tags': ['PII'],
+            'operation': 'getNetworkPiiRequests',
         }
-        resource = f"/networks/{networkId}/pii/requests"
+        resource = f'/networks/{networkId}/pii/requests'
 
         return self._session.get(metadata, resource)
 
@@ -63,27 +63,17 @@ class PII(object):
 
         kwargs.update(locals())
 
-        if "type" in kwargs:
-            options = ["delete", "restrict processing"]
-            assert (
-                kwargs["type"] in options
-            ), f""""type" cannot be "{kwargs['type']}", & must be set to one of: {options}"""
+        if 'type' in kwargs:
+            options = ['delete', 'restrict processing']
+            assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
 
         metadata = {
-            "tags": ["PII"],
-            "operation": "createNetworkPiiRequest",
+            'tags': ['PII'],
+            'operation': 'createNetworkPiiRequest',
         }
-        resource = f"/networks/{networkId}/pii/requests"
+        resource = f'/networks/{networkId}/pii/requests'
 
-        body_params = [
-            "type",
-            "datasets",
-            "username",
-            "email",
-            "mac",
-            "smDeviceId",
-            "smUserId",
-        ]
+        body_params = ['type', 'datasets', 'username', 'email', 'mac', 'smDeviceId', 'smUserId']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -98,10 +88,10 @@ class PII(object):
         """
 
         metadata = {
-            "tags": ["PII"],
-            "operation": "getNetworkPiiRequest",
+            'tags': ['PII'],
+            'operation': 'getNetworkPiiRequest',
         }
-        resource = f"/networks/{networkId}/pii/requests/{requestId}"
+        resource = f'/networks/{networkId}/pii/requests/{requestId}'
 
         return self._session.get(metadata, resource)
 
@@ -115,10 +105,10 @@ class PII(object):
         """
 
         metadata = {
-            "tags": ["PII"],
-            "operation": "deleteNetworkPiiRequest",
+            'tags': ['PII'],
+            'operation': 'deleteNetworkPiiRequest',
         }
-        resource = f"/networks/{networkId}/pii/requests/{requestId}"
+        resource = f'/networks/{networkId}/pii/requests/{requestId}'
 
         return self._session.delete(metadata, resource)
 
@@ -139,12 +129,12 @@ class PII(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["PII"],
-            "operation": "getNetworkPiiSmDevicesForKey",
+            'tags': ['PII'],
+            'operation': 'getNetworkPiiSmDevicesForKey',
         }
-        resource = f"/networks/{networkId}/pii/smDevicesForKey"
+        resource = f'/networks/{networkId}/pii/smDevicesForKey'
 
-        query_params = ["username", "email", "mac", "serial", "imei", "bluetoothMac"]
+        query_params = ['username', 'email', 'mac', 'serial', 'imei', 'bluetoothMac']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -166,12 +156,13 @@ class PII(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["PII"],
-            "operation": "getNetworkPiiSmOwnersForKey",
+            'tags': ['PII'],
+            'operation': 'getNetworkPiiSmOwnersForKey',
         }
-        resource = f"/networks/{networkId}/pii/smOwnersForKey"
+        resource = f'/networks/{networkId}/pii/smOwnersForKey'
 
-        query_params = ["username", "email", "mac", "serial", "imei", "bluetoothMac"]
+        query_params = ['username', 'email', 'mac', 'serial', 'imei', 'bluetoothMac']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
+

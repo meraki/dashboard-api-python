@@ -2,7 +2,7 @@ class WirelessHealth(object):
     def __init__(self, session):
         super(WirelessHealth, self).__init__()
         self._session = session
-
+    
     def getNetworkClientsConnectionStats(self, networkId: str, **kwargs):
         """
         **Aggregated connectivity info for this network, grouped by clients**
@@ -20,12 +20,12 @@ class WirelessHealth(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Wireless health"],
-            "operation": "getNetworkClientsConnectionStats",
+            'tags': ['Wireless health'],
+            'operation': 'getNetworkClientsConnectionStats',
         }
-        resource = f"/networks/{networkId}/clients/connectionStats"
+        resource = f'/networks/{networkId}/clients/connectionStats'
 
-        query_params = ["t0", "t1", "timespan", "ssid", "vlan", "apTag"]
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -48,12 +48,12 @@ class WirelessHealth(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Wireless health"],
-            "operation": "getNetworkClientsLatencyStats",
+            'tags': ['Wireless health'],
+            'operation': 'getNetworkClientsLatencyStats',
         }
-        resource = f"/networks/{networkId}/clients/latencyStats"
+        resource = f'/networks/{networkId}/clients/latencyStats'
 
-        query_params = ["t0", "t1", "timespan", "ssid", "vlan", "apTag", "fields"]
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', 'fields']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -76,12 +76,12 @@ class WirelessHealth(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Wireless health"],
-            "operation": "getNetworkClientConnectionStats",
+            'tags': ['Wireless health'],
+            'operation': 'getNetworkClientConnectionStats',
         }
-        resource = f"/networks/{networkId}/clients/{clientId}/connectionStats"
+        resource = f'/networks/{networkId}/clients/{clientId}/connectionStats'
 
-        query_params = ["t0", "t1", "timespan", "ssid", "vlan", "apTag"]
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -105,12 +105,12 @@ class WirelessHealth(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Wireless health"],
-            "operation": "getNetworkClientLatencyStats",
+            'tags': ['Wireless health'],
+            'operation': 'getNetworkClientLatencyStats',
         }
-        resource = f"/networks/{networkId}/clients/{clientId}/latencyStats"
+        resource = f'/networks/{networkId}/clients/{clientId}/latencyStats'
 
-        query_params = ["t0", "t1", "timespan", "ssid", "vlan", "apTag", "fields"]
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', 'fields']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -132,12 +132,12 @@ class WirelessHealth(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Wireless health"],
-            "operation": "getNetworkConnectionStats",
+            'tags': ['Wireless health'],
+            'operation': 'getNetworkConnectionStats',
         }
-        resource = f"/networks/{networkId}/connectionStats"
+        resource = f'/networks/{networkId}/connectionStats'
 
-        query_params = ["t0", "t1", "timespan", "ssid", "vlan", "apTag"]
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -159,12 +159,12 @@ class WirelessHealth(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Wireless health"],
-            "operation": "getNetworkDevicesConnectionStats",
+            'tags': ['Wireless health'],
+            'operation': 'getNetworkDevicesConnectionStats',
         }
-        resource = f"/networks/{networkId}/devices/connectionStats"
+        resource = f'/networks/{networkId}/devices/connectionStats'
 
-        query_params = ["t0", "t1", "timespan", "ssid", "vlan", "apTag"]
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -187,12 +187,12 @@ class WirelessHealth(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Wireless health"],
-            "operation": "getNetworkDevicesLatencyStats",
+            'tags': ['Wireless health'],
+            'operation': 'getNetworkDevicesLatencyStats',
         }
-        resource = f"/networks/{networkId}/devices/latencyStats"
+        resource = f'/networks/{networkId}/devices/latencyStats'
 
-        query_params = ["t0", "t1", "timespan", "ssid", "vlan", "apTag", "fields"]
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', 'fields']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -215,12 +215,12 @@ class WirelessHealth(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Wireless health"],
-            "operation": "getNetworkDeviceConnectionStats",
+            'tags': ['Wireless health'],
+            'operation': 'getNetworkDeviceConnectionStats',
         }
-        resource = f"/networks/{networkId}/devices/{serial}/connectionStats"
+        resource = f'/networks/{networkId}/devices/{serial}/connectionStats'
 
-        query_params = ["t0", "t1", "timespan", "ssid", "vlan", "apTag"]
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -244,12 +244,12 @@ class WirelessHealth(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Wireless health"],
-            "operation": "getNetworkDeviceLatencyStats",
+            'tags': ['Wireless health'],
+            'operation': 'getNetworkDeviceLatencyStats',
         }
-        resource = f"/networks/{networkId}/devices/{serial}/latencyStats"
+        resource = f'/networks/{networkId}/devices/{serial}/latencyStats'
 
-        query_params = ["t0", "t1", "timespan", "ssid", "vlan", "apTag", "fields"]
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', 'fields']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -273,21 +273,12 @@ class WirelessHealth(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Wireless health"],
-            "operation": "getNetworkFailedConnections",
+            'tags': ['Wireless health'],
+            'operation': 'getNetworkFailedConnections',
         }
-        resource = f"/networks/{networkId}/failedConnections"
+        resource = f'/networks/{networkId}/failedConnections'
 
-        query_params = [
-            "t0",
-            "t1",
-            "timespan",
-            "ssid",
-            "vlan",
-            "apTag",
-            "serial",
-            "clientId",
-        ]
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', 'serial', 'clientId']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -310,12 +301,13 @@ class WirelessHealth(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Wireless health"],
-            "operation": "getNetworkLatencyStats",
+            'tags': ['Wireless health'],
+            'operation': 'getNetworkLatencyStats',
         }
-        resource = f"/networks/{networkId}/latencyStats"
+        resource = f'/networks/{networkId}/latencyStats'
 
-        query_params = ["t0", "t1", "timespan", "ssid", "vlan", "apTag", "fields"]
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', 'fields']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
+

@@ -2,7 +2,7 @@ class SplashLoginAttempts(object):
     def __init__(self, session):
         super(SplashLoginAttempts, self).__init__()
         self._session = session
-
+    
     def getNetworkSplashLoginAttempts(self, networkId: str, **kwargs):
         """
         **List the splash login attempts for a network**
@@ -16,19 +16,18 @@ class SplashLoginAttempts(object):
 
         kwargs.update(locals())
 
-        if "ssidNumber" in kwargs:
+        if 'ssidNumber' in kwargs:
             options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-            assert (
-                kwargs["ssidNumber"] in options
-            ), f""""ssidNumber" cannot be "{kwargs['ssidNumber']}", & must be set to one of: {options}"""
+            assert kwargs['ssidNumber'] in options, f'''"ssidNumber" cannot be "{kwargs['ssidNumber']}", & must be set to one of: {options}'''
 
         metadata = {
-            "tags": ["Splash login attempts"],
-            "operation": "getNetworkSplashLoginAttempts",
+            'tags': ['Splash login attempts'],
+            'operation': 'getNetworkSplashLoginAttempts',
         }
-        resource = f"/networks/{networkId}/splashLoginAttempts"
+        resource = f'/networks/{networkId}/splashLoginAttempts'
 
-        query_params = ["ssidNumber", "loginIdentifier", "timespan"]
+        query_params = ['ssidNumber', 'loginIdentifier', 'timespan']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
+

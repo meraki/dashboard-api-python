@@ -2,7 +2,7 @@ class SwitchPorts(object):
     def __init__(self, session):
         super(SwitchPorts, self).__init__()
         self._session = session
-
+    
     def getDeviceSwitchPortStatuses(self, serial: str, **kwargs):
         """
         **Return the status for all the ports of a switch**
@@ -16,12 +16,12 @@ class SwitchPorts(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Switch ports"],
-            "operation": "getDeviceSwitchPortStatuses",
+            'tags': ['Switch ports'],
+            'operation': 'getDeviceSwitchPortStatuses',
         }
-        resource = f"/devices/{serial}/switchPortStatuses"
+        resource = f'/devices/{serial}/switchPortStatuses'
 
-        query_params = ["t0", "timespan"]
+        query_params = ['t0', 'timespan']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -35,10 +35,10 @@ class SwitchPorts(object):
         """
 
         metadata = {
-            "tags": ["Switch ports"],
-            "operation": "getDeviceSwitchPorts",
+            'tags': ['Switch ports'],
+            'operation': 'getDeviceSwitchPorts',
         }
-        resource = f"/devices/{serial}/switchPorts"
+        resource = f'/devices/{serial}/switchPorts'
 
         return self._session.get(metadata, resource)
 
@@ -52,10 +52,10 @@ class SwitchPorts(object):
         """
 
         metadata = {
-            "tags": ["Switch ports"],
-            "operation": "getDeviceSwitchPort",
+            'tags': ['Switch ports'],
+            'operation': 'getDeviceSwitchPort',
         }
-        resource = f"/devices/{serial}/switchPorts/{number}"
+        resource = f'/devices/{serial}/switchPorts/{number}'
 
         return self._session.get(metadata, resource)
 
@@ -89,39 +89,18 @@ class SwitchPorts(object):
 
         kwargs.update(locals())
 
-        if "udld" in kwargs:
-            options = ["Alert only", "Enforce"]
-            assert (
-                kwargs["udld"] in options
-            ), f""""udld" cannot be "{kwargs['udld']}", & must be set to one of: {options}"""
+        if 'udld' in kwargs:
+            options = ['Alert only', 'Enforce']
+            assert kwargs['udld'] in options, f'''"udld" cannot be "{kwargs['udld']}", & must be set to one of: {options}'''
 
         metadata = {
-            "tags": ["Switch ports"],
-            "operation": "updateDeviceSwitchPort",
+            'tags': ['Switch ports'],
+            'operation': 'updateDeviceSwitchPort',
         }
-        resource = f"/devices/{serial}/switchPorts/{number}"
+        resource = f'/devices/{serial}/switchPorts/{number}'
 
-        body_params = [
-            "name",
-            "tags",
-            "enabled",
-            "type",
-            "vlan",
-            "voiceVlan",
-            "allowedVlans",
-            "poeEnabled",
-            "isolationEnabled",
-            "rstpEnabled",
-            "stpGuard",
-            "accessPolicyNumber",
-            "linkNegotiation",
-            "portScheduleId",
-            "udld",
-            "macWhitelist",
-            "stickyMacWhitelist",
-            "stickyMacWhitelistLimit",
-            "stormControlEnabled",
-        ]
+        body_params = ['name', 'tags', 'enabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'poeEnabled', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'accessPolicyNumber', 'linkNegotiation', 'portScheduleId', 'udld', 'macWhitelist', 'stickyMacWhitelist', 'stickyMacWhitelistLimit', 'stormControlEnabled']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
+

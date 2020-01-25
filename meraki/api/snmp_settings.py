@@ -2,7 +2,7 @@ class SNMPSettings(object):
     def __init__(self, session):
         super(SNMPSettings, self).__init__()
         self._session = session
-
+    
     def getNetworkSnmpSettings(self, networkId: str):
         """
         **Return the SNMP settings for a network**
@@ -12,10 +12,10 @@ class SNMPSettings(object):
         """
 
         metadata = {
-            "tags": ["SNMP settings"],
-            "operation": "getNetworkSnmpSettings",
+            'tags': ['SNMP settings'],
+            'operation': 'getNetworkSnmpSettings',
         }
-        resource = f"/networks/{networkId}/snmpSettings"
+        resource = f'/networks/{networkId}/snmpSettings'
 
         return self._session.get(metadata, resource)
 
@@ -32,19 +32,17 @@ class SNMPSettings(object):
 
         kwargs.update(locals())
 
-        if "access" in kwargs:
-            options = ["none", "community", "users"]
-            assert (
-                kwargs["access"] in options
-            ), f""""access" cannot be "{kwargs['access']}", & must be set to one of: {options}"""
+        if 'access' in kwargs:
+            options = ['none', 'community', 'users']
+            assert kwargs['access'] in options, f'''"access" cannot be "{kwargs['access']}", & must be set to one of: {options}'''
 
         metadata = {
-            "tags": ["SNMP settings"],
-            "operation": "updateNetworkSnmpSettings",
+            'tags': ['SNMP settings'],
+            'operation': 'updateNetworkSnmpSettings',
         }
-        resource = f"/networks/{networkId}/snmpSettings"
+        resource = f'/networks/{networkId}/snmpSettings'
 
-        body_params = ["access", "communityString", "users"]
+        body_params = ['access', 'communityString', 'users']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -58,10 +56,10 @@ class SNMPSettings(object):
         """
 
         metadata = {
-            "tags": ["SNMP settings"],
-            "operation": "getOrganizationSnmp",
+            'tags': ['SNMP settings'],
+            'operation': 'getOrganizationSnmp',
         }
-        resource = f"/organizations/{organizationId}/snmp"
+        resource = f'/organizations/{organizationId}/snmp'
 
         return self._session.get(metadata, resource)
 
@@ -82,32 +80,21 @@ class SNMPSettings(object):
 
         kwargs.update(locals())
 
-        if "v3AuthMode" in kwargs:
-            options = ["MD5", "SHA"]
-            assert (
-                kwargs["v3AuthMode"] in options
-            ), f""""v3AuthMode" cannot be "{kwargs['v3AuthMode']}", & must be set to one of: {options}"""
-        if "v3PrivMode" in kwargs:
-            options = ["DES", "AES128"]
-            assert (
-                kwargs["v3PrivMode"] in options
-            ), f""""v3PrivMode" cannot be "{kwargs['v3PrivMode']}", & must be set to one of: {options}"""
+        if 'v3AuthMode' in kwargs:
+            options = ['MD5', 'SHA']
+            assert kwargs['v3AuthMode'] in options, f'''"v3AuthMode" cannot be "{kwargs['v3AuthMode']}", & must be set to one of: {options}'''
+        if 'v3PrivMode' in kwargs:
+            options = ['DES', 'AES128']
+            assert kwargs['v3PrivMode'] in options, f'''"v3PrivMode" cannot be "{kwargs['v3PrivMode']}", & must be set to one of: {options}'''
 
         metadata = {
-            "tags": ["SNMP settings"],
-            "operation": "updateOrganizationSnmp",
+            'tags': ['SNMP settings'],
+            'operation': 'updateOrganizationSnmp',
         }
-        resource = f"/organizations/{organizationId}/snmp"
+        resource = f'/organizations/{organizationId}/snmp'
 
-        body_params = [
-            "v2cEnabled",
-            "v3Enabled",
-            "v3AuthMode",
-            "v3AuthPass",
-            "v3PrivMode",
-            "v3PrivPass",
-            "peerIps",
-        ]
+        body_params = ['v2cEnabled', 'v3Enabled', 'v3AuthMode', 'v3AuthPass', 'v3PrivMode', 'v3PrivPass', 'peerIps']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
+

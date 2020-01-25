@@ -2,7 +2,7 @@ class IntrusionSettings(object):
     def __init__(self, session):
         super(IntrusionSettings, self).__init__()
         self._session = session
-
+    
     def getNetworkSecurityIntrusionSettings(self, networkId: str):
         """
         **Returns all supported intrusion settings for an MX network**
@@ -12,10 +12,10 @@ class IntrusionSettings(object):
         """
 
         metadata = {
-            "tags": ["Intrusion settings"],
-            "operation": "getNetworkSecurityIntrusionSettings",
+            'tags': ['Intrusion settings'],
+            'operation': 'getNetworkSecurityIntrusionSettings',
         }
-        resource = f"/networks/{networkId}/security/intrusionSettings"
+        resource = f'/networks/{networkId}/security/intrusionSettings'
 
         return self._session.get(metadata, resource)
 
@@ -33,12 +33,12 @@ class IntrusionSettings(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Intrusion settings"],
-            "operation": "updateNetworkSecurityIntrusionSettings",
+            'tags': ['Intrusion settings'],
+            'operation': 'updateNetworkSecurityIntrusionSettings',
         }
-        resource = f"/networks/{networkId}/security/intrusionSettings"
+        resource = f'/networks/{networkId}/security/intrusionSettings'
 
-        body_params = ["mode", "idsRulesets", "protectedNetworks"]
+        body_params = ['mode', 'idsRulesets', 'protectedNetworks']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -52,16 +52,14 @@ class IntrusionSettings(object):
         """
 
         metadata = {
-            "tags": ["Intrusion settings"],
-            "operation": "getOrganizationSecurityIntrusionSettings",
+            'tags': ['Intrusion settings'],
+            'operation': 'getOrganizationSecurityIntrusionSettings',
         }
-        resource = f"/organizations/{organizationId}/security/intrusionSettings"
+        resource = f'/organizations/{organizationId}/security/intrusionSettings'
 
         return self._session.get(metadata, resource)
 
-    def updateOrganizationSecurityIntrusionSettings(
-        self, organizationId: str, whitelistedRules: list
-    ):
+    def updateOrganizationSecurityIntrusionSettings(self, organizationId: str, whitelistedRules: list):
         """
         **Sets supported intrusion settings for an organization**
         https://api.meraki.com/api_docs#sets-supported-intrusion-settings-for-an-organization
@@ -73,12 +71,13 @@ class IntrusionSettings(object):
         kwargs = locals()
 
         metadata = {
-            "tags": ["Intrusion settings"],
-            "operation": "updateOrganizationSecurityIntrusionSettings",
+            'tags': ['Intrusion settings'],
+            'operation': 'updateOrganizationSecurityIntrusionSettings',
         }
-        resource = f"/organizations/{organizationId}/security/intrusionSettings"
+        resource = f'/organizations/{organizationId}/security/intrusionSettings'
 
-        body_params = ["whitelistedRules"]
+        body_params = ['whitelistedRules']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
+

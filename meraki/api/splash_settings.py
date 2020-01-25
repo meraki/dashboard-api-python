@@ -2,7 +2,7 @@ class SplashSettings(object):
     def __init__(self, session):
         super(SplashSettings, self).__init__()
         self._session = session
-
+    
     def getNetworkSsidSplashSettings(self, networkId: str, number: str):
         """
         **Display the splash page settings for the given SSID**
@@ -13,10 +13,10 @@ class SplashSettings(object):
         """
 
         metadata = {
-            "tags": ["Splash settings"],
-            "operation": "getNetworkSsidSplashSettings",
+            'tags': ['Splash settings'],
+            'operation': 'getNetworkSsidSplashSettings',
         }
-        resource = f"/networks/{networkId}/ssids/{number}/splashSettings"
+        resource = f'/networks/{networkId}/ssids/{number}/splashSettings'
 
         return self._session.get(metadata, resource)
 
@@ -34,12 +34,13 @@ class SplashSettings(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Splash settings"],
-            "operation": "updateNetworkSsidSplashSettings",
+            'tags': ['Splash settings'],
+            'operation': 'updateNetworkSsidSplashSettings',
         }
-        resource = f"/networks/{networkId}/ssids/{number}/splashSettings"
+        resource = f'/networks/{networkId}/ssids/{number}/splashSettings'
 
-        body_params = ["splashUrl", "useSplashUrl"]
+        body_params = ['splashUrl', 'useSplashUrl']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
+

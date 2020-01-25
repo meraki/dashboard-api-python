@@ -2,10 +2,8 @@ class WebhookLogs(object):
     def __init__(self, session):
         super(WebhookLogs, self).__init__()
         self._session = session
-
-    def getOrganizationWebhookLogs(
-        self, organizationId: str, total_pages=1, direction="next", **kwargs
-    ):
+    
+    def getOrganizationWebhookLogs(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **Return the log of webhook POSTs sent**
         https://api.meraki.com/api_docs#return-the-log-of-webhook-posts-sent
@@ -25,22 +23,14 @@ class WebhookLogs(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Webhook logs"],
-            "operation": "getOrganizationWebhookLogs",
+            'tags': ['Webhook logs'],
+            'operation': 'getOrganizationWebhookLogs',
         }
-        resource = f"/organizations/{organizationId}/webhookLogs"
+        resource = f'/organizations/{organizationId}/webhookLogs'
 
-        query_params = [
-            "t0",
-            "t1",
-            "timespan",
-            "perPage",
-            "startingAfter",
-            "endingBefore",
-            "url",
-        ]
+        query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'url']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get_pages(
-            metadata, resource, params, total_pages, direction
-        )
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+

@@ -2,10 +2,8 @@ class APIUsage(object):
     def __init__(self, session):
         super(APIUsage, self).__init__()
         self._session = session
-
-    def getOrganizationApiRequests(
-        self, organizationId: str, total_pages=1, direction="next", **kwargs
-    ):
+    
+    def getOrganizationApiRequests(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the API requests made by an organization**
         https://api.meraki.com/api_docs#list-the-api-requests-made-by-an-organization
@@ -29,26 +27,14 @@ class APIUsage(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["API usage"],
-            "operation": "getOrganizationApiRequests",
+            'tags': ['API usage'],
+            'operation': 'getOrganizationApiRequests',
         }
-        resource = f"/organizations/{organizationId}/apiRequests"
+        resource = f'/organizations/{organizationId}/apiRequests'
 
-        query_params = [
-            "t0",
-            "t1",
-            "timespan",
-            "perPage",
-            "startingAfter",
-            "endingBefore",
-            "adminId",
-            "path",
-            "method",
-            "responseCode",
-            "sourceIp",
-        ]
+        query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'adminId', 'path', 'method', 'responseCode', 'sourceIp']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get_pages(
-            metadata, resource, params, total_pages, direction
-        )
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+

@@ -2,7 +2,7 @@ class SyslogServers(object):
     def __init__(self, session):
         super(SyslogServers, self).__init__()
         self._session = session
-
+    
     def getNetworkSyslogServers(self, networkId: str):
         """
         **List the syslog servers for a network**
@@ -12,10 +12,10 @@ class SyslogServers(object):
         """
 
         metadata = {
-            "tags": ["Syslog servers"],
-            "operation": "getNetworkSyslogServers",
+            'tags': ['Syslog servers'],
+            'operation': 'getNetworkSyslogServers',
         }
-        resource = f"/networks/{networkId}/syslogServers"
+        resource = f'/networks/{networkId}/syslogServers'
 
         return self._session.get(metadata, resource)
 
@@ -31,12 +31,13 @@ class SyslogServers(object):
         kwargs = locals()
 
         metadata = {
-            "tags": ["Syslog servers"],
-            "operation": "updateNetworkSyslogServers",
+            'tags': ['Syslog servers'],
+            'operation': 'updateNetworkSyslogServers',
         }
-        resource = f"/networks/{networkId}/syslogServers"
+        resource = f'/networks/{networkId}/syslogServers'
 
-        body_params = ["servers"]
+        body_params = ['servers']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
+

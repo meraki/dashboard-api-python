@@ -2,7 +2,7 @@ class MGUplinkSettings(object):
     def __init__(self, session):
         super(MGUplinkSettings, self).__init__()
         self._session = session
-
+    
     def getNetworkCellularGatewaySettingsUplink(self, networkId: str):
         """
         **Returns the uplink settings for your MG network.**
@@ -12,10 +12,10 @@ class MGUplinkSettings(object):
         """
 
         metadata = {
-            "tags": ["MG uplink settings"],
-            "operation": "getNetworkCellularGatewaySettingsUplink",
+            'tags': ['MG uplink settings'],
+            'operation': 'getNetworkCellularGatewaySettingsUplink',
         }
-        resource = f"/networks/{networkId}/cellularGateway/settings/uplink"
+        resource = f'/networks/{networkId}/cellularGateway/settings/uplink'
 
         return self._session.get(metadata, resource)
 
@@ -31,12 +31,13 @@ class MGUplinkSettings(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["MG uplink settings"],
-            "operation": "updateNetworkCellularGatewaySettingsUplink",
+            'tags': ['MG uplink settings'],
+            'operation': 'updateNetworkCellularGatewaySettingsUplink',
         }
-        resource = f"/networks/{networkId}/cellularGateway/settings/uplink"
+        resource = f'/networks/{networkId}/cellularGateway/settings/uplink'
 
-        body_params = ["bandwidthLimits"]
+        body_params = ['bandwidthLimits']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
+

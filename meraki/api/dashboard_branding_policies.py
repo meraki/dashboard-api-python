@@ -2,7 +2,7 @@ class DashboardBrandingPolicies(object):
     def __init__(self, session):
         super(DashboardBrandingPolicies, self).__init__()
         self._session = session
-
+    
     def getOrganizationBrandingPolicies(self, organizationId: str):
         """
         **List the branding policies of an organization**
@@ -12,21 +12,14 @@ class DashboardBrandingPolicies(object):
         """
 
         metadata = {
-            "tags": ["Dashboard branding policies"],
-            "operation": "getOrganizationBrandingPolicies",
+            'tags': ['Dashboard branding policies'],
+            'operation': 'getOrganizationBrandingPolicies',
         }
-        resource = f"/organizations/{organizationId}/brandingPolicies"
+        resource = f'/organizations/{organizationId}/brandingPolicies'
 
         return self._session.get(metadata, resource)
 
-    def createOrganizationBrandingPolicy(
-        self,
-        organizationId: str,
-        name: str,
-        enabled: bool,
-        adminSettings: dict,
-        **kwargs,
-    ):
+    def createOrganizationBrandingPolicy(self, organizationId: str, name: str, enabled: bool, adminSettings: dict, **kwargs):
         """
         **Add a new branding policy to an organization**
         https://api.meraki.com/api_docs#add-a-new-branding-policy-to-an-organization
@@ -45,12 +38,12 @@ class DashboardBrandingPolicies(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Dashboard branding policies"],
-            "operation": "createOrganizationBrandingPolicy",
+            'tags': ['Dashboard branding policies'],
+            'operation': 'createOrganizationBrandingPolicy',
         }
-        resource = f"/organizations/{organizationId}/brandingPolicies"
+        resource = f'/organizations/{organizationId}/brandingPolicies'
 
-        body_params = ["name", "enabled", "adminSettings", "helpSettings"]
+        body_params = ['name', 'enabled', 'adminSettings', 'helpSettings']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -64,16 +57,14 @@ class DashboardBrandingPolicies(object):
         """
 
         metadata = {
-            "tags": ["Dashboard branding policies"],
-            "operation": "getOrganizationBrandingPoliciesPriorities",
+            'tags': ['Dashboard branding policies'],
+            'operation': 'getOrganizationBrandingPoliciesPriorities',
         }
-        resource = f"/organizations/{organizationId}/brandingPolicies/priorities"
+        resource = f'/organizations/{organizationId}/brandingPolicies/priorities'
 
         return self._session.get(metadata, resource)
 
-    def updateOrganizationBrandingPoliciesPriorities(
-        self, organizationId: str, brandingPolicyIds: list
-    ):
+    def updateOrganizationBrandingPoliciesPriorities(self, organizationId: str, brandingPolicyIds: list):
         """
         **Update the priority ordering of an organization's branding policies.**
         https://api.meraki.com/api_docs#update-the-priority-ordering-of-an-organizations-branding-policies
@@ -85,12 +76,12 @@ class DashboardBrandingPolicies(object):
         kwargs = locals()
 
         metadata = {
-            "tags": ["Dashboard branding policies"],
-            "operation": "updateOrganizationBrandingPoliciesPriorities",
+            'tags': ['Dashboard branding policies'],
+            'operation': 'updateOrganizationBrandingPoliciesPriorities',
         }
-        resource = f"/organizations/{organizationId}/brandingPolicies/priorities"
+        resource = f'/organizations/{organizationId}/brandingPolicies/priorities'
 
-        body_params = ["brandingPolicyIds"]
+        body_params = ['brandingPolicyIds']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -105,18 +96,14 @@ class DashboardBrandingPolicies(object):
         """
 
         metadata = {
-            "tags": ["Dashboard branding policies"],
-            "operation": "getOrganizationBrandingPolicy",
+            'tags': ['Dashboard branding policies'],
+            'operation': 'getOrganizationBrandingPolicy',
         }
-        resource = (
-            f"/organizations/{organizationId}/brandingPolicies/{brandingPolicyId}"
-        )
+        resource = f'/organizations/{organizationId}/brandingPolicies/{brandingPolicyId}'
 
         return self._session.get(metadata, resource)
 
-    def updateOrganizationBrandingPolicy(
-        self, organizationId: str, brandingPolicyId: str, **kwargs
-    ):
+    def updateOrganizationBrandingPolicy(self, organizationId: str, brandingPolicyId: str, **kwargs):
         """
         **Update a branding policy**
         https://api.meraki.com/api_docs#update-a-branding-policy
@@ -136,21 +123,17 @@ class DashboardBrandingPolicies(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Dashboard branding policies"],
-            "operation": "updateOrganizationBrandingPolicy",
+            'tags': ['Dashboard branding policies'],
+            'operation': 'updateOrganizationBrandingPolicy',
         }
-        resource = (
-            f"/organizations/{organizationId}/brandingPolicies/{brandingPolicyId}"
-        )
+        resource = f'/organizations/{organizationId}/brandingPolicies/{brandingPolicyId}'
 
-        body_params = ["name", "enabled", "adminSettings", "helpSettings"]
+        body_params = ['name', 'enabled', 'adminSettings', 'helpSettings']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
 
-    def deleteOrganizationBrandingPolicy(
-        self, organizationId: str, brandingPolicyId: str
-    ):
+    def deleteOrganizationBrandingPolicy(self, organizationId: str, brandingPolicyId: str):
         """
         **Delete a branding policy**
         https://api.meraki.com/api_docs#delete-a-branding-policy
@@ -160,11 +143,10 @@ class DashboardBrandingPolicies(object):
         """
 
         metadata = {
-            "tags": ["Dashboard branding policies"],
-            "operation": "deleteOrganizationBrandingPolicy",
+            'tags': ['Dashboard branding policies'],
+            'operation': 'deleteOrganizationBrandingPolicy',
         }
-        resource = (
-            f"/organizations/{organizationId}/brandingPolicies/{brandingPolicyId}"
-        )
+        resource = f'/organizations/{organizationId}/brandingPolicies/{brandingPolicyId}'
 
         return self._session.delete(metadata, resource)
+

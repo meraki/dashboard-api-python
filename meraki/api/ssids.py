@@ -2,7 +2,7 @@ class SSIDs(object):
     def __init__(self, session):
         super(SSIDs, self).__init__()
         self._session = session
-
+    
     def getNetworkDeviceWirelessStatus(self, networkId: str, serial: str):
         """
         **Return the SSID statuses of an access point**
@@ -13,10 +13,10 @@ class SSIDs(object):
         """
 
         metadata = {
-            "tags": ["SSIDs"],
-            "operation": "getNetworkDeviceWirelessStatus",
+            'tags': ['SSIDs'],
+            'operation': 'getNetworkDeviceWirelessStatus',
         }
-        resource = f"/networks/{networkId}/devices/{serial}/wireless/status"
+        resource = f'/networks/{networkId}/devices/{serial}/wireless/status'
 
         return self._session.get(metadata, resource)
 
@@ -29,10 +29,10 @@ class SSIDs(object):
         """
 
         metadata = {
-            "tags": ["SSIDs"],
-            "operation": "getNetworkSsids",
+            'tags': ['SSIDs'],
+            'operation': 'getNetworkSsids',
         }
-        resource = f"/networks/{networkId}/ssids"
+        resource = f'/networks/{networkId}/ssids'
 
         return self._session.get(metadata, resource)
 
@@ -46,10 +46,10 @@ class SSIDs(object):
         """
 
         metadata = {
-            "tags": ["SSIDs"],
-            "operation": "getNetworkSsid",
+            'tags': ['SSIDs'],
+            'operation': 'getNetworkSsid',
         }
-        resource = f"/networks/{networkId}/ssids/{number}"
+        resource = f'/networks/{networkId}/ssids/{number}'
 
         return self._session.get(metadata, resource)
 
@@ -93,98 +93,36 @@ class SSIDs(object):
 
         kwargs.update(locals())
 
-        if "authMode" in kwargs:
-            options = [
-                "open",
-                "psk",
-                "open-with-radius",
-                "8021x-meraki",
-                "8021x-radius",
-            ]
-            assert (
-                kwargs["authMode"] in options
-            ), f""""authMode" cannot be "{kwargs['authMode']}", & must be set to one of: {options}"""
-        if "enterpriseAdminAccess" in kwargs:
-            options = ["access disabled", "access enabled"]
-            assert (
-                kwargs["enterpriseAdminAccess"] in options
-            ), f""""enterpriseAdminAccess" cannot be "{kwargs['enterpriseAdminAccess']}", & must be set to one of: {options}"""
-        if "encryptionMode" in kwargs:
-            options = ["wep", "wpa"]
-            assert (
-                kwargs["encryptionMode"] in options
-            ), f""""encryptionMode" cannot be "{kwargs['encryptionMode']}", & must be set to one of: {options}"""
-        if "wpaEncryptionMode" in kwargs:
-            options = ["WPA1 and WPA2", "WPA2 only"]
-            assert (
-                kwargs["wpaEncryptionMode"] in options
-            ), f""""wpaEncryptionMode" cannot be "{kwargs['wpaEncryptionMode']}", & must be set to one of: {options}"""
-        if "splashPage" in kwargs:
-            options = [
-                "None",
-                "Click-through splash page",
-                "Billing",
-                "Password-protected with Meraki RADIUS",
-                "Password-protected with custom RADIUS",
-                "Password-protected with Active Directory",
-                "Password-protected with LDAP",
-                "SMS authentication",
-                "Systems Manager Sentry",
-                "Facebook Wi-Fi",
-                "Google OAuth",
-                "Sponsored guest",
-            ]
-            assert (
-                kwargs["splashPage"] in options
-            ), f""""splashPage" cannot be "{kwargs['splashPage']}", & must be set to one of: {options}"""
-        if "radiusFailoverPolicy" in kwargs:
-            options = ["Deny access", "Allow access"]
-            assert (
-                kwargs["radiusFailoverPolicy"] in options
-            ), f""""radiusFailoverPolicy" cannot be "{kwargs['radiusFailoverPolicy']}", & must be set to one of: {options}"""
-        if "radiusLoadBalancingPolicy" in kwargs:
-            options = ["Strict priority order", "Round robin"]
-            assert (
-                kwargs["radiusLoadBalancingPolicy"] in options
-            ), f""""radiusLoadBalancingPolicy" cannot be "{kwargs['radiusLoadBalancingPolicy']}", & must be set to one of: {options}"""
+        if 'authMode' in kwargs:
+            options = ['open', 'psk', 'open-with-radius', '8021x-meraki', '8021x-radius']
+            assert kwargs['authMode'] in options, f'''"authMode" cannot be "{kwargs['authMode']}", & must be set to one of: {options}'''
+        if 'enterpriseAdminAccess' in kwargs:
+            options = ['access disabled', 'access enabled']
+            assert kwargs['enterpriseAdminAccess'] in options, f'''"enterpriseAdminAccess" cannot be "{kwargs['enterpriseAdminAccess']}", & must be set to one of: {options}'''
+        if 'encryptionMode' in kwargs:
+            options = ['wep', 'wpa']
+            assert kwargs['encryptionMode'] in options, f'''"encryptionMode" cannot be "{kwargs['encryptionMode']}", & must be set to one of: {options}'''
+        if 'wpaEncryptionMode' in kwargs:
+            options = ['WPA1 and WPA2', 'WPA2 only']
+            assert kwargs['wpaEncryptionMode'] in options, f'''"wpaEncryptionMode" cannot be "{kwargs['wpaEncryptionMode']}", & must be set to one of: {options}'''
+        if 'splashPage' in kwargs:
+            options = ['None', 'Click-through splash page', 'Billing', 'Password-protected with Meraki RADIUS', 'Password-protected with custom RADIUS', 'Password-protected with Active Directory', 'Password-protected with LDAP', 'SMS authentication', 'Systems Manager Sentry', 'Facebook Wi-Fi', 'Google OAuth', 'Sponsored guest']
+            assert kwargs['splashPage'] in options, f'''"splashPage" cannot be "{kwargs['splashPage']}", & must be set to one of: {options}'''
+        if 'radiusFailoverPolicy' in kwargs:
+            options = ['Deny access', 'Allow access']
+            assert kwargs['radiusFailoverPolicy'] in options, f'''"radiusFailoverPolicy" cannot be "{kwargs['radiusFailoverPolicy']}", & must be set to one of: {options}'''
+        if 'radiusLoadBalancingPolicy' in kwargs:
+            options = ['Strict priority order', 'Round robin']
+            assert kwargs['radiusLoadBalancingPolicy'] in options, f'''"radiusLoadBalancingPolicy" cannot be "{kwargs['radiusLoadBalancingPolicy']}", & must be set to one of: {options}'''
 
         metadata = {
-            "tags": ["SSIDs"],
-            "operation": "updateNetworkSsid",
+            'tags': ['SSIDs'],
+            'operation': 'updateNetworkSsid',
         }
-        resource = f"/networks/{networkId}/ssids/{number}"
+        resource = f'/networks/{networkId}/ssids/{number}'
 
-        body_params = [
-            "name",
-            "enabled",
-            "authMode",
-            "enterpriseAdminAccess",
-            "encryptionMode",
-            "psk",
-            "wpaEncryptionMode",
-            "splashPage",
-            "radiusServers",
-            "radiusCoaEnabled",
-            "radiusFailoverPolicy",
-            "radiusLoadBalancingPolicy",
-            "radiusAccountingEnabled",
-            "radiusAccountingServers",
-            "radiusAttributeForGroupPolicies",
-            "ipAssignmentMode",
-            "useVlanTagging",
-            "concentratorNetworkId",
-            "vlanId",
-            "defaultVlanId",
-            "apTagsAndVlanIds",
-            "walledGardenEnabled",
-            "walledGardenRanges",
-            "radiusOverride",
-            "minBitrate",
-            "bandSelection",
-            "perClientBandwidthLimitUp",
-            "perClientBandwidthLimitDown",
-            "lanIsolationEnabled",
-        ]
+        body_params = ['name', 'enabled', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk', 'wpaEncryptionMode', 'splashPage', 'radiusServers', 'radiusCoaEnabled', 'radiusFailoverPolicy', 'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging', 'concentratorNetworkId', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 'walledGardenEnabled', 'walledGardenRanges', 'radiusOverride', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'lanIsolationEnabled']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
+

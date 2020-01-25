@@ -2,7 +2,7 @@ class ContentFilteringCategories(object):
     def __init__(self, session):
         super(ContentFilteringCategories, self).__init__()
         self._session = session
-
+    
     def getNetworkContentFilteringCategories(self, networkId: str):
         """
         **List all available content filtering categories for an MX network**
@@ -12,9 +12,10 @@ class ContentFilteringCategories(object):
         """
 
         metadata = {
-            "tags": ["Content filtering categories"],
-            "operation": "getNetworkContentFilteringCategories",
+            'tags': ['Content filtering categories'],
+            'operation': 'getNetworkContentFilteringCategories',
         }
-        resource = f"/networks/{networkId}/contentFiltering/categories"
+        resource = f'/networks/{networkId}/contentFiltering/categories'
 
         return self._session.get(metadata, resource)
+

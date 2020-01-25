@@ -2,7 +2,7 @@ class MGPortForwardingRules(object):
     def __init__(self, session):
         super(MGPortForwardingRules, self).__init__()
         self._session = session
-
+    
     def getDeviceCellularGatewaySettingsPortForwardingRules(self, serial: str):
         """
         **Returns the port forwarding rules for a single MG.**
@@ -12,16 +12,14 @@ class MGPortForwardingRules(object):
         """
 
         metadata = {
-            "tags": ["MG port forwarding rules"],
-            "operation": "getDeviceCellularGatewaySettingsPortForwardingRules",
+            'tags': ['MG port forwarding rules'],
+            'operation': 'getDeviceCellularGatewaySettingsPortForwardingRules',
         }
-        resource = f"/devices/{serial}/cellularGateway/settings/portForwardingRules"
+        resource = f'/devices/{serial}/cellularGateway/settings/portForwardingRules'
 
         return self._session.get(metadata, resource)
 
-    def updateDeviceCellularGatewaySettingsPortForwardingRules(
-        self, serial: str, **kwargs
-    ):
+    def updateDeviceCellularGatewaySettingsPortForwardingRules(self, serial: str, **kwargs):
         """
         **Updates the port forwarding rules for a single MG.**
         https://api.meraki.com/api_docs#updates-the-port-forwarding-rules-for-a-single-mg
@@ -33,12 +31,13 @@ class MGPortForwardingRules(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["MG port forwarding rules"],
-            "operation": "updateDeviceCellularGatewaySettingsPortForwardingRules",
+            'tags': ['MG port forwarding rules'],
+            'operation': 'updateDeviceCellularGatewaySettingsPortForwardingRules',
         }
-        resource = f"/devices/{serial}/cellularGateway/settings/portForwardingRules"
+        resource = f'/devices/{serial}/cellularGateway/settings/portForwardingRules'
 
-        body_params = ["rules"]
+        body_params = ['rules']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
+
