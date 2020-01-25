@@ -10,7 +10,7 @@ from meraki.exceptions import *
 
 
 # Main module interface
-class AsyncRestSession(object):
+class AsyncRestSession:
     def __init__(
         self,
         logger,
@@ -48,10 +48,11 @@ class AsyncRestSession(object):
         if self._certificate_path:
             self._sslcontext = ssl.create_default_context()
             self._sslcontext.load_verify_locations(certificate_path)
-        
+
         # Initialize a new `aiohttp` session
         self._req_session = aiohttp.ClientSession(
-            headers=headers, timeout=aiohttp.ClientTimeout(total=single_request_timeout),
+            headers=headers,
+            timeout=aiohttp.ClientTimeout(total=single_request_timeout),
         )
 
         # Log API calls
