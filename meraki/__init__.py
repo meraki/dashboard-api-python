@@ -93,7 +93,7 @@ class DashboardAPI(object):
     - single_request_timeout (integer): maximum number of seconds for each API call
     - certificate_path (string): path for TLS/SSL certificate verification if behind local proxy
     - wait_on_rate_limit (boolean): retry if 429 rate limit error encountered?
-    - maximum_retries_on_rate_limit (integer): retry up to this many times when encountering 429s or other server-side errors
+    - maximum_retries (integer): retry up to this many times when encountering 429s or other server-side errors
     - output_log (boolean): create an output log file?
     - log_path (string): path to output log; by default, working directory of script if not specified
     - log_file_prefix (string): log file name appended with date and timestamp
