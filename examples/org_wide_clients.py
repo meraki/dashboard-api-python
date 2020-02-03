@@ -4,7 +4,7 @@ import os
 
 import meraki
 
-# Either input your API key below by uncommenting line 10 and changing line 15 to api_key=api_key,
+# Either input your API key below by uncommenting line 10 and changing line 16 to api_key=api_key,
 # or set an environment variable (preferred) to define your API key. The former is insecure and not recommended.
 # For example, in Linux/macOS:  export MERAKI_DASHBOARD_API_KEY=093b24e85df15a3e66f1fc359f4c48493eaa1b73
 # api_key = '093b24e85df15a3e66f1fc359f4c48493eaa1b73'
@@ -12,11 +12,17 @@ import meraki
 
 def main():
     # Instantiate a Meraki dashboard API session
-    dashboard = meraki.DashboardAPI(api_key=None, base_url='https://api.meraki.com/api/v0/', log_file_prefix=__file__[:-3], print_console=False)
+    dashboard = meraki.DashboardAPI(
+        api_key='',
+        base_url='https://api-mp.meraki.com/api/v0/',
+        log_file_prefix=os.path.basename(__file__)[:-3],
+        log_path='',
+        print_console=False
+    )
 
     # Get list of organizations to which API key has access
     organizations = dashboard.organizations.getOrganizations()
-
+    
     # Iterate through list of orgs
     for org in organizations:
         print(f'\nAnalyzing organization {org["name"]}:')
