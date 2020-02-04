@@ -1,8 +1,8 @@
-class AsyncMGLANSettings(object):
+class AsyncMGLANSettings:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getDeviceCellularGatewaySettings(self, serial: str):
         """
         **Show the LAN Settings of a MG**
@@ -12,10 +12,10 @@ class AsyncMGLANSettings(object):
         """
 
         metadata = {
-            "tags": ["MG LAN settings"],
-            "operation": "getDeviceCellularGatewaySettings",
+            'tags': ['MG LAN settings'],
+            'operation': 'getDeviceCellularGatewaySettings',
         }
-        resource = f"/devices/{serial}/cellularGateway/settings"
+        resource = f'/devices/{serial}/cellularGateway/settings'
 
         return await self._session.get(metadata, resource)
 
@@ -32,12 +32,13 @@ class AsyncMGLANSettings(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["MG LAN settings"],
-            "operation": "updateDeviceCellularGatewaySettings",
+            'tags': ['MG LAN settings'],
+            'operation': 'updateDeviceCellularGatewaySettings',
         }
-        resource = f"/devices/{serial}/cellularGateway/settings"
+        resource = f'/devices/{serial}/cellularGateway/settings'
 
-        body_params = ["reservedIpRanges", "fixedIpAssignments"]
+        body_params = ['reservedIpRanges', 'fixedIpAssignments']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
+

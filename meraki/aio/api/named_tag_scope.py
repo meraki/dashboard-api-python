@@ -1,8 +1,8 @@
-class AsyncNamedTagScope(object):
+class AsyncNamedTagScope:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getNetworkSmTargetGroups(self, networkId: str, **kwargs):
         """
         **List the target groups in this network**
@@ -15,12 +15,12 @@ class AsyncNamedTagScope(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Named tag scope"],
-            "operation": "getNetworkSmTargetGroups",
+            'tags': ['Named tag scope'],
+            'operation': 'getNetworkSmTargetGroups',
         }
-        resource = f"/networks/{networkId}/sm/targetGroups"
+        resource = f'/networks/{networkId}/sm/targetGroups'
 
-        query_params = ["withDetails"]
+        query_params = ['withDetails']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return await self._session.get(metadata, resource, params)
@@ -38,19 +38,17 @@ class AsyncNamedTagScope(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Named tag scope"],
-            "operation": "createNetworkSmTargetGroup",
+            'tags': ['Named tag scope'],
+            'operation': 'createNetworkSmTargetGroup',
         }
-        resource = f"/networks/{networkId}/sm/targetGroups"
+        resource = f'/networks/{networkId}/sm/targetGroups'
 
-        body_params = ["name", "scope"]
+        body_params = ['name', 'scope']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.post(metadata, resource, payload)
 
-    async def getNetworkSmTargetGroup(
-        self, networkId: str, targetGroupId: str, **kwargs
-    ):
+    async def getNetworkSmTargetGroup(self, networkId: str, targetGroupId: str, **kwargs):
         """
         **Return a target group**
         https://api.meraki.com/api_docs#return-a-target-group
@@ -63,19 +61,17 @@ class AsyncNamedTagScope(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Named tag scope"],
-            "operation": "getNetworkSmTargetGroup",
+            'tags': ['Named tag scope'],
+            'operation': 'getNetworkSmTargetGroup',
         }
-        resource = f"/networks/{networkId}/sm/targetGroups/{targetGroupId}"
+        resource = f'/networks/{networkId}/sm/targetGroups/{targetGroupId}'
 
-        query_params = ["withDetails"]
+        query_params = ['withDetails']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return await self._session.get(metadata, resource, params)
 
-    async def updateNetworkSmTargetGroup(
-        self, networkId: str, targetGroupId: str, **kwargs
-    ):
+    async def updateNetworkSmTargetGroup(self, networkId: str, targetGroupId: str, **kwargs):
         """
         **Update a target group**
         https://api.meraki.com/api_docs#update-a-target-group
@@ -89,12 +85,12 @@ class AsyncNamedTagScope(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Named tag scope"],
-            "operation": "updateNetworkSmTargetGroup",
+            'tags': ['Named tag scope'],
+            'operation': 'updateNetworkSmTargetGroup',
         }
-        resource = f"/networks/{networkId}/sm/targetGroups/{targetGroupId}"
+        resource = f'/networks/{networkId}/sm/targetGroups/{targetGroupId}'
 
-        body_params = ["name", "scope"]
+        body_params = ['name', 'scope']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
@@ -109,9 +105,10 @@ class AsyncNamedTagScope(object):
         """
 
         metadata = {
-            "tags": ["Named tag scope"],
-            "operation": "deleteNetworkSmTargetGroup",
+            'tags': ['Named tag scope'],
+            'operation': 'deleteNetworkSmTargetGroup',
         }
-        resource = f"/networks/{networkId}/sm/targetGroups/{targetGroupId}"
+        resource = f'/networks/{networkId}/sm/targetGroups/{targetGroupId}'
 
         return await self._session.delete(metadata, resource)
+

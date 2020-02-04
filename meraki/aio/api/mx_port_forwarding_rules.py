@@ -1,8 +1,8 @@
-class AsyncMXPortForwardingRules(object):
+class AsyncMXPortForwardingRules:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getNetworkPortForwardingRules(self, networkId: str):
         """
         **Return the port forwarding rules for an MX network**
@@ -12,10 +12,10 @@ class AsyncMXPortForwardingRules(object):
         """
 
         metadata = {
-            "tags": ["MX port forwarding rules"],
-            "operation": "getNetworkPortForwardingRules",
+            'tags': ['MX port forwarding rules'],
+            'operation': 'getNetworkPortForwardingRules',
         }
-        resource = f"/networks/{networkId}/portForwardingRules"
+        resource = f'/networks/{networkId}/portForwardingRules'
 
         return await self._session.get(metadata, resource)
 
@@ -31,12 +31,13 @@ class AsyncMXPortForwardingRules(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["MX port forwarding rules"],
-            "operation": "updateNetworkPortForwardingRules",
+            'tags': ['MX port forwarding rules'],
+            'operation': 'updateNetworkPortForwardingRules',
         }
-        resource = f"/networks/{networkId}/portForwardingRules"
+        resource = f'/networks/{networkId}/portForwardingRules'
 
-        body_params = ["rules"]
+        body_params = ['rules']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
+

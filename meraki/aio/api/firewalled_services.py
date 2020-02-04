@@ -1,8 +1,8 @@
-class AsyncFirewalledServices(object):
+class AsyncFirewalledServices:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getNetworkFirewalledServices(self, networkId: str):
         """
         **List the appliance services and their accessibility rules**
@@ -12,10 +12,10 @@ class AsyncFirewalledServices(object):
         """
 
         metadata = {
-            "tags": ["Firewalled services"],
-            "operation": "getNetworkFirewalledServices",
+            'tags': ['Firewalled services'],
+            'operation': 'getNetworkFirewalledServices',
         }
-        resource = f"/networks/{networkId}/firewalledServices"
+        resource = f'/networks/{networkId}/firewalledServices'
 
         return await self._session.get(metadata, resource)
 
@@ -29,16 +29,14 @@ class AsyncFirewalledServices(object):
         """
 
         metadata = {
-            "tags": ["Firewalled services"],
-            "operation": "getNetworkFirewalledService",
+            'tags': ['Firewalled services'],
+            'operation': 'getNetworkFirewalledService',
         }
-        resource = f"/networks/{networkId}/firewalledServices/{service}"
+        resource = f'/networks/{networkId}/firewalledServices/{service}'
 
         return await self._session.get(metadata, resource)
 
-    async def updateNetworkFirewalledService(
-        self, networkId: str, service: str, access: str, **kwargs
-    ):
+    async def updateNetworkFirewalledService(self, networkId: str, service: str, access: str, **kwargs):
         """
         **Updates the accessibility settings for the given service ('ICMP', 'web', or 'SNMP')**
         https://api.meraki.com/api_docs#updates-the-accessibility-settings-for-the-given-service-icmp-web-or-snmp
@@ -51,19 +49,18 @@ class AsyncFirewalledServices(object):
 
         kwargs.update(locals())
 
-        if "access" in kwargs:
-            options = ["blocked", "restricted", "unrestricted"]
-            assert (
-                kwargs["access"] in options
-            ), f""""access" cannot be "{kwargs['access']}", & must be set to one of: {options}"""
+        if 'access' in kwargs:
+            options = ['blocked', 'restricted', 'unrestricted']
+            assert kwargs['access'] in options, f'''"access" cannot be "{kwargs['access']}", & must be set to one of: {options}'''
 
         metadata = {
-            "tags": ["Firewalled services"],
-            "operation": "updateNetworkFirewalledService",
+            'tags': ['Firewalled services'],
+            'operation': 'updateNetworkFirewalledService',
         }
-        resource = f"/networks/{networkId}/firewalledServices/{service}"
+        resource = f'/networks/{networkId}/firewalledServices/{service}'
 
-        body_params = ["access", "allowedIps"]
+        body_params = ['access', 'allowedIps']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
+

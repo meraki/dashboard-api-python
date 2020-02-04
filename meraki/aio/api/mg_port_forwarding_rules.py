@@ -1,8 +1,8 @@
-class AsyncMGPortForwardingRules(object):
+class AsyncMGPortForwardingRules:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getDeviceCellularGatewaySettingsPortForwardingRules(self, serial: str):
         """
         **Returns the port forwarding rules for a single MG.**
@@ -12,16 +12,14 @@ class AsyncMGPortForwardingRules(object):
         """
 
         metadata = {
-            "tags": ["MG port forwarding rules"],
-            "operation": "getDeviceCellularGatewaySettingsPortForwardingRules",
+            'tags': ['MG port forwarding rules'],
+            'operation': 'getDeviceCellularGatewaySettingsPortForwardingRules',
         }
-        resource = f"/devices/{serial}/cellularGateway/settings/portForwardingRules"
+        resource = f'/devices/{serial}/cellularGateway/settings/portForwardingRules'
 
         return await self._session.get(metadata, resource)
 
-    async def updateDeviceCellularGatewaySettingsPortForwardingRules(
-        self, serial: str, **kwargs
-    ):
+    async def updateDeviceCellularGatewaySettingsPortForwardingRules(self, serial: str, **kwargs):
         """
         **Updates the port forwarding rules for a single MG.**
         https://api.meraki.com/api_docs#updates-the-port-forwarding-rules-for-a-single-mg
@@ -33,12 +31,13 @@ class AsyncMGPortForwardingRules(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["MG port forwarding rules"],
-            "operation": "updateDeviceCellularGatewaySettingsPortForwardingRules",
+            'tags': ['MG port forwarding rules'],
+            'operation': 'updateDeviceCellularGatewaySettingsPortForwardingRules',
         }
-        resource = f"/devices/{serial}/cellularGateway/settings/portForwardingRules"
+        resource = f'/devices/{serial}/cellularGateway/settings/portForwardingRules'
 
-        body_params = ["rules"]
+        body_params = ['rules']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
+

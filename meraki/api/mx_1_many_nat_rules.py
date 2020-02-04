@@ -19,7 +19,7 @@ class MX1ManyNATRules(object):
 
         return self._session.get(metadata, resource)
 
-    def updateNetworkOneToManyNatRules(self, networkId: str, **kwargs):
+    def updateNetworkOneToManyNatRules(self, networkId: str, rules: list):
         """
         **Set the 1:Many NAT mapping rules for an MX network**
         https://api.meraki.com/api_docs#set-the-1many-nat-mapping-rules-for-an-mx-network
@@ -28,7 +28,7 @@ class MX1ManyNATRules(object):
         - rules (array): An array of 1:Many nat rules
         """
 
-        kwargs.update(locals())
+        kwargs = locals()
 
         metadata = {
             'tags': ['MX 1:Many NAT rules'],

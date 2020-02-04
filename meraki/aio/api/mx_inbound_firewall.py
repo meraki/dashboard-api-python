@@ -1,8 +1,8 @@
-class AsyncMXInboundFirewall(object):
+class AsyncMXInboundFirewall:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getNetworkApplianceFirewallInboundFirewallRules(self, networkId: str):
         """
         **Return the inbound firewall rules for an MX network**
@@ -12,16 +12,14 @@ class AsyncMXInboundFirewall(object):
         """
 
         metadata = {
-            "tags": ["MX inbound firewall"],
-            "operation": "getNetworkApplianceFirewallInboundFirewallRules",
+            'tags': ['MX inbound firewall'],
+            'operation': 'getNetworkApplianceFirewallInboundFirewallRules',
         }
-        resource = f"/networks/{networkId}/appliance/firewall/inboundFirewallRules"
+        resource = f'/networks/{networkId}/appliance/firewall/inboundFirewallRules'
 
         return await self._session.get(metadata, resource)
 
-    async def updateNetworkApplianceFirewallInboundFirewallRules(
-        self, networkId: str, **kwargs
-    ):
+    async def updateNetworkApplianceFirewallInboundFirewallRules(self, networkId: str, **kwargs):
         """
         **Update the inbound firewall rules of an MX network**
         https://api.meraki.com/api_docs#update-the-inbound-firewall-rules-of-an-mx-network
@@ -34,12 +32,13 @@ class AsyncMXInboundFirewall(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["MX inbound firewall"],
-            "operation": "updateNetworkApplianceFirewallInboundFirewallRules",
+            'tags': ['MX inbound firewall'],
+            'operation': 'updateNetworkApplianceFirewallInboundFirewallRules',
         }
-        resource = f"/networks/{networkId}/appliance/firewall/inboundFirewallRules"
+        resource = f'/networks/{networkId}/appliance/firewall/inboundFirewallRules'
 
-        body_params = ["rules", "syslogDefaultRule"]
+        body_params = ['rules', 'syslogDefaultRule']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
+

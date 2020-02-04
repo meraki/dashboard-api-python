@@ -12,9 +12,7 @@ from .api.camera_quality_retention_profiles import AsyncCameraQualityRetentionPr
 from .api.cameras import AsyncCameras
 from .api.clients import AsyncClients
 from .api.config_templates import AsyncConfigTemplates
-from .api.connectivity_monitoring_destinations import (
-    AsyncConnectivityMonitoringDestinations,
-)
+from .api.connectivity_monitoring_destinations import AsyncConnectivityMonitoringDestinations
 from .api.content_filtering_categories import AsyncContentFilteringCategories
 from .api.content_filtering_rules import AsyncContentFilteringRules
 from .api.dashboard_branding_policies import AsyncDashboardBrandingPolicies
@@ -29,9 +27,7 @@ from .api.licenses import AsyncLicenses
 from .api.link_aggregations import AsyncLinkAggregations
 from .api.mg_dhcp_settings import AsyncMGDHCPSettings
 from .api.mg_lan_settings import AsyncMGLANSettings
-from .api.mg_connectivity_monitoring_destinations import (
-    AsyncMGConnectivityMonitoringDestinations,
-)
+from .api.mg_connectivity_monitoring_destinations import AsyncMGConnectivityMonitoringDestinations
 from .api.mg_port_forwarding_rules import AsyncMGPortForwardingRules
 from .api.mg_subnet_pool_settings import AsyncMGSubnetPoolSettings
 from .api.mg_uplink_settings import AsyncMGUplinkSettings
@@ -52,6 +48,7 @@ from .api.mx_warm_spare_settings import AsyncMXWarmSpareSettings
 from .api.malware_settings import AsyncMalwareSettings
 from .api.management_interface_settings import AsyncManagementInterfaceSettings
 from .api.meraki_auth_users import AsyncMerakiAuthUsers
+from .api.monitored_media_servers import AsyncMonitoredMediaServers
 from .api.named_tag_scope import AsyncNamedTagScope
 from .api.netflow_settings import AsyncNetFlowSettings
 from .api.networks import AsyncNetworks
@@ -80,22 +77,13 @@ from .api.vlans import AsyncVLANs
 from .api.webhook_logs import AsyncWebhookLogs
 from .api.wireless_health import AsyncWirelessHealth
 from .api.wireless_settings import AsyncWirelessSettings
-
-from meraki.config import (
-    API_KEY_ENVIRONMENT_VARIABLE,
-    DEFAULT_BASE_URL,
-    SINGLE_REQUEST_TIMEOUT,
-    CERTIFICATE_PATH,
-    WAIT_ON_RATE_LIMIT,
-    MAXIMUM_RETRIES,
-    OUTPUT_LOG,
-    LOG_FILE_PREFIX,
-    PRINT_TO_CONSOLE,
-    SIMULATE_API_CALLS,
+from ..config import (
+    API_KEY_ENVIRONMENT_VARIABLE, DEFAULT_BASE_URL, SINGLE_REQUEST_TIMEOUT, CERTIFICATE_PATH, WAIT_ON_RATE_LIMIT,
+    MAXIMUM_RETRIES, OUTPUT_LOG, LOG_PATH, LOG_FILE_PREFIX, PRINT_TO_CONSOLE, SIMULATE_API_CALLS
 )
 
 
-class AsyncDashboardAPI(object):
+class AsyncDashboardAPI:
     """
     **Creates a persistent Meraki dashboard API session**
 
@@ -104,51 +92,41 @@ class AsyncDashboardAPI(object):
     - single_request_timeout (integer): maximum number of seconds for each API call
     - certificate_path (string): path for TLS/SSL certificate verification if behind local proxy
     - wait_on_rate_limit (boolean): retry if 429 rate limit error encountered?
-    - maximum_retries_on_rate_limit (integer): retry up to this many times when encountering 429s or other server-side errors
+    - maximum_retries (integer): retry up to this many times when encountering 429s or other server-side errors
     - output_log (boolean): create an output log file?
+    - log_path (string): path to output log; by default, working directory of script if not specified
     - log_file_prefix (string): log file name appended with date and timestamp
     - print_console (boolean): if output log used, output to console too?
     - simulate (boolean): simulate POST/PUT/DELETE calls to prevent changes?
     """
 
-    def __init__(
-        self,
-        api_key=None,
-        base_url=DEFAULT_BASE_URL,
-        single_request_timeout=SINGLE_REQUEST_TIMEOUT,
-        certificate_path=CERTIFICATE_PATH,
-        wait_on_rate_limit=WAIT_ON_RATE_LIMIT,
-        maximum_retries=MAXIMUM_RETRIES,
-        output_log=OUTPUT_LOG,
-        log_file_prefix=LOG_FILE_PREFIX,
-        print_console=PRINT_TO_CONSOLE,
-        simulate=SIMULATE_API_CALLS,
-    ):
+    def __init__(self, api_key=None, base_url=DEFAULT_BASE_URL, single_request_timeout=SINGLE_REQUEST_TIMEOUT,
+                 certificate_path=CERTIFICATE_PATH, wait_on_rate_limit=WAIT_ON_RATE_LIMIT,
+                 maximum_retries=MAXIMUM_RETRIES, output_log=OUTPUT_LOG, log_path=LOG_PATH,
+                 log_file_prefix=LOG_FILE_PREFIX, print_console=PRINT_TO_CONSOLE, simulate=SIMULATE_API_CALLS):
+        # Check API key
         api_key = api_key or os.environ.get(API_KEY_ENVIRONMENT_VARIABLE)
         if not api_key:
             raise APIKeyError()
 
         # Configure logging
         self._logger = logging.getLogger(__name__)
-        self._log_file = (
-            f"{log_file_prefix}_log__{datetime.now():%Y-%m-%d_%H-%M-%S}.log"
-        )
+        if log_path and log_path[-1] != '/':
+            log_path += '/'
+        self._log_file = f'{log_path}{log_file_prefix}_log__{datetime.now():%Y-%m-%d_%H-%M-%S}.log'
         if output_log:
             logging.basicConfig(
                 filename=self._log_file,
                 level=logging.DEBUG,
-                format="%(asctime)s %(name)12s: %(levelname)8s > %(message)s",
-                datefmt="%Y-%m-%d %H:%M:%S",
-            )
+                format='%(asctime)s %(name)12s: %(levelname)8s > %(message)s',
+                datefmt='%Y-%m-%d %H:%M:%S')
 
             if print_console:
                 console = logging.StreamHandler()
                 console.setLevel(logging.INFO)
-                formatter = logging.Formatter(
-                    "%(name)12s: %(levelname)8s > %(message)s"
-                )
+                formatter = logging.Formatter('%(name)12s: %(levelname)8s > %(message)s')
                 console.setFormatter(formatter)
-                logging.getLogger("").addHandler(console)
+                logging.getLogger('').addHandler(console)
 
         # Creates the API session
         self._session = AsyncRestSession(
@@ -168,18 +146,12 @@ class AsyncDashboardAPI(object):
         self.admins = AsyncAdmins(self._session)
         self.alert_settings = AsyncAlertSettings(self._session)
         self.bluetooth_clients = AsyncBluetoothClients(self._session)
-        self.camera_quality_retention_profiles = AsyncCameraQualityRetentionProfiles(
-            self._session
-        )
+        self.camera_quality_retention_profiles = AsyncCameraQualityRetentionProfiles(self._session)
         self.cameras = AsyncCameras(self._session)
         self.clients = AsyncClients(self._session)
         self.config_templates = AsyncConfigTemplates(self._session)
-        self.connectivity_monitoring_destinations = AsyncConnectivityMonitoringDestinations(
-            self._session
-        )
-        self.content_filtering_categories = AsyncContentFilteringCategories(
-            self._session
-        )
+        self.connectivity_monitoring_destinations = AsyncConnectivityMonitoringDestinations(self._session)
+        self.content_filtering_categories = AsyncContentFilteringCategories(self._session)
         self.content_filtering_rules = AsyncContentFilteringRules(self._session)
         self.dashboard_branding_policies = AsyncDashboardBrandingPolicies(self._session)
         self.devices = AsyncDevices(self._session)
@@ -193,9 +165,7 @@ class AsyncDashboardAPI(object):
         self.link_aggregations = AsyncLinkAggregations(self._session)
         self.mg_dhcp_settings = AsyncMGDHCPSettings(self._session)
         self.mg_lan_settings = AsyncMGLANSettings(self._session)
-        self.mg_connectivity_monitoring_destinations = AsyncMGConnectivityMonitoringDestinations(
-            self._session
-        )
+        self.mg_connectivity_monitoring_destinations = AsyncMGConnectivityMonitoringDestinations(self._session)
         self.mg_port_forwarding_rules = AsyncMGPortForwardingRules(self._session)
         self.mg_subnet_pool_settings = AsyncMGSubnetPoolSettings(self._session)
         self.mg_uplink_settings = AsyncMGUplinkSettings(self._session)
@@ -204,9 +174,7 @@ class AsyncDashboardAPI(object):
         self.mx_1_1_nat_rules = AsyncMX11NATRules(self._session)
         self.mx_1_many_nat_rules = AsyncMX1ManyNATRules(self._session)
         self.mx_l3_firewall = AsyncMXL3Firewall(self._session)
-        self.mx_l7_application_categories = AsyncMXL7ApplicationCategories(
-            self._session
-        )
+        self.mx_l7_application_categories = AsyncMXL7ApplicationCategories(self._session)
         self.mx_l7_firewall = AsyncMXL7Firewall(self._session)
         self.mx_vlan_ports = AsyncMXVLANPorts(self._session)
         self.mx_vpn_firewall = AsyncMXVPNFirewall(self._session)
@@ -216,10 +184,9 @@ class AsyncDashboardAPI(object):
         self.mx_static_routes = AsyncMXStaticRoutes(self._session)
         self.mx_warm_spare_settings = AsyncMXWarmSpareSettings(self._session)
         self.malware_settings = AsyncMalwareSettings(self._session)
-        self.management_interface_settings = AsyncManagementInterfaceSettings(
-            self._session
-        )
+        self.management_interface_settings = AsyncManagementInterfaceSettings(self._session)
         self.meraki_auth_users = AsyncMerakiAuthUsers(self._session)
+        self.monitored_media_servers = AsyncMonitoredMediaServers(self._session)
         self.named_tag_scope = AsyncNamedTagScope(self._session)
         self.netflow_settings = AsyncNetFlowSettings(self._session)
         self.networks = AsyncNetworks(self._session)

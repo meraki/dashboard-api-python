@@ -1,11 +1,9 @@
-class AsyncSwitchProfiles(object):
+class AsyncSwitchProfiles:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
-    async def getOrganizationConfigTemplateSwitchProfiles(
-        self, organizationId: str, configTemplateId: str
-    ):
+    
+    async def getOrganizationConfigTemplateSwitchProfiles(self, organizationId: str, configTemplateId: str):
         """
         **List the switch profiles for your switch template configuration**
         https://api.meraki.com/api_docs#list-the-switch-profiles-for-your-switch-template-configuration
@@ -15,9 +13,10 @@ class AsyncSwitchProfiles(object):
         """
 
         metadata = {
-            "tags": ["Switch profiles"],
-            "operation": "getOrganizationConfigTemplateSwitchProfiles",
+            'tags': ['Switch profiles'],
+            'operation': 'getOrganizationConfigTemplateSwitchProfiles',
         }
-        resource = f"/organizations/{organizationId}/configTemplates/{configTemplateId}/switchProfiles"
+        resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}/switchProfiles'
 
         return await self._session.get(metadata, resource)
+

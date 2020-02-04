@@ -1,8 +1,8 @@
-class AsyncLinkAggregations(object):
+class AsyncLinkAggregations:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getNetworkSwitchLinkAggregations(self, networkId: str):
         """
         **List link aggregation groups**
@@ -12,10 +12,10 @@ class AsyncLinkAggregations(object):
         """
 
         metadata = {
-            "tags": ["Link aggregations"],
-            "operation": "getNetworkSwitchLinkAggregations",
+            'tags': ['Link aggregations'],
+            'operation': 'getNetworkSwitchLinkAggregations',
         }
-        resource = f"/networks/{networkId}/switch/linkAggregations"
+        resource = f'/networks/{networkId}/switch/linkAggregations'
 
         return await self._session.get(metadata, resource)
 
@@ -32,19 +32,17 @@ class AsyncLinkAggregations(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Link aggregations"],
-            "operation": "createNetworkSwitchLinkAggregation",
+            'tags': ['Link aggregations'],
+            'operation': 'createNetworkSwitchLinkAggregation',
         }
-        resource = f"/networks/{networkId}/switch/linkAggregations"
+        resource = f'/networks/{networkId}/switch/linkAggregations'
 
-        body_params = ["switchPorts", "switchProfilePorts"]
+        body_params = ['switchPorts', 'switchProfilePorts']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.post(metadata, resource, payload)
 
-    async def updateNetworkSwitchLinkAggregation(
-        self, networkId: str, linkAggregationId: str, **kwargs
-    ):
+    async def updateNetworkSwitchLinkAggregation(self, networkId: str, linkAggregationId: str, **kwargs):
         """
         **Update a link aggregation group**
         https://api.meraki.com/api_docs#update-a-link-aggregation-group
@@ -58,19 +56,17 @@ class AsyncLinkAggregations(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Link aggregations"],
-            "operation": "updateNetworkSwitchLinkAggregation",
+            'tags': ['Link aggregations'],
+            'operation': 'updateNetworkSwitchLinkAggregation',
         }
-        resource = f"/networks/{networkId}/switch/linkAggregations/{linkAggregationId}"
+        resource = f'/networks/{networkId}/switch/linkAggregations/{linkAggregationId}'
 
-        body_params = ["switchPorts", "switchProfilePorts"]
+        body_params = ['switchPorts', 'switchProfilePorts']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
 
-    async def deleteNetworkSwitchLinkAggregation(
-        self, networkId: str, linkAggregationId: str
-    ):
+    async def deleteNetworkSwitchLinkAggregation(self, networkId: str, linkAggregationId: str):
         """
         **Split a link aggregation group into separate ports**
         https://api.meraki.com/api_docs#split-a-link-aggregation-group-into-separate-ports
@@ -80,9 +76,10 @@ class AsyncLinkAggregations(object):
         """
 
         metadata = {
-            "tags": ["Link aggregations"],
-            "operation": "deleteNetworkSwitchLinkAggregation",
+            'tags': ['Link aggregations'],
+            'operation': 'deleteNetworkSwitchLinkAggregation',
         }
-        resource = f"/networks/{networkId}/switch/linkAggregations/{linkAggregationId}"
+        resource = f'/networks/{networkId}/switch/linkAggregations/{linkAggregationId}'
 
         return await self._session.delete(metadata, resource)
+

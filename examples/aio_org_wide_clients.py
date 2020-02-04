@@ -7,7 +7,7 @@ import meraki.aio
 
 # Either input your API key below, or set an environment variable
 # for example, in Terminal on macOS:  export MERAKI_DASHBOARD_API_KEY=66839003d2861bc302b292eb66d3b247709f2d0d
-api_key = ""
+api_key = "4594323450eadd7fd4e918bbd5202288c568fe38"
 
 async def listNetworkClients(aiomeraki:meraki.aio.AsyncDashboardAPI, folder_name, network):
     print(f'Finding clients in network {network["name"]}')

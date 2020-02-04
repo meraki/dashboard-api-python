@@ -1,8 +1,8 @@
-class AsyncIntrusionSettings(object):
+class AsyncIntrusionSettings:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getNetworkSecurityIntrusionSettings(self, networkId: str):
         """
         **Returns all supported intrusion settings for an MX network**
@@ -12,10 +12,10 @@ class AsyncIntrusionSettings(object):
         """
 
         metadata = {
-            "tags": ["Intrusion settings"],
-            "operation": "getNetworkSecurityIntrusionSettings",
+            'tags': ['Intrusion settings'],
+            'operation': 'getNetworkSecurityIntrusionSettings',
         }
-        resource = f"/networks/{networkId}/security/intrusionSettings"
+        resource = f'/networks/{networkId}/security/intrusionSettings'
 
         return await self._session.get(metadata, resource)
 
@@ -33,12 +33,12 @@ class AsyncIntrusionSettings(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Intrusion settings"],
-            "operation": "updateNetworkSecurityIntrusionSettings",
+            'tags': ['Intrusion settings'],
+            'operation': 'updateNetworkSecurityIntrusionSettings',
         }
-        resource = f"/networks/{networkId}/security/intrusionSettings"
+        resource = f'/networks/{networkId}/security/intrusionSettings'
 
-        body_params = ["mode", "idsRulesets", "protectedNetworks"]
+        body_params = ['mode', 'idsRulesets', 'protectedNetworks']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
@@ -52,16 +52,14 @@ class AsyncIntrusionSettings(object):
         """
 
         metadata = {
-            "tags": ["Intrusion settings"],
-            "operation": "getOrganizationSecurityIntrusionSettings",
+            'tags': ['Intrusion settings'],
+            'operation': 'getOrganizationSecurityIntrusionSettings',
         }
-        resource = f"/organizations/{organizationId}/security/intrusionSettings"
+        resource = f'/organizations/{organizationId}/security/intrusionSettings'
 
         return await self._session.get(metadata, resource)
 
-    async def updateOrganizationSecurityIntrusionSettings(
-        self, organizationId: str, whitelistedRules: list
-    ):
+    async def updateOrganizationSecurityIntrusionSettings(self, organizationId: str, whitelistedRules: list):
         """
         **Sets supported intrusion settings for an organization**
         https://api.meraki.com/api_docs#sets-supported-intrusion-settings-for-an-organization
@@ -73,12 +71,13 @@ class AsyncIntrusionSettings(object):
         kwargs = locals()
 
         metadata = {
-            "tags": ["Intrusion settings"],
-            "operation": "updateOrganizationSecurityIntrusionSettings",
+            'tags': ['Intrusion settings'],
+            'operation': 'updateOrganizationSecurityIntrusionSettings',
         }
-        resource = f"/organizations/{organizationId}/security/intrusionSettings"
+        resource = f'/organizations/{organizationId}/security/intrusionSettings'
 
-        body_params = ["whitelistedRules"]
+        body_params = ['whitelistedRules']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
+

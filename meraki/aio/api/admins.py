@@ -1,8 +1,8 @@
-class AsyncAdmins(object):
+class AsyncAdmins:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getOrganizationAdmins(self, organizationId: str):
         """
         **List the dashboard administrators in this organization**
@@ -12,16 +12,14 @@ class AsyncAdmins(object):
         """
 
         metadata = {
-            "tags": ["Admins"],
-            "operation": "getOrganizationAdmins",
+            'tags': ['Admins'],
+            'operation': 'getOrganizationAdmins',
         }
-        resource = f"/organizations/{organizationId}/admins"
+        resource = f'/organizations/{organizationId}/admins'
 
         return await self._session.get(metadata, resource)
 
-    async def createOrganizationAdmin(
-        self, organizationId: str, email: str, name: str, orgAccess: str, **kwargs
-    ):
+    async def createOrganizationAdmin(self, organizationId: str, email: str, name: str, orgAccess: str, **kwargs):
         """
         **Create a new dashboard administrator**
         https://api.meraki.com/api_docs#create-a-new-dashboard-administrator
@@ -36,19 +34,17 @@ class AsyncAdmins(object):
 
         kwargs.update(locals())
 
-        if "orgAccess" in kwargs:
-            options = ["full", "read-only", "enterprise", "none"]
-            assert (
-                kwargs["orgAccess"] in options
-            ), f""""orgAccess" cannot be "{kwargs['orgAccess']}", & must be set to one of: {options}"""
+        if 'orgAccess' in kwargs:
+            options = ['full', 'read-only', 'enterprise', 'none']
+            assert kwargs['orgAccess'] in options, f'''"orgAccess" cannot be "{kwargs['orgAccess']}", & must be set to one of: {options}'''
 
         metadata = {
-            "tags": ["Admins"],
-            "operation": "createOrganizationAdmin",
+            'tags': ['Admins'],
+            'operation': 'createOrganizationAdmin',
         }
-        resource = f"/organizations/{organizationId}/admins"
+        resource = f'/organizations/{organizationId}/admins'
 
-        body_params = ["email", "name", "orgAccess", "tags", "networks"]
+        body_params = ['email', 'name', 'orgAccess', 'tags', 'networks']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.post(metadata, resource, payload)
@@ -68,19 +64,17 @@ class AsyncAdmins(object):
 
         kwargs.update(locals())
 
-        if "orgAccess" in kwargs:
-            options = ["full", "read-only", "enterprise", "none"]
-            assert (
-                kwargs["orgAccess"] in options
-            ), f""""orgAccess" cannot be "{kwargs['orgAccess']}", & must be set to one of: {options}"""
+        if 'orgAccess' in kwargs:
+            options = ['full', 'read-only', 'enterprise', 'none']
+            assert kwargs['orgAccess'] in options, f'''"orgAccess" cannot be "{kwargs['orgAccess']}", & must be set to one of: {options}'''
 
         metadata = {
-            "tags": ["Admins"],
-            "operation": "updateOrganizationAdmin",
+            'tags': ['Admins'],
+            'operation': 'updateOrganizationAdmin',
         }
-        resource = f"/organizations/{organizationId}/admins/{id}"
+        resource = f'/organizations/{organizationId}/admins/{id}'
 
-        body_params = ["name", "orgAccess", "tags", "networks"]
+        body_params = ['name', 'orgAccess', 'tags', 'networks']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
@@ -95,9 +89,10 @@ class AsyncAdmins(object):
         """
 
         metadata = {
-            "tags": ["Admins"],
-            "operation": "deleteOrganizationAdmin",
+            'tags': ['Admins'],
+            'operation': 'deleteOrganizationAdmin',
         }
-        resource = f"/organizations/{organizationId}/admins/{id}"
+        resource = f'/organizations/{organizationId}/admins/{id}'
 
         return await self._session.delete(metadata, resource)
+

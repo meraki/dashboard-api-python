@@ -1,8 +1,8 @@
-class AsyncClients(object):
+class AsyncClients:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getDeviceClients(self, serial: str, **kwargs):
         """
         **List the clients of a device, up to a maximum of a month ago. The usage of each client is returned in kilobytes. If the device is a switch, the switchport is returned; otherwise the switchport field is null.**
@@ -16,19 +16,17 @@ class AsyncClients(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Clients"],
-            "operation": "getDeviceClients",
+            'tags': ['Clients'],
+            'operation': 'getDeviceClients',
         }
-        resource = f"/devices/{serial}/clients"
+        resource = f'/devices/{serial}/clients'
 
-        query_params = ["t0", "timespan"]
+        query_params = ['t0', 'timespan']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return await self._session.get(metadata, resource, params)
 
-    async def getNetworkClients(
-        self, networkId: str, total_pages=1, direction="next", **kwargs
-    ):
+    async def getNetworkClients(self, networkId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the clients that have used this network in the timespan**
         https://api.meraki.com/api_docs#list-the-clients-that-have-used-this-network-in-the-timespan
@@ -46,39 +44,42 @@ class AsyncClients(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Clients"],
-            "operation": "getNetworkClients",
+            'tags': ['Clients'],
+            'operation': 'getNetworkClients',
         }
-        resource = f"/networks/{networkId}/clients"
+        resource = f'/networks/{networkId}/clients'
 
-        query_params = ["t0", "timespan", "perPage", "startingAfter", "endingBefore"]
+        query_params = ['t0', 'timespan', 'perPage', 'startingAfter', 'endingBefore']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return await self._session.get_pages(
-            metadata, resource, params, total_pages, direction
-        )
+        return await self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    async def provisionNetworkClients(self, networkId: str, **kwargs):
+
+    async def provisionNetworkClients(self, networkId: str, mac: str, devicePolicy: str, **kwargs):
         """
         **Provisions a client with a name and policy. Clients can be provisioned before they associate to the network.**
         https://api.meraki.com/api_docs#provisions-a-client-with-a-name-and-policy
         
         - networkId (string)
         - mac (string): The MAC address of the client. Required.
-        - name (string): The display name for the client. Optional. Limited to 255 bytes.
         - devicePolicy (string): The policy to apply to the specified client. Can be 'Whitelisted', 'Blocked', 'Normal' or 'Group policy'. Required.
-        - groupPolicyId (string): The ID of the desired group policy to apply to the client. Required if 'devicePolicy' is set to "Group policy". Otherwise this is ignored.
+        - name (string): The display name for the client. Optional. Limited to 255 bytes.
+        - groupPolicyId (integer): The ID of the desired group policy to apply to the client. Required if 'devicePolicy' is set to "Group policy". Otherwise this is ignored.
         """
 
         kwargs.update(locals())
 
-        metadata = {
-            "tags": ["Clients"],
-            "operation": "provisionNetworkClients",
-        }
-        resource = f"/networks/{networkId}/clients/provision"
+        if 'devicePolicy' in kwargs:
+            options = ['Whitelisted', 'Blocked', 'Normal', 'Group policy']
+            assert kwargs['devicePolicy'] in options, f'''"devicePolicy" cannot be "{kwargs['devicePolicy']}", & must be set to one of: {options}'''
 
-        body_params = ["mac", "name", "devicePolicy", "groupPolicyId"]
+        metadata = {
+            'tags': ['Clients'],
+            'operation': 'provisionNetworkClients',
+        }
+        resource = f'/networks/{networkId}/clients/provision'
+
+        body_params = ['mac', 'name', 'devicePolicy', 'groupPolicyId']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.post(metadata, resource, payload)
@@ -93,16 +94,14 @@ class AsyncClients(object):
         """
 
         metadata = {
-            "tags": ["Clients"],
-            "operation": "getNetworkClient",
+            'tags': ['Clients'],
+            'operation': 'getNetworkClient',
         }
-        resource = f"/networks/{networkId}/clients/{clientId}"
+        resource = f'/networks/{networkId}/clients/{clientId}'
 
         return await self._session.get(metadata, resource)
 
-    async def getNetworkClientEvents(
-        self, networkId: str, clientId: str, total_pages=1, direction="next", **kwargs
-    ):
+    async def getNetworkClientEvents(self, networkId: str, clientId: str, total_pages=1, direction='next', **kwargs):
         """
         **Return the events associated with this client. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
         https://api.meraki.com/api_docs#return-the-events-associated-with-this-client
@@ -119,21 +118,18 @@ class AsyncClients(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Clients"],
-            "operation": "getNetworkClientEvents",
+            'tags': ['Clients'],
+            'operation': 'getNetworkClientEvents',
         }
-        resource = f"/networks/{networkId}/clients/{clientId}/events"
+        resource = f'/networks/{networkId}/clients/{clientId}/events'
 
-        query_params = ["perPage", "startingAfter", "endingBefore"]
+        query_params = ['perPage', 'startingAfter', 'endingBefore']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return await self._session.get_pages(
-            metadata, resource, params, total_pages, direction
-        )
+        return await self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    async def getNetworkClientLatencyHistory(
-        self, networkId: str, clientId: str, **kwargs
-    ):
+
+    async def getNetworkClientLatencyHistory(self, networkId: str, clientId: str, **kwargs):
         """
         **Return the latency history for a client. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP. The latency data is from a sample of 2% of packets and is grouped into 4 traffic categories: background, best effort, video, voice. Within these categories the sampled packet counters are bucketed by latency in milliseconds.**
         https://api.meraki.com/api_docs#return-the-latency-history-for-a-client
@@ -149,12 +145,12 @@ class AsyncClients(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Clients"],
-            "operation": "getNetworkClientLatencyHistory",
+            'tags': ['Clients'],
+            'operation': 'getNetworkClientLatencyHistory',
         }
-        resource = f"/networks/{networkId}/clients/{clientId}/latencyHistory"
+        resource = f'/networks/{networkId}/clients/{clientId}/latencyHistory'
 
-        query_params = ["t0", "t1", "timespan", "resolution"]
+        query_params = ['t0', 't1', 'timespan', 'resolution']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return await self._session.get(metadata, resource, params)
@@ -169,10 +165,10 @@ class AsyncClients(object):
         """
 
         metadata = {
-            "tags": ["Clients"],
-            "operation": "getNetworkClientPolicy",
+            'tags': ['Clients'],
+            'operation': 'getNetworkClientPolicy',
         }
-        resource = f"/networks/{networkId}/clients/{clientId}/policy"
+        resource = f'/networks/{networkId}/clients/{clientId}/policy'
 
         return await self._session.get(metadata, resource)
 
@@ -190,19 +186,17 @@ class AsyncClients(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Clients"],
-            "operation": "updateNetworkClientPolicy",
+            'tags': ['Clients'],
+            'operation': 'updateNetworkClientPolicy',
         }
-        resource = f"/networks/{networkId}/clients/{clientId}/policy"
+        resource = f'/networks/{networkId}/clients/{clientId}/policy'
 
-        body_params = ["devicePolicy", "groupPolicyId"]
+        body_params = ['devicePolicy', 'groupPolicyId']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
 
-    async def getNetworkClientSplashAuthorizationStatus(
-        self, networkId: str, clientId: str
-    ):
+    async def getNetworkClientSplashAuthorizationStatus(self, networkId: str, clientId: str):
         """
         **Return the splash authorization for a client, for each SSID they've associated with through splash. Only enabled SSIDs with Click-through splash enabled will be included. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
         https://api.meraki.com/api_docs#return-the-splash-authorization-for-a-client-for-each-ssid-theyve-associated-with-through-splash
@@ -212,16 +206,14 @@ class AsyncClients(object):
         """
 
         metadata = {
-            "tags": ["Clients"],
-            "operation": "getNetworkClientSplashAuthorizationStatus",
+            'tags': ['Clients'],
+            'operation': 'getNetworkClientSplashAuthorizationStatus',
         }
-        resource = f"/networks/{networkId}/clients/{clientId}/splashAuthorizationStatus"
+        resource = f'/networks/{networkId}/clients/{clientId}/splashAuthorizationStatus'
 
         return await self._session.get(metadata, resource)
 
-    async def updateNetworkClientSplashAuthorizationStatus(
-        self, networkId: str, clientId: str, **kwargs
-    ):
+    async def updateNetworkClientSplashAuthorizationStatus(self, networkId: str, clientId: str, **kwargs):
         """
         **Update a client's splash authorization. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
         https://api.meraki.com/api_docs#update-a-clients-splash-authorization
@@ -234,19 +226,17 @@ class AsyncClients(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Clients"],
-            "operation": "updateNetworkClientSplashAuthorizationStatus",
+            'tags': ['Clients'],
+            'operation': 'updateNetworkClientSplashAuthorizationStatus',
         }
-        resource = f"/networks/{networkId}/clients/{clientId}/splashAuthorizationStatus"
+        resource = f'/networks/{networkId}/clients/{clientId}/splashAuthorizationStatus'
 
-        body_params = ["ssids"]
+        body_params = ['ssids']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
 
-    async def getNetworkClientTrafficHistory(
-        self, networkId: str, clientId: str, total_pages=1, direction="next", **kwargs
-    ):
+    async def getNetworkClientTrafficHistory(self, networkId: str, clientId: str, total_pages=1, direction='next', **kwargs):
         """
         **Return the client's network traffic data over time. Usage data is in kilobytes. This endpoint requires detailed traffic analysis to be enabled on the Network-wide > General page. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
         https://api.meraki.com/api_docs#return-the-clients-network-traffic-data-over-time
@@ -263,17 +253,16 @@ class AsyncClients(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Clients"],
-            "operation": "getNetworkClientTrafficHistory",
+            'tags': ['Clients'],
+            'operation': 'getNetworkClientTrafficHistory',
         }
-        resource = f"/networks/{networkId}/clients/{clientId}/trafficHistory"
+        resource = f'/networks/{networkId}/clients/{clientId}/trafficHistory'
 
-        query_params = ["perPage", "startingAfter", "endingBefore"]
+        query_params = ['perPage', 'startingAfter', 'endingBefore']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return await self._session.get_pages(
-            metadata, resource, params, total_pages, direction
-        )
+        return await self._session.get_pages(metadata, resource, params, total_pages, direction)
+
 
     async def getNetworkClientUsageHistory(self, networkId: str, clientId: str):
         """
@@ -285,9 +274,10 @@ class AsyncClients(object):
         """
 
         metadata = {
-            "tags": ["Clients"],
-            "operation": "getNetworkClientUsageHistory",
+            'tags': ['Clients'],
+            'operation': 'getNetworkClientUsageHistory',
         }
-        resource = f"/networks/{networkId}/clients/{clientId}/usageHistory"
+        resource = f'/networks/{networkId}/clients/{clientId}/usageHistory'
 
         return await self._session.get(metadata, resource)
+

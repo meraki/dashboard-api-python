@@ -1,8 +1,8 @@
-class AsyncMRL3Firewall(object):
+class AsyncMRL3Firewall:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getNetworkSsidL3FirewallRules(self, networkId: str, number: str):
         """
         **Return the L3 firewall rules for an SSID on an MR network**
@@ -13,16 +13,14 @@ class AsyncMRL3Firewall(object):
         """
 
         metadata = {
-            "tags": ["MR L3 firewall"],
-            "operation": "getNetworkSsidL3FirewallRules",
+            'tags': ['MR L3 firewall'],
+            'operation': 'getNetworkSsidL3FirewallRules',
         }
-        resource = f"/networks/{networkId}/ssids/{number}/l3FirewallRules"
+        resource = f'/networks/{networkId}/ssids/{number}/l3FirewallRules'
 
         return await self._session.get(metadata, resource)
 
-    async def updateNetworkSsidL3FirewallRules(
-        self, networkId: str, number: str, **kwargs
-    ):
+    async def updateNetworkSsidL3FirewallRules(self, networkId: str, number: str, **kwargs):
         """
         **Update the L3 firewall rules of an SSID on an MR network**
         https://api.meraki.com/api_docs#update-the-l3-firewall-rules-of-an-ssid-on-an-mr-network
@@ -36,12 +34,13 @@ class AsyncMRL3Firewall(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["MR L3 firewall"],
-            "operation": "updateNetworkSsidL3FirewallRules",
+            'tags': ['MR L3 firewall'],
+            'operation': 'updateNetworkSsidL3FirewallRules',
         }
-        resource = f"/networks/{networkId}/ssids/{number}/l3FirewallRules"
+        resource = f'/networks/{networkId}/ssids/{number}/l3FirewallRules'
 
-        body_params = ["rules", "allowLanAccess"]
+        body_params = ['rules', 'allowLanAccess']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
+

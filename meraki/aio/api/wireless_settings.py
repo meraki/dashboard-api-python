@@ -1,8 +1,8 @@
-class AsyncWirelessSettings(object):
+class AsyncWirelessSettings:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getNetworkWirelessSettings(self, networkId: str):
         """
         **Return the wireless settings for a network**
@@ -12,10 +12,10 @@ class AsyncWirelessSettings(object):
         """
 
         metadata = {
-            "tags": ["Wireless settings"],
-            "operation": "getNetworkWirelessSettings",
+            'tags': ['Wireless settings'],
+            'operation': 'getNetworkWirelessSettings',
         }
-        resource = f"/networks/{networkId}/wireless/settings"
+        resource = f'/networks/{networkId}/wireless/settings'
 
         return await self._session.get(metadata, resource)
 
@@ -34,17 +34,13 @@ class AsyncWirelessSettings(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Wireless settings"],
-            "operation": "updateNetworkWirelessSettings",
+            'tags': ['Wireless settings'],
+            'operation': 'updateNetworkWirelessSettings',
         }
-        resource = f"/networks/{networkId}/wireless/settings"
+        resource = f'/networks/{networkId}/wireless/settings'
 
-        body_params = [
-            "meshingEnabled",
-            "ipv6BridgeEnabled",
-            "locationAnalyticsEnabled",
-            "ledLightsOn",
-        ]
+        body_params = ['meshingEnabled', 'ipv6BridgeEnabled', 'locationAnalyticsEnabled', 'ledLightsOn']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
+

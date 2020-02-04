@@ -1,8 +1,8 @@
-class AsyncGroupPolicies(object):
+class AsyncGroupPolicies:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getNetworkGroupPolicies(self, networkId: str):
         """
         **List the group policies in a network**
@@ -12,10 +12,10 @@ class AsyncGroupPolicies(object):
         """
 
         metadata = {
-            "tags": ["Group policies"],
-            "operation": "getNetworkGroupPolicies",
+            'tags': ['Group policies'],
+            'operation': 'getNetworkGroupPolicies',
         }
-        resource = f"/networks/{networkId}/groupPolicies"
+        resource = f'/networks/{networkId}/groupPolicies'
 
         return await self._session.get(metadata, resource)
 
@@ -40,28 +40,17 @@ class AsyncGroupPolicies(object):
 
         kwargs.update(locals())
 
-        if "splashAuthSettings" in kwargs:
-            options = ["network default", "bypass"]
-            assert (
-                kwargs["splashAuthSettings"] in options
-            ), f""""splashAuthSettings" cannot be "{kwargs['splashAuthSettings']}", & must be set to one of: {options}"""
+        if 'splashAuthSettings' in kwargs:
+            options = ['network default', 'bypass']
+            assert kwargs['splashAuthSettings'] in options, f'''"splashAuthSettings" cannot be "{kwargs['splashAuthSettings']}", & must be set to one of: {options}'''
 
         metadata = {
-            "tags": ["Group policies"],
-            "operation": "createNetworkGroupPolicy",
+            'tags': ['Group policies'],
+            'operation': 'createNetworkGroupPolicy',
         }
-        resource = f"/networks/{networkId}/groupPolicies"
+        resource = f'/networks/{networkId}/groupPolicies'
 
-        body_params = [
-            "name",
-            "scheduling",
-            "bandwidth",
-            "firewallAndTrafficShaping",
-            "contentFiltering",
-            "splashAuthSettings",
-            "vlanTagging",
-            "bonjourForwarding",
-        ]
+        body_params = ['name', 'scheduling', 'bandwidth', 'firewallAndTrafficShaping', 'contentFiltering', 'splashAuthSettings', 'vlanTagging', 'bonjourForwarding']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.post(metadata, resource, payload)
@@ -76,16 +65,14 @@ class AsyncGroupPolicies(object):
         """
 
         metadata = {
-            "tags": ["Group policies"],
-            "operation": "getNetworkGroupPolicy",
+            'tags': ['Group policies'],
+            'operation': 'getNetworkGroupPolicy',
         }
-        resource = f"/networks/{networkId}/groupPolicies/{groupPolicyId}"
+        resource = f'/networks/{networkId}/groupPolicies/{groupPolicyId}'
 
         return await self._session.get(metadata, resource)
 
-    async def updateNetworkGroupPolicy(
-        self, networkId: str, groupPolicyId: str, **kwargs
-    ):
+    async def updateNetworkGroupPolicy(self, networkId: str, groupPolicyId: str, **kwargs):
         """
         **Update a group policy**
         https://api.meraki.com/api_docs#update-a-group-policy
@@ -107,28 +94,17 @@ class AsyncGroupPolicies(object):
 
         kwargs.update(locals())
 
-        if "splashAuthSettings" in kwargs:
-            options = ["network default", "bypass"]
-            assert (
-                kwargs["splashAuthSettings"] in options
-            ), f""""splashAuthSettings" cannot be "{kwargs['splashAuthSettings']}", & must be set to one of: {options}"""
+        if 'splashAuthSettings' in kwargs:
+            options = ['network default', 'bypass']
+            assert kwargs['splashAuthSettings'] in options, f'''"splashAuthSettings" cannot be "{kwargs['splashAuthSettings']}", & must be set to one of: {options}'''
 
         metadata = {
-            "tags": ["Group policies"],
-            "operation": "updateNetworkGroupPolicy",
+            'tags': ['Group policies'],
+            'operation': 'updateNetworkGroupPolicy',
         }
-        resource = f"/networks/{networkId}/groupPolicies/{groupPolicyId}"
+        resource = f'/networks/{networkId}/groupPolicies/{groupPolicyId}'
 
-        body_params = [
-            "name",
-            "scheduling",
-            "bandwidth",
-            "firewallAndTrafficShaping",
-            "contentFiltering",
-            "splashAuthSettings",
-            "vlanTagging",
-            "bonjourForwarding",
-        ]
+        body_params = ['name', 'scheduling', 'bandwidth', 'firewallAndTrafficShaping', 'contentFiltering', 'splashAuthSettings', 'vlanTagging', 'bonjourForwarding']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
@@ -143,9 +119,10 @@ class AsyncGroupPolicies(object):
         """
 
         metadata = {
-            "tags": ["Group policies"],
-            "operation": "deleteNetworkGroupPolicy",
+            'tags': ['Group policies'],
+            'operation': 'deleteNetworkGroupPolicy',
         }
-        resource = f"/networks/{networkId}/groupPolicies/{groupPolicyId}"
+        resource = f'/networks/{networkId}/groupPolicies/{groupPolicyId}'
 
         return await self._session.delete(metadata, resource)
+

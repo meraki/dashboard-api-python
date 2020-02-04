@@ -1,11 +1,9 @@
-class AsyncActionBatches(object):
+class AsyncActionBatches:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
-    async def createOrganizationActionBatch(
-        self, organizationId: str, actions: list, **kwargs
-    ):
+    
+    async def createOrganizationActionBatch(self, organizationId: str, actions: list, **kwargs):
         """
         **Create an action batch**
         https://api.meraki.com/api_docs#create-an-action-batch
@@ -19,12 +17,12 @@ class AsyncActionBatches(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Action batches"],
-            "operation": "createOrganizationActionBatch",
+            'tags': ['Action batches'],
+            'operation': 'createOrganizationActionBatch',
         }
-        resource = f"/organizations/{organizationId}/actionBatches"
+        resource = f'/organizations/{organizationId}/actionBatches'
 
-        body_params = ["confirmed", "synchronous", "actions"]
+        body_params = ['confirmed', 'synchronous', 'actions']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.post(metadata, resource, payload)
@@ -38,10 +36,10 @@ class AsyncActionBatches(object):
         """
 
         metadata = {
-            "tags": ["Action batches"],
-            "operation": "getOrganizationActionBatches",
+            'tags': ['Action batches'],
+            'operation': 'getOrganizationActionBatches',
         }
-        resource = f"/organizations/{organizationId}/actionBatches"
+        resource = f'/organizations/{organizationId}/actionBatches'
 
         return await self._session.get(metadata, resource)
 
@@ -55,16 +53,14 @@ class AsyncActionBatches(object):
         """
 
         metadata = {
-            "tags": ["Action batches"],
-            "operation": "getOrganizationActionBatch",
+            'tags': ['Action batches'],
+            'operation': 'getOrganizationActionBatch',
         }
-        resource = f"/organizations/{organizationId}/actionBatches/{actionBatchId}"
+        resource = f'/organizations/{organizationId}/actionBatches/{actionBatchId}'
 
         return await self._session.get(metadata, resource)
 
-    async def deleteOrganizationActionBatch(
-        self, organizationId: str, actionBatchId: str
-    ):
+    async def deleteOrganizationActionBatch(self, organizationId: str, actionBatchId: str):
         """
         **Delete an action batch**
         https://api.meraki.com/api_docs#delete-an-action-batch
@@ -74,16 +70,14 @@ class AsyncActionBatches(object):
         """
 
         metadata = {
-            "tags": ["Action batches"],
-            "operation": "deleteOrganizationActionBatch",
+            'tags': ['Action batches'],
+            'operation': 'deleteOrganizationActionBatch',
         }
-        resource = f"/organizations/{organizationId}/actionBatches/{actionBatchId}"
+        resource = f'/organizations/{organizationId}/actionBatches/{actionBatchId}'
 
         return await self._session.delete(metadata, resource)
 
-    async def updateOrganizationActionBatch(
-        self, organizationId: str, actionBatchId: str, **kwargs
-    ):
+    async def updateOrganizationActionBatch(self, organizationId: str, actionBatchId: str, **kwargs):
         """
         **Update an action batch**
         https://api.meraki.com/api_docs#update-an-action-batch
@@ -97,12 +91,13 @@ class AsyncActionBatches(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Action batches"],
-            "operation": "updateOrganizationActionBatch",
+            'tags': ['Action batches'],
+            'operation': 'updateOrganizationActionBatch',
         }
-        resource = f"/organizations/{organizationId}/actionBatches/{actionBatchId}"
+        resource = f'/organizations/{organizationId}/actionBatches/{actionBatchId}'
 
-        body_params = ["confirmed", "synchronous"]
+        body_params = ['confirmed', 'synchronous']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
+

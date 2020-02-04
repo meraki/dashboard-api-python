@@ -1,8 +1,8 @@
-class AsyncCameraQualityRetentionProfiles(object):
+class AsyncCameraQualityRetentionProfiles:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getNetworkCameraQualityRetentionProfiles(self, networkId: str):
         """
         **List the quality retention profiles for this network**
@@ -12,16 +12,14 @@ class AsyncCameraQualityRetentionProfiles(object):
         """
 
         metadata = {
-            "tags": ["Camera quality retention profiles"],
-            "operation": "getNetworkCameraQualityRetentionProfiles",
+            'tags': ['Camera quality retention profiles'],
+            'operation': 'getNetworkCameraQualityRetentionProfiles',
         }
-        resource = f"/networks/{networkId}/camera/qualityRetentionProfiles"
+        resource = f'/networks/{networkId}/camera/qualityRetentionProfiles'
 
         return await self._session.get(metadata, resource)
 
-    async def createNetworkCameraQualityRetentionProfile(
-        self, networkId: str, name: str, **kwargs
-    ):
+    async def createNetworkCameraQualityRetentionProfile(self, networkId: str, name: str, **kwargs):
         """
         **Creates new quality retention profile for this network.**
         https://api.meraki.com/api_docs#creates-new-quality-retention-profile-for-this-network
@@ -40,28 +38,17 @@ class AsyncCameraQualityRetentionProfiles(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Camera quality retention profiles"],
-            "operation": "createNetworkCameraQualityRetentionProfile",
+            'tags': ['Camera quality retention profiles'],
+            'operation': 'createNetworkCameraQualityRetentionProfile',
         }
-        resource = f"/networks/{networkId}/camera/qualityRetentionProfiles"
+        resource = f'/networks/{networkId}/camera/qualityRetentionProfiles'
 
-        body_params = [
-            "name",
-            "motionBasedRetentionEnabled",
-            "restrictedBandwidthModeEnabled",
-            "audioRecordingEnabled",
-            "cloudArchiveEnabled",
-            "scheduleId",
-            "maxRetentionDays",
-            "videoSettings",
-        ]
+        body_params = ['name', 'motionBasedRetentionEnabled', 'restrictedBandwidthModeEnabled', 'audioRecordingEnabled', 'cloudArchiveEnabled', 'scheduleId', 'maxRetentionDays', 'videoSettings']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.post(metadata, resource, payload)
 
-    async def getNetworkCameraQualityRetentionProfile(
-        self, networkId: str, qualityRetentionProfileId: str
-    ):
+    async def getNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str):
         """
         **Retrieve a single quality retention profile**
         https://api.meraki.com/api_docs#retrieve-a-single-quality-retention-profile
@@ -71,16 +58,14 @@ class AsyncCameraQualityRetentionProfiles(object):
         """
 
         metadata = {
-            "tags": ["Camera quality retention profiles"],
-            "operation": "getNetworkCameraQualityRetentionProfile",
+            'tags': ['Camera quality retention profiles'],
+            'operation': 'getNetworkCameraQualityRetentionProfile',
         }
-        resource = f"/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}"
+        resource = f'/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}'
 
         return await self._session.get(metadata, resource)
 
-    async def updateNetworkCameraQualityRetentionProfile(
-        self, networkId: str, qualityRetentionProfileId: str, **kwargs
-    ):
+    async def updateNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str, **kwargs):
         """
         **Update an existing quality retention profile for this network.**
         https://api.meraki.com/api_docs#update-an-existing-quality-retention-profile-for-this-network
@@ -100,28 +85,17 @@ class AsyncCameraQualityRetentionProfiles(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Camera quality retention profiles"],
-            "operation": "updateNetworkCameraQualityRetentionProfile",
+            'tags': ['Camera quality retention profiles'],
+            'operation': 'updateNetworkCameraQualityRetentionProfile',
         }
-        resource = f"/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}"
+        resource = f'/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}'
 
-        body_params = [
-            "name",
-            "motionBasedRetentionEnabled",
-            "restrictedBandwidthModeEnabled",
-            "audioRecordingEnabled",
-            "cloudArchiveEnabled",
-            "scheduleId",
-            "maxRetentionDays",
-            "videoSettings",
-        ]
+        body_params = ['name', 'motionBasedRetentionEnabled', 'restrictedBandwidthModeEnabled', 'audioRecordingEnabled', 'cloudArchiveEnabled', 'scheduleId', 'maxRetentionDays', 'videoSettings']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
 
-    async def deleteNetworkCameraQualityRetentionProfile(
-        self, networkId: str, qualityRetentionProfileId: str
-    ):
+    async def deleteNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str):
         """
         **Delete an existing quality retention profile for this network.**
         https://api.meraki.com/api_docs#delete-an-existing-quality-retention-profile-for-this-network
@@ -131,9 +105,10 @@ class AsyncCameraQualityRetentionProfiles(object):
         """
 
         metadata = {
-            "tags": ["Camera quality retention profiles"],
-            "operation": "deleteNetworkCameraQualityRetentionProfile",
+            'tags': ['Camera quality retention profiles'],
+            'operation': 'deleteNetworkCameraQualityRetentionProfile',
         }
-        resource = f"/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}"
+        resource = f'/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}'
 
         return await self._session.delete(metadata, resource)
+

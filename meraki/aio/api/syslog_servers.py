@@ -1,8 +1,8 @@
-class AsyncSyslogServers(object):
+class AsyncSyslogServers:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getNetworkSyslogServers(self, networkId: str):
         """
         **List the syslog servers for a network**
@@ -12,10 +12,10 @@ class AsyncSyslogServers(object):
         """
 
         metadata = {
-            "tags": ["Syslog servers"],
-            "operation": "getNetworkSyslogServers",
+            'tags': ['Syslog servers'],
+            'operation': 'getNetworkSyslogServers',
         }
-        resource = f"/networks/{networkId}/syslogServers"
+        resource = f'/networks/{networkId}/syslogServers'
 
         return await self._session.get(metadata, resource)
 
@@ -31,12 +31,13 @@ class AsyncSyslogServers(object):
         kwargs = locals()
 
         metadata = {
-            "tags": ["Syslog servers"],
-            "operation": "updateNetworkSyslogServers",
+            'tags': ['Syslog servers'],
+            'operation': 'updateNetworkSyslogServers',
         }
-        resource = f"/networks/{networkId}/syslogServers"
+        resource = f'/networks/{networkId}/syslogServers'
 
-        body_params = ["servers"]
+        body_params = ['servers']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
+

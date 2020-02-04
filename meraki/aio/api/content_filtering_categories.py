@@ -1,8 +1,8 @@
-class AsyncContentFilteringCategories(object):
+class AsyncContentFilteringCategories:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getNetworkContentFilteringCategories(self, networkId: str):
         """
         **List all available content filtering categories for an MX network**
@@ -12,9 +12,10 @@ class AsyncContentFilteringCategories(object):
         """
 
         metadata = {
-            "tags": ["Content filtering categories"],
-            "operation": "getNetworkContentFilteringCategories",
+            'tags': ['Content filtering categories'],
+            'operation': 'getNetworkContentFilteringCategories',
         }
-        resource = f"/networks/{networkId}/contentFiltering/categories"
+        resource = f'/networks/{networkId}/contentFiltering/categories'
 
         return await self._session.get(metadata, resource)
+

@@ -1,8 +1,8 @@
-class AsyncHTTPServers(object):
+class AsyncHTTPServers:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getNetworkHttpServers(self, networkId: str):
         """
         **List the HTTP servers for a network**
@@ -12,16 +12,14 @@ class AsyncHTTPServers(object):
         """
 
         metadata = {
-            "tags": ["HTTP servers"],
-            "operation": "getNetworkHttpServers",
+            'tags': ['HTTP servers'],
+            'operation': 'getNetworkHttpServers',
         }
-        resource = f"/networks/{networkId}/httpServers"
+        resource = f'/networks/{networkId}/httpServers'
 
         return await self._session.get(metadata, resource)
 
-    async def createNetworkHttpServer(
-        self, networkId: str, name: str, url: str, **kwargs
-    ):
+    async def createNetworkHttpServer(self, networkId: str, name: str, url: str, **kwargs):
         """
         **Add an HTTP server to a network**
         https://api.meraki.com/api_docs#add-an-http-server-to-a-network
@@ -35,12 +33,12 @@ class AsyncHTTPServers(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["HTTP servers"],
-            "operation": "createNetworkHttpServer",
+            'tags': ['HTTP servers'],
+            'operation': 'createNetworkHttpServer',
         }
-        resource = f"/networks/{networkId}/httpServers"
+        resource = f'/networks/{networkId}/httpServers'
 
-        body_params = ["name", "url", "sharedSecret"]
+        body_params = ['name', 'url', 'sharedSecret']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.post(metadata, resource, payload)
@@ -57,12 +55,12 @@ class AsyncHTTPServers(object):
         kwargs = locals()
 
         metadata = {
-            "tags": ["HTTP servers"],
-            "operation": "createNetworkHttpServersWebhookTest",
+            'tags': ['HTTP servers'],
+            'operation': 'createNetworkHttpServersWebhookTest',
         }
-        resource = f"/networks/{networkId}/httpServers/webhookTests"
+        resource = f'/networks/{networkId}/httpServers/webhookTests'
 
-        body_params = ["url"]
+        body_params = ['url']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.post(metadata, resource, payload)
@@ -77,10 +75,10 @@ class AsyncHTTPServers(object):
         """
 
         metadata = {
-            "tags": ["HTTP servers"],
-            "operation": "getNetworkHttpServersWebhookTest",
+            'tags': ['HTTP servers'],
+            'operation': 'getNetworkHttpServersWebhookTest',
         }
-        resource = f"/networks/{networkId}/httpServers/webhookTests/{id}"
+        resource = f'/networks/{networkId}/httpServers/webhookTests/{id}'
 
         return await self._session.get(metadata, resource)
 
@@ -94,10 +92,10 @@ class AsyncHTTPServers(object):
         """
 
         metadata = {
-            "tags": ["HTTP servers"],
-            "operation": "getNetworkHttpServer",
+            'tags': ['HTTP servers'],
+            'operation': 'getNetworkHttpServer',
         }
-        resource = f"/networks/{networkId}/httpServers/{id}"
+        resource = f'/networks/{networkId}/httpServers/{id}'
 
         return await self._session.get(metadata, resource)
 
@@ -116,12 +114,12 @@ class AsyncHTTPServers(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["HTTP servers"],
-            "operation": "updateNetworkHttpServer",
+            'tags': ['HTTP servers'],
+            'operation': 'updateNetworkHttpServer',
         }
-        resource = f"/networks/{networkId}/httpServers/{id}"
+        resource = f'/networks/{networkId}/httpServers/{id}'
 
-        body_params = ["name", "url", "sharedSecret"]
+        body_params = ['name', 'url', 'sharedSecret']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
@@ -136,9 +134,10 @@ class AsyncHTTPServers(object):
         """
 
         metadata = {
-            "tags": ["HTTP servers"],
-            "operation": "deleteNetworkHttpServer",
+            'tags': ['HTTP servers'],
+            'operation': 'deleteNetworkHttpServer',
         }
-        resource = f"/networks/{networkId}/httpServers/{id}"
+        resource = f'/networks/{networkId}/httpServers/{id}'
 
         return await self._session.delete(metadata, resource)
+

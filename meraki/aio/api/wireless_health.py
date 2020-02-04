@@ -1,8 +1,8 @@
-class AsyncWirelessHealth(object):
+class AsyncWirelessHealth:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getNetworkClientsConnectionStats(self, networkId: str, **kwargs):
         """
         **Aggregated connectivity info for this network, grouped by clients**
@@ -20,12 +20,12 @@ class AsyncWirelessHealth(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Wireless health"],
-            "operation": "getNetworkClientsConnectionStats",
+            'tags': ['Wireless health'],
+            'operation': 'getNetworkClientsConnectionStats',
         }
-        resource = f"/networks/{networkId}/clients/connectionStats"
+        resource = f'/networks/{networkId}/clients/connectionStats'
 
-        query_params = ["t0", "t1", "timespan", "ssid", "vlan", "apTag"]
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return await self._session.get(metadata, resource, params)
@@ -48,19 +48,17 @@ class AsyncWirelessHealth(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Wireless health"],
-            "operation": "getNetworkClientsLatencyStats",
+            'tags': ['Wireless health'],
+            'operation': 'getNetworkClientsLatencyStats',
         }
-        resource = f"/networks/{networkId}/clients/latencyStats"
+        resource = f'/networks/{networkId}/clients/latencyStats'
 
-        query_params = ["t0", "t1", "timespan", "ssid", "vlan", "apTag", "fields"]
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', 'fields']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return await self._session.get(metadata, resource, params)
 
-    async def getNetworkClientConnectionStats(
-        self, networkId: str, clientId: str, **kwargs
-    ):
+    async def getNetworkClientConnectionStats(self, networkId: str, clientId: str, **kwargs):
         """
         **Aggregated connectivity info for a given client on this network. Clients are identified by their MAC.**
         https://api.meraki.com/api_docs#aggregated-connectivity-info-for-a-given-client-on-this-network
@@ -78,19 +76,17 @@ class AsyncWirelessHealth(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Wireless health"],
-            "operation": "getNetworkClientConnectionStats",
+            'tags': ['Wireless health'],
+            'operation': 'getNetworkClientConnectionStats',
         }
-        resource = f"/networks/{networkId}/clients/{clientId}/connectionStats"
+        resource = f'/networks/{networkId}/clients/{clientId}/connectionStats'
 
-        query_params = ["t0", "t1", "timespan", "ssid", "vlan", "apTag"]
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return await self._session.get(metadata, resource, params)
 
-    async def getNetworkClientLatencyStats(
-        self, networkId: str, clientId: str, **kwargs
-    ):
+    async def getNetworkClientLatencyStats(self, networkId: str, clientId: str, **kwargs):
         """
         **Aggregated latency info for a given client on this network. Clients are identified by their MAC.**
         https://api.meraki.com/api_docs#aggregated-latency-info-for-a-given-client-on-this-network
@@ -109,12 +105,12 @@ class AsyncWirelessHealth(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Wireless health"],
-            "operation": "getNetworkClientLatencyStats",
+            'tags': ['Wireless health'],
+            'operation': 'getNetworkClientLatencyStats',
         }
-        resource = f"/networks/{networkId}/clients/{clientId}/latencyStats"
+        resource = f'/networks/{networkId}/clients/{clientId}/latencyStats'
 
-        query_params = ["t0", "t1", "timespan", "ssid", "vlan", "apTag", "fields"]
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', 'fields']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return await self._session.get(metadata, resource, params)
@@ -136,12 +132,12 @@ class AsyncWirelessHealth(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Wireless health"],
-            "operation": "getNetworkConnectionStats",
+            'tags': ['Wireless health'],
+            'operation': 'getNetworkConnectionStats',
         }
-        resource = f"/networks/{networkId}/connectionStats"
+        resource = f'/networks/{networkId}/connectionStats'
 
-        query_params = ["t0", "t1", "timespan", "ssid", "vlan", "apTag"]
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return await self._session.get(metadata, resource, params)
@@ -163,12 +159,12 @@ class AsyncWirelessHealth(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Wireless health"],
-            "operation": "getNetworkDevicesConnectionStats",
+            'tags': ['Wireless health'],
+            'operation': 'getNetworkDevicesConnectionStats',
         }
-        resource = f"/networks/{networkId}/devices/connectionStats"
+        resource = f'/networks/{networkId}/devices/connectionStats'
 
-        query_params = ["t0", "t1", "timespan", "ssid", "vlan", "apTag"]
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return await self._session.get(metadata, resource, params)
@@ -191,19 +187,17 @@ class AsyncWirelessHealth(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Wireless health"],
-            "operation": "getNetworkDevicesLatencyStats",
+            'tags': ['Wireless health'],
+            'operation': 'getNetworkDevicesLatencyStats',
         }
-        resource = f"/networks/{networkId}/devices/latencyStats"
+        resource = f'/networks/{networkId}/devices/latencyStats'
 
-        query_params = ["t0", "t1", "timespan", "ssid", "vlan", "apTag", "fields"]
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', 'fields']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return await self._session.get(metadata, resource, params)
 
-    async def getNetworkDeviceConnectionStats(
-        self, networkId: str, serial: str, **kwargs
-    ):
+    async def getNetworkDeviceConnectionStats(self, networkId: str, serial: str, **kwargs):
         """
         **Aggregated connectivity info for a given AP on this network**
         https://api.meraki.com/api_docs#aggregated-connectivity-info-for-a-given-ap-on-this-network
@@ -221,12 +215,12 @@ class AsyncWirelessHealth(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Wireless health"],
-            "operation": "getNetworkDeviceConnectionStats",
+            'tags': ['Wireless health'],
+            'operation': 'getNetworkDeviceConnectionStats',
         }
-        resource = f"/networks/{networkId}/devices/{serial}/connectionStats"
+        resource = f'/networks/{networkId}/devices/{serial}/connectionStats'
 
-        query_params = ["t0", "t1", "timespan", "ssid", "vlan", "apTag"]
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return await self._session.get(metadata, resource, params)
@@ -250,12 +244,12 @@ class AsyncWirelessHealth(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Wireless health"],
-            "operation": "getNetworkDeviceLatencyStats",
+            'tags': ['Wireless health'],
+            'operation': 'getNetworkDeviceLatencyStats',
         }
-        resource = f"/networks/{networkId}/devices/{serial}/latencyStats"
+        resource = f'/networks/{networkId}/devices/{serial}/latencyStats'
 
-        query_params = ["t0", "t1", "timespan", "ssid", "vlan", "apTag", "fields"]
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', 'fields']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return await self._session.get(metadata, resource, params)
@@ -279,21 +273,12 @@ class AsyncWirelessHealth(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Wireless health"],
-            "operation": "getNetworkFailedConnections",
+            'tags': ['Wireless health'],
+            'operation': 'getNetworkFailedConnections',
         }
-        resource = f"/networks/{networkId}/failedConnections"
+        resource = f'/networks/{networkId}/failedConnections'
 
-        query_params = [
-            "t0",
-            "t1",
-            "timespan",
-            "ssid",
-            "vlan",
-            "apTag",
-            "serial",
-            "clientId",
-        ]
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', 'serial', 'clientId']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return await self._session.get(metadata, resource, params)
@@ -316,12 +301,13 @@ class AsyncWirelessHealth(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Wireless health"],
-            "operation": "getNetworkLatencyStats",
+            'tags': ['Wireless health'],
+            'operation': 'getNetworkLatencyStats',
         }
-        resource = f"/networks/{networkId}/latencyStats"
+        resource = f'/networks/{networkId}/latencyStats'
 
-        query_params = ["t0", "t1", "timespan", "ssid", "vlan", "apTag", "fields"]
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', 'fields']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return await self._session.get(metadata, resource, params)
+

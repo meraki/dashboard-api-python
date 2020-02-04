@@ -1,8 +1,8 @@
-class AsyncSAMLRoles(object):
+class AsyncSAMLRoles:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getOrganizationSamlRoles(self, organizationId: str):
         """
         **List the SAML roles for this organization**
@@ -12,10 +12,10 @@ class AsyncSAMLRoles(object):
         """
 
         metadata = {
-            "tags": ["SAML roles"],
-            "operation": "getOrganizationSamlRoles",
+            'tags': ['SAML roles'],
+            'operation': 'getOrganizationSamlRoles',
         }
-        resource = f"/organizations/{organizationId}/samlRoles"
+        resource = f'/organizations/{organizationId}/samlRoles'
 
         return await self._session.get(metadata, resource)
 
@@ -34,12 +34,12 @@ class AsyncSAMLRoles(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["SAML roles"],
-            "operation": "createOrganizationSamlRole",
+            'tags': ['SAML roles'],
+            'operation': 'createOrganizationSamlRole',
         }
-        resource = f"/organizations/{organizationId}/samlRoles"
+        resource = f'/organizations/{organizationId}/samlRoles'
 
-        body_params = ["role", "orgAccess", "tags", "networks"]
+        body_params = ['role', 'orgAccess', 'tags', 'networks']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.post(metadata, resource, payload)
@@ -54,16 +54,14 @@ class AsyncSAMLRoles(object):
         """
 
         metadata = {
-            "tags": ["SAML roles"],
-            "operation": "getOrganizationSamlRole",
+            'tags': ['SAML roles'],
+            'operation': 'getOrganizationSamlRole',
         }
-        resource = f"/organizations/{organizationId}/samlRoles/{samlRoleId}"
+        resource = f'/organizations/{organizationId}/samlRoles/{samlRoleId}'
 
         return await self._session.get(metadata, resource)
 
-    async def updateOrganizationSamlRole(
-        self, organizationId: str, samlRoleId: str, **kwargs
-    ):
+    async def updateOrganizationSamlRole(self, organizationId: str, samlRoleId: str, **kwargs):
         """
         **Update a SAML role**
         https://api.meraki.com/api_docs#update-a-saml-role
@@ -79,12 +77,12 @@ class AsyncSAMLRoles(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["SAML roles"],
-            "operation": "updateOrganizationSamlRole",
+            'tags': ['SAML roles'],
+            'operation': 'updateOrganizationSamlRole',
         }
-        resource = f"/organizations/{organizationId}/samlRoles/{samlRoleId}"
+        resource = f'/organizations/{organizationId}/samlRoles/{samlRoleId}'
 
-        body_params = ["role", "orgAccess", "tags", "networks"]
+        body_params = ['role', 'orgAccess', 'tags', 'networks']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
@@ -99,9 +97,10 @@ class AsyncSAMLRoles(object):
         """
 
         metadata = {
-            "tags": ["SAML roles"],
-            "operation": "deleteOrganizationSamlRole",
+            'tags': ['SAML roles'],
+            'operation': 'deleteOrganizationSamlRole',
         }
-        resource = f"/organizations/{organizationId}/samlRoles/{samlRoleId}"
+        resource = f'/organizations/{organizationId}/samlRoles/{samlRoleId}'
 
         return await self._session.delete(metadata, resource)
+

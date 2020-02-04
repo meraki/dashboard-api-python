@@ -1,8 +1,8 @@
-class AsyncMXStaticRoutes(object):
+class AsyncMXStaticRoutes:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getNetworkStaticRoutes(self, networkId: str):
         """
         **List the static routes for an MX or teleworker network**
@@ -12,10 +12,10 @@ class AsyncMXStaticRoutes(object):
         """
 
         metadata = {
-            "tags": ["MX static routes"],
-            "operation": "getNetworkStaticRoutes",
+            'tags': ['MX static routes'],
+            'operation': 'getNetworkStaticRoutes',
         }
-        resource = f"/networks/{networkId}/staticRoutes"
+        resource = f'/networks/{networkId}/staticRoutes'
 
         return await self._session.get(metadata, resource)
 
@@ -33,12 +33,12 @@ class AsyncMXStaticRoutes(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["MX static routes"],
-            "operation": "createNetworkStaticRoute",
+            'tags': ['MX static routes'],
+            'operation': 'createNetworkStaticRoute',
         }
-        resource = f"/networks/{networkId}/staticRoutes"
+        resource = f'/networks/{networkId}/staticRoutes'
 
-        body_params = ["name", "subnet", "gatewayIp"]
+        body_params = ['name', 'subnet', 'gatewayIp']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.post(metadata, resource, payload)
@@ -53,10 +53,10 @@ class AsyncMXStaticRoutes(object):
         """
 
         metadata = {
-            "tags": ["MX static routes"],
-            "operation": "getNetworkStaticRoute",
+            'tags': ['MX static routes'],
+            'operation': 'getNetworkStaticRoute',
         }
-        resource = f"/networks/{networkId}/staticRoutes/{srId}"
+        resource = f'/networks/{networkId}/staticRoutes/{srId}'
 
         return await self._session.get(metadata, resource)
 
@@ -78,19 +78,12 @@ class AsyncMXStaticRoutes(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["MX static routes"],
-            "operation": "updateNetworkStaticRoute",
+            'tags': ['MX static routes'],
+            'operation': 'updateNetworkStaticRoute',
         }
-        resource = f"/networks/{networkId}/staticRoutes/{srId}"
+        resource = f'/networks/{networkId}/staticRoutes/{srId}'
 
-        body_params = [
-            "name",
-            "subnet",
-            "gatewayIp",
-            "enabled",
-            "fixedIpAssignments",
-            "reservedIpRanges",
-        ]
+        body_params = ['name', 'subnet', 'gatewayIp', 'enabled', 'fixedIpAssignments', 'reservedIpRanges']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
@@ -105,9 +98,10 @@ class AsyncMXStaticRoutes(object):
         """
 
         metadata = {
-            "tags": ["MX static routes"],
-            "operation": "deleteNetworkStaticRoute",
+            'tags': ['MX static routes'],
+            'operation': 'deleteNetworkStaticRoute',
         }
-        resource = f"/networks/{networkId}/staticRoutes/{srId}"
+        resource = f'/networks/{networkId}/staticRoutes/{srId}'
 
         return await self._session.delete(metadata, resource)
+

@@ -1,8 +1,8 @@
-class AsyncSwitchPorts(object):
+class AsyncSwitchPorts:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getDeviceSwitchPortStatuses(self, serial: str, **kwargs):
         """
         **Return the status for all the ports of a switch**
@@ -16,12 +16,35 @@ class AsyncSwitchPorts(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Switch ports"],
-            "operation": "getDeviceSwitchPortStatuses",
+            'tags': ['Switch ports'],
+            'operation': 'getDeviceSwitchPortStatuses',
         }
-        resource = f"/devices/{serial}/switchPortStatuses"
+        resource = f'/devices/{serial}/switchPortStatuses'
 
-        query_params = ["t0", "timespan"]
+        query_params = ['t0', 'timespan']
+        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+
+        return await self._session.get(metadata, resource, params)
+
+    async def getDeviceSwitchPortStatusesPackets(self, serial: str, **kwargs):
+        """
+        **Return the packet counters for all the ports of a switch**
+        https://api.meraki.com/api_docs#return-the-packet-counters-for-all-the-ports-of-a-switch
+        
+        - serial (string)
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 1 day from today.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 1 day. The default is 1 day.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['Switch ports'],
+            'operation': 'getDeviceSwitchPortStatusesPackets',
+        }
+        resource = f'/devices/{serial}/switchPortStatuses/packets'
+
+        query_params = ['t0', 'timespan']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return await self._session.get(metadata, resource, params)
@@ -35,10 +58,10 @@ class AsyncSwitchPorts(object):
         """
 
         metadata = {
-            "tags": ["Switch ports"],
-            "operation": "getDeviceSwitchPorts",
+            'tags': ['Switch ports'],
+            'operation': 'getDeviceSwitchPorts',
         }
-        resource = f"/devices/{serial}/switchPorts"
+        resource = f'/devices/{serial}/switchPorts'
 
         return await self._session.get(metadata, resource)
 
@@ -52,10 +75,10 @@ class AsyncSwitchPorts(object):
         """
 
         metadata = {
-            "tags": ["Switch ports"],
-            "operation": "getDeviceSwitchPort",
+            'tags': ['Switch ports'],
+            'operation': 'getDeviceSwitchPort',
         }
-        resource = f"/devices/{serial}/switchPorts/{number}"
+        resource = f'/devices/{serial}/switchPorts/{number}'
 
         return await self._session.get(metadata, resource)
 
@@ -89,39 +112,18 @@ class AsyncSwitchPorts(object):
 
         kwargs.update(locals())
 
-        if "udld" in kwargs:
-            options = ["Alert only", "Enforce"]
-            assert (
-                kwargs["udld"] in options
-            ), f""""udld" cannot be "{kwargs['udld']}", & must be set to one of: {options}"""
+        if 'udld' in kwargs:
+            options = ['Alert only', 'Enforce']
+            assert kwargs['udld'] in options, f'''"udld" cannot be "{kwargs['udld']}", & must be set to one of: {options}'''
 
         metadata = {
-            "tags": ["Switch ports"],
-            "operation": "updateDeviceSwitchPort",
+            'tags': ['Switch ports'],
+            'operation': 'updateDeviceSwitchPort',
         }
-        resource = f"/devices/{serial}/switchPorts/{number}"
+        resource = f'/devices/{serial}/switchPorts/{number}'
 
-        body_params = [
-            "name",
-            "tags",
-            "enabled",
-            "type",
-            "vlan",
-            "voiceVlan",
-            "allowedVlans",
-            "poeEnabled",
-            "isolationEnabled",
-            "rstpEnabled",
-            "stpGuard",
-            "accessPolicyNumber",
-            "linkNegotiation",
-            "portScheduleId",
-            "udld",
-            "macWhitelist",
-            "stickyMacWhitelist",
-            "stickyMacWhitelistLimit",
-            "stormControlEnabled",
-        ]
+        body_params = ['name', 'tags', 'enabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'poeEnabled', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'accessPolicyNumber', 'linkNegotiation', 'portScheduleId', 'udld', 'macWhitelist', 'stickyMacWhitelist', 'stickyMacWhitelistLimit', 'stormControlEnabled']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
+

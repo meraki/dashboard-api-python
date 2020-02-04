@@ -1,8 +1,8 @@
-class AsyncSwitchSettings(object):
+class AsyncSwitchSettings:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getNetworkSwitchSettings(self, networkId: str):
         """
         **Returns the switch network settings**
@@ -12,10 +12,10 @@ class AsyncSwitchSettings(object):
         """
 
         metadata = {
-            "tags": ["Switch settings"],
-            "operation": "getNetworkSwitchSettings",
+            'tags': ['Switch settings'],
+            'operation': 'getNetworkSwitchSettings',
         }
-        resource = f"/networks/{networkId}/switch/settings"
+        resource = f'/networks/{networkId}/switch/settings'
 
         return await self._session.get(metadata, resource)
 
@@ -33,12 +33,12 @@ class AsyncSwitchSettings(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Switch settings"],
-            "operation": "updateNetworkSwitchSettings",
+            'tags': ['Switch settings'],
+            'operation': 'updateNetworkSwitchSettings',
         }
-        resource = f"/networks/{networkId}/switch/settings"
+        resource = f'/networks/{networkId}/switch/settings'
 
-        body_params = ["vlan", "useCombinedPower", "powerExceptions"]
+        body_params = ['vlan', 'useCombinedPower', 'powerExceptions']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
@@ -52,16 +52,14 @@ class AsyncSwitchSettings(object):
         """
 
         metadata = {
-            "tags": ["Switch settings"],
-            "operation": "getNetworkSwitchSettingsDhcpServerPolicy",
+            'tags': ['Switch settings'],
+            'operation': 'getNetworkSwitchSettingsDhcpServerPolicy',
         }
-        resource = f"/networks/{networkId}/switch/settings/dhcpServerPolicy"
+        resource = f'/networks/{networkId}/switch/settings/dhcpServerPolicy'
 
         return await self._session.get(metadata, resource)
 
-    async def updateNetworkSwitchSettingsDhcpServerPolicy(
-        self, networkId: str, **kwargs
-    ):
+    async def updateNetworkSwitchSettingsDhcpServerPolicy(self, networkId: str, **kwargs):
         """
         **Update the DHCP server policy**
         https://api.meraki.com/api_docs#update-the-dhcp-server-policy
@@ -74,19 +72,17 @@ class AsyncSwitchSettings(object):
 
         kwargs.update(locals())
 
-        if "defaultPolicy" in kwargs:
-            options = ["allow", "block"]
-            assert (
-                kwargs["defaultPolicy"] in options
-            ), f""""defaultPolicy" cannot be "{kwargs['defaultPolicy']}", & must be set to one of: {options}"""
+        if 'defaultPolicy' in kwargs:
+            options = ['allow', 'block']
+            assert kwargs['defaultPolicy'] in options, f'''"defaultPolicy" cannot be "{kwargs['defaultPolicy']}", & must be set to one of: {options}'''
 
         metadata = {
-            "tags": ["Switch settings"],
-            "operation": "updateNetworkSwitchSettingsDhcpServerPolicy",
+            'tags': ['Switch settings'],
+            'operation': 'updateNetworkSwitchSettingsDhcpServerPolicy',
         }
-        resource = f"/networks/{networkId}/switch/settings/dhcpServerPolicy"
+        resource = f'/networks/{networkId}/switch/settings/dhcpServerPolicy'
 
-        body_params = ["defaultPolicy", "allowedServers", "blockedServers"]
+        body_params = ['defaultPolicy', 'allowedServers', 'blockedServers']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
@@ -100,16 +96,14 @@ class AsyncSwitchSettings(object):
         """
 
         metadata = {
-            "tags": ["Switch settings"],
-            "operation": "getNetworkSwitchSettingsDscpToCosMappings",
+            'tags': ['Switch settings'],
+            'operation': 'getNetworkSwitchSettingsDscpToCosMappings',
         }
-        resource = f"/networks/{networkId}/switch/settings/dscpToCosMappings"
+        resource = f'/networks/{networkId}/switch/settings/dscpToCosMappings'
 
         return await self._session.get(metadata, resource)
 
-    async def updateNetworkSwitchSettingsDscpToCosMappings(
-        self, networkId: str, mappings: list
-    ):
+    async def updateNetworkSwitchSettingsDscpToCosMappings(self, networkId: str, mappings: list):
         """
         **Update the DSCP to CoS mappings**
         https://api.meraki.com/api_docs#update-the-dscp-to-cos-mappings
@@ -121,12 +115,12 @@ class AsyncSwitchSettings(object):
         kwargs = locals()
 
         metadata = {
-            "tags": ["Switch settings"],
-            "operation": "updateNetworkSwitchSettingsDscpToCosMappings",
+            'tags': ['Switch settings'],
+            'operation': 'updateNetworkSwitchSettingsDscpToCosMappings',
         }
-        resource = f"/networks/{networkId}/switch/settings/dscpToCosMappings"
+        resource = f'/networks/{networkId}/switch/settings/dscpToCosMappings'
 
-        body_params = ["mappings"]
+        body_params = ['mappings']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
@@ -140,10 +134,10 @@ class AsyncSwitchSettings(object):
         """
 
         metadata = {
-            "tags": ["Switch settings"],
-            "operation": "getNetworkSwitchSettingsMtu",
+            'tags': ['Switch settings'],
+            'operation': 'getNetworkSwitchSettingsMtu',
         }
-        resource = f"/networks/{networkId}/switch/settings/mtu"
+        resource = f'/networks/{networkId}/switch/settings/mtu'
 
         return await self._session.get(metadata, resource)
 
@@ -160,12 +154,51 @@ class AsyncSwitchSettings(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Switch settings"],
-            "operation": "updateNetworkSwitchSettingsMtu",
+            'tags': ['Switch settings'],
+            'operation': 'updateNetworkSwitchSettingsMtu',
         }
-        resource = f"/networks/{networkId}/switch/settings/mtu"
+        resource = f'/networks/{networkId}/switch/settings/mtu'
 
-        body_params = ["defaultMtuSize", "overrides"]
+        body_params = ['defaultMtuSize', 'overrides']
+        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+
+        return await self._session.put(metadata, resource, payload)
+
+    async def getNetworkSwitchSettingsMulticast(self, networkId: str):
+        """
+        **Return Multicast settings for a network**
+        https://api.meraki.com/api_docs#return-multicast-settings-for-a-network
+        
+        - networkId (string)
+        """
+
+        metadata = {
+            'tags': ['Switch settings'],
+            'operation': 'getNetworkSwitchSettingsMulticast',
+        }
+        resource = f'/networks/{networkId}/switch/settings/multicast'
+
+        return await self._session.get(metadata, resource)
+
+    async def updateNetworkSwitchSettingsMulticast(self, networkId: str, **kwargs):
+        """
+        **Update multicast settings for a network**
+        https://api.meraki.com/api_docs#update-multicast-settings-for-a-network
+        
+        - networkId (string)
+        - defaultSettings (object): Default multicast setting for entire network. IGMP snooping and Flood unknown multicast traffic settings are enabled by default.
+        - overrides (array): Array of paired switches/stacks/profiles and corresponding multicast settings. An empty array will clear the multicast settings.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['Switch settings'],
+            'operation': 'updateNetworkSwitchSettingsMulticast',
+        }
+        resource = f'/networks/{networkId}/switch/settings/multicast'
+
+        body_params = ['defaultSettings', 'overrides']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
@@ -179,16 +212,14 @@ class AsyncSwitchSettings(object):
         """
 
         metadata = {
-            "tags": ["Switch settings"],
-            "operation": "getNetworkSwitchSettingsQosRules",
+            'tags': ['Switch settings'],
+            'operation': 'getNetworkSwitchSettingsQosRules',
         }
-        resource = f"/networks/{networkId}/switch/settings/qosRules"
+        resource = f'/networks/{networkId}/switch/settings/qosRules'
 
         return await self._session.get(metadata, resource)
 
-    async def createNetworkSwitchSettingsQosRule(
-        self, networkId: str, vlan: int, **kwargs
-    ):
+    async def createNetworkSwitchSettingsQosRule(self, networkId: str, vlan: int, **kwargs):
         """
         **Add a quality of service rule**
         https://api.meraki.com/api_docs#add-a-quality-of-service-rule
@@ -205,27 +236,17 @@ class AsyncSwitchSettings(object):
 
         kwargs.update(locals())
 
-        if "protocol" in kwargs:
-            options = ["ANY", "TCP", "UDP"]
-            assert (
-                kwargs["protocol"] in options
-            ), f""""protocol" cannot be "{kwargs['protocol']}", & must be set to one of: {options}"""
+        if 'protocol' in kwargs:
+            options = ['ANY', 'TCP', 'UDP']
+            assert kwargs['protocol'] in options, f'''"protocol" cannot be "{kwargs['protocol']}", & must be set to one of: {options}'''
 
         metadata = {
-            "tags": ["Switch settings"],
-            "operation": "createNetworkSwitchSettingsQosRule",
+            'tags': ['Switch settings'],
+            'operation': 'createNetworkSwitchSettingsQosRule',
         }
-        resource = f"/networks/{networkId}/switch/settings/qosRules"
+        resource = f'/networks/{networkId}/switch/settings/qosRules'
 
-        body_params = [
-            "vlan",
-            "protocol",
-            "srcPort",
-            "srcPortRange",
-            "dstPort",
-            "dstPortRange",
-            "dscp",
-        ]
+        body_params = ['vlan', 'protocol', 'srcPort', 'srcPortRange', 'dstPort', 'dstPortRange', 'dscp']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.post(metadata, resource, payload)
@@ -239,16 +260,14 @@ class AsyncSwitchSettings(object):
         """
 
         metadata = {
-            "tags": ["Switch settings"],
-            "operation": "getNetworkSwitchSettingsQosRulesOrder",
+            'tags': ['Switch settings'],
+            'operation': 'getNetworkSwitchSettingsQosRulesOrder',
         }
-        resource = f"/networks/{networkId}/switch/settings/qosRules/order"
+        resource = f'/networks/{networkId}/switch/settings/qosRules/order'
 
         return await self._session.get(metadata, resource)
 
-    async def updateNetworkSwitchSettingsQosRulesOrder(
-        self, networkId: str, ruleIds: list
-    ):
+    async def updateNetworkSwitchSettingsQosRulesOrder(self, networkId: str, ruleIds: list):
         """
         **Update the order in which the rules should be processed by the switch**
         https://api.meraki.com/api_docs#update-the-order-in-which-the-rules-should-be-processed-by-the-switch
@@ -260,12 +279,12 @@ class AsyncSwitchSettings(object):
         kwargs = locals()
 
         metadata = {
-            "tags": ["Switch settings"],
-            "operation": "updateNetworkSwitchSettingsQosRulesOrder",
+            'tags': ['Switch settings'],
+            'operation': 'updateNetworkSwitchSettingsQosRulesOrder',
         }
-        resource = f"/networks/{networkId}/switch/settings/qosRules/order"
+        resource = f'/networks/{networkId}/switch/settings/qosRules/order'
 
-        body_params = ["ruleIds"]
+        body_params = ['ruleIds']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
@@ -280,10 +299,10 @@ class AsyncSwitchSettings(object):
         """
 
         metadata = {
-            "tags": ["Switch settings"],
-            "operation": "getNetworkSwitchSettingsQosRule",
+            'tags': ['Switch settings'],
+            'operation': 'getNetworkSwitchSettingsQosRule',
         }
-        resource = f"/networks/{networkId}/switch/settings/qosRules/{qosRuleId}"
+        resource = f'/networks/{networkId}/switch/settings/qosRules/{qosRuleId}'
 
         return await self._session.get(metadata, resource)
 
@@ -297,16 +316,14 @@ class AsyncSwitchSettings(object):
         """
 
         metadata = {
-            "tags": ["Switch settings"],
-            "operation": "deleteNetworkSwitchSettingsQosRule",
+            'tags': ['Switch settings'],
+            'operation': 'deleteNetworkSwitchSettingsQosRule',
         }
-        resource = f"/networks/{networkId}/switch/settings/qosRules/{qosRuleId}"
+        resource = f'/networks/{networkId}/switch/settings/qosRules/{qosRuleId}'
 
         return await self._session.delete(metadata, resource)
 
-    async def updateNetworkSwitchSettingsQosRule(
-        self, networkId: str, qosRuleId: str, **kwargs
-    ):
+    async def updateNetworkSwitchSettingsQosRule(self, networkId: str, qosRuleId: str, **kwargs):
         """
         **Update a quality of service rule**
         https://api.meraki.com/api_docs#update-a-quality-of-service-rule
@@ -324,27 +341,17 @@ class AsyncSwitchSettings(object):
 
         kwargs.update(locals())
 
-        if "protocol" in kwargs:
-            options = ["ANY", "TCP", "UDP"]
-            assert (
-                kwargs["protocol"] in options
-            ), f""""protocol" cannot be "{kwargs['protocol']}", & must be set to one of: {options}"""
+        if 'protocol' in kwargs:
+            options = ['ANY', 'TCP', 'UDP']
+            assert kwargs['protocol'] in options, f'''"protocol" cannot be "{kwargs['protocol']}", & must be set to one of: {options}'''
 
         metadata = {
-            "tags": ["Switch settings"],
-            "operation": "updateNetworkSwitchSettingsQosRule",
+            'tags': ['Switch settings'],
+            'operation': 'updateNetworkSwitchSettingsQosRule',
         }
-        resource = f"/networks/{networkId}/switch/settings/qosRules/{qosRuleId}"
+        resource = f'/networks/{networkId}/switch/settings/qosRules/{qosRuleId}'
 
-        body_params = [
-            "vlan",
-            "protocol",
-            "srcPort",
-            "srcPortRange",
-            "dstPort",
-            "dstPortRange",
-            "dscp",
-        ]
+        body_params = ['vlan', 'protocol', 'srcPort', 'srcPortRange', 'dstPort', 'dstPortRange', 'dscp']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
@@ -358,10 +365,10 @@ class AsyncSwitchSettings(object):
         """
 
         metadata = {
-            "tags": ["Switch settings"],
-            "operation": "getNetworkSwitchSettingsStormControl",
+            'tags': ['Switch settings'],
+            'operation': 'getNetworkSwitchSettingsStormControl',
         }
-        resource = f"/networks/{networkId}/switch/settings/stormControl"
+        resource = f'/networks/{networkId}/switch/settings/stormControl'
 
         return await self._session.get(metadata, resource)
 
@@ -379,16 +386,12 @@ class AsyncSwitchSettings(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Switch settings"],
-            "operation": "updateNetworkSwitchSettingsStormControl",
+            'tags': ['Switch settings'],
+            'operation': 'updateNetworkSwitchSettingsStormControl',
         }
-        resource = f"/networks/{networkId}/switch/settings/stormControl"
+        resource = f'/networks/{networkId}/switch/settings/stormControl'
 
-        body_params = [
-            "broadcastThreshold",
-            "multicastThreshold",
-            "unknownUnicastThreshold",
-        ]
+        body_params = ['broadcastThreshold', 'multicastThreshold', 'unknownUnicastThreshold']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
@@ -402,10 +405,10 @@ class AsyncSwitchSettings(object):
         """
 
         metadata = {
-            "tags": ["Switch settings"],
-            "operation": "getNetworkSwitchSettingsStp",
+            'tags': ['Switch settings'],
+            'operation': 'getNetworkSwitchSettingsStp',
         }
-        resource = f"/networks/{networkId}/switch/settings/stp"
+        resource = f'/networks/{networkId}/switch/settings/stp'
 
         return await self._session.get(metadata, resource)
 
@@ -422,12 +425,13 @@ class AsyncSwitchSettings(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Switch settings"],
-            "operation": "updateNetworkSwitchSettingsStp",
+            'tags': ['Switch settings'],
+            'operation': 'updateNetworkSwitchSettingsStp',
         }
-        resource = f"/networks/{networkId}/switch/settings/stp"
+        resource = f'/networks/{networkId}/switch/settings/stp'
 
-        body_params = ["rstpEnabled", "stpBridgePriority"]
+        body_params = ['rstpEnabled', 'stpBridgePriority']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
+

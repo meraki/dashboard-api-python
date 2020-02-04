@@ -1,8 +1,8 @@
-class AsyncMGSubnetPoolSettings(object):
+class AsyncMGSubnetPoolSettings:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getNetworkCellularGatewaySettingsSubnetPool(self, networkId: str):
         """
         **Return the subnet pool and mask configured for MGs in the network.**
@@ -12,16 +12,14 @@ class AsyncMGSubnetPoolSettings(object):
         """
 
         metadata = {
-            "tags": ["MG subnet pool settings"],
-            "operation": "getNetworkCellularGatewaySettingsSubnetPool",
+            'tags': ['MG subnet pool settings'],
+            'operation': 'getNetworkCellularGatewaySettingsSubnetPool',
         }
-        resource = f"/networks/{networkId}/cellularGateway/settings/subnetPool"
+        resource = f'/networks/{networkId}/cellularGateway/settings/subnetPool'
 
         return await self._session.get(metadata, resource)
 
-    async def updateNetworkCellularGatewaySettingsSubnetPool(
-        self, networkId: str, **kwargs
-    ):
+    async def updateNetworkCellularGatewaySettingsSubnetPool(self, networkId: str, **kwargs):
         """
         **Update the subnet pool and mask configuration for MGs in the network.**
         https://api.meraki.com/api_docs#update-the-subnet-pool-and-mask-configuration-for-mgs-in-the-network
@@ -34,12 +32,13 @@ class AsyncMGSubnetPoolSettings(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["MG subnet pool settings"],
-            "operation": "updateNetworkCellularGatewaySettingsSubnetPool",
+            'tags': ['MG subnet pool settings'],
+            'operation': 'updateNetworkCellularGatewaySettingsSubnetPool',
         }
-        resource = f"/networks/{networkId}/cellularGateway/settings/subnetPool"
+        resource = f'/networks/{networkId}/cellularGateway/settings/subnetPool'
 
-        body_params = ["mask", "cidr"]
+        body_params = ['mask', 'cidr']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
+

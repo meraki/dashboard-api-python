@@ -102,6 +102,7 @@ class AsyncRestSession:
                         f"{tag}, {operation} - {e}, retrying in 1 second"
                     )
                     await asyncio.sleep(1)
+                    continue
 
                 if status == 200:
                     if "page" in metadata:

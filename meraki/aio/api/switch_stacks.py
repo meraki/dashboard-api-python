@@ -1,8 +1,8 @@
-class AsyncSwitchStacks(object):
+class AsyncSwitchStacks:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getNetworkSwitchStacks(self, networkId: str):
         """
         **List the switch stacks in a network**
@@ -12,10 +12,10 @@ class AsyncSwitchStacks(object):
         """
 
         metadata = {
-            "tags": ["Switch stacks"],
-            "operation": "getNetworkSwitchStacks",
+            'tags': ['Switch stacks'],
+            'operation': 'getNetworkSwitchStacks',
         }
-        resource = f"/networks/{networkId}/switchStacks"
+        resource = f'/networks/{networkId}/switchStacks'
 
         return await self._session.get(metadata, resource)
 
@@ -32,12 +32,12 @@ class AsyncSwitchStacks(object):
         kwargs = locals()
 
         metadata = {
-            "tags": ["Switch stacks"],
-            "operation": "createNetworkSwitchStack",
+            'tags': ['Switch stacks'],
+            'operation': 'createNetworkSwitchStack',
         }
-        resource = f"/networks/{networkId}/switchStacks"
+        resource = f'/networks/{networkId}/switchStacks'
 
-        body_params = ["name", "serials"]
+        body_params = ['name', 'serials']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.post(metadata, resource, payload)
@@ -52,10 +52,10 @@ class AsyncSwitchStacks(object):
         """
 
         metadata = {
-            "tags": ["Switch stacks"],
-            "operation": "getNetworkSwitchStack",
+            'tags': ['Switch stacks'],
+            'operation': 'getNetworkSwitchStack',
         }
-        resource = f"/networks/{networkId}/switchStacks/{switchStackId}"
+        resource = f'/networks/{networkId}/switchStacks/{switchStackId}'
 
         return await self._session.get(metadata, resource)
 
@@ -69,16 +69,14 @@ class AsyncSwitchStacks(object):
         """
 
         metadata = {
-            "tags": ["Switch stacks"],
-            "operation": "deleteNetworkSwitchStack",
+            'tags': ['Switch stacks'],
+            'operation': 'deleteNetworkSwitchStack',
         }
-        resource = f"/networks/{networkId}/switchStacks/{switchStackId}"
+        resource = f'/networks/{networkId}/switchStacks/{switchStackId}'
 
         return await self._session.delete(metadata, resource)
 
-    async def addNetworkSwitchStack(
-        self, networkId: str, switchStackId: str, serial: str
-    ):
+    async def addNetworkSwitchStack(self, networkId: str, switchStackId: str, serial: str):
         """
         **Add a switch to a stack**
         https://api.meraki.com/api_docs#add-a-switch-to-a-stack
@@ -91,19 +89,17 @@ class AsyncSwitchStacks(object):
         kwargs = locals()
 
         metadata = {
-            "tags": ["Switch stacks"],
-            "operation": "addNetworkSwitchStack",
+            'tags': ['Switch stacks'],
+            'operation': 'addNetworkSwitchStack',
         }
-        resource = f"/networks/{networkId}/switchStacks/{switchStackId}/add"
+        resource = f'/networks/{networkId}/switchStacks/{switchStackId}/add'
 
-        body_params = ["serial"]
+        body_params = ['serial']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.post(metadata, resource, payload)
 
-    async def removeNetworkSwitchStack(
-        self, networkId: str, switchStackId: str, serial: str
-    ):
+    async def removeNetworkSwitchStack(self, networkId: str, switchStackId: str, serial: str):
         """
         **Remove a switch from a stack**
         https://api.meraki.com/api_docs#remove-a-switch-from-a-stack
@@ -116,12 +112,13 @@ class AsyncSwitchStacks(object):
         kwargs = locals()
 
         metadata = {
-            "tags": ["Switch stacks"],
-            "operation": "removeNetworkSwitchStack",
+            'tags': ['Switch stacks'],
+            'operation': 'removeNetworkSwitchStack',
         }
-        resource = f"/networks/{networkId}/switchStacks/{switchStackId}/remove"
+        resource = f'/networks/{networkId}/switchStacks/{switchStackId}/remove'
 
-        body_params = ["serial"]
+        body_params = ['serial']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.post(metadata, resource, payload)
+

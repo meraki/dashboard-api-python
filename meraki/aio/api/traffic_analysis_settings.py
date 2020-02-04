@@ -1,8 +1,8 @@
-class AsyncTrafficAnalysisSettings(object):
+class AsyncTrafficAnalysisSettings:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getNetworkTrafficAnalysisSettings(self, networkId: str):
         """
         **Return the traffic analysis settings for a network**
@@ -12,10 +12,10 @@ class AsyncTrafficAnalysisSettings(object):
         """
 
         metadata = {
-            "tags": ["Traffic analysis settings"],
-            "operation": "getNetworkTrafficAnalysisSettings",
+            'tags': ['Traffic analysis settings'],
+            'operation': 'getNetworkTrafficAnalysisSettings',
         }
-        resource = f"/networks/{networkId}/trafficAnalysisSettings"
+        resource = f'/networks/{networkId}/trafficAnalysisSettings'
 
         return await self._session.get(metadata, resource)
 
@@ -33,19 +33,18 @@ class AsyncTrafficAnalysisSettings(object):
 
         kwargs.update(locals())
 
-        if "mode" in kwargs:
-            options = ["disabled", "basic", "detailed"]
-            assert (
-                kwargs["mode"] in options
-            ), f""""mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}"""
+        if 'mode' in kwargs:
+            options = ['disabled', 'basic', 'detailed']
+            assert kwargs['mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
 
         metadata = {
-            "tags": ["Traffic analysis settings"],
-            "operation": "updateNetworkTrafficAnalysisSettings",
+            'tags': ['Traffic analysis settings'],
+            'operation': 'updateNetworkTrafficAnalysisSettings',
         }
-        resource = f"/networks/{networkId}/trafficAnalysisSettings"
+        resource = f'/networks/{networkId}/trafficAnalysisSettings'
 
-        body_params = ["mode", "customPieChartItems"]
+        body_params = ['mode', 'customPieChartItems']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
+

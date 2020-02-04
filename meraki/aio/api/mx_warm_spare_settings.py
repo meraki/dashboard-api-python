@@ -1,8 +1,8 @@
-class AsyncMXWarmSpareSettings(object):
+class AsyncMXWarmSpareSettings:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def swapNetworkWarmspare(self, networkId: str):
         """
         **Swap MX primary and warm spare appliances**
@@ -12,10 +12,10 @@ class AsyncMXWarmSpareSettings(object):
         """
 
         metadata = {
-            "tags": ["MX warm spare settings"],
-            "operation": "swapNetworkWarmspare",
+            'tags': ['MX warm spare settings'],
+            'operation': 'swapNetworkWarmspare',
         }
-        resource = f"/networks/{networkId}/swapWarmSpare"
+        resource = f'/networks/{networkId}/swapWarmSpare'
 
         return await self._session.post(metadata, resource)
 
@@ -28,16 +28,14 @@ class AsyncMXWarmSpareSettings(object):
         """
 
         metadata = {
-            "tags": ["MX warm spare settings"],
-            "operation": "getNetworkWarmSpareSettings",
+            'tags': ['MX warm spare settings'],
+            'operation': 'getNetworkWarmSpareSettings',
         }
-        resource = f"/networks/{networkId}/warmSpareSettings"
+        resource = f'/networks/{networkId}/warmSpareSettings'
 
         return await self._session.get(metadata, resource)
 
-    async def updateNetworkWarmSpareSettings(
-        self, networkId: str, enabled: bool, **kwargs
-    ):
+    async def updateNetworkWarmSpareSettings(self, networkId: str, enabled: bool, **kwargs):
         """
         **Update MX warm spare settings**
         https://api.meraki.com/api_docs#update-mx-warm-spare-settings
@@ -53,18 +51,13 @@ class AsyncMXWarmSpareSettings(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["MX warm spare settings"],
-            "operation": "updateNetworkWarmSpareSettings",
+            'tags': ['MX warm spare settings'],
+            'operation': 'updateNetworkWarmSpareSettings',
         }
-        resource = f"/networks/{networkId}/warmSpareSettings"
+        resource = f'/networks/{networkId}/warmSpareSettings'
 
-        body_params = [
-            "enabled",
-            "spareSerial",
-            "uplinkMode",
-            "virtualIp1",
-            "virtualIp2",
-        ]
+        body_params = ['enabled', 'spareSerial', 'uplinkMode', 'virtualIp1', 'virtualIp2']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
+

@@ -1,8 +1,8 @@
-class AsyncMXVPNFirewall(object):
+class AsyncMXVPNFirewall:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getOrganizationVpnFirewallRules(self, organizationId: str):
         """
         **Return the firewall rules for an organization's site-to-site VPN**
@@ -12,10 +12,10 @@ class AsyncMXVPNFirewall(object):
         """
 
         metadata = {
-            "tags": ["MX VPN firewall"],
-            "operation": "getOrganizationVpnFirewallRules",
+            'tags': ['MX VPN firewall'],
+            'operation': 'getOrganizationVpnFirewallRules',
         }
-        resource = f"/organizations/{organizationId}/vpnFirewallRules"
+        resource = f'/organizations/{organizationId}/vpnFirewallRules'
 
         return await self._session.get(metadata, resource)
 
@@ -32,12 +32,13 @@ class AsyncMXVPNFirewall(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["MX VPN firewall"],
-            "operation": "updateOrganizationVpnFirewallRules",
+            'tags': ['MX VPN firewall'],
+            'operation': 'updateOrganizationVpnFirewallRules',
         }
-        resource = f"/organizations/{organizationId}/vpnFirewallRules"
+        resource = f'/organizations/{organizationId}/vpnFirewallRules'
 
-        body_params = ["rules", "syslogDefaultRule"]
+        body_params = ['rules', 'syslogDefaultRule']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
+

@@ -1,8 +1,8 @@
-class AsyncAlertSettings(object):
+class AsyncAlertSettings:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getNetworkAlertSettings(self, networkId: str):
         """
         **Return the alert configuration for this network**
@@ -12,10 +12,10 @@ class AsyncAlertSettings(object):
         """
 
         metadata = {
-            "tags": ["Alert settings"],
-            "operation": "getNetworkAlertSettings",
+            'tags': ['Alert settings'],
+            'operation': 'getNetworkAlertSettings',
         }
-        resource = f"/networks/{networkId}/alertSettings"
+        resource = f'/networks/{networkId}/alertSettings'
 
         return await self._session.get(metadata, resource)
 
@@ -32,12 +32,13 @@ class AsyncAlertSettings(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Alert settings"],
-            "operation": "updateNetworkAlertSettings",
+            'tags': ['Alert settings'],
+            'operation': 'updateNetworkAlertSettings',
         }
-        resource = f"/networks/{networkId}/alertSettings"
+        resource = f'/networks/{networkId}/alertSettings'
 
-        body_params = ["defaultDestinations", "alerts"]
+        body_params = ['defaultDestinations', 'alerts']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
+

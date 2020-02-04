@@ -1,8 +1,8 @@
-class AsyncSwitchPortSchedules(object):
+class AsyncSwitchPortSchedules:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getNetworkSwitchPortSchedules(self, networkId: str):
         """
         **List switch port schedules**
@@ -12,16 +12,14 @@ class AsyncSwitchPortSchedules(object):
         """
 
         metadata = {
-            "tags": ["Switch port schedules"],
-            "operation": "getNetworkSwitchPortSchedules",
+            'tags': ['Switch port schedules'],
+            'operation': 'getNetworkSwitchPortSchedules',
         }
-        resource = f"/networks/{networkId}/switch/portSchedules"
+        resource = f'/networks/{networkId}/switch/portSchedules'
 
         return await self._session.get(metadata, resource)
 
-    async def createNetworkSwitchPortSchedule(
-        self, networkId: str, name: str, **kwargs
-    ):
+    async def createNetworkSwitchPortSchedule(self, networkId: str, name: str, **kwargs):
         """
         **Add a switch port schedule**
         https://api.meraki.com/api_docs#add-a-switch-port-schedule
@@ -37,19 +35,17 @@ class AsyncSwitchPortSchedules(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Switch port schedules"],
-            "operation": "createNetworkSwitchPortSchedule",
+            'tags': ['Switch port schedules'],
+            'operation': 'createNetworkSwitchPortSchedule',
         }
-        resource = f"/networks/{networkId}/switch/portSchedules"
+        resource = f'/networks/{networkId}/switch/portSchedules'
 
-        body_params = ["name", "portSchedule"]
+        body_params = ['name', 'portSchedule']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.post(metadata, resource, payload)
 
-    async def deleteNetworkSwitchPortSchedule(
-        self, networkId: str, portScheduleId: str
-    ):
+    async def deleteNetworkSwitchPortSchedule(self, networkId: str, portScheduleId: str):
         """
         **Delete a switch port schedule**
         https://api.meraki.com/api_docs#delete-a-switch-port-schedule
@@ -59,16 +55,14 @@ class AsyncSwitchPortSchedules(object):
         """
 
         metadata = {
-            "tags": ["Switch port schedules"],
-            "operation": "deleteNetworkSwitchPortSchedule",
+            'tags': ['Switch port schedules'],
+            'operation': 'deleteNetworkSwitchPortSchedule',
         }
-        resource = f"/networks/{networkId}/switch/portSchedules/{portScheduleId}"
+        resource = f'/networks/{networkId}/switch/portSchedules/{portScheduleId}'
 
         return await self._session.delete(metadata, resource)
 
-    async def updateNetworkSwitchPortSchedule(
-        self, networkId: str, portScheduleId: str, **kwargs
-    ):
+    async def updateNetworkSwitchPortSchedule(self, networkId: str, portScheduleId: str, **kwargs):
         """
         **Update a switch port schedule**
         https://api.meraki.com/api_docs#update-a-switch-port-schedule
@@ -85,12 +79,13 @@ class AsyncSwitchPortSchedules(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Switch port schedules"],
-            "operation": "updateNetworkSwitchPortSchedule",
+            'tags': ['Switch port schedules'],
+            'operation': 'updateNetworkSwitchPortSchedule',
         }
-        resource = f"/networks/{networkId}/switch/portSchedules/{portScheduleId}"
+        resource = f'/networks/{networkId}/switch/portSchedules/{portScheduleId}'
 
-        body_params = ["name", "portSchedule"]
+        body_params = ['name', 'portSchedule']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
+

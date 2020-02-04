@@ -331,236 +331,6 @@ class SM(object):
 
         return self._session.post(metadata, resource)
 
-    def createNetworkSmProfileClarity(self, networkId: str, name: str, scope: str, VendorConfig: list, **kwargs):
-        """
-        **Create a new profile containing a Cisco Clarity payload**
-        https://api.meraki.com/api_docs#create-a-new-profile-containing-a-cisco-clarity-payload
-        
-        - networkId (string)
-        - name (string): The name to be given to the new profile
-        - scope (string): The scope (one of all, none, withAny, withAll, withoutAny, or withoutAll) and a set of tags of the devices to be assigned
-        - VendorConfig (array): The specific VendorConfig to be passed to the filtering framework, in the form of an array of objects (as JSON).
-        - PluginBundleID (string): The bundle ID of the application, defaults to com.cisco.ciscosecurity.app
-        - FilterBrowsers (boolean): Whether or not to enable browser traffic filtering (one of true, false). Default true.
-        - FilterSockets (boolean): Whether or not to enable socket traffic filtering (one of true, false). Default true.
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['SM'],
-            'operation': 'createNetworkSmProfileClarity',
-        }
-        resource = f'/networks/{networkId}/sm/profile/clarity'
-
-        body_params = ['name', 'scope', 'PluginBundleID', 'FilterBrowsers', 'FilterSockets', 'VendorConfig']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
-
-        return self._session.post(metadata, resource, payload)
-
-    def updateNetworkSmProfileClarity(self, networkId: str, profileId: str, **kwargs):
-        """
-        **Update an existing profile containing a Cisco Clarity payload**
-        https://api.meraki.com/api_docs#update-an-existing-profile-containing-a-cisco-clarity-payload
-        
-        - networkId (string)
-        - profileId (string)
-        - name (string): optional: A new name for the profile
-        - scope (string): optional: A new scope for the profile (one of all, none, withAny, withAll, withoutAny, or withoutAll) and a set of tags of the devices to be assigned
-        - PluginBundleID (string): optional: The new bundle ID of the application
-        - FilterBrowsers (boolean): optional: Whether or not to enable browser traffic filtering (one of true, false).
-        - FilterSockets (boolean): optional: Whether or not to enable socket traffic filtering (one of true, false).
-        - VendorConfig (array): optional: The specific VendorConfig to be passed to the filtering framework, in the form of an array of objects (as JSON).
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['SM'],
-            'operation': 'updateNetworkSmProfileClarity',
-        }
-        resource = f'/networks/{networkId}/sm/profile/clarity/{profileId}'
-
-        body_params = ['name', 'scope', 'PluginBundleID', 'FilterBrowsers', 'FilterSockets', 'VendorConfig']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
-
-        return self._session.put(metadata, resource, payload)
-
-    def addNetworkSmProfileClarity(self, networkId: str, profileId: str, VendorConfig: list, **kwargs):
-        """
-        **Add a Cisco Clarity payload to an existing profile**
-        https://api.meraki.com/api_docs#add-a-cisco-clarity-payload-to-an-existing-profile
-        
-        - networkId (string)
-        - profileId (string)
-        - VendorConfig (array): The specific VendorConfig to be passed to the filtering framework, in the form of an array of objects (as JSON).
-        - PluginBundleID (string): The bundle ID of the application, defaults to com.cisco.ciscosecurity.app
-        - FilterBrowsers (boolean): Whether or not to enable browser traffic filtering (one of true, false). Defaults to true
-        - FilterSockets (boolean): Whether or not to enable socket traffic filtering (one of true, false). Defaults to true
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['SM'],
-            'operation': 'addNetworkSmProfileClarity',
-        }
-        resource = f'/networks/{networkId}/sm/profile/clarity/{profileId}'
-
-        body_params = ['PluginBundleID', 'FilterBrowsers', 'FilterSockets', 'VendorConfig']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
-
-        return self._session.post(metadata, resource, payload)
-
-    def getNetworkSmProfileClarity(self, networkId: str, profileId: str):
-        """
-        **Get details for a Cisco Clarity payload**
-        https://api.meraki.com/api_docs#get-details-for-a-cisco-clarity-payload
-        
-        - networkId (string)
-        - profileId (string)
-        """
-
-        metadata = {
-            'tags': ['SM'],
-            'operation': 'getNetworkSmProfileClarity',
-        }
-        resource = f'/networks/{networkId}/sm/profile/clarity/{profileId}'
-
-        return self._session.get(metadata, resource)
-
-    def deleteNetworkSmProfileClarity(self, networkId: str, profileId: str):
-        """
-        **Delete a Cisco Clarity payload. Deletes the entire profile if it's empty after removing the payload.**
-        https://api.meraki.com/api_docs#delete-a-cisco-clarity-payload
-        
-        - networkId (string)
-        - profileId (string)
-        """
-
-        metadata = {
-            'tags': ['SM'],
-            'operation': 'deleteNetworkSmProfileClarity',
-        }
-        resource = f'/networks/{networkId}/sm/profile/clarity/{profileId}'
-
-        return self._session.delete(metadata, resource)
-
-    def createNetworkSmProfileUmbrella(self, networkId: str, name: str, scope: str, ProviderConfiguration: list, **kwargs):
-        """
-        **Create a new profile containing a Cisco Umbrella payload**
-        https://api.meraki.com/api_docs#create-a-new-profile-containing-a-cisco-umbrella-payload
-        
-        - networkId (string)
-        - name (string): The name to be given to the new profile
-        - scope (string): The scope (one of all, none, withAny, withAll, withoutAny, or withoutAll) and a set of tags of the devices to be assigned
-        - ProviderConfiguration (array): The specific ProviderConfiguration to be passed to the filtering framework, in the form of an array of objects (as JSON).
-        - AppBundleIdentifier (string): The bundle ID of the application, defaults to com.cisco.ciscosecurity.app
-        - ProviderBundleIdentifier (string): The bundle ID of the provider, defaults to com.cisco.ciscosecurity.app.CiscoUmbrella
-        - usesCert (boolean): Whether the certificate should be attached to this profile (one of true, false). False by default
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['SM'],
-            'operation': 'createNetworkSmProfileUmbrella',
-        }
-        resource = f'/networks/{networkId}/sm/profile/umbrella'
-
-        body_params = ['name', 'scope', 'AppBundleIdentifier', 'ProviderBundleIdentifier', 'ProviderConfiguration', 'usesCert']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
-
-        return self._session.post(metadata, resource, payload)
-
-    def updateNetworkSmProfileUmbrella(self, networkId: str, profileId: str, **kwargs):
-        """
-        **Update an existing profile containing a Cisco Umbrella payload**
-        https://api.meraki.com/api_docs#update-an-existing-profile-containing-a-cisco-umbrella-payload
-        
-        - networkId (string)
-        - profileId (string)
-        - name (string): optional: A new name for the profile
-        - scope (string): optional: A new scope for the profile (one of all, none, withAny, withAll, withoutAny, or withoutAll) and a set of tags of the devices to be assigned
-        - AppBundleIdentifier (string): optional: The bundle ID of the application
-        - ProviderBundleIdentifier (string): optional: The bundle ID of the provider
-        - ProviderConfiguration (array): optional: The specific ProviderConfiguration to be passed to the filtering framework, in the form of an array of objects (as JSON).
-        - usesCert (boolean): optional: Whether the certificate should be attached to this profile (one of true, false)
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['SM'],
-            'operation': 'updateNetworkSmProfileUmbrella',
-        }
-        resource = f'/networks/{networkId}/sm/profile/umbrella/{profileId}'
-
-        body_params = ['name', 'scope', 'AppBundleIdentifier', 'ProviderBundleIdentifier', 'ProviderConfiguration', 'usesCert']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
-
-        return self._session.put(metadata, resource, payload)
-
-    def addNetworkSmProfileUmbrella(self, networkId: str, profileId: str, ProviderConfiguration: list, **kwargs):
-        """
-        **Add a Cisco Umbrella payload to an existing profile**
-        https://api.meraki.com/api_docs#add-a-cisco-umbrella-payload-to-an-existing-profile
-        
-        - networkId (string)
-        - profileId (string)
-        - ProviderConfiguration (array): The specific ProviderConfiguration to be passed to the filtering framework, in the form of an array of objects (as JSON).
-        - AppBundleIdentifier (string): The bundle ID of the application, defaults to com.cisco.ciscosecurity.app
-        - ProviderBundleIdentifier (string): The bundle ID of the provider, defaults to com.cisco.ciscosecurity.app.CiscoUmbrella
-        - usesCert (boolean): Whether the certificate should be attached to this profile (one of true, false). False by default
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['SM'],
-            'operation': 'addNetworkSmProfileUmbrella',
-        }
-        resource = f'/networks/{networkId}/sm/profile/umbrella/{profileId}'
-
-        body_params = ['AppBundleIdentifier', 'ProviderBundleIdentifier', 'ProviderConfiguration', 'usesCert']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
-
-        return self._session.post(metadata, resource, payload)
-
-    def getNetworkSmProfileUmbrella(self, networkId: str, profileId: str):
-        """
-        **Get details for a Cisco Umbrella payload**
-        https://api.meraki.com/api_docs#get-details-for-a-cisco-umbrella-payload
-        
-        - networkId (string)
-        - profileId (string)
-        """
-
-        metadata = {
-            'tags': ['SM'],
-            'operation': 'getNetworkSmProfileUmbrella',
-        }
-        resource = f'/networks/{networkId}/sm/profile/umbrella/{profileId}'
-
-        return self._session.get(metadata, resource)
-
-    def deleteNetworkSmProfileUmbrella(self, networkId: str, profileId: str):
-        """
-        **Delete a Cisco Umbrella payload. Deletes the entire profile if it's empty after removing the payload**
-        https://api.meraki.com/api_docs#delete-a-cisco-umbrella-payload
-        
-        - networkId (string)
-        - profileId (string)
-        """
-
-        metadata = {
-            'tags': ['SM'],
-            'operation': 'deleteNetworkSmProfileUmbrella',
-        }
-        resource = f'/networks/{networkId}/sm/profile/umbrella/{profileId}'
-
-        return self._session.delete(metadata, resource)
-
     def getNetworkSmProfiles(self, networkId: str):
         """
         **List all the profiles in the network**
@@ -807,9 +577,9 @@ class SM(object):
         - id (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - perPage (string): The number of entries per page returned
-        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, next or prev page in the HTTP Link header should define it.
-        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, next or prev page in the HTTP Link header should define it.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
         kwargs.update(locals())
@@ -835,9 +605,9 @@ class SM(object):
         - id (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - perPage (string): The number of entries per page returned
-        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, next or prev page in the HTTP Link header should define it.
-        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, next or prev page in the HTTP Link header should define it.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
         kwargs.update(locals())
@@ -867,9 +637,9 @@ class SM(object):
         - id (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - perPage (string): The number of entries per page returned
-        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, next or prev page in the HTTP Link header should define it.
-        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, next or prev page in the HTTP Link header should define it.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
         kwargs.update(locals())
@@ -895,9 +665,9 @@ class SM(object):
         - id (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - perPage (string): The number of entries per page returned
-        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, next or prev page in the HTTP Link header should define it.
-        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, next or prev page in the HTTP Link header should define it.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
         kwargs.update(locals())

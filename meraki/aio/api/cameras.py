@@ -1,8 +1,8 @@
-class AsyncCameras(object):
+class AsyncCameras:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getDeviceCameraQualityAndRetentionSettings(self, serial: str):
         """
         **Returns quality and retention settings for the given camera**
@@ -12,16 +12,14 @@ class AsyncCameras(object):
         """
 
         metadata = {
-            "tags": ["Cameras"],
-            "operation": "getDeviceCameraQualityAndRetentionSettings",
+            'tags': ['Cameras'],
+            'operation': 'getDeviceCameraQualityAndRetentionSettings',
         }
-        resource = f"/devices/{serial}/camera/qualityAndRetentionSettings"
+        resource = f'/devices/{serial}/camera/qualityAndRetentionSettings'
 
         return await self._session.get(metadata, resource)
 
-    async def updateDeviceCameraQualityAndRetentionSettings(
-        self, serial: str, **kwargs
-    ):
+    async def updateDeviceCameraQualityAndRetentionSettings(self, serial: str, **kwargs):
         """
         **Update quality and retention settings for the given camera**
         https://api.meraki.com/api_docs#update-quality-and-retention-settings-for-the-given-camera
@@ -37,31 +35,20 @@ class AsyncCameras(object):
 
         kwargs.update(locals())
 
-        if "quality" in kwargs:
-            options = ["Standard", "High", "Enhanced"]
-            assert (
-                kwargs["quality"] in options
-            ), f""""quality" cannot be "{kwargs['quality']}", & must be set to one of: {options}"""
-        if "resolution" in kwargs:
-            options = ["1280x720", "1920x1080", "1080x1080", "2058x2058"]
-            assert (
-                kwargs["resolution"] in options
-            ), f""""resolution" cannot be "{kwargs['resolution']}", & must be set to one of: {options}"""
+        if 'quality' in kwargs:
+            options = ['Standard', 'High', 'Enhanced']
+            assert kwargs['quality'] in options, f'''"quality" cannot be "{kwargs['quality']}", & must be set to one of: {options}'''
+        if 'resolution' in kwargs:
+            options = ['1280x720', '1920x1080', '1080x1080', '2058x2058']
+            assert kwargs['resolution'] in options, f'''"resolution" cannot be "{kwargs['resolution']}", & must be set to one of: {options}'''
 
         metadata = {
-            "tags": ["Cameras"],
-            "operation": "updateDeviceCameraQualityAndRetentionSettings",
+            'tags': ['Cameras'],
+            'operation': 'updateDeviceCameraQualityAndRetentionSettings',
         }
-        resource = f"/devices/{serial}/camera/qualityAndRetentionSettings"
+        resource = f'/devices/{serial}/camera/qualityAndRetentionSettings'
 
-        body_params = [
-            "profileId",
-            "motionBasedRetentionEnabled",
-            "audioRecordingEnabled",
-            "restrictedBandwidthModeEnabled",
-            "quality",
-            "resolution",
-        ]
+        body_params = ['profileId', 'motionBasedRetentionEnabled', 'audioRecordingEnabled', 'restrictedBandwidthModeEnabled', 'quality', 'resolution']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
@@ -75,16 +62,14 @@ class AsyncCameras(object):
         """
 
         metadata = {
-            "tags": ["Cameras"],
-            "operation": "getNetworkCameraSchedules",
+            'tags': ['Cameras'],
+            'operation': 'getNetworkCameraSchedules',
         }
-        resource = f"/networks/{networkId}/camera/schedules"
+        resource = f'/networks/{networkId}/camera/schedules'
 
         return await self._session.get(metadata, resource)
 
-    async def generateNetworkCameraSnapshot(
-        self, networkId: str, serial: str, **kwargs
-    ):
+    async def generateNetworkCameraSnapshot(self, networkId: str, serial: str, **kwargs):
         """
         **Generate a snapshot of what the camera sees at the specified time and return a link to that image.**
         https://api.meraki.com/api_docs#generate-a-snapshot-of-what-the-camera-sees-at-the-specified-time-and-return-a-link-to-that-image
@@ -97,12 +82,12 @@ class AsyncCameras(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Cameras"],
-            "operation": "generateNetworkCameraSnapshot",
+            'tags': ['Cameras'],
+            'operation': 'generateNetworkCameraSnapshot',
         }
-        resource = f"/networks/{networkId}/cameras/{serial}/snapshot"
+        resource = f'/networks/{networkId}/cameras/{serial}/snapshot'
 
-        body_params = ["timestamp"]
+        body_params = ['timestamp']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.post(metadata, resource, payload)
@@ -120,12 +105,13 @@ class AsyncCameras(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Cameras"],
-            "operation": "getNetworkCameraVideoLink",
+            'tags': ['Cameras'],
+            'operation': 'getNetworkCameraVideoLink',
         }
-        resource = f"/networks/{networkId}/cameras/{serial}/videoLink"
+        resource = f'/networks/{networkId}/cameras/{serial}/videoLink'
 
-        query_params = ["timestamp"]
+        query_params = ['timestamp']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return await self._session.get(metadata, resource, params)
+

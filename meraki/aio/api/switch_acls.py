@@ -1,8 +1,8 @@
-class AsyncSwitchACLs(object):
+class AsyncSwitchACLs:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getNetworkSwitchAccessControlLists(self, networkId: str):
         """
         **Return the access control lists for a MS network**
@@ -12,10 +12,10 @@ class AsyncSwitchACLs(object):
         """
 
         metadata = {
-            "tags": ["Switch ACLs"],
-            "operation": "getNetworkSwitchAccessControlLists",
+            'tags': ['Switch ACLs'],
+            'operation': 'getNetworkSwitchAccessControlLists',
         }
-        resource = f"/networks/{networkId}/switch/accessControlLists"
+        resource = f'/networks/{networkId}/switch/accessControlLists'
 
         return await self._session.get(metadata, resource)
 
@@ -31,12 +31,13 @@ class AsyncSwitchACLs(object):
         kwargs = locals()
 
         metadata = {
-            "tags": ["Switch ACLs"],
-            "operation": "updateNetworkSwitchAccessControlLists",
+            'tags': ['Switch ACLs'],
+            'operation': 'updateNetworkSwitchAccessControlLists',
         }
-        resource = f"/networks/{networkId}/switch/accessControlLists"
+        resource = f'/networks/{networkId}/switch/accessControlLists'
 
-        body_params = ["rules"]
+        body_params = ['rules']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
+

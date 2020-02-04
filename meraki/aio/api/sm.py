@@ -1,8 +1,8 @@
-class AsyncSM(object):
+class AsyncSM:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def createNetworkSmAppPolaris(self, networkId: str, scope: str, **kwargs):
         """
         **Create a new Polaris app**
@@ -19,18 +19,12 @@ class AsyncSM(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["SM"],
-            "operation": "createNetworkSmAppPolaris",
+            'tags': ['SM'],
+            'operation': 'createNetworkSmAppPolaris',
         }
-        resource = f"/networks/{networkId}/sm/app/polaris"
+        resource = f'/networks/{networkId}/sm/app/polaris'
 
-        body_params = [
-            "scope",
-            "manifestUrl",
-            "bundleId",
-            "preventAutoInstall",
-            "usesVPP",
-        ]
+        body_params = ['scope', 'manifestUrl', 'bundleId', 'preventAutoInstall', 'usesVPP']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.post(metadata, resource, payload)
@@ -47,12 +41,12 @@ class AsyncSM(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["SM"],
-            "operation": "getNetworkSmAppPolaris",
+            'tags': ['SM'],
+            'operation': 'getNetworkSmAppPolaris',
         }
-        resource = f"/networks/{networkId}/sm/app/polaris"
+        resource = f'/networks/{networkId}/sm/app/polaris'
 
-        query_params = ["bundleId"]
+        query_params = ['bundleId']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return await self._session.get(metadata, resource, params)
@@ -72,12 +66,12 @@ class AsyncSM(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["SM"],
-            "operation": "updateNetworkSmAppPolaris",
+            'tags': ['SM'],
+            'operation': 'updateNetworkSmAppPolaris',
         }
-        resource = f"/networks/{networkId}/sm/app/polaris/{appId}"
+        resource = f'/networks/{networkId}/sm/app/polaris/{appId}'
 
-        body_params = ["scope", "preventAutoInstall", "usesVPP"]
+        body_params = ['scope', 'preventAutoInstall', 'usesVPP']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
@@ -92,16 +86,14 @@ class AsyncSM(object):
         """
 
         metadata = {
-            "tags": ["SM"],
-            "operation": "deleteNetworkSmAppPolaris",
+            'tags': ['SM'],
+            'operation': 'deleteNetworkSmAppPolaris',
         }
-        resource = f"/networks/{networkId}/sm/app/polaris/{appId}"
+        resource = f'/networks/{networkId}/sm/app/polaris/{appId}'
 
         return await self._session.delete(metadata, resource)
 
-    async def createNetworkSmBypassActivationLockAttempt(
-        self, networkId: str, ids: list
-    ):
+    async def createNetworkSmBypassActivationLockAttempt(self, networkId: str, ids: list):
         """
         **Bypass activation lock attempt**
         https://api.meraki.com/api_docs#bypass-activation-lock-attempt
@@ -113,19 +105,17 @@ class AsyncSM(object):
         kwargs = locals()
 
         metadata = {
-            "tags": ["SM"],
-            "operation": "createNetworkSmBypassActivationLockAttempt",
+            'tags': ['SM'],
+            'operation': 'createNetworkSmBypassActivationLockAttempt',
         }
-        resource = f"/networks/{networkId}/sm/bypassActivationLockAttempts"
+        resource = f'/networks/{networkId}/sm/bypassActivationLockAttempts'
 
-        body_params = ["ids"]
+        body_params = ['ids']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.post(metadata, resource, payload)
 
-    async def getNetworkSmBypassActivationLockAttempt(
-        self, networkId: str, attemptId: str
-    ):
+    async def getNetworkSmBypassActivationLockAttempt(self, networkId: str, attemptId: str):
         """
         **Bypass activation lock attempt status**
         https://api.meraki.com/api_docs#bypass-activation-lock-attempt-status
@@ -135,16 +125,14 @@ class AsyncSM(object):
         """
 
         metadata = {
-            "tags": ["SM"],
-            "operation": "getNetworkSmBypassActivationLockAttempt",
+            'tags': ['SM'],
+            'operation': 'getNetworkSmBypassActivationLockAttempt',
         }
-        resource = f"/networks/{networkId}/sm/bypassActivationLockAttempts/{attemptId}"
+        resource = f'/networks/{networkId}/sm/bypassActivationLockAttempts/{attemptId}'
 
         return await self._session.get(metadata, resource)
 
-    async def updateNetworkSmDeviceFields(
-        self, networkId: str, deviceFields: dict, **kwargs
-    ):
+    async def updateNetworkSmDeviceFields(self, networkId: str, deviceFields: dict, **kwargs):
         """
         **Modify the fields of a device**
         https://api.meraki.com/api_docs#modify-the-fields-of-a-device
@@ -159,12 +147,12 @@ class AsyncSM(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["SM"],
-            "operation": "updateNetworkSmDeviceFields",
+            'tags': ['SM'],
+            'operation': 'updateNetworkSmDeviceFields',
         }
-        resource = f"/networks/{networkId}/sm/device/fields"
+        resource = f'/networks/{networkId}/sm/device/fields'
 
-        body_params = ["wifiMac", "id", "serial", "deviceFields"]
+        body_params = ['wifiMac', 'id', 'serial', 'deviceFields']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
@@ -184,12 +172,12 @@ class AsyncSM(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["SM"],
-            "operation": "wipeNetworkSmDevice",
+            'tags': ['SM'],
+            'operation': 'wipeNetworkSmDevice',
         }
-        resource = f"/networks/{networkId}/sm/device/wipe"
+        resource = f'/networks/{networkId}/sm/device/wipe'
 
-        body_params = ["wifiMac", "id", "serial", "pin"]
+        body_params = ['wifiMac', 'id', 'serial', 'pin']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
@@ -204,10 +192,10 @@ class AsyncSM(object):
         """
 
         metadata = {
-            "tags": ["SM"],
-            "operation": "refreshNetworkSmDeviceDetails",
+            'tags': ['SM'],
+            'operation': 'refreshNetworkSmDeviceDetails',
         }
-        resource = f"/networks/{networkId}/sm/device/{deviceId}/refreshDetails"
+        resource = f'/networks/{networkId}/sm/device/{deviceId}/refreshDetails'
 
         return await self._session.post(metadata, resource)
 
@@ -238,20 +226,12 @@ class AsyncSM(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["SM"],
-            "operation": "getNetworkSmDevices",
+            'tags': ['SM'],
+            'operation': 'getNetworkSmDevices',
         }
-        resource = f"/networks/{networkId}/sm/devices"
+        resource = f'/networks/{networkId}/sm/devices'
 
-        query_params = [
-            "fields",
-            "wifiMacs",
-            "serials",
-            "ids",
-            "scope",
-            "batchSize",
-            "batchToken",
-        ]
+        query_params = ['fields', 'wifiMacs', 'serials', 'ids', 'scope', 'batchSize', 'batchToken']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return await self._session.get(metadata, resource, params)
@@ -271,12 +251,12 @@ class AsyncSM(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["SM"],
-            "operation": "checkinNetworkSmDevices",
+            'tags': ['SM'],
+            'operation': 'checkinNetworkSmDevices',
         }
-        resource = f"/networks/{networkId}/sm/devices/checkin"
+        resource = f'/networks/{networkId}/sm/devices/checkin'
 
-        body_params = ["wifiMacs", "ids", "serials", "scope"]
+        body_params = ['wifiMacs', 'ids', 'serials', 'scope']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
@@ -297,19 +277,17 @@ class AsyncSM(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["SM"],
-            "operation": "moveNetworkSmDevices",
+            'tags': ['SM'],
+            'operation': 'moveNetworkSmDevices',
         }
-        resource = f"/networks/{networkId}/sm/devices/move"
+        resource = f'/networks/{networkId}/sm/devices/move'
 
-        body_params = ["wifiMacs", "ids", "serials", "scope", "newNetwork"]
+        body_params = ['wifiMacs', 'ids', 'serials', 'scope', 'newNetwork']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
 
-    async def updateNetworkSmDevicesTags(
-        self, networkId: str, tags: str, updateAction: str, **kwargs
-    ):
+    async def updateNetworkSmDevicesTags(self, networkId: str, tags: str, updateAction: str, **kwargs):
         """
         **Add, delete, or update the tags of a set of devices**
         https://api.meraki.com/api_docs#add-delete-or-update-the-tags-of-a-set-of-devices
@@ -326,12 +304,12 @@ class AsyncSM(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["SM"],
-            "operation": "updateNetworkSmDevicesTags",
+            'tags': ['SM'],
+            'operation': 'updateNetworkSmDevicesTags',
         }
-        resource = f"/networks/{networkId}/sm/devices/tags"
+        resource = f'/networks/{networkId}/sm/devices/tags'
 
-        body_params = ["wifiMacs", "ids", "serials", "scope", "tags", "updateAction"]
+        body_params = ['wifiMacs', 'ids', 'serials', 'scope', 'tags', 'updateAction']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
@@ -346,297 +324,12 @@ class AsyncSM(object):
         """
 
         metadata = {
-            "tags": ["SM"],
-            "operation": "unenrollNetworkSmDevice",
+            'tags': ['SM'],
+            'operation': 'unenrollNetworkSmDevice',
         }
-        resource = f"/networks/{networkId}/sm/devices/{deviceId}/unenroll"
+        resource = f'/networks/{networkId}/sm/devices/{deviceId}/unenroll'
 
         return await self._session.post(metadata, resource)
-
-    async def createNetworkSmProfileClarity(
-        self, networkId: str, name: str, scope: str, VendorConfig: list, **kwargs
-    ):
-        """
-        **Create a new profile containing a Cisco Clarity payload**
-        https://api.meraki.com/api_docs#create-a-new-profile-containing-a-cisco-clarity-payload
-        
-        - networkId (string)
-        - name (string): The name to be given to the new profile
-        - scope (string): The scope (one of all, none, withAny, withAll, withoutAny, or withoutAll) and a set of tags of the devices to be assigned
-        - VendorConfig (array): The specific VendorConfig to be passed to the filtering framework, in the form of an array of objects (as JSON).
-        - PluginBundleID (string): The bundle ID of the application, defaults to com.cisco.ciscosecurity.app
-        - FilterBrowsers (boolean): Whether or not to enable browser traffic filtering (one of true, false). Default true.
-        - FilterSockets (boolean): Whether or not to enable socket traffic filtering (one of true, false). Default true.
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            "tags": ["SM"],
-            "operation": "createNetworkSmProfileClarity",
-        }
-        resource = f"/networks/{networkId}/sm/profile/clarity"
-
-        body_params = [
-            "name",
-            "scope",
-            "PluginBundleID",
-            "FilterBrowsers",
-            "FilterSockets",
-            "VendorConfig",
-        ]
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
-
-        return await self._session.post(metadata, resource, payload)
-
-    async def updateNetworkSmProfileClarity(
-        self, networkId: str, profileId: str, **kwargs
-    ):
-        """
-        **Update an existing profile containing a Cisco Clarity payload**
-        https://api.meraki.com/api_docs#update-an-existing-profile-containing-a-cisco-clarity-payload
-        
-        - networkId (string)
-        - profileId (string)
-        - name (string): optional: A new name for the profile
-        - scope (string): optional: A new scope for the profile (one of all, none, withAny, withAll, withoutAny, or withoutAll) and a set of tags of the devices to be assigned
-        - PluginBundleID (string): optional: The new bundle ID of the application
-        - FilterBrowsers (boolean): optional: Whether or not to enable browser traffic filtering (one of true, false).
-        - FilterSockets (boolean): optional: Whether or not to enable socket traffic filtering (one of true, false).
-        - VendorConfig (array): optional: The specific VendorConfig to be passed to the filtering framework, in the form of an array of objects (as JSON).
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            "tags": ["SM"],
-            "operation": "updateNetworkSmProfileClarity",
-        }
-        resource = f"/networks/{networkId}/sm/profile/clarity/{profileId}"
-
-        body_params = [
-            "name",
-            "scope",
-            "PluginBundleID",
-            "FilterBrowsers",
-            "FilterSockets",
-            "VendorConfig",
-        ]
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
-
-        return await self._session.put(metadata, resource, payload)
-
-    async def addNetworkSmProfileClarity(
-        self, networkId: str, profileId: str, VendorConfig: list, **kwargs
-    ):
-        """
-        **Add a Cisco Clarity payload to an existing profile**
-        https://api.meraki.com/api_docs#add-a-cisco-clarity-payload-to-an-existing-profile
-        
-        - networkId (string)
-        - profileId (string)
-        - VendorConfig (array): The specific VendorConfig to be passed to the filtering framework, in the form of an array of objects (as JSON).
-        - PluginBundleID (string): The bundle ID of the application, defaults to com.cisco.ciscosecurity.app
-        - FilterBrowsers (boolean): Whether or not to enable browser traffic filtering (one of true, false). Defaults to true
-        - FilterSockets (boolean): Whether or not to enable socket traffic filtering (one of true, false). Defaults to true
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            "tags": ["SM"],
-            "operation": "addNetworkSmProfileClarity",
-        }
-        resource = f"/networks/{networkId}/sm/profile/clarity/{profileId}"
-
-        body_params = [
-            "PluginBundleID",
-            "FilterBrowsers",
-            "FilterSockets",
-            "VendorConfig",
-        ]
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
-
-        return await self._session.post(metadata, resource, payload)
-
-    async def getNetworkSmProfileClarity(self, networkId: str, profileId: str):
-        """
-        **Get details for a Cisco Clarity payload**
-        https://api.meraki.com/api_docs#get-details-for-a-cisco-clarity-payload
-        
-        - networkId (string)
-        - profileId (string)
-        """
-
-        metadata = {
-            "tags": ["SM"],
-            "operation": "getNetworkSmProfileClarity",
-        }
-        resource = f"/networks/{networkId}/sm/profile/clarity/{profileId}"
-
-        return await self._session.get(metadata, resource)
-
-    async def deleteNetworkSmProfileClarity(self, networkId: str, profileId: str):
-        """
-        **Delete a Cisco Clarity payload. Deletes the entire profile if it's empty after removing the payload.**
-        https://api.meraki.com/api_docs#delete-a-cisco-clarity-payload
-        
-        - networkId (string)
-        - profileId (string)
-        """
-
-        metadata = {
-            "tags": ["SM"],
-            "operation": "deleteNetworkSmProfileClarity",
-        }
-        resource = f"/networks/{networkId}/sm/profile/clarity/{profileId}"
-
-        return await self._session.delete(metadata, resource)
-
-    async def createNetworkSmProfileUmbrella(
-        self,
-        networkId: str,
-        name: str,
-        scope: str,
-        ProviderConfiguration: list,
-        **kwargs,
-    ):
-        """
-        **Create a new profile containing a Cisco Umbrella payload**
-        https://api.meraki.com/api_docs#create-a-new-profile-containing-a-cisco-umbrella-payload
-        
-        - networkId (string)
-        - name (string): The name to be given to the new profile
-        - scope (string): The scope (one of all, none, withAny, withAll, withoutAny, or withoutAll) and a set of tags of the devices to be assigned
-        - ProviderConfiguration (array): The specific ProviderConfiguration to be passed to the filtering framework, in the form of an array of objects (as JSON).
-        - AppBundleIdentifier (string): The bundle ID of the application, defaults to com.cisco.ciscosecurity.app
-        - ProviderBundleIdentifier (string): The bundle ID of the provider, defaults to com.cisco.ciscosecurity.app.CiscoUmbrella
-        - usesCert (boolean): Whether the certificate should be attached to this profile (one of true, false). False by default
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            "tags": ["SM"],
-            "operation": "createNetworkSmProfileUmbrella",
-        }
-        resource = f"/networks/{networkId}/sm/profile/umbrella"
-
-        body_params = [
-            "name",
-            "scope",
-            "AppBundleIdentifier",
-            "ProviderBundleIdentifier",
-            "ProviderConfiguration",
-            "usesCert",
-        ]
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
-
-        return await self._session.post(metadata, resource, payload)
-
-    async def updateNetworkSmProfileUmbrella(
-        self, networkId: str, profileId: str, **kwargs
-    ):
-        """
-        **Update an existing profile containing a Cisco Umbrella payload**
-        https://api.meraki.com/api_docs#update-an-existing-profile-containing-a-cisco-umbrella-payload
-        
-        - networkId (string)
-        - profileId (string)
-        - name (string): optional: A new name for the profile
-        - scope (string): optional: A new scope for the profile (one of all, none, withAny, withAll, withoutAny, or withoutAll) and a set of tags of the devices to be assigned
-        - AppBundleIdentifier (string): optional: The bundle ID of the application
-        - ProviderBundleIdentifier (string): optional: The bundle ID of the provider
-        - ProviderConfiguration (array): optional: The specific ProviderConfiguration to be passed to the filtering framework, in the form of an array of objects (as JSON).
-        - usesCert (boolean): optional: Whether the certificate should be attached to this profile (one of true, false)
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            "tags": ["SM"],
-            "operation": "updateNetworkSmProfileUmbrella",
-        }
-        resource = f"/networks/{networkId}/sm/profile/umbrella/{profileId}"
-
-        body_params = [
-            "name",
-            "scope",
-            "AppBundleIdentifier",
-            "ProviderBundleIdentifier",
-            "ProviderConfiguration",
-            "usesCert",
-        ]
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
-
-        return await self._session.put(metadata, resource, payload)
-
-    async def addNetworkSmProfileUmbrella(
-        self, networkId: str, profileId: str, ProviderConfiguration: list, **kwargs
-    ):
-        """
-        **Add a Cisco Umbrella payload to an existing profile**
-        https://api.meraki.com/api_docs#add-a-cisco-umbrella-payload-to-an-existing-profile
-        
-        - networkId (string)
-        - profileId (string)
-        - ProviderConfiguration (array): The specific ProviderConfiguration to be passed to the filtering framework, in the form of an array of objects (as JSON).
-        - AppBundleIdentifier (string): The bundle ID of the application, defaults to com.cisco.ciscosecurity.app
-        - ProviderBundleIdentifier (string): The bundle ID of the provider, defaults to com.cisco.ciscosecurity.app.CiscoUmbrella
-        - usesCert (boolean): Whether the certificate should be attached to this profile (one of true, false). False by default
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            "tags": ["SM"],
-            "operation": "addNetworkSmProfileUmbrella",
-        }
-        resource = f"/networks/{networkId}/sm/profile/umbrella/{profileId}"
-
-        body_params = [
-            "AppBundleIdentifier",
-            "ProviderBundleIdentifier",
-            "ProviderConfiguration",
-            "usesCert",
-        ]
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
-
-        return await self._session.post(metadata, resource, payload)
-
-    async def getNetworkSmProfileUmbrella(self, networkId: str, profileId: str):
-        """
-        **Get details for a Cisco Umbrella payload**
-        https://api.meraki.com/api_docs#get-details-for-a-cisco-umbrella-payload
-        
-        - networkId (string)
-        - profileId (string)
-        """
-
-        metadata = {
-            "tags": ["SM"],
-            "operation": "getNetworkSmProfileUmbrella",
-        }
-        resource = f"/networks/{networkId}/sm/profile/umbrella/{profileId}"
-
-        return await self._session.get(metadata, resource)
-
-    async def deleteNetworkSmProfileUmbrella(self, networkId: str, profileId: str):
-        """
-        **Delete a Cisco Umbrella payload. Deletes the entire profile if it's empty after removing the payload**
-        https://api.meraki.com/api_docs#delete-a-cisco-umbrella-payload
-        
-        - networkId (string)
-        - profileId (string)
-        """
-
-        metadata = {
-            "tags": ["SM"],
-            "operation": "deleteNetworkSmProfileUmbrella",
-        }
-        resource = f"/networks/{networkId}/sm/profile/umbrella/{profileId}"
-
-        return await self._session.delete(metadata, resource)
 
     async def getNetworkSmProfiles(self, networkId: str):
         """
@@ -647,10 +340,10 @@ class AsyncSM(object):
         """
 
         metadata = {
-            "tags": ["SM"],
-            "operation": "getNetworkSmProfiles",
+            'tags': ['SM'],
+            'operation': 'getNetworkSmProfiles',
         }
-        resource = f"/networks/{networkId}/sm/profiles"
+        resource = f'/networks/{networkId}/sm/profiles'
 
         return await self._session.get(metadata, resource)
 
@@ -664,10 +357,10 @@ class AsyncSM(object):
         """
 
         metadata = {
-            "tags": ["SM"],
-            "operation": "getNetworkSmUserDeviceProfiles",
+            'tags': ['SM'],
+            'operation': 'getNetworkSmUserDeviceProfiles',
         }
-        resource = f"/networks/{networkId}/sm/user/{userId}/deviceProfiles"
+        resource = f'/networks/{networkId}/sm/user/{userId}/deviceProfiles'
 
         return await self._session.get(metadata, resource)
 
@@ -681,10 +374,10 @@ class AsyncSM(object):
         """
 
         metadata = {
-            "tags": ["SM"],
-            "operation": "getNetworkSmUserSoftwares",
+            'tags': ['SM'],
+            'operation': 'getNetworkSmUserSoftwares',
         }
-        resource = f"/networks/{networkId}/sm/user/{userId}/softwares"
+        resource = f'/networks/{networkId}/sm/user/{userId}/softwares'
 
         return await self._session.get(metadata, resource)
 
@@ -703,12 +396,12 @@ class AsyncSM(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["SM"],
-            "operation": "getNetworkSmUsers",
+            'tags': ['SM'],
+            'operation': 'getNetworkSmUsers',
         }
-        resource = f"/networks/{networkId}/sm/users"
+        resource = f'/networks/{networkId}/sm/users'
 
-        query_params = ["ids", "usernames", "emails", "scope"]
+        query_params = ['ids', 'usernames', 'emails', 'scope']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
         return await self._session.get(metadata, resource, params)
@@ -723,10 +416,10 @@ class AsyncSM(object):
         """
 
         metadata = {
-            "tags": ["SM"],
-            "operation": "getNetworkSmCellularUsageHistory",
+            'tags': ['SM'],
+            'operation': 'getNetworkSmCellularUsageHistory',
         }
-        resource = f"/networks/{networkId}/sm/{deviceId}/cellularUsageHistory"
+        resource = f'/networks/{networkId}/sm/{deviceId}/cellularUsageHistory'
 
         return await self._session.get(metadata, resource)
 
@@ -740,10 +433,10 @@ class AsyncSM(object):
         """
 
         metadata = {
-            "tags": ["SM"],
-            "operation": "getNetworkSmCerts",
+            'tags': ['SM'],
+            'operation': 'getNetworkSmCerts',
         }
-        resource = f"/networks/{networkId}/sm/{deviceId}/certs"
+        resource = f'/networks/{networkId}/sm/{deviceId}/certs'
 
         return await self._session.get(metadata, resource)
 
@@ -757,10 +450,10 @@ class AsyncSM(object):
         """
 
         metadata = {
-            "tags": ["SM"],
-            "operation": "getNetworkSmDeviceProfiles",
+            'tags': ['SM'],
+            'operation': 'getNetworkSmDeviceProfiles',
         }
-        resource = f"/networks/{networkId}/sm/{deviceId}/deviceProfiles"
+        resource = f'/networks/{networkId}/sm/{deviceId}/deviceProfiles'
 
         return await self._session.get(metadata, resource)
 
@@ -774,10 +467,10 @@ class AsyncSM(object):
         """
 
         metadata = {
-            "tags": ["SM"],
-            "operation": "getNetworkSmNetworkAdapters",
+            'tags': ['SM'],
+            'operation': 'getNetworkSmNetworkAdapters',
         }
-        resource = f"/networks/{networkId}/sm/{deviceId}/networkAdapters"
+        resource = f'/networks/{networkId}/sm/{deviceId}/networkAdapters'
 
         return await self._session.get(metadata, resource)
 
@@ -791,10 +484,10 @@ class AsyncSM(object):
         """
 
         metadata = {
-            "tags": ["SM"],
-            "operation": "getNetworkSmRestrictions",
+            'tags': ['SM'],
+            'operation': 'getNetworkSmRestrictions',
         }
-        resource = f"/networks/{networkId}/sm/{deviceId}/restrictions"
+        resource = f'/networks/{networkId}/sm/{deviceId}/restrictions'
 
         return await self._session.get(metadata, resource)
 
@@ -808,10 +501,10 @@ class AsyncSM(object):
         """
 
         metadata = {
-            "tags": ["SM"],
-            "operation": "getNetworkSmSecurityCenters",
+            'tags': ['SM'],
+            'operation': 'getNetworkSmSecurityCenters',
         }
-        resource = f"/networks/{networkId}/sm/{deviceId}/securityCenters"
+        resource = f'/networks/{networkId}/sm/{deviceId}/securityCenters'
 
         return await self._session.get(metadata, resource)
 
@@ -825,10 +518,10 @@ class AsyncSM(object):
         """
 
         metadata = {
-            "tags": ["SM"],
-            "operation": "getNetworkSmSoftwares",
+            'tags': ['SM'],
+            'operation': 'getNetworkSmSoftwares',
         }
-        resource = f"/networks/{networkId}/sm/{deviceId}/softwares"
+        resource = f'/networks/{networkId}/sm/{deviceId}/softwares'
 
         return await self._session.get(metadata, resource)
 
@@ -842,10 +535,10 @@ class AsyncSM(object):
         """
 
         metadata = {
-            "tags": ["SM"],
-            "operation": "getNetworkSmWlanLists",
+            'tags': ['SM'],
+            'operation': 'getNetworkSmWlanLists',
         }
-        resource = f"/networks/{networkId}/sm/{deviceId}/wlanLists"
+        resource = f'/networks/{networkId}/sm/{deviceId}/wlanLists'
 
         return await self._session.get(metadata, resource)
 
@@ -865,19 +558,17 @@ class AsyncSM(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["SM"],
-            "operation": "lockNetworkSmDevices",
+            'tags': ['SM'],
+            'operation': 'lockNetworkSmDevices',
         }
-        resource = f"/networks/{network_id}/sm/devices/lock"
+        resource = f'/networks/{network_id}/sm/devices/lock'
 
-        body_params = ["wifiMacs", "ids", "serials", "scope", "pin"]
+        body_params = ['wifiMacs', 'ids', 'serials', 'scope', 'pin']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
 
-    async def getNetworkSmConnectivity(
-        self, network_id: str, id: str, total_pages=1, direction="next", **kwargs
-    ):
+    async def getNetworkSmConnectivity(self, network_id: str, id: str, total_pages=1, direction='next', **kwargs):
         """
         **Returns historical connectivity data (whether a device is regularly checking in to Dashboard).**
         https://api.meraki.com/api_docs#returns-historical-connectivity-data-whether-a-device-is-regularly-checking-in-to-dashboard
@@ -886,29 +577,26 @@ class AsyncSM(object):
         - id (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - perPage (string): The number of entries per page returned
-        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, next or prev page in the HTTP Link header should define it.
-        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, next or prev page in the HTTP Link header should define it.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["SM"],
-            "operation": "getNetworkSmConnectivity",
+            'tags': ['SM'],
+            'operation': 'getNetworkSmConnectivity',
         }
-        resource = f"/networks/{network_id}/sm/{id}/connectivity"
+        resource = f'/networks/{network_id}/sm/{id}/connectivity'
 
-        query_params = ["perPage", "startingAfter", "endingBefore"]
+        query_params = ['perPage', 'startingAfter', 'endingBefore']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return await self._session.get_pages(
-            metadata, resource, params, total_pages, direction
-        )
+        return await self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    async def getNetworkSmDesktopLogs(
-        self, network_id: str, id: str, total_pages=1, direction="next", **kwargs
-    ):
+
+    async def getNetworkSmDesktopLogs(self, network_id: str, id: str, total_pages=1, direction='next', **kwargs):
         """
         **Return historical records of various Systems Manager network connection details for desktop devices.**
         https://api.meraki.com/api_docs#return-historical-records-of-various-systems-manager-network-connection-details-for-desktop-devices
@@ -917,29 +605,26 @@ class AsyncSM(object):
         - id (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - perPage (string): The number of entries per page returned
-        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, next or prev page in the HTTP Link header should define it.
-        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, next or prev page in the HTTP Link header should define it.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["SM"],
-            "operation": "getNetworkSmDesktopLogs",
+            'tags': ['SM'],
+            'operation': 'getNetworkSmDesktopLogs',
         }
-        resource = f"/networks/{network_id}/sm/{id}/desktopLogs"
+        resource = f'/networks/{network_id}/sm/{id}/desktopLogs'
 
-        query_params = ["perPage", "startingAfter", "endingBefore"]
+        query_params = ['perPage', 'startingAfter', 'endingBefore']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return await self._session.get_pages(
-            metadata, resource, params, total_pages, direction
-        )
+        return await self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    async def getNetworkSmDeviceCommandLogs(
-        self, network_id: str, id: str, total_pages=1, direction="next", **kwargs
-    ):
+
+    async def getNetworkSmDeviceCommandLogs(self, network_id: str, id: str, total_pages=1, direction='next', **kwargs):
         """
         **    Return historical records of commands sent to Systems Manager devices.
     <p>Note that this will include the name of the Dashboard user who initiated the command if it was generated
@@ -952,29 +637,26 @@ class AsyncSM(object):
         - id (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - perPage (string): The number of entries per page returned
-        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, next or prev page in the HTTP Link header should define it.
-        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, next or prev page in the HTTP Link header should define it.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["SM"],
-            "operation": "getNetworkSmDeviceCommandLogs",
+            'tags': ['SM'],
+            'operation': 'getNetworkSmDeviceCommandLogs',
         }
-        resource = f"/networks/{network_id}/sm/{id}/deviceCommandLogs"
+        resource = f'/networks/{network_id}/sm/{id}/deviceCommandLogs'
 
-        query_params = ["perPage", "startingAfter", "endingBefore"]
+        query_params = ['perPage', 'startingAfter', 'endingBefore']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return await self._session.get_pages(
-            metadata, resource, params, total_pages, direction
-        )
+        return await self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    async def getNetworkSmPerformanceHistory(
-        self, network_id: str, id: str, total_pages=1, direction="next", **kwargs
-    ):
+
+    async def getNetworkSmPerformanceHistory(self, network_id: str, id: str, total_pages=1, direction='next', **kwargs):
         """
         **Return historical records of various Systems Manager client metrics for desktop devices.**
         https://api.meraki.com/api_docs#return-historical-records-of-various-systems-manager-client-metrics-for-desktop-devices
@@ -983,22 +665,22 @@ class AsyncSM(object):
         - id (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - perPage (string): The number of entries per page returned
-        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, next or prev page in the HTTP Link header should define it.
-        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, next or prev page in the HTTP Link header should define it.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["SM"],
-            "operation": "getNetworkSmPerformanceHistory",
+            'tags': ['SM'],
+            'operation': 'getNetworkSmPerformanceHistory',
         }
-        resource = f"/networks/{network_id}/sm/{id}/performanceHistory"
+        resource = f'/networks/{network_id}/sm/{id}/performanceHistory'
 
-        query_params = ["perPage", "startingAfter", "endingBefore"]
+        query_params = ['perPage', 'startingAfter', 'endingBefore']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return await self._session.get_pages(
-            metadata, resource, params, total_pages, direction
-        )
+        return await self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+

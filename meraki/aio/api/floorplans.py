@@ -1,8 +1,8 @@
-class AsyncFloorplans(object):
+class AsyncFloorplans:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getNetworkFloorPlans(self, networkId: str):
         """
         **List the floor plans that belong to your network**
@@ -12,16 +12,14 @@ class AsyncFloorplans(object):
         """
 
         metadata = {
-            "tags": ["Floorplans"],
-            "operation": "getNetworkFloorPlans",
+            'tags': ['Floorplans'],
+            'operation': 'getNetworkFloorPlans',
         }
-        resource = f"/networks/{networkId}/floorPlans"
+        resource = f'/networks/{networkId}/floorPlans'
 
         return await self._session.get(metadata, resource)
 
-    async def createNetworkFloorPlan(
-        self, networkId: str, name: str, imageContents: str, **kwargs
-    ):
+    async def createNetworkFloorPlan(self, networkId: str, name: str, imageContents: str, **kwargs):
         """
         **Upload a floor plan**
         https://api.meraki.com/api_docs#upload-a-floor-plan
@@ -39,20 +37,12 @@ class AsyncFloorplans(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Floorplans"],
-            "operation": "createNetworkFloorPlan",
+            'tags': ['Floorplans'],
+            'operation': 'createNetworkFloorPlan',
         }
-        resource = f"/networks/{networkId}/floorPlans"
+        resource = f'/networks/{networkId}/floorPlans'
 
-        body_params = [
-            "name",
-            "center",
-            "bottomLeftCorner",
-            "bottomRightCorner",
-            "topLeftCorner",
-            "topRightCorner",
-            "imageContents",
-        ]
+        body_params = ['name', 'center', 'bottomLeftCorner', 'bottomRightCorner', 'topLeftCorner', 'topRightCorner', 'imageContents']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.post(metadata, resource, payload)
@@ -67,10 +57,10 @@ class AsyncFloorplans(object):
         """
 
         metadata = {
-            "tags": ["Floorplans"],
-            "operation": "getNetworkFloorPlan",
+            'tags': ['Floorplans'],
+            'operation': 'getNetworkFloorPlan',
         }
-        resource = f"/networks/{networkId}/floorPlans/{floorPlanId}"
+        resource = f'/networks/{networkId}/floorPlans/{floorPlanId}'
 
         return await self._session.get(metadata, resource)
 
@@ -93,20 +83,12 @@ class AsyncFloorplans(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Floorplans"],
-            "operation": "updateNetworkFloorPlan",
+            'tags': ['Floorplans'],
+            'operation': 'updateNetworkFloorPlan',
         }
-        resource = f"/networks/{networkId}/floorPlans/{floorPlanId}"
+        resource = f'/networks/{networkId}/floorPlans/{floorPlanId}'
 
-        body_params = [
-            "name",
-            "center",
-            "bottomLeftCorner",
-            "bottomRightCorner",
-            "topLeftCorner",
-            "topRightCorner",
-            "imageContents",
-        ]
+        body_params = ['name', 'center', 'bottomLeftCorner', 'bottomRightCorner', 'topLeftCorner', 'topRightCorner', 'imageContents']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
@@ -121,9 +103,10 @@ class AsyncFloorplans(object):
         """
 
         metadata = {
-            "tags": ["Floorplans"],
-            "operation": "deleteNetworkFloorPlan",
+            'tags': ['Floorplans'],
+            'operation': 'deleteNetworkFloorPlan',
         }
-        resource = f"/networks/{networkId}/floorPlans/{floorPlanId}"
+        resource = f'/networks/{networkId}/floorPlans/{floorPlanId}'
 
         return await self._session.delete(metadata, resource)
+

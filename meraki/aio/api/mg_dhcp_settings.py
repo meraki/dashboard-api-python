@@ -1,8 +1,8 @@
-class AsyncMGDHCPSettings(object):
+class AsyncMGDHCPSettings:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getNetworkCellularGatewaySettingsDhcp(self, networkId: str):
         """
         **List common DHCP settings of MGs**
@@ -12,10 +12,10 @@ class AsyncMGDHCPSettings(object):
         """
 
         metadata = {
-            "tags": ["MG DHCP settings"],
-            "operation": "getNetworkCellularGatewaySettingsDhcp",
+            'tags': ['MG DHCP settings'],
+            'operation': 'getNetworkCellularGatewaySettingsDhcp',
         }
-        resource = f"/networks/{networkId}/cellularGateway/settings/dhcp"
+        resource = f'/networks/{networkId}/cellularGateway/settings/dhcp'
 
         return await self._session.get(metadata, resource)
 
@@ -33,12 +33,13 @@ class AsyncMGDHCPSettings(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["MG DHCP settings"],
-            "operation": "updateNetworkCellularGatewaySettingsDhcp",
+            'tags': ['MG DHCP settings'],
+            'operation': 'updateNetworkCellularGatewaySettingsDhcp',
         }
-        resource = f"/networks/{networkId}/cellularGateway/settings/dhcp"
+        resource = f'/networks/{networkId}/cellularGateway/settings/dhcp'
 
-        body_params = ["dhcpLeaseTime", "dnsNameservers", "dnsCustomNameservers"]
+        body_params = ['dhcpLeaseTime', 'dnsNameservers', 'dnsCustomNameservers']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
+

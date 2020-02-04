@@ -1,8 +1,8 @@
-class AsyncMXCellularFirewall(object):
+class AsyncMXCellularFirewall:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getNetworkCellularFirewallRules(self, networkId: str):
         """
         **Return the cellular firewall rules for an MX network**
@@ -12,10 +12,10 @@ class AsyncMXCellularFirewall(object):
         """
 
         metadata = {
-            "tags": ["MX cellular firewall"],
-            "operation": "getNetworkCellularFirewallRules",
+            'tags': ['MX cellular firewall'],
+            'operation': 'getNetworkCellularFirewallRules',
         }
-        resource = f"/networks/{networkId}/cellularFirewallRules"
+        resource = f'/networks/{networkId}/cellularFirewallRules'
 
         return await self._session.get(metadata, resource)
 
@@ -31,12 +31,13 @@ class AsyncMXCellularFirewall(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["MX cellular firewall"],
-            "operation": "updateNetworkCellularFirewallRules",
+            'tags': ['MX cellular firewall'],
+            'operation': 'updateNetworkCellularFirewallRules',
         }
-        resource = f"/networks/{networkId}/cellularFirewallRules"
+        resource = f'/networks/{networkId}/cellularFirewallRules'
 
-        body_params = ["rules"]
+        body_params = ['rules']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
+

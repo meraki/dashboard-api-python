@@ -1,8 +1,8 @@
-class AsyncMerakiAuthUsers(object):
+class AsyncMerakiAuthUsers:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getNetworkMerakiAuthUsers(self, networkId: str):
         """
         **List the splash or RADIUS users configured under Meraki Authentication for a network**
@@ -12,10 +12,10 @@ class AsyncMerakiAuthUsers(object):
         """
 
         metadata = {
-            "tags": ["Meraki auth users"],
-            "operation": "getNetworkMerakiAuthUsers",
+            'tags': ['Meraki auth users'],
+            'operation': 'getNetworkMerakiAuthUsers',
         }
-        resource = f"/networks/{networkId}/merakiAuthUsers"
+        resource = f'/networks/{networkId}/merakiAuthUsers'
 
         return await self._session.get(metadata, resource)
 
@@ -29,9 +29,10 @@ class AsyncMerakiAuthUsers(object):
         """
 
         metadata = {
-            "tags": ["Meraki auth users"],
-            "operation": "getNetworkMerakiAuthUser",
+            'tags': ['Meraki auth users'],
+            'operation': 'getNetworkMerakiAuthUser',
         }
-        resource = f"/networks/{networkId}/merakiAuthUsers/{merakiAuthUserId}"
+        resource = f'/networks/{networkId}/merakiAuthUsers/{merakiAuthUserId}'
 
         return await self._session.get(metadata, resource)
+

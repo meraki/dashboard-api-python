@@ -1,8 +1,8 @@
-class AsyncNetFlowSettings(object):
+class AsyncNetFlowSettings:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getNetworkNetflowSettings(self, networkId: str):
         """
         **Return the NetFlow traffic reporting settings for a network**
@@ -12,10 +12,10 @@ class AsyncNetFlowSettings(object):
         """
 
         metadata = {
-            "tags": ["NetFlow settings"],
-            "operation": "getNetworkNetflowSettings",
+            'tags': ['NetFlow settings'],
+            'operation': 'getNetworkNetflowSettings',
         }
-        resource = f"/networks/{networkId}/netflowSettings"
+        resource = f'/networks/{networkId}/netflowSettings'
 
         return await self._session.get(metadata, resource)
 
@@ -33,12 +33,13 @@ class AsyncNetFlowSettings(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["NetFlow settings"],
-            "operation": "updateNetworkNetflowSettings",
+            'tags': ['NetFlow settings'],
+            'operation': 'updateNetworkNetflowSettings',
         }
-        resource = f"/networks/{networkId}/netflowSettings"
+        resource = f'/networks/{networkId}/netflowSettings'
 
-        body_params = ["reportingEnabled", "collectorIp", "collectorPort"]
+        body_params = ['reportingEnabled', 'collectorIp', 'collectorPort']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
+

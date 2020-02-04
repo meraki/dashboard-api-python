@@ -1,8 +1,8 @@
-class AsyncSplashSettings(object):
+class AsyncSplashSettings:
     def __init__(self, session):
         super().__init__()
         self._session = session
-
+    
     async def getNetworkSsidSplashSettings(self, networkId: str, number: str):
         """
         **Display the splash page settings for the given SSID**
@@ -13,16 +13,14 @@ class AsyncSplashSettings(object):
         """
 
         metadata = {
-            "tags": ["Splash settings"],
-            "operation": "getNetworkSsidSplashSettings",
+            'tags': ['Splash settings'],
+            'operation': 'getNetworkSsidSplashSettings',
         }
-        resource = f"/networks/{networkId}/ssids/{number}/splashSettings"
+        resource = f'/networks/{networkId}/ssids/{number}/splashSettings'
 
         return await self._session.get(metadata, resource)
 
-    async def updateNetworkSsidSplashSettings(
-        self, networkId: str, number: str, **kwargs
-    ):
+    async def updateNetworkSsidSplashSettings(self, networkId: str, number: str, **kwargs):
         """
         **Modify the splash page settings for the given SSID**
         https://api.meraki.com/api_docs#modify-the-splash-page-settings-for-the-given-ssid
@@ -36,12 +34,13 @@ class AsyncSplashSettings(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["Splash settings"],
-            "operation": "updateNetworkSsidSplashSettings",
+            'tags': ['Splash settings'],
+            'operation': 'updateNetworkSsidSplashSettings',
         }
-        resource = f"/networks/{networkId}/ssids/{number}/splashSettings"
+        resource = f'/networks/{networkId}/ssids/{number}/splashSettings'
 
-        body_params = ["splashUrl", "useSplashUrl"]
+        body_params = ['splashUrl', 'useSplashUrl']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
+
