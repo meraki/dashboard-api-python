@@ -55,19 +55,23 @@ class Clients(object):
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
 
-    def provisionNetworkClients(self, networkId: str, **kwargs):
+    def provisionNetworkClients(self, networkId: str, mac: str, devicePolicy: str, **kwargs):
         """
         **Provisions a client with a name and policy. Clients can be provisioned before they associate to the network.**
         https://api.meraki.com/api_docs#provisions-a-client-with-a-name-and-policy
         
         - networkId (string)
         - mac (string): The MAC address of the client. Required.
-        - name (string): The display name for the client. Optional. Limited to 255 bytes.
         - devicePolicy (string): The policy to apply to the specified client. Can be 'Whitelisted', 'Blocked', 'Normal' or 'Group policy'. Required.
-        - groupPolicyId (string): The ID of the desired group policy to apply to the client. Required if 'devicePolicy' is set to "Group policy". Otherwise this is ignored.
+        - name (string): The display name for the client. Optional. Limited to 255 bytes.
+        - groupPolicyId (integer): The ID of the desired group policy to apply to the client. Required if 'devicePolicy' is set to "Group policy". Otherwise this is ignored.
         """
 
         kwargs.update(locals())
+
+        if 'devicePolicy' in kwargs:
+            options = ['Whitelisted', 'Blocked', 'Normal', 'Group policy']
+            assert kwargs['devicePolicy'] in options, f'''"devicePolicy" cannot be "{kwargs['devicePolicy']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['Clients'],

@@ -26,6 +26,29 @@ class SwitchPorts(object):
 
         return self._session.get(metadata, resource, params)
 
+    def getDeviceSwitchPortStatusesPackets(self, serial: str, **kwargs):
+        """
+        **Return the packet counters for all the ports of a switch**
+        https://api.meraki.com/api_docs#return-the-packet-counters-for-all-the-ports-of-a-switch
+        
+        - serial (string)
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 1 day from today.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 1 day. The default is 1 day.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['Switch ports'],
+            'operation': 'getDeviceSwitchPortStatusesPackets',
+        }
+        resource = f'/devices/{serial}/switchPortStatuses/packets'
+
+        query_params = ['t0', 'timespan']
+        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+
+        return self._session.get(metadata, resource, params)
+
     def getDeviceSwitchPorts(self, serial: str):
         """
         **List the switch ports for a switch**

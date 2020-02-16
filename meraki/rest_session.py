@@ -78,7 +78,7 @@ class RestSession(object):
                     time.sleep(1)
                     retries -= 1
                     if retries == 0:
-                        raise APIError(metadata, response)
+                        raise APIError(metadata)
                     else:
                         continue
 
