@@ -11,6 +11,7 @@ from .api.alert_settings import AlertSettings
 from .api.bluetooth_clients import BluetoothClients
 from .api.camera_quality_retention_profiles import CameraQualityRetentionProfiles
 from .api.cameras import Cameras
+from .api.cellular_uplink_configurations import CellularUplinkConfigurations
 from .api.clients import Clients
 from .api.config_templates import ConfigTemplates
 from .api.connectivity_monitoring_destinations import ConnectivityMonitoringDestinations
@@ -149,6 +150,7 @@ class DashboardAPI(object):
         self.bluetooth_clients = BluetoothClients(self._session)
         self.camera_quality_retention_profiles = CameraQualityRetentionProfiles(self._session)
         self.cameras = Cameras(self._session)
+        self.cellular_uplink_configurations = CellularUplinkConfigurations(self._session)
         self.clients = Clients(self._session)
         self.config_templates = ConfigTemplates(self._session)
         self.connectivity_monitoring_destinations = ConnectivityMonitoringDestinations(self._session)
