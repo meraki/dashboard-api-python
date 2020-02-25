@@ -67,6 +67,7 @@ class RestSession(object):
             self._logger.info(f'{tag}, {operation} - SIMULATED')
             return None
         else:
+            response = None
             while retries > 0:
                 # Make the HTTP request to the API endpoint
                 try:
