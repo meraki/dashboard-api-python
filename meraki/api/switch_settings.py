@@ -166,7 +166,7 @@ class SwitchSettings(object):
 
     def getNetworkSwitchSettingsMulticast(self, networkId: str):
         """
-        **Return Multicast settings for a network**
+        **Return multicast settings for a network**
         https://api.meraki.com/api_docs#return-multicast-settings-for-a-network
         
         - networkId (string)

@@ -9,6 +9,7 @@ from .api.action_batches import ActionBatches
 from .api.admins import Admins
 from .api.alert_settings import AlertSettings
 from .api.bluetooth_clients import BluetoothClients
+from .api.bluetooth_settings import BluetoothSettings
 from .api.camera_quality_retention_profiles import CameraQualityRetentionProfiles
 from .api.cameras import Cameras
 from .api.clients import Clients
@@ -147,6 +148,7 @@ class DashboardAPI(object):
         self.admins = Admins(self._session)
         self.alert_settings = AlertSettings(self._session)
         self.bluetooth_clients = BluetoothClients(self._session)
+        self.bluetooth_settings = BluetoothSettings(self._session)
         self.camera_quality_retention_profiles = CameraQualityRetentionProfiles(self._session)
         self.cameras = Cameras(self._session)
         self.clients = Clients(self._session)

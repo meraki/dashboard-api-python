@@ -92,14 +92,14 @@ class SwitchPorts(object):
         - name (string): The name of the switch port
         - tags (string): The tags of the switch port
         - enabled (boolean): The status of the switch port
-        - type (string): The type of the switch port ("access" or "trunk")
+        - type (string): The type of the switch port ('trunk' or 'access')
         - vlan (integer): The VLAN of the switch port. A null value will clear the value set for trunk ports.
         - voiceVlan (integer): The voice VLAN of the switch port. Only applicable to access ports.
         - allowedVlans (string): The VLANs allowed on the switch port. Only applicable to trunk ports.
         - poeEnabled (boolean): The PoE status of the switch port
         - isolationEnabled (boolean): The isolation status of the switch port
         - rstpEnabled (boolean): The rapid spanning tree protocol status
-        - stpGuard (string): The state of the STP guard ("disabled", "Root guard", "BPDU guard", "Loop guard")
+        - stpGuard (string): The state of the STP guard ('disabled', 'root guard', 'bpdu guard' or 'loop guard')
         - accessPolicyNumber (integer): The number of the access policy of the switch port. Only applicable to access ports.
         - linkNegotiation (string): The link speed for the switch port
         - portScheduleId (string): The ID of the port schedule. A value of null will clear the port schedule.
@@ -112,6 +112,12 @@ class SwitchPorts(object):
 
         kwargs.update(locals())
 
+        if 'type' in kwargs:
+            options = ['trunk', 'access']
+            assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
+        if 'stpGuard' in kwargs:
+            options = ['disabled', 'root guard', 'bpdu guard', 'loop guard']
+            assert kwargs['stpGuard'] in options, f'''"stpGuard" cannot be "{kwargs['stpGuard']}", & must be set to one of: {options}'''
         if 'udld' in kwargs:
             options = ['Alert only', 'Enforce']
             assert kwargs['udld'] in options, f'''"udld" cannot be "{kwargs['udld']}", & must be set to one of: {options}'''

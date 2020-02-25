@@ -19,7 +19,7 @@ class MXPortForwardingRules(object):
 
         return self._session.get(metadata, resource)
 
-    def updateNetworkPortForwardingRules(self, networkId: str, **kwargs):
+    def updateNetworkPortForwardingRules(self, networkId: str, rules: list):
         """
         **Update the port forwarding rules for an MX network**
         https://api.meraki.com/api_docs#update-the-port-forwarding-rules-for-an-mx-network
@@ -28,7 +28,7 @@ class MXPortForwardingRules(object):
         - rules (array): An array of port forwarding params
         """
 
-        kwargs.update(locals())
+        kwargs = locals()
 
         metadata = {
             'tags': ['MX port forwarding rules'],

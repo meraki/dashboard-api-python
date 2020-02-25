@@ -78,7 +78,7 @@ class RestSession(object):
                     time.sleep(1)
                     retries -= 1
                     if retries == 0:
-                        raise APIError(metadata)
+                        raise APIError(metadata, response)
                     else:
                         continue
 
@@ -132,8 +132,24 @@ class RestSession(object):
                         message = response.json()
                     except ValueError:
                         message = response.text[:100]
-                    self._logger.error(f'{tag}, {operation} - {status} {reason}, {message}')
-                    raise APIError(metadata, response)
+
+                    # Check specifically for action batch concurrency error
+                    action_batch_concurrency_error = {
+                        'errors': [
+                            'Too many concurrently executing batches. Maximum is 5 confirmed but not yet executed batches.'
+                        ]
+                    }
+                    if message == action_batch_concurrency_error:
+                        self._logger.warning(f'{tag}, {operation} - {status} {reason}, retrying in 60 seconds')
+                        time.sleep(60)
+                        retries -= 1
+                        if retries == 0:
+                            raise APIError(metadata, response)
+
+                    # All other client-side errors
+                    else:
+                        self._logger.error(f'{tag}, {operation} - {status} {reason}, {message}')
+                        raise APIError(metadata, response)
 
     def get(self, metadata, url, params=None):
         metadata['method'] = 'GET'

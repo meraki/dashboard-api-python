@@ -33,6 +33,10 @@ class ContentFilteringRules(object):
 
         kwargs.update(locals())
 
+        if 'urlCategoryListSize' in kwargs:
+            options = ['topSites', 'fullList']
+            assert kwargs['urlCategoryListSize'] in options, f'''"urlCategoryListSize" cannot be "{kwargs['urlCategoryListSize']}", & must be set to one of: {options}'''
+
         metadata = {
             'tags': ['Content filtering rules'],
             'operation': 'updateNetworkContentFiltering',

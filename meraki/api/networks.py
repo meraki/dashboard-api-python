@@ -124,53 +124,6 @@ class Networks(object):
 
         return self._session.post(metadata, resource, payload)
 
-    def getNetworkBluetoothSettings(self, networkId: str):
-        """
-        **Return the Bluetooth settings for a network. <a href="https://documentation.meraki.com/MR/Bluetooth/Bluetooth_Low_Energy_(BLE)">Bluetooth settings</a> must be enabled on the network.**
-        https://api.meraki.com/api_docs#return-the-bluetooth-settings-for-a-network
-        
-        - networkId (string)
-        """
-
-        metadata = {
-            'tags': ['Networks'],
-            'operation': 'getNetworkBluetoothSettings',
-        }
-        resource = f'/networks/{networkId}/bluetoothSettings'
-
-        return self._session.get(metadata, resource)
-
-    def updateNetworkBluetoothSettings(self, networkId: str, **kwargs):
-        """
-        **Update the Bluetooth settings for a network. See the docs page for <a href="https://documentation.meraki.com/MR/Bluetooth/Bluetooth_Low_Energy_(BLE)">Bluetooth settings</a>.**
-        https://api.meraki.com/api_docs#update-the-bluetooth-settings-for-a-network
-        
-        - networkId (string)
-        - scanningEnabled (boolean): Whether APs will scan for Bluetooth enabled clients. (true, false)
-        - advertisingEnabled (boolean): Whether APs will advertise beacons. (true, false)
-        - uuid (string): The UUID to be used in the beacon identifier.
-        - majorMinorAssignmentMode (string): The way major and minor number should be assigned to nodes in the network. ('Unique', 'Non-unique')
-        - major (integer): The major number to be used in the beacon identifier. Only valid in 'Non-unique' mode.
-        - minor (integer): The minor number to be used in the beacon identifier. Only valid in 'Non-unique' mode.
-        """
-
-        kwargs.update(locals())
-
-        if 'majorMinorAssignmentMode' in kwargs:
-            options = ['Unique', 'Non-unique']
-            assert kwargs['majorMinorAssignmentMode'] in options, f'''"majorMinorAssignmentMode" cannot be "{kwargs['majorMinorAssignmentMode']}", & must be set to one of: {options}'''
-
-        metadata = {
-            'tags': ['Networks'],
-            'operation': 'updateNetworkBluetoothSettings',
-        }
-        resource = f'/networks/{networkId}/bluetoothSettings'
-
-        body_params = ['scanningEnabled', 'advertisingEnabled', 'uuid', 'majorMinorAssignmentMode', 'major', 'minor']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
-
-        return self._session.put(metadata, resource, payload)
-
     def getNetworkSiteToSiteVpn(self, networkId: str):
         """
         **Return the site-to-site VPN settings of a network. Only valid for MX networks.**

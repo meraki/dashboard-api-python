@@ -3,6 +3,28 @@ class Devices(object):
         super(Devices, self).__init__()
         self._session = session
     
+    def cycleDeviceSwitchPorts(self, serial: str, ports: list):
+        """
+        **Cycle a set of switch ports**
+        https://api.meraki.com/api_docs#cycle-a-set-of-switch-ports
+        
+        - serial (string)
+        - ports (array): List of switch ports. Example: [1, 2-5, 1_MA-MOD-8X10G_1, 1_MA-MOD-8X10G_2-1_MA-MOD-8X10G_8]
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['Devices'],
+            'operation': 'cycleDeviceSwitchPorts',
+        }
+        resource = f'/devices/{serial}/switch/ports/cycle'
+
+        body_params = ['ports']
+        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+
+        return self._session.post(metadata, resource, payload)
+
     def getNetworkDevices(self, networkId: str):
         """
         **List the devices in a network**
@@ -36,7 +58,7 @@ class Devices(object):
         }
         resource = f'/networks/{networkId}/devices/claim'
 
-        body_params = ['serial']
+        body_params = ['serial', 'serials']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.post(metadata, resource, payload)
