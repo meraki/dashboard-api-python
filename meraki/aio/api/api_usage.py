@@ -1,9 +1,9 @@
-class APIUsage(object):
+class AsyncAPIUsage:
     def __init__(self, session):
-        super(APIUsage, self).__init__()
+        super().__init__()
         self._session = session
     
-    def getOrganizationApiRequests(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    async def getOrganizationApiRequests(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the API requests made by an organization**
         https://api.meraki.com/api_docs#list-the-api-requests-made-by-an-organization
@@ -35,10 +35,10 @@ class APIUsage(object):
         query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'adminId', 'path', 'method', 'responseCode', 'sourceIp']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        return await self._session.get_pages(metadata, resource, params, total_pages, direction)
 
 
-    def getOrganizationApiRequestsOverview(self, organizationId: str, **kwargs):
+    async def getOrganizationApiRequestsOverview(self, organizationId: str, **kwargs):
         """
         **Return an aggregated overview of API requests data**
         https://api.meraki.com/api_docs#return-an-aggregated-overview-of-api-requests-data
@@ -60,5 +60,5 @@ class APIUsage(object):
         query_params = ['t0', 't1', 'timespan']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)
 

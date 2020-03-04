@@ -12,6 +12,7 @@ from .api.bluetooth_clients import BluetoothClients
 from .api.bluetooth_settings import BluetoothSettings
 from .api.camera_quality_retention_profiles import CameraQualityRetentionProfiles
 from .api.cameras import Cameras
+from .api.change_log import ChangeLog
 from .api.clients import Clients
 from .api.config_templates import ConfigTemplates
 from .api.connectivity_monitoring_destinations import ConnectivityMonitoringDestinations
@@ -84,8 +85,7 @@ from .config import (
     MAXIMUM_RETRIES, OUTPUT_LOG, LOG_PATH, LOG_FILE_PREFIX, PRINT_TO_CONSOLE, SIMULATE_API_CALLS
 )
 
-__version__ = '0.80.3'
-
+__version__ = '0.90.0'
 
 class DashboardAPI(object):
     """
@@ -100,7 +100,7 @@ class DashboardAPI(object):
     - output_log (boolean): create an output log file?
     - log_path (string): path to output log; by default, working directory of script if not specified
     - log_file_prefix (string): log file name appended with date and timestamp
-    - print_console (boolean): if output log used, output to console too?
+    - print_console (boolean): print logging output to console?
     - simulate (boolean): simulate POST/PUT/DELETE calls to prevent changes?
     """
 
@@ -124,13 +124,17 @@ class DashboardAPI(object):
                 level=logging.DEBUG,
                 format='%(asctime)s %(name)12s: %(levelname)8s > %(message)s',
                 datefmt='%Y-%m-%d %H:%M:%S')
-
             if print_console:
                 console = logging.StreamHandler()
                 console.setLevel(logging.INFO)
                 formatter = logging.Formatter('%(name)12s: %(levelname)8s > %(message)s')
                 console.setFormatter(formatter)
                 logging.getLogger('').addHandler(console)
+        elif print_console:
+            logging.basicConfig(
+                level=logging.DEBUG,
+                format='%(asctime)s %(name)12s: %(levelname)8s > %(message)s',
+                datefmt='%Y-%m-%d %H:%M:%S')
 
         # Creates the API session
         self._session = RestSession(
@@ -153,6 +157,7 @@ class DashboardAPI(object):
         self.bluetooth_settings = BluetoothSettings(self._session)
         self.camera_quality_retention_profiles = CameraQualityRetentionProfiles(self._session)
         self.cameras = Cameras(self._session)
+        self.change_log = ChangeLog(self._session)
         self.clients = Clients(self._session)
         self.config_templates = ConfigTemplates(self._session)
         self.connectivity_monitoring_destinations = ConnectivityMonitoringDestinations(self._session)

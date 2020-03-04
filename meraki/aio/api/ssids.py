@@ -1,9 +1,9 @@
-class SSIDs(object):
+class AsyncSSIDs:
     def __init__(self, session):
-        super(SSIDs, self).__init__()
+        super().__init__()
         self._session = session
     
-    def getNetworkDeviceWirelessStatus(self, networkId: str, serial: str):
+    async def getNetworkDeviceWirelessStatus(self, networkId: str, serial: str):
         """
         **Return the SSID statuses of an access point**
         https://api.meraki.com/api_docs#return-the-ssid-statuses-of-an-access-point
@@ -18,9 +18,9 @@ class SSIDs(object):
         }
         resource = f'/networks/{networkId}/devices/{serial}/wireless/status'
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def getNetworkSsids(self, networkId: str):
+    async def getNetworkSsids(self, networkId: str):
         """
         **List the SSIDs in a network. Supports networks with access points or wireless-enabled security appliances and teleworker gateways.**
         https://api.meraki.com/api_docs#list-the-ssids-in-a-network
@@ -34,9 +34,9 @@ class SSIDs(object):
         }
         resource = f'/networks/{networkId}/ssids'
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def getNetworkSsid(self, networkId: str, number: str):
+    async def getNetworkSsid(self, networkId: str, number: str):
         """
         **Return a single SSID**
         https://api.meraki.com/api_docs#return-a-single-ssid
@@ -51,9 +51,9 @@ class SSIDs(object):
         }
         resource = f'/networks/{networkId}/ssids/{number}'
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkSsid(self, networkId: str, number: str, **kwargs):
+    async def updateNetworkSsid(self, networkId: str, number: str, **kwargs):
         """
         **Update the attributes of an SSID**
         https://api.meraki.com/api_docs#update-the-attributes-of-an-ssid
@@ -124,5 +124,5 @@ class SSIDs(object):
         body_params = ['name', 'enabled', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk', 'wpaEncryptionMode', 'splashPage', 'radiusServers', 'radiusCoaEnabled', 'radiusFailoverPolicy', 'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging', 'concentratorNetworkId', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 'walledGardenEnabled', 'walledGardenRanges', 'radiusOverride', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'lanIsolationEnabled']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 

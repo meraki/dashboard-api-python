@@ -1,9 +1,9 @@
-class CameraQualityRetentionProfiles(object):
+class AsyncCameraQualityRetentionProfiles:
     def __init__(self, session):
-        super(CameraQualityRetentionProfiles, self).__init__()
+        super().__init__()
         self._session = session
     
-    def getNetworkCameraQualityRetentionProfiles(self, networkId: str):
+    async def getNetworkCameraQualityRetentionProfiles(self, networkId: str):
         """
         **List the quality retention profiles for this network**
         https://api.meraki.com/api_docs#list-the-quality-retention-profiles-for-this-network
@@ -17,9 +17,9 @@ class CameraQualityRetentionProfiles(object):
         }
         resource = f'/networks/{networkId}/camera/qualityRetentionProfiles'
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def createNetworkCameraQualityRetentionProfile(self, networkId: str, name: str, **kwargs):
+    async def createNetworkCameraQualityRetentionProfile(self, networkId: str, name: str, **kwargs):
         """
         **Creates new quality retention profile for this network.**
         https://api.meraki.com/api_docs#creates-new-quality-retention-profile-for-this-network
@@ -47,9 +47,9 @@ class CameraQualityRetentionProfiles(object):
         body_params = ['name', 'motionBasedRetentionEnabled', 'restrictedBandwidthModeEnabled', 'audioRecordingEnabled', 'cloudArchiveEnabled', 'motionDetectorVersion', 'scheduleId', 'maxRetentionDays', 'videoSettings']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def getNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str):
+    async def getNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str):
         """
         **Retrieve a single quality retention profile**
         https://api.meraki.com/api_docs#retrieve-a-single-quality-retention-profile
@@ -64,9 +64,9 @@ class CameraQualityRetentionProfiles(object):
         }
         resource = f'/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}'
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str, **kwargs):
+    async def updateNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str, **kwargs):
         """
         **Update an existing quality retention profile for this network.**
         https://api.meraki.com/api_docs#update-an-existing-quality-retention-profile-for-this-network
@@ -95,9 +95,9 @@ class CameraQualityRetentionProfiles(object):
         body_params = ['name', 'motionBasedRetentionEnabled', 'restrictedBandwidthModeEnabled', 'audioRecordingEnabled', 'cloudArchiveEnabled', 'motionDetectorVersion', 'scheduleId', 'maxRetentionDays', 'videoSettings']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def deleteNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str):
+    async def deleteNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str):
         """
         **Delete an existing quality retention profile for this network.**
         https://api.meraki.com/api_docs#delete-an-existing-quality-retention-profile-for-this-network
@@ -112,5 +112,5 @@ class CameraQualityRetentionProfiles(object):
         }
         resource = f'/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}'
 
-        return self._session.delete(metadata, resource)
+        return await self._session.delete(metadata, resource)
 

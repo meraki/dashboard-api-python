@@ -1,9 +1,9 @@
-class Cameras(object):
+class AsyncCameras:
     def __init__(self, session):
-        super(Cameras, self).__init__()
+        super().__init__()
         self._session = session
     
-    def getDeviceCameraQualityAndRetentionSettings(self, serial: str):
+    async def getDeviceCameraQualityAndRetentionSettings(self, serial: str):
         """
         **Returns quality and retention settings for the given camera**
         https://api.meraki.com/api_docs#returns-quality-and-retention-settings-for-the-given-camera
@@ -17,9 +17,9 @@ class Cameras(object):
         }
         resource = f'/devices/{serial}/camera/qualityAndRetentionSettings'
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateDeviceCameraQualityAndRetentionSettings(self, serial: str, **kwargs):
+    async def updateDeviceCameraQualityAndRetentionSettings(self, serial: str, **kwargs):
         """
         **Update quality and retention settings for the given camera**
         https://api.meraki.com/api_docs#update-quality-and-retention-settings-for-the-given-camera
@@ -51,9 +51,9 @@ class Cameras(object):
         body_params = ['profileId', 'motionBasedRetentionEnabled', 'audioRecordingEnabled', 'restrictedBandwidthModeEnabled', 'quality', 'resolution']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def getNetworkCameraSchedules(self, networkId: str):
+    async def getNetworkCameraSchedules(self, networkId: str):
         """
         **Returns a list of all camera recording schedules.**
         https://api.meraki.com/api_docs#returns-a-list-of-all-camera-recording-schedules
@@ -67,9 +67,9 @@ class Cameras(object):
         }
         resource = f'/networks/{networkId}/camera/schedules'
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def generateNetworkCameraSnapshot(self, networkId: str, serial: str, **kwargs):
+    async def generateNetworkCameraSnapshot(self, networkId: str, serial: str, **kwargs):
         """
         **Generate a snapshot of what the camera sees at the specified time and return a link to that image.**
         https://api.meraki.com/api_docs#generate-a-snapshot-of-what-the-camera-sees-at-the-specified-time-and-return-a-link-to-that-image
@@ -91,9 +91,9 @@ class Cameras(object):
         body_params = ['timestamp', 'fullframe']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def getNetworkCameraVideoLink(self, networkId: str, serial: str, **kwargs):
+    async def getNetworkCameraVideoLink(self, networkId: str, serial: str, **kwargs):
         """
         **Returns video link to the specified camera. If a timestamp is supplied, it links to that timestamp.**
         https://api.meraki.com/api_docs#returns-video-link-to-the-specified-camera
@@ -114,5 +114,5 @@ class Cameras(object):
         query_params = ['timestamp']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)
 

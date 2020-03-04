@@ -9,9 +9,17 @@ from .exceptions import *
 
 # Main module interface
 class RestSession(object):
-    def __init__(self, logger, api_key, base_url=DEFAULT_BASE_URL, single_request_timeout=SINGLE_REQUEST_TIMEOUT,
-                 certificate_path=CERTIFICATE_PATH, wait_on_rate_limit=WAIT_ON_RATE_LIMIT,
-                 maximum_retries=MAXIMUM_RETRIES, simulate=SIMULATE_API_CALLS):
+    def __init__(
+        self,
+        logger,
+        api_key,
+        base_url=DEFAULT_BASE_URL,
+        single_request_timeout=SINGLE_REQUEST_TIMEOUT,
+        certificate_path=CERTIFICATE_PATH,
+        wait_on_rate_limit=WAIT_ON_RATE_LIMIT,
+        maximum_retries=MAXIMUM_RETRIES,
+        simulate=SIMULATE_API_CALLS,
+    ):
         super(RestSession, self).__init__()
 
         # Initialize attributes and properties

@@ -1,9 +1,9 @@
-class Devices(object):
+class AsyncDevices:
     def __init__(self, session):
-        super(Devices, self).__init__()
+        super().__init__()
         self._session = session
     
-    def cycleDeviceSwitchPorts(self, serial: str, ports: list):
+    async def cycleDeviceSwitchPorts(self, serial: str, ports: list):
         """
         **Cycle a set of switch ports**
         https://api.meraki.com/api_docs#cycle-a-set-of-switch-ports
@@ -23,9 +23,9 @@ class Devices(object):
         body_params = ['ports']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def getNetworkDevices(self, networkId: str):
+    async def getNetworkDevices(self, networkId: str):
         """
         **List the devices in a network**
         https://api.meraki.com/api_docs#list-the-devices-in-a-network
@@ -39,9 +39,9 @@ class Devices(object):
         }
         resource = f'/networks/{networkId}/devices'
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def claimNetworkDevices(self, networkId: str, **kwargs):
+    async def claimNetworkDevices(self, networkId: str, **kwargs):
         """
         **Claim devices into a network**
         https://api.meraki.com/api_docs#claim-devices-into-a-network
@@ -62,9 +62,9 @@ class Devices(object):
         body_params = ['serials', 'serial', 'serials']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def getNetworkDevice(self, networkId: str, serial: str):
+    async def getNetworkDevice(self, networkId: str, serial: str):
         """
         **Return a single device**
         https://api.meraki.com/api_docs#return-a-single-device
@@ -79,9 +79,9 @@ class Devices(object):
         }
         resource = f'/networks/{networkId}/devices/{serial}'
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateNetworkDevice(self, networkId: str, serial: str, **kwargs):
+    async def updateNetworkDevice(self, networkId: str, serial: str, **kwargs):
         """
         **Update the attributes of a device**
         https://api.meraki.com/api_docs#update-the-attributes-of-a-device
@@ -110,9 +110,9 @@ class Devices(object):
         body_params = ['name', 'tags', 'lat', 'lng', 'address', 'notes', 'moveMapMarker', 'switchProfileId', 'floorPlanId']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def blinkNetworkDeviceLeds(self, networkId: str, serial: str, **kwargs):
+    async def blinkNetworkDeviceLeds(self, networkId: str, serial: str, **kwargs):
         """
         **Blink the LEDs on a device**
         https://api.meraki.com/api_docs#blink-the-leds-on-a-device
@@ -135,9 +135,9 @@ class Devices(object):
         body_params = ['duration', 'period', 'duty']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def getNetworkDeviceLldp_cdp(self, networkId: str, serial: str, **kwargs):
+    async def getNetworkDeviceLldp_cdp(self, networkId: str, serial: str, **kwargs):
         """
         **List LLDP and CDP information for a device**
         https://api.meraki.com/api_docs#list-lldp-and-cdp-information-for-a-device
@@ -158,9 +158,9 @@ class Devices(object):
         query_params = ['timespan']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)
 
-    def getNetworkDeviceLossAndLatencyHistory(self, networkId: str, serial: str, ip: str, **kwargs):
+    async def getNetworkDeviceLossAndLatencyHistory(self, networkId: str, serial: str, ip: str, **kwargs):
         """
         **Get the uplink loss percentage and latency in milliseconds for a wired network device.**
         https://api.meraki.com/api_docs#get-the-uplink-loss-percentage-and-latency-in-milliseconds-for-a-wired-network-device
@@ -190,9 +190,9 @@ class Devices(object):
         query_params = ['t0', 't1', 'timespan', 'resolution', 'uplink', 'ip']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)
 
-    def getNetworkDevicePerformance(self, networkId: str, serial: str):
+    async def getNetworkDevicePerformance(self, networkId: str, serial: str):
         """
         **Return the performance score for a single device. Only primary MX devices supported. If no data is available, a 204 error code is returned.**
         https://api.meraki.com/api_docs#return-the-performance-score-for-a-single-device
@@ -207,9 +207,9 @@ class Devices(object):
         }
         resource = f'/networks/{networkId}/devices/{serial}/performance'
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def rebootNetworkDevice(self, networkId: str, serial: str):
+    async def rebootNetworkDevice(self, networkId: str, serial: str):
         """
         **Reboot a device**
         https://api.meraki.com/api_docs#reboot-a-device
@@ -224,9 +224,9 @@ class Devices(object):
         }
         resource = f'/networks/{networkId}/devices/{serial}/reboot'
 
-        return self._session.post(metadata, resource)
+        return await self._session.post(metadata, resource)
 
-    def removeNetworkDevice(self, networkId: str, serial: str):
+    async def removeNetworkDevice(self, networkId: str, serial: str):
         """
         **Remove a single device**
         https://api.meraki.com/api_docs#remove-a-single-device
@@ -241,9 +241,9 @@ class Devices(object):
         }
         resource = f'/networks/{networkId}/devices/{serial}/remove'
 
-        return self._session.post(metadata, resource)
+        return await self._session.post(metadata, resource)
 
-    def getNetworkDeviceUplink(self, networkId: str, serial: str):
+    async def getNetworkDeviceUplink(self, networkId: str, serial: str):
         """
         **Return the uplink information for a device.**
         https://api.meraki.com/api_docs#return-the-uplink-information-for-a-device
@@ -258,9 +258,9 @@ class Devices(object):
         }
         resource = f'/networks/{networkId}/devices/{serial}/uplink'
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def getOrganizationDevices(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    async def getOrganizationDevices(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the devices in an organization**
         https://api.meraki.com/api_docs#list-the-devices-in-an-organization
@@ -285,6 +285,6 @@ class Devices(object):
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'configurationUpdatedAfter']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        return await self._session.get_pages(metadata, resource, params, total_pages, direction)
 
 

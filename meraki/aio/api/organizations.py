@@ -1,9 +1,9 @@
-class Organizations(object):
+class AsyncOrganizations:
     def __init__(self, session):
-        super(Organizations, self).__init__()
+        super().__init__()
         self._session = session
     
-    def getOrganizations(self):
+    async def getOrganizations(self):
         """
         **List the organizations that the user has privileges on**
         https://api.meraki.com/api_docs#list-the-organizations-that-the-user-has-privileges-on
@@ -16,9 +16,9 @@ class Organizations(object):
         }
         resource = f'/organizations'
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def createOrganization(self, name: str):
+    async def createOrganization(self, name: str):
         """
         **Create a new organization**
         https://api.meraki.com/api_docs#create-a-new-organization
@@ -37,9 +37,9 @@ class Organizations(object):
         body_params = ['name']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def getOrganization(self, organizationId: str):
+    async def getOrganization(self, organizationId: str):
         """
         **Return an organization**
         https://api.meraki.com/api_docs#return-an-organization
@@ -53,9 +53,9 @@ class Organizations(object):
         }
         resource = f'/organizations/{organizationId}'
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateOrganization(self, organizationId: str, **kwargs):
+    async def updateOrganization(self, organizationId: str, **kwargs):
         """
         **Update an organization**
         https://api.meraki.com/api_docs#update-an-organization
@@ -75,9 +75,9 @@ class Organizations(object):
         body_params = ['name']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def deleteOrganization(self, organizationId: str):
+    async def deleteOrganization(self, organizationId: str):
         """
         **Delete an organization**
         https://api.meraki.com/api_docs#delete-an-organization
@@ -91,9 +91,9 @@ class Organizations(object):
         }
         resource = f'/organizations/{organizationId}'
 
-        return self._session.delete(metadata, resource)
+        return await self._session.delete(metadata, resource)
 
-    def claimOrganization(self, organizationId: str, **kwargs):
+    async def claimOrganization(self, organizationId: str, **kwargs):
         """
         **Claim a list of devices, licenses, and/or orders into an organization. When claiming by order, all devices and licenses in the order will be claimed; licenses will be added to the organization and devices will be placed in the organization's inventory.**
         https://api.meraki.com/api_docs#claim-a-list-of-devices-licenses-and/or-orders-into-an-organization
@@ -115,9 +115,9 @@ class Organizations(object):
         body_params = ['orders', 'serials', 'licenses']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def cloneOrganization(self, organizationId: str, name: str):
+    async def cloneOrganization(self, organizationId: str, name: str):
         """
         **Create a new organization by cloning the addressed organization**
         https://api.meraki.com/api_docs#create-a-new-organization-by-cloning-the-addressed-organization
@@ -137,9 +137,9 @@ class Organizations(object):
         body_params = ['name']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.post(metadata, resource, payload)
+        return await self._session.post(metadata, resource, payload)
 
-    def getOrganizationDeviceStatuses(self, organizationId: str):
+    async def getOrganizationDeviceStatuses(self, organizationId: str):
         """
         **List the status of every Meraki device in the organization**
         https://api.meraki.com/api_docs#list-the-status-of-every-meraki-device-in-the-organization
@@ -153,9 +153,9 @@ class Organizations(object):
         }
         resource = f'/organizations/{organizationId}/deviceStatuses'
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def getOrganizationInventory(self, organizationId: str, **kwargs):
+    async def getOrganizationInventory(self, organizationId: str, **kwargs):
         """
         **Return the inventory for an organization**
         https://api.meraki.com/api_docs#return-the-inventory-for-an-organization
@@ -175,9 +175,9 @@ class Organizations(object):
         query_params = ['includeLicenseInfo']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)
 
-    def getOrganizationLicenseState(self, organizationId: str):
+    async def getOrganizationLicenseState(self, organizationId: str):
         """
         **Return an overview of the license state for an organization**
         https://api.meraki.com/api_docs#return-an-overview-of-the-license-state-for-an-organization
@@ -191,9 +191,9 @@ class Organizations(object):
         }
         resource = f'/organizations/{organizationId}/licenseState'
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def getOrganizationThirdPartyVPNPeers(self, organizationId: str):
+    async def getOrganizationThirdPartyVPNPeers(self, organizationId: str):
         """
         **Return the third party VPN peers for an organization**
         https://api.meraki.com/api_docs#return-the-third-party-vpn-peers-for-an-organization
@@ -207,9 +207,9 @@ class Organizations(object):
         }
         resource = f'/organizations/{organizationId}/thirdPartyVPNPeers'
 
-        return self._session.get(metadata, resource)
+        return await self._session.get(metadata, resource)
 
-    def updateOrganizationThirdPartyVPNPeers(self, organizationId: str, peers: list):
+    async def updateOrganizationThirdPartyVPNPeers(self, organizationId: str, peers: list):
         """
         **Update the third party VPN peers for an organization**
         https://api.meraki.com/api_docs#update-the-third-party-vpn-peers-for-an-organization
@@ -229,9 +229,9 @@ class Organizations(object):
         body_params = ['peers']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return await self._session.put(metadata, resource, payload)
 
-    def getOrganizationUplinksLossAndLatency(self, organizationId: str, **kwargs):
+    async def getOrganizationUplinksLossAndLatency(self, organizationId: str, **kwargs):
         """
         **Return the uplink loss and latency for every MX in the organization from at latest 2 minutes ago**
         https://api.meraki.com/api_docs#return-the-uplink-loss-and-latency-for-every-mx-in-the-organization-from-at-latest-2-minutes-ago
@@ -259,5 +259,5 @@ class Organizations(object):
         query_params = ['t0', 't1', 'timespan', 'uplink', 'ip']
         params = {k: v for (k, v) in kwargs.items() if k in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return await self._session.get(metadata, resource, params)
 
