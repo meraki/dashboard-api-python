@@ -26,9 +26,12 @@ def find_version(fname):
     return version
 
 
+__version__ = find_version('cli.py')
+
+
 setup(
     name='meraki',
-    version='0.70.5',
+    version=__version__,
     packages=find_packages(),
     include_package_data=True,
     install_requires=['requests'],
