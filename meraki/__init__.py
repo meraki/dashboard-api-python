@@ -84,6 +84,8 @@ from .config import (
     MAXIMUM_RETRIES, OUTPUT_LOG, LOG_PATH, LOG_FILE_PREFIX, PRINT_TO_CONSOLE, SIMULATE_API_CALLS
 )
 
+__version__ = '0.80.3'
+
 
 class DashboardAPI(object):
     """
