@@ -1,6 +1,7 @@
 """Setup script for meraki"""
 
 import os.path
+import re
 from setuptools import setup, find_packages
 
 HERE = os.path.abspath(os.path.dirname(__file__))
