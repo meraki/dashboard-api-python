@@ -4,6 +4,7 @@ import os.path
 from setuptools import setup, find_packages
 
 HERE = os.path.abspath(os.path.dirname(__file__))
+PACKAGE_INIT = os.path.abspath(os.path.join('meraki', '__init__.py'))
 
 with open(os.path.join(HERE, 'README.md')) as fid:
     README = fid.read()
@@ -26,7 +27,7 @@ def find_version(fname):
     return version
 
 
-__version__ = find_version('cli.py')
+__version__ = find_version(PACKAGE_INIT)
 
 
 setup(
