@@ -55,19 +55,25 @@ class Clients(object):
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
 
-    def provisionNetworkClients(self, networkId: str, **kwargs):
+    def provisionNetworkClients(self, networkId: str, mac: str, devicePolicy: str, **kwargs):
         """
         **Provisions a client with a name and policy. Clients can be provisioned before they associate to the network.**
         https://api.meraki.com/api_docs#provisions-a-client-with-a-name-and-policy
         
         - networkId (string)
         - mac (string): The MAC address of the client. Required.
+        - devicePolicy (string): The policy to apply to the specified client. Can be 'Group policy', 'Whitelisted', 'Blocked', 'Per connection' or 'Normal'. Required.
         - name (string): The display name for the client. Optional. Limited to 255 bytes.
-        - devicePolicy (string): The policy to apply to the specified client. Can be 'Whitelisted', 'Blocked', 'Normal' or 'Group policy'. Required.
         - groupPolicyId (string): The ID of the desired group policy to apply to the client. Required if 'devicePolicy' is set to "Group policy". Otherwise this is ignored.
+        - policiesBySecurityAppliance (object): An object, describing what the policy-connection association is for the security appliance. (Only relevant if the security appliance is actually within the network)
+        - policiesBySsid (object): An object, describing the policy-connection associations for each active SSID within the network. Keys should be the number of enabled SSIDs, mapping to an object describing the client's policy
         """
 
         kwargs.update(locals())
+
+        if 'devicePolicy' in kwargs:
+            options = ['Group policy', 'Whitelisted', 'Blocked', 'Per connection', 'Normal']
+            assert kwargs['devicePolicy'] in options, f'''"devicePolicy" cannot be "{kwargs['devicePolicy']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['Clients'],
@@ -75,7 +81,7 @@ class Clients(object):
         }
         resource = f'/networks/{networkId}/clients/provision'
 
-        body_params = ['mac', 'name', 'devicePolicy', 'groupPolicyId']
+        body_params = ['mac', 'name', 'devicePolicy', 'groupPolicyId', 'policiesBySecurityAppliance', 'policiesBySsid']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -168,15 +174,15 @@ class Clients(object):
 
         return self._session.get(metadata, resource)
 
-    def updateNetworkClientPolicy(self, networkId: str, clientId: str, **kwargs):
+    def updateNetworkClientPolicy(self, networkId: str, clientId: str, devicePolicy: str, **kwargs):
         """
         **Update the policy assigned to a client on the network. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
         https://api.meraki.com/api_docs#update-the-policy-assigned-to-a-client-on-the-network
         
         - networkId (string)
         - clientId (string)
-        - devicePolicy (string): The group policy (Whitelisted, Blocked, Normal, Group policy)
-        - groupPolicyId (string): [optional] If devicePolicy param is set to 'Group policy' this param is used to specify the group ID.
+        - devicePolicy (string): The policy to assign. Can be 'Whitelisted', 'Blocked', 'Normal' or 'Group policy'. Required.
+        - groupPolicyId (string): [optional] If 'devicePolicy' is set to 'Group policy' this param is used to specify the group policy ID.
         """
 
         kwargs.update(locals())
@@ -209,17 +215,17 @@ class Clients(object):
 
         return self._session.get(metadata, resource)
 
-    def updateNetworkClientSplashAuthorizationStatus(self, networkId: str, clientId: str, **kwargs):
+    def updateNetworkClientSplashAuthorizationStatus(self, networkId: str, clientId: str, ssids: dict):
         """
         **Update a client's splash authorization. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
         https://api.meraki.com/api_docs#update-a-clients-splash-authorization
         
         - networkId (string)
         - clientId (string)
-        - ssids (object): The target SSIDs. Each SSID must be enabled and must have Click-through splash enabled. For each SSID where isAuthorized is true, the expiration time will automatically be set according to the SSID's splash frequency.
+        - ssids (object): The target SSIDs. Each SSID must be enabled and must have Click-through splash enabled. For each SSID where isAuthorized is true, the expiration time will automatically be set according to the SSID's splash frequency. Not all networks support configuring all SSIDs
         """
 
-        kwargs.update(locals())
+        kwargs = locals()
 
         metadata = {
             'tags': ['Clients'],

@@ -179,8 +179,8 @@ class Organizations(object):
 
     def getOrganizationLicenseState(self, organizationId: str):
         """
-        **Return the license state for an organization**
-        https://api.meraki.com/api_docs#return-the-license-state-for-an-organization
+        **Return an overview of the license state for an organization**
+        https://api.meraki.com/api_docs#return-an-overview-of-the-license-state-for-an-organization
         
         - organizationId (string)
         """

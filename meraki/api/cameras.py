@@ -77,6 +77,7 @@ class Cameras(object):
         - networkId (string)
         - serial (string)
         - timestamp (string): [optional] The snapshot will be taken from this time on the camera. The timestamp is expected to be in ISO 8601 format. If no timestamp is specified, we will assume current time.
+        - fullframe (boolean): [optional] If set to "true" the snapshot will be taken at full sensor resolution. This will error if used with timestamp.
         """
 
         kwargs.update(locals())
@@ -87,7 +88,7 @@ class Cameras(object):
         }
         resource = f'/networks/{networkId}/cameras/{serial}/snapshot'
 
-        body_params = ['timestamp']
+        body_params = ['timestamp', 'fullframe']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.post(metadata, resource, payload)

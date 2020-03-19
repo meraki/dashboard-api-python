@@ -164,6 +164,45 @@ class SwitchSettings(object):
 
         return self._session.put(metadata, resource, payload)
 
+    def getNetworkSwitchSettingsMulticast(self, networkId: str):
+        """
+        **Return multicast settings for a network**
+        https://api.meraki.com/api_docs#return-multicast-settings-for-a-network
+        
+        - networkId (string)
+        """
+
+        metadata = {
+            'tags': ['Switch settings'],
+            'operation': 'getNetworkSwitchSettingsMulticast',
+        }
+        resource = f'/networks/{networkId}/switch/settings/multicast'
+
+        return self._session.get(metadata, resource)
+
+    def updateNetworkSwitchSettingsMulticast(self, networkId: str, **kwargs):
+        """
+        **Update multicast settings for a network**
+        https://api.meraki.com/api_docs#update-multicast-settings-for-a-network
+        
+        - networkId (string)
+        - defaultSettings (object): Default multicast setting for entire network. IGMP snooping and Flood unknown multicast traffic settings are enabled by default.
+        - overrides (array): Array of paired switches/stacks/profiles and corresponding multicast settings. An empty array will clear the multicast settings.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['Switch settings'],
+            'operation': 'updateNetworkSwitchSettingsMulticast',
+        }
+        resource = f'/networks/{networkId}/switch/settings/multicast'
+
+        body_params = ['defaultSettings', 'overrides']
+        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
     def getNetworkSwitchSettingsQosRules(self, networkId: str):
         """
         **List quality of service rules**

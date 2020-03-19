@@ -32,6 +32,13 @@ class IntrusionSettings(object):
 
         kwargs.update(locals())
 
+        if 'mode' in kwargs:
+            options = ['prevention', 'detection', 'disabled']
+            assert kwargs['mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
+        if 'idsRulesets' in kwargs:
+            options = ['connectivity', 'balanced', 'security']
+            assert kwargs['idsRulesets'] in options, f'''"idsRulesets" cannot be "{kwargs['idsRulesets']}", & must be set to one of: {options}'''
+
         metadata = {
             'tags': ['Intrusion settings'],
             'operation': 'updateNetworkSecurityIntrusionSettings',

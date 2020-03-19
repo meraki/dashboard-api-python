@@ -21,10 +21,13 @@ MAXIMUM_RETRIES = 2
 # Create an output log file?
 OUTPUT_LOG = True
 
+# Path to output log; by default, working directory of script if not specified
+LOG_PATH = ''
+
 # Log file name appended with date and timestamp
 LOG_FILE_PREFIX = 'meraki_api_'
 
-# If output log used, output to console too?
+# Print output logging to console?
 PRINT_TO_CONSOLE = True
 
 # Simulate POST/PUT/DELETE calls to prevent changes?
