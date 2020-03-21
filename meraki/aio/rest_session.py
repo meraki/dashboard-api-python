@@ -89,6 +89,7 @@ class AsyncRestSession:
             return None
         else:
             response = None
+            message = None
             for _ in range(retries):
                 # Make the HTTP request to the API endpoint
                 try:
@@ -154,7 +155,7 @@ class AsyncRestSession:
                     self._logger.error(
                         f"{tag}, {operation} - {status} {reason}, {message}"
                     )
-            raise AsyncAPIError(metadata, response, await response.text())
+                    raise AsyncAPIError(metadata, response, message)
 
     async def get(self, metadata, url, params=None):
         metadata["method"] = "GET"
