@@ -2,3 +2,4 @@
 # No PyCharm config files
 .idea/
 venv/
+__pycache__
