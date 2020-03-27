@@ -81,9 +81,10 @@ from .api.wireless_health import AsyncWirelessHealth
 from .api.wireless_settings import AsyncWirelessSettings
 from ..config import (
     API_KEY_ENVIRONMENT_VARIABLE, DEFAULT_BASE_URL, SINGLE_REQUEST_TIMEOUT, CERTIFICATE_PATH, WAIT_ON_RATE_LIMIT,
-    MAXIMUM_RETRIES, OUTPUT_LOG, LOG_PATH, LOG_FILE_PREFIX, PRINT_TO_CONSOLE, SIMULATE_API_CALLS
+    MAXIMUM_RETRIES, OUTPUT_LOG, LOG_PATH, LOG_FILE_PREFIX, PRINT_TO_CONSOLE, SIMULATE_API_CALLS, AIO_MAXIMUM_CONCURRENT_REQUESTS
 )
 
+__version__ = '0.90.1'
 
 class AsyncDashboardAPI:
     """
@@ -105,7 +106,8 @@ class AsyncDashboardAPI:
     def __init__(self, api_key=None, base_url=DEFAULT_BASE_URL, single_request_timeout=SINGLE_REQUEST_TIMEOUT,
                  certificate_path=CERTIFICATE_PATH, wait_on_rate_limit=WAIT_ON_RATE_LIMIT,
                  maximum_retries=MAXIMUM_RETRIES, output_log=OUTPUT_LOG, log_path=LOG_PATH,
-                 log_file_prefix=LOG_FILE_PREFIX, print_console=PRINT_TO_CONSOLE, simulate=SIMULATE_API_CALLS):
+                 log_file_prefix=LOG_FILE_PREFIX, print_console=PRINT_TO_CONSOLE, simulate=SIMULATE_API_CALLS,
+                 maximum_concurrent_requests=AIO_MAXIMUM_CONCURRENT_REQUESTS):
         # Check API key
         api_key = api_key or os.environ.get(API_KEY_ENVIRONMENT_VARIABLE)
         if not api_key:
@@ -144,6 +146,7 @@ class AsyncDashboardAPI:
             wait_on_rate_limit=wait_on_rate_limit,
             maximum_retries=maximum_retries,
             simulate=simulate,
+            maximum_concurrent_requests=maximum_concurrent_requests
         )
 
         # API endpoints by section
