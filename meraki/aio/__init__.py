@@ -101,6 +101,7 @@ class AsyncDashboardAPI:
     - log_file_prefix (string): log file name appended with date and timestamp
     - print_console (boolean): print logging output to console?
     - simulate (boolean): simulate POST/PUT/DELETE calls to prevent changes?
+    - maximum_concurrent_requests (integer): How many requests should be handled at the same time? Additional requests will be queued
     """
 
     def __init__(self, api_key=None, base_url=DEFAULT_BASE_URL, single_request_timeout=SINGLE_REQUEST_TIMEOUT,

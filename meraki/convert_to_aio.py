@@ -75,7 +75,7 @@ def compile_regex():
 
     patternInitFile[re.compile("(, SIMULATE_API_CALLS)")] = r"\1, AIO_MAXIMUM_CONCURRENT_REQUESTS"
     patternInitFile[re.compile("(, simulate=SIMULATE_API_CALLS)")] = ("\\1,\n"+" "*17)+"maximum_concurrent_requests=AIO_MAXIMUM_CONCURRENT_REQUESTS"
-    patternInitFile[re.compile("(    - simulate (boolean): .*)")] = "\\1\n    - maximum_concurrent_requests (integer): How many requests should be handled at the same time? Additional requests will be queued"
+    patternInitFile[re.compile("(    - simulate \(boolean\): .*)")] = "\\1\n    - maximum_concurrent_requests (integer): How many requests should be handled at the same time? Additional requests will be queued"
     patternInitFile[re.compile("( {12}simulate=simulate,)")] = ("\\1\n"+" "*12)+"maximum_concurrent_requests=maximum_concurrent_requests"
 
     patternInitFile[
