@@ -287,4 +287,29 @@ class Devices(object):
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
+    def getOrganizationDeviceStatuses(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **List the devices in an organization**
+        https://api.meraki.com/api_docs/v0#list-the-status-of-every-meraki-device-in-the-organization
+        
+        - organizationId (string)
+        - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - configurationUpdatedAfter (string): Filter results by whether or not the device's configuration has been updated after the given timestamp
+        """
 
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['Devices'],
+            'operation': 'getOrganizationDeviceStatuses',
+        }
+        resource = f'/organizations/{organizationId}/deviceStatuses'
+
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'configurationUpdatedAfter']
+        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
