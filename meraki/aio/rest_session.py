@@ -189,7 +189,7 @@ class AsyncRestSession:
                             f"{tag}, {operation} - {status} {reason}, {message}"
                         )
                         raise AsyncAPIError(metadata, response, message)
-            raise AsyncAPIError(metadata, response, "Reached retry limit: " + message)
+            raise AsyncAPIError(metadata, response, "Reached retry limit: " + str(message))
 
     async def get(self, metadata, url, params=None):
         metadata["method"] = "GET"
