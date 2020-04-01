@@ -1,7 +1,7 @@
-'''
+"""
 SPECIAL THANKS to Heimo Stieg (https://github.com/coreGreenberet) for implementing the "aio_" examples as well as this
 script, which generates the contents of the "aio" directory for running asynchronously.
-'''
+"""
 
 
 import csv
@@ -72,6 +72,12 @@ def compile_regex():
         re.compile("class DashboardAPI\(object\):")
     ] = "class AsyncDashboardAPI:"
     patternInitFile[re.compile("(from \.api\..*import )(.*)")] = r"\1Async\2"
+
+    patternInitFile[re.compile("(, SIMULATE_API_CALLS)")] = r"\1, AIO_MAXIMUM_CONCURRENT_REQUESTS"
+    patternInitFile[re.compile("(, simulate=SIMULATE_API_CALLS)")] = ("\\1,\n"+" "*17)+"maximum_concurrent_requests=AIO_MAXIMUM_CONCURRENT_REQUESTS"
+    patternInitFile[re.compile("(    - simulate \(boolean\): .*)")] = "\\1\n    - maximum_concurrent_requests (integer): How many requests should be handled at the same time? Additional requests will be queued"
+    patternInitFile[re.compile("( {12}simulate=simulate,)")] = ("\\1\n"+" "*12)+"maximum_concurrent_requests=maximum_concurrent_requests"
+
     patternInitFile[
         re.compile("self\._session = RestSession\(")
     ] = "self._session = AsyncRestSession("

@@ -4,10 +4,10 @@ import time
 import ssl
 import aiohttp
 import asyncio
+import random
 
 from meraki.config import *
 from meraki.exceptions import *
-
 
 # Main module interface
 class AsyncRestSession:
@@ -21,6 +21,7 @@ class AsyncRestSession:
         wait_on_rate_limit=WAIT_ON_RATE_LIMIT,
         maximum_retries=MAXIMUM_RETRIES,
         simulate=SIMULATE_API_CALLS,
+        maximum_concurrent_requests=AIO_MAXIMUM_CONCURRENT_REQUESTS,
     ):
         super().__init__()
 
@@ -32,6 +33,8 @@ class AsyncRestSession:
         self._wait_on_rate_limit = wait_on_rate_limit
         self._maximum_retries = maximum_retries
         self._simulate = simulate
+        self._maximum_concurrent_sessions = maximum_concurrent_requests
+        self._current_sessions = 0
 
         # Update the headers of the `requests` session
         headers = None
@@ -64,6 +67,16 @@ class AsyncRestSession:
         )
 
     async def request(self, metadata, method, url, **kwargs):
+        while self._current_sessions >= self._maximum_concurrent_sessions:
+            await asyncio.sleep(0.3)  # wait for a free slot
+
+        self._current_sessions = self._current_sessions + 1
+        try:
+            return await self._request(metadata, method, url, **kwargs)
+        finally:
+            self._current_sessions = self._current_sessions - 1
+
+    async def _request(self, metadata, method, url, **kwargs):
         # Metadata on endpoint
         tag = metadata["tags"][0]
         operation = metadata["operation"]
@@ -135,7 +148,11 @@ class AsyncRestSession:
                     ]
                 # Rate limit 429 errors
                 elif status == 429:
-                    wait = int(response.headers["Retry-After"])
+                    wait = 0
+                    if "Retry-After" in response.headers:
+                        wait = int(response.headers["Retry-After"])
+                    else:
+                        wait = random.uniform(1, self._current_sessions)
                     self._logger.warning(
                         f"{tag}, {operation} - {status} {reason}, retrying in {wait} seconds"
                     )
@@ -152,10 +169,27 @@ class AsyncRestSession:
                         message = await response.json()
                     except aiohttp.client_exceptions.ContentTypeError:
                         message = (await response.text())[:100]
-                    self._logger.error(
-                        f"{tag}, {operation} - {status} {reason}, {message}"
-                    )
-                    raise AsyncAPIError(metadata, response, message)
+
+                    # Check specifically for action batch concurrency error
+                    action_batch_concurrency_error = {
+                        "errors": [
+                            "Too many concurrently executing batches. Maximum is 5 confirmed but not yet executed batches."
+                        ]
+                    }
+
+                    if message == action_batch_concurrency_error:
+                        self._logger.warning(
+                            f"{tag}, {operation} - {status} {reason}, retrying in 60 seconds"
+                        )
+                        await asyncio.sleep(60)
+
+                    # All other client-side errors
+                    else:
+                        self._logger.error(
+                            f"{tag}, {operation} - {status} {reason}, {message}"
+                        )
+                        raise AsyncAPIError(metadata, response, message)
+            raise AsyncAPIError(metadata, response, "Reached retry limit: " + str(message))
 
     async def get(self, metadata, url, params=None):
         metadata["method"] = "GET"
