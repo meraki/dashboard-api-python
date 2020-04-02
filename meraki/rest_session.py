@@ -17,6 +17,10 @@ class RestSession(object):
         single_request_timeout=SINGLE_REQUEST_TIMEOUT,
         certificate_path=CERTIFICATE_PATH,
         wait_on_rate_limit=WAIT_ON_RATE_LIMIT,
+        nginx_429_retry_wait_time=NGINX_429_RETRY_WAIT_TIME,
+        action_batch_retry_wait_time=ACTION_BATCH_RETRY_WAIT_TIME,
+        retry_4xx_error=RETRY_4XX_ERROR,
+        retry_4xx_error_wait_time=RETRY_4XX_ERROR_WAIT_TIME,
         maximum_retries=MAXIMUM_RETRIES,
         simulate=SIMULATE_API_CALLS,
     ):
@@ -28,6 +32,10 @@ class RestSession(object):
         self._single_request_timeout = single_request_timeout
         self._certificate_path = certificate_path
         self._wait_on_rate_limit = wait_on_rate_limit
+        self._nginx_429_retry_wait_time = nginx_429_retry_wait_time
+        self._action_batch_retry_wait_time = action_batch_retry_wait_time
+        self._retry_4xx_error = retry_4xx_error
+        self._retry_4xx_error_wait_time = retry_4xx_error_wait_time
         self._maximum_retries = maximum_retries
         self._simulate = simulate
 
@@ -40,9 +48,17 @@ class RestSession(object):
 
         # Update the headers of the `requests` session
         if 'v0' in self._base_url:
-            self._req_session.headers = {'X-Cisco-Meraki-API-Key': self._api_key, 'Content-Type': 'application/json'}
+            self._req_session.headers = {
+                'X-Cisco-Meraki-API-Key': self._api_key,
+                'Content-Type': 'application/json',
+                'User-Agent': 'python-meraki/0.100.0',
+            }
         elif 'v1' in self._base_url:
-            self._req_session.headers = {'Authorization': 'Bearer ' + self._api_key, 'Content-Type': 'application/json'}
+            self._req_session.headers = {
+                'Authorization': 'Bearer ' + self._api_key,
+                'Content-Type': 'application/json',
+                'User-Agent': 'python-meraki/0.100.0',
+            }
 
         # Log API calls
         self._logger = logger
@@ -120,7 +136,10 @@ class RestSession(object):
 
                 # Rate limit 429 errors
                 elif status == 429:
-                    wait = int(response.headers['Retry-After'])
+                    if 'Retry-After' in response.headers:
+                        wait = int(response.headers['Retry-After'])
+                    else:
+                        wait = self._nginx_429_retry_wait_time
                     self._logger.warning(f'{tag}, {operation} - {status} {reason}, retrying in {wait} seconds')
                     time.sleep(wait)
                     retries -= 1
@@ -143,14 +162,20 @@ class RestSession(object):
                         message = response.text[:100]
 
                     # Check specifically for action batch concurrency error
-                    action_batch_concurrency_error = {
-                        'errors': [
-                            'Too many concurrently executing batches. Maximum is 5 confirmed but not yet executed batches.'
-                        ]
+                    action_batch_concurrency_error = {'errors': [
+                        'Too many concurrently executing batches. Maximum is 5 confirmed but not yet executed batches.']
                     }
                     if message == action_batch_concurrency_error:
-                        self._logger.warning(f'{tag}, {operation} - {status} {reason}, retrying in 60 seconds')
-                        time.sleep(60)
+                        wait = self._action_batch_retry_wait_time
+                        self._logger.warning(f'{tag}, {operation} - {status} {reason}, retrying in {wait} seconds')
+                        time.sleep(wait)
+                        retries -= 1
+                        if retries == 0:
+                            raise APIError(metadata, response)
+                    elif self._retry_4xx_error:
+                        wait = self._retry_4xx_error_wait_time
+                        self._logger.warning(f'{tag}, {operation} - {status} {reason}, retrying in {wait} seconds')
+                        time.sleep(wait)
                         retries -= 1
                         if retries == 0:
                             raise APIError(metadata, response)

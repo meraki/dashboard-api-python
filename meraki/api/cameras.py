@@ -31,6 +31,7 @@ class Cameras(object):
         - restrictedBandwidthModeEnabled (boolean): Boolean indicating if restricted bandwidth is enabled(true) or disabled(false) on the camera
         - quality (string): Quality of the camera. Can be one of 'Standard', 'High' or 'Enhanced'. Not all qualities are supported by every camera model.
         - resolution (string): Resolution of the camera. Can be one of '1280x720', '1920x1080', '1080x1080' or '2058x2058'. Not all resolutions are supported by every camera model.
+        - motionDetectorVersion (integer): The version of the motion detector that will be used by the camera. Only applies to Gen 2 cameras. Defaults to v2.
         """
 
         kwargs.update(locals())
@@ -41,6 +42,9 @@ class Cameras(object):
         if 'resolution' in kwargs:
             options = ['1280x720', '1920x1080', '1080x1080', '2058x2058']
             assert kwargs['resolution'] in options, f'''"resolution" cannot be "{kwargs['resolution']}", & must be set to one of: {options}'''
+        if 'motionDetectorVersion' in kwargs:
+            options = [1, 2]
+            assert kwargs['motionDetectorVersion'] in options, f'''"motionDetectorVersion" cannot be "{kwargs['motionDetectorVersion']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['Cameras'],
@@ -48,7 +52,7 @@ class Cameras(object):
         }
         resource = f'/devices/{serial}/camera/qualityAndRetentionSettings'
 
-        body_params = ['profileId', 'motionBasedRetentionEnabled', 'audioRecordingEnabled', 'restrictedBandwidthModeEnabled', 'quality', 'resolution']
+        body_params = ['profileId', 'motionBasedRetentionEnabled', 'audioRecordingEnabled', 'restrictedBandwidthModeEnabled', 'quality', 'resolution', 'motionDetectorVersion']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)

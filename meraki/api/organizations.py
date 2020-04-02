@@ -93,7 +93,7 @@ class Organizations(object):
 
         return self._session.delete(metadata, resource)
 
-    def claimOrganization(self, organizationId: str, **kwargs):
+    def claimIntoOrganization(self, organizationId: str, **kwargs):
         """
         **Claim a list of devices, licenses, and/or orders into an organization. When claiming by order, all devices and licenses in the order will be claimed; licenses will be added to the organization and devices will be placed in the organization's inventory.**
         https://api.meraki.com/api_docs#claim-a-list-of-devices-licenses-and/or-orders-into-an-organization
@@ -108,7 +108,7 @@ class Organizations(object):
 
         metadata = {
             'tags': ['Organizations'],
-            'operation': 'claimOrganization',
+            'operation': 'claimIntoOrganization',
         }
         resource = f'/organizations/{organizationId}/claim'
 
