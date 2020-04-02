@@ -59,7 +59,7 @@ class AsyncDevices:
         }
         resource = f'/networks/{networkId}/devices/claim'
 
-        body_params = ['serials', 'serial', 'serials']
+        body_params = ['serials', 'serial']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.post(metadata, resource, payload)

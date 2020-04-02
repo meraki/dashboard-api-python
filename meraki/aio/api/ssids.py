@@ -62,18 +62,18 @@ class AsyncSSIDs:
         - number (string)
         - name (string): The name of the SSID
         - enabled (boolean): Whether or not the SSID is enabled
-        - authMode (string): The association control method for the SSID ('open', 'psk', 'open-with-radius', '8021x-meraki' or '8021x-radius')
+        - authMode (string): The association control method for the SSID ('open', 'psk', 'open-with-radius', '8021x-meraki', '8021x-radius', 'ipsk-with-radius' or 'ipsk-without-radius')
         - enterpriseAdminAccess (string): Whether or not an SSID is accessible by 'enterprise' administrators ('access disabled' or 'access enabled')
         - encryptionMode (string): The psk encryption mode for the SSID ('wep' or 'wpa'). This param is only valid if the authMode is 'psk'
         - psk (string): The passkey for the SSID. This param is only valid if the authMode is 'psk'
         - wpaEncryptionMode (string): The types of WPA encryption. ('WPA1 only', 'WPA1 and WPA2', 'WPA2 only', 'WPA3 Transition Mode' or 'WPA3 only')
         - splashPage (string): The type of splash page for the SSID ('None', 'Click-through splash page', 'Billing', 'Password-protected with Meraki RADIUS', 'Password-protected with custom RADIUS', 'Password-protected with Active Directory', 'Password-protected with LDAP', 'SMS authentication', 'Systems Manager Sentry', 'Facebook Wi-Fi', 'Google OAuth' or 'Sponsored guest'). This attribute is not supported for template children.
-        - radiusServers (array): The RADIUS 802.1x servers to be used for authentication. This param is only valid if the authMode is 'open-with-radius' or '8021x-radius'
+        - radiusServers (array): The RADIUS 802.1X servers to be used for authentication. This param is only valid if the authMode is 'open-with-radius', '8021x-radius' or 'ipsk-with-radius'
         - radiusCoaEnabled (boolean): If true, Meraki devices will act as a RADIUS Dynamic Authorization Server and will respond to RADIUS Change-of-Authorization and Disconnect messages sent by the RADIUS server.
         - radiusFailoverPolicy (string): This policy determines how authentication requests should be handled in the event that all of the configured RADIUS servers are unreachable ('Deny access' or 'Allow access')
         - radiusLoadBalancingPolicy (string): This policy determines which RADIUS server will be contacted first in an authentication attempt and the ordering of any necessary retry attempts ('Strict priority order' or 'Round robin')
-        - radiusAccountingEnabled (boolean): Whether or not RADIUS accounting is enabled. This param is only valid if the authMode is 'open-with-radius' or '8021x-radius'
-        - radiusAccountingServers (array): The RADIUS accounting 802.1x servers to be used for authentication. This param is only valid if the authMode is 'open-with-radius' or '8021x-radius' and radiusAccountingEnabled is 'true'
+        - radiusAccountingEnabled (boolean): Whether or not RADIUS accounting is enabled. This param is only valid if the authMode is 'open-with-radius', '8021x-radius' or 'ipsk-with-radius'
+        - radiusAccountingServers (array): The RADIUS accounting 802.1X servers to be used for authentication. This param is only valid if the authMode is 'open-with-radius', '8021x-radius' or 'ipsk-with-radius' and radiusAccountingEnabled is 'true'
         - radiusAttributeForGroupPolicies (string): Specify the RADIUS attribute used to look up group policies ('Filter-Id', 'Reply-Message', 'Airespace-ACL-Name' or 'Aruba-User-Role'). Access points must receive this attribute in the RADIUS Access-Accept message
         - ipAssignmentMode (string): The client IP assignment mode ('NAT mode', 'Bridge mode', 'Layer 3 roaming', 'Layer 3 roaming with a concentrator' or 'VPN')
         - useVlanTagging (boolean): Whether or not traffic should be directed to use specific VLANs. This param is only valid if the ipAssignmentMode is 'Bridge mode' or 'Layer 3 roaming'
@@ -94,7 +94,7 @@ class AsyncSSIDs:
         kwargs.update(locals())
 
         if 'authMode' in kwargs:
-            options = ['open', 'psk', 'open-with-radius', '8021x-meraki', '8021x-radius']
+            options = ['open', 'psk', 'open-with-radius', '8021x-meraki', '8021x-radius', 'ipsk-with-radius', 'ipsk-without-radius']
             assert kwargs['authMode'] in options, f'''"authMode" cannot be "{kwargs['authMode']}", & must be set to one of: {options}'''
         if 'enterpriseAdminAccess' in kwargs:
             options = ['access disabled', 'access enabled']

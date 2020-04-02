@@ -25,7 +25,7 @@ class AsyncAlertSettings:
         https://api.meraki.com/api_docs#update-the-alert-configuration-for-this-network
         
         - networkId (string)
-        - defaultDestinations (object): The network_wide destinations for all alerts on the network.
+        - defaultDestinations (object): The network-wide destinations for all alerts on the network.
         - alerts (array): Alert-specific configuration for each type. Only alerts that pertain to the network can be updated.
         """
 

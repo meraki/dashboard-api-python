@@ -194,12 +194,16 @@ class AsyncNetworks:
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 30 days from today.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 30 days.
-        - deviceType (string):     Filter the data by device type: combined (default), wireless, switch, appliance.
-    When using combined, for each rule the data will come from the device type with the most usage.
+        - deviceType (string):     Filter the data by device type: 'combined', 'wireless', 'switch' or 'appliance'. Defaults to 'combined'.
+    When using 'combined', for each rule the data will come from the device type with the most usage.
 
         """
 
         kwargs.update(locals())
+
+        if 'deviceType' in kwargs:
+            options = ['combined', 'wireless', 'switch', 'appliance']
+            assert kwargs['deviceType'] in options, f'''"deviceType" cannot be "{kwargs['deviceType']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['Networks'],

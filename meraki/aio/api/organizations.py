@@ -93,7 +93,7 @@ class AsyncOrganizations:
 
         return await self._session.delete(metadata, resource)
 
-    async def claimOrganization(self, organizationId: str, **kwargs):
+    async def claimIntoOrganization(self, organizationId: str, **kwargs):
         """
         **Claim a list of devices, licenses, and/or orders into an organization. When claiming by order, all devices and licenses in the order will be claimed; licenses will be added to the organization and devices will be placed in the organization's inventory.**
         https://api.meraki.com/api_docs#claim-a-list-of-devices-licenses-and/or-orders-into-an-organization
@@ -108,7 +108,31 @@ class AsyncOrganizations:
 
         metadata = {
             'tags': ['Organizations'],
-            'operation': 'claimOrganization',
+            'operation': 'claimIntoOrganization',
+        }
+        resource = f'/organizations/{organizationId}/claim'
+
+        body_params = ['orders', 'serials', 'licenses']
+        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+
+        return await self._session.post(metadata, resource, payload)
+
+    async def claimOrganization(self, organizationId: str, **kwargs):
+        """
+        **Claim a list of devices, licenses, and/or orders into an organization. When claiming by order, all devices and licenses in the order will be claimed; licenses will be added to the organization and devices will be placed in the organization's inventory.**
+        https://api.meraki.com/api_docs#claim-a-list-of-devices-licenses-and/or-orders-into-an-organization
+
+        - organizationId (string)
+        - orders (array): The numbers of the orders that should be claimed
+        - serials (array): The serials of the devices that should be claimed
+        - licenses (array): The licenses that should be claimed
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['Organizations'],
+            'operation': 'claimIntoOrganization',
         }
         resource = f'/organizations/{organizationId}/claim'
 

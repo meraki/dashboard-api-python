@@ -81,10 +81,11 @@ from .api.wireless_health import AsyncWirelessHealth
 from .api.wireless_settings import AsyncWirelessSettings
 from ..config import (
     API_KEY_ENVIRONMENT_VARIABLE, DEFAULT_BASE_URL, SINGLE_REQUEST_TIMEOUT, CERTIFICATE_PATH, WAIT_ON_RATE_LIMIT,
+    NGINX_429_RETRY_WAIT_TIME, ACTION_BATCH_RETRY_WAIT_TIME, RETRY_4XX_ERROR, RETRY_4XX_ERROR_WAIT_TIME,
     MAXIMUM_RETRIES, OUTPUT_LOG, LOG_PATH, LOG_FILE_PREFIX, PRINT_TO_CONSOLE, SIMULATE_API_CALLS, AIO_MAXIMUM_CONCURRENT_REQUESTS
 )
 
-__version__ = '0.90.1'
+__version__ = '0.100.1'
 
 class AsyncDashboardAPI:
     """
@@ -95,6 +96,10 @@ class AsyncDashboardAPI:
     - single_request_timeout (integer): maximum number of seconds for each API call
     - certificate_path (string): path for TLS/SSL certificate verification if behind local proxy
     - wait_on_rate_limit (boolean): retry if 429 rate limit error encountered?
+    - nginx_429_retry_wait_time (integer): Nginx 429 retry wait time
+    - action_batch_retry_wait_time (integer): action batch concurrency error retry wait time
+    - retry_4xx_error (boolean): retry if encountering other 4XX error (besides 429)?
+    - retry_4xx_error_wait_time (integer): other 4XX error retry wait time
     - maximum_retries (integer): retry up to this many times when encountering 429s or other server-side errors
     - output_log (boolean): create an output log file?
     - log_path (string): path to output log; by default, working directory of script if not specified
@@ -106,6 +111,9 @@ class AsyncDashboardAPI:
 
     def __init__(self, api_key=None, base_url=DEFAULT_BASE_URL, single_request_timeout=SINGLE_REQUEST_TIMEOUT,
                  certificate_path=CERTIFICATE_PATH, wait_on_rate_limit=WAIT_ON_RATE_LIMIT,
+                 nginx_429_retry_wait_time=NGINX_429_RETRY_WAIT_TIME,
+                 action_batch_retry_wait_time=ACTION_BATCH_RETRY_WAIT_TIME,
+                 retry_4xx_error=RETRY_4XX_ERROR, retry_4xx_error_wait_time=RETRY_4XX_ERROR_WAIT_TIME,
                  maximum_retries=MAXIMUM_RETRIES, output_log=OUTPUT_LOG, log_path=LOG_PATH,
                  log_file_prefix=LOG_FILE_PREFIX, print_console=PRINT_TO_CONSOLE, simulate=SIMULATE_API_CALLS,
                  maximum_concurrent_requests=AIO_MAXIMUM_CONCURRENT_REQUESTS):
@@ -145,6 +153,10 @@ class AsyncDashboardAPI:
             single_request_timeout=single_request_timeout,
             certificate_path=certificate_path,
             wait_on_rate_limit=wait_on_rate_limit,
+            nginx_429_retry_wait_time=nginx_429_retry_wait_time,
+            action_batch_retry_wait_time=action_batch_retry_wait_time,
+            retry_4xx_error=retry_4xx_error,
+            retry_4xx_error_wait_time=retry_4xx_error_wait_time,
             maximum_retries=maximum_retries,
             simulate=simulate,
             maximum_concurrent_requests=maximum_concurrent_requests

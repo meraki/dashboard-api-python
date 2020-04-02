@@ -19,7 +19,7 @@ class AsyncVLANs:
 
         return await self._session.get(metadata, resource)
 
-    async def createNetworkVlan(self, networkId: str, id: str, name: str, subnet: str, applianceIp: str):
+    async def createNetworkVlan(self, networkId: str, id: str, name: str, subnet: str, applianceIp: str, **kwargs):
         """
         **Add a VLAN**
         https://api.meraki.com/api_docs#add-a-vlan
@@ -29,9 +29,10 @@ class AsyncVLANs:
         - name (string): The name of the new VLAN
         - subnet (string): The subnet of the VLAN
         - applianceIp (string): The local IP of the appliance on the VLAN
+        - groupPolicyId (string): The id of the desired group policy to apply to the VLAN
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         metadata = {
             'tags': ['VLANs'],
@@ -39,7 +40,7 @@ class AsyncVLANs:
         }
         resource = f'/networks/{networkId}/vlans'
 
-        body_params = ['id', 'name', 'subnet', 'applianceIp']
+        body_params = ['id', 'name', 'subnet', 'applianceIp', 'groupPolicyId']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.post(metadata, resource, payload)
@@ -71,6 +72,7 @@ class AsyncVLANs:
         - name (string): The name of the VLAN
         - subnet (string): The subnet of the VLAN
         - applianceIp (string): The local IP of the appliance on the VLAN
+        - groupPolicyId (string): The id of the desired group policy to apply to the VLAN
         - vpnNatSubnet (string): The translated VPN subnet if VPN and VPN subnet translation are enabled on the VLAN
         - dhcpHandling (string): The appliance's handling of DHCP requests on this VLAN. One of: 'Run a DHCP server', 'Relay DHCP to another server' or 'Do not respond to DHCP requests'
         - dhcpRelayServerIps (array): The IPs of the DHCP servers that DHCP requests should be relayed to
@@ -99,7 +101,7 @@ class AsyncVLANs:
         }
         resource = f'/networks/{networkId}/vlans/{vlanId}'
 
-        body_params = ['name', 'subnet', 'applianceIp', 'vpnNatSubnet', 'dhcpHandling', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dhcpBootOptionsEnabled', 'dhcpBootNextServer', 'dhcpBootFilename', 'fixedIpAssignments', 'reservedIpRanges', 'dnsNameservers', 'dhcpOptions']
+        body_params = ['name', 'subnet', 'applianceIp', 'groupPolicyId', 'vpnNatSubnet', 'dhcpHandling', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dhcpBootOptionsEnabled', 'dhcpBootNextServer', 'dhcpBootFilename', 'fixedIpAssignments', 'reservedIpRanges', 'dnsNameservers', 'dhcpOptions']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)

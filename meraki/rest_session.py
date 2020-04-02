@@ -51,13 +51,13 @@ class RestSession(object):
             self._req_session.headers = {
                 'X-Cisco-Meraki-API-Key': self._api_key,
                 'Content-Type': 'application/json',
-                'User-Agent': 'python-meraki/0.100.0',
+                'User-Agent': 'python-meraki/0.100.1',
             }
         elif 'v1' in self._base_url:
             self._req_session.headers = {
                 'Authorization': 'Bearer ' + self._api_key,
                 'Content-Type': 'application/json',
-                'User-Agent': 'python-meraki/0.100.0',
+                'User-Agent': 'python-meraki/0.100.1',
             }
 
         # Log API calls
