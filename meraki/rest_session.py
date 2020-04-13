@@ -95,6 +95,8 @@ class RestSession(object):
             while retries > 0:
                 # Make the HTTP request to the API endpoint
                 try:
+                    if response:
+                        response.close()
                     response = self._req_session.request(method, abs_url, allow_redirects=False, **kwargs)
                     reason = response.reason if response.reason else ''
                     status = response.status_code
@@ -190,7 +192,12 @@ class RestSession(object):
         metadata['url'] = url
         metadata['params'] = params
         response = self.request(metadata, 'GET', url, params=params)
-        return response.json() if response and response.text.strip() else None
+        ret = None
+        if response:
+            if response.text.strip():
+                ret = response.json() 
+            response.close()
+        return ret
 
     def get_pages(self, metadata, url, params=None, total_pages=-1, direction='next'):
         if type(total_pages) == str and total_pages.lower() == 'all':
@@ -216,6 +223,9 @@ class RestSession(object):
                     next = l[l.find('<')+1:l.find('>')]
                 elif 'rel=last' in l:
                     last = l[l.find('<')+1:l.find('>')]
+
+            response.close()
+            response = None
 
             # GET the subsequent page
             if direction == 'next' and next:
@@ -243,6 +253,9 @@ class RestSession(object):
 
             total_pages -= 1
 
+        if response:
+            response.close()
+
         return results
 
     def post(self, metadata, url, json=None):
@@ -250,17 +263,29 @@ class RestSession(object):
         metadata['url'] = url
         metadata['json'] = json
         response = self.request(metadata, 'POST', url, json=json)
-        return response.json() if response and response.text.strip() else None
+        ret = None
+        if response:
+            if response.text.strip():
+                ret = response.json() 
+            response.close()
+        return ret
 
     def put(self, metadata, url, json=None):
         metadata['method'] = 'PUT'
         metadata['url'] = url
         metadata['json'] = json
         response = self.request(metadata, 'PUT', url, json=json)
-        return response.json() if response and response.text.strip() else None
+        ret = None
+        if response:
+            if response.text.strip():
+                ret = response.json() 
+            response.close()
+        return ret
 
     def delete(self, metadata, url):
         metadata['method'] = 'DELETE'
         metadata['url'] = url
-        self.request(metadata, 'DELETE', url)
+        response = self.request(metadata, 'DELETE', url)
+        if response:
+            response.close()
         return None
