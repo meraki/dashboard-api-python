@@ -61,7 +61,7 @@ class SwitchPorts(object):
             'tags': ['Switch ports'],
             'operation': 'getDeviceSwitchPorts',
         }
-        resource = f'/devices/{serial}/switchPorts'
+        resource = f'/devices/{serial}/switch/ports'
 
         return self._session.get(metadata, resource)
 
