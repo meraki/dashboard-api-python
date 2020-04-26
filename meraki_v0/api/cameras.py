@@ -57,6 +57,44 @@ class Cameras(object):
 
         return self._session.put(metadata, resource, payload)
 
+    def getDeviceCameraVideoSettings(self, serial: str):
+        """
+        **Returns video settings for the given camera**
+        https://api.meraki.com/api_docs#returns-video-settings-for-the-given-camera
+        
+        - serial (string)
+        """
+
+        metadata = {
+            'tags': ['Cameras'],
+            'operation': 'getDeviceCameraVideoSettings',
+        }
+        resource = f'/devices/{serial}/camera/video/settings'
+
+        return self._session.get(metadata, resource)
+
+    def updateDeviceCameraVideoSettings(self, serial: str, **kwargs):
+        """
+        **Update video settings for the given camera**
+        https://api.meraki.com/api_docs#update-video-settings-for-the-given-camera
+        
+        - serial (string)
+        - externalRtspEnabled (boolean): Boolean indicating if external rtsp stream is exposed
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['Cameras'],
+            'operation': 'updateDeviceCameraVideoSettings',
+        }
+        resource = f'/devices/{serial}/camera/video/settings'
+
+        body_params = ['externalRtspEnabled']
+        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
     def getNetworkCameraSchedules(self, networkId: str):
         """
         **Returns a list of all camera recording schedules.**

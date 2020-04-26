@@ -1,13 +1,12 @@
-import json
-import time
-
-import ssl
-import aiohttp
 import asyncio
-import random
+import json
+import ssl
+import sys
 
-from meraki.config import *
-from meraki.exceptions import *
+import aiohttp
+
+from ..config import *
+from ..exceptions import *
 
 # Main module interface
 class AsyncRestSession:
@@ -44,27 +43,26 @@ class AsyncRestSession:
         self._maximum_concurrent_sessions = maximum_concurrent_requests
         self._current_sessions = 0
 
-        # Update the headers of the `requests` session
-        headers = None
-        if "v0" in self._base_url:
-            headers = {
-                "X-Cisco-Meraki-API-Key": self._api_key,
-                "Content-Type": "application/json",
-                "User-Agent": "python-meraki/aio-0.100.1",
-            }
-        elif "v1" in self._base_url:
-            headers = {
-                "Authorization": "Bearer " + self._api_key,
-                "Content-Type": "application/json",
-                "User-Agent": "python-meraki/aio-0.100.1",
-            }
+        # Check base URL
+        if 'v1' in self._base_url:
+            sys.exit(f'If you want to use the Python library with v1 paths ({self._base_url} was configured as the base'
+                     f' URL), then install the v1 library. For example: pip install meraki==1.0.0b1')
+        elif self._base_url[-1] == '/':
+            self._base_url = self._base_url[:-1]
+
+        # Update the headers for the session
+        self._headers = {
+            'X-Cisco-Meraki-API-Key': self._api_key,
+            "Content-Type": "application/json",
+            "User-Agent": "python-meraki/aio-0.100.2",
+        }
         if self._certificate_path:
             self._sslcontext = ssl.create_default_context()
             self._sslcontext.load_verify_locations(certificate_path)
 
         # Initialize a new `aiohttp` session
         self._req_session = aiohttp.ClientSession(
-            headers=headers,
+            headers=self._headers,
             timeout=aiohttp.ClientTimeout(total=single_request_timeout),
         )
 
@@ -72,9 +70,8 @@ class AsyncRestSession:
         self._logger = logger
         self._parameters = locals()
         self._parameters["api_key"] = "*" * 36 + self._api_key[-4:]
-        self._logger.info(
-            f"Meraki dashboard API session initialized with these parameters: {self._parameters}"
-        )
+        if self._logger:
+            self._logger.info(f"Meraki dashboard API session initialized with these parameters: {self._parameters}")
 
     async def request(self, metadata, method, url, **kwargs):
         while self._current_sessions >= self._maximum_concurrent_sessions:
@@ -82,7 +79,7 @@ class AsyncRestSession:
 
         self._current_sessions = self._current_sessions + 1
         try:
-            return await self._request(metadata, method, url, **kwargs)
+            return await self._request(metadata, method, url, allow_redirects=False, **kwargs)
         finally:
             self._current_sessions = self._current_sessions - 1
 
@@ -106,9 +103,11 @@ class AsyncRestSession:
         retries = self._maximum_retries
 
         # Option to simulate non-safe API calls without actually sending them
-        self._logger.debug(metadata)
+        if self._logger:
+            self._logger.debug(metadata)
         if self._simulate and method != "GET":
-            self._logger.info(f"{tag}, {operation} - SIMULATED")
+            if self._logger:
+                self._logger.info(f"{tag}, {operation} > {abs_url} - SIMULATED")
             return None
         else:
             response = None
@@ -116,26 +115,23 @@ class AsyncRestSession:
             for _ in range(retries):
                 # Make the HTTP request to the API endpoint
                 try:
-                    response = await self._req_session.request(
-                        method, abs_url, **kwargs
-                    )
+                    response = await self._req_session.request(method, abs_url, **kwargs)
                     reason = response.reason if response.reason else None
                     status = response.status
                 except Exception as e:
-                    self._logger.warning(
-                        f"{tag}, {operation} - {e}, retrying in 1 second"
-                    )
+                    if self._logger:
+                        self._logger.warning(f"{tag}, {operation} > {abs_url} - {e}, retrying in 1 second")
                     await asyncio.sleep(1)
                     continue
 
                 if status == 200:
                     if "page" in metadata:
                         counter = metadata["page"]
-                        self._logger.info(
-                            f"{tag}, {operation}; page {counter} - {status} {reason}"
-                        )
+                        if self._logger:
+                            self._logger.info(f"{tag}, {operation}; page {counter} > {abs_url} - {status} {reason}")
                     else:
-                        self._logger.info(f"{tag}, {operation} - {status} {reason}")
+                        if self._logger:
+                            self._logger.info(f"{tag}, {operation} > {abs_url} - {status} {reason}")
                     # For non-empty response to GET, ensure valid JSON
                     try:
                         if method == "GET":
@@ -145,9 +141,8 @@ class AsyncRestSession:
                         json.decoder.JSONDecodeError,
                         aiohttp.client_exceptions.ContentTypeError,
                     ) as e:
-                        self._logger.warning(
-                            f"{tag}, {operation} - {e}, retrying in 1 second"
-                        )
+                        if self._logger:
+                            self._logger.warning(f"{tag}, {operation} > {abs_url} - {e}, retrying in 1 second")
                         await asyncio.sleep(1)
                 # Handle 3XX redirects automatically
                 elif 300 <= status < 400:
@@ -163,15 +158,13 @@ class AsyncRestSession:
                         wait = int(response.headers["Retry-After"])
                     else:
                         wait = self._nginx_429_retry_wait_time
-                    self._logger.warning(
-                        f"{tag}, {operation} - {status} {reason}, retrying in {wait} seconds"
-                    )
+                    if self._logger:
+                        self._logger.warning(f"{tag}, {operation} > {abs_url} - {status} {reason}, retrying in {wait} seconds")
                     await asyncio.sleep(wait)
                 # 5XX errors
                 elif status >= 500:
-                    self._logger.warning(
-                        f"{tag}, {operation} - {status} {reason}, retrying in 1 second"
-                    )
+                    if self._logger:
+                        self._logger.warning(f"{tag}, {operation} > {abs_url} - {status} {reason}, retrying in 1 second")
                     await asyncio.sleep(1)
                 # 4XX errors
                 else:
@@ -188,19 +181,20 @@ class AsyncRestSession:
                     }
                     if message == action_batch_concurrency_error:
                         wait = self._action_batch_retry_wait_time
-                        self._logger.warning(f"{tag}, {operation} - {status} {reason}, retrying in {wait} seconds")
+                        if self._logger:
+                            self._logger.warning(f"{tag}, {operation} > {abs_url} - {status} {reason}, retrying in {wait} seconds")
                         await asyncio.sleep(wait)
                     
                     elif self._retry_4xx_error:
                         wait = self._retry_4xx_error_wait_time
-                        self._logger.warning(f"{tag}, {operation} - {status} {reason}, retrying in {wait} seconds")
+                        if self._logger:
+                            self._logger.warning(f"{tag}, {operation} > {abs_url} - {status} {reason}, retrying in {wait} seconds")
                         await asyncio.sleep(wait)
 
                     # All other client-side errors
                     else:
-                        self._logger.error(
-                            f"{tag}, {operation} - {status} {reason}, {message}"
-                        )
+                        if self._logger:
+                            self._logger.error(f"{tag}, {operation} > {abs_url} - {status} {reason}, {message}")
                         raise AsyncAPIError(metadata, response, message)
             raise AsyncAPIError(metadata, response, "Reached retry limit: " + str(message))
 

@@ -14,7 +14,8 @@ def main():
     # Instantiate a Meraki dashboard API session
     dashboard = meraki.DashboardAPI(
         api_key='',
-        base_url='https://api-mp.meraki.com/api/v0/',
+        base_url='https://api-mp.meraki.com/api/v1/',
+        output_log=True,
         log_file_prefix=os.path.basename(__file__)[:-3],
         log_path='',
         print_console=False
@@ -30,9 +31,12 @@ def main():
 
         # Get list of networks in organization
         try:
-            networks = dashboard.networks.getOrganizationNetworks(org_id)
+            networks = dashboard.organizations.getOrganizationNetworks(org_id)
         except meraki.APIError as e:
             print(f'Meraki API error: {e}')
+            print(f'status code = {e.status}')
+            print(f'reason = {e.reason}')
+            print(f'error = {e.message}')
             continue
         except Exception as e:
             print(f'some other error: {e}')
@@ -52,9 +56,12 @@ def main():
             print(f'Finding clients in network {net["name"]} ({counter} of {total})')
             try:
                 # Get list of clients on network, filtering on timespan of last 14 days
-                clients = dashboard.clients.getNetworkClients(net['id'], timespan=60*60*24*14, perPage=1000, total_pages='all')
+                clients = dashboard.networks.getNetworkClients(net['id'], timespan=60*60*24*14, perPage=1000, total_pages='all')
             except meraki.APIError as e:
                 print(f'Meraki API error: {e}')
+                print(f'status code = {e.status}')
+                print(f'reason = {e.reason}')
+                print(f'error = {e.message}')
             except Exception as e:
                 print(f'some other error: {e}')
             else:
@@ -74,9 +81,10 @@ def main():
 
         # Stitch together one consolidated CSV per org
         output_file = open(f'{folder_name}.csv', mode='w', newline='\n')
-        field_names = list(field_names)
-        field_names.insert(0, 'Network Name')
-        field_names.insert(1, 'Network ID')
+        field_names = ['id', 'mac', 'description', 'ip', 'ip6', 'ip6Local', 'user', 'firstSeen', 'lastSeen', 'manufacturer', 'os', 'recentDeviceSerial', 'recentDeviceName', 'recentDeviceMac', 'ssid', 'vlan', 'switchport', 'usage', 'status', 'notes', 'smInstalled', 'groupPolicy8021x']
+        field_names.insert(0, "Network Name")
+        field_names.insert(1, "Network ID")
+    
         csv_writer = csv.DictWriter(output_file, field_names, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
         csv_writer.writeheader()
         for net in networks:

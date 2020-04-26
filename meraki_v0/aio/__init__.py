@@ -82,10 +82,11 @@ from .api.wireless_settings import AsyncWirelessSettings
 from ..config import (
     API_KEY_ENVIRONMENT_VARIABLE, DEFAULT_BASE_URL, SINGLE_REQUEST_TIMEOUT, CERTIFICATE_PATH, WAIT_ON_RATE_LIMIT,
     NGINX_429_RETRY_WAIT_TIME, ACTION_BATCH_RETRY_WAIT_TIME, RETRY_4XX_ERROR, RETRY_4XX_ERROR_WAIT_TIME,
-    MAXIMUM_RETRIES, OUTPUT_LOG, LOG_PATH, LOG_FILE_PREFIX, PRINT_TO_CONSOLE, SIMULATE_API_CALLS, AIO_MAXIMUM_CONCURRENT_REQUESTS
+    MAXIMUM_RETRIES, OUTPUT_LOG, LOG_PATH, LOG_FILE_PREFIX, PRINT_TO_CONSOLE, SUPPRESS_LOGGING, SIMULATE_API_CALLS,
+    AIO_MAXIMUM_CONCURRENT_REQUESTS
 )
 
-__version__ = '0.100.1'
+__version__ = '0.100.2'
 
 class AsyncDashboardAPI:
     """
@@ -105,8 +106,9 @@ class AsyncDashboardAPI:
     - log_path (string): path to output log; by default, working directory of script if not specified
     - log_file_prefix (string): log file name appended with date and timestamp
     - print_console (boolean): print logging output to console?
+    - suppress_logging (boolean): disable all logging? you're on your own then!
     - simulate (boolean): simulate POST/PUT/DELETE calls to prevent changes?
-    - maximum_concurrent_requests (integer): How many requests should be handled at the same time? Additional requests will be queued
+    - maximum_concurrent_requests (integer): number of concurrent API requests for asynchronous class
     """
 
     def __init__(self, api_key=None, base_url=DEFAULT_BASE_URL, single_request_timeout=SINGLE_REQUEST_TIMEOUT,
@@ -115,35 +117,38 @@ class AsyncDashboardAPI:
                  action_batch_retry_wait_time=ACTION_BATCH_RETRY_WAIT_TIME,
                  retry_4xx_error=RETRY_4XX_ERROR, retry_4xx_error_wait_time=RETRY_4XX_ERROR_WAIT_TIME,
                  maximum_retries=MAXIMUM_RETRIES, output_log=OUTPUT_LOG, log_path=LOG_PATH,
-                 log_file_prefix=LOG_FILE_PREFIX, print_console=PRINT_TO_CONSOLE, simulate=SIMULATE_API_CALLS,
-                 maximum_concurrent_requests=AIO_MAXIMUM_CONCURRENT_REQUESTS):
+                 log_file_prefix=LOG_FILE_PREFIX, print_console=PRINT_TO_CONSOLE, suppress_logging=SUPPRESS_LOGGING,
+                 simulate=SIMULATE_API_CALLS, maximum_concurrent_requests=AIO_MAXIMUM_CONCURRENT_REQUESTS):
         # Check API key
         api_key = api_key or os.environ.get(API_KEY_ENVIRONMENT_VARIABLE)
         if not api_key:
             raise APIKeyError()
 
         # Configure logging
-        self._logger = logging.getLogger(__name__)
-        if log_path and log_path[-1] != '/':
-            log_path += '/'
-        self._log_file = f'{log_path}{log_file_prefix}_log__{datetime.now():%Y-%m-%d_%H-%M-%S}.log'
-        if output_log:
-            logging.basicConfig(
-                filename=self._log_file,
-                level=logging.DEBUG,
-                format='%(asctime)s %(name)12s: %(levelname)8s > %(message)s',
-                datefmt='%Y-%m-%d %H:%M:%S')
-            if print_console:
-                console = logging.StreamHandler()
-                console.setLevel(logging.INFO)
-                formatter = logging.Formatter('%(name)12s: %(levelname)8s > %(message)s')
-                console.setFormatter(formatter)
-                logging.getLogger('').addHandler(console)
-        elif print_console:
-            logging.basicConfig(
-                level=logging.DEBUG,
-                format='%(asctime)s %(name)12s: %(levelname)8s > %(message)s',
-                datefmt='%Y-%m-%d %H:%M:%S')
+        if not suppress_logging:
+            self._logger = logging.getLogger(__name__)
+            if log_path and log_path[-1] != '/':
+                log_path += '/'
+            self._log_file = f'{log_path}{log_file_prefix}_log__{datetime.now():%Y-%m-%d_%H-%M-%S}.log'
+            if output_log:
+                logging.basicConfig(
+                    filename=self._log_file,
+                    level=logging.DEBUG,
+                    format='%(asctime)s %(name)12s: %(levelname)8s > %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S')
+                if print_console:
+                    console = logging.StreamHandler()
+                    console.setLevel(logging.INFO)
+                    formatter = logging.Formatter('%(name)12s: %(levelname)8s > %(message)s')
+                    console.setFormatter(formatter)
+                    logging.getLogger('').addHandler(console)
+            elif print_console:
+                logging.basicConfig(
+                    level=logging.DEBUG,
+                    format='%(asctime)s %(name)12s: %(levelname)8s > %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S')
+        else:
+            self._logger = None
 
         # Creates the API session
         self._session = AsyncRestSession(

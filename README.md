@@ -1,20 +1,20 @@
 # Meraki Dashboard API Python Library
 
-The new Meraki Dashboard API Python library provides all current Meraki [Dashboard API](https://api.meraki.com/api_docs) calls to interface with the Cisco Meraki cloud-managed platform. The library is supported on Python 3.6 or above, and you can install it via [PyPI](https://pypi.org/project/meraki/):
+The Meraki Dashboard API Python library provides all current Meraki [Dashboard API](https://developer.cisco.com/docs/meraki-api-v1) calls to interface with the Cisco Meraki cloud-managed platform. The library is supported on Python 3.6 or above, and you can install it via [PyPI](https://pypi.org/project/meraki/):
 
     pip install meraki
 
 ## Features
 
-This library's goal is to refresh and supplant the legacy module (this repository versions 0.34 and prior) as well as the now-deprecated [SDK](https://github.com/meraki/meraki-python-sdk). Here are some of the features in this revamped library:
+While you can make direct HTTP requests to dashboard API in any programming language or REST API client, using a client library can make it easier for you to focus on your specific use case, without the overhead of having to write functions to handle the dashboard API calls. The Python library can also take care of error handling, logging, retries, and other convenient processes and options for you automatically.
 
-* Support for all API endpoints, as it uses the [OpenAPI specification](https://api.meraki.com/api/v0/openapiSpec) to generate source code
+* Support for all API endpoints, as it uses the [OpenAPI specification](https://api.meraki.com/api/v1/openapiSpec) to generate source code
 * Log all API requests made to a local file as well as on-screen console
-* Automatic retries upon 429 rate limit errors, using the [`Retry-After` field](https://developer.cisco.com/meraki/api/#/rest/guides/rate-limit-errors) within response headers
+* Automatic retries upon 429 rate limit errors, using the [`Retry-After` field](https://developer.cisco.com/docs/meraki-api-v1/#!rate-limit) within response headers
 * Get all (or a specified number of) pages of data with built-in pagination control
-* Tweak settings such as the default base URL (for example, to use with V1 and/or mega-proxy)
+* Tweak settings such as maximum retries, certificate path, suppress logging, and other options
 * Simulate POST/PUT/DELETE calls to preview first, so that network configuration does not get changed
-* Includes the legacy module's functions for backward compatibility
+* Includes the legacy module's (version 0.34 and prior) functions for backward compatibility
 
 ## Setup
 
@@ -22,12 +22,13 @@ This library's goal is to refresh and supplant the legacy module (this repositor
 
 2. Keep your API key safe and secure, as it is similar to a password for your dashboard. If publishing your Python code to a wider audience, please research secure handling of API keys.
 
-3. Although the Meraki dashboard API, as a REST API, can be accessed in various ways, this library uses Python 3.6+. ([get started with Python](https://wiki.python.org/moin/BeginnersGuide/NonProgrammers))
+3. Install the latest version of [Python 3](ttps://wiki.python.org/moin/BeginnersGuide/NonProgrammers)
 
-4. After Python 3 is installed, use _pip_ (or an alternative such as _easy_install_) to install the library:
+4. Use _pip_ (or an alternative such as _easy_install_) to install the library:
     * `pip install meraki`
     * If you have both Python3 and Python2 installed, you may need to use `pip3 install meraki`
     * If _meraki_ was previously installed, you can upgrade with `pip install --upgrade meraki` or `pip3 install --upgrade meraki`
+    * You can specify the version of the library, for example `pip install meraki==0.100.2` for v0 or `pip install meraki==1.0.0b1` for v1
 
 ## Usage
 1. Export your API key as an [environment variable](https://www.twilio.com/blog/2017/01/how-to-set-environment-variables.html), for example:
@@ -50,7 +51,7 @@ This library's goal is to refresh and supplant the legacy module (this repositor
     dashboard = meraki.DashboardAPI()
     ```
 
-5. Make dashboard API calls in your source code, using the format _client.section.operation_, where _client_ is the name you defined in the previous step (**dashboard** above), _section_ is the corresponding group (or tag from the OpenAPI spec) from the [API docs](https://developer.cisco.com/meraki/api/#/rest), and _operation_ is the name (or operation ID from OpenAPI) of the API endpoint. For example, to make a call to get the list of organizations accessible by the API key defined in step 1, use this function call:
+5. Make dashboard API calls in your source code, using the format _client.scope.operation_, where _client_ is the name you defined in the previous step (**dashboard** above), _scope_ is the corresponding scope that represents the first tag from the OpenAPI spec, and _operation_ is the operation of the API endpoint. For example, to make a call to get the list of organizations accessible by the API key defined in step 1, use this function call:
 
     ```python
     my_orgs = dashboard.organizations.getOrganizations()
