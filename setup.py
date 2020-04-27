@@ -36,7 +36,7 @@ setup(
     version=__version__,
     packages=find_packages(),
     include_package_data=True,
-    install_requires=['requests'],
+    install_requires=['requests', 'aiohttp'],
     keywords = ['meraki', 'dashboard', 'cisco'],
     description='Cisco Meraki Dashboard API library',
     long_description=README,
