@@ -103,7 +103,7 @@ class RestSession(object):
         self._req_session.headers = {
             'Authorization': 'Bearer ' + self._api_key,
             'Content-Type': 'application/json',
-            'User-Agent': 'python-meraki/1.0.0b1' + urllib.parse.quote(json.dumps(user_agent_extended)),
+            'User-Agent': 'python-meraki/1.0.0b1 ' + urllib.parse.quote(json.dumps(user_agent_extended)),
         }
 
         # Log API calls
