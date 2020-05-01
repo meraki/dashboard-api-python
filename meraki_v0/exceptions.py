@@ -31,12 +31,10 @@ class AsyncAPIError(Exception):
         self.response = response
         self.tag = metadata['tags'][0]
         self.operation = metadata['operation']
-        self.status = self.response.status if self.response is not None and self.response.status else None
-        self.reason = self.response.reason if self.response is not None and self.response.reason else None
-        try:
-            self.message = self.response.json() if self.response is not None and self.response.json() else None
-        except ValueError:
-            self.message = self.response.text[:100]
+        self.status = response.status if response is not None and response.status else None
+        self.reason = response.reason if response is not None and response.reason else None
+        self.message = message
+
         super().__init__(
             f'{self.tag}, {self.operation} - {self.status} {self.reason}, {self.message}'
         )
