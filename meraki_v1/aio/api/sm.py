@@ -522,7 +522,7 @@ class AsyncSm:
 
     async def getNetworkSmProfiles(self, networkId: str):
         """
-        **List all the profiles in the network**
+        **List all profiles in a network**
         https://developer.cisco.com/docs/meraki-api-v1/#!get-network-sm-profiles
         
         - networkId (string)

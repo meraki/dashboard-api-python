@@ -158,45 +158,6 @@ class CellularGateway(object):
 
         return self._session.put(metadata, resource, payload)
 
-    def getNetworkCellularGatewaySettingsSubnetPool(self, networkId: str):
-        """
-        **Return the subnet pool and mask configured for MGs in the network.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-cellular-gateway-settings-subnet-pool
-        
-        - networkId (string)
-        """
-
-        metadata = {
-            'tags': ['cellularGateway', 'configure', 'settings', 'subnetPool'],
-            'operation': 'getNetworkCellularGatewaySettingsSubnetPool',
-        }
-        resource = f'/networks/{networkId}/cellularGateway/settings/subnetPool'
-
-        return self._session.get(metadata, resource)
-
-    def updateNetworkCellularGatewaySettingsSubnetPool(self, networkId: str, **kwargs):
-        """
-        **Update the subnet pool and mask configuration for MGs in the network.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-cellular-gateway-settings-subnet-pool
-        
-        - networkId (string)
-        - mask (integer): Mask used for the subnet of all MGs in  this network.
-        - cidr (string): CIDR of the pool of subnets. Each MG in this network will automatically pick a subnet from this pool.
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['cellularGateway', 'configure', 'settings', 'subnetPool'],
-            'operation': 'updateNetworkCellularGatewaySettingsSubnetPool',
-        }
-        resource = f'/networks/{networkId}/cellularGateway/settings/subnetPool'
-
-        body_params = ['mask', 'cidr']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
-
-        return self._session.put(metadata, resource, payload)
-
     def getNetworkCellularGatewaySettingsUplink(self, networkId: str):
         """
         **Returns the uplink settings for your MG network.**
@@ -231,6 +192,45 @@ class CellularGateway(object):
         resource = f'/networks/{networkId}/cellularGateway/settings/uplink'
 
         body_params = ['bandwidthLimits']
+        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
+    def getNetworkCellularGatewaySubnetPool(self, networkId: str):
+        """
+        **Return the subnet pool and mask configured for MGs in the network.**
+        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-cellular-gateway-subnet-pool
+        
+        - networkId (string)
+        """
+
+        metadata = {
+            'tags': ['cellularGateway', 'configure', 'subnetPool'],
+            'operation': 'getNetworkCellularGatewaySubnetPool',
+        }
+        resource = f'/networks/{networkId}/cellularGateway/subnetPool'
+
+        return self._session.get(metadata, resource)
+
+    def updateNetworkCellularGatewaySubnetPool(self, networkId: str, **kwargs):
+        """
+        **Update the subnet pool and mask configuration for MGs in the network.**
+        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-cellular-gateway-subnet-pool
+        
+        - networkId (string)
+        - mask (integer): Mask used for the subnet of all MGs in  this network.
+        - cidr (string): CIDR of the pool of subnets. Each MG in this network will automatically pick a subnet from this pool.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['cellularGateway', 'configure', 'subnetPool'],
+            'operation': 'updateNetworkCellularGatewaySubnetPool',
+        }
+        resource = f'/networks/{networkId}/cellularGateway/subnetPool'
+
+        body_params = ['mask', 'cidr']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)

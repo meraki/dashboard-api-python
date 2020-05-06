@@ -1,14 +1,15 @@
 import json
+import platform
 import sys
 import time
+import urllib.parse
 
 import requests
 
-import urllib.parse
-import platform
-
 from .config import *
 from .exceptions import *
+from .__init__ import __version__
+
 
 def user_agent_extended(be_geo_id, caller):
     # Generate extended portion of the User-Agent
@@ -51,6 +52,7 @@ def user_agent_extended(be_geo_id, caller):
 
     return urllib.parse.quote(json.dumps(user_agent_extended))
 
+
 # Main module interface
 class RestSession(object):
     def __init__(
@@ -67,8 +69,8 @@ class RestSession(object):
         retry_4xx_error_wait_time=RETRY_4XX_ERROR_WAIT_TIME,
         maximum_retries=MAXIMUM_RETRIES,
         simulate=SIMULATE_API_CALLS,
-        be_geo_id='',
-        caller=''
+        be_geo_id=BE_GEO_ID,
+        caller=MERAKI_PYTHON_SDK_CALLER,
     ):
         super(RestSession, self).__init__()
 
@@ -93,7 +95,7 @@ class RestSession(object):
         # Check base URL
         if 'v0' in self._base_url:
             sys.exit(f'If you want to use the Python library with v0 paths ({self._base_url} was configured as the base'
-                     f' URL), then install the v0 library. For example: pip install meraki==0.100.2')
+                     f' URL), then install the v0 library. See the "Setup" section @ https://github.com/meraki/dashboard-api-python/')
         elif self._base_url[-1] == '/':
             self._base_url = self._base_url[:-1]
 
@@ -101,7 +103,7 @@ class RestSession(object):
         self._req_session.headers = {
             'Authorization': 'Bearer ' + self._api_key,
             'Content-Type': 'application/json',
-            'User-Agent': 'python-meraki/1.0.0b1 ' + user_agent_extended(be_geo_id, caller),
+            'User-Agent': f'python-meraki/{__version__} ' + user_agent_extended(self._be_geo_id, self._caller),
         }
 
         # Log API calls

@@ -96,7 +96,7 @@ class AsyncRestSession:
         # Check base URL
         if 'v1' in self._base_url:
             sys.exit(f'If you want to use the Python library with v1 paths ({self._base_url} was configured as the base'
-                     f' URL), then install the v1 library. For example: pip install meraki==1.0.0b1')
+                     f' URL), then install the v1 library. See the "Setup" section @ https://github.com/meraki/dashboard-api-python/')
         elif self._base_url[-1] == '/':
             self._base_url = self._base_url[:-1]
 

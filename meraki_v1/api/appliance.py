@@ -3,6 +3,22 @@ class Appliance(object):
         super(Appliance, self).__init__()
         self._session = session
 
+    def getDeviceApplianceDhcpSubnets(self, serial: str):
+        """
+        **Return the DHCP subnet information for an appliance**
+        https://developer.cisco.com/docs/meraki-api-v1/#!get-device-appliance-dhcp-subnets
+        
+        - serial (string)
+        """
+
+        metadata = {
+            'tags': ['appliance', 'monitor', 'dhcp', 'subnets'],
+            'operation': 'getDeviceApplianceDhcpSubnets',
+        }
+        resource = f'/devices/{serial}/appliance/dhcp/subnets'
+
+        return self._session.get(metadata, resource)
+
     def getDeviceAppliancePerformance(self, serial: str):
         """
         **Return the performance score for a single device. Only primary MX devices supported. If no data is available, a 204 error code is returned.**
@@ -1186,6 +1202,99 @@ class Appliance(object):
 
         return self._session.put(metadata, resource, payload)
 
+    def getNetworkApplianceWarmSpare(self, networkId: str):
+        """
+        **Return MX warm spare settings**
+        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-appliance-warm-spare
+        
+        - networkId (string)
+        """
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'warmSpare'],
+            'operation': 'getNetworkApplianceWarmSpare',
+        }
+        resource = f'/networks/{networkId}/appliance/warmSpare'
+
+        return self._session.get(metadata, resource)
+
+    def updateNetworkApplianceWarmSpare(self, networkId: str, enabled: bool, **kwargs):
+        """
+        **Update MX warm spare settings**
+        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-appliance-warm-spare
+        
+        - networkId (string)
+        - enabled (boolean): Enable warm spare
+        - spareSerial (string): Serial number of the warm spare appliance
+        - uplinkMode (string): Uplink mode, either virtual or public
+        - virtualIp1 (string): The WAN 1 shared IP
+        - virtualIp2 (string): The WAN 2 shared IP
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'warmSpare'],
+            'operation': 'updateNetworkApplianceWarmSpare',
+        }
+        resource = f'/networks/{networkId}/appliance/warmSpare'
+
+        body_params = ['enabled', 'spareSerial', 'uplinkMode', 'virtualIp1', 'virtualIp2']
+        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
+    def swapNetworkApplianceWarmSpare(self, networkId: str):
+        """
+        **Swap MX primary and warm spare appliances**
+        https://developer.cisco.com/docs/meraki-api-v1/#!swap-network-appliance-warm-spare
+        
+        - networkId (string)
+        """
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'warmSpare'],
+            'operation': 'swapNetworkApplianceWarmSpare',
+        }
+        resource = f'/networks/{networkId}/appliance/warmSpare/swap'
+
+        return self._session.post(metadata, resource)
+
+    def getOrganizationApplianceSecurityEvents(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **List the security events for an organization**
+        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-appliance-security-events
+        
+        - organizationId (string)
+        - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 365 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 365 days. The default is 31 days.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - sortOrder (string): Sorted order of security events based on event detection time. Order options are 'ascending' or 'descending'. Default is ascending order.
+        """
+
+        kwargs.update(locals())
+
+        if 'sortOrder' in kwargs:
+            options = ['ascending', 'descending']
+            assert kwargs['sortOrder'] in options, f'''"sortOrder" cannot be "{kwargs['sortOrder']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['appliance', 'monitor', 'security', 'events'],
+            'operation': 'getOrganizationApplianceSecurityEvents',
+        }
+        resource = f'/organizations/{organizationId}/appliance/security/events'
+
+        query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'sortOrder']
+        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+
     def getOrganizationApplianceSecurityIntrusion(self, organizationId: str):
         """
         **Returns all supported intrusion settings for an organization**
@@ -1220,6 +1329,83 @@ class Appliance(object):
         resource = f'/organizations/{organizationId}/appliance/security/intrusion'
 
         body_params = ['whitelistedRules']
+        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
+    def getOrganizationApplianceThirdPartyVPNPeers(self, organizationId: str):
+        """
+        **Return the third party VPN peers for an organization**
+        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-appliance-third-party-v-p-n-peers
+        
+        - organizationId (string)
+        """
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'thirdPartyVPNPeers'],
+            'operation': 'getOrganizationApplianceThirdPartyVPNPeers',
+        }
+        resource = f'/organizations/{organizationId}/appliance/thirdPartyVPNPeers'
+
+        return self._session.get(metadata, resource)
+
+    def updateOrganizationApplianceThirdPartyVPNPeers(self, organizationId: str, peers: list):
+        """
+        **Update the third party VPN peers for an organization**
+        https://developer.cisco.com/docs/meraki-api-v1/#!update-organization-appliance-third-party-v-p-n-peers
+        
+        - organizationId (string)
+        - peers (array): The list of VPN peers
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'thirdPartyVPNPeers'],
+            'operation': 'updateOrganizationApplianceThirdPartyVPNPeers',
+        }
+        resource = f'/organizations/{organizationId}/appliance/thirdPartyVPNPeers'
+
+        body_params = ['peers']
+        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
+    def getOrganizationApplianceVpnVpnFirewallRules(self, organizationId: str):
+        """
+        **Return the firewall rules for an organization's site-to-site VPN**
+        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-appliance-vpn-vpn-firewall-rules
+        
+        - organizationId (string)
+        """
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'vpn', 'vpnFirewallRules'],
+            'operation': 'getOrganizationApplianceVpnVpnFirewallRules',
+        }
+        resource = f'/organizations/{organizationId}/appliance/vpn/vpnFirewallRules'
+
+        return self._session.get(metadata, resource)
+
+    def updateOrganizationApplianceVpnVpnFirewallRules(self, organizationId: str, **kwargs):
+        """
+        **Update the firewall rules of an organization's site-to-site VPN**
+        https://developer.cisco.com/docs/meraki-api-v1/#!update-organization-appliance-vpn-vpn-firewall-rules
+        
+        - organizationId (string)
+        - rules (array): An ordered array of the firewall rules (not including the default rule)
+        - syslogDefaultRule (boolean): Log the special default rule (boolean value - enable only if you've configured a syslog server) (optional)
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'vpn', 'vpnFirewallRules'],
+            'operation': 'updateOrganizationApplianceVpnVpnFirewallRules',
+        }
+        resource = f'/organizations/{organizationId}/appliance/vpn/vpnFirewallRules'
+
+        body_params = ['rules', 'syslogDefaultRule']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)

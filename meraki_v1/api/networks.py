@@ -926,26 +926,26 @@ class Networks(object):
 
         return self._session.get(metadata, resource)
 
-    def getNetworkNetflowSettings(self, networkId: str):
+    def getNetworkNetflow(self, networkId: str):
         """
         **Return the NetFlow traffic reporting settings for a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-netflow-settings
+        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-netflow
         
         - networkId (string)
         """
 
         metadata = {
-            'tags': ['networks', 'configure', 'netflowSettings'],
-            'operation': 'getNetworkNetflowSettings',
+            'tags': ['networks', 'configure', 'netflow'],
+            'operation': 'getNetworkNetflow',
         }
-        resource = f'/networks/{networkId}/netflowSettings'
+        resource = f'/networks/{networkId}/netflow'
 
         return self._session.get(metadata, resource)
 
-    def updateNetworkNetflowSettings(self, networkId: str, **kwargs):
+    def updateNetworkNetflow(self, networkId: str, **kwargs):
         """
         **Update the NetFlow traffic reporting settings for a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-netflow-settings
+        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-netflow
         
         - networkId (string)
         - reportingEnabled (boolean): Boolean indicating whether NetFlow traffic reporting is enabled (true) or disabled (false).
@@ -956,10 +956,10 @@ class Networks(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['networks', 'configure', 'netflowSettings'],
-            'operation': 'updateNetworkNetflowSettings',
+            'tags': ['networks', 'configure', 'netflow'],
+            'operation': 'updateNetworkNetflow',
         }
-        resource = f'/networks/{networkId}/netflowSettings'
+        resource = f'/networks/{networkId}/netflow'
 
         body_params = ['reportingEnabled', 'collectorIp', 'collectorPort']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
@@ -1168,26 +1168,26 @@ class Networks(object):
 
         return self._session.put(metadata, resource, payload)
 
-    def getNetworkSnmpSettings(self, networkId: str):
+    def getNetworkSnmp(self, networkId: str):
         """
         **Return the SNMP settings for a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-snmp-settings
+        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-snmp
         
         - networkId (string)
         """
 
         metadata = {
-            'tags': ['networks', 'configure', 'snmpSettings'],
-            'operation': 'getNetworkSnmpSettings',
+            'tags': ['networks', 'configure', 'snmp'],
+            'operation': 'getNetworkSnmp',
         }
-        resource = f'/networks/{networkId}/snmpSettings'
+        resource = f'/networks/{networkId}/snmp'
 
         return self._session.get(metadata, resource)
 
-    def updateNetworkSnmpSettings(self, networkId: str, **kwargs):
+    def updateNetworkSnmp(self, networkId: str, **kwargs):
         """
         **Update the SNMP settings for a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-snmp-settings
+        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-snmp
         
         - networkId (string)
         - access (string): The type of SNMP access. Can be one of 'none' (disabled), 'community' (V1/V2c), or 'users' (V3).
@@ -1202,10 +1202,10 @@ class Networks(object):
             assert kwargs['access'] in options, f'''"access" cannot be "{kwargs['access']}", & must be set to one of: {options}'''
 
         metadata = {
-            'tags': ['networks', 'configure', 'snmpSettings'],
-            'operation': 'updateNetworkSnmpSettings',
+            'tags': ['networks', 'configure', 'snmp'],
+            'operation': 'updateNetworkSnmp',
         }
-        resource = f'/networks/{networkId}/snmpSettings'
+        resource = f'/networks/{networkId}/snmp'
 
         body_params = ['access', 'communityString', 'users']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
@@ -1253,22 +1253,6 @@ class Networks(object):
             'operation': 'splitNetwork',
         }
         resource = f'/networks/{networkId}/split'
-
-        return self._session.post(metadata, resource)
-
-    def swapNetworkWarmspare(self, networkId: str):
-        """
-        **Swap MX primary and warm spare appliances**
-        https://developer.cisco.com/docs/meraki-api-v1/#!swap-network-warmspare
-        
-        - networkId (string)
-        """
-
-        metadata = {
-            'tags': ['networks', 'configure'],
-            'operation': 'swapNetworkWarmspare',
-        }
-        resource = f'/networks/{networkId}/swapWarmSpare'
 
         return self._session.post(metadata, resource)
 
@@ -1342,26 +1326,26 @@ class Networks(object):
 
         return self._session.get(metadata, resource, params)
 
-    def getNetworkTrafficAnalysisSettings(self, networkId: str):
+    def getNetworkTrafficAnalysis(self, networkId: str):
         """
         **Return the traffic analysis settings for a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-traffic-analysis-settings
+        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-traffic-analysis
         
         - networkId (string)
         """
 
         metadata = {
-            'tags': ['networks', 'configure', 'trafficAnalysisSettings'],
-            'operation': 'getNetworkTrafficAnalysisSettings',
+            'tags': ['networks', 'configure', 'trafficAnalysis'],
+            'operation': 'getNetworkTrafficAnalysis',
         }
-        resource = f'/networks/{networkId}/trafficAnalysisSettings'
+        resource = f'/networks/{networkId}/trafficAnalysis'
 
         return self._session.get(metadata, resource)
 
-    def updateNetworkTrafficAnalysisSettings(self, networkId: str, **kwargs):
+    def updateNetworkTrafficAnalysis(self, networkId: str, **kwargs):
         """
         **Update the traffic analysis settings for a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-traffic-analysis-settings
+        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-traffic-analysis
         
         - networkId (string)
         - mode (string):     The traffic analysis mode for the network. Can be one of 'disabled' (do not collect traffic types),
@@ -1377,10 +1361,10 @@ class Networks(object):
             assert kwargs['mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
 
         metadata = {
-            'tags': ['networks', 'configure', 'trafficAnalysisSettings'],
-            'operation': 'updateNetworkTrafficAnalysisSettings',
+            'tags': ['networks', 'configure', 'trafficAnalysis'],
+            'operation': 'updateNetworkTrafficAnalysis',
         }
-        resource = f'/networks/{networkId}/trafficAnalysisSettings'
+        resource = f'/networks/{networkId}/trafficAnalysis'
 
         body_params = ['mode', 'customPieChartItems']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
@@ -1434,46 +1418,4 @@ class Networks(object):
         resource = f'/networks/{networkId}/unbind'
 
         return self._session.post(metadata, resource)
-
-    def getNetworkWarmSpareSettings(self, networkId: str):
-        """
-        **Return MX warm spare settings**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-warm-spare-settings
-        
-        - networkId (string)
-        """
-
-        metadata = {
-            'tags': ['networks', 'configure', 'warmSpareSettings'],
-            'operation': 'getNetworkWarmSpareSettings',
-        }
-        resource = f'/networks/{networkId}/warmSpareSettings'
-
-        return self._session.get(metadata, resource)
-
-    def updateNetworkWarmSpareSettings(self, networkId: str, enabled: bool, **kwargs):
-        """
-        **Update MX warm spare settings**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-warm-spare-settings
-        
-        - networkId (string)
-        - enabled (boolean): Enable warm spare
-        - spareSerial (string): Serial number of the warm spare appliance
-        - uplinkMode (string): Uplink mode, either virtual or public
-        - virtualIp1 (string): The WAN 1 shared IP
-        - virtualIp2 (string): The WAN 2 shared IP
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['networks', 'configure', 'warmSpareSettings'],
-            'operation': 'updateNetworkWarmSpareSettings',
-        }
-        resource = f'/networks/{networkId}/warmSpareSettings'
-
-        body_params = ['enabled', 'spareSerial', 'uplinkMode', 'virtualIp1', 'virtualIp2']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
-
-        return self._session.put(metadata, resource, payload)
 

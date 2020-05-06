@@ -1146,41 +1146,6 @@ class Organizations(object):
 
         return self._session.delete(metadata, resource)
 
-    def getOrganizationSecurityEvents(self, organizationId: str, total_pages=1, direction='next', **kwargs):
-        """
-        **List the security events for an organization**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-security-events
-        
-        - organizationId (string)
-        - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
-        - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
-        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 365 days after t0.
-        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 365 days. The default is 31 days.
-        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
-        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - sortOrder (string): Sorted order of security events based on event detection time. Order options are 'ascending' or 'descending'. Default is ascending order.
-        """
-
-        kwargs.update(locals())
-
-        if 'sortOrder' in kwargs:
-            options = ['ascending', 'descending']
-            assert kwargs['sortOrder'] in options, f'''"sortOrder" cannot be "{kwargs['sortOrder']}", & must be set to one of: {options}'''
-
-        metadata = {
-            'tags': ['organizations', 'monitor', 'securityEvents'],
-            'operation': 'getOrganizationSecurityEvents',
-        }
-        resource = f'/organizations/{organizationId}/securityEvents'
-
-        query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'sortOrder']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
-
-        return self._session.get_pages(metadata, resource, params, total_pages, direction)
-
-
     def getOrganizationSnmp(self, organizationId: str):
         """
         **Return the SNMP settings for an organization**
@@ -1228,83 +1193,6 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/snmp'
 
         body_params = ['v2cEnabled', 'v3Enabled', 'v3AuthMode', 'v3AuthPass', 'v3PrivMode', 'v3PrivPass', 'peerIps']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
-
-        return self._session.put(metadata, resource, payload)
-
-    def getOrganizationThirdPartyVPNPeers(self, organizationId: str):
-        """
-        **Return the third party VPN peers for an organization**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-third-party-v-p-n-peers
-        
-        - organizationId (string)
-        """
-
-        metadata = {
-            'tags': ['organizations', 'configure', 'thirdPartyVPNPeers'],
-            'operation': 'getOrganizationThirdPartyVPNPeers',
-        }
-        resource = f'/organizations/{organizationId}/thirdPartyVPNPeers'
-
-        return self._session.get(metadata, resource)
-
-    def updateOrganizationThirdPartyVPNPeers(self, organizationId: str, peers: list):
-        """
-        **Update the third party VPN peers for an organization**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-organization-third-party-v-p-n-peers
-        
-        - organizationId (string)
-        - peers (array): The list of VPN peers
-        """
-
-        kwargs = locals()
-
-        metadata = {
-            'tags': ['organizations', 'configure', 'thirdPartyVPNPeers'],
-            'operation': 'updateOrganizationThirdPartyVPNPeers',
-        }
-        resource = f'/organizations/{organizationId}/thirdPartyVPNPeers'
-
-        body_params = ['peers']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
-
-        return self._session.put(metadata, resource, payload)
-
-    def getOrganizationVpnFirewallRules(self, organizationId: str):
-        """
-        **Return the firewall rules for an organization's site-to-site VPN**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-vpn-firewall-rules
-        
-        - organizationId (string)
-        """
-
-        metadata = {
-            'tags': ['organizations', 'configure', 'vpnFirewallRules'],
-            'operation': 'getOrganizationVpnFirewallRules',
-        }
-        resource = f'/organizations/{organizationId}/vpnFirewallRules'
-
-        return self._session.get(metadata, resource)
-
-    def updateOrganizationVpnFirewallRules(self, organizationId: str, **kwargs):
-        """
-        **Update the firewall rules of an organization's site-to-site VPN**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-organization-vpn-firewall-rules
-        
-        - organizationId (string)
-        - rules (array): An ordered array of the firewall rules (not including the default rule)
-        - syslogDefaultRule (boolean): Log the special default rule (boolean value - enable only if you've configured a syslog server) (optional)
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['organizations', 'configure', 'vpnFirewallRules'],
-            'operation': 'updateOrganizationVpnFirewallRules',
-        }
-        resource = f'/organizations/{organizationId}/vpnFirewallRules'
-
-        body_params = ['rules', 'syslogDefaultRule']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return self._session.put(metadata, resource, payload)
