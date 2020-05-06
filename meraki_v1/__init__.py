@@ -42,6 +42,8 @@ class DashboardAPI(object):
     - print_console (boolean): print logging output to console?
     - suppress_logging (boolean): disable all logging? you're on your own then!
     - simulate (boolean): simulate POST/PUT/DELETE calls to prevent changes?
+    - be_geo_id (string): optional partner identifier for API usage tracking; can also be set as an environment variable BE_GEO_ID
+    - caller (string): optional identifier for API usage tracking; can also be set as an environment variable MERAKI_PYTHON_SDK_CALLER
     """
 
     def __init__(self, api_key=None, base_url=DEFAULT_BASE_URL, single_request_timeout=SINGLE_REQUEST_TIMEOUT,
@@ -51,11 +53,17 @@ class DashboardAPI(object):
                  retry_4xx_error=RETRY_4XX_ERROR, retry_4xx_error_wait_time=RETRY_4XX_ERROR_WAIT_TIME,
                  maximum_retries=MAXIMUM_RETRIES, output_log=OUTPUT_LOG, log_path=LOG_PATH,
                  log_file_prefix=LOG_FILE_PREFIX, print_console=PRINT_TO_CONSOLE, suppress_logging=SUPPRESS_LOGGING,
-                 simulate=SIMULATE_API_CALLS):
+                 simulate=SIMULATE_API_CALLS, be_geo_id='', caller=''):
         # Check API key
         api_key = api_key or os.environ.get(API_KEY_ENVIRONMENT_VARIABLE)
         if not api_key:
             raise APIKeyError()
+
+        # Pull the BE GEO ID from an environment variable if present
+        be_geo_id = be_geo_id or os.environ.get('BE_GEO_ID')
+
+        # Pull the caller from an environment variable if present
+        caller = caller or os.environ.get('MERAKI_PYTHON_SDK_CALLER')
 
         # Configure logging
         if not suppress_logging:
@@ -97,6 +105,8 @@ class DashboardAPI(object):
             retry_4xx_error_wait_time=retry_4xx_error_wait_time,
             maximum_retries=maximum_retries,
             simulate=simulate,
+            be_geo_id=be_geo_id,
+            caller=caller,
         )
 
         # API endpoints by section
