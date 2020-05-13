@@ -1,5 +1,6 @@
 import json
 import platform
+import random
 import sys
 import time
 import urllib.parse
@@ -91,6 +92,7 @@ class RestSession(object):
 
         # Initialize a new `requests` session
         self._req_session = requests.session()
+        self._req_session.encoding = 'utf-8'
 
         # Check base URL
         if 'v0' in self._base_url:
@@ -176,7 +178,7 @@ class RestSession(object):
                             self._logger.info(f'{tag}, {operation} - {status} {reason}')
                     # For non-empty response to GET, ensure valid JSON
                     try:
-                        if method == 'GET' and response.text.strip():
+                        if method == 'GET' and response.content.strip():
                             response.json()
                         return response
                     except json.decoder.JSONDecodeError as e:
@@ -194,7 +196,7 @@ class RestSession(object):
                     if 'Retry-After' in response.headers:
                         wait = int(response.headers['Retry-After'])
                     else:
-                        wait = self._nginx_429_retry_wait_time
+                        wait = random.randint(1, self._nginx_429_retry_wait_time)
                     if self._logger:
                         self._logger.warning(f'{tag}, {operation} - {status} {reason}, retrying in {wait} seconds')
                     time.sleep(wait)
@@ -216,7 +218,7 @@ class RestSession(object):
                     try:
                         message = response.json()
                     except ValueError:
-                        message = response.text[:100]
+                        message = response.content[:100]
 
                     # Check specifically for action batch concurrency error
                     action_batch_concurrency_error = {'errors': [
@@ -231,7 +233,7 @@ class RestSession(object):
                         if retries == 0:
                             raise APIError(metadata, response)
                     elif self._retry_4xx_error:
-                        wait = self._retry_4xx_error_wait_time
+                        wait = random.randint(1, self._retry_4xx_error_wait_time)
                         if self._logger:
                             self._logger.warning(f'{tag}, {operation} - {status} {reason}, retrying in {wait} seconds')
                         time.sleep(wait)
@@ -252,7 +254,7 @@ class RestSession(object):
         response = self.request(metadata, 'GET', url, params=params)
         ret = None
         if response:
-            if response.text.strip():
+            if response.content.strip():
                 ret = response.json()
             response.close()
         return ret
@@ -323,7 +325,7 @@ class RestSession(object):
         response = self.request(metadata, 'POST', url, json=json)
         ret = None
         if response:
-            if response.text.strip():
+            if response.content.strip():
                 ret = response.json()
             response.close()
         return ret
@@ -335,7 +337,7 @@ class RestSession(object):
         response = self.request(metadata, 'PUT', url, json=json)
         ret = None
         if response:
-            if response.text.strip():
+            if response.content.strip():
                 ret = response.json()
             response.close()
         return ret

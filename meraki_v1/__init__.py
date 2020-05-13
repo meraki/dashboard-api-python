@@ -21,7 +21,7 @@ from .config import (
     BE_GEO_ID, MERAKI_PYTHON_SDK_CALLER
 )
 
-__version__ = '1.0.0b3'
+__version__ = '1.0.0b4'
 
 class DashboardAPI(object):
     """

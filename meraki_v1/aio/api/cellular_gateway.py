@@ -3,26 +3,26 @@ class AsyncCellularGateway:
         super().__init__()
         self._session = session
 
-    async def getDeviceCellularGatewaySettings(self, serial: str):
+    async def getDeviceCellularGatewayLan(self, serial: str):
         """
         **Show the LAN Settings of a MG**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-device-cellular-gateway-settings
+        https://developer.cisco.com/docs/meraki-api-v1/#!get-device-cellular-gateway-lan
         
         - serial (string)
         """
 
         metadata = {
-            'tags': ['cellularGateway', 'configure', 'settings'],
-            'operation': 'getDeviceCellularGatewaySettings',
+            'tags': ['cellularGateway', 'configure', 'lan'],
+            'operation': 'getDeviceCellularGatewayLan',
         }
-        resource = f'/devices/{serial}/cellularGateway/settings'
+        resource = f'/devices/{serial}/cellularGateway/lan'
 
         return await self._session.get(metadata, resource)
 
-    async def updateDeviceCellularGatewaySettings(self, serial: str, **kwargs):
+    async def updateDeviceCellularGatewayLan(self, serial: str, **kwargs):
         """
         **Update the LAN Settings for a single MG.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-device-cellular-gateway-settings
+        https://developer.cisco.com/docs/meraki-api-v1/#!update-device-cellular-gateway-lan
         
         - serial (string)
         - reservedIpRanges (array): list of all reserved IP ranges for a single MG
@@ -32,36 +32,36 @@ class AsyncCellularGateway:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['cellularGateway', 'configure', 'settings'],
-            'operation': 'updateDeviceCellularGatewaySettings',
+            'tags': ['cellularGateway', 'configure', 'lan'],
+            'operation': 'updateDeviceCellularGatewayLan',
         }
-        resource = f'/devices/{serial}/cellularGateway/settings'
+        resource = f'/devices/{serial}/cellularGateway/lan'
 
         body_params = ['reservedIpRanges', 'fixedIpAssignments']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
 
-    async def getDeviceCellularGatewaySettingsPortForwardingRules(self, serial: str):
+    async def getDeviceCellularGatewayPortForwardingRules(self, serial: str):
         """
         **Returns the port forwarding rules for a single MG.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-device-cellular-gateway-settings-port-forwarding-rules
+        https://developer.cisco.com/docs/meraki-api-v1/#!get-device-cellular-gateway-port-forwarding-rules
         
         - serial (string)
         """
 
         metadata = {
-            'tags': ['cellularGateway', 'configure', 'settings', 'portForwardingRules'],
-            'operation': 'getDeviceCellularGatewaySettingsPortForwardingRules',
+            'tags': ['cellularGateway', 'configure', 'portForwardingRules'],
+            'operation': 'getDeviceCellularGatewayPortForwardingRules',
         }
-        resource = f'/devices/{serial}/cellularGateway/settings/portForwardingRules'
+        resource = f'/devices/{serial}/cellularGateway/portForwardingRules'
 
         return await self._session.get(metadata, resource)
 
-    async def updateDeviceCellularGatewaySettingsPortForwardingRules(self, serial: str, **kwargs):
+    async def updateDeviceCellularGatewayPortForwardingRules(self, serial: str, **kwargs):
         """
         **Updates the port forwarding rules for a single MG.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-device-cellular-gateway-settings-port-forwarding-rules
+        https://developer.cisco.com/docs/meraki-api-v1/#!update-device-cellular-gateway-port-forwarding-rules
         
         - serial (string)
         - rules (array): An array of port forwarding params
@@ -70,10 +70,10 @@ class AsyncCellularGateway:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['cellularGateway', 'configure', 'settings', 'portForwardingRules'],
-            'operation': 'updateDeviceCellularGatewaySettingsPortForwardingRules',
+            'tags': ['cellularGateway', 'configure', 'portForwardingRules'],
+            'operation': 'updateDeviceCellularGatewayPortForwardingRules',
         }
-        resource = f'/devices/{serial}/cellularGateway/settings/portForwardingRules'
+        resource = f'/devices/{serial}/cellularGateway/portForwardingRules'
 
         body_params = ['rules']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
@@ -118,26 +118,26 @@ class AsyncCellularGateway:
 
         return await self._session.put(metadata, resource, payload)
 
-    async def getNetworkCellularGatewaySettingsDhcp(self, networkId: str):
+    async def getNetworkCellularGatewayDhcp(self, networkId: str):
         """
         **List common DHCP settings of MGs**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-cellular-gateway-settings-dhcp
+        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-cellular-gateway-dhcp
         
         - networkId (string)
         """
 
         metadata = {
-            'tags': ['cellularGateway', 'configure', 'settings', 'dhcp'],
-            'operation': 'getNetworkCellularGatewaySettingsDhcp',
+            'tags': ['cellularGateway', 'configure', 'dhcp'],
+            'operation': 'getNetworkCellularGatewayDhcp',
         }
-        resource = f'/networks/{networkId}/cellularGateway/settings/dhcp'
+        resource = f'/networks/{networkId}/cellularGateway/dhcp'
 
         return await self._session.get(metadata, resource)
 
-    async def updateNetworkCellularGatewaySettingsDhcp(self, networkId: str, **kwargs):
+    async def updateNetworkCellularGatewayDhcp(self, networkId: str, **kwargs):
         """
         **Update common DHCP settings of MGs**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-cellular-gateway-settings-dhcp
+        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-cellular-gateway-dhcp
         
         - networkId (string)
         - dhcpLeaseTime (string): DHCP Lease time for all MG of the network. It can be '30 minutes', '1 hour', '4 hours', '12 hours', '1 day' or '1 week'.
@@ -148,10 +148,10 @@ class AsyncCellularGateway:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['cellularGateway', 'configure', 'settings', 'dhcp'],
-            'operation': 'updateNetworkCellularGatewaySettingsDhcp',
+            'tags': ['cellularGateway', 'configure', 'dhcp'],
+            'operation': 'updateNetworkCellularGatewayDhcp',
         }
-        resource = f'/networks/{networkId}/cellularGateway/settings/dhcp'
+        resource = f'/networks/{networkId}/cellularGateway/dhcp'
 
         body_params = ['dhcpLeaseTime', 'dnsNameservers', 'dnsCustomNameservers']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
@@ -173,28 +173,6 @@ class AsyncCellularGateway:
         resource = f'/networks/{networkId}/cellularGateway/settings/uplink'
 
         return await self._session.get(metadata, resource)
-
-    async def updateNetworkCellularGatewaySettingsUplink(self, networkId: str, **kwargs):
-        """
-        **Updates the uplink settings for your MG network.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-cellular-gateway-settings-uplink
-        
-        - networkId (string)
-        - bandwidthLimits (object): The bandwidth settings for the 'cellular' uplink
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['cellularGateway', 'configure', 'settings', 'uplink'],
-            'operation': 'updateNetworkCellularGatewaySettingsUplink',
-        }
-        resource = f'/networks/{networkId}/cellularGateway/settings/uplink'
-
-        body_params = ['bandwidthLimits']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
-
-        return await self._session.put(metadata, resource, payload)
 
     async def getNetworkCellularGatewaySubnetPool(self, networkId: str):
         """
@@ -231,6 +209,28 @@ class AsyncCellularGateway:
         resource = f'/networks/{networkId}/cellularGateway/subnetPool'
 
         body_params = ['mask', 'cidr']
+        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+
+        return await self._session.put(metadata, resource, payload)
+
+    async def updateNetworkCellularGatewayUplink(self, networkId: str, **kwargs):
+        """
+        **Updates the uplink settings for your MG network.**
+        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-cellular-gateway-uplink
+        
+        - networkId (string)
+        - bandwidthLimits (object): The bandwidth settings for the 'cellular' uplink
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['cellularGateway', 'configure', 'uplink'],
+            'operation': 'updateNetworkCellularGatewayUplink',
+        }
+        resource = f'/networks/{networkId}/cellularGateway/uplink'
+
+        body_params = ['bandwidthLimits']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)

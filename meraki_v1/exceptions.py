@@ -19,7 +19,7 @@ class APIError(Exception):
         try:
             self.message = self.response.json() if self.response is not None and self.response.json() else None
         except ValueError:
-            self.message = self.response.text[:100]
+            self.message = self.response.content[:100]
         super(APIError, self).__init__(f'{self.tag}, {self.operation} - {self.status} {self.reason}, {self.message}')
 
     def __repr__(self):

@@ -1,6 +1,7 @@
 import asyncio
 import json
 import platform
+import random
 import ssl
 import sys
 import urllib.parse
@@ -207,7 +208,7 @@ class AsyncRestSession:
                     if "Retry-After" in response.headers:
                         wait = int(response.headers["Retry-After"])
                     else:
-                        wait = self._nginx_429_retry_wait_time
+                        wait = random.randint(1, self._nginx_429_retry_wait_time)
                     if self._logger:
                         self._logger.warning(f"{tag}, {operation} > {abs_url} - {status} {reason}, retrying in {wait} seconds")
                     await asyncio.sleep(wait)
@@ -221,7 +222,7 @@ class AsyncRestSession:
                     try:
                         message = await response.json()
                     except aiohttp.client_exceptions.ContentTypeError:
-                        message = (await response.text())[:100]
+                        message = (await response.content())[:100]
 
                     # Check specifically for action batch concurrency error
                     action_batch_concurrency_error = {
@@ -236,7 +237,7 @@ class AsyncRestSession:
                         await asyncio.sleep(wait)
                     
                     elif self._retry_4xx_error:
-                        wait = self._retry_4xx_error_wait_time
+                        wait = random.randint(1, self._retry_4xx_error_wait_time)
                         if self._logger:
                             self._logger.warning(f"{tag}, {operation} > {abs_url} - {status} {reason}, retrying in {wait} seconds")
                         await asyncio.sleep(wait)

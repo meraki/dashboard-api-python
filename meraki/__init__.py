@@ -88,7 +88,7 @@ from .config import (
 )
 
 
-__version__ = '0.110.0'
+__version__ = '0.110.1'
 
 
 class DashboardAPI(object):

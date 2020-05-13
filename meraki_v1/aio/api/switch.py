@@ -653,6 +653,45 @@ class AsyncSwitch:
 
         return await self._session.put(metadata, resource, payload)
 
+    async def getNetworkSwitchRoutingMulticast(self, networkId: str):
+        """
+        **Return multicast settings for a network**
+        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-switch-routing-multicast
+        
+        - networkId (string)
+        """
+
+        metadata = {
+            'tags': ['switch', 'configure', 'routing', 'multicast'],
+            'operation': 'getNetworkSwitchRoutingMulticast',
+        }
+        resource = f'/networks/{networkId}/switch/routing/multicast'
+
+        return await self._session.get(metadata, resource)
+
+    async def updateNetworkSwitchRoutingMulticast(self, networkId: str, **kwargs):
+        """
+        **Update multicast settings for a network**
+        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-switch-routing-multicast
+        
+        - networkId (string)
+        - defaultSettings (object): Default multicast setting for entire network. IGMP snooping and Flood unknown multicast traffic settings are enabled by default.
+        - overrides (array): Array of paired switches/stacks/profiles and corresponding multicast settings. An empty array will clear the multicast settings.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['switch', 'configure', 'routing', 'multicast'],
+            'operation': 'updateNetworkSwitchRoutingMulticast',
+        }
+        resource = f'/networks/{networkId}/switch/routing/multicast'
+
+        body_params = ['defaultSettings', 'overrides']
+        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+
+        return await self._session.put(metadata, resource, payload)
+
     async def getNetworkSwitchSettings(self, networkId: str):
         """
         **Returns the switch network settings**
@@ -693,65 +732,26 @@ class AsyncSwitch:
 
         return await self._session.put(metadata, resource, payload)
 
-    async def getNetworkSwitchSettingsMulticast(self, networkId: str):
-        """
-        **Return multicast settings for a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-switch-settings-multicast
-        
-        - networkId (string)
-        """
-
-        metadata = {
-            'tags': ['switch', 'configure', 'settings', 'multicast'],
-            'operation': 'getNetworkSwitchSettingsMulticast',
-        }
-        resource = f'/networks/{networkId}/switch/settings/multicast'
-
-        return await self._session.get(metadata, resource)
-
-    async def updateNetworkSwitchSettingsMulticast(self, networkId: str, **kwargs):
-        """
-        **Update multicast settings for a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-switch-settings-multicast
-        
-        - networkId (string)
-        - defaultSettings (object): Default multicast setting for entire network. IGMP snooping and Flood unknown multicast traffic settings are enabled by default.
-        - overrides (array): Array of paired switches/stacks/profiles and corresponding multicast settings. An empty array will clear the multicast settings.
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['switch', 'configure', 'settings', 'multicast'],
-            'operation': 'updateNetworkSwitchSettingsMulticast',
-        }
-        resource = f'/networks/{networkId}/switch/settings/multicast'
-
-        body_params = ['defaultSettings', 'overrides']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
-
-        return await self._session.put(metadata, resource, payload)
-
-    async def getNetworkSwitchSettingsStormControl(self, networkId: str):
+    async def getNetworkSwitchStormControl(self, networkId: str):
         """
         **Return the storm control configuration for a switch network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-switch-settings-storm-control
+        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-switch-storm-control
         
         - networkId (string)
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'settings', 'stormControl'],
-            'operation': 'getNetworkSwitchSettingsStormControl',
+            'tags': ['switch', 'configure', 'stormControl'],
+            'operation': 'getNetworkSwitchStormControl',
         }
-        resource = f'/networks/{networkId}/switch/settings/stormControl'
+        resource = f'/networks/{networkId}/switch/stormControl'
 
         return await self._session.get(metadata, resource)
 
-    async def updateNetworkSwitchSettingsStormControl(self, networkId: str, **kwargs):
+    async def updateNetworkSwitchStormControl(self, networkId: str, **kwargs):
         """
         **Update the storm control configuration for a switch network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-switch-settings-storm-control
+        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-switch-storm-control
         
         - networkId (string)
         - broadcastThreshold (integer): Percentage (1 to 99) of total available port bandwidth for broadcast traffic type. Default value 100 percent rate is to clear the configuration.
@@ -762,10 +762,10 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'configure', 'settings', 'stormControl'],
-            'operation': 'updateNetworkSwitchSettingsStormControl',
+            'tags': ['switch', 'configure', 'stormControl'],
+            'operation': 'updateNetworkSwitchStormControl',
         }
-        resource = f'/networks/{networkId}/switch/settings/stormControl'
+        resource = f'/networks/{networkId}/switch/stormControl'
 
         body_params = ['broadcastThreshold', 'multicastThreshold', 'unknownUnicastThreshold']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}

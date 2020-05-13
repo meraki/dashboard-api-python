@@ -3,17 +3,17 @@ class MXWarmSpareSettings(object):
         super(MXWarmSpareSettings, self).__init__()
         self._session = session
     
-    def swapNetworkWarmspare(self, networkId: str):
+    def swapNetworkWarmSpare(self, networkId: str):
         """
         **Swap MX primary and warm spare appliances**
-        https://developer.cisco.com/docs/meraki-api-v0/#!swap-network-warmspare
+        https://developer.cisco.com/docs/meraki-api-v0/#!swap-network-warm-spare
         
         - networkId (string)
         """
 
         metadata = {
             'tags': ['MX warm spare settings'],
-            'operation': 'swapNetworkWarmspare',
+            'operation': 'swapNetworkWarmSpare',
         }
         resource = f'/networks/{networkId}/swapWarmSpare'
 
