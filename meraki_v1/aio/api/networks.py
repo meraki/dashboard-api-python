@@ -60,26 +60,26 @@ class AsyncNetworks:
 
         return await self._session.delete(metadata, resource)
 
-    async def getNetworkAlertSettings(self, networkId: str):
+    async def getNetworkAlertsSettings(self, networkId: str):
         """
         **Return the alert configuration for this network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-alert-settings
+        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-alerts-settings
         
         - networkId (string)
         """
 
         metadata = {
-            'tags': ['networks', 'configure', 'alertSettings'],
-            'operation': 'getNetworkAlertSettings',
+            'tags': ['networks', 'configure', 'alerts', 'settings'],
+            'operation': 'getNetworkAlertsSettings',
         }
-        resource = f'/networks/{networkId}/alertSettings'
+        resource = f'/networks/{networkId}/alerts/settings'
 
         return await self._session.get(metadata, resource)
 
-    async def updateNetworkAlertSettings(self, networkId: str, **kwargs):
+    async def updateNetworkAlertsSettings(self, networkId: str, **kwargs):
         """
         **Update the alert configuration for this network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-alert-settings
+        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-alerts-settings
         
         - networkId (string)
         - defaultDestinations (object): The network-wide destinations for all alerts on the network.
@@ -89,10 +89,10 @@ class AsyncNetworks:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['networks', 'configure', 'alertSettings'],
-            'operation': 'updateNetworkAlertSettings',
+            'tags': ['networks', 'configure', 'alerts', 'settings'],
+            'operation': 'updateNetworkAlertsSettings',
         }
-        resource = f'/networks/{networkId}/alertSettings'
+        resource = f'/networks/{networkId}/alerts/settings'
 
         body_params = ['defaultDestinations', 'alerts']
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
@@ -965,6 +965,37 @@ class AsyncNetworks:
         payload = {k: v for (k, v) in kwargs.items() if k in body_params}
 
         return await self._session.put(metadata, resource, payload)
+
+    async def getNetworkNetworkHealthChannelUtilization(self, networkId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Get the channel utilization over each radio for all APs in a network.**
+        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-network-health-channel-utilization
+        
+        - networkId (string)
+        - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        - resolution (integer): The time resolution in seconds for returned data. The valid resolutions are: 600. The default is 600.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 10.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['networks', 'configure', 'networkHealth', 'channelUtilization'],
+            'operation': 'getNetworkNetworkHealthChannelUtilization',
+        }
+        resource = f'/networks/{networkId}/networkHealth/channelUtilization'
+
+        query_params = ['t0', 't1', 'timespan', 'resolution', 'perPage', 'startingAfter', 'endingBefore']
+        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+
+        return await self._session.get_pages(metadata, resource, params, total_pages, direction)
+
 
     async def getNetworkPiiPiiKeys(self, networkId: str, **kwargs):
         """

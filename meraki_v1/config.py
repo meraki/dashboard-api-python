@@ -12,6 +12,9 @@ SINGLE_REQUEST_TIMEOUT = 60
 # Path for TLS/SSL certificate verification if behind local proxy
 CERTIFICATE_PATH = ''
 
+# Proxy server and port, if needed, for HTTPS
+REQUESTS_PROXY = ''
+
 # Retry if 429 rate limit error encountered?
 WAIT_ON_RATE_LIMIT = True
 

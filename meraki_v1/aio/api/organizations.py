@@ -694,13 +694,20 @@ class AsyncOrganizations:
         return await self._session.get_pages(metadata, resource, params, total_pages, direction)
 
 
-    async def getOrganizationDevicesStatuses(self, organizationId: str):
+    async def getOrganizationDevicesStatuses(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the status of every Meraki device in the organization**
         https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-devices-statuses
         
         - organizationId (string)
+        - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
+
+        kwargs.update(locals())
 
         metadata = {
             'tags': ['organizations', 'monitor', 'devices', 'statuses'],
@@ -708,7 +715,11 @@ class AsyncOrganizations:
         }
         resource = f'/organizations/{organizationId}/devices/statuses'
 
-        return await self._session.get(metadata, resource)
+        query_params = ['perPage', 'startingAfter', 'endingBefore']
+        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+
+        return await self._session.get_pages(metadata, resource, params, total_pages, direction)
+
 
     async def getOrganizationDevicesUplinksLossAndLatency(self, organizationId: str, **kwargs):
         """

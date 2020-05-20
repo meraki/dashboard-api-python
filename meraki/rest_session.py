@@ -63,6 +63,7 @@ class RestSession(object):
         base_url=DEFAULT_BASE_URL,
         single_request_timeout=SINGLE_REQUEST_TIMEOUT,
         certificate_path=CERTIFICATE_PATH,
+        requests_proxy=REQUESTS_PROXY,
         wait_on_rate_limit=WAIT_ON_RATE_LIMIT,
         nginx_429_retry_wait_time=NGINX_429_RETRY_WAIT_TIME,
         action_batch_retry_wait_time=ACTION_BATCH_RETRY_WAIT_TIME,
@@ -80,6 +81,7 @@ class RestSession(object):
         self._base_url = str(base_url)
         self._single_request_timeout = single_request_timeout
         self._certificate_path = certificate_path
+        self._requests_proxy = requests_proxy
         self._wait_on_rate_limit = wait_on_rate_limit
         self._nginx_429_retry_wait_time = nginx_429_retry_wait_time
         self._action_batch_retry_wait_time = action_batch_retry_wait_time
@@ -123,6 +125,8 @@ class RestSession(object):
         # Update request kwargs with session defaults
         if self._certificate_path:
             kwargs.setdefault('verify', self._certificate_path)
+        if self._requests_proxy:
+            kwargs.setdefault('proxies', {'https': self._requests_proxy})
         kwargs.setdefault('timeout', self._single_request_timeout)
 
         # Ensure proper base URL
@@ -271,29 +275,17 @@ class RestSession(object):
 
         # Get additional pages if more than one requested
         while total_pages != 1:
-            # Parse Link from headers
-            links = response.headers['Link'].split(',')
-            first = prev = next = last = None
-            for l in links:
-                if 'rel=first' in l:
-                    first = l[l.find('<')+1:l.find('>')]
-                elif 'rel=prev' in l:
-                    prev = l[l.find('<')+1:l.find('>')]
-                elif 'rel=next' in l:
-                    next = l[l.find('<')+1:l.find('>')]
-                elif 'rel=last' in l:
-                    last = l[l.find('<')+1:l.find('>')]
-
+            links = response.links
             response.close()
             response = None
 
             # GET the subsequent page
-            if direction == 'next' and next:
+            if direction == 'next' and 'next' in links:
                 metadata['page'] += 1
-                response = self.request(metadata, 'GET', next)
-            elif direction == 'prev' and prev:
+                response = self.request(metadata, 'GET', links['next']['url'])
+            elif direction == 'prev' and 'prev' in links:
                 metadata['page'] += 1
-                response = self.request(metadata, 'GET', prev)
+                response = self.request(metadata, 'GET', links['prev']['url'])
             else:
                 break
 

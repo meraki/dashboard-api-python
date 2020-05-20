@@ -1000,6 +1000,52 @@ class Appliance(object):
 
         return self._session.put(metadata, resource, payload)
 
+    def getNetworkApplianceTrafficShapingUplinkSelection(self, networkId: str):
+        """
+        **Show uplink selection settings for an MX network**
+        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-appliance-traffic-shaping-uplink-selection
+        
+        - networkId (string)
+        """
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'trafficShaping', 'uplinkSelection'],
+            'operation': 'getNetworkApplianceTrafficShapingUplinkSelection',
+        }
+        resource = f'/networks/{networkId}/appliance/trafficShaping/uplinkSelection'
+
+        return self._session.get(metadata, resource)
+
+    def updateNetworkApplianceTrafficShapingUplinkSelection(self, networkId: str, **kwargs):
+        """
+        **Update uplink selection settings for an MX network**
+        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-appliance-traffic-shaping-uplink-selection
+        
+        - networkId (string)
+        - activeActiveAutoVpnEnabled (boolean): Toggle for enabling or disabling active-active AutoVPN
+        - defaultUplink (string): The default uplink. Must be one of: 'wan1' or 'wan2'
+        - loadBalancingEnabled (boolean): Toggle for enabling or disabling load balancing
+        - wanTrafficUplinkPreferences (array): Array of uplink preference rules for WAN traffic
+        - vpnTrafficUplinkPreferences (array): Array of uplink preference rules for VPN traffic
+        """
+
+        kwargs.update(locals())
+
+        if 'defaultUplink' in kwargs:
+            options = ['wan1', 'wan2']
+            assert kwargs['defaultUplink'] in options, f'''"defaultUplink" cannot be "{kwargs['defaultUplink']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'trafficShaping', 'uplinkSelection'],
+            'operation': 'updateNetworkApplianceTrafficShapingUplinkSelection',
+        }
+        resource = f'/networks/{networkId}/appliance/trafficShaping/uplinkSelection'
+
+        body_params = ['activeActiveAutoVpnEnabled', 'defaultUplink', 'loadBalancingEnabled', 'wanTrafficUplinkPreferences', 'vpnTrafficUplinkPreferences']
+        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
     def getNetworkApplianceVlans(self, networkId: str):
         """
         **List the VLANs for an MX network**

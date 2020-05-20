@@ -7,21 +7,21 @@ from .rest_session import *
 from .api.organizations import Organizations
 from .api.networks import Networks
 from .api.devices import Devices
-from .api.insight import Insight
-from .api.wireless import Wireless
-from .api.camera import Camera
 from .api.appliance import Appliance
-from .api.switch import Switch
+from .api.camera import Camera
 from .api.cellular_gateway import CellularGateway
+from .api.insight import Insight
 from .api.sm import Sm
+from .api.switch import Switch
+from .api.wireless import Wireless
 from .config import (
-    API_KEY_ENVIRONMENT_VARIABLE, DEFAULT_BASE_URL, SINGLE_REQUEST_TIMEOUT, CERTIFICATE_PATH, WAIT_ON_RATE_LIMIT,
-    NGINX_429_RETRY_WAIT_TIME, ACTION_BATCH_RETRY_WAIT_TIME, RETRY_4XX_ERROR, RETRY_4XX_ERROR_WAIT_TIME,
-    MAXIMUM_RETRIES, OUTPUT_LOG, LOG_PATH, LOG_FILE_PREFIX, PRINT_TO_CONSOLE, SUPPRESS_LOGGING, SIMULATE_API_CALLS,
-    BE_GEO_ID, MERAKI_PYTHON_SDK_CALLER
+    API_KEY_ENVIRONMENT_VARIABLE, DEFAULT_BASE_URL, SINGLE_REQUEST_TIMEOUT, CERTIFICATE_PATH, REQUESTS_PROXY,
+    WAIT_ON_RATE_LIMIT, NGINX_429_RETRY_WAIT_TIME, ACTION_BATCH_RETRY_WAIT_TIME, RETRY_4XX_ERROR,
+    RETRY_4XX_ERROR_WAIT_TIME, MAXIMUM_RETRIES, OUTPUT_LOG, LOG_PATH, LOG_FILE_PREFIX, PRINT_TO_CONSOLE,
+    SUPPRESS_LOGGING, SIMULATE_API_CALLS, BE_GEO_ID, MERAKI_PYTHON_SDK_CALLER
 )
 
-__version__ = '1.0.0b4'
+__version__ = '1.0.0b5'
 
 class DashboardAPI(object):
     """
@@ -31,6 +31,7 @@ class DashboardAPI(object):
     - base_url (string): preceding all endpoint resources
     - single_request_timeout (integer): maximum number of seconds for each API call
     - certificate_path (string): path for TLS/SSL certificate verification if behind local proxy
+    - requests_proxy (string): proxy server and port, if needed, for HTTPS
     - wait_on_rate_limit (boolean): retry if 429 rate limit error encountered?
     - nginx_429_retry_wait_time (integer): Nginx 429 retry wait time
     - action_batch_retry_wait_time (integer): action batch concurrency error retry wait time
@@ -48,13 +49,13 @@ class DashboardAPI(object):
     """
 
     def __init__(self, api_key=None, base_url=DEFAULT_BASE_URL, single_request_timeout=SINGLE_REQUEST_TIMEOUT,
-                 certificate_path=CERTIFICATE_PATH, wait_on_rate_limit=WAIT_ON_RATE_LIMIT,
-                 nginx_429_retry_wait_time=NGINX_429_RETRY_WAIT_TIME,
-                 action_batch_retry_wait_time=ACTION_BATCH_RETRY_WAIT_TIME,
-                 retry_4xx_error=RETRY_4XX_ERROR, retry_4xx_error_wait_time=RETRY_4XX_ERROR_WAIT_TIME,
-                 maximum_retries=MAXIMUM_RETRIES, output_log=OUTPUT_LOG, log_path=LOG_PATH,
-                 log_file_prefix=LOG_FILE_PREFIX, print_console=PRINT_TO_CONSOLE, suppress_logging=SUPPRESS_LOGGING,
-                 simulate=SIMULATE_API_CALLS, be_geo_id=BE_GEO_ID, caller=MERAKI_PYTHON_SDK_CALLER):
+                 certificate_path=CERTIFICATE_PATH, requests_proxy=REQUESTS_PROXY,
+                 wait_on_rate_limit=WAIT_ON_RATE_LIMIT, nginx_429_retry_wait_time=NGINX_429_RETRY_WAIT_TIME,
+                 action_batch_retry_wait_time=ACTION_BATCH_RETRY_WAIT_TIME, retry_4xx_error=RETRY_4XX_ERROR,
+                 retry_4xx_error_wait_time=RETRY_4XX_ERROR_WAIT_TIME, maximum_retries=MAXIMUM_RETRIES,
+                 output_log=OUTPUT_LOG, log_path=LOG_PATH, log_file_prefix=LOG_FILE_PREFIX,
+                 print_console=PRINT_TO_CONSOLE, suppress_logging=SUPPRESS_LOGGING, simulate=SIMULATE_API_CALLS,
+                 be_geo_id=BE_GEO_ID, caller=MERAKI_PYTHON_SDK_CALLER):
         # Check API key
         api_key = api_key or os.environ.get(API_KEY_ENVIRONMENT_VARIABLE)
         if not api_key:
@@ -99,6 +100,7 @@ class DashboardAPI(object):
             base_url=base_url,
             single_request_timeout=single_request_timeout,
             certificate_path=certificate_path,
+            requests_proxy=requests_proxy,
             wait_on_rate_limit=wait_on_rate_limit,
             nginx_429_retry_wait_time=nginx_429_retry_wait_time,
             action_batch_retry_wait_time=action_batch_retry_wait_time,
@@ -114,10 +116,10 @@ class DashboardAPI(object):
         self.organizations = Organizations(self._session)
         self.networks = Networks(self._session)
         self.devices = Devices(self._session)
-        self.insight = Insight(self._session)
-        self.wireless = Wireless(self._session)
-        self.camera = Camera(self._session)
         self.appliance = Appliance(self._session)
-        self.switch = Switch(self._session)
+        self.camera = Camera(self._session)
         self.cellulargateway = CellularGateway(self._session)
+        self.insight = Insight(self._session)
         self.sm = Sm(self._session)
+        self.switch = Switch(self._session)
+        self.wireless = Wireless(self._session)
