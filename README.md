@@ -30,8 +30,10 @@ While you can make direct HTTP requests to dashboard API in any programming lang
     * If _meraki_ was previously installed, you can upgrade to the latest stable (non-beta) release with `pip install --upgrade meraki`
 
 5. Meraki dashboard API v1 is currently in beta, so if you clone this repository and want to use v1 locally, rename the folder _meraki_v1_ to _meraki_, replacing the v0 contents there. You can also specify the version of the library when installing with _pip_:
-    * For example, `pip install meraki==0.110.0` for v0 or `pip install meraki==1.0.0b3` for v1 beta
-    * To see the full [release history](https://pypi.org/project/meraki/#history), you can also use `pip install meraki==` without including a version number
+    * See the full [release history](https://pypi.org/project/meraki/#history) to pick the version you want, or use `pip install meraki==` without including a version number to display the list of available versions
+    * v0 versions of the Python library begin with _0_ (0.**x**.**y**), and v1 versions begin with _1_ (1.0.0b**z** for beta)
+    * Specify the version you want with the install command; for example: `pip install meraki==0.x.y` for v0 or `pip install meraki==1.0.0bz` for v1 beta
+    * You can also upgrade to the latest non-beta version with `pip install meraki --upgrade`
 
 ## Usage
 1. Export your API key as an [environment variable](https://www.twilio.com/blog/2017/01/how-to-set-environment-variables.html), for example:
