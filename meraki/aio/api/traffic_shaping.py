@@ -6,7 +6,7 @@ class AsyncTrafficShaping:
     async def updateNetworkSsidTrafficShaping(self, networkId: str, number: str, **kwargs):
         """
         **Update the traffic shaping settings for an SSID on an MR network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-ssid-traffic-shaping
+        https://developer.cisco.com/meraki/api/#!update-network-ssid-traffic-shaping
         
         - networkId (string)
         - number (string)
@@ -38,7 +38,7 @@ class AsyncTrafficShaping:
     async def getNetworkSsidTrafficShaping(self, networkId: str, number: str):
         """
         **Display the traffic shaping settings for a SSID on an MR network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-ssid-traffic-shaping
+        https://developer.cisco.com/meraki/api/#!get-network-ssid-traffic-shaping
         
         - networkId (string)
         - number (string)
@@ -55,7 +55,7 @@ class AsyncTrafficShaping:
     async def updateNetworkTrafficShaping(self, networkId: str, **kwargs):
         """
         **Update the traffic shaping settings for an MX network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-traffic-shaping
+        https://developer.cisco.com/meraki/api/#!update-network-traffic-shaping
         
         - networkId (string)
         - defaultRulesEnabled (boolean):     Whether default traffic shaping rules are enabled (true) or disabled (false).
@@ -85,7 +85,7 @@ class AsyncTrafficShaping:
     async def getNetworkTrafficShaping(self, networkId: str):
         """
         **Display the traffic shaping settings for an MX network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-traffic-shaping
+        https://developer.cisco.com/meraki/api/#!get-network-traffic-shaping
         
         - networkId (string)
         """
@@ -101,7 +101,7 @@ class AsyncTrafficShaping:
     async def getNetworkTrafficShapingApplicationCategories(self, networkId: str):
         """
         **Returns the application categories for traffic shaping rules.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-traffic-shaping-application-categories
+        https://developer.cisco.com/meraki/api/#!get-network-traffic-shaping-application-categories
         
         - networkId (string)
         """
@@ -117,7 +117,7 @@ class AsyncTrafficShaping:
     async def getNetworkTrafficShapingDscpTaggingOptions(self, networkId: str):
         """
         **Returns the available DSCP tagging options for your traffic shaping rules.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-traffic-shaping-dscp-tagging-options
+        https://developer.cisco.com/meraki/api/#!get-network-traffic-shaping-dscp-tagging-options
         
         - networkId (string)
         """

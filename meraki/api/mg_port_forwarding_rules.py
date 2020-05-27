@@ -6,7 +6,7 @@ class MGPortForwardingRules(object):
     def getDeviceCellularGatewaySettingsPortForwardingRules(self, serial: str):
         """
         **Returns the port forwarding rules for a single MG.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-device-cellular-gateway-settings-port-forwarding-rules
+        https://developer.cisco.com/meraki/api/#!get-device-cellular-gateway-settings-port-forwarding-rules
         
         - serial (string)
         """
@@ -22,7 +22,7 @@ class MGPortForwardingRules(object):
     def updateDeviceCellularGatewaySettingsPortForwardingRules(self, serial: str, **kwargs):
         """
         **Updates the port forwarding rules for a single MG.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-device-cellular-gateway-settings-port-forwarding-rules
+        https://developer.cisco.com/meraki/api/#!update-device-cellular-gateway-settings-port-forwarding-rules
         
         - serial (string)
         - rules (array): An array of port forwarding params

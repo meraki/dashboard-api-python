@@ -6,7 +6,7 @@ class AsyncUplinkSettings:
     async def getNetworkUplinkSettings(self, networkId: str):
         """
         **Returns the uplink settings for your MX network.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-uplink-settings
+        https://developer.cisco.com/meraki/api/#!get-network-uplink-settings
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class AsyncUplinkSettings:
     async def updateNetworkUplinkSettings(self, networkId: str, **kwargs):
         """
         **Updates the uplink settings for your MX network.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-uplink-settings
+        https://developer.cisco.com/meraki/api/#!update-network-uplink-settings
         
         - networkId (string)
         - bandwidthLimits (object): A mapping of uplinks to their bandwidth settings (be sure to check which uplinks are supported for your network)

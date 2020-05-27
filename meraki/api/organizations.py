@@ -6,7 +6,7 @@ class Organizations(object):
     def getOrganizations(self):
         """
         **List the organizations that the user has privileges on**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organizations
+        https://developer.cisco.com/meraki/api/#!get-organizations
         
         """
 
@@ -21,7 +21,7 @@ class Organizations(object):
     def createOrganization(self, name: str):
         """
         **Create a new organization**
-        https://developer.cisco.com/docs/meraki-api-v0/#!create-organization
+        https://developer.cisco.com/meraki/api/#!create-organization
         
         - name (string): The name of the organization
         """
@@ -42,7 +42,7 @@ class Organizations(object):
     def getOrganization(self, organizationId: str):
         """
         **Return an organization**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organization
+        https://developer.cisco.com/meraki/api/#!get-organization
         
         - organizationId (string)
         """
@@ -58,7 +58,7 @@ class Organizations(object):
     def updateOrganization(self, organizationId: str, **kwargs):
         """
         **Update an organization**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-organization
+        https://developer.cisco.com/meraki/api/#!update-organization
         
         - organizationId (string)
         - name (string): The name of the organization
@@ -80,7 +80,7 @@ class Organizations(object):
     def deleteOrganization(self, organizationId: str):
         """
         **Delete an organization**
-        https://developer.cisco.com/docs/meraki-api-v0/#!delete-organization
+        https://developer.cisco.com/meraki/api/#!delete-organization
         
         - organizationId (string)
         """
@@ -96,7 +96,7 @@ class Organizations(object):
     def claimIntoOrganization(self, organizationId: str, **kwargs):
         """
         **Claim a list of devices, licenses, and/or orders into an organization. When claiming by order, all devices and licenses in the order will be claimed; licenses will be added to the organization and devices will be placed in the organization's inventory.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!claim-into-organization
+        https://developer.cisco.com/meraki/api/#!claim-into-organization
         
         - organizationId (string)
         - orders (array): The numbers of the orders that should be claimed
@@ -120,7 +120,7 @@ class Organizations(object):
     def cloneOrganization(self, organizationId: str, name: str):
         """
         **Create a new organization by cloning the addressed organization**
-        https://developer.cisco.com/docs/meraki-api-v0/#!clone-organization
+        https://developer.cisco.com/meraki/api/#!clone-organization
         
         - organizationId (string)
         - name (string): The name of the new organization
@@ -142,7 +142,7 @@ class Organizations(object):
     def getOrganizationDeviceStatuses(self, organizationId: str):
         """
         **List the status of every Meraki device in the organization**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organization-device-statuses
+        https://developer.cisco.com/meraki/api/#!get-organization-device-statuses
         
         - organizationId (string)
         """
@@ -158,7 +158,7 @@ class Organizations(object):
     def getOrganizationInventory(self, organizationId: str, **kwargs):
         """
         **Return the inventory for an organization**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organization-inventory
+        https://developer.cisco.com/meraki/api/#!get-organization-inventory
         
         - organizationId (string)
         - includeLicenseInfo (boolean): When this parameter is true, each entity in the response will include the license expiration date of the device (if any). Only applies to organizations that support per-device licensing. Defaults to false.
@@ -180,7 +180,7 @@ class Organizations(object):
     def getOrganizationLicenseState(self, organizationId: str):
         """
         **Return an overview of the license state for an organization**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organization-license-state
+        https://developer.cisco.com/meraki/api/#!get-organization-license-state
         
         - organizationId (string)
         """
@@ -196,7 +196,7 @@ class Organizations(object):
     def getOrganizationThirdPartyVPNPeers(self, organizationId: str):
         """
         **Return the third party VPN peers for an organization**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organization-third-party-v-p-n-peers
+        https://developer.cisco.com/meraki/api/#!get-organization-third-party-v-p-n-peers
         
         - organizationId (string)
         """
@@ -212,7 +212,7 @@ class Organizations(object):
     def updateOrganizationThirdPartyVPNPeers(self, organizationId: str, peers: list):
         """
         **Update the third party VPN peers for an organization**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-organization-third-party-v-p-n-peers
+        https://developer.cisco.com/meraki/api/#!update-organization-third-party-v-p-n-peers
         
         - organizationId (string)
         - peers (array): The list of VPN peers
@@ -234,7 +234,7 @@ class Organizations(object):
     def getOrganizationUplinksLossAndLatency(self, organizationId: str, **kwargs):
         """
         **Return the uplink loss and latency for every MX in the organization from at latest 2 minutes ago**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organization-uplinks-loss-and-latency
+        https://developer.cisco.com/meraki/api/#!get-organization-uplinks-loss-and-latency
         
         - organizationId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.

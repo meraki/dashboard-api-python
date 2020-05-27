@@ -6,7 +6,7 @@ class SwitchStacks(object):
     def getNetworkSwitchStacks(self, networkId: str):
         """
         **List the switch stacks in a network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-switch-stacks
+        https://developer.cisco.com/meraki/api/#!get-network-switch-stacks
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class SwitchStacks(object):
     def createNetworkSwitchStack(self, networkId: str, name: str, serials: list):
         """
         **Create a stack**
-        https://developer.cisco.com/docs/meraki-api-v0/#!create-network-switch-stack
+        https://developer.cisco.com/meraki/api/#!create-network-switch-stack
         
         - networkId (string)
         - name (string): The name of the new stack
@@ -45,7 +45,7 @@ class SwitchStacks(object):
     def getNetworkSwitchStack(self, networkId: str, switchStackId: str):
         """
         **Show a switch stack**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-switch-stack
+        https://developer.cisco.com/meraki/api/#!get-network-switch-stack
         
         - networkId (string)
         - switchStackId (string)
@@ -62,7 +62,7 @@ class SwitchStacks(object):
     def deleteNetworkSwitchStack(self, networkId: str, switchStackId: str):
         """
         **Delete a stack**
-        https://developer.cisco.com/docs/meraki-api-v0/#!delete-network-switch-stack
+        https://developer.cisco.com/meraki/api/#!delete-network-switch-stack
         
         - networkId (string)
         - switchStackId (string)
@@ -79,7 +79,7 @@ class SwitchStacks(object):
     def addNetworkSwitchStack(self, networkId: str, switchStackId: str, serial: str):
         """
         **Add a switch to a stack**
-        https://developer.cisco.com/docs/meraki-api-v0/#!add-network-switch-stack
+        https://developer.cisco.com/meraki/api/#!add-network-switch-stack
         
         - networkId (string)
         - switchStackId (string)
@@ -102,7 +102,7 @@ class SwitchStacks(object):
     def removeNetworkSwitchStack(self, networkId: str, switchStackId: str, serial: str):
         """
         **Remove a switch from a stack**
-        https://developer.cisco.com/docs/meraki-api-v0/#!remove-network-switch-stack
+        https://developer.cisco.com/meraki/api/#!remove-network-switch-stack
         
         - networkId (string)
         - switchStackId (string)

@@ -6,7 +6,7 @@ class Insight(object):
     def getOrganizationInsightMonitoredMediaServers(self, organizationId: str):
         """
         **List the monitored media servers for this organization. Only valid for organizations with Meraki Insight.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-insight-monitored-media-servers
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-insight-monitored-media-servers
         
         - organizationId (string)
         """
@@ -22,7 +22,7 @@ class Insight(object):
     def createOrganizationInsightMonitoredMediaServer(self, organizationId: str, name: str, address: str):
         """
         **Add a media server to be monitored for this organization. Only valid for organizations with Meraki Insight.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!create-organization-insight-monitored-media-server
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-insight-monitored-media-server
         
         - organizationId (string)
         - name (string): The name of the VoIP provider
@@ -45,7 +45,7 @@ class Insight(object):
     def getOrganizationInsightMonitoredMediaServer(self, organizationId: str, monitoredMediaServerId: str):
         """
         **Return a monitored media server for this organization. Only valid for organizations with Meraki Insight.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-insight-monitored-media-server
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-insight-monitored-media-server
         
         - organizationId (string)
         - monitoredMediaServerId (string)
@@ -62,7 +62,7 @@ class Insight(object):
     def updateOrganizationInsightMonitoredMediaServer(self, organizationId: str, monitoredMediaServerId: str, **kwargs):
         """
         **Update a monitored media server for this organization. Only valid for organizations with Meraki Insight.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-organization-insight-monitored-media-server
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-insight-monitored-media-server
         
         - organizationId (string)
         - monitoredMediaServerId (string)
@@ -86,7 +86,7 @@ class Insight(object):
     def deleteOrganizationInsightMonitoredMediaServer(self, organizationId: str, monitoredMediaServerId: str):
         """
         **Delete a monitored media server from this organization. Only valid for organizations with Meraki Insight.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!delete-organization-insight-monitored-media-server
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-insight-monitored-media-server
         
         - organizationId (string)
         - monitoredMediaServerId (string)

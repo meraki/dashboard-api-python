@@ -6,7 +6,7 @@ class Admins(object):
     def getOrganizationAdmins(self, organizationId: str):
         """
         **List the dashboard administrators in this organization**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organization-admins
+        https://developer.cisco.com/meraki/api/#!get-organization-admins
         
         - organizationId (string)
         """
@@ -22,7 +22,7 @@ class Admins(object):
     def createOrganizationAdmin(self, organizationId: str, email: str, name: str, orgAccess: str, **kwargs):
         """
         **Create a new dashboard administrator**
-        https://developer.cisco.com/docs/meraki-api-v0/#!create-organization-admin
+        https://developer.cisco.com/meraki/api/#!create-organization-admin
         
         - organizationId (string)
         - email (string): The email of the dashboard administrator. This attribute can not be updated.
@@ -52,7 +52,7 @@ class Admins(object):
     def updateOrganizationAdmin(self, organizationId: str, id: str, **kwargs):
         """
         **Update an administrator**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-organization-admin
+        https://developer.cisco.com/meraki/api/#!update-organization-admin
         
         - organizationId (string)
         - id (string)
@@ -82,7 +82,7 @@ class Admins(object):
     def deleteOrganizationAdmin(self, organizationId: str, id: str):
         """
         **Revoke all access for a dashboard administrator within this organization**
-        https://developer.cisco.com/docs/meraki-api-v0/#!delete-organization-admin
+        https://developer.cisco.com/meraki/api/#!delete-organization-admin
         
         - organizationId (string)
         - id (string)

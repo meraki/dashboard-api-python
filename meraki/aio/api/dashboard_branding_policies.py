@@ -6,7 +6,7 @@ class AsyncDashboardBrandingPolicies:
     async def getOrganizationBrandingPolicies(self, organizationId: str):
         """
         **List the branding policies of an organization**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organization-branding-policies
+        https://developer.cisco.com/meraki/api/#!get-organization-branding-policies
         
         - organizationId (string)
         """
@@ -22,7 +22,7 @@ class AsyncDashboardBrandingPolicies:
     async def createOrganizationBrandingPolicy(self, organizationId: str, name: str, enabled: bool, adminSettings: dict, **kwargs):
         """
         **Add a new branding policy to an organization**
-        https://developer.cisco.com/docs/meraki-api-v0/#!create-organization-branding-policy
+        https://developer.cisco.com/meraki/api/#!create-organization-branding-policy
         
         - organizationId (string)
         - name (string): Name of the Dashboard branding policy.
@@ -51,7 +51,7 @@ class AsyncDashboardBrandingPolicies:
     async def getOrganizationBrandingPoliciesPriorities(self, organizationId: str):
         """
         **Return the branding policy IDs of an organization in priority order. IDs are ordered in ascending order of priority (IDs later in the array have higher priority).**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organization-branding-policies-priorities
+        https://developer.cisco.com/meraki/api/#!get-organization-branding-policies-priorities
         
         - organizationId (string)
         """
@@ -67,7 +67,7 @@ class AsyncDashboardBrandingPolicies:
     async def updateOrganizationBrandingPoliciesPriorities(self, organizationId: str, brandingPolicyIds: list):
         """
         **Update the priority ordering of an organization's branding policies.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-organization-branding-policies-priorities
+        https://developer.cisco.com/meraki/api/#!update-organization-branding-policies-priorities
         
         - organizationId (string)
         - brandingPolicyIds (array): A list of branding policy IDs arranged in ascending priority order (IDs later in the array have higher priority).
@@ -89,7 +89,7 @@ class AsyncDashboardBrandingPolicies:
     async def getOrganizationBrandingPolicy(self, organizationId: str, brandingPolicyId: str):
         """
         **Return a branding policy**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organization-branding-policy
+        https://developer.cisco.com/meraki/api/#!get-organization-branding-policy
         
         - organizationId (string)
         - brandingPolicyId (string)
@@ -106,7 +106,7 @@ class AsyncDashboardBrandingPolicies:
     async def updateOrganizationBrandingPolicy(self, organizationId: str, brandingPolicyId: str, **kwargs):
         """
         **Update a branding policy**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-organization-branding-policy
+        https://developer.cisco.com/meraki/api/#!update-organization-branding-policy
         
         - organizationId (string)
         - brandingPolicyId (string)
@@ -136,7 +136,7 @@ class AsyncDashboardBrandingPolicies:
     async def deleteOrganizationBrandingPolicy(self, organizationId: str, brandingPolicyId: str):
         """
         **Delete a branding policy**
-        https://developer.cisco.com/docs/meraki-api-v0/#!delete-organization-branding-policy
+        https://developer.cisco.com/meraki/api/#!delete-organization-branding-policy
         
         - organizationId (string)
         - brandingPolicyId (string)

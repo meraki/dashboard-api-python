@@ -6,7 +6,7 @@ class MXL3Firewall(object):
     def getNetworkL3FirewallRules(self, networkId: str):
         """
         **Return the L3 firewall rules for an MX network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-l-3-firewall-rules
+        https://developer.cisco.com/meraki/api/#!get-network-l-3-firewall-rules
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class MXL3Firewall(object):
     def updateNetworkL3FirewallRules(self, networkId: str, **kwargs):
         """
         **Update the L3 firewall rules of an MX network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-l-3-firewall-rules
+        https://developer.cisco.com/meraki/api/#!update-network-l-3-firewall-rules
         
         - networkId (string)
         - rules (array): An ordered array of the firewall rules (not including the default rule)

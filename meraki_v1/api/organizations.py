@@ -6,7 +6,7 @@ class Organizations(object):
     def getOrganizations(self):
         """
         **List the organizations that the user has privileges on**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organizations
+        https://developer.cisco.com/meraki/api-v1/#!get-organizations
         
         """
 
@@ -21,7 +21,7 @@ class Organizations(object):
     def createOrganization(self, name: str):
         """
         **Create a new organization**
-        https://developer.cisco.com/docs/meraki-api-v1/#!create-organization
+        https://developer.cisco.com/meraki/api-v1/#!create-organization
         
         - name (string): The name of the organization
         """
@@ -42,7 +42,7 @@ class Organizations(object):
     def getOrganization(self, organizationId: str):
         """
         **Return an organization**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization
+        https://developer.cisco.com/meraki/api-v1/#!get-organization
         
         - organizationId (string)
         """
@@ -58,7 +58,7 @@ class Organizations(object):
     def updateOrganization(self, organizationId: str, **kwargs):
         """
         **Update an organization**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-organization
+        https://developer.cisco.com/meraki/api-v1/#!update-organization
         
         - organizationId (string)
         - name (string): The name of the organization
@@ -80,7 +80,7 @@ class Organizations(object):
     def deleteOrganization(self, organizationId: str):
         """
         **Delete an organization**
-        https://developer.cisco.com/docs/meraki-api-v1/#!delete-organization
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization
         
         - organizationId (string)
         """
@@ -96,7 +96,7 @@ class Organizations(object):
     def createOrganizationActionBatch(self, organizationId: str, actions: list, **kwargs):
         """
         **Create an action batch**
-        https://developer.cisco.com/docs/meraki-api-v1/#!create-organization-action-batch
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-action-batch
         
         - organizationId (string)
         - actions (array): A set of changes to make as part of this action (<a href='https://developer.cisco.com/meraki/api/#/rest/guides/action-batches/'>more details</a>)
@@ -120,7 +120,7 @@ class Organizations(object):
     def getOrganizationActionBatches(self, organizationId: str):
         """
         **Return the list of action batches in the organization**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-action-batches
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-action-batches
         
         - organizationId (string)
         """
@@ -136,7 +136,7 @@ class Organizations(object):
     def getOrganizationActionBatch(self, organizationId: str, actionBatchId: str):
         """
         **Return an action batch**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-action-batch
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-action-batch
         
         - organizationId (string)
         - actionBatchId (string)
@@ -153,7 +153,7 @@ class Organizations(object):
     def deleteOrganizationActionBatch(self, organizationId: str, actionBatchId: str):
         """
         **Delete an action batch**
-        https://developer.cisco.com/docs/meraki-api-v1/#!delete-organization-action-batch
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-action-batch
         
         - organizationId (string)
         - actionBatchId (string)
@@ -170,7 +170,7 @@ class Organizations(object):
     def updateOrganizationActionBatch(self, organizationId: str, actionBatchId: str, **kwargs):
         """
         **Update an action batch**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-organization-action-batch
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-action-batch
         
         - organizationId (string)
         - actionBatchId (string)
@@ -194,7 +194,7 @@ class Organizations(object):
     def getOrganizationAdmins(self, organizationId: str):
         """
         **List the dashboard administrators in this organization**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-admins
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-admins
         
         - organizationId (string)
         """
@@ -210,7 +210,7 @@ class Organizations(object):
     def createOrganizationAdmin(self, organizationId: str, email: str, name: str, orgAccess: str, **kwargs):
         """
         **Create a new dashboard administrator**
-        https://developer.cisco.com/docs/meraki-api-v1/#!create-organization-admin
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-admin
         
         - organizationId (string)
         - email (string): The email of the dashboard administrator. This attribute can not be updated.
@@ -240,7 +240,7 @@ class Organizations(object):
     def updateOrganizationAdmin(self, organizationId: str, id: str, **kwargs):
         """
         **Update an administrator**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-organization-admin
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-admin
         
         - organizationId (string)
         - id (string)
@@ -270,7 +270,7 @@ class Organizations(object):
     def deleteOrganizationAdmin(self, organizationId: str, id: str):
         """
         **Revoke all access for a dashboard administrator within this organization**
-        https://developer.cisco.com/docs/meraki-api-v1/#!delete-organization-admin
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-admin
         
         - organizationId (string)
         - id (string)
@@ -287,7 +287,7 @@ class Organizations(object):
     def getOrganizationApiRequests(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the API requests made by an organization**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-api-requests
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-api-requests
         
         - organizationId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
@@ -322,7 +322,7 @@ class Organizations(object):
     def getOrganizationApiRequestsOverview(self, organizationId: str, **kwargs):
         """
         **Return an aggregated overview of API requests data**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-api-requests-overview
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-api-requests-overview
         
         - organizationId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
@@ -346,7 +346,7 @@ class Organizations(object):
     def getOrganizationBrandingPolicies(self, organizationId: str):
         """
         **List the branding policies of an organization**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-branding-policies
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-branding-policies
         
         - organizationId (string)
         """
@@ -362,7 +362,7 @@ class Organizations(object):
     def createOrganizationBrandingPolicy(self, organizationId: str, name: str, enabled: bool, adminSettings: dict, **kwargs):
         """
         **Add a new branding policy to an organization**
-        https://developer.cisco.com/docs/meraki-api-v1/#!create-organization-branding-policy
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-branding-policy
         
         - organizationId (string)
         - name (string): Name of the Dashboard branding policy.
@@ -391,7 +391,7 @@ class Organizations(object):
     def getOrganizationBrandingPoliciesPriorities(self, organizationId: str):
         """
         **Return the branding policy IDs of an organization in priority order. IDs are ordered in ascending order of priority (IDs later in the array have higher priority).**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-branding-policies-priorities
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-branding-policies-priorities
         
         - organizationId (string)
         """
@@ -407,7 +407,7 @@ class Organizations(object):
     def updateOrganizationBrandingPoliciesPriorities(self, organizationId: str, brandingPolicyIds: list):
         """
         **Update the priority ordering of an organization's branding policies.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-organization-branding-policies-priorities
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-branding-policies-priorities
         
         - organizationId (string)
         - brandingPolicyIds (array): A list of branding policy IDs arranged in ascending priority order (IDs later in the array have higher priority).
@@ -429,7 +429,7 @@ class Organizations(object):
     def getOrganizationBrandingPolicy(self, organizationId: str, brandingPolicyId: str):
         """
         **Return a branding policy**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-branding-policy
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-branding-policy
         
         - organizationId (string)
         - brandingPolicyId (string)
@@ -446,7 +446,7 @@ class Organizations(object):
     def updateOrganizationBrandingPolicy(self, organizationId: str, brandingPolicyId: str, **kwargs):
         """
         **Update a branding policy**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-organization-branding-policy
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-branding-policy
         
         - organizationId (string)
         - brandingPolicyId (string)
@@ -476,7 +476,7 @@ class Organizations(object):
     def deleteOrganizationBrandingPolicy(self, organizationId: str, brandingPolicyId: str):
         """
         **Delete a branding policy**
-        https://developer.cisco.com/docs/meraki-api-v1/#!delete-organization-branding-policy
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-branding-policy
         
         - organizationId (string)
         - brandingPolicyId (string)
@@ -493,7 +493,7 @@ class Organizations(object):
     def claimIntoOrganization(self, organizationId: str, **kwargs):
         """
         **Claim a list of devices, licenses, and/or orders into an organization. When claiming by order, all devices and licenses in the order will be claimed; licenses will be added to the organization and devices will be placed in the organization's inventory.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!claim-into-organization
+        https://developer.cisco.com/meraki/api-v1/#!claim-into-organization
         
         - organizationId (string)
         - orders (array): The numbers of the orders that should be claimed
@@ -517,7 +517,7 @@ class Organizations(object):
     def cloneOrganization(self, organizationId: str, name: str):
         """
         **Create a new organization by cloning the addressed organization**
-        https://developer.cisco.com/docs/meraki-api-v1/#!clone-organization
+        https://developer.cisco.com/meraki/api-v1/#!clone-organization
         
         - organizationId (string)
         - name (string): The name of the new organization
@@ -539,7 +539,7 @@ class Organizations(object):
     def getOrganizationConfigTemplates(self, organizationId: str):
         """
         **List the configuration templates for this organization**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-config-templates
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-config-templates
         
         - organizationId (string)
         """
@@ -555,7 +555,7 @@ class Organizations(object):
     def createOrganizationConfigTemplate(self, organizationId: str, name: str, **kwargs):
         """
         **Create a new configuration template**
-        https://developer.cisco.com/docs/meraki-api-v1/#!create-organization-config-template
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-config-template
         
         - organizationId (string)
         - name (string): The name of the configuration template
@@ -579,7 +579,7 @@ class Organizations(object):
     def updateOrganizationConfigTemplate(self, organizationId: str, configTemplateId: str, **kwargs):
         """
         **Update a configuration template**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-organization-config-template
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-config-template
         
         - organizationId (string)
         - configTemplateId (string)
@@ -603,7 +603,7 @@ class Organizations(object):
     def deleteOrganizationConfigTemplate(self, organizationId: str, configTemplateId: str):
         """
         **Remove a configuration template**
-        https://developer.cisco.com/docs/meraki-api-v1/#!delete-organization-config-template
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-config-template
         
         - organizationId (string)
         - configTemplateId (string)
@@ -620,7 +620,7 @@ class Organizations(object):
     def getOrganizationConfigTemplate(self, organizationId: str, configTemplateId: str):
         """
         **Return a single configuration template**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-config-template
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-config-template
         
         - organizationId (string)
         - configTemplateId (string)
@@ -637,7 +637,7 @@ class Organizations(object):
     def getOrganizationConfigurationChanges(self, organizationId: str, total_pages=1, direction='prev', **kwargs):
         """
         **View the Change Log for your organization**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-configuration-changes
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-configuration-changes
         
         - organizationId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
@@ -669,7 +669,7 @@ class Organizations(object):
     def getOrganizationDevices(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the devices in an organization**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-devices
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices
         
         - organizationId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
@@ -697,7 +697,7 @@ class Organizations(object):
     def getOrganizationDevicesStatuses(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the status of every Meraki device in the organization**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-devices-statuses
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-statuses
         
         - organizationId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
@@ -724,7 +724,7 @@ class Organizations(object):
     def getOrganizationDevicesUplinksLossAndLatency(self, organizationId: str, **kwargs):
         """
         **Return the uplink loss and latency for every MX in the organization from at latest 2 minutes ago**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-devices-uplinks-loss-and-latency
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-uplinks-loss-and-latency
         
         - organizationId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
@@ -754,7 +754,7 @@ class Organizations(object):
     def getOrganizationInventory(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **Return the device inventory for an organization**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-inventory
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-inventory
         
         - organizationId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
@@ -781,7 +781,7 @@ class Organizations(object):
     def getOrganizationLicenses(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the licenses for an organization**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-licenses
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-licenses
         
         - organizationId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
@@ -815,7 +815,7 @@ class Organizations(object):
     def assignOrganizationLicensesSeats(self, organizationId: str, licenseId: str, networkId: str, seatCount: int):
         """
         **Assign SM seats to a network. This will increase the managed SM device limit of the network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!assign-organization-licenses-seats
+        https://developer.cisco.com/meraki/api-v1/#!assign-organization-licenses-seats
         
         - organizationId (string)
         - licenseId (string): The ID of the SM license to assign seats from
@@ -839,7 +839,7 @@ class Organizations(object):
     def moveOrganizationLicenses(self, organizationId: str, destOrganizationId: str, licenseIds: list):
         """
         **Move licenses to another organization. This will also move any devices that the licenses are assigned to**
-        https://developer.cisco.com/docs/meraki-api-v1/#!move-organization-licenses
+        https://developer.cisco.com/meraki/api-v1/#!move-organization-licenses
         
         - organizationId (string)
         - destOrganizationId (string): The ID of the organization to move the licenses to
@@ -862,7 +862,7 @@ class Organizations(object):
     def moveOrganizationLicensesSeats(self, organizationId: str, destOrganizationId: str, licenseId: str, seatCount: int):
         """
         **Move SM seats to another organization**
-        https://developer.cisco.com/docs/meraki-api-v1/#!move-organization-licenses-seats
+        https://developer.cisco.com/meraki/api-v1/#!move-organization-licenses-seats
         
         - organizationId (string)
         - destOrganizationId (string): The ID of the organization to move the SM seats to
@@ -886,7 +886,7 @@ class Organizations(object):
     def getOrganizationLicensesOverview(self, organizationId: str):
         """
         **Return an overview of the license state for an organization**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-licenses-overview
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-licenses-overview
         
         - organizationId (string)
         """
@@ -902,7 +902,7 @@ class Organizations(object):
     def renewOrganizationLicensesSeats(self, organizationId: str, licenseIdToRenew: str, unusedLicenseId: str):
         """
         **Renew SM seats of a license. This will extend the license expiration date of managed SM devices covered by this license**
-        https://developer.cisco.com/docs/meraki-api-v1/#!renew-organization-licenses-seats
+        https://developer.cisco.com/meraki/api-v1/#!renew-organization-licenses-seats
         
         - organizationId (string)
         - licenseIdToRenew (string): The ID of the SM license to renew. This license must already be assigned to an SM network
@@ -925,7 +925,7 @@ class Organizations(object):
     def getOrganizationLicense(self, organizationId: str, licenseId: str):
         """
         **Display a license**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-license
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-license
         
         - organizationId (string)
         - licenseId (string)
@@ -942,7 +942,7 @@ class Organizations(object):
     def updateOrganizationLicense(self, organizationId: str, licenseId: str, **kwargs):
         """
         **Update a license**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-organization-license
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-license
         
         - organizationId (string)
         - licenseId (string)
@@ -965,7 +965,7 @@ class Organizations(object):
     def getOrganizationNetworks(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the networks that the user has privileges on in an organization**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-networks
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-networks
         
         - organizationId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
@@ -993,7 +993,7 @@ class Organizations(object):
     def createOrganizationNetwork(self, organizationId: str, name: str, productTypes: list, **kwargs):
         """
         **Create a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!create-organization-network
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-network
         
         - organizationId (string)
         - name (string): The name of the new network
@@ -1019,7 +1019,7 @@ class Organizations(object):
     def combineOrganizationNetworks(self, organizationId: str, name: str, networkIds: list, **kwargs):
         """
         **Combine multiple networks into a single network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!combine-organization-networks
+        https://developer.cisco.com/meraki/api-v1/#!combine-organization-networks
         
         - organizationId (string)
         - name (string): The name of the combined network
@@ -1043,7 +1043,7 @@ class Organizations(object):
     def getOrganizationOpenapiSpec(self, organizationId: str):
         """
         **Return the OpenAPI 2.0 Specification of the organization's API documentation in JSON**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-openapi-spec
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-openapi-spec
         
         - organizationId (string)
         """
@@ -1059,7 +1059,7 @@ class Organizations(object):
     def getOrganizationSamlRoles(self, organizationId: str):
         """
         **List the SAML roles for this organization**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-saml-roles
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-saml-roles
         
         - organizationId (string)
         """
@@ -1075,7 +1075,7 @@ class Organizations(object):
     def createOrganizationSamlRole(self, organizationId: str, **kwargs):
         """
         **Create a SAML role**
-        https://developer.cisco.com/docs/meraki-api-v1/#!create-organization-saml-role
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-saml-role
         
         - organizationId (string)
         - role (string): The role of the SAML administrator
@@ -1100,7 +1100,7 @@ class Organizations(object):
     def getOrganizationSamlRole(self, organizationId: str, samlRoleId: str):
         """
         **Return a SAML role**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-saml-role
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-saml-role
         
         - organizationId (string)
         - samlRoleId (string)
@@ -1117,7 +1117,7 @@ class Organizations(object):
     def updateOrganizationSamlRole(self, organizationId: str, samlRoleId: str, **kwargs):
         """
         **Update a SAML role**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-organization-saml-role
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-saml-role
         
         - organizationId (string)
         - samlRoleId (string)
@@ -1143,7 +1143,7 @@ class Organizations(object):
     def deleteOrganizationSamlRole(self, organizationId: str, samlRoleId: str):
         """
         **Remove a SAML role**
-        https://developer.cisco.com/docs/meraki-api-v1/#!delete-organization-saml-role
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-saml-role
         
         - organizationId (string)
         - samlRoleId (string)
@@ -1160,7 +1160,7 @@ class Organizations(object):
     def getOrganizationSnmp(self, organizationId: str):
         """
         **Return the SNMP settings for an organization**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-snmp
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-snmp
         
         - organizationId (string)
         """
@@ -1176,7 +1176,7 @@ class Organizations(object):
     def updateOrganizationSnmp(self, organizationId: str, **kwargs):
         """
         **Update the SNMP settings for an organization**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-organization-snmp
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-snmp
         
         - organizationId (string)
         - v2cEnabled (boolean): Boolean indicating whether SNMP version 2c is enabled for the organization.
@@ -1211,7 +1211,7 @@ class Organizations(object):
     def getOrganizationWebhookLogs(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **Return the log of webhook POSTs sent**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-webhook-logs
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-webhook-logs
         
         - organizationId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages

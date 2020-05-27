@@ -6,7 +6,7 @@ class AsyncMXWarmSpareSettings:
     async def swapNetworkWarmSpare(self, networkId: str):
         """
         **Swap MX primary and warm spare appliances**
-        https://developer.cisco.com/docs/meraki-api-v0/#!swap-network-warm-spare
+        https://developer.cisco.com/meraki/api/#!swap-network-warm-spare
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class AsyncMXWarmSpareSettings:
     async def getNetworkWarmSpareSettings(self, networkId: str):
         """
         **Return MX warm spare settings**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-warm-spare-settings
+        https://developer.cisco.com/meraki/api/#!get-network-warm-spare-settings
         
         - networkId (string)
         """
@@ -38,7 +38,7 @@ class AsyncMXWarmSpareSettings:
     async def updateNetworkWarmSpareSettings(self, networkId: str, enabled: bool, **kwargs):
         """
         **Update MX warm spare settings**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-warm-spare-settings
+        https://developer.cisco.com/meraki/api/#!update-network-warm-spare-settings
         
         - networkId (string)
         - enabled (boolean): Enable warm spare

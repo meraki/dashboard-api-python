@@ -6,7 +6,7 @@ class SSIDs(object):
     def getNetworkDeviceWirelessStatus(self, networkId: str, serial: str):
         """
         **Return the SSID statuses of an access point**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-device-wireless-status
+        https://developer.cisco.com/meraki/api/#!get-network-device-wireless-status
         
         - networkId (string)
         - serial (string)
@@ -23,7 +23,7 @@ class SSIDs(object):
     def getNetworkSsids(self, networkId: str):
         """
         **List the SSIDs in a network. Supports networks with access points or wireless-enabled security appliances and teleworker gateways.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-ssids
+        https://developer.cisco.com/meraki/api/#!get-network-ssids
         
         - networkId (string)
         """
@@ -39,7 +39,7 @@ class SSIDs(object):
     def getNetworkSsid(self, networkId: str, number: str):
         """
         **Return a single SSID**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-ssid
+        https://developer.cisco.com/meraki/api/#!get-network-ssid
         
         - networkId (string)
         - number (string)
@@ -56,7 +56,7 @@ class SSIDs(object):
     def updateNetworkSsid(self, networkId: str, number: str, **kwargs):
         """
         **Update the attributes of an SSID**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-ssid
+        https://developer.cisco.com/meraki/api/#!update-network-ssid
         
         - networkId (string)
         - number (string)

@@ -6,7 +6,7 @@ class AsyncMXPortForwardingRules:
     async def getNetworkPortForwardingRules(self, networkId: str):
         """
         **Return the port forwarding rules for an MX network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-port-forwarding-rules
+        https://developer.cisco.com/meraki/api/#!get-network-port-forwarding-rules
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class AsyncMXPortForwardingRules:
     async def updateNetworkPortForwardingRules(self, networkId: str, rules: list):
         """
         **Update the port forwarding rules for an MX network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-port-forwarding-rules
+        https://developer.cisco.com/meraki/api/#!update-network-port-forwarding-rules
         
         - networkId (string)
         - rules (array): An array of port forwarding params

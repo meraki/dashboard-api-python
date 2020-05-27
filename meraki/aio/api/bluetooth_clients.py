@@ -6,7 +6,7 @@ class AsyncBluetoothClients:
     async def getNetworkBluetoothClients(self, networkId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the Bluetooth clients seen by APs in this network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-bluetooth-clients
+        https://developer.cisco.com/meraki/api/#!get-network-bluetooth-clients
         
         - networkId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
@@ -36,7 +36,7 @@ class AsyncBluetoothClients:
     async def getNetworkBluetoothClient(self, networkId: str, bluetoothClientId: str, **kwargs):
         """
         **Return a Bluetooth client. Bluetooth clients can be identified by their ID or their MAC.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-bluetooth-client
+        https://developer.cisco.com/meraki/api/#!get-network-bluetooth-client
         
         - networkId (string)
         - bluetoothClientId (string)

@@ -6,7 +6,7 @@ class AsyncOpenAPISpec:
     async def getOrganizationOpenapiSpec(self, organizationId: str):
         """
         **Return the OpenAPI 2.0 Specification of the organization's API documentation in JSON**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organization-openapi-spec
+        https://developer.cisco.com/meraki/api/#!get-organization-openapi-spec
         
         - organizationId (string)
         """

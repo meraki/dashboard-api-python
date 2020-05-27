@@ -6,7 +6,7 @@ class SwitchACLs(object):
     def getNetworkSwitchAccessControlLists(self, networkId: str):
         """
         **Return the access control lists for a MS network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-switch-access-control-lists
+        https://developer.cisco.com/meraki/api/#!get-network-switch-access-control-lists
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class SwitchACLs(object):
     def updateNetworkSwitchAccessControlLists(self, networkId: str, rules: list):
         """
         **Update the access control lists for a MS network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-switch-access-control-lists
+        https://developer.cisco.com/meraki/api/#!update-network-switch-access-control-lists
         
         - networkId (string)
         - rules (array): An ordered array of the access control list rules (not including the default rule). An empty array will clear the rules.

@@ -6,7 +6,7 @@ class AsyncMonitoredMediaServers:
     async def getOrganizationInsightMonitoredMediaServers(self, organizationId: str):
         """
         **List the monitored media servers for this organization. Only valid for organizations with Meraki Insight.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organization-insight-monitored-media-servers
+        https://developer.cisco.com/meraki/api/#!get-organization-insight-monitored-media-servers
         
         - organizationId (string)
         """
@@ -22,7 +22,7 @@ class AsyncMonitoredMediaServers:
     async def createOrganizationInsightMonitoredMediaServer(self, organizationId: str, name: str, address: str):
         """
         **Add a media server to be monitored for this organization. Only valid for organizations with Meraki Insight.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!create-organization-insight-monitored-media-server
+        https://developer.cisco.com/meraki/api/#!create-organization-insight-monitored-media-server
         
         - organizationId (string)
         - name (string): The name of the VoIP provider
@@ -45,7 +45,7 @@ class AsyncMonitoredMediaServers:
     async def getOrganizationInsightMonitoredMediaServer(self, organizationId: str, monitoredMediaServerId: str):
         """
         **Return a monitored media server for this organization. Only valid for organizations with Meraki Insight.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organization-insight-monitored-media-server
+        https://developer.cisco.com/meraki/api/#!get-organization-insight-monitored-media-server
         
         - organizationId (string)
         - monitoredMediaServerId (string)
@@ -62,7 +62,7 @@ class AsyncMonitoredMediaServers:
     async def updateOrganizationInsightMonitoredMediaServer(self, organizationId: str, monitoredMediaServerId: str, **kwargs):
         """
         **Update a monitored media server for this organization. Only valid for organizations with Meraki Insight.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-organization-insight-monitored-media-server
+        https://developer.cisco.com/meraki/api/#!update-organization-insight-monitored-media-server
         
         - organizationId (string)
         - monitoredMediaServerId (string)
@@ -86,7 +86,7 @@ class AsyncMonitoredMediaServers:
     async def deleteOrganizationInsightMonitoredMediaServer(self, organizationId: str, monitoredMediaServerId: str):
         """
         **Delete a monitored media server from this organization. Only valid for organizations with Meraki Insight.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!delete-organization-insight-monitored-media-server
+        https://developer.cisco.com/meraki/api/#!delete-organization-insight-monitored-media-server
         
         - organizationId (string)
         - monitoredMediaServerId (string)

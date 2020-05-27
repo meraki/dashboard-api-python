@@ -6,7 +6,7 @@ class AsyncEvents:
     async def getNetworkEvents(self, networkId: str, total_pages=1, direction='prev', **kwargs):
         """
         **List the events for the network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-events
+        https://developer.cisco.com/meraki/api/#!get-network-events
         
         - networkId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
@@ -49,7 +49,7 @@ class AsyncEvents:
     async def getNetworkEventsEventTypes(self, networkId: str):
         """
         **List the event type to human-readable description**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-events-event-types
+        https://developer.cisco.com/meraki/api/#!get-network-events-event-types
         
         - networkId (string)
         """

@@ -6,7 +6,7 @@ class AsyncFirewalledServices:
     async def getNetworkFirewalledServices(self, networkId: str):
         """
         **List the appliance services and their accessibility rules**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-firewalled-services
+        https://developer.cisco.com/meraki/api/#!get-network-firewalled-services
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class AsyncFirewalledServices:
     async def getNetworkFirewalledService(self, networkId: str, service: str):
         """
         **Return the accessibility settings of the given service ('ICMP', 'web', or 'SNMP')**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-firewalled-service
+        https://developer.cisco.com/meraki/api/#!get-network-firewalled-service
         
         - networkId (string)
         - service (string)
@@ -39,7 +39,7 @@ class AsyncFirewalledServices:
     async def updateNetworkFirewalledService(self, networkId: str, service: str, access: str, **kwargs):
         """
         **Updates the accessibility settings for the given service ('ICMP', 'web', or 'SNMP')**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-firewalled-service
+        https://developer.cisco.com/meraki/api/#!update-network-firewalled-service
         
         - networkId (string)
         - service (string)

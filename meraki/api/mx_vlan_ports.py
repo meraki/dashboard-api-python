@@ -6,7 +6,7 @@ class MXVLANPorts(object):
     def getNetworkAppliancePorts(self, networkId: str):
         """
         **List per-port VLAN settings for all ports of a MX.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-appliance-ports
+        https://developer.cisco.com/meraki/api/#!get-network-appliance-ports
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class MXVLANPorts(object):
     def getNetworkAppliancePort(self, networkId: str, appliancePortId: str):
         """
         **Return per-port VLAN settings for a single MX port.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-appliance-port
+        https://developer.cisco.com/meraki/api/#!get-network-appliance-port
         
         - networkId (string)
         - appliancePortId (string)
@@ -39,7 +39,7 @@ class MXVLANPorts(object):
     def updateNetworkAppliancePort(self, networkId: str, appliancePortId: str, **kwargs):
         """
         **Update the per-port VLAN settings for a single MX port.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-appliance-port
+        https://developer.cisco.com/meraki/api/#!update-network-appliance-port
         
         - networkId (string)
         - appliancePortId (string)

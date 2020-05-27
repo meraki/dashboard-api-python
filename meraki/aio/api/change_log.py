@@ -6,7 +6,7 @@ class AsyncChangeLog:
     async def getOrganizationConfigurationChanges(self, organizationId: str, total_pages=1, direction='prev', **kwargs):
         """
         **View the Change Log for your organization**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organization-configuration-changes
+        https://developer.cisco.com/meraki/api/#!get-organization-configuration-changes
         
         - organizationId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages

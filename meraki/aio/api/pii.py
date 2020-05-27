@@ -6,7 +6,7 @@ class AsyncPII:
     async def getNetworkPiiPiiKeys(self, networkId: str, **kwargs):
         """
         **List the keys required to access Personally Identifiable Information (PII) for a given identifier. Exactly one identifier will be accepted. If the organization contains org-wide Systems Manager users matching the key provided then there will be an entry with the key "0" containing the applicable keys.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-pii-pii-keys
+        https://developer.cisco.com/meraki/api/#!get-network-pii-pii-keys
         
         - networkId (string)
         - username (string): The username of a Systems Manager user
@@ -33,7 +33,7 @@ class AsyncPII:
     async def getNetworkPiiRequests(self, networkId: str):
         """
         **List the PII requests for this network or organization**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-pii-requests
+        https://developer.cisco.com/meraki/api/#!get-network-pii-requests
         
         - networkId (string)
         """
@@ -49,7 +49,7 @@ class AsyncPII:
     async def createNetworkPiiRequest(self, networkId: str, **kwargs):
         """
         **Submit a new delete or restrict processing PII request**
-        https://developer.cisco.com/docs/meraki-api-v0/#!create-network-pii-request
+        https://developer.cisco.com/meraki/api/#!create-network-pii-request
         
         - networkId (string)
         - type (string): One of "delete" or "restrict processing"
@@ -81,7 +81,7 @@ class AsyncPII:
     async def getNetworkPiiRequest(self, networkId: str, requestId: str):
         """
         **Return a PII request**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-pii-request
+        https://developer.cisco.com/meraki/api/#!get-network-pii-request
         
         - networkId (string)
         - requestId (string)
@@ -98,7 +98,7 @@ class AsyncPII:
     async def deleteNetworkPiiRequest(self, networkId: str, requestId: str):
         """
         **Delete a restrict processing PII request**
-        https://developer.cisco.com/docs/meraki-api-v0/#!delete-network-pii-request
+        https://developer.cisco.com/meraki/api/#!delete-network-pii-request
         
         - networkId (string)
         - requestId (string)
@@ -115,7 +115,7 @@ class AsyncPII:
     async def getNetworkPiiSmDevicesForKey(self, networkId: str, **kwargs):
         """
         **Given a piece of Personally Identifiable Information (PII), return the Systems Manager device ID(s) associated with that identifier. These device IDs can be used with the Systems Manager API endpoints to retrieve device details. Exactly one identifier will be accepted.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-pii-sm-devices-for-key
+        https://developer.cisco.com/meraki/api/#!get-network-pii-sm-devices-for-key
         
         - networkId (string)
         - username (string): The username of a Systems Manager user
@@ -142,7 +142,7 @@ class AsyncPII:
     async def getNetworkPiiSmOwnersForKey(self, networkId: str, **kwargs):
         """
         **Given a piece of Personally Identifiable Information (PII), return the Systems Manager owner ID(s) associated with that identifier. These owner IDs can be used with the Systems Manager API endpoints to retrieve owner details. Exactly one identifier will be accepted.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-pii-sm-owners-for-key
+        https://developer.cisco.com/meraki/api/#!get-network-pii-sm-owners-for-key
         
         - networkId (string)
         - username (string): The username of a Systems Manager user

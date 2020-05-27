@@ -6,7 +6,7 @@ class MVSense(object):
     def getDeviceCameraAnalyticsLive(self, serial: str):
         """
         **Returns live state from camera of analytics zones**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-device-camera-analytics-live
+        https://developer.cisco.com/meraki/api/#!get-device-camera-analytics-live
         
         - serial (string)
         """
@@ -22,7 +22,7 @@ class MVSense(object):
     def getDeviceCameraAnalyticsOverview(self, serial: str, **kwargs):
         """
         **Returns an overview of aggregate analytics data for a timespan**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-device-camera-analytics-overview
+        https://developer.cisco.com/meraki/api/#!get-device-camera-analytics-overview
         
         - serial (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
@@ -51,7 +51,7 @@ class MVSense(object):
     def getDeviceCameraAnalyticsRecent(self, serial: str, **kwargs):
         """
         **Returns most recent record for analytics zones**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-device-camera-analytics-recent
+        https://developer.cisco.com/meraki/api/#!get-device-camera-analytics-recent
         
         - serial (string)
         - objectType (string): [optional] The object type for which analytics will be retrieved. The default object type is person. The available types are [person, vehicle].
@@ -77,7 +77,7 @@ class MVSense(object):
     def getDeviceCameraAnalyticsZones(self, serial: str):
         """
         **Returns all configured analytic zones for this camera**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-device-camera-analytics-zones
+        https://developer.cisco.com/meraki/api/#!get-device-camera-analytics-zones
         
         - serial (string)
         """
@@ -93,7 +93,7 @@ class MVSense(object):
     def getDeviceCameraAnalyticsZoneHistory(self, serial: str, zoneId: str, **kwargs):
         """
         **Return historical records for analytic zones**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-device-camera-analytics-zone-history
+        https://developer.cisco.com/meraki/api/#!get-device-camera-analytics-zone-history
         
         - serial (string)
         - zoneId (string)

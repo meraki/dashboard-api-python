@@ -6,7 +6,7 @@ class AsyncAlertSettings:
     async def getNetworkAlertSettings(self, networkId: str):
         """
         **Return the alert configuration for this network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-alert-settings
+        https://developer.cisco.com/meraki/api/#!get-network-alert-settings
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class AsyncAlertSettings:
     async def updateNetworkAlertSettings(self, networkId: str, **kwargs):
         """
         **Update the alert configuration for this network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-alert-settings
+        https://developer.cisco.com/meraki/api/#!update-network-alert-settings
         
         - networkId (string)
         - defaultDestinations (object): The network-wide destinations for all alerts on the network.

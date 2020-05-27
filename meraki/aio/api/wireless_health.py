@@ -6,7 +6,7 @@ class AsyncWirelessHealth:
     async def getNetworkClientsConnectionStats(self, networkId: str, **kwargs):
         """
         **Aggregated connectivity info for this network, grouped by clients**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-clients-connection-stats
+        https://developer.cisco.com/meraki/api/#!get-network-clients-connection-stats
         
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
@@ -38,7 +38,7 @@ class AsyncWirelessHealth:
     async def getNetworkClientsLatencyStats(self, networkId: str, **kwargs):
         """
         **Aggregated latency info for this network, grouped by clients**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-clients-latency-stats
+        https://developer.cisco.com/meraki/api/#!get-network-clients-latency-stats
         
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
@@ -71,7 +71,7 @@ class AsyncWirelessHealth:
     async def getNetworkClientConnectionStats(self, networkId: str, clientId: str, **kwargs):
         """
         **Aggregated connectivity info for a given client on this network. Clients are identified by their MAC.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-client-connection-stats
+        https://developer.cisco.com/meraki/api/#!get-network-client-connection-stats
         
         - networkId (string)
         - clientId (string)
@@ -104,7 +104,7 @@ class AsyncWirelessHealth:
     async def getNetworkClientLatencyStats(self, networkId: str, clientId: str, **kwargs):
         """
         **Aggregated latency info for a given client on this network. Clients are identified by their MAC.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-client-latency-stats
+        https://developer.cisco.com/meraki/api/#!get-network-client-latency-stats
         
         - networkId (string)
         - clientId (string)
@@ -138,7 +138,7 @@ class AsyncWirelessHealth:
     async def getNetworkConnectionStats(self, networkId: str, **kwargs):
         """
         **Aggregated connectivity info for this network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-connection-stats
+        https://developer.cisco.com/meraki/api/#!get-network-connection-stats
         
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
@@ -170,7 +170,7 @@ class AsyncWirelessHealth:
     async def getNetworkDevicesConnectionStats(self, networkId: str, **kwargs):
         """
         **Aggregated connectivity info for this network, grouped by node**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-devices-connection-stats
+        https://developer.cisco.com/meraki/api/#!get-network-devices-connection-stats
         
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
@@ -202,7 +202,7 @@ class AsyncWirelessHealth:
     async def getNetworkDevicesLatencyStats(self, networkId: str, **kwargs):
         """
         **Aggregated latency info for this network, grouped by node**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-devices-latency-stats
+        https://developer.cisco.com/meraki/api/#!get-network-devices-latency-stats
         
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
@@ -235,7 +235,7 @@ class AsyncWirelessHealth:
     async def getNetworkDeviceConnectionStats(self, networkId: str, serial: str, **kwargs):
         """
         **Aggregated connectivity info for a given AP on this network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-device-connection-stats
+        https://developer.cisco.com/meraki/api/#!get-network-device-connection-stats
         
         - networkId (string)
         - serial (string)
@@ -268,7 +268,7 @@ class AsyncWirelessHealth:
     async def getNetworkDeviceLatencyStats(self, networkId: str, serial: str, **kwargs):
         """
         **Aggregated latency info for a given AP on this network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-device-latency-stats
+        https://developer.cisco.com/meraki/api/#!get-network-device-latency-stats
         
         - networkId (string)
         - serial (string)
@@ -302,7 +302,7 @@ class AsyncWirelessHealth:
     async def getNetworkFailedConnections(self, networkId: str, **kwargs):
         """
         **List of all failed client connection events on this network in a given time range**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-failed-connections
+        https://developer.cisco.com/meraki/api/#!get-network-failed-connections
         
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
@@ -336,7 +336,7 @@ class AsyncWirelessHealth:
     async def getNetworkLatencyStats(self, networkId: str, **kwargs):
         """
         **Aggregated latency info for this network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-latency-stats
+        https://developer.cisco.com/meraki/api/#!get-network-latency-stats
         
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.

@@ -6,7 +6,7 @@ class IntrusionSettings(object):
     def getNetworkSecurityIntrusionSettings(self, networkId: str):
         """
         **Returns all supported intrusion settings for an MX network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-security-intrusion-settings
+        https://developer.cisco.com/meraki/api/#!get-network-security-intrusion-settings
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class IntrusionSettings(object):
     def updateNetworkSecurityIntrusionSettings(self, networkId: str, **kwargs):
         """
         **Set the supported intrusion settings for an MX network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-security-intrusion-settings
+        https://developer.cisco.com/meraki/api/#!update-network-security-intrusion-settings
         
         - networkId (string)
         - mode (string): Set mode to 'disabled'/'detection'/'prevention' (optional - omitting will leave current config unchanged)
@@ -53,7 +53,7 @@ class IntrusionSettings(object):
     def getOrganizationSecurityIntrusionSettings(self, organizationId: str):
         """
         **Returns all supported intrusion settings for an organization**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organization-security-intrusion-settings
+        https://developer.cisco.com/meraki/api/#!get-organization-security-intrusion-settings
         
         - organizationId (string)
         """
@@ -69,7 +69,7 @@ class IntrusionSettings(object):
     def updateOrganizationSecurityIntrusionSettings(self, organizationId: str, whitelistedRules: list):
         """
         **Sets supported intrusion settings for an organization**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-organization-security-intrusion-settings
+        https://developer.cisco.com/meraki/api/#!update-organization-security-intrusion-settings
         
         - organizationId (string)
         - whitelistedRules (array): Sets a list of specific SNORT® signatures to whitelist

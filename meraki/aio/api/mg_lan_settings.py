@@ -6,7 +6,7 @@ class AsyncMGLANSettings:
     async def getDeviceCellularGatewaySettings(self, serial: str):
         """
         **Show the LAN Settings of a MG**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-device-cellular-gateway-settings
+        https://developer.cisco.com/meraki/api/#!get-device-cellular-gateway-settings
         
         - serial (string)
         """
@@ -22,7 +22,7 @@ class AsyncMGLANSettings:
     async def updateDeviceCellularGatewaySettings(self, serial: str, **kwargs):
         """
         **Update the LAN Settings for a single MG.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-device-cellular-gateway-settings
+        https://developer.cisco.com/meraki/api/#!update-device-cellular-gateway-settings
         
         - serial (string)
         - reservedIpRanges (array): list of all reserved IP ranges for a single MG

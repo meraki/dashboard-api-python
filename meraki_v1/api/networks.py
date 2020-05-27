@@ -6,7 +6,7 @@ class Networks(object):
     def getNetwork(self, networkId: str):
         """
         **Return a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network
+        https://developer.cisco.com/meraki/api-v1/#!get-network
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class Networks(object):
     def updateNetwork(self, networkId: str, **kwargs):
         """
         **Update a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network
+        https://developer.cisco.com/meraki/api-v1/#!update-network
         
         - networkId (string)
         - name (string): The name of the network
@@ -47,7 +47,7 @@ class Networks(object):
     def deleteNetwork(self, networkId: str):
         """
         **Delete a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!delete-network
+        https://developer.cisco.com/meraki/api-v1/#!delete-network
         
         - networkId (string)
         """
@@ -63,7 +63,7 @@ class Networks(object):
     def getNetworkAlertsSettings(self, networkId: str):
         """
         **Return the alert configuration for this network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-alerts-settings
+        https://developer.cisco.com/meraki/api-v1/#!get-network-alerts-settings
         
         - networkId (string)
         """
@@ -79,7 +79,7 @@ class Networks(object):
     def updateNetworkAlertsSettings(self, networkId: str, **kwargs):
         """
         **Update the alert configuration for this network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-alerts-settings
+        https://developer.cisco.com/meraki/api-v1/#!update-network-alerts-settings
         
         - networkId (string)
         - defaultDestinations (object): The network-wide destinations for all alerts on the network.
@@ -102,7 +102,7 @@ class Networks(object):
     def bindNetwork(self, networkId: str, configTemplateId: str, **kwargs):
         """
         **Bind a network to a template.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!bind-network
+        https://developer.cisco.com/meraki/api-v1/#!bind-network
         
         - networkId (string)
         - configTemplateId (string): The ID of the template to which the network should be bound.
@@ -125,7 +125,7 @@ class Networks(object):
     def getNetworkBluetoothClients(self, networkId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the Bluetooth clients seen by APs in this network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-bluetooth-clients
+        https://developer.cisco.com/meraki/api-v1/#!get-network-bluetooth-clients
         
         - networkId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
@@ -155,7 +155,7 @@ class Networks(object):
     def getNetworkBluetoothClient(self, networkId: str, bluetoothClientId: str, **kwargs):
         """
         **Return a Bluetooth client. Bluetooth clients can be identified by their ID or their MAC.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-bluetooth-client
+        https://developer.cisco.com/meraki/api-v1/#!get-network-bluetooth-client
         
         - networkId (string)
         - bluetoothClientId (string)
@@ -179,7 +179,7 @@ class Networks(object):
     def getNetworkClients(self, networkId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the clients that have used this network in the timespan**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-clients
+        https://developer.cisco.com/meraki/api-v1/#!get-network-clients
         
         - networkId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
@@ -208,7 +208,7 @@ class Networks(object):
     def provisionNetworkClients(self, networkId: str, clients: list, devicePolicy: str, **kwargs):
         """
         **Provisions a client with a name and policy. Clients can be provisioned before they associate to the network.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!provision-network-clients
+        https://developer.cisco.com/meraki/api-v1/#!provision-network-clients
         
         - networkId (string)
         - clients (array): The array of clients to provision
@@ -238,7 +238,7 @@ class Networks(object):
     def getNetworkClient(self, networkId: str, clientId: str):
         """
         **Return the client associated with the given identifier. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-client
+        https://developer.cisco.com/meraki/api-v1/#!get-network-client
         
         - networkId (string)
         - clientId (string)
@@ -255,7 +255,7 @@ class Networks(object):
     def getNetworkClientPolicy(self, networkId: str, clientId: str):
         """
         **Return the policy assigned to a client on the network. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-client-policy
+        https://developer.cisco.com/meraki/api-v1/#!get-network-client-policy
         
         - networkId (string)
         - clientId (string)
@@ -272,7 +272,7 @@ class Networks(object):
     def updateNetworkClientPolicy(self, networkId: str, clientId: str, devicePolicy: str, **kwargs):
         """
         **Update the policy assigned to a client on the network. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-client-policy
+        https://developer.cisco.com/meraki/api-v1/#!update-network-client-policy
         
         - networkId (string)
         - clientId (string)
@@ -296,7 +296,7 @@ class Networks(object):
     def getNetworkClientSplashAuthorizationStatus(self, networkId: str, clientId: str):
         """
         **Return the splash authorization for a client, for each SSID they've associated with through splash. Only enabled SSIDs with Click-through splash enabled will be included. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-client-splash-authorization-status
+        https://developer.cisco.com/meraki/api-v1/#!get-network-client-splash-authorization-status
         
         - networkId (string)
         - clientId (string)
@@ -313,7 +313,7 @@ class Networks(object):
     def updateNetworkClientSplashAuthorizationStatus(self, networkId: str, clientId: str, ssids: dict):
         """
         **Update a client's splash authorization. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-client-splash-authorization-status
+        https://developer.cisco.com/meraki/api-v1/#!update-network-client-splash-authorization-status
         
         - networkId (string)
         - clientId (string)
@@ -336,7 +336,7 @@ class Networks(object):
     def getNetworkClientTrafficHistory(self, networkId: str, clientId: str, total_pages=1, direction='next', **kwargs):
         """
         **Return the client's network traffic data over time. Usage data is in kilobytes. This endpoint requires detailed traffic analysis to be enabled on the Network-wide > General page. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-client-traffic-history
+        https://developer.cisco.com/meraki/api-v1/#!get-network-client-traffic-history
         
         - networkId (string)
         - clientId (string)
@@ -364,7 +364,7 @@ class Networks(object):
     def getNetworkClientUsageHistory(self, networkId: str, clientId: str):
         """
         **Return the client's daily usage history. Usage data is in kilobytes. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-client-usage-history
+        https://developer.cisco.com/meraki/api-v1/#!get-network-client-usage-history
         
         - networkId (string)
         - clientId (string)
@@ -381,7 +381,7 @@ class Networks(object):
     def getNetworkDevices(self, networkId: str):
         """
         **List the devices in a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-devices
+        https://developer.cisco.com/meraki/api-v1/#!get-network-devices
         
         - networkId (string)
         """
@@ -397,7 +397,7 @@ class Networks(object):
     def claimNetworkDevices(self, networkId: str, serials: list):
         """
         **Claim devices into a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!claim-network-devices
+        https://developer.cisco.com/meraki/api-v1/#!claim-network-devices
         
         - networkId (string)
         - serials (array): A list of serials of devices to claim
@@ -419,7 +419,7 @@ class Networks(object):
     def removeNetworkDevices(self, networkId: str, serial: str):
         """
         **Remove a single device**
-        https://developer.cisco.com/docs/meraki-api-v1/#!remove-network-devices
+        https://developer.cisco.com/meraki/api-v1/#!remove-network-devices
         
         - networkId (string)
         - serial (string): The serial of a device
@@ -441,7 +441,7 @@ class Networks(object):
     def getNetworkEvents(self, networkId: str, total_pages=1, direction='prev', **kwargs):
         """
         **List the events for the network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-events
+        https://developer.cisco.com/meraki/api-v1/#!get-network-events
         
         - networkId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
@@ -484,7 +484,7 @@ class Networks(object):
     def getNetworkEventsEventTypes(self, networkId: str):
         """
         **List the event type to human-readable description**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-events-event-types
+        https://developer.cisco.com/meraki/api-v1/#!get-network-events-event-types
         
         - networkId (string)
         """
@@ -500,7 +500,7 @@ class Networks(object):
     def updateNetworkFirewalledService(self, networkId: str, service: str, access: str, **kwargs):
         """
         **Updates the accessibility settings for the given service ('ICMP', 'web', or 'SNMP')**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-firewalled-service
+        https://developer.cisco.com/meraki/api-v1/#!update-network-firewalled-service
         
         - networkId (string)
         - service (string)
@@ -528,7 +528,7 @@ class Networks(object):
     def getNetworkFloorPlans(self, networkId: str):
         """
         **List the floor plans that belong to your network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-floor-plans
+        https://developer.cisco.com/meraki/api-v1/#!get-network-floor-plans
         
         - networkId (string)
         """
@@ -544,7 +544,7 @@ class Networks(object):
     def createNetworkFloorPlan(self, networkId: str, name: str, imageContents: str, **kwargs):
         """
         **Upload a floor plan**
-        https://developer.cisco.com/docs/meraki-api-v1/#!create-network-floor-plan
+        https://developer.cisco.com/meraki/api-v1/#!create-network-floor-plan
         
         - networkId (string)
         - name (string): The name of your floor plan.
@@ -572,7 +572,7 @@ class Networks(object):
     def getNetworkFloorPlan(self, networkId: str, floorPlanId: str):
         """
         **Find a floor plan by ID**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-floor-plan
+        https://developer.cisco.com/meraki/api-v1/#!get-network-floor-plan
         
         - networkId (string)
         - floorPlanId (string)
@@ -589,7 +589,7 @@ class Networks(object):
     def updateNetworkFloorPlan(self, networkId: str, floorPlanId: str, **kwargs):
         """
         **Update a floor plan's geolocation and other meta data**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-floor-plan
+        https://developer.cisco.com/meraki/api-v1/#!update-network-floor-plan
         
         - networkId (string)
         - floorPlanId (string)
@@ -618,7 +618,7 @@ class Networks(object):
     def deleteNetworkFloorPlan(self, networkId: str, floorPlanId: str):
         """
         **Destroy a floor plan**
-        https://developer.cisco.com/docs/meraki-api-v1/#!delete-network-floor-plan
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-floor-plan
         
         - networkId (string)
         - floorPlanId (string)
@@ -635,7 +635,7 @@ class Networks(object):
     def getNetworkGroupPolicies(self, networkId: str):
         """
         **List the group policies in a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-group-policies
+        https://developer.cisco.com/meraki/api-v1/#!get-network-group-policies
         
         - networkId (string)
         """
@@ -651,7 +651,7 @@ class Networks(object):
     def createNetworkGroupPolicy(self, networkId: str, name: str, **kwargs):
         """
         **Create a group policy**
-        https://developer.cisco.com/docs/meraki-api-v1/#!create-network-group-policy
+        https://developer.cisco.com/meraki/api-v1/#!create-network-group-policy
         
         - networkId (string)
         - name (string): The name for your group policy. Required.
@@ -687,7 +687,7 @@ class Networks(object):
     def getNetworkGroupPolicy(self, networkId: str, groupPolicyId: str):
         """
         **Display a group policy**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-group-policy
+        https://developer.cisco.com/meraki/api-v1/#!get-network-group-policy
         
         - networkId (string)
         - groupPolicyId (string)
@@ -704,7 +704,7 @@ class Networks(object):
     def updateNetworkGroupPolicy(self, networkId: str, groupPolicyId: str, **kwargs):
         """
         **Update a group policy**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-group-policy
+        https://developer.cisco.com/meraki/api-v1/#!update-network-group-policy
         
         - networkId (string)
         - groupPolicyId (string)
@@ -741,7 +741,7 @@ class Networks(object):
     def deleteNetworkGroupPolicy(self, networkId: str, groupPolicyId: str):
         """
         **Delete a group policy**
-        https://developer.cisco.com/docs/meraki-api-v1/#!delete-network-group-policy
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-group-policy
         
         - networkId (string)
         - groupPolicyId (string)
@@ -758,7 +758,7 @@ class Networks(object):
     def getNetworkHttpServers(self, networkId: str):
         """
         **List the HTTP servers for a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-http-servers
+        https://developer.cisco.com/meraki/api-v1/#!get-network-http-servers
         
         - networkId (string)
         """
@@ -774,7 +774,7 @@ class Networks(object):
     def createNetworkHttpServer(self, networkId: str, name: str, url: str, **kwargs):
         """
         **Add an HTTP server to a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!create-network-http-server
+        https://developer.cisco.com/meraki/api-v1/#!create-network-http-server
         
         - networkId (string)
         - name (string): A name for easy reference to the HTTP server
@@ -798,7 +798,7 @@ class Networks(object):
     def createNetworkHttpServersWebhookTest(self, networkId: str, url: str):
         """
         **Send a test webhook for a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!create-network-http-servers-webhook-test
+        https://developer.cisco.com/meraki/api-v1/#!create-network-http-servers-webhook-test
         
         - networkId (string)
         - url (string): The URL where the test webhook will be sent
@@ -820,7 +820,7 @@ class Networks(object):
     def getNetworkHttpServersWebhookTest(self, networkId: str, id: str):
         """
         **Return the status of a webhook test for a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-http-servers-webhook-test
+        https://developer.cisco.com/meraki/api-v1/#!get-network-http-servers-webhook-test
         
         - networkId (string)
         - id (string)
@@ -837,7 +837,7 @@ class Networks(object):
     def getNetworkHttpServer(self, networkId: str, id: str):
         """
         **Return an HTTP server for a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-http-server
+        https://developer.cisco.com/meraki/api-v1/#!get-network-http-server
         
         - networkId (string)
         - id (string)
@@ -854,7 +854,7 @@ class Networks(object):
     def updateNetworkHttpServer(self, networkId: str, id: str, **kwargs):
         """
         **Update an HTTP server**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-http-server
+        https://developer.cisco.com/meraki/api-v1/#!update-network-http-server
         
         - networkId (string)
         - id (string)
@@ -879,7 +879,7 @@ class Networks(object):
     def deleteNetworkHttpServer(self, networkId: str, id: str):
         """
         **Delete an HTTP server from a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!delete-network-http-server
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-http-server
         
         - networkId (string)
         - id (string)
@@ -896,7 +896,7 @@ class Networks(object):
     def getNetworkMerakiAuthUsers(self, networkId: str):
         """
         **List the splash or RADIUS users configured under Meraki Authentication for a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-meraki-auth-users
+        https://developer.cisco.com/meraki/api-v1/#!get-network-meraki-auth-users
         
         - networkId (string)
         """
@@ -912,7 +912,7 @@ class Networks(object):
     def getNetworkMerakiAuthUser(self, networkId: str, merakiAuthUserId: str):
         """
         **Return the Meraki Auth splash or RADIUS user**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-meraki-auth-user
+        https://developer.cisco.com/meraki/api-v1/#!get-network-meraki-auth-user
         
         - networkId (string)
         - merakiAuthUserId (string)
@@ -929,7 +929,7 @@ class Networks(object):
     def getNetworkNetflow(self, networkId: str):
         """
         **Return the NetFlow traffic reporting settings for a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-netflow
+        https://developer.cisco.com/meraki/api-v1/#!get-network-netflow
         
         - networkId (string)
         """
@@ -945,7 +945,7 @@ class Networks(object):
     def updateNetworkNetflow(self, networkId: str, **kwargs):
         """
         **Update the NetFlow traffic reporting settings for a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-netflow
+        https://developer.cisco.com/meraki/api-v1/#!update-network-netflow
         
         - networkId (string)
         - reportingEnabled (boolean): Boolean indicating whether NetFlow traffic reporting is enabled (true) or disabled (false).
@@ -969,7 +969,7 @@ class Networks(object):
     def getNetworkNetworkHealthChannelUtilization(self, networkId: str, total_pages=1, direction='next', **kwargs):
         """
         **Get the channel utilization over each radio for all APs in a network.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-network-health-channel-utilization
+        https://developer.cisco.com/meraki/api-v1/#!get-network-network-health-channel-utilization
         
         - networkId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
@@ -1000,7 +1000,7 @@ class Networks(object):
     def getNetworkPiiPiiKeys(self, networkId: str, **kwargs):
         """
         **List the keys required to access Personally Identifiable Information (PII) for a given identifier. Exactly one identifier will be accepted. If the organization contains org-wide Systems Manager users matching the key provided then there will be an entry with the key "0" containing the applicable keys.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-pii-pii-keys
+        https://developer.cisco.com/meraki/api-v1/#!get-network-pii-pii-keys
         
         - networkId (string)
         - username (string): The username of a Systems Manager user
@@ -1027,7 +1027,7 @@ class Networks(object):
     def getNetworkPiiRequests(self, networkId: str):
         """
         **List the PII requests for this network or organization**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-pii-requests
+        https://developer.cisco.com/meraki/api-v1/#!get-network-pii-requests
         
         - networkId (string)
         """
@@ -1043,7 +1043,7 @@ class Networks(object):
     def createNetworkPiiRequest(self, networkId: str, **kwargs):
         """
         **Submit a new delete or restrict processing PII request**
-        https://developer.cisco.com/docs/meraki-api-v1/#!create-network-pii-request
+        https://developer.cisco.com/meraki/api-v1/#!create-network-pii-request
         
         - networkId (string)
         - type (string): One of "delete" or "restrict processing"
@@ -1075,7 +1075,7 @@ class Networks(object):
     def getNetworkPiiRequest(self, networkId: str, requestId: str):
         """
         **Return a PII request**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-pii-request
+        https://developer.cisco.com/meraki/api-v1/#!get-network-pii-request
         
         - networkId (string)
         - requestId (string)
@@ -1092,7 +1092,7 @@ class Networks(object):
     def deleteNetworkPiiRequest(self, networkId: str, requestId: str):
         """
         **Delete a restrict processing PII request**
-        https://developer.cisco.com/docs/meraki-api-v1/#!delete-network-pii-request
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-pii-request
         
         - networkId (string)
         - requestId (string)
@@ -1109,7 +1109,7 @@ class Networks(object):
     def getNetworkPiiSmDevicesForKey(self, networkId: str, **kwargs):
         """
         **Given a piece of Personally Identifiable Information (PII), return the Systems Manager device ID(s) associated with that identifier. These device IDs can be used with the Systems Manager API endpoints to retrieve device details. Exactly one identifier will be accepted.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-pii-sm-devices-for-key
+        https://developer.cisco.com/meraki/api-v1/#!get-network-pii-sm-devices-for-key
         
         - networkId (string)
         - username (string): The username of a Systems Manager user
@@ -1136,7 +1136,7 @@ class Networks(object):
     def getNetworkPiiSmOwnersForKey(self, networkId: str, **kwargs):
         """
         **Given a piece of Personally Identifiable Information (PII), return the Systems Manager owner ID(s) associated with that identifier. These owner IDs can be used with the Systems Manager API endpoints to retrieve owner details. Exactly one identifier will be accepted.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-pii-sm-owners-for-key
+        https://developer.cisco.com/meraki/api-v1/#!get-network-pii-sm-owners-for-key
         
         - networkId (string)
         - username (string): The username of a Systems Manager user
@@ -1163,7 +1163,7 @@ class Networks(object):
     def getNetworkSettings(self, networkId: str):
         """
         **Return the settings for a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-settings
+        https://developer.cisco.com/meraki/api-v1/#!get-network-settings
         
         - networkId (string)
         """
@@ -1179,7 +1179,7 @@ class Networks(object):
     def updateNetworkSettings(self, networkId: str, **kwargs):
         """
         **Update the settings for a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-settings
+        https://developer.cisco.com/meraki/api-v1/#!update-network-settings
         
         - networkId (string)
         - localStatusPageEnabled (boolean): Enables / disables the local device status pages (<a target='_blank' href='http://my.meraki.com/'>my.meraki.com, </a><a target='_blank' href='http://ap.meraki.com/'>ap.meraki.com, </a><a target='_blank' href='http://switch.meraki.com/'>switch.meraki.com, </a><a target='_blank' href='http://wired.meraki.com/'>wired.meraki.com</a>). Optional (defaults to false)
@@ -1202,7 +1202,7 @@ class Networks(object):
     def getNetworkSnmp(self, networkId: str):
         """
         **Return the SNMP settings for a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-snmp
+        https://developer.cisco.com/meraki/api-v1/#!get-network-snmp
         
         - networkId (string)
         """
@@ -1218,7 +1218,7 @@ class Networks(object):
     def updateNetworkSnmp(self, networkId: str, **kwargs):
         """
         **Update the SNMP settings for a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-snmp
+        https://developer.cisco.com/meraki/api-v1/#!update-network-snmp
         
         - networkId (string)
         - access (string): The type of SNMP access. Can be one of 'none' (disabled), 'community' (V1/V2c), or 'users' (V3).
@@ -1246,7 +1246,7 @@ class Networks(object):
     def getNetworkSplashLoginAttempts(self, networkId: str, **kwargs):
         """
         **List the splash login attempts for a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-splash-login-attempts
+        https://developer.cisco.com/meraki/api-v1/#!get-network-splash-login-attempts
         
         - networkId (string)
         - ssidNumber (integer): Only return the login attempts for the specified SSID
@@ -1274,7 +1274,7 @@ class Networks(object):
     def splitNetwork(self, networkId: str):
         """
         **Split a combined network into individual networks for each type of device**
-        https://developer.cisco.com/docs/meraki-api-v1/#!split-network
+        https://developer.cisco.com/meraki/api-v1/#!split-network
         
         - networkId (string)
         """
@@ -1290,7 +1290,7 @@ class Networks(object):
     def getNetworkSyslogServers(self, networkId: str):
         """
         **List the syslog servers for a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-syslog-servers
+        https://developer.cisco.com/meraki/api-v1/#!get-network-syslog-servers
         
         - networkId (string)
         """
@@ -1306,7 +1306,7 @@ class Networks(object):
     def updateNetworkSyslogServers(self, networkId: str, servers: list):
         """
         **Update the syslog servers for a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-syslog-servers
+        https://developer.cisco.com/meraki/api-v1/#!update-network-syslog-servers
         
         - networkId (string)
         - servers (array): A list of the syslog servers for this network
@@ -1330,7 +1330,7 @@ class Networks(object):
         **    The traffic analysis data for this network.
     <a href="https://documentation.meraki.com/MR/Monitoring_and_Reporting/Hostname_Visibility">Traffic Analysis with Hostname Visibility</a> must be enabled on the network.
 **
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-traffic
+        https://developer.cisco.com/meraki/api-v1/#!get-network-traffic
         
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 30 days from today.
@@ -1360,7 +1360,7 @@ class Networks(object):
     def getNetworkTrafficAnalysis(self, networkId: str):
         """
         **Return the traffic analysis settings for a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-traffic-analysis
+        https://developer.cisco.com/meraki/api-v1/#!get-network-traffic-analysis
         
         - networkId (string)
         """
@@ -1376,7 +1376,7 @@ class Networks(object):
     def updateNetworkTrafficAnalysis(self, networkId: str, **kwargs):
         """
         **Update the traffic analysis settings for a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-traffic-analysis
+        https://developer.cisco.com/meraki/api-v1/#!update-network-traffic-analysis
         
         - networkId (string)
         - mode (string):     The traffic analysis mode for the network. Can be one of 'disabled' (do not collect traffic types),
@@ -1405,7 +1405,7 @@ class Networks(object):
     def getNetworkTrafficShapingApplicationCategories(self, networkId: str):
         """
         **Returns the application categories for traffic shaping rules.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-traffic-shaping-application-categories
+        https://developer.cisco.com/meraki/api-v1/#!get-network-traffic-shaping-application-categories
         
         - networkId (string)
         """
@@ -1421,7 +1421,7 @@ class Networks(object):
     def getNetworkTrafficShapingDscpTaggingOptions(self, networkId: str):
         """
         **Returns the available DSCP tagging options for your traffic shaping rules.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-traffic-shaping-dscp-tagging-options
+        https://developer.cisco.com/meraki/api-v1/#!get-network-traffic-shaping-dscp-tagging-options
         
         - networkId (string)
         """
@@ -1437,7 +1437,7 @@ class Networks(object):
     def unbindNetwork(self, networkId: str):
         """
         **Unbind a network from a template.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!unbind-network
+        https://developer.cisco.com/meraki/api-v1/#!unbind-network
         
         - networkId (string)
         """

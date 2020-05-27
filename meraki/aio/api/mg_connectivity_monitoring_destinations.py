@@ -6,7 +6,7 @@ class AsyncMGConnectivityMonitoringDestinations:
     async def getNetworkCellularGatewaySettingsConnectivityMonitoringDestinations(self, networkId: str):
         """
         **Return the connectivity testing destinations for an MG network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-cellular-gateway-settings-connectivity-monitoring-destinations
+        https://developer.cisco.com/meraki/api/#!get-network-cellular-gateway-settings-connectivity-monitoring-destinations
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class AsyncMGConnectivityMonitoringDestinations:
     async def updateNetworkCellularGatewaySettingsConnectivityMonitoringDestinations(self, networkId: str, **kwargs):
         """
         **Update the connectivity testing destinations for an MG network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-cellular-gateway-settings-connectivity-monitoring-destinations
+        https://developer.cisco.com/meraki/api/#!update-network-cellular-gateway-settings-connectivity-monitoring-destinations
         
         - networkId (string)
         - destinations (array): The list of connectivity monitoring destinations

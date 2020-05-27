@@ -6,7 +6,7 @@ class AsyncSAMLRoles:
     async def getOrganizationSamlRoles(self, organizationId: str):
         """
         **List the SAML roles for this organization**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organization-saml-roles
+        https://developer.cisco.com/meraki/api/#!get-organization-saml-roles
         
         - organizationId (string)
         """
@@ -22,7 +22,7 @@ class AsyncSAMLRoles:
     async def createOrganizationSamlRole(self, organizationId: str, **kwargs):
         """
         **Create a SAML role**
-        https://developer.cisco.com/docs/meraki-api-v0/#!create-organization-saml-role
+        https://developer.cisco.com/meraki/api/#!create-organization-saml-role
         
         - organizationId (string)
         - role (string): The role of the SAML administrator
@@ -47,7 +47,7 @@ class AsyncSAMLRoles:
     async def getOrganizationSamlRole(self, organizationId: str, samlRoleId: str):
         """
         **Return a SAML role**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organization-saml-role
+        https://developer.cisco.com/meraki/api/#!get-organization-saml-role
         
         - organizationId (string)
         - samlRoleId (string)
@@ -64,7 +64,7 @@ class AsyncSAMLRoles:
     async def updateOrganizationSamlRole(self, organizationId: str, samlRoleId: str, **kwargs):
         """
         **Update a SAML role**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-organization-saml-role
+        https://developer.cisco.com/meraki/api/#!update-organization-saml-role
         
         - organizationId (string)
         - samlRoleId (string)
@@ -90,7 +90,7 @@ class AsyncSAMLRoles:
     async def deleteOrganizationSamlRole(self, organizationId: str, samlRoleId: str):
         """
         **Remove a SAML role**
-        https://developer.cisco.com/docs/meraki-api-v0/#!delete-organization-saml-role
+        https://developer.cisco.com/meraki/api/#!delete-organization-saml-role
         
         - organizationId (string)
         - samlRoleId (string)

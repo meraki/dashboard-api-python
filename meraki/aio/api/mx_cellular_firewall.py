@@ -6,7 +6,7 @@ class AsyncMXCellularFirewall:
     async def getNetworkCellularFirewallRules(self, networkId: str):
         """
         **Return the cellular firewall rules for an MX network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-cellular-firewall-rules
+        https://developer.cisco.com/meraki/api/#!get-network-cellular-firewall-rules
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class AsyncMXCellularFirewall:
     async def updateNetworkCellularFirewallRules(self, networkId: str, **kwargs):
         """
         **Update the cellular firewall rules of an MX network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-cellular-firewall-rules
+        https://developer.cisco.com/meraki/api/#!update-network-cellular-firewall-rules
         
         - networkId (string)
         - rules (array): An ordered array of the firewall rules (not including the default rule)

@@ -6,7 +6,7 @@ class AsyncVLANs:
     async def getNetworkVlans(self, networkId: str):
         """
         **List the VLANs for an MX network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-vlans
+        https://developer.cisco.com/meraki/api/#!get-network-vlans
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class AsyncVLANs:
     async def createNetworkVlan(self, networkId: str, id: str, name: str, subnet: str, applianceIp: str, **kwargs):
         """
         **Add a VLAN**
-        https://developer.cisco.com/docs/meraki-api-v0/#!create-network-vlan
+        https://developer.cisco.com/meraki/api/#!create-network-vlan
         
         - networkId (string)
         - id (string): The VLAN ID of the new VLAN (must be between 1 and 4094)
@@ -48,7 +48,7 @@ class AsyncVLANs:
     async def getNetworkVlan(self, networkId: str, vlanId: str):
         """
         **Return a VLAN**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-vlan
+        https://developer.cisco.com/meraki/api/#!get-network-vlan
         
         - networkId (string)
         - vlanId (string)
@@ -65,7 +65,7 @@ class AsyncVLANs:
     async def updateNetworkVlan(self, networkId: str, vlanId: str, **kwargs):
         """
         **Update a VLAN**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-vlan
+        https://developer.cisco.com/meraki/api/#!update-network-vlan
         
         - networkId (string)
         - vlanId (string)
@@ -109,7 +109,7 @@ class AsyncVLANs:
     async def deleteNetworkVlan(self, networkId: str, vlanId: str):
         """
         **Delete a VLAN from a network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!delete-network-vlan
+        https://developer.cisco.com/meraki/api/#!delete-network-vlan
         
         - networkId (string)
         - vlanId (string)
@@ -126,7 +126,7 @@ class AsyncVLANs:
     async def getNetworkVlansEnabledState(self, networkId: str):
         """
         **Returns the enabled status of VLANs for the network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-vlans-enabled-state
+        https://developer.cisco.com/meraki/api/#!get-network-vlans-enabled-state
         
         - networkId (string)
         """
@@ -142,7 +142,7 @@ class AsyncVLANs:
     async def updateNetworkVlansEnabledState(self, networkId: str, enabled: bool):
         """
         **Enable/Disable VLANs for the given network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-vlans-enabled-state
+        https://developer.cisco.com/meraki/api/#!update-network-vlans-enabled-state
         
         - networkId (string)
         - enabled (boolean): Boolean indicating whether to enable (true) or disable (false) VLANs for the network

@@ -6,7 +6,7 @@ class Devices(object):
     def getDevice(self, serial: str):
         """
         **Return a single device**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-device
+        https://developer.cisco.com/meraki/api-v1/#!get-device
         
         - serial (string)
         """
@@ -22,7 +22,7 @@ class Devices(object):
     def updateDevice(self, serial: str, **kwargs):
         """
         **Update the attributes of a device**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-device
+        https://developer.cisco.com/meraki/api-v1/#!update-device
         
         - serial (string)
         - name (string): The name of a device
@@ -52,7 +52,7 @@ class Devices(object):
     def blinkDeviceLeds(self, serial: str, **kwargs):
         """
         **Blink the LEDs on a device**
-        https://developer.cisco.com/docs/meraki-api-v1/#!blink-device-leds
+        https://developer.cisco.com/meraki/api-v1/#!blink-device-leds
         
         - serial (string)
         - duration (integer): The duration in seconds. Must be between 5 and 120. Default is 20 seconds
@@ -76,7 +76,7 @@ class Devices(object):
     def getDeviceClients(self, serial: str, **kwargs):
         """
         **List the clients of a device, up to a maximum of a month ago. The usage of each client is returned in kilobytes. If the device is a switch, the switchport is returned; otherwise the switchport field is null.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-device-clients
+        https://developer.cisco.com/meraki/api-v1/#!get-device-clients
         
         - serial (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
@@ -99,7 +99,7 @@ class Devices(object):
     def getDeviceLldpCdp(self, serial: str, **kwargs):
         """
         **List LLDP and CDP information for a device**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-device-lldp-cdp
+        https://developer.cisco.com/meraki/api-v1/#!get-device-lldp-cdp
         
         - serial (string)
         - timespan (integer): The timespan for which LLDP and CDP information will be fetched. Must be in seconds and less than or equal to a month (2592000 seconds). LLDP and CDP information is sent to the Meraki dashboard every 10 minutes. In instances where this LLDP and CDP information matches an existing entry in the Meraki dashboard, the data is updated once every two hours. Meraki recommends querying LLDP and CDP information at an interval slightly greater than two hours, to ensure that unchanged CDP / LLDP information can be queried consistently.
@@ -121,7 +121,7 @@ class Devices(object):
     def getDeviceLossAndLatencyHistory(self, serial: str, ip: str, **kwargs):
         """
         **Get the uplink loss percentage and latency in milliseconds for a wired network device.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-device-loss-and-latency-history
+        https://developer.cisco.com/meraki/api-v1/#!get-device-loss-and-latency-history
         
         - serial (string)
         - ip (string): The destination IP used to obtain the requested stats. This is required.
@@ -152,7 +152,7 @@ class Devices(object):
     def getDeviceManagementInterface(self, serial: str):
         """
         **Return the management interface settings for a device**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-device-management-interface
+        https://developer.cisco.com/meraki/api-v1/#!get-device-management-interface
         
         - serial (string)
         """
@@ -168,7 +168,7 @@ class Devices(object):
     def updateDeviceManagementInterface(self, serial: str, **kwargs):
         """
         **Update the management interface settings for a device**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-device-management-interface
+        https://developer.cisco.com/meraki/api-v1/#!update-device-management-interface
         
         - serial (string)
         - wan1 (object): WAN 1 settings
@@ -191,7 +191,7 @@ class Devices(object):
     def rebootDevice(self, serial: str):
         """
         **Reboot a device**
-        https://developer.cisco.com/docs/meraki-api-v1/#!reboot-device
+        https://developer.cisco.com/meraki/api-v1/#!reboot-device
         
         - serial (string)
         """
@@ -207,7 +207,7 @@ class Devices(object):
     def getDeviceUplink(self, serial: str):
         """
         **Return the uplink information for a device.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-device-uplink
+        https://developer.cisco.com/meraki/api-v1/#!get-device-uplink
         
         - serial (string)
         """

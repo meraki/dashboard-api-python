@@ -6,7 +6,7 @@ class AsyncNamedTagScope:
     async def getNetworkSmTargetGroups(self, networkId: str, **kwargs):
         """
         **List the target groups in this network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-sm-target-groups
+        https://developer.cisco.com/meraki/api/#!get-network-sm-target-groups
         
         - networkId (string)
         - withDetails (boolean): Boolean indicating if the the ids of the devices or users scoped by the target group should be included in the response
@@ -28,7 +28,7 @@ class AsyncNamedTagScope:
     async def createNetworkSmTargetGroup(self, networkId: str, **kwargs):
         """
         **Add a target group**
-        https://developer.cisco.com/docs/meraki-api-v0/#!create-network-sm-target-group
+        https://developer.cisco.com/meraki/api/#!create-network-sm-target-group
         
         - networkId (string)
         - name (string): The name of this target group
@@ -51,7 +51,7 @@ class AsyncNamedTagScope:
     async def getNetworkSmTargetGroup(self, networkId: str, targetGroupId: str, **kwargs):
         """
         **Return a target group**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-sm-target-group
+        https://developer.cisco.com/meraki/api/#!get-network-sm-target-group
         
         - networkId (string)
         - targetGroupId (string)
@@ -74,7 +74,7 @@ class AsyncNamedTagScope:
     async def updateNetworkSmTargetGroup(self, networkId: str, targetGroupId: str, **kwargs):
         """
         **Update a target group**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-sm-target-group
+        https://developer.cisco.com/meraki/api/#!update-network-sm-target-group
         
         - networkId (string)
         - targetGroupId (string)
@@ -98,7 +98,7 @@ class AsyncNamedTagScope:
     async def deleteNetworkSmTargetGroup(self, networkId: str, targetGroupId: str):
         """
         **Delete a target group from a network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!delete-network-sm-target-group
+        https://developer.cisco.com/meraki/api/#!delete-network-sm-target-group
         
         - networkId (string)
         - targetGroupId (string)

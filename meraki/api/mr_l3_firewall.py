@@ -6,7 +6,7 @@ class MRL3Firewall(object):
     def getNetworkSsidL3FirewallRules(self, networkId: str, number: str):
         """
         **Return the L3 firewall rules for an SSID on an MR network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-ssid-l-3-firewall-rules
+        https://developer.cisco.com/meraki/api/#!get-network-ssid-l-3-firewall-rules
         
         - networkId (string)
         - number (string)
@@ -23,7 +23,7 @@ class MRL3Firewall(object):
     def updateNetworkSsidL3FirewallRules(self, networkId: str, number: str, **kwargs):
         """
         **Update the L3 firewall rules of an SSID on an MR network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-ssid-l-3-firewall-rules
+        https://developer.cisco.com/meraki/api/#!update-network-ssid-l-3-firewall-rules
         
         - networkId (string)
         - number (string)

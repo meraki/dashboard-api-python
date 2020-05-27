@@ -6,7 +6,7 @@ class AsyncConfigTemplates:
     async def getOrganizationConfigTemplates(self, organizationId: str):
         """
         **List the configuration templates for this organization**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organization-config-templates
+        https://developer.cisco.com/meraki/api/#!get-organization-config-templates
         
         - organizationId (string)
         """
@@ -22,7 +22,7 @@ class AsyncConfigTemplates:
     async def deleteOrganizationConfigTemplate(self, organizationId: str, configTemplateId: str):
         """
         **Remove a configuration template**
-        https://developer.cisco.com/docs/meraki-api-v0/#!delete-organization-config-template
+        https://developer.cisco.com/meraki/api/#!delete-organization-config-template
         
         - organizationId (string)
         - configTemplateId (string)

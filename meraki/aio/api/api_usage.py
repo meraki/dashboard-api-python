@@ -6,7 +6,7 @@ class AsyncAPIUsage:
     async def getOrganizationApiRequests(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the API requests made by an organization**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organization-api-requests
+        https://developer.cisco.com/meraki/api/#!get-organization-api-requests
         
         - organizationId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
@@ -41,7 +41,7 @@ class AsyncAPIUsage:
     async def getOrganizationApiRequestsOverview(self, organizationId: str, **kwargs):
         """
         **Return an aggregated overview of API requests data**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organization-api-requests-overview
+        https://developer.cisco.com/meraki/api/#!get-organization-api-requests-overview
         
         - organizationId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.

@@ -6,7 +6,7 @@ class AsyncSwitchPortSchedules:
     async def getNetworkSwitchPortSchedules(self, networkId: str):
         """
         **List switch port schedules**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-switch-port-schedules
+        https://developer.cisco.com/meraki/api/#!get-network-switch-port-schedules
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class AsyncSwitchPortSchedules:
     async def createNetworkSwitchPortSchedule(self, networkId: str, name: str, **kwargs):
         """
         **Add a switch port schedule**
-        https://developer.cisco.com/docs/meraki-api-v0/#!create-network-switch-port-schedule
+        https://developer.cisco.com/meraki/api/#!create-network-switch-port-schedule
         
         - networkId (string)
         - name (string): The name for your port schedule. Required
@@ -48,7 +48,7 @@ class AsyncSwitchPortSchedules:
     async def deleteNetworkSwitchPortSchedule(self, networkId: str, portScheduleId: str):
         """
         **Delete a switch port schedule**
-        https://developer.cisco.com/docs/meraki-api-v0/#!delete-network-switch-port-schedule
+        https://developer.cisco.com/meraki/api/#!delete-network-switch-port-schedule
         
         - networkId (string)
         - portScheduleId (string)
@@ -65,7 +65,7 @@ class AsyncSwitchPortSchedules:
     async def updateNetworkSwitchPortSchedule(self, networkId: str, portScheduleId: str, **kwargs):
         """
         **Update a switch port schedule**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-switch-port-schedule
+        https://developer.cisco.com/meraki/api/#!update-network-switch-port-schedule
         
         - networkId (string)
         - portScheduleId (string)

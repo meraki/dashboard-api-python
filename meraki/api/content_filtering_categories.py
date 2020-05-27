@@ -6,7 +6,7 @@ class ContentFilteringCategories(object):
     def getNetworkContentFilteringCategories(self, networkId: str):
         """
         **List all available content filtering categories for an MX network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-content-filtering-categories
+        https://developer.cisco.com/meraki/api/#!get-network-content-filtering-categories
         
         - networkId (string)
         """

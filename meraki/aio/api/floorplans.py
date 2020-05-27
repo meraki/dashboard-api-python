@@ -6,7 +6,7 @@ class AsyncFloorplans:
     async def getNetworkFloorPlans(self, networkId: str):
         """
         **List the floor plans that belong to your network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-floor-plans
+        https://developer.cisco.com/meraki/api/#!get-network-floor-plans
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class AsyncFloorplans:
     async def createNetworkFloorPlan(self, networkId: str, name: str, imageContents: str, **kwargs):
         """
         **Upload a floor plan**
-        https://developer.cisco.com/docs/meraki-api-v0/#!create-network-floor-plan
+        https://developer.cisco.com/meraki/api/#!create-network-floor-plan
         
         - networkId (string)
         - name (string): The name of your floor plan.
@@ -50,7 +50,7 @@ class AsyncFloorplans:
     async def getNetworkFloorPlan(self, networkId: str, floorPlanId: str):
         """
         **Find a floor plan by ID**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-floor-plan
+        https://developer.cisco.com/meraki/api/#!get-network-floor-plan
         
         - networkId (string)
         - floorPlanId (string)
@@ -67,7 +67,7 @@ class AsyncFloorplans:
     async def updateNetworkFloorPlan(self, networkId: str, floorPlanId: str, **kwargs):
         """
         **Update a floor plan's geolocation and other meta data**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-floor-plan
+        https://developer.cisco.com/meraki/api/#!update-network-floor-plan
         
         - networkId (string)
         - floorPlanId (string)
@@ -96,7 +96,7 @@ class AsyncFloorplans:
     async def deleteNetworkFloorPlan(self, networkId: str, floorPlanId: str):
         """
         **Destroy a floor plan**
-        https://developer.cisco.com/docs/meraki-api-v0/#!delete-network-floor-plan
+        https://developer.cisco.com/meraki/api/#!delete-network-floor-plan
         
         - networkId (string)
         - floorPlanId (string)

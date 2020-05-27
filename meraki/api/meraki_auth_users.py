@@ -6,7 +6,7 @@ class MerakiAuthUsers(object):
     def getNetworkMerakiAuthUsers(self, networkId: str):
         """
         **List the splash or RADIUS users configured under Meraki Authentication for a network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-meraki-auth-users
+        https://developer.cisco.com/meraki/api/#!get-network-meraki-auth-users
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class MerakiAuthUsers(object):
     def getNetworkMerakiAuthUser(self, networkId: str, merakiAuthUserId: str):
         """
         **Return the Meraki Auth splash or RADIUS user**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-meraki-auth-user
+        https://developer.cisco.com/meraki/api/#!get-network-meraki-auth-user
         
         - networkId (string)
         - merakiAuthUserId (string)

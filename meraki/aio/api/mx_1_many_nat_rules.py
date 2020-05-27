@@ -6,7 +6,7 @@ class AsyncMX1ManyNATRules:
     async def getNetworkOneToManyNatRules(self, networkId: str):
         """
         **Return the 1:Many NAT mapping rules for an MX network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-one-to-many-nat-rules
+        https://developer.cisco.com/meraki/api/#!get-network-one-to-many-nat-rules
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class AsyncMX1ManyNATRules:
     async def updateNetworkOneToManyNatRules(self, networkId: str, rules: list):
         """
         **Set the 1:Many NAT mapping rules for an MX network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-one-to-many-nat-rules
+        https://developer.cisco.com/meraki/api/#!update-network-one-to-many-nat-rules
         
         - networkId (string)
         - rules (array): An array of 1:Many nat rules

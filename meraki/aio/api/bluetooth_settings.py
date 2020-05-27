@@ -6,7 +6,7 @@ class AsyncBluetoothSettings:
     async def getDeviceWirelessBluetoothSettings(self, serial: str):
         """
         **Return the bluetooth settings for a wireless device**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-device-wireless-bluetooth-settings
+        https://developer.cisco.com/meraki/api/#!get-device-wireless-bluetooth-settings
         
         - serial (string)
         """
@@ -22,7 +22,7 @@ class AsyncBluetoothSettings:
     async def updateDeviceWirelessBluetoothSettings(self, serial: str, **kwargs):
         """
         **Update the bluetooth settings for a wireless device**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-device-wireless-bluetooth-settings
+        https://developer.cisco.com/meraki/api/#!update-device-wireless-bluetooth-settings
         
         - serial (string)
         - uuid (string): Desired UUID of the beacon. If the value is set to null it will reset to Dashboard's automatically generated value.
@@ -46,7 +46,7 @@ class AsyncBluetoothSettings:
     async def getNetworkBluetoothSettings(self, networkId: str):
         """
         **Return the Bluetooth settings for a network. <a href="https://documentation.meraki.com/MR/Bluetooth/Bluetooth_Low_Energy_(BLE)">Bluetooth settings</a> must be enabled on the network.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-bluetooth-settings
+        https://developer.cisco.com/meraki/api/#!get-network-bluetooth-settings
         
         - networkId (string)
         """
@@ -62,7 +62,7 @@ class AsyncBluetoothSettings:
     async def updateNetworkBluetoothSettings(self, networkId: str, **kwargs):
         """
         **Update the Bluetooth settings for a network. See the docs page for <a href="https://documentation.meraki.com/MR/Bluetooth/Bluetooth_Low_Energy_(BLE)">Bluetooth settings</a>.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-bluetooth-settings
+        https://developer.cisco.com/meraki/api/#!update-network-bluetooth-settings
         
         - networkId (string)
         - scanningEnabled (boolean): Whether APs will scan for Bluetooth enabled clients. (true, false)

@@ -6,7 +6,7 @@ class Switch(object):
     def getDeviceSwitchPorts(self, serial: str):
         """
         **List the switch ports for a switch**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-device-switch-ports
+        https://developer.cisco.com/meraki/api-v1/#!get-device-switch-ports
         
         - serial (string)
         """
@@ -22,7 +22,7 @@ class Switch(object):
     def cycleDeviceSwitchPorts(self, serial: str, ports: list):
         """
         **Cycle a set of switch ports**
-        https://developer.cisco.com/docs/meraki-api-v1/#!cycle-device-switch-ports
+        https://developer.cisco.com/meraki/api-v1/#!cycle-device-switch-ports
         
         - serial (string)
         - ports (array): List of switch ports. Example: [1, 2-5, 1_MA-MOD-8X10G_1, 1_MA-MOD-8X10G_2-1_MA-MOD-8X10G_8]
@@ -44,7 +44,7 @@ class Switch(object):
     def getDeviceSwitchPortsStatuses(self, serial: str, **kwargs):
         """
         **Return the status for all the ports of a switch**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-device-switch-ports-statuses
+        https://developer.cisco.com/meraki/api-v1/#!get-device-switch-ports-statuses
         
         - serial (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
@@ -67,7 +67,7 @@ class Switch(object):
     def getDeviceSwitchPortsStatusesPackets(self, serial: str, **kwargs):
         """
         **Return the packet counters for all the ports of a switch**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-device-switch-ports-statuses-packets
+        https://developer.cisco.com/meraki/api-v1/#!get-device-switch-ports-statuses-packets
         
         - serial (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 1 day from today.
@@ -90,7 +90,7 @@ class Switch(object):
     def getDeviceSwitchPort(self, serial: str, portId: str):
         """
         **Return a switch port**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-device-switch-port
+        https://developer.cisco.com/meraki/api-v1/#!get-device-switch-port
         
         - serial (string)
         - portId (string)
@@ -107,7 +107,7 @@ class Switch(object):
     def updateDeviceSwitchPort(self, serial: str, portId: str, **kwargs):
         """
         **Update a switch port**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-device-switch-port
+        https://developer.cisco.com/meraki/api-v1/#!update-device-switch-port
         
         - serial (string)
         - portId (string)
@@ -162,7 +162,7 @@ class Switch(object):
     def getNetworkSwitchAccessControlLists(self, networkId: str):
         """
         **Return the access control lists for a MS network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-switch-access-control-lists
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-access-control-lists
         
         - networkId (string)
         """
@@ -178,7 +178,7 @@ class Switch(object):
     def updateNetworkSwitchAccessControlLists(self, networkId: str, rules: list):
         """
         **Update the access control lists for a MS network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-switch-access-control-lists
+        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-access-control-lists
         
         - networkId (string)
         - rules (array): An ordered array of the access control list rules (not including the default rule). An empty array will clear the rules.
@@ -200,7 +200,7 @@ class Switch(object):
     def getNetworkSwitchAccessPolicies(self, networkId: str):
         """
         **List the access policies for this network. Only valid for MS networks.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-switch-access-policies
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-access-policies
         
         - networkId (string)
         """
@@ -216,7 +216,7 @@ class Switch(object):
     def getNetworkSwitchDhcpServerPolicy(self, networkId: str):
         """
         **Return the DHCP server policy**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-switch-dhcp-server-policy
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-dhcp-server-policy
         
         - networkId (string)
         """
@@ -232,7 +232,7 @@ class Switch(object):
     def updateNetworkSwitchDhcpServerPolicy(self, networkId: str, **kwargs):
         """
         **Update the DHCP server policy**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-switch-dhcp-server-policy
+        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-dhcp-server-policy
         
         - networkId (string)
         - defaultPolicy (string): 'allow' or 'block' new DHCP servers. Default value is 'allow'.
@@ -260,7 +260,7 @@ class Switch(object):
     def getNetworkSwitchDscpToCosMappings(self, networkId: str):
         """
         **Return the DSCP to CoS mappings**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-switch-dscp-to-cos-mappings
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-dscp-to-cos-mappings
         
         - networkId (string)
         """
@@ -276,7 +276,7 @@ class Switch(object):
     def updateNetworkSwitchDscpToCosMappings(self, networkId: str, mappings: list):
         """
         **Update the DSCP to CoS mappings**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-switch-dscp-to-cos-mappings
+        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-dscp-to-cos-mappings
         
         - networkId (string)
         - mappings (array): An array of DSCP to CoS mappings. An empty array will reset the mappings to default.
@@ -298,7 +298,7 @@ class Switch(object):
     def getNetworkSwitchLinkAggregations(self, networkId: str):
         """
         **List link aggregation groups**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-switch-link-aggregations
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-link-aggregations
         
         - networkId (string)
         """
@@ -314,7 +314,7 @@ class Switch(object):
     def createNetworkSwitchLinkAggregation(self, networkId: str, **kwargs):
         """
         **Create a link aggregation group**
-        https://developer.cisco.com/docs/meraki-api-v1/#!create-network-switch-link-aggregation
+        https://developer.cisco.com/meraki/api-v1/#!create-network-switch-link-aggregation
         
         - networkId (string)
         - switchPorts (array): Array of switch or stack ports for creating aggregation group. Minimum 2 and maximum 8 ports are supported.
@@ -337,7 +337,7 @@ class Switch(object):
     def updateNetworkSwitchLinkAggregation(self, networkId: str, linkAggregationId: str, **kwargs):
         """
         **Update a link aggregation group**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-switch-link-aggregation
+        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-link-aggregation
         
         - networkId (string)
         - linkAggregationId (string)
@@ -361,7 +361,7 @@ class Switch(object):
     def deleteNetworkSwitchLinkAggregation(self, networkId: str, linkAggregationId: str):
         """
         **Split a link aggregation group into separate ports**
-        https://developer.cisco.com/docs/meraki-api-v1/#!delete-network-switch-link-aggregation
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-link-aggregation
         
         - networkId (string)
         - linkAggregationId (string)
@@ -378,7 +378,7 @@ class Switch(object):
     def getNetworkSwitchMtu(self, networkId: str):
         """
         **Return the MTU configuration**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-switch-mtu
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-mtu
         
         - networkId (string)
         """
@@ -394,7 +394,7 @@ class Switch(object):
     def updateNetworkSwitchMtu(self, networkId: str, **kwargs):
         """
         **Update the MTU configuration**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-switch-mtu
+        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-mtu
         
         - networkId (string)
         - defaultMtuSize (integer): MTU size for the entire network. Default value is 9578.
@@ -417,7 +417,7 @@ class Switch(object):
     def getNetworkSwitchPortSchedules(self, networkId: str):
         """
         **List switch port schedules**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-switch-port-schedules
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-port-schedules
         
         - networkId (string)
         """
@@ -433,7 +433,7 @@ class Switch(object):
     def createNetworkSwitchPortSchedule(self, networkId: str, name: str, **kwargs):
         """
         **Add a switch port schedule**
-        https://developer.cisco.com/docs/meraki-api-v1/#!create-network-switch-port-schedule
+        https://developer.cisco.com/meraki/api-v1/#!create-network-switch-port-schedule
         
         - networkId (string)
         - name (string): The name for your port schedule. Required
@@ -459,7 +459,7 @@ class Switch(object):
     def deleteNetworkSwitchPortSchedule(self, networkId: str, portScheduleId: str):
         """
         **Delete a switch port schedule**
-        https://developer.cisco.com/docs/meraki-api-v1/#!delete-network-switch-port-schedule
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-port-schedule
         
         - networkId (string)
         - portScheduleId (string)
@@ -476,7 +476,7 @@ class Switch(object):
     def updateNetworkSwitchPortSchedule(self, networkId: str, portScheduleId: str, **kwargs):
         """
         **Update a switch port schedule**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-switch-port-schedule
+        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-port-schedule
         
         - networkId (string)
         - portScheduleId (string)
@@ -503,7 +503,7 @@ class Switch(object):
     def getNetworkSwitchQosRules(self, networkId: str):
         """
         **List quality of service rules**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-switch-qos-rules
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-qos-rules
         
         - networkId (string)
         """
@@ -519,7 +519,7 @@ class Switch(object):
     def createNetworkSwitchQosRule(self, networkId: str, vlan: int, **kwargs):
         """
         **Add a quality of service rule**
-        https://developer.cisco.com/docs/meraki-api-v1/#!create-network-switch-qos-rule
+        https://developer.cisco.com/meraki/api-v1/#!create-network-switch-qos-rule
         
         - networkId (string)
         - vlan (integer): The VLAN of the incoming packet. A null value will match any VLAN.
@@ -551,7 +551,7 @@ class Switch(object):
     def getNetworkSwitchQosRulesOrder(self, networkId: str):
         """
         **Return the quality of service rule IDs by order in which they will be processed by the switch**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-switch-qos-rules-order
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-qos-rules-order
         
         - networkId (string)
         """
@@ -567,7 +567,7 @@ class Switch(object):
     def updateNetworkSwitchQosRulesOrder(self, networkId: str, ruleIds: list):
         """
         **Update the order in which the rules should be processed by the switch**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-switch-qos-rules-order
+        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-qos-rules-order
         
         - networkId (string)
         - ruleIds (array): A list of quality of service rule IDs arranged in order in which they should be processed by the switch.
@@ -589,7 +589,7 @@ class Switch(object):
     def getNetworkSwitchQosRule(self, networkId: str, qosRuleId: str):
         """
         **Return a quality of service rule**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-switch-qos-rule
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-qos-rule
         
         - networkId (string)
         - qosRuleId (string)
@@ -606,7 +606,7 @@ class Switch(object):
     def deleteNetworkSwitchQosRule(self, networkId: str, qosRuleId: str):
         """
         **Delete a quality of service rule**
-        https://developer.cisco.com/docs/meraki-api-v1/#!delete-network-switch-qos-rule
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-qos-rule
         
         - networkId (string)
         - qosRuleId (string)
@@ -623,7 +623,7 @@ class Switch(object):
     def updateNetworkSwitchQosRule(self, networkId: str, qosRuleId: str, **kwargs):
         """
         **Update a quality of service rule**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-switch-qos-rule
+        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-qos-rule
         
         - networkId (string)
         - qosRuleId (string)
@@ -656,7 +656,7 @@ class Switch(object):
     def getNetworkSwitchRoutingMulticast(self, networkId: str):
         """
         **Return multicast settings for a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-switch-routing-multicast
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-routing-multicast
         
         - networkId (string)
         """
@@ -672,7 +672,7 @@ class Switch(object):
     def updateNetworkSwitchRoutingMulticast(self, networkId: str, **kwargs):
         """
         **Update multicast settings for a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-switch-routing-multicast
+        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-routing-multicast
         
         - networkId (string)
         - defaultSettings (object): Default multicast setting for entire network. IGMP snooping and Flood unknown multicast traffic settings are enabled by default.
@@ -695,7 +695,7 @@ class Switch(object):
     def getNetworkSwitchSettings(self, networkId: str):
         """
         **Returns the switch network settings**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-switch-settings
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-settings
         
         - networkId (string)
         """
@@ -711,7 +711,7 @@ class Switch(object):
     def updateNetworkSwitchSettings(self, networkId: str, **kwargs):
         """
         **Update switch network settings**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-switch-settings
+        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-settings
         
         - networkId (string)
         - vlan (integer): Management VLAN
@@ -735,7 +735,7 @@ class Switch(object):
     def getNetworkSwitchStormControl(self, networkId: str):
         """
         **Return the storm control configuration for a switch network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-switch-storm-control
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-storm-control
         
         - networkId (string)
         """
@@ -751,7 +751,7 @@ class Switch(object):
     def updateNetworkSwitchStormControl(self, networkId: str, **kwargs):
         """
         **Update the storm control configuration for a switch network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-switch-storm-control
+        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-storm-control
         
         - networkId (string)
         - broadcastThreshold (integer): Percentage (1 to 99) of total available port bandwidth for broadcast traffic type. Default value 100 percent rate is to clear the configuration.
@@ -775,7 +775,7 @@ class Switch(object):
     def getNetworkSwitchStp(self, networkId: str):
         """
         **Returns STP settings**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-switch-stp
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-stp
         
         - networkId (string)
         """
@@ -791,7 +791,7 @@ class Switch(object):
     def updateNetworkSwitchStp(self, networkId: str, **kwargs):
         """
         **Updates STP settings**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-switch-stp
+        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-stp
         
         - networkId (string)
         - rstpEnabled (boolean): The spanning tree protocol status in network
@@ -814,7 +814,7 @@ class Switch(object):
     def getNetworkSwitchSwitchStacks(self, networkId: str):
         """
         **List the switch stacks in a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-switch-switch-stacks
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-switch-stacks
         
         - networkId (string)
         """
@@ -830,7 +830,7 @@ class Switch(object):
     def createNetworkSwitchSwitchStack(self, networkId: str, name: str, serials: list):
         """
         **Create a stack**
-        https://developer.cisco.com/docs/meraki-api-v1/#!create-network-switch-switch-stack
+        https://developer.cisco.com/meraki/api-v1/#!create-network-switch-switch-stack
         
         - networkId (string)
         - name (string): The name of the new stack
@@ -853,7 +853,7 @@ class Switch(object):
     def getNetworkSwitchSwitchStack(self, networkId: str, switchStackId: str):
         """
         **Show a switch stack**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-switch-switch-stack
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-switch-stack
         
         - networkId (string)
         - switchStackId (string)
@@ -870,7 +870,7 @@ class Switch(object):
     def deleteNetworkSwitchSwitchStack(self, networkId: str, switchStackId: str):
         """
         **Delete a stack**
-        https://developer.cisco.com/docs/meraki-api-v1/#!delete-network-switch-switch-stack
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-switch-stack
         
         - networkId (string)
         - switchStackId (string)
@@ -887,7 +887,7 @@ class Switch(object):
     def addNetworkSwitchSwitchStack(self, networkId: str, switchStackId: str, serial: str):
         """
         **Add a switch to a stack**
-        https://developer.cisco.com/docs/meraki-api-v1/#!add-network-switch-switch-stack
+        https://developer.cisco.com/meraki/api-v1/#!add-network-switch-switch-stack
         
         - networkId (string)
         - switchStackId (string)
@@ -910,7 +910,7 @@ class Switch(object):
     def removeNetworkSwitchSwitchStack(self, networkId: str, switchStackId: str, serial: str):
         """
         **Remove a switch from a stack**
-        https://developer.cisco.com/docs/meraki-api-v1/#!remove-network-switch-switch-stack
+        https://developer.cisco.com/meraki/api-v1/#!remove-network-switch-switch-stack
         
         - networkId (string)
         - switchStackId (string)
@@ -933,7 +933,7 @@ class Switch(object):
     def getOrganizationConfigTemplateSwitchProfiles(self, organizationId: str, configTemplateId: str):
         """
         **List the switch profiles for your switch template configuration**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-config-template-switch-profiles
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-config-template-switch-profiles
         
         - organizationId (string)
         - configTemplateId (string)
@@ -950,7 +950,7 @@ class Switch(object):
     def getOrganizationConfigTemplateSwitchProfilePorts(self, organizationId: str, configTemplateId: str, profileId: str):
         """
         **Return all the ports of a switch profile**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-config-template-switch-profile-ports
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-config-template-switch-profile-ports
         
         - organizationId (string)
         - configTemplateId (string)
@@ -968,7 +968,7 @@ class Switch(object):
     def getOrganizationConfigTemplateSwitchProfilePort(self, organizationId: str, configTemplateId: str, profileId: str, portId: str):
         """
         **Return a switch profile port**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-organization-config-template-switch-profile-port
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-config-template-switch-profile-port
         
         - organizationId (string)
         - configTemplateId (string)
@@ -987,7 +987,7 @@ class Switch(object):
     def updateOrganizationConfigTemplateSwitchProfilePort(self, organizationId: str, configTemplateId: str, profileId: str, portId: str, **kwargs):
         """
         **Update a switch profile port**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-organization-config-template-switch-profile-port
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-config-template-switch-profile-port
         
         - organizationId (string)
         - configTemplateId (string)

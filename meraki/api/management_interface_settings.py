@@ -6,7 +6,7 @@ class ManagementInterfaceSettings(object):
     def getNetworkDeviceManagementInterfaceSettings(self, networkId: str, serial: str):
         """
         **Return the management interface settings for a device**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-device-management-interface-settings
+        https://developer.cisco.com/meraki/api/#!get-network-device-management-interface-settings
         
         - networkId (string)
         - serial (string)
@@ -23,7 +23,7 @@ class ManagementInterfaceSettings(object):
     def updateNetworkDeviceManagementInterfaceSettings(self, networkId: str, serial: str, **kwargs):
         """
         **Update the management interface settings for a device**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-device-management-interface-settings
+        https://developer.cisco.com/meraki/api/#!update-network-device-management-interface-settings
         
         - networkId (string)
         - serial (string)

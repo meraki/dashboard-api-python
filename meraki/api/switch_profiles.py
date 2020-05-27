@@ -6,7 +6,7 @@ class SwitchProfiles(object):
     def getOrganizationConfigTemplateSwitchProfiles(self, organizationId: str, configTemplateId: str):
         """
         **List the switch profiles for your switch template configuration**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organization-config-template-switch-profiles
+        https://developer.cisco.com/meraki/api/#!get-organization-config-template-switch-profiles
         
         - organizationId (string)
         - configTemplateId (string)

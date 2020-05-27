@@ -6,7 +6,7 @@ class SNMPSettings(object):
     def getNetworkSnmpSettings(self, networkId: str):
         """
         **Return the SNMP settings for a network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-snmp-settings
+        https://developer.cisco.com/meraki/api/#!get-network-snmp-settings
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class SNMPSettings(object):
     def updateNetworkSnmpSettings(self, networkId: str, **kwargs):
         """
         **Update the SNMP settings for a network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-snmp-settings
+        https://developer.cisco.com/meraki/api/#!update-network-snmp-settings
         
         - networkId (string)
         - access (string): The type of SNMP access. Can be one of 'none' (disabled), 'community' (V1/V2c), or 'users' (V3).
@@ -50,7 +50,7 @@ class SNMPSettings(object):
     def getOrganizationSnmp(self, organizationId: str):
         """
         **Return the SNMP settings for an organization**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organization-snmp
+        https://developer.cisco.com/meraki/api/#!get-organization-snmp
         
         - organizationId (string)
         """
@@ -66,7 +66,7 @@ class SNMPSettings(object):
     def updateOrganizationSnmp(self, organizationId: str, **kwargs):
         """
         **Update the SNMP settings for an organization**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-organization-snmp
+        https://developer.cisco.com/meraki/api/#!update-organization-snmp
         
         - organizationId (string)
         - v2cEnabled (boolean): Boolean indicating whether SNMP version 2c is enabled for the organization.

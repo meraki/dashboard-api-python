@@ -6,7 +6,7 @@ class AsyncMXInboundFirewall:
     async def getNetworkApplianceFirewallInboundFirewallRules(self, networkId: str):
         """
         **Return the inbound firewall rules for an MX network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-appliance-firewall-inbound-firewall-rules
+        https://developer.cisco.com/meraki/api/#!get-network-appliance-firewall-inbound-firewall-rules
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class AsyncMXInboundFirewall:
     async def updateNetworkApplianceFirewallInboundFirewallRules(self, networkId: str, **kwargs):
         """
         **Update the inbound firewall rules of an MX network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-appliance-firewall-inbound-firewall-rules
+        https://developer.cisco.com/meraki/api/#!update-network-appliance-firewall-inbound-firewall-rules
         
         - networkId (string)
         - rules (array): An ordered array of the firewall rules (not including the default rule)

@@ -6,7 +6,7 @@ class Devices(object):
     def cycleDeviceSwitchPorts(self, serial: str, ports: list):
         """
         **Cycle a set of switch ports**
-        https://developer.cisco.com/docs/meraki-api-v0/#!cycle-device-switch-ports
+        https://developer.cisco.com/meraki/api/#!cycle-device-switch-ports
         
         - serial (string)
         - ports (array): List of switch ports. Example: [1, 2-5, 1_MA-MOD-8X10G_1, 1_MA-MOD-8X10G_2-1_MA-MOD-8X10G_8]
@@ -28,7 +28,7 @@ class Devices(object):
     def getNetworkDevices(self, networkId: str):
         """
         **List the devices in a network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-devices
+        https://developer.cisco.com/meraki/api/#!get-network-devices
         
         - networkId (string)
         """
@@ -44,7 +44,7 @@ class Devices(object):
     def claimNetworkDevices(self, networkId: str, **kwargs):
         """
         **Claim devices into a network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!claim-network-devices
+        https://developer.cisco.com/meraki/api/#!claim-network-devices
         
         - networkId (string)
         - serials (array): A list of serials of devices to claim
@@ -67,7 +67,7 @@ class Devices(object):
     def getNetworkDevice(self, networkId: str, serial: str):
         """
         **Return a single device**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-device
+        https://developer.cisco.com/meraki/api/#!get-network-device
         
         - networkId (string)
         - serial (string)
@@ -84,7 +84,7 @@ class Devices(object):
     def updateNetworkDevice(self, networkId: str, serial: str, **kwargs):
         """
         **Update the attributes of a device**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-device
+        https://developer.cisco.com/meraki/api/#!update-network-device
         
         - networkId (string)
         - serial (string)
@@ -115,7 +115,7 @@ class Devices(object):
     def blinkNetworkDeviceLeds(self, networkId: str, serial: str, **kwargs):
         """
         **Blink the LEDs on a device**
-        https://developer.cisco.com/docs/meraki-api-v0/#!blink-network-device-leds
+        https://developer.cisco.com/meraki/api/#!blink-network-device-leds
         
         - networkId (string)
         - serial (string)
@@ -140,7 +140,7 @@ class Devices(object):
     def getNetworkDeviceLldp_cdp(self, networkId: str, serial: str, **kwargs):
         """
         **List LLDP and CDP information for a device**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-device-lldp-_cdp
+        https://developer.cisco.com/meraki/api/#!get-network-device-lldp-_cdp
         
         - networkId (string)
         - serial (string)
@@ -163,7 +163,7 @@ class Devices(object):
     def getNetworkDeviceLossAndLatencyHistory(self, networkId: str, serial: str, ip: str, **kwargs):
         """
         **Get the uplink loss percentage and latency in milliseconds for a wired network device.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-device-loss-and-latency-history
+        https://developer.cisco.com/meraki/api/#!get-network-device-loss-and-latency-history
         
         - networkId (string)
         - serial (string)
@@ -195,7 +195,7 @@ class Devices(object):
     def getNetworkDevicePerformance(self, networkId: str, serial: str):
         """
         **Return the performance score for a single device. Only primary MX devices supported. If no data is available, a 204 error code is returned.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-device-performance
+        https://developer.cisco.com/meraki/api/#!get-network-device-performance
         
         - networkId (string)
         - serial (string)
@@ -212,7 +212,7 @@ class Devices(object):
     def rebootNetworkDevice(self, networkId: str, serial: str):
         """
         **Reboot a device**
-        https://developer.cisco.com/docs/meraki-api-v0/#!reboot-network-device
+        https://developer.cisco.com/meraki/api/#!reboot-network-device
         
         - networkId (string)
         - serial (string)
@@ -229,7 +229,7 @@ class Devices(object):
     def removeNetworkDevice(self, networkId: str, serial: str):
         """
         **Remove a single device**
-        https://developer.cisco.com/docs/meraki-api-v0/#!remove-network-device
+        https://developer.cisco.com/meraki/api/#!remove-network-device
         
         - networkId (string)
         - serial (string)
@@ -246,7 +246,7 @@ class Devices(object):
     def getNetworkDeviceUplink(self, networkId: str, serial: str):
         """
         **Return the uplink information for a device.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-device-uplink
+        https://developer.cisco.com/meraki/api/#!get-network-device-uplink
         
         - networkId (string)
         - serial (string)
@@ -263,7 +263,7 @@ class Devices(object):
     def getOrganizationDevices(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the devices in an organization**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organization-devices
+        https://developer.cisco.com/meraki/api/#!get-organization-devices
         
         - organizationId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages

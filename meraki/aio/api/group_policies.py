@@ -6,7 +6,7 @@ class AsyncGroupPolicies:
     async def getNetworkGroupPolicies(self, networkId: str):
         """
         **List the group policies in a network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-group-policies
+        https://developer.cisco.com/meraki/api/#!get-network-group-policies
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class AsyncGroupPolicies:
     async def createNetworkGroupPolicy(self, networkId: str, name: str, **kwargs):
         """
         **Create a group policy**
-        https://developer.cisco.com/docs/meraki-api-v0/#!create-network-group-policy
+        https://developer.cisco.com/meraki/api/#!create-network-group-policy
         
         - networkId (string)
         - name (string): The name for your group policy. Required.
@@ -58,7 +58,7 @@ class AsyncGroupPolicies:
     async def getNetworkGroupPolicy(self, networkId: str, groupPolicyId: str):
         """
         **Display a group policy**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-group-policy
+        https://developer.cisco.com/meraki/api/#!get-network-group-policy
         
         - networkId (string)
         - groupPolicyId (string)
@@ -75,7 +75,7 @@ class AsyncGroupPolicies:
     async def updateNetworkGroupPolicy(self, networkId: str, groupPolicyId: str, **kwargs):
         """
         **Update a group policy**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-group-policy
+        https://developer.cisco.com/meraki/api/#!update-network-group-policy
         
         - networkId (string)
         - groupPolicyId (string)
@@ -112,7 +112,7 @@ class AsyncGroupPolicies:
     async def deleteNetworkGroupPolicy(self, networkId: str, groupPolicyId: str):
         """
         **Delete a group policy**
-        https://developer.cisco.com/docs/meraki-api-v0/#!delete-network-group-policy
+        https://developer.cisco.com/meraki/api/#!delete-network-group-policy
         
         - networkId (string)
         - groupPolicyId (string)

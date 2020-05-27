@@ -6,7 +6,7 @@ class Clients(object):
     def getDeviceClients(self, serial: str, **kwargs):
         """
         **List the clients of a device, up to a maximum of a month ago. The usage of each client is returned in kilobytes. If the device is a switch, the switchport is returned; otherwise the switchport field is null.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-device-clients
+        https://developer.cisco.com/meraki/api/#!get-device-clients
         
         - serial (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
@@ -29,7 +29,7 @@ class Clients(object):
     def getNetworkClients(self, networkId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the clients that have used this network in the timespan**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-clients
+        https://developer.cisco.com/meraki/api/#!get-network-clients
         
         - networkId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
@@ -58,7 +58,7 @@ class Clients(object):
     def provisionNetworkClients(self, networkId: str, mac: str, devicePolicy: str, **kwargs):
         """
         **Provisions a client with a name and policy. Clients can be provisioned before they associate to the network.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!provision-network-clients
+        https://developer.cisco.com/meraki/api/#!provision-network-clients
         
         - networkId (string)
         - mac (string): The MAC address of the client. Required.
@@ -89,7 +89,7 @@ class Clients(object):
     def getNetworkClient(self, networkId: str, clientId: str):
         """
         **Return the client associated with the given identifier. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-client
+        https://developer.cisco.com/meraki/api/#!get-network-client
         
         - networkId (string)
         - clientId (string)
@@ -106,7 +106,7 @@ class Clients(object):
     def getNetworkClientEvents(self, networkId: str, clientId: str, total_pages=1, direction='next', **kwargs):
         """
         **Return the events associated with this client. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-client-events
+        https://developer.cisco.com/meraki/api/#!get-network-client-events
         
         - networkId (string)
         - clientId (string)
@@ -134,7 +134,7 @@ class Clients(object):
     def getNetworkClientLatencyHistory(self, networkId: str, clientId: str, **kwargs):
         """
         **Return the latency history for a client. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP. The latency data is from a sample of 2% of packets and is grouped into 4 traffic categories: background, best effort, video, voice. Within these categories the sampled packet counters are bucketed by latency in milliseconds.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-client-latency-history
+        https://developer.cisco.com/meraki/api/#!get-network-client-latency-history
         
         - networkId (string)
         - clientId (string)
@@ -160,7 +160,7 @@ class Clients(object):
     def getNetworkClientPolicy(self, networkId: str, clientId: str):
         """
         **Return the policy assigned to a client on the network. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-client-policy
+        https://developer.cisco.com/meraki/api/#!get-network-client-policy
         
         - networkId (string)
         - clientId (string)
@@ -177,7 +177,7 @@ class Clients(object):
     def updateNetworkClientPolicy(self, networkId: str, clientId: str, devicePolicy: str, **kwargs):
         """
         **Update the policy assigned to a client on the network. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-client-policy
+        https://developer.cisco.com/meraki/api/#!update-network-client-policy
         
         - networkId (string)
         - clientId (string)
@@ -201,7 +201,7 @@ class Clients(object):
     def getNetworkClientSplashAuthorizationStatus(self, networkId: str, clientId: str):
         """
         **Return the splash authorization for a client, for each SSID they've associated with through splash. Only enabled SSIDs with Click-through splash enabled will be included. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-client-splash-authorization-status
+        https://developer.cisco.com/meraki/api/#!get-network-client-splash-authorization-status
         
         - networkId (string)
         - clientId (string)
@@ -218,7 +218,7 @@ class Clients(object):
     def updateNetworkClientSplashAuthorizationStatus(self, networkId: str, clientId: str, ssids: dict):
         """
         **Update a client's splash authorization. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-client-splash-authorization-status
+        https://developer.cisco.com/meraki/api/#!update-network-client-splash-authorization-status
         
         - networkId (string)
         - clientId (string)
@@ -241,7 +241,7 @@ class Clients(object):
     def getNetworkClientTrafficHistory(self, networkId: str, clientId: str, total_pages=1, direction='next', **kwargs):
         """
         **Return the client's network traffic data over time. Usage data is in kilobytes. This endpoint requires detailed traffic analysis to be enabled on the Network-wide > General page. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-client-traffic-history
+        https://developer.cisco.com/meraki/api/#!get-network-client-traffic-history
         
         - networkId (string)
         - clientId (string)
@@ -269,7 +269,7 @@ class Clients(object):
     def getNetworkClientUsageHistory(self, networkId: str, clientId: str):
         """
         **Return the client's daily usage history. Usage data is in kilobytes. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-client-usage-history
+        https://developer.cisco.com/meraki/api/#!get-network-client-usage-history
         
         - networkId (string)
         - clientId (string)

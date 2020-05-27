@@ -6,7 +6,7 @@ class NetFlowSettings(object):
     def getNetworkNetflowSettings(self, networkId: str):
         """
         **Return the NetFlow traffic reporting settings for a network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-netflow-settings
+        https://developer.cisco.com/meraki/api/#!get-network-netflow-settings
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class NetFlowSettings(object):
     def updateNetworkNetflowSettings(self, networkId: str, **kwargs):
         """
         **Update the NetFlow traffic reporting settings for a network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-netflow-settings
+        https://developer.cisco.com/meraki/api/#!update-network-netflow-settings
         
         - networkId (string)
         - reportingEnabled (boolean): Boolean indicating whether NetFlow traffic reporting is enabled (true) or disabled (false).

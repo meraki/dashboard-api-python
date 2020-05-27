@@ -6,7 +6,7 @@ class AsyncLinkAggregations:
     async def getNetworkSwitchLinkAggregations(self, networkId: str):
         """
         **List link aggregation groups**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-switch-link-aggregations
+        https://developer.cisco.com/meraki/api/#!get-network-switch-link-aggregations
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class AsyncLinkAggregations:
     async def createNetworkSwitchLinkAggregation(self, networkId: str, **kwargs):
         """
         **Create a link aggregation group**
-        https://developer.cisco.com/docs/meraki-api-v0/#!create-network-switch-link-aggregation
+        https://developer.cisco.com/meraki/api/#!create-network-switch-link-aggregation
         
         - networkId (string)
         - switchPorts (array): Array of switch or stack ports for creating aggregation group. Minimum 2 and maximum 8 ports are supported.
@@ -45,7 +45,7 @@ class AsyncLinkAggregations:
     async def updateNetworkSwitchLinkAggregation(self, networkId: str, linkAggregationId: str, **kwargs):
         """
         **Update a link aggregation group**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-switch-link-aggregation
+        https://developer.cisco.com/meraki/api/#!update-network-switch-link-aggregation
         
         - networkId (string)
         - linkAggregationId (string)
@@ -69,7 +69,7 @@ class AsyncLinkAggregations:
     async def deleteNetworkSwitchLinkAggregation(self, networkId: str, linkAggregationId: str):
         """
         **Split a link aggregation group into separate ports**
-        https://developer.cisco.com/docs/meraki-api-v0/#!delete-network-switch-link-aggregation
+        https://developer.cisco.com/meraki/api/#!delete-network-switch-link-aggregation
         
         - networkId (string)
         - linkAggregationId (string)

@@ -6,7 +6,7 @@ class ConnectivityMonitoringDestinations(object):
     def getNetworkConnectivityMonitoringDestinations(self, networkId: str):
         """
         **Return the connectivity testing destinations for an MX network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-connectivity-monitoring-destinations
+        https://developer.cisco.com/meraki/api/#!get-network-connectivity-monitoring-destinations
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class ConnectivityMonitoringDestinations(object):
     def updateNetworkConnectivityMonitoringDestinations(self, networkId: str, **kwargs):
         """
         **Update the connectivity testing destinations for an MX network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-connectivity-monitoring-destinations
+        https://developer.cisco.com/meraki/api/#!update-network-connectivity-monitoring-destinations
         
         - networkId (string)
         - destinations (array): The list of connectivity monitoring destinations

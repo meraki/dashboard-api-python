@@ -6,7 +6,7 @@ class Camera(object):
     def getDeviceCameraAnalyticsLive(self, serial: str):
         """
         **Returns live state from camera of analytics zones**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-device-camera-analytics-live
+        https://developer.cisco.com/meraki/api-v1/#!get-device-camera-analytics-live
         
         - serial (string)
         """
@@ -22,7 +22,7 @@ class Camera(object):
     def getDeviceCameraAnalyticsOverview(self, serial: str, **kwargs):
         """
         **Returns an overview of aggregate analytics data for a timespan**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-device-camera-analytics-overview
+        https://developer.cisco.com/meraki/api-v1/#!get-device-camera-analytics-overview
         
         - serial (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
@@ -51,7 +51,7 @@ class Camera(object):
     def getDeviceCameraAnalyticsRecent(self, serial: str, **kwargs):
         """
         **Returns most recent record for analytics zones**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-device-camera-analytics-recent
+        https://developer.cisco.com/meraki/api-v1/#!get-device-camera-analytics-recent
         
         - serial (string)
         - objectType (string): [optional] The object type for which analytics will be retrieved. The default object type is person. The available types are [person, vehicle].
@@ -77,7 +77,7 @@ class Camera(object):
     def getDeviceCameraAnalyticsZones(self, serial: str):
         """
         **Returns all configured analytic zones for this camera**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-device-camera-analytics-zones
+        https://developer.cisco.com/meraki/api-v1/#!get-device-camera-analytics-zones
         
         - serial (string)
         """
@@ -93,7 +93,7 @@ class Camera(object):
     def getDeviceCameraAnalyticsZoneHistory(self, serial: str, zoneId: str, **kwargs):
         """
         **Return historical records for analytic zones**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-device-camera-analytics-zone-history
+        https://developer.cisco.com/meraki/api-v1/#!get-device-camera-analytics-zone-history
         
         - serial (string)
         - zoneId (string)
@@ -124,7 +124,7 @@ class Camera(object):
     def generateDeviceCameraSnapshot(self, serial: str, **kwargs):
         """
         **Generate a snapshot of what the camera sees at the specified time and return a link to that image.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!generate-device-camera-snapshot
+        https://developer.cisco.com/meraki/api-v1/#!generate-device-camera-snapshot
         
         - serial (string)
         - timestamp (string): [optional] The snapshot will be taken from this time on the camera. The timestamp is expected to be in ISO 8601 format. If no timestamp is specified, we will assume current time.
@@ -147,7 +147,7 @@ class Camera(object):
     def getDeviceCameraQualityAndRetention(self, serial: str):
         """
         **Returns quality and retention settings for the given camera**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-device-camera-quality-and-retention
+        https://developer.cisco.com/meraki/api-v1/#!get-device-camera-quality-and-retention
         
         - serial (string)
         """
@@ -163,7 +163,7 @@ class Camera(object):
     def updateDeviceCameraQualityAndRetention(self, serial: str, **kwargs):
         """
         **Update quality and retention settings for the given camera**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-device-camera-quality-and-retention
+        https://developer.cisco.com/meraki/api-v1/#!update-device-camera-quality-and-retention
         
         - serial (string)
         - profileId (string): The ID of a quality and retention profile to assign to the camera. The profile's settings will override all of the per-camera quality and retention settings. If the value of this parameter is null, any existing profile will be unassigned from the camera.
@@ -201,7 +201,7 @@ class Camera(object):
     def getDeviceCameraVideoSettings(self, serial: str):
         """
         **Returns video settings for the given camera**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-device-camera-video-settings
+        https://developer.cisco.com/meraki/api-v1/#!get-device-camera-video-settings
         
         - serial (string)
         """
@@ -217,7 +217,7 @@ class Camera(object):
     def updateDeviceCameraVideoSettings(self, serial: str, **kwargs):
         """
         **Update video settings for the given camera**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-device-camera-video-settings
+        https://developer.cisco.com/meraki/api-v1/#!update-device-camera-video-settings
         
         - serial (string)
         - externalRtspEnabled (boolean): Boolean indicating if external rtsp stream is exposed
@@ -239,7 +239,7 @@ class Camera(object):
     def getDeviceCameraVideoLink(self, serial: str, **kwargs):
         """
         **Returns video link to the specified camera. If a timestamp is supplied, it links to that timestamp.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-device-camera-video-link
+        https://developer.cisco.com/meraki/api-v1/#!get-device-camera-video-link
         
         - serial (string)
         - timestamp (string): [optional] The video link will start at this time. The timestamp should be a string in ISO8601 format. If no timestamp is specified, we will assume current time.
@@ -261,7 +261,7 @@ class Camera(object):
     def getNetworkCameraQualityRetentionProfiles(self, networkId: str):
         """
         **List the quality retention profiles for this network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-camera-quality-retention-profiles
+        https://developer.cisco.com/meraki/api-v1/#!get-network-camera-quality-retention-profiles
         
         - networkId (string)
         """
@@ -277,7 +277,7 @@ class Camera(object):
     def createNetworkCameraQualityRetentionProfile(self, networkId: str, name: str, **kwargs):
         """
         **Creates new quality retention profile for this network.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!create-network-camera-quality-retention-profile
+        https://developer.cisco.com/meraki/api-v1/#!create-network-camera-quality-retention-profile
         
         - networkId (string)
         - name (string): The name of the new profile. Must be unique. This parameter is required.
@@ -307,7 +307,7 @@ class Camera(object):
     def getNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str):
         """
         **Retrieve a single quality retention profile**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-camera-quality-retention-profile
+        https://developer.cisco.com/meraki/api-v1/#!get-network-camera-quality-retention-profile
         
         - networkId (string)
         - qualityRetentionProfileId (string)
@@ -324,7 +324,7 @@ class Camera(object):
     def updateNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str, **kwargs):
         """
         **Update an existing quality retention profile for this network.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-camera-quality-retention-profile
+        https://developer.cisco.com/meraki/api-v1/#!update-network-camera-quality-retention-profile
         
         - networkId (string)
         - qualityRetentionProfileId (string)
@@ -355,7 +355,7 @@ class Camera(object):
     def deleteNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str):
         """
         **Delete an existing quality retention profile for this network.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!delete-network-camera-quality-retention-profile
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-camera-quality-retention-profile
         
         - networkId (string)
         - qualityRetentionProfileId (string)
@@ -372,7 +372,7 @@ class Camera(object):
     def getNetworkCameraSchedules(self, networkId: str):
         """
         **Returns a list of all camera recording schedules.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-camera-schedules
+        https://developer.cisco.com/meraki/api-v1/#!get-network-camera-schedules
         
         - networkId (string)
         """

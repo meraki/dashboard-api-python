@@ -6,7 +6,7 @@ class Cameras(object):
     def getDeviceCameraQualityAndRetentionSettings(self, serial: str):
         """
         **Returns quality and retention settings for the given camera**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-device-camera-quality-and-retention-settings
+        https://developer.cisco.com/meraki/api/#!get-device-camera-quality-and-retention-settings
         
         - serial (string)
         """
@@ -22,7 +22,7 @@ class Cameras(object):
     def updateDeviceCameraQualityAndRetentionSettings(self, serial: str, **kwargs):
         """
         **Update quality and retention settings for the given camera**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-device-camera-quality-and-retention-settings
+        https://developer.cisco.com/meraki/api/#!update-device-camera-quality-and-retention-settings
         
         - serial (string)
         - profileId (string): The ID of a quality and retention profile to assign to the camera. The profile's settings will override all of the per-camera quality and retention settings. If the value of this parameter is null, any existing profile will be unassigned from the camera.
@@ -60,7 +60,7 @@ class Cameras(object):
     def getDeviceCameraVideoSettings(self, serial: str):
         """
         **Returns video settings for the given camera**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-device-camera-video-settings
+        https://developer.cisco.com/meraki/api/#!get-device-camera-video-settings
         
         - serial (string)
         """
@@ -76,7 +76,7 @@ class Cameras(object):
     def updateDeviceCameraVideoSettings(self, serial: str, **kwargs):
         """
         **Update video settings for the given camera**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-device-camera-video-settings
+        https://developer.cisco.com/meraki/api/#!update-device-camera-video-settings
         
         - serial (string)
         - externalRtspEnabled (boolean): Boolean indicating if external rtsp stream is exposed
@@ -98,7 +98,7 @@ class Cameras(object):
     def getNetworkCameraSchedules(self, networkId: str):
         """
         **Returns a list of all camera recording schedules.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-camera-schedules
+        https://developer.cisco.com/meraki/api/#!get-network-camera-schedules
         
         - networkId (string)
         """
@@ -114,7 +114,7 @@ class Cameras(object):
     def generateNetworkCameraSnapshot(self, networkId: str, serial: str, **kwargs):
         """
         **Generate a snapshot of what the camera sees at the specified time and return a link to that image.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!generate-network-camera-snapshot
+        https://developer.cisco.com/meraki/api/#!generate-network-camera-snapshot
         
         - networkId (string)
         - serial (string)
@@ -138,7 +138,7 @@ class Cameras(object):
     def getNetworkCameraVideoLink(self, networkId: str, serial: str, **kwargs):
         """
         **Returns video link to the specified camera. If a timestamp is supplied, it links to that timestamp.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-camera-video-link
+        https://developer.cisco.com/meraki/api/#!get-network-camera-video-link
         
         - networkId (string)
         - serial (string)

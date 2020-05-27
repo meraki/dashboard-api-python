@@ -6,7 +6,7 @@ class HTTPServers(object):
     def getNetworkHttpServers(self, networkId: str):
         """
         **List the HTTP servers for a network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-http-servers
+        https://developer.cisco.com/meraki/api/#!get-network-http-servers
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class HTTPServers(object):
     def createNetworkHttpServer(self, networkId: str, name: str, url: str, **kwargs):
         """
         **Add an HTTP server to a network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!create-network-http-server
+        https://developer.cisco.com/meraki/api/#!create-network-http-server
         
         - networkId (string)
         - name (string): A name for easy reference to the HTTP server
@@ -46,7 +46,7 @@ class HTTPServers(object):
     def createNetworkHttpServersWebhookTest(self, networkId: str, url: str):
         """
         **Send a test webhook for a network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!create-network-http-servers-webhook-test
+        https://developer.cisco.com/meraki/api/#!create-network-http-servers-webhook-test
         
         - networkId (string)
         - url (string): The URL where the test webhook will be sent
@@ -68,7 +68,7 @@ class HTTPServers(object):
     def getNetworkHttpServersWebhookTest(self, networkId: str, id: str):
         """
         **Return the status of a webhook test for a network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-http-servers-webhook-test
+        https://developer.cisco.com/meraki/api/#!get-network-http-servers-webhook-test
         
         - networkId (string)
         - id (string)
@@ -85,7 +85,7 @@ class HTTPServers(object):
     def getNetworkHttpServer(self, networkId: str, id: str):
         """
         **Return an HTTP server for a network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-http-server
+        https://developer.cisco.com/meraki/api/#!get-network-http-server
         
         - networkId (string)
         - id (string)
@@ -102,7 +102,7 @@ class HTTPServers(object):
     def updateNetworkHttpServer(self, networkId: str, id: str, **kwargs):
         """
         **Update an HTTP server**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-http-server
+        https://developer.cisco.com/meraki/api/#!update-network-http-server
         
         - networkId (string)
         - id (string)
@@ -127,7 +127,7 @@ class HTTPServers(object):
     def deleteNetworkHttpServer(self, networkId: str, id: str):
         """
         **Delete an HTTP server from a network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!delete-network-http-server
+        https://developer.cisco.com/meraki/api/#!delete-network-http-server
         
         - networkId (string)
         - id (string)

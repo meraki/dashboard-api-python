@@ -6,7 +6,7 @@ class MGDHCPSettings(object):
     def getNetworkCellularGatewaySettingsDhcp(self, networkId: str):
         """
         **List common DHCP settings of MGs**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-cellular-gateway-settings-dhcp
+        https://developer.cisco.com/meraki/api/#!get-network-cellular-gateway-settings-dhcp
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class MGDHCPSettings(object):
     def updateNetworkCellularGatewaySettingsDhcp(self, networkId: str, **kwargs):
         """
         **Update common DHCP settings of MGs**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-cellular-gateway-settings-dhcp
+        https://developer.cisco.com/meraki/api/#!update-network-cellular-gateway-settings-dhcp
         
         - networkId (string)
         - dhcpLeaseTime (string): DHCP Lease time for all MG of the network. It can be '30 minutes', '1 hour', '4 hours', '12 hours', '1 day' or '1 week'.

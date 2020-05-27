@@ -6,7 +6,7 @@ class SecurityEvents(object):
     def getNetworkClientSecurityEvents(self, networkId: str, clientId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the security events (intrusion detection only) for a client. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-client-security-events
+        https://developer.cisco.com/meraki/api/#!get-network-client-security-events
         
         - networkId (string)
         - clientId (string)
@@ -37,7 +37,7 @@ class SecurityEvents(object):
     def getNetworkSecurityEvents(self, networkId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the security events (intrusion detection only) for a network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-security-events
+        https://developer.cisco.com/meraki/api/#!get-network-security-events
         
         - networkId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
@@ -67,7 +67,7 @@ class SecurityEvents(object):
     def getOrganizationSecurityEvents(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the security events (intrusion detection only) for an organization**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organization-security-events
+        https://developer.cisco.com/meraki/api/#!get-organization-security-events
         
         - organizationId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages

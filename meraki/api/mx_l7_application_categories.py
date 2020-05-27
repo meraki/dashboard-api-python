@@ -6,7 +6,7 @@ class MXL7ApplicationCategories(object):
     def getNetworkL7FirewallRulesApplicationCategories(self, networkId: str):
         """
         **Return the L7 firewall application categories and their associated applications for an MX network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-l-7-firewall-rules-application-categories
+        https://developer.cisco.com/meraki/api/#!get-network-l-7-firewall-rules-application-categories
         
         - networkId (string)
         """

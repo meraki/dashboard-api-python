@@ -6,7 +6,7 @@ class SplashSettings(object):
     def getNetworkSsidSplashSettings(self, networkId: str, number: str):
         """
         **Display the splash page settings for the given SSID**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-ssid-splash-settings
+        https://developer.cisco.com/meraki/api/#!get-network-ssid-splash-settings
         
         - networkId (string)
         - number (string)
@@ -23,7 +23,7 @@ class SplashSettings(object):
     def updateNetworkSsidSplashSettings(self, networkId: str, number: str, **kwargs):
         """
         **Modify the splash page settings for the given SSID**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-ssid-splash-settings
+        https://developer.cisco.com/meraki/api/#!update-network-ssid-splash-settings
         
         - networkId (string)
         - number (string)

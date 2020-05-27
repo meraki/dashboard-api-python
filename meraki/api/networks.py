@@ -6,7 +6,7 @@ class Networks(object):
     def getNetwork(self, networkId: str):
         """
         **Return a network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network
+        https://developer.cisco.com/meraki/api/#!get-network
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class Networks(object):
     def updateNetwork(self, networkId: str, **kwargs):
         """
         **Update a network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network
+        https://developer.cisco.com/meraki/api/#!update-network
         
         - networkId (string)
         - name (string): The name of the network
@@ -49,7 +49,7 @@ class Networks(object):
     def deleteNetwork(self, networkId: str):
         """
         **Delete a network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!delete-network
+        https://developer.cisco.com/meraki/api/#!delete-network
         
         - networkId (string)
         """
@@ -65,7 +65,7 @@ class Networks(object):
     def getNetworkAccessPolicies(self, networkId: str):
         """
         **List the access policies for this network. Only valid for MS networks.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-access-policies
+        https://developer.cisco.com/meraki/api/#!get-network-access-policies
         
         - networkId (string)
         """
@@ -81,7 +81,7 @@ class Networks(object):
     def getNetworkAirMarshal(self, networkId: str, **kwargs):
         """
         **List Air Marshal scan results from a network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-air-marshal
+        https://developer.cisco.com/meraki/api/#!get-network-air-marshal
         
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
@@ -104,7 +104,7 @@ class Networks(object):
     def bindNetwork(self, networkId: str, configTemplateId: str, **kwargs):
         """
         **Bind a network to a template.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!bind-network
+        https://developer.cisco.com/meraki/api/#!bind-network
         
         - networkId (string)
         - configTemplateId (string): The ID of the template to which the network should be bound.
@@ -127,7 +127,7 @@ class Networks(object):
     def getNetworkSiteToSiteVpn(self, networkId: str):
         """
         **Return the site-to-site VPN settings of a network. Only valid for MX networks.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-site-to-site-vpn
+        https://developer.cisco.com/meraki/api/#!get-network-site-to-site-vpn
         
         - networkId (string)
         """
@@ -143,7 +143,7 @@ class Networks(object):
     def updateNetworkSiteToSiteVpn(self, networkId: str, mode: str, **kwargs):
         """
         **Update the site-to-site VPN settings of a network. Only valid for MX networks in NAT mode.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-site-to-site-vpn
+        https://developer.cisco.com/meraki/api/#!update-network-site-to-site-vpn
         
         - networkId (string)
         - mode (string): The site-to-site VPN mode. Can be one of 'none', 'spoke' or 'hub'
@@ -171,7 +171,7 @@ class Networks(object):
     def splitNetwork(self, networkId: str):
         """
         **Split a combined network into individual networks for each type of device**
-        https://developer.cisco.com/docs/meraki-api-v0/#!split-network
+        https://developer.cisco.com/meraki/api/#!split-network
         
         - networkId (string)
         """
@@ -189,7 +189,7 @@ class Networks(object):
         **    The traffic analysis data for this network.
     <a href="https://documentation.meraki.com/MR/Monitoring_and_Reporting/Hostname_Visibility">Traffic Analysis with Hostname Visibility</a> must be enabled on the network.
 **
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-traffic
+        https://developer.cisco.com/meraki/api/#!get-network-traffic
         
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 30 days from today.
@@ -219,7 +219,7 @@ class Networks(object):
     def unbindNetwork(self, networkId: str):
         """
         **Unbind a network from a template.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!unbind-network
+        https://developer.cisco.com/meraki/api/#!unbind-network
         
         - networkId (string)
         """
@@ -235,7 +235,7 @@ class Networks(object):
     def getOrganizationNetworks(self, organizationId: str, **kwargs):
         """
         **List the networks in an organization**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organization-networks
+        https://developer.cisco.com/meraki/api/#!get-organization-networks
         
         - organizationId (string)
         - configTemplateId (string): An optional parameter that is the ID of a config template. Will return all networks bound to that template.
@@ -257,7 +257,7 @@ class Networks(object):
     def createOrganizationNetwork(self, organizationId: str, name: str, type: str, **kwargs):
         """
         **Create a network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!create-organization-network
+        https://developer.cisco.com/meraki/api/#!create-organization-network
         
         - organizationId (string)
         - name (string): The name of the new network
@@ -285,7 +285,7 @@ class Networks(object):
     def combineOrganizationNetworks(self, organizationId: str, name: str, networkIds: list, **kwargs):
         """
         **Combine multiple networks into a single network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!combine-organization-networks
+        https://developer.cisco.com/meraki/api/#!combine-organization-networks
         
         - organizationId (string)
         - name (string): The name of the combined network

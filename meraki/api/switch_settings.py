@@ -6,7 +6,7 @@ class SwitchSettings(object):
     def getNetworkSwitchSettings(self, networkId: str):
         """
         **Returns the switch network settings**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-switch-settings
+        https://developer.cisco.com/meraki/api/#!get-network-switch-settings
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class SwitchSettings(object):
     def updateNetworkSwitchSettings(self, networkId: str, **kwargs):
         """
         **Update switch network settings**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-switch-settings
+        https://developer.cisco.com/meraki/api/#!update-network-switch-settings
         
         - networkId (string)
         - vlan (integer): Management VLAN
@@ -46,7 +46,7 @@ class SwitchSettings(object):
     def getNetworkSwitchSettingsDhcpServerPolicy(self, networkId: str):
         """
         **Return the DHCP server policy**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-switch-settings-dhcp-server-policy
+        https://developer.cisco.com/meraki/api/#!get-network-switch-settings-dhcp-server-policy
         
         - networkId (string)
         """
@@ -62,7 +62,7 @@ class SwitchSettings(object):
     def updateNetworkSwitchSettingsDhcpServerPolicy(self, networkId: str, **kwargs):
         """
         **Update the DHCP server policy**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-switch-settings-dhcp-server-policy
+        https://developer.cisco.com/meraki/api/#!update-network-switch-settings-dhcp-server-policy
         
         - networkId (string)
         - defaultPolicy (string): 'allow' or 'block' new DHCP servers. Default value is 'allow'.
@@ -90,7 +90,7 @@ class SwitchSettings(object):
     def getNetworkSwitchSettingsDscpToCosMappings(self, networkId: str):
         """
         **Return the DSCP to CoS mappings**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-switch-settings-dscp-to-cos-mappings
+        https://developer.cisco.com/meraki/api/#!get-network-switch-settings-dscp-to-cos-mappings
         
         - networkId (string)
         """
@@ -106,7 +106,7 @@ class SwitchSettings(object):
     def updateNetworkSwitchSettingsDscpToCosMappings(self, networkId: str, mappings: list):
         """
         **Update the DSCP to CoS mappings**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-switch-settings-dscp-to-cos-mappings
+        https://developer.cisco.com/meraki/api/#!update-network-switch-settings-dscp-to-cos-mappings
         
         - networkId (string)
         - mappings (array): An array of DSCP to CoS mappings. An empty array will reset the mappings to default.
@@ -128,7 +128,7 @@ class SwitchSettings(object):
     def getNetworkSwitchSettingsMtu(self, networkId: str):
         """
         **Return the MTU configuration**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-switch-settings-mtu
+        https://developer.cisco.com/meraki/api/#!get-network-switch-settings-mtu
         
         - networkId (string)
         """
@@ -144,7 +144,7 @@ class SwitchSettings(object):
     def updateNetworkSwitchSettingsMtu(self, networkId: str, **kwargs):
         """
         **Update the MTU configuration**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-switch-settings-mtu
+        https://developer.cisco.com/meraki/api/#!update-network-switch-settings-mtu
         
         - networkId (string)
         - defaultMtuSize (integer): MTU size for the entire network. Default value is 9578.
@@ -167,7 +167,7 @@ class SwitchSettings(object):
     def getNetworkSwitchSettingsMulticast(self, networkId: str):
         """
         **Return multicast settings for a network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-switch-settings-multicast
+        https://developer.cisco.com/meraki/api/#!get-network-switch-settings-multicast
         
         - networkId (string)
         """
@@ -183,7 +183,7 @@ class SwitchSettings(object):
     def updateNetworkSwitchSettingsMulticast(self, networkId: str, **kwargs):
         """
         **Update multicast settings for a network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-switch-settings-multicast
+        https://developer.cisco.com/meraki/api/#!update-network-switch-settings-multicast
         
         - networkId (string)
         - defaultSettings (object): Default multicast setting for entire network. IGMP snooping and Flood unknown multicast traffic settings are enabled by default.
@@ -206,7 +206,7 @@ class SwitchSettings(object):
     def getNetworkSwitchSettingsQosRules(self, networkId: str):
         """
         **List quality of service rules**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-switch-settings-qos-rules
+        https://developer.cisco.com/meraki/api/#!get-network-switch-settings-qos-rules
         
         - networkId (string)
         """
@@ -222,7 +222,7 @@ class SwitchSettings(object):
     def createNetworkSwitchSettingsQosRule(self, networkId: str, vlan: int, **kwargs):
         """
         **Add a quality of service rule**
-        https://developer.cisco.com/docs/meraki-api-v0/#!create-network-switch-settings-qos-rule
+        https://developer.cisco.com/meraki/api/#!create-network-switch-settings-qos-rule
         
         - networkId (string)
         - vlan (integer): The VLAN of the incoming packet. A null value will match any VLAN.
@@ -254,7 +254,7 @@ class SwitchSettings(object):
     def getNetworkSwitchSettingsQosRulesOrder(self, networkId: str):
         """
         **Return the quality of service rule IDs by order in which they will be processed by the switch**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-switch-settings-qos-rules-order
+        https://developer.cisco.com/meraki/api/#!get-network-switch-settings-qos-rules-order
         
         - networkId (string)
         """
@@ -270,7 +270,7 @@ class SwitchSettings(object):
     def updateNetworkSwitchSettingsQosRulesOrder(self, networkId: str, ruleIds: list):
         """
         **Update the order in which the rules should be processed by the switch**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-switch-settings-qos-rules-order
+        https://developer.cisco.com/meraki/api/#!update-network-switch-settings-qos-rules-order
         
         - networkId (string)
         - ruleIds (array): A list of quality of service rule IDs arranged in order in which they should be processed by the switch.
@@ -292,7 +292,7 @@ class SwitchSettings(object):
     def getNetworkSwitchSettingsQosRule(self, networkId: str, qosRuleId: str):
         """
         **Return a quality of service rule**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-switch-settings-qos-rule
+        https://developer.cisco.com/meraki/api/#!get-network-switch-settings-qos-rule
         
         - networkId (string)
         - qosRuleId (string)
@@ -309,7 +309,7 @@ class SwitchSettings(object):
     def deleteNetworkSwitchSettingsQosRule(self, networkId: str, qosRuleId: str):
         """
         **Delete a quality of service rule**
-        https://developer.cisco.com/docs/meraki-api-v0/#!delete-network-switch-settings-qos-rule
+        https://developer.cisco.com/meraki/api/#!delete-network-switch-settings-qos-rule
         
         - networkId (string)
         - qosRuleId (string)
@@ -326,7 +326,7 @@ class SwitchSettings(object):
     def updateNetworkSwitchSettingsQosRule(self, networkId: str, qosRuleId: str, **kwargs):
         """
         **Update a quality of service rule**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-switch-settings-qos-rule
+        https://developer.cisco.com/meraki/api/#!update-network-switch-settings-qos-rule
         
         - networkId (string)
         - qosRuleId (string)
@@ -359,7 +359,7 @@ class SwitchSettings(object):
     def getNetworkSwitchSettingsStormControl(self, networkId: str):
         """
         **Return the storm control configuration for a switch network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-switch-settings-storm-control
+        https://developer.cisco.com/meraki/api/#!get-network-switch-settings-storm-control
         
         - networkId (string)
         """
@@ -375,7 +375,7 @@ class SwitchSettings(object):
     def updateNetworkSwitchSettingsStormControl(self, networkId: str, **kwargs):
         """
         **Update the storm control configuration for a switch network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-switch-settings-storm-control
+        https://developer.cisco.com/meraki/api/#!update-network-switch-settings-storm-control
         
         - networkId (string)
         - broadcastThreshold (integer): Percentage (1 to 99) of total available port bandwidth for broadcast traffic type. Default value 100 percent rate is to clear the configuration.
@@ -399,7 +399,7 @@ class SwitchSettings(object):
     def getNetworkSwitchSettingsStp(self, networkId: str):
         """
         **Returns STP settings**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-switch-settings-stp
+        https://developer.cisco.com/meraki/api/#!get-network-switch-settings-stp
         
         - networkId (string)
         """
@@ -415,7 +415,7 @@ class SwitchSettings(object):
     def updateNetworkSwitchSettingsStp(self, networkId: str, **kwargs):
         """
         **Updates STP settings**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-switch-settings-stp
+        https://developer.cisco.com/meraki/api/#!update-network-switch-settings-stp
         
         - networkId (string)
         - rstpEnabled (boolean): The spanning tree protocol status in network

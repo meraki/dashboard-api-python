@@ -6,7 +6,7 @@ class AsyncRadioSettings:
     async def getNetworkDeviceWirelessRadioSettings(self, networkId: str, serial: str):
         """
         **Return the radio settings of a device**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-device-wireless-radio-settings
+        https://developer.cisco.com/meraki/api/#!get-network-device-wireless-radio-settings
         
         - networkId (string)
         - serial (string)
@@ -23,7 +23,7 @@ class AsyncRadioSettings:
     async def updateNetworkDeviceWirelessRadioSettings(self, networkId: str, serial: str, **kwargs):
         """
         **Update the radio settings of a device**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-device-wireless-radio-settings
+        https://developer.cisco.com/meraki/api/#!update-network-device-wireless-radio-settings
         
         - networkId (string)
         - serial (string)
@@ -49,7 +49,7 @@ class AsyncRadioSettings:
     async def getNetworkWirelessRfProfiles(self, networkId: str, **kwargs):
         """
         **List the non-basic RF profiles for this network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-wireless-rf-profiles
+        https://developer.cisco.com/meraki/api/#!get-network-wireless-rf-profiles
         
         - networkId (string)
         - includeTemplateProfiles (boolean):     If the network is bound to a template, this parameter controls whether or not the non-basic RF profiles defined on the template
@@ -73,7 +73,7 @@ class AsyncRadioSettings:
     async def createNetworkWirelessRfProfile(self, networkId: str, name: str, bandSelectionType: str, **kwargs):
         """
         **Creates new RF profile for this network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!create-network-wireless-rf-profile
+        https://developer.cisco.com/meraki/api/#!create-network-wireless-rf-profile
         
         - networkId (string)
         - name (string): The name of the new profile. Must be unique. This param is required on creation.
@@ -108,7 +108,7 @@ class AsyncRadioSettings:
     async def updateNetworkWirelessRfProfile(self, networkId: str, rfProfileId: str, **kwargs):
         """
         **Updates specified RF profile for this network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-wireless-rf-profile
+        https://developer.cisco.com/meraki/api/#!update-network-wireless-rf-profile
         
         - networkId (string)
         - rfProfileId (string)
@@ -144,7 +144,7 @@ class AsyncRadioSettings:
     async def deleteNetworkWirelessRfProfile(self, networkId: str, rfProfileId: str):
         """
         **Delete a RF Profile**
-        https://developer.cisco.com/docs/meraki-api-v0/#!delete-network-wireless-rf-profile
+        https://developer.cisco.com/meraki/api/#!delete-network-wireless-rf-profile
         
         - networkId (string)
         - rfProfileId (string)
@@ -161,7 +161,7 @@ class AsyncRadioSettings:
     async def getNetworkWirelessRfProfile(self, networkId: str, rfProfileId: str):
         """
         **Return a RF profile**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-wireless-rf-profile
+        https://developer.cisco.com/meraki/api/#!get-network-wireless-rf-profile
         
         - networkId (string)
         - rfProfileId (string)

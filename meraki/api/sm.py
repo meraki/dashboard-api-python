@@ -6,7 +6,7 @@ class SM(object):
     def createNetworkSmBypassActivationLockAttempt(self, networkId: str, ids: list):
         """
         **Bypass activation lock attempt**
-        https://developer.cisco.com/docs/meraki-api-v0/#!create-network-sm-bypass-activation-lock-attempt
+        https://developer.cisco.com/meraki/api/#!create-network-sm-bypass-activation-lock-attempt
         
         - networkId (string)
         - ids (array): The ids of the devices to attempt activation lock bypass.
@@ -28,7 +28,7 @@ class SM(object):
     def getNetworkSmBypassActivationLockAttempt(self, networkId: str, attemptId: str):
         """
         **Bypass activation lock attempt status**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-sm-bypass-activation-lock-attempt
+        https://developer.cisco.com/meraki/api/#!get-network-sm-bypass-activation-lock-attempt
         
         - networkId (string)
         - attemptId (string)
@@ -45,7 +45,7 @@ class SM(object):
     def updateNetworkSmDeviceFields(self, networkId: str, deviceFields: dict, **kwargs):
         """
         **Modify the fields of a device**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-sm-device-fields
+        https://developer.cisco.com/meraki/api/#!update-network-sm-device-fields
         
         - networkId (string)
         - deviceFields (object): The new fields of the device. Each field of this object is optional.
@@ -70,7 +70,7 @@ class SM(object):
     def wipeNetworkSmDevice(self, networkId: str, **kwargs):
         """
         **Wipe a device**
-        https://developer.cisco.com/docs/meraki-api-v0/#!wipe-network-sm-device
+        https://developer.cisco.com/meraki/api/#!wipe-network-sm-device
         
         - networkId (string)
         - wifiMac (string): The wifiMac of the device to be wiped.
@@ -95,7 +95,7 @@ class SM(object):
     def refreshNetworkSmDeviceDetails(self, networkId: str, deviceId: str):
         """
         **Refresh the details of a device**
-        https://developer.cisco.com/docs/meraki-api-v0/#!refresh-network-sm-device-details
+        https://developer.cisco.com/meraki/api/#!refresh-network-sm-device-details
         
         - networkId (string)
         - deviceId (string)
@@ -112,7 +112,7 @@ class SM(object):
     def getNetworkSmDevices(self, networkId: str, **kwargs):
         """
         **List the devices enrolled in an SM network with various specified fields and filters**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-sm-devices
+        https://developer.cisco.com/meraki/api/#!get-network-sm-devices
         
         - networkId (string)
         - fields (string): Additional fields that will be displayed for each device. Multiple fields can be passed in as comma separated values.
@@ -149,7 +149,7 @@ class SM(object):
     def checkinNetworkSmDevices(self, networkId: str, **kwargs):
         """
         **Force check-in a set of devices**
-        https://developer.cisco.com/docs/meraki-api-v0/#!checkin-network-sm-devices
+        https://developer.cisco.com/meraki/api/#!checkin-network-sm-devices
         
         - networkId (string)
         - wifiMacs (string): The wifiMacs of the devices to be checked-in.
@@ -174,7 +174,7 @@ class SM(object):
     def moveNetworkSmDevices(self, networkId: str, newNetwork: str, **kwargs):
         """
         **Move a set of devices to a new network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!move-network-sm-devices
+        https://developer.cisco.com/meraki/api/#!move-network-sm-devices
         
         - networkId (string)
         - newNetwork (string): The new network to which the devices will be moved.
@@ -200,7 +200,7 @@ class SM(object):
     def updateNetworkSmDevicesTags(self, networkId: str, tags: str, updateAction: str, **kwargs):
         """
         **Add, delete, or update the tags of a set of devices**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-sm-devices-tags
+        https://developer.cisco.com/meraki/api/#!update-network-sm-devices-tags
         
         - networkId (string)
         - tags (string): The tags to be added, deleted, or updated.
@@ -227,7 +227,7 @@ class SM(object):
     def unenrollNetworkSmDevice(self, networkId: str, deviceId: str):
         """
         **Unenroll a device**
-        https://developer.cisco.com/docs/meraki-api-v0/#!unenroll-network-sm-device
+        https://developer.cisco.com/meraki/api/#!unenroll-network-sm-device
         
         - networkId (string)
         - deviceId (string)
@@ -244,7 +244,7 @@ class SM(object):
     def getNetworkSmProfiles(self, networkId: str):
         """
         **List all the profiles in the network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-sm-profiles
+        https://developer.cisco.com/meraki/api/#!get-network-sm-profiles
         
         - networkId (string)
         """
@@ -260,7 +260,7 @@ class SM(object):
     def getNetworkSmUserDeviceProfiles(self, networkId: str, userId: str):
         """
         **Get the profiles associated with a user**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-sm-user-device-profiles
+        https://developer.cisco.com/meraki/api/#!get-network-sm-user-device-profiles
         
         - networkId (string)
         - userId (string)
@@ -277,7 +277,7 @@ class SM(object):
     def getNetworkSmUserSoftwares(self, networkId: str, userId: str):
         """
         **Get a list of softwares associated with a user**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-sm-user-softwares
+        https://developer.cisco.com/meraki/api/#!get-network-sm-user-softwares
         
         - networkId (string)
         - userId (string)
@@ -294,7 +294,7 @@ class SM(object):
     def getNetworkSmUsers(self, networkId: str, **kwargs):
         """
         **List the owners in an SM network with various specified fields and filters**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-sm-users
+        https://developer.cisco.com/meraki/api/#!get-network-sm-users
         
         - networkId (string)
         - ids (string): Filter users by id(s). Multiple ids can be passed in as comma separated values.
@@ -319,7 +319,7 @@ class SM(object):
     def getNetworkSmCellularUsageHistory(self, networkId: str, deviceId: str):
         """
         **Return the client's daily cellular data usage history. Usage data is in kilobytes.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-sm-cellular-usage-history
+        https://developer.cisco.com/meraki/api/#!get-network-sm-cellular-usage-history
         
         - networkId (string)
         - deviceId (string)
@@ -336,7 +336,7 @@ class SM(object):
     def getNetworkSmCerts(self, networkId: str, deviceId: str):
         """
         **List the certs on a device**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-sm-certs
+        https://developer.cisco.com/meraki/api/#!get-network-sm-certs
         
         - networkId (string)
         - deviceId (string)
@@ -353,7 +353,7 @@ class SM(object):
     def getNetworkSmDeviceProfiles(self, networkId: str, deviceId: str):
         """
         **Get the profiles associated with a device**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-sm-device-profiles
+        https://developer.cisco.com/meraki/api/#!get-network-sm-device-profiles
         
         - networkId (string)
         - deviceId (string)
@@ -370,7 +370,7 @@ class SM(object):
     def getNetworkSmNetworkAdapters(self, networkId: str, deviceId: str):
         """
         **List the network adapters of a device**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-sm-network-adapters
+        https://developer.cisco.com/meraki/api/#!get-network-sm-network-adapters
         
         - networkId (string)
         - deviceId (string)
@@ -387,7 +387,7 @@ class SM(object):
     def getNetworkSmRestrictions(self, networkId: str, deviceId: str):
         """
         **List the restrictions on a device**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-sm-restrictions
+        https://developer.cisco.com/meraki/api/#!get-network-sm-restrictions
         
         - networkId (string)
         - deviceId (string)
@@ -404,7 +404,7 @@ class SM(object):
     def getNetworkSmSecurityCenters(self, networkId: str, deviceId: str):
         """
         **List the security centers on a device**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-sm-security-centers
+        https://developer.cisco.com/meraki/api/#!get-network-sm-security-centers
         
         - networkId (string)
         - deviceId (string)
@@ -421,7 +421,7 @@ class SM(object):
     def getNetworkSmSoftwares(self, networkId: str, deviceId: str):
         """
         **Get a list of softwares associated with a device**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-sm-softwares
+        https://developer.cisco.com/meraki/api/#!get-network-sm-softwares
         
         - networkId (string)
         - deviceId (string)
@@ -438,7 +438,7 @@ class SM(object):
     def getNetworkSmWlanLists(self, networkId: str, deviceId: str):
         """
         **List the saved SSID names on a device**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-sm-wlan-lists
+        https://developer.cisco.com/meraki/api/#!get-network-sm-wlan-lists
         
         - networkId (string)
         - deviceId (string)
@@ -455,7 +455,7 @@ class SM(object):
     def lockNetworkSmDevices(self, network_id: str, **kwargs):
         """
         **Lock a set of devices**
-        https://developer.cisco.com/docs/meraki-api-v0/#!lock-network-sm-devices
+        https://developer.cisco.com/meraki/api/#!lock-network-sm-devices
         
         - network_id (string)
         - wifiMacs (string): The wifiMacs of the devices to be locked.
@@ -481,7 +481,7 @@ class SM(object):
     def getNetworkSmConnectivity(self, network_id: str, id: str, total_pages=1, direction='next', **kwargs):
         """
         **Returns historical connectivity data (whether a device is regularly checking in to Dashboard).**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-sm-connectivity
+        https://developer.cisco.com/meraki/api/#!get-network-sm-connectivity
         
         - network_id (string)
         - id (string)
@@ -509,7 +509,7 @@ class SM(object):
     def getNetworkSmDesktopLogs(self, network_id: str, id: str, total_pages=1, direction='next', **kwargs):
         """
         **Return historical records of various Systems Manager network connection details for desktop devices.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-sm-desktop-logs
+        https://developer.cisco.com/meraki/api/#!get-network-sm-desktop-logs
         
         - network_id (string)
         - id (string)
@@ -541,7 +541,7 @@ class SM(object):
     by a Dashboard admin rather than the automatic behavior of the system; you may wish to filter this out
     of any reports.</p>
 **
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-sm-device-command-logs
+        https://developer.cisco.com/meraki/api/#!get-network-sm-device-command-logs
         
         - network_id (string)
         - id (string)
@@ -569,7 +569,7 @@ class SM(object):
     def getNetworkSmPerformanceHistory(self, network_id: str, id: str, total_pages=1, direction='next', **kwargs):
         """
         **Return historical records of various Systems Manager client metrics for desktop devices.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-sm-performance-history
+        https://developer.cisco.com/meraki/api/#!get-network-sm-performance-history
         
         - network_id (string)
         - id (string)

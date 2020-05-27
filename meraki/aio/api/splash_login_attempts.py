@@ -6,7 +6,7 @@ class AsyncSplashLoginAttempts:
     async def getNetworkSplashLoginAttempts(self, networkId: str, **kwargs):
         """
         **List the splash login attempts for a network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-splash-login-attempts
+        https://developer.cisco.com/meraki/api/#!get-network-splash-login-attempts
         
         - networkId (string)
         - ssidNumber (integer): Only return the login attempts for the specified SSID

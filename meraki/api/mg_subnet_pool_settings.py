@@ -6,7 +6,7 @@ class MGSubnetPoolSettings(object):
     def getNetworkCellularGatewaySettingsSubnetPool(self, networkId: str):
         """
         **Return the subnet pool and mask configured for MGs in the network.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-cellular-gateway-settings-subnet-pool
+        https://developer.cisco.com/meraki/api/#!get-network-cellular-gateway-settings-subnet-pool
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class MGSubnetPoolSettings(object):
     def updateNetworkCellularGatewaySettingsSubnetPool(self, networkId: str, **kwargs):
         """
         **Update the subnet pool and mask configuration for MGs in the network.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-cellular-gateway-settings-subnet-pool
+        https://developer.cisco.com/meraki/api/#!update-network-cellular-gateway-settings-subnet-pool
         
         - networkId (string)
         - mask (integer): Mask used for the subnet of all MGs in  this network.

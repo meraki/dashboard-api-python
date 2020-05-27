@@ -6,7 +6,7 @@ class AsyncLicenses:
     async def getOrganizationLicenses(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the licenses for an organization**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organization-licenses
+        https://developer.cisco.com/meraki/api/#!get-organization-licenses
         
         - organizationId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
@@ -40,7 +40,7 @@ class AsyncLicenses:
     async def assignOrganizationLicensesSeats(self, organizationId: str, licenseId: str, networkId: str, seatCount: int):
         """
         **Assign SM seats to a network. This will increase the managed SM device limit of the network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!assign-organization-licenses-seats
+        https://developer.cisco.com/meraki/api/#!assign-organization-licenses-seats
         
         - organizationId (string)
         - licenseId (string): The ID of the SM license to assign seats from
@@ -64,7 +64,7 @@ class AsyncLicenses:
     async def moveOrganizationLicenses(self, organizationId: str, destOrganizationId: str, licenseIds: list):
         """
         **Move licenses to another organization. This will also move any devices that the licenses are assigned to**
-        https://developer.cisco.com/docs/meraki-api-v0/#!move-organization-licenses
+        https://developer.cisco.com/meraki/api/#!move-organization-licenses
         
         - organizationId (string)
         - destOrganizationId (string): The ID of the organization to move the licenses to
@@ -87,7 +87,7 @@ class AsyncLicenses:
     async def moveOrganizationLicensesSeats(self, organizationId: str, destOrganizationId: str, licenseId: str, seatCount: int):
         """
         **Move SM seats to another organization**
-        https://developer.cisco.com/docs/meraki-api-v0/#!move-organization-licenses-seats
+        https://developer.cisco.com/meraki/api/#!move-organization-licenses-seats
         
         - organizationId (string)
         - destOrganizationId (string): The ID of the organization to move the SM seats to
@@ -111,7 +111,7 @@ class AsyncLicenses:
     async def renewOrganizationLicensesSeats(self, organizationId: str, licenseIdToRenew: str, unusedLicenseId: str):
         """
         **Renew SM seats of a license. This will extend the license expiration date of managed SM devices covered by this license**
-        https://developer.cisco.com/docs/meraki-api-v0/#!renew-organization-licenses-seats
+        https://developer.cisco.com/meraki/api/#!renew-organization-licenses-seats
         
         - organizationId (string)
         - licenseIdToRenew (string): The ID of the SM license to renew. This license must already be assigned to an SM network
@@ -134,7 +134,7 @@ class AsyncLicenses:
     async def getOrganizationLicense(self, organizationId: str, licenseId: str):
         """
         **Display a license**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organization-license
+        https://developer.cisco.com/meraki/api/#!get-organization-license
         
         - organizationId (string)
         - licenseId (string)
@@ -151,7 +151,7 @@ class AsyncLicenses:
     async def updateOrganizationLicense(self, organizationId: str, licenseId: str, **kwargs):
         """
         **Update a license**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-organization-license
+        https://developer.cisco.com/meraki/api/#!update-organization-license
         
         - organizationId (string)
         - licenseId (string)

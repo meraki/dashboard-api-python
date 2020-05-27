@@ -6,7 +6,7 @@ class TrafficAnalysisSettings(object):
     def getNetworkTrafficAnalysisSettings(self, networkId: str):
         """
         **Return the traffic analysis settings for a network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-traffic-analysis-settings
+        https://developer.cisco.com/meraki/api/#!get-network-traffic-analysis-settings
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class TrafficAnalysisSettings(object):
     def updateNetworkTrafficAnalysisSettings(self, networkId: str, **kwargs):
         """
         **Update the traffic analysis settings for a network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-traffic-analysis-settings
+        https://developer.cisco.com/meraki/api/#!update-network-traffic-analysis-settings
         
         - networkId (string)
         - mode (string):     The traffic analysis mode for the network. Can be one of 'disabled' (do not collect traffic types),

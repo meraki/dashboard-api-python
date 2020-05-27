@@ -6,7 +6,7 @@ class AsyncWebhookLogs:
     async def getOrganizationWebhookLogs(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **Return the log of webhook POSTs sent**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organization-webhook-logs
+        https://developer.cisco.com/meraki/api/#!get-organization-webhook-logs
         
         - organizationId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages

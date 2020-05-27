@@ -6,7 +6,7 @@ class AsyncContentFilteringRules:
     async def getNetworkContentFiltering(self, networkId: str):
         """
         **Return the content filtering settings for an MX network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-content-filtering
+        https://developer.cisco.com/meraki/api/#!get-network-content-filtering
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class AsyncContentFilteringRules:
     async def updateNetworkContentFiltering(self, networkId: str, **kwargs):
         """
         **Update the content filtering settings for an MX network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-content-filtering
+        https://developer.cisco.com/meraki/api/#!update-network-content-filtering
         
         - networkId (string)
         - allowedUrlPatterns (array): A whitelist of URL patterns to allow

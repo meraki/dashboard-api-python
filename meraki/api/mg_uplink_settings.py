@@ -6,7 +6,7 @@ class MGUplinkSettings(object):
     def getNetworkCellularGatewaySettingsUplink(self, networkId: str):
         """
         **Returns the uplink settings for your MG network.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-cellular-gateway-settings-uplink
+        https://developer.cisco.com/meraki/api/#!get-network-cellular-gateway-settings-uplink
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class MGUplinkSettings(object):
     def updateNetworkCellularGatewaySettingsUplink(self, networkId: str, **kwargs):
         """
         **Updates the uplink settings for your MG network.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-cellular-gateway-settings-uplink
+        https://developer.cisco.com/meraki/api/#!update-network-cellular-gateway-settings-uplink
         
         - networkId (string)
         - bandwidthLimits (object): The bandwidth settings for the 'cellular' uplink

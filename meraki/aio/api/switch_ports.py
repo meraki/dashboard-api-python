@@ -6,7 +6,7 @@ class AsyncSwitchPorts:
     async def getDeviceSwitchPortStatuses(self, serial: str, **kwargs):
         """
         **Return the status for all the ports of a switch**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-device-switch-port-statuses
+        https://developer.cisco.com/meraki/api/#!get-device-switch-port-statuses
         
         - serial (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
@@ -29,7 +29,7 @@ class AsyncSwitchPorts:
     async def getDeviceSwitchPortStatusesPackets(self, serial: str, **kwargs):
         """
         **Return the packet counters for all the ports of a switch**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-device-switch-port-statuses-packets
+        https://developer.cisco.com/meraki/api/#!get-device-switch-port-statuses-packets
         
         - serial (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 1 day from today.
@@ -52,7 +52,7 @@ class AsyncSwitchPorts:
     async def getDeviceSwitchPorts(self, serial: str):
         """
         **List the switch ports for a switch**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-device-switch-ports
+        https://developer.cisco.com/meraki/api/#!get-device-switch-ports
         
         - serial (string)
         """
@@ -68,7 +68,7 @@ class AsyncSwitchPorts:
     async def getDeviceSwitchPort(self, serial: str, number: str):
         """
         **Return a switch port**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-device-switch-port
+        https://developer.cisco.com/meraki/api/#!get-device-switch-port
         
         - serial (string)
         - number (string)
@@ -85,7 +85,7 @@ class AsyncSwitchPorts:
     async def updateDeviceSwitchPort(self, serial: str, number: str, **kwargs):
         """
         **Update a switch port**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-device-switch-port
+        https://developer.cisco.com/meraki/api/#!update-device-switch-port
         
         - serial (string)
         - number (string)

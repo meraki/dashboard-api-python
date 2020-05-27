@@ -6,7 +6,7 @@ class AsyncCameraQualityRetentionProfiles:
     async def getNetworkCameraQualityRetentionProfiles(self, networkId: str):
         """
         **List the quality retention profiles for this network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-camera-quality-retention-profiles
+        https://developer.cisco.com/meraki/api/#!get-network-camera-quality-retention-profiles
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class AsyncCameraQualityRetentionProfiles:
     async def createNetworkCameraQualityRetentionProfile(self, networkId: str, name: str, **kwargs):
         """
         **Creates new quality retention profile for this network.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!create-network-camera-quality-retention-profile
+        https://developer.cisco.com/meraki/api/#!create-network-camera-quality-retention-profile
         
         - networkId (string)
         - name (string): The name of the new profile. Must be unique. This parameter is required.
@@ -52,7 +52,7 @@ class AsyncCameraQualityRetentionProfiles:
     async def getNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str):
         """
         **Retrieve a single quality retention profile**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-camera-quality-retention-profile
+        https://developer.cisco.com/meraki/api/#!get-network-camera-quality-retention-profile
         
         - networkId (string)
         - qualityRetentionProfileId (string)
@@ -69,7 +69,7 @@ class AsyncCameraQualityRetentionProfiles:
     async def updateNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str, **kwargs):
         """
         **Update an existing quality retention profile for this network.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-camera-quality-retention-profile
+        https://developer.cisco.com/meraki/api/#!update-network-camera-quality-retention-profile
         
         - networkId (string)
         - qualityRetentionProfileId (string)
@@ -100,7 +100,7 @@ class AsyncCameraQualityRetentionProfiles:
     async def deleteNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str):
         """
         **Delete an existing quality retention profile for this network.**
-        https://developer.cisco.com/docs/meraki-api-v0/#!delete-network-camera-quality-retention-profile
+        https://developer.cisco.com/meraki/api/#!delete-network-camera-quality-retention-profile
         
         - networkId (string)
         - qualityRetentionProfileId (string)

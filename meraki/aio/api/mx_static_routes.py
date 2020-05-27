@@ -6,7 +6,7 @@ class AsyncMXStaticRoutes:
     async def getNetworkStaticRoutes(self, networkId: str):
         """
         **List the static routes for an MX or teleworker network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-static-routes
+        https://developer.cisco.com/meraki/api/#!get-network-static-routes
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class AsyncMXStaticRoutes:
     async def createNetworkStaticRoute(self, networkId: str, name: str, subnet: str, gatewayIp: str):
         """
         **Add a static route for an MX or teleworker network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!create-network-static-route
+        https://developer.cisco.com/meraki/api/#!create-network-static-route
         
         - networkId (string)
         - name (string): The name of the new static route
@@ -46,7 +46,7 @@ class AsyncMXStaticRoutes:
     async def getNetworkStaticRoute(self, networkId: str, staticRouteId: str):
         """
         **Return a static route for an MX or teleworker network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-static-route
+        https://developer.cisco.com/meraki/api/#!get-network-static-route
         
         - networkId (string)
         - staticRouteId (string)
@@ -63,7 +63,7 @@ class AsyncMXStaticRoutes:
     async def updateNetworkStaticRoute(self, networkId: str, staticRouteId: str, **kwargs):
         """
         **Update a static route for an MX or teleworker network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-static-route
+        https://developer.cisco.com/meraki/api/#!update-network-static-route
         
         - networkId (string)
         - staticRouteId (string)
@@ -91,7 +91,7 @@ class AsyncMXStaticRoutes:
     async def deleteNetworkStaticRoute(self, networkId: str, staticRouteId: str):
         """
         **Delete a static route from an MX or teleworker network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!delete-network-static-route
+        https://developer.cisco.com/meraki/api/#!delete-network-static-route
         
         - networkId (string)
         - staticRouteId (string)

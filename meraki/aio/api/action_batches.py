@@ -6,7 +6,7 @@ class AsyncActionBatches:
     async def createOrganizationActionBatch(self, organizationId: str, actions: list, **kwargs):
         """
         **Create an action batch**
-        https://developer.cisco.com/docs/meraki-api-v0/#!create-organization-action-batch
+        https://developer.cisco.com/meraki/api/#!create-organization-action-batch
         
         - organizationId (string)
         - actions (array): A set of changes to make as part of this action (<a href='https://developer.cisco.com/meraki/api/#/rest/guides/action-batches/'>more details</a>)
@@ -30,7 +30,7 @@ class AsyncActionBatches:
     async def getOrganizationActionBatches(self, organizationId: str):
         """
         **Return the list of action batches in the organization**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organization-action-batches
+        https://developer.cisco.com/meraki/api/#!get-organization-action-batches
         
         - organizationId (string)
         """
@@ -46,7 +46,7 @@ class AsyncActionBatches:
     async def getOrganizationActionBatch(self, organizationId: str, actionBatchId: str):
         """
         **Return an action batch**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organization-action-batch
+        https://developer.cisco.com/meraki/api/#!get-organization-action-batch
         
         - organizationId (string)
         - actionBatchId (string)
@@ -63,7 +63,7 @@ class AsyncActionBatches:
     async def deleteOrganizationActionBatch(self, organizationId: str, actionBatchId: str):
         """
         **Delete an action batch**
-        https://developer.cisco.com/docs/meraki-api-v0/#!delete-organization-action-batch
+        https://developer.cisco.com/meraki/api/#!delete-organization-action-batch
         
         - organizationId (string)
         - actionBatchId (string)
@@ -80,7 +80,7 @@ class AsyncActionBatches:
     async def updateOrganizationActionBatch(self, organizationId: str, actionBatchId: str, **kwargs):
         """
         **Update an action batch**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-organization-action-batch
+        https://developer.cisco.com/meraki/api/#!update-organization-action-batch
         
         - organizationId (string)
         - actionBatchId (string)

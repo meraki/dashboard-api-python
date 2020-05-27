@@ -6,7 +6,7 @@ class MXL7Firewall(object):
     def getNetworkL7FirewallRules(self, networkId: str):
         """
         **List the MX L7 firewall rules for an MX network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-network-l-7-firewall-rules
+        https://developer.cisco.com/meraki/api/#!get-network-l-7-firewall-rules
         
         - networkId (string)
         """
@@ -22,7 +22,7 @@ class MXL7Firewall(object):
     def updateNetworkL7FirewallRules(self, networkId: str, **kwargs):
         """
         **Update the MX L7 firewall rules for an MX network**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-network-l-7-firewall-rules
+        https://developer.cisco.com/meraki/api/#!update-network-l-7-firewall-rules
         
         - networkId (string)
         - rules (array): An ordered array of the MX L7 firewall rules

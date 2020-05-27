@@ -6,7 +6,7 @@ class AsyncWireless:
     async def getDeviceWirelessBluetoothSettings(self, serial: str):
         """
         **Return the bluetooth settings for a wireless device**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-device-wireless-bluetooth-settings
+        https://developer.cisco.com/meraki/api-v1/#!get-device-wireless-bluetooth-settings
         
         - serial (string)
         """
@@ -22,7 +22,7 @@ class AsyncWireless:
     async def updateDeviceWirelessBluetoothSettings(self, serial: str, **kwargs):
         """
         **Update the bluetooth settings for a wireless device**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-device-wireless-bluetooth-settings
+        https://developer.cisco.com/meraki/api-v1/#!update-device-wireless-bluetooth-settings
         
         - serial (string)
         - uuid (string): Desired UUID of the beacon. If the value is set to null it will reset to Dashboard's automatically generated value.
@@ -46,7 +46,7 @@ class AsyncWireless:
     async def getDeviceWirelessConnectionStats(self, serial: str, **kwargs):
         """
         **Aggregated connectivity info for a given AP on this network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-device-wireless-connection-stats
+        https://developer.cisco.com/meraki/api-v1/#!get-device-wireless-connection-stats
         
         - serial (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
@@ -73,7 +73,7 @@ class AsyncWireless:
     async def getDeviceWirelessLatencyStats(self, serial: str, **kwargs):
         """
         **Aggregated latency info for a given AP on this network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-device-wireless-latency-stats
+        https://developer.cisco.com/meraki/api-v1/#!get-device-wireless-latency-stats
         
         - serial (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
@@ -101,7 +101,7 @@ class AsyncWireless:
     async def getDeviceWirelessRadioSettings(self, serial: str):
         """
         **Return the radio settings of a device**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-device-wireless-radio-settings
+        https://developer.cisco.com/meraki/api-v1/#!get-device-wireless-radio-settings
         
         - serial (string)
         """
@@ -117,7 +117,7 @@ class AsyncWireless:
     async def updateDeviceWirelessRadioSettings(self, serial: str, **kwargs):
         """
         **Update the radio settings of a device**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-device-wireless-radio-settings
+        https://developer.cisco.com/meraki/api-v1/#!update-device-wireless-radio-settings
         
         - serial (string)
         - rfProfileId (integer):     The ID of an RF profile to assign to the device. If the value of this parameter is null, the appropriate basic RF profile
@@ -142,7 +142,7 @@ class AsyncWireless:
     async def getDeviceWirelessStatus(self, serial: str):
         """
         **Return the SSID statuses of an access point**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-device-wireless-status
+        https://developer.cisco.com/meraki/api-v1/#!get-device-wireless-status
         
         - serial (string)
         """
@@ -158,7 +158,7 @@ class AsyncWireless:
     async def getNetworkWirelessAirMarshal(self, networkId: str, **kwargs):
         """
         **List Air Marshal scan results from a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-wireless-air-marshal
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-air-marshal
         
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
@@ -181,7 +181,7 @@ class AsyncWireless:
     async def getNetworkWirelessBluetoothSettings(self, networkId: str):
         """
         **Return the Bluetooth settings for a network. <a href="https://documentation.meraki.com/MR/Bluetooth/Bluetooth_Low_Energy_(BLE)">Bluetooth settings</a> must be enabled on the network.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-wireless-bluetooth-settings
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-bluetooth-settings
         
         - networkId (string)
         """
@@ -197,7 +197,7 @@ class AsyncWireless:
     async def updateNetworkWirelessBluetoothSettings(self, networkId: str, **kwargs):
         """
         **Update the Bluetooth settings for a network. See the docs page for <a href="https://documentation.meraki.com/MR/Bluetooth/Bluetooth_Low_Energy_(BLE)">Bluetooth settings</a>.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-wireless-bluetooth-settings
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-bluetooth-settings
         
         - networkId (string)
         - scanningEnabled (boolean): Whether APs will scan for Bluetooth enabled clients. (true, false)
@@ -228,7 +228,7 @@ class AsyncWireless:
     async def getNetworkWirelessChannelUtilizationHistory(self, networkId: str, **kwargs):
         """
         **Return AP channel utilization over time for a device or network client**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-wireless-channel-utilization-history
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-channel-utilization-history
         
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
@@ -262,7 +262,7 @@ class AsyncWireless:
     async def getNetworkWirelessClientCountHistory(self, networkId: str, **kwargs):
         """
         **Return wireless client counts over time for a network, device, or network client**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-wireless-client-count-history
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-client-count-history
         
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
@@ -297,7 +297,7 @@ class AsyncWireless:
     async def getNetworkWirelessClientsConnectionStats(self, networkId: str, **kwargs):
         """
         **Aggregated connectivity info for this network, grouped by clients**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-wireless-clients-connection-stats
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-clients-connection-stats
         
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
@@ -324,7 +324,7 @@ class AsyncWireless:
     async def getNetworkWirelessClientsLatencyStats(self, networkId: str, **kwargs):
         """
         **Aggregated latency info for this network, grouped by clients**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-wireless-clients-latency-stats
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-clients-latency-stats
         
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
@@ -352,7 +352,7 @@ class AsyncWireless:
     async def getNetworkWirelessClientConnectionStats(self, networkId: str, clientId: str, **kwargs):
         """
         **Aggregated connectivity info for a given client on this network. Clients are identified by their MAC.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-wireless-client-connection-stats
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-client-connection-stats
         
         - networkId (string)
         - clientId (string)
@@ -380,7 +380,7 @@ class AsyncWireless:
     async def getNetworkWirelessClientConnectivityEvents(self, networkId: str, clientId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the wireless connectivity events for a client within a network in the timespan.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-wireless-client-connectivity-events
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-client-connectivity-events
         
         - networkId (string)
         - clientId (string)
@@ -428,7 +428,7 @@ class AsyncWireless:
     async def getNetworkWirelessClientLatencyHistory(self, networkId: str, clientId: str, **kwargs):
         """
         **Return the latency history for a client. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP. The latency data is from a sample of 2% of packets and is grouped into 4 traffic categories: background, best effort, video, voice. Within these categories the sampled packet counters are bucketed by latency in milliseconds.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-wireless-client-latency-history
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-client-latency-history
         
         - networkId (string)
         - clientId (string)
@@ -454,7 +454,7 @@ class AsyncWireless:
     async def getNetworkWirelessClientLatencyStats(self, networkId: str, clientId: str, **kwargs):
         """
         **Aggregated latency info for a given client on this network. Clients are identified by their MAC.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-wireless-client-latency-stats
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-client-latency-stats
         
         - networkId (string)
         - clientId (string)
@@ -483,7 +483,7 @@ class AsyncWireless:
     async def getNetworkWirelessConnectionStats(self, networkId: str, **kwargs):
         """
         **Aggregated connectivity info for this network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-wireless-connection-stats
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-connection-stats
         
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
@@ -510,7 +510,7 @@ class AsyncWireless:
     async def getNetworkWirelessDataRateHistory(self, networkId: str, **kwargs):
         """
         **Return PHY data rates over time for a network, device, or network client**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-wireless-data-rate-history
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-data-rate-history
         
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
@@ -545,7 +545,7 @@ class AsyncWireless:
     async def getNetworkWirelessDevicesConnectionStats(self, networkId: str, **kwargs):
         """
         **Aggregated connectivity info for this network, grouped by node**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-wireless-devices-connection-stats
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-devices-connection-stats
         
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
@@ -572,7 +572,7 @@ class AsyncWireless:
     async def getNetworkWirelessDevicesLatencyStats(self, networkId: str, **kwargs):
         """
         **Aggregated latency info for this network, grouped by node**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-wireless-devices-latency-stats
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-devices-latency-stats
         
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
@@ -600,7 +600,7 @@ class AsyncWireless:
     async def getNetworkWirelessFailedConnections(self, networkId: str, **kwargs):
         """
         **List of all failed client connection events on this network in a given time range**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-wireless-failed-connections
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-failed-connections
         
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
@@ -629,7 +629,7 @@ class AsyncWireless:
     async def getNetworkWirelessLatencyHistory(self, networkId: str, **kwargs):
         """
         **Return average wireless latency over time for a network, device, or network client**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-wireless-latency-history
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-latency-history
         
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
@@ -668,7 +668,7 @@ class AsyncWireless:
     async def getNetworkWirelessLatencyStats(self, networkId: str, **kwargs):
         """
         **Aggregated latency info for this network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-wireless-latency-stats
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-latency-stats
         
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
@@ -696,7 +696,7 @@ class AsyncWireless:
     async def getNetworkWirelessMeshStatuses(self, networkId: str, total_pages=1, direction='next', **kwargs):
         """
         **List wireless mesh statuses for repeaters**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-wireless-mesh-statuses
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-mesh-statuses
         
         - networkId (string)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
@@ -723,7 +723,7 @@ class AsyncWireless:
     async def getNetworkWirelessRfProfiles(self, networkId: str, **kwargs):
         """
         **List the non-basic RF profiles for this network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-wireless-rf-profiles
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-rf-profiles
         
         - networkId (string)
         - includeTemplateProfiles (boolean):     If the network is bound to a template, this parameter controls whether or not the non-basic RF profiles defined on the template
@@ -747,7 +747,7 @@ class AsyncWireless:
     async def createNetworkWirelessRfProfile(self, networkId: str, name: str, bandSelectionType: str, **kwargs):
         """
         **Creates new RF profile for this network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!create-network-wireless-rf-profile
+        https://developer.cisco.com/meraki/api-v1/#!create-network-wireless-rf-profile
         
         - networkId (string)
         - name (string): The name of the new profile. Must be unique. This param is required on creation.
@@ -782,7 +782,7 @@ class AsyncWireless:
     async def updateNetworkWirelessRfProfile(self, networkId: str, rfProfileId: str, **kwargs):
         """
         **Updates specified RF profile for this network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-wireless-rf-profile
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-rf-profile
         
         - networkId (string)
         - rfProfileId (string)
@@ -818,7 +818,7 @@ class AsyncWireless:
     async def deleteNetworkWirelessRfProfile(self, networkId: str, rfProfileId: str):
         """
         **Delete a RF Profile**
-        https://developer.cisco.com/docs/meraki-api-v1/#!delete-network-wireless-rf-profile
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-wireless-rf-profile
         
         - networkId (string)
         - rfProfileId (string)
@@ -835,7 +835,7 @@ class AsyncWireless:
     async def getNetworkWirelessRfProfile(self, networkId: str, rfProfileId: str):
         """
         **Return a RF profile**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-wireless-rf-profile
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-rf-profile
         
         - networkId (string)
         - rfProfileId (string)
@@ -852,7 +852,7 @@ class AsyncWireless:
     async def getNetworkWirelessSettings(self, networkId: str):
         """
         **Return the wireless settings for a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-wireless-settings
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-settings
         
         - networkId (string)
         """
@@ -868,7 +868,7 @@ class AsyncWireless:
     async def updateNetworkWirelessSettings(self, networkId: str, **kwargs):
         """
         **Update the wireless settings for a network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-wireless-settings
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-settings
         
         - networkId (string)
         - meshingEnabled (boolean): Toggle for enabling or disabling meshing in a network
@@ -898,7 +898,7 @@ class AsyncWireless:
     async def getNetworkWirelessSignalQualityHistory(self, networkId: str, **kwargs):
         """
         **Return signal quality (SNR/RSSI) over time for a device or network client**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-wireless-signal-quality-history
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-signal-quality-history
         
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
@@ -933,7 +933,7 @@ class AsyncWireless:
     async def getNetworkWirelessSsids(self, networkId: str):
         """
         **List the SSIDs in a network. Supports networks with access points or wireless-enabled security appliances and teleworker gateways.**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-wireless-ssids
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssids
         
         - networkId (string)
         """
@@ -949,7 +949,7 @@ class AsyncWireless:
     async def getNetworkWirelessSsid(self, networkId: str, number: str):
         """
         **Return a single SSID**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-wireless-ssid
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssid
         
         - networkId (string)
         - number (string)
@@ -966,7 +966,7 @@ class AsyncWireless:
     async def updateNetworkWirelessSsid(self, networkId: str, number: str, **kwargs):
         """
         **Update the attributes of an SSID**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-wireless-ssid
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid
         
         - networkId (string)
         - number (string)
@@ -1043,7 +1043,7 @@ class AsyncWireless:
     async def getNetworkWirelessSsidFirewallL3FirewallRules(self, networkId: str, number: str):
         """
         **Return the L3 firewall rules for an SSID on an MR network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-wireless-ssid-firewall-l-3-firewall-rules
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssid-firewall-l-3-firewall-rules
         
         - networkId (string)
         - number (string)
@@ -1060,7 +1060,7 @@ class AsyncWireless:
     async def updateNetworkWirelessSsidFirewallL3FirewallRules(self, networkId: str, number: str, **kwargs):
         """
         **Update the L3 firewall rules of an SSID on an MR network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-wireless-ssid-firewall-l-3-firewall-rules
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-firewall-l-3-firewall-rules
         
         - networkId (string)
         - number (string)
@@ -1084,7 +1084,7 @@ class AsyncWireless:
     async def getNetworkWirelessSsidFirewallL7FirewallRules(self, networkId: str, number: str):
         """
         **Return the L7 firewall rules for an SSID on an MR network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-wireless-ssid-firewall-l-7-firewall-rules
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssid-firewall-l-7-firewall-rules
         
         - networkId (string)
         - number (string)
@@ -1101,7 +1101,7 @@ class AsyncWireless:
     async def updateNetworkWirelessSsidFirewallL7FirewallRules(self, networkId: str, number: str, **kwargs):
         """
         **Update the L7 firewall rules of an SSID on an MR network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-wireless-ssid-firewall-l-7-firewall-rules
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-firewall-l-7-firewall-rules
         
         - networkId (string)
         - number (string)
@@ -1124,7 +1124,7 @@ class AsyncWireless:
     async def getNetworkWirelessSsidIdentityPsks(self, networkId: str, number: str):
         """
         **List all Identity PSKs in a wireless network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-wireless-ssid-identity-psks
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssid-identity-psks
         
         - networkId (string)
         - number (string)
@@ -1141,7 +1141,7 @@ class AsyncWireless:
     async def createNetworkWirelessSsidIdentityPsk(self, networkId: str, number: str, name: str, passphrase: str, groupPolicyId: str):
         """
         **Create an Identity PSK**
-        https://developer.cisco.com/docs/meraki-api-v1/#!create-network-wireless-ssid-identity-psk
+        https://developer.cisco.com/meraki/api-v1/#!create-network-wireless-ssid-identity-psk
         
         - networkId (string)
         - number (string)
@@ -1166,7 +1166,7 @@ class AsyncWireless:
     async def getNetworkWirelessSsidIdentityPsk(self, networkId: str, number: str, identityPskId: str):
         """
         **Return an Identity PSK**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-wireless-ssid-identity-psk
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssid-identity-psk
         
         - networkId (string)
         - number (string)
@@ -1184,7 +1184,7 @@ class AsyncWireless:
     async def updateNetworkWirelessSsidIdentityPsk(self, networkId: str, number: str, identityPskId: str, **kwargs):
         """
         **Update an Identity PSK**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-wireless-ssid-identity-psk
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-identity-psk
         
         - networkId (string)
         - number (string)
@@ -1210,7 +1210,7 @@ class AsyncWireless:
     async def deleteNetworkWirelessSsidIdentityPsk(self, networkId: str, number: str, identityPskId: str):
         """
         **Delete an Identity PSK**
-        https://developer.cisco.com/docs/meraki-api-v1/#!delete-network-wireless-ssid-identity-psk
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-wireless-ssid-identity-psk
         
         - networkId (string)
         - number (string)
@@ -1228,7 +1228,7 @@ class AsyncWireless:
     async def getNetworkWirelessSsidSplashSettings(self, networkId: str, number: str):
         """
         **Display the splash page settings for the given SSID**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-wireless-ssid-splash-settings
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssid-splash-settings
         
         - networkId (string)
         - number (string)
@@ -1245,7 +1245,7 @@ class AsyncWireless:
     async def updateNetworkWirelessSsidSplashSettings(self, networkId: str, number: str, **kwargs):
         """
         **Modify the splash page settings for the given SSID**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-wireless-ssid-splash-settings
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-splash-settings
         
         - networkId (string)
         - number (string)
@@ -1269,7 +1269,7 @@ class AsyncWireless:
     async def updateNetworkWirelessSsidTrafficShapingRules(self, networkId: str, number: str, **kwargs):
         """
         **Update the traffic shaping settings for an SSID on an MR network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!update-network-wireless-ssid-traffic-shaping-rules
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-traffic-shaping-rules
         
         - networkId (string)
         - number (string)
@@ -1301,7 +1301,7 @@ class AsyncWireless:
     async def getNetworkWirelessSsidTrafficShapingRules(self, networkId: str, number: str):
         """
         **Display the traffic shaping settings for a SSID on an MR network**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-wireless-ssid-traffic-shaping-rules
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssid-traffic-shaping-rules
         
         - networkId (string)
         - number (string)
@@ -1318,7 +1318,7 @@ class AsyncWireless:
     async def getNetworkWirelessUsageHistory(self, networkId: str, **kwargs):
         """
         **Return AP usage over time for a device or network client**
-        https://developer.cisco.com/docs/meraki-api-v1/#!get-network-wireless-usage-history
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-usage-history
         
         - networkId (string)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.

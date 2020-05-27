@@ -6,7 +6,7 @@ class MXVPNFirewall(object):
     def getOrganizationVpnFirewallRules(self, organizationId: str):
         """
         **Return the firewall rules for an organization's site-to-site VPN**
-        https://developer.cisco.com/docs/meraki-api-v0/#!get-organization-vpn-firewall-rules
+        https://developer.cisco.com/meraki/api/#!get-organization-vpn-firewall-rules
         
         - organizationId (string)
         """
@@ -22,7 +22,7 @@ class MXVPNFirewall(object):
     def updateOrganizationVpnFirewallRules(self, organizationId: str, **kwargs):
         """
         **Update the firewall rules of an organization's site-to-site VPN**
-        https://developer.cisco.com/docs/meraki-api-v0/#!update-organization-vpn-firewall-rules
+        https://developer.cisco.com/meraki/api/#!update-organization-vpn-firewall-rules
         
         - organizationId (string)
         - rules (array): An ordered array of the firewall rules (not including the default rule)
