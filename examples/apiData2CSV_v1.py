@@ -5,7 +5,7 @@ import json
 import argparse
 import sys
 
-import meraki
+import meraki_v1
 
 import urllib.parse
 import platform
@@ -29,7 +29,7 @@ import platform
 
 def main(org_id, timespan):
     # Instantiate a Meraki dashboard API session
-    dashboard = meraki.DashboardAPI(
+    dashboard = meraki_v1.DashboardAPI(
         base_url='https://api-mp.meraki.com/api/v1/',
         print_console=False,
         output_log=False,
@@ -59,13 +59,25 @@ def main(org_id, timespan):
             if len(userAgent) > 1:
                 if "implementation" in userAgent[1]:
                     userAgentDict = json.loads(urllib.parse.unquote(userAgent[1]))
-                    csvString += userAgentDict['implementation']['name'] + ','
-                    csvString += userAgentDict['implementation']['version'] + ','
-                    csvString += userAgentDict['distro']['name'] + ','
-                    csvString += userAgentDict['distro']['version'] + ','
-                    csvString += userAgentDict['system']['name'] + ','
-                    csvString += userAgentDict['system']['release'] + ','
-                    csvString += userAgentDict['cpu'] + ','
+                    if "implementation" in userAgentDict:
+                        csvString += userAgentDict['implementation']['name'] + ','
+                        csvString += userAgentDict['implementation']['version'] + ','
+                    else:
+                        csvString += ',,'
+                    if "distro" in userAgentDict:
+                        csvString += userAgentDict['distro']['name'] + ','
+                        csvString += userAgentDict['distro']['version'] + ','
+                    else:
+                        csvString += ',,'
+                    if "system" in userAgentDict:
+                        csvString += userAgentDict['system']['name'] + ','
+                        csvString += userAgentDict['system']['release'] + ','
+                    else:
+                        csvString += ',,'
+                    if "cpu" in userAgentDict:
+                        csvString += userAgentDict['cpu'] + ','
+                    else:
+                        csvString += ','
                     if "be_geo_id" in userAgentDict:
                         csvString += userAgentDict['be_geo_id'] + ','
                     else:
