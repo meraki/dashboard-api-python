@@ -112,7 +112,7 @@ class AsyncSwitch:
         - serial (string)
         - portId (string)
         - name (string): The name of the switch port
-        - tags (string): The tags of the switch port
+        - tags (array): The list of tags of the switch port
         - enabled (boolean): The status of the switch port
         - type (string): The type of the switch port ('trunk' or 'access')
         - vlan (integer): The VLAN of the switch port. A null value will clear the value set for trunk ports.
@@ -994,7 +994,7 @@ class AsyncSwitch:
         - profileId (string)
         - portId (string)
         - name (string): The name of the switch profile port
-        - tags (string): The tags of the switch profile port
+        - tags (array): The list of tags of the switch profile port
         - enabled (boolean): The status of the switch profile port
         - type (string): The type of the switch profile port ('trunk' or 'access')
         - vlan (integer): The VLAN of the switch profile port. A null value will clear the value set for trunk ports.

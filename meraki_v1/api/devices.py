@@ -26,7 +26,7 @@ class Devices(object):
         
         - serial (string)
         - name (string): The name of a device
-        - tags (string): The tags of a device
+        - tags (array): The list of tags of a device
         - lat (number): The latitude of a device
         - lng (number): The longitude of a device
         - address (string): The address of a device

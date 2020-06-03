@@ -27,7 +27,7 @@ class Networks(object):
         - networkId (string)
         - name (string): The name of the network
         - timeZone (string): The timezone of the network. For a list of allowed timezones, please see the 'TZ' column in the table in <a target='_blank' href='https://en.wikipedia.org/wiki/List_of_tz_database_time_zones'>this article.</a>
-        - tags (string): A space-separated list of tags to be applied to the network
+        - tags (array): A list of tags to be applied to the network
         - enrollmentString (string): A unique identifier which can be used for device enrollment or easy access through the Meraki SM Registration page or the Self Service Portal. Please note that changing this field may cause existing bookmarks to break.
         """
 
