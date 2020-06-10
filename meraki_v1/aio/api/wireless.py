@@ -178,6 +178,47 @@ class AsyncWireless:
 
         return await self._session.get(metadata, resource, params)
 
+    async def getNetworkWirelessAlternateManagementInterface(self, networkId: str):
+        """
+        **Return alternate management interface and devices with IP assigned**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-alternate-management-interface
+        
+        - networkId (string)
+        """
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'alternateManagementInterface'],
+            'operation': 'getNetworkWirelessAlternateManagementInterface',
+        }
+        resource = f'/networks/{networkId}/wireless/alternateManagementInterface'
+
+        return await self._session.get(metadata, resource)
+
+    async def updateNetworkWirelessAlternateManagementInterface(self, networkId: str, **kwargs):
+        """
+        **Update alternate management interface and device static IP**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-alternate-management-interface
+        
+        - networkId (string)
+        - enabled (boolean): Boolean value to enable or disable alternate management interface
+        - vlanId (integer): Alternate management interface VLAN, must be between 1 and 4094
+        - protocols (array): Can be one or more of the following values: 'radius', 'snmp', 'syslog' or 'ldap'
+        - accessPoints (array): Array of access point serial number and IP assignment. Note: accessPoints IP assignment is not applicable for template networks, in other words, do not put 'accessPoints' in the body when updating template networks. Also, an empty 'accessPoints' array will remove all previous static IP assignments
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'alternateManagementInterface'],
+            'operation': 'updateNetworkWirelessAlternateManagementInterface',
+        }
+        resource = f'/networks/{networkId}/wireless/alternateManagementInterface'
+
+        body_params = ['enabled', 'vlanId', 'protocols', 'accessPoints']
+        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+
+        return await self._session.put(metadata, resource, payload)
+
     async def getNetworkWirelessBluetoothSettings(self, networkId: str):
         """
         **Return the Bluetooth settings for a network. <a href="https://documentation.meraki.com/MR/Bluetooth/Bluetooth_Low_Energy_(BLE)">Bluetooth settings</a> must be enabled on the network.**
