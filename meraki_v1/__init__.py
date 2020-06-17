@@ -2,14 +2,13 @@ from datetime import datetime
 import logging
 import os
 
-from .legacy import *
 from .rest_session import *
 from .api.organizations import Organizations
 from .api.networks import Networks
 from .api.devices import Devices
 from .api.appliance import Appliance
 from .api.camera import Camera
-from .api.cellular_gateway import CellularGateway
+from .api.cellularGateway import CellularGateway
 from .api.insight import Insight
 from .api.sm import Sm
 from .api.switch import Switch
@@ -21,7 +20,7 @@ from .config import (
     SUPPRESS_LOGGING, SIMULATE_API_CALLS, BE_GEO_ID, MERAKI_PYTHON_SDK_CALLER
 )
 
-__version__ = '1.0.0b8'
+__version__ = '1.0.0b9'
 
 class DashboardAPI(object):
     """
@@ -118,7 +117,7 @@ class DashboardAPI(object):
         self.devices = Devices(self._session)
         self.appliance = Appliance(self._session)
         self.camera = Camera(self._session)
-        self.cellulargateway = CellularGateway(self._session)
+        self.cellularGateway = CellularGateway(self._session)
         self.insight = Insight(self._session)
         self.sm = Sm(self._session)
         self.switch = Switch(self._session)

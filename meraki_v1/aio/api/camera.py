@@ -3,28 +3,26 @@ class AsyncCamera:
         super().__init__()
         self._session = session
 
-    async def getDeviceCameraAnalyticsLive(self, serial: str):
+    def getDeviceCameraAnalyticsLive(self, serial: str):
         """
         **Returns live state from camera of analytics zones**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-analytics-live
-        
-        - serial (string)
+        - serial (string): (required)
         """
 
         metadata = {
             'tags': ['camera', 'monitor', 'analytics', 'live'],
-            'operation': 'getDeviceCameraAnalyticsLive',
+            'operation': 'getDeviceCameraAnalyticsLive'
         }
         resource = f'/devices/{serial}/camera/analytics/live'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def getDeviceCameraAnalyticsOverview(self, serial: str, **kwargs):
+    def getDeviceCameraAnalyticsOverview(self, serial: str, **kwargs):
         """
         **Returns an overview of aggregate analytics data for a timespan**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-analytics-overview
-        
-        - serial (string)
+        - serial (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days. The default is 1 hour.
@@ -39,21 +37,20 @@ class AsyncCamera:
 
         metadata = {
             'tags': ['camera', 'monitor', 'analytics', 'overview'],
-            'operation': 'getDeviceCameraAnalyticsOverview',
+            'operation': 'getDeviceCameraAnalyticsOverview'
         }
         resource = f'/devices/{serial}/camera/analytics/overview'
 
-        query_params = ['t0', 't1', 'timespan', 'objectType']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['t0', 't1', 'timespan', 'objectType', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        return await self._session.get(metadata, resource, params)
+        return self._session.get(metadata, resource, params)
 
-    async def getDeviceCameraAnalyticsRecent(self, serial: str, **kwargs):
+    def getDeviceCameraAnalyticsRecent(self, serial: str, **kwargs):
         """
         **Returns most recent record for analytics zones**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-analytics-recent
-        
-        - serial (string)
+        - serial (string): (required)
         - objectType (string): [optional] The object type for which analytics will be retrieved. The default object type is person. The available types are [person, vehicle].
         """
 
@@ -65,38 +62,36 @@ class AsyncCamera:
 
         metadata = {
             'tags': ['camera', 'monitor', 'analytics', 'recent'],
-            'operation': 'getDeviceCameraAnalyticsRecent',
+            'operation': 'getDeviceCameraAnalyticsRecent'
         }
         resource = f'/devices/{serial}/camera/analytics/recent'
 
-        query_params = ['objectType']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['objectType', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        return await self._session.get(metadata, resource, params)
+        return self._session.get(metadata, resource, params)
 
-    async def getDeviceCameraAnalyticsZones(self, serial: str):
+    def getDeviceCameraAnalyticsZones(self, serial: str):
         """
         **Returns all configured analytic zones for this camera**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-analytics-zones
-        
-        - serial (string)
+        - serial (string): (required)
         """
 
         metadata = {
             'tags': ['camera', 'monitor', 'analytics', 'zones'],
-            'operation': 'getDeviceCameraAnalyticsZones',
+            'operation': 'getDeviceCameraAnalyticsZones'
         }
         resource = f'/devices/{serial}/camera/analytics/zones'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def getDeviceCameraAnalyticsZoneHistory(self, serial: str, zoneId: str, **kwargs):
+    def getDeviceCameraAnalyticsZoneHistory(self, serial: str, zoneId: str, **kwargs):
         """
         **Return historical records for analytic zones**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-analytics-zone-history
-        
-        - serial (string)
-        - zoneId (string)
+        - serial (string): (required)
+        - zoneId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 hours after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 14 hours. The default is 1 hour.
@@ -112,21 +107,20 @@ class AsyncCamera:
 
         metadata = {
             'tags': ['camera', 'monitor', 'analytics', 'zones', 'history'],
-            'operation': 'getDeviceCameraAnalyticsZoneHistory',
+            'operation': 'getDeviceCameraAnalyticsZoneHistory'
         }
         resource = f'/devices/{serial}/camera/analytics/zones/{zoneId}/history'
 
-        query_params = ['t0', 't1', 'timespan', 'resolution', 'objectType']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['t0', 't1', 'timespan', 'resolution', 'objectType', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        return await self._session.get(metadata, resource, params)
+        return self._session.get(metadata, resource, params)
 
-    async def generateDeviceCameraSnapshot(self, serial: str, **kwargs):
+    def generateDeviceCameraSnapshot(self, serial: str, **kwargs):
         """
         **Generate a snapshot of what the camera sees at the specified time and return a link to that image.**
         https://developer.cisco.com/meraki/api-v1/#!generate-device-camera-snapshot
-        
-        - serial (string)
+        - serial (string): (required)
         - timestamp (string): [optional] The snapshot will be taken from this time on the camera. The timestamp is expected to be in ISO 8601 format. If no timestamp is specified, we will assume current time.
         - fullframe (boolean): [optional] If set to "true" the snapshot will be taken at full sensor resolution. This will error if used with timestamp.
         """
@@ -135,37 +129,35 @@ class AsyncCamera:
 
         metadata = {
             'tags': ['camera', 'monitor'],
-            'operation': 'generateDeviceCameraSnapshot',
+            'operation': 'generateDeviceCameraSnapshot'
         }
         resource = f'/devices/{serial}/camera/generateSnapshot'
 
-        body_params = ['timestamp', 'fullframe']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['timestamp', 'fullframe', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.post(metadata, resource, payload)
+        return self._session.post(metadata, resource, payload)
 
-    async def getDeviceCameraQualityAndRetention(self, serial: str):
+    def getDeviceCameraQualityAndRetention(self, serial: str):
         """
         **Returns quality and retention settings for the given camera**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-quality-and-retention
-        
-        - serial (string)
+        - serial (string): (required)
         """
 
         metadata = {
             'tags': ['camera', 'configure', 'qualityAndRetention'],
-            'operation': 'getDeviceCameraQualityAndRetention',
+            'operation': 'getDeviceCameraQualityAndRetention'
         }
         resource = f'/devices/{serial}/camera/qualityAndRetention'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def updateDeviceCameraQualityAndRetention(self, serial: str, **kwargs):
+    def updateDeviceCameraQualityAndRetention(self, serial: str, **kwargs):
         """
         **Update quality and retention settings for the given camera**
         https://developer.cisco.com/meraki/api-v1/#!update-device-camera-quality-and-retention
-        
-        - serial (string)
+        - serial (string): (required)
         - profileId (string): The ID of a quality and retention profile to assign to the camera. The profile's settings will override all of the per-camera quality and retention settings. If the value of this parameter is null, any existing profile will be unassigned from the camera.
         - motionBasedRetentionEnabled (boolean): Boolean indicating if motion-based retention is enabled(true) or disabled(false) on the camera
         - audioRecordingEnabled (boolean): Boolean indicating if audio recording is enabled(true) or disabled(false) on the camera
@@ -189,37 +181,35 @@ class AsyncCamera:
 
         metadata = {
             'tags': ['camera', 'configure', 'qualityAndRetention'],
-            'operation': 'updateDeviceCameraQualityAndRetention',
+            'operation': 'updateDeviceCameraQualityAndRetention'
         }
         resource = f'/devices/{serial}/camera/qualityAndRetention'
 
-        body_params = ['profileId', 'motionBasedRetentionEnabled', 'audioRecordingEnabled', 'restrictedBandwidthModeEnabled', 'quality', 'resolution', 'motionDetectorVersion']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['profileId', 'motionBasedRetentionEnabled', 'audioRecordingEnabled', 'restrictedBandwidthModeEnabled', 'quality', 'resolution', 'motionDetectorVersion', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.put(metadata, resource, payload)
+        return self._session.put(metadata, resource, payload)
 
-    async def getDeviceCameraVideoSettings(self, serial: str):
+    def getDeviceCameraVideoSettings(self, serial: str):
         """
         **Returns video settings for the given camera**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-video-settings
-        
-        - serial (string)
+        - serial (string): (required)
         """
 
         metadata = {
             'tags': ['camera', 'configure', 'video', 'settings'],
-            'operation': 'getDeviceCameraVideoSettings',
+            'operation': 'getDeviceCameraVideoSettings'
         }
         resource = f'/devices/{serial}/camera/video/settings'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def updateDeviceCameraVideoSettings(self, serial: str, **kwargs):
+    def updateDeviceCameraVideoSettings(self, serial: str, **kwargs):
         """
         **Update video settings for the given camera**
         https://developer.cisco.com/meraki/api-v1/#!update-device-camera-video-settings
-        
-        - serial (string)
+        - serial (string): (required)
         - externalRtspEnabled (boolean): Boolean indicating if external rtsp stream is exposed
         """
 
@@ -227,21 +217,20 @@ class AsyncCamera:
 
         metadata = {
             'tags': ['camera', 'configure', 'video', 'settings'],
-            'operation': 'updateDeviceCameraVideoSettings',
+            'operation': 'updateDeviceCameraVideoSettings'
         }
         resource = f'/devices/{serial}/camera/video/settings'
 
-        body_params = ['externalRtspEnabled']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['externalRtspEnabled', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.put(metadata, resource, payload)
+        return self._session.put(metadata, resource, payload)
 
-    async def getDeviceCameraVideoLink(self, serial: str, **kwargs):
+    def getDeviceCameraVideoLink(self, serial: str, **kwargs):
         """
         **Returns video link to the specified camera. If a timestamp is supplied, it links to that timestamp.**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-video-link
-        
-        - serial (string)
+        - serial (string): (required)
         - timestamp (string): [optional] The video link will start at this time. The timestamp should be a string in ISO8601 format. If no timestamp is specified, we will assume current time.
         """
 
@@ -249,37 +238,35 @@ class AsyncCamera:
 
         metadata = {
             'tags': ['camera', 'configure', 'videoLink'],
-            'operation': 'getDeviceCameraVideoLink',
+            'operation': 'getDeviceCameraVideoLink'
         }
         resource = f'/devices/{serial}/camera/videoLink'
 
-        query_params = ['timestamp']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['timestamp', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        return await self._session.get(metadata, resource, params)
+        return self._session.get(metadata, resource, params)
 
-    async def getNetworkCameraQualityRetentionProfiles(self, networkId: str):
+    def getNetworkCameraQualityRetentionProfiles(self, networkId: str):
         """
         **List the quality retention profiles for this network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-camera-quality-retention-profiles
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['camera', 'configure', 'qualityRetentionProfiles'],
-            'operation': 'getNetworkCameraQualityRetentionProfiles',
+            'operation': 'getNetworkCameraQualityRetentionProfiles'
         }
         resource = f'/networks/{networkId}/camera/qualityRetentionProfiles'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def createNetworkCameraQualityRetentionProfile(self, networkId: str, name: str, **kwargs):
+    def createNetworkCameraQualityRetentionProfile(self, networkId: str, name: str, **kwargs):
         """
         **Creates new quality retention profile for this network.**
         https://developer.cisco.com/meraki/api-v1/#!create-network-camera-quality-retention-profile
-        
-        - networkId (string)
+        - networkId (string): (required)
         - name (string): The name of the new profile. Must be unique. This parameter is required.
         - motionBasedRetentionEnabled (boolean): Deletes footage older than 3 days in which no motion was detected. Can be either true or false. Defaults to false.
         - restrictedBandwidthModeEnabled (boolean): Disable features that require additional bandwidth such as Motion Recap. Can be either true or false. Defaults to false.
@@ -295,39 +282,37 @@ class AsyncCamera:
 
         metadata = {
             'tags': ['camera', 'configure', 'qualityRetentionProfiles'],
-            'operation': 'createNetworkCameraQualityRetentionProfile',
+            'operation': 'createNetworkCameraQualityRetentionProfile'
         }
         resource = f'/networks/{networkId}/camera/qualityRetentionProfiles'
 
-        body_params = ['name', 'motionBasedRetentionEnabled', 'restrictedBandwidthModeEnabled', 'audioRecordingEnabled', 'cloudArchiveEnabled', 'motionDetectorVersion', 'scheduleId', 'maxRetentionDays', 'videoSettings']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['name', 'motionBasedRetentionEnabled', 'restrictedBandwidthModeEnabled', 'audioRecordingEnabled', 'cloudArchiveEnabled', 'motionDetectorVersion', 'scheduleId', 'maxRetentionDays', 'videoSettings', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.post(metadata, resource, payload)
+        return self._session.post(metadata, resource, payload)
 
-    async def getNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str):
+    def getNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str):
         """
         **Retrieve a single quality retention profile**
         https://developer.cisco.com/meraki/api-v1/#!get-network-camera-quality-retention-profile
-        
-        - networkId (string)
-        - qualityRetentionProfileId (string)
+        - networkId (string): (required)
+        - qualityRetentionProfileId (string): (required)
         """
 
         metadata = {
             'tags': ['camera', 'configure', 'qualityRetentionProfiles'],
-            'operation': 'getNetworkCameraQualityRetentionProfile',
+            'operation': 'getNetworkCameraQualityRetentionProfile'
         }
         resource = f'/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def updateNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str, **kwargs):
+    def updateNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str, **kwargs):
         """
         **Update an existing quality retention profile for this network.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-camera-quality-retention-profile
-        
-        - networkId (string)
-        - qualityRetentionProfileId (string)
+        - networkId (string): (required)
+        - qualityRetentionProfileId (string): (required)
         - name (string): The name of the new profile. Must be unique.
         - motionBasedRetentionEnabled (boolean): Deletes footage older than 3 days in which no motion was detected. Can be either true or false. Defaults to false.
         - restrictedBandwidthModeEnabled (boolean): Disable features that require additional bandwidth such as Motion Recap. Can be either true or false. Defaults to false.
@@ -343,45 +328,42 @@ class AsyncCamera:
 
         metadata = {
             'tags': ['camera', 'configure', 'qualityRetentionProfiles'],
-            'operation': 'updateNetworkCameraQualityRetentionProfile',
+            'operation': 'updateNetworkCameraQualityRetentionProfile'
         }
         resource = f'/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}'
 
-        body_params = ['name', 'motionBasedRetentionEnabled', 'restrictedBandwidthModeEnabled', 'audioRecordingEnabled', 'cloudArchiveEnabled', 'motionDetectorVersion', 'scheduleId', 'maxRetentionDays', 'videoSettings']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['name', 'motionBasedRetentionEnabled', 'restrictedBandwidthModeEnabled', 'audioRecordingEnabled', 'cloudArchiveEnabled', 'motionDetectorVersion', 'scheduleId', 'maxRetentionDays', 'videoSettings', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.put(metadata, resource, payload)
+        return self._session.put(metadata, resource, payload)
 
-    async def deleteNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str):
+    def deleteNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str):
         """
         **Delete an existing quality retention profile for this network.**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-camera-quality-retention-profile
-        
-        - networkId (string)
-        - qualityRetentionProfileId (string)
+        - networkId (string): (required)
+        - qualityRetentionProfileId (string): (required)
         """
 
         metadata = {
             'tags': ['camera', 'configure', 'qualityRetentionProfiles'],
-            'operation': 'deleteNetworkCameraQualityRetentionProfile',
+            'operation': 'deleteNetworkCameraQualityRetentionProfile'
         }
         resource = f'/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}'
 
-        return await self._session.delete(metadata, resource)
+        return self._session.delete(metadata, resource)
 
-    async def getNetworkCameraSchedules(self, networkId: str):
+    def getNetworkCameraSchedules(self, networkId: str):
         """
         **Returns a list of all camera recording schedules.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-camera-schedules
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['camera', 'configure', 'schedules'],
-            'operation': 'getNetworkCameraSchedules',
+            'operation': 'getNetworkCameraSchedules'
         }
         resource = f'/networks/{networkId}/camera/schedules'
 
-        return await self._session.get(metadata, resource)
-
+        return self._session.get(metadata, resource)

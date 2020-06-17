@@ -7,13 +7,12 @@ class Networks(object):
         """
         **Return a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'configure'],
-            'operation': 'getNetwork',
+            'operation': 'getNetwork'
         }
         resource = f'/networks/{networkId}'
 
@@ -23,8 +22,7 @@ class Networks(object):
         """
         **Update a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network
-        
-        - networkId (string)
+        - networkId (string): (required)
         - name (string): The name of the network
         - timeZone (string): The timezone of the network. For a list of allowed timezones, please see the 'TZ' column in the table in <a target='_blank' href='https://en.wikipedia.org/wiki/List_of_tz_database_time_zones'>this article.</a>
         - tags (array): A list of tags to be applied to the network
@@ -35,12 +33,12 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'configure'],
-            'operation': 'updateNetwork',
+            'operation': 'updateNetwork'
         }
         resource = f'/networks/{networkId}'
 
-        body_params = ['name', 'timeZone', 'tags', 'enrollmentString']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['name', 'timeZone', 'tags', 'enrollmentString', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -48,13 +46,12 @@ class Networks(object):
         """
         **Delete a network**
         https://developer.cisco.com/meraki/api-v1/#!delete-network
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'configure'],
-            'operation': 'deleteNetwork',
+            'operation': 'deleteNetwork'
         }
         resource = f'/networks/{networkId}'
 
@@ -64,13 +61,12 @@ class Networks(object):
         """
         **Return the alert configuration for this network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-alerts-settings
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'configure', 'alerts', 'settings'],
-            'operation': 'getNetworkAlertsSettings',
+            'operation': 'getNetworkAlertsSettings'
         }
         resource = f'/networks/{networkId}/alerts/settings'
 
@@ -80,8 +76,7 @@ class Networks(object):
         """
         **Update the alert configuration for this network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-alerts-settings
-        
-        - networkId (string)
+        - networkId (string): (required)
         - defaultDestinations (object): The network-wide destinations for all alerts on the network.
         - alerts (array): Alert-specific configuration for each type. Only alerts that pertain to the network can be updated.
         """
@@ -90,12 +85,12 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'configure', 'alerts', 'settings'],
-            'operation': 'updateNetworkAlertsSettings',
+            'operation': 'updateNetworkAlertsSettings'
         }
         resource = f'/networks/{networkId}/alerts/settings'
 
-        body_params = ['defaultDestinations', 'alerts']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['defaultDestinations', 'alerts', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -103,8 +98,7 @@ class Networks(object):
         """
         **Bind a network to a template.**
         https://developer.cisco.com/meraki/api-v1/#!bind-network
-        
-        - networkId (string)
+        - networkId (string): (required)
         - configTemplateId (string): The ID of the template to which the network should be bound.
         - autoBind (boolean): Optional boolean indicating whether the network's switches should automatically bind to profiles of the same model. Defaults to false if left unspecified. This option only affects switch networks and switch templates. Auto-bind is not valid unless the switch template has at least one profile and has at most one profile per switch model.
         """
@@ -113,12 +107,12 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'configure'],
-            'operation': 'bindNetwork',
+            'operation': 'bindNetwork'
         }
         resource = f'/networks/{networkId}/bind'
 
-        body_params = ['configTemplateId', 'autoBind']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['configTemplateId', 'autoBind', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
 
@@ -126,8 +120,7 @@ class Networks(object):
         """
         **List the Bluetooth clients seen by APs in this network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-bluetooth-clients
-        
-        - networkId (string)
+        - networkId (string): (required)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 7 days from today.
@@ -142,23 +135,21 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'monitor', 'bluetoothClients'],
-            'operation': 'getNetworkBluetoothClients',
+            'operation': 'getNetworkBluetoothClients'
         }
         resource = f'/networks/{networkId}/bluetoothClients'
 
-        query_params = ['t0', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'includeConnectivityHistory']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['t0', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'includeConnectivityHistory', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-
 
     def getNetworkBluetoothClient(self, networkId: str, bluetoothClientId: str, **kwargs):
         """
         **Return a Bluetooth client. Bluetooth clients can be identified by their ID or their MAC.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-bluetooth-client
-        
-        - networkId (string)
-        - bluetoothClientId (string)
+        - networkId (string): (required)
+        - bluetoothClientId (string): (required)
         - includeConnectivityHistory (boolean): Include the connectivity history for this client
         - connectivityHistoryTimespan (integer): The timespan, in seconds, for the connectivityHistory data. By default 1 day, 86400, will be used.
         """
@@ -167,12 +158,12 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'monitor', 'bluetoothClients'],
-            'operation': 'getNetworkBluetoothClient',
+            'operation': 'getNetworkBluetoothClient'
         }
         resource = f'/networks/{networkId}/bluetoothClients/{bluetoothClientId}'
 
-        query_params = ['includeConnectivityHistory', 'connectivityHistoryTimespan']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['includeConnectivityHistory', 'connectivityHistoryTimespan', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
 
@@ -180,8 +171,7 @@ class Networks(object):
         """
         **List the clients that have used this network in the timespan**
         https://developer.cisco.com/meraki/api-v1/#!get-network-clients
-        
-        - networkId (string)
+        - networkId (string): (required)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
@@ -195,22 +185,20 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'monitor', 'clients'],
-            'operation': 'getNetworkClients',
+            'operation': 'getNetworkClients'
         }
         resource = f'/networks/{networkId}/clients'
 
-        query_params = ['t0', 'timespan', 'perPage', 'startingAfter', 'endingBefore']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['t0', 'timespan', 'perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-
 
     def provisionNetworkClients(self, networkId: str, clients: list, devicePolicy: str, **kwargs):
         """
         **Provisions a client with a name and policy. Clients can be provisioned before they associate to the network.**
         https://developer.cisco.com/meraki/api-v1/#!provision-network-clients
-        
-        - networkId (string)
+        - networkId (string): (required)
         - clients (array): The array of clients to provision
         - devicePolicy (string): The policy to apply to the specified client. Can be 'Group policy', 'Whitelisted', 'Blocked', 'Per connection' or 'Normal'. Required.
         - groupPolicyId (string): The ID of the desired group policy to apply to the client. Required if 'devicePolicy' is set to "Group policy". Otherwise this is ignored.
@@ -226,12 +214,12 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'configure', 'clients'],
-            'operation': 'provisionNetworkClients',
+            'operation': 'provisionNetworkClients'
         }
         resource = f'/networks/{networkId}/clients/provision'
 
-        body_params = ['clients', 'devicePolicy', 'groupPolicyId', 'policiesBySecurityAppliance', 'policiesBySsid']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['clients', 'devicePolicy', 'groupPolicyId', 'policiesBySecurityAppliance', 'policiesBySsid', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
 
@@ -239,14 +227,13 @@ class Networks(object):
         """
         **Return the client associated with the given identifier. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-client
-        
-        - networkId (string)
-        - clientId (string)
+        - networkId (string): (required)
+        - clientId (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'monitor', 'clients'],
-            'operation': 'getNetworkClient',
+            'operation': 'getNetworkClient'
         }
         resource = f'/networks/{networkId}/clients/{clientId}'
 
@@ -256,14 +243,13 @@ class Networks(object):
         """
         **Return the policy assigned to a client on the network. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-client-policy
-        
-        - networkId (string)
-        - clientId (string)
+        - networkId (string): (required)
+        - clientId (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'configure', 'clients', 'policy'],
-            'operation': 'getNetworkClientPolicy',
+            'operation': 'getNetworkClientPolicy'
         }
         resource = f'/networks/{networkId}/clients/{clientId}/policy'
 
@@ -273,9 +259,8 @@ class Networks(object):
         """
         **Update the policy assigned to a client on the network. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-client-policy
-        
-        - networkId (string)
-        - clientId (string)
+        - networkId (string): (required)
+        - clientId (string): (required)
         - devicePolicy (string): The policy to assign. Can be 'Whitelisted', 'Blocked', 'Normal' or 'Group policy'. Required.
         - groupPolicyId (string): [optional] If 'devicePolicy' is set to 'Group policy' this param is used to specify the group policy ID.
         """
@@ -284,12 +269,12 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'configure', 'clients', 'policy'],
-            'operation': 'updateNetworkClientPolicy',
+            'operation': 'updateNetworkClientPolicy'
         }
         resource = f'/networks/{networkId}/clients/{clientId}/policy'
 
-        body_params = ['devicePolicy', 'groupPolicyId']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['devicePolicy', 'groupPolicyId', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -297,14 +282,13 @@ class Networks(object):
         """
         **Return the splash authorization for a client, for each SSID they've associated with through splash. Only enabled SSIDs with Click-through splash enabled will be included. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-client-splash-authorization-status
-        
-        - networkId (string)
-        - clientId (string)
+        - networkId (string): (required)
+        - clientId (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'configure', 'clients', 'splashAuthorizationStatus'],
-            'operation': 'getNetworkClientSplashAuthorizationStatus',
+            'operation': 'getNetworkClientSplashAuthorizationStatus'
         }
         resource = f'/networks/{networkId}/clients/{clientId}/splashAuthorizationStatus'
 
@@ -314,9 +298,8 @@ class Networks(object):
         """
         **Update a client's splash authorization. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-client-splash-authorization-status
-        
-        - networkId (string)
-        - clientId (string)
+        - networkId (string): (required)
+        - clientId (string): (required)
         - ssids (object): The target SSIDs. Each SSID must be enabled and must have Click-through splash enabled. For each SSID where isAuthorized is true, the expiration time will automatically be set according to the SSID's splash frequency. Not all networks support configuring all SSIDs
         """
 
@@ -324,12 +307,12 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'configure', 'clients', 'splashAuthorizationStatus'],
-            'operation': 'updateNetworkClientSplashAuthorizationStatus',
+            'operation': 'updateNetworkClientSplashAuthorizationStatus'
         }
         resource = f'/networks/{networkId}/clients/{clientId}/splashAuthorizationStatus'
 
-        body_params = ['ssids']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['ssids', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -337,9 +320,8 @@ class Networks(object):
         """
         **Return the client's network traffic data over time. Usage data is in kilobytes. This endpoint requires detailed traffic analysis to be enabled on the Network-wide > General page. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-client-traffic-history
-        
-        - networkId (string)
-        - clientId (string)
+        - networkId (string): (required)
+        - clientId (string): (required)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000.
@@ -351,28 +333,26 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'monitor', 'clients', 'trafficHistory'],
-            'operation': 'getNetworkClientTrafficHistory',
+            'operation': 'getNetworkClientTrafficHistory'
         }
         resource = f'/networks/{networkId}/clients/{clientId}/trafficHistory'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-
 
     def getNetworkClientUsageHistory(self, networkId: str, clientId: str):
         """
         **Return the client's daily usage history. Usage data is in kilobytes. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-client-usage-history
-        
-        - networkId (string)
-        - clientId (string)
+        - networkId (string): (required)
+        - clientId (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'monitor', 'clients', 'usageHistory'],
-            'operation': 'getNetworkClientUsageHistory',
+            'operation': 'getNetworkClientUsageHistory'
         }
         resource = f'/networks/{networkId}/clients/{clientId}/usageHistory'
 
@@ -382,13 +362,12 @@ class Networks(object):
         """
         **List the devices in a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-devices
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'configure', 'devices'],
-            'operation': 'getNetworkDevices',
+            'operation': 'getNetworkDevices'
         }
         resource = f'/networks/{networkId}/devices'
 
@@ -398,8 +377,7 @@ class Networks(object):
         """
         **Claim devices into a network**
         https://developer.cisco.com/meraki/api-v1/#!claim-network-devices
-        
-        - networkId (string)
+        - networkId (string): (required)
         - serials (array): A list of serials of devices to claim
         """
 
@@ -407,12 +385,12 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'configure', 'devices'],
-            'operation': 'claimNetworkDevices',
+            'operation': 'claimNetworkDevices'
         }
         resource = f'/networks/{networkId}/devices/claim'
 
-        body_params = ['serials']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['serials', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
 
@@ -420,8 +398,7 @@ class Networks(object):
         """
         **Remove a single device**
         https://developer.cisco.com/meraki/api-v1/#!remove-network-devices
-        
-        - networkId (string)
+        - networkId (string): (required)
         - serial (string): The serial of a device
         """
 
@@ -429,12 +406,12 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'configure', 'devices'],
-            'operation': 'removeNetworkDevices',
+            'operation': 'removeNetworkDevices'
         }
         resource = f'/networks/{networkId}/devices/remove'
 
-        body_params = ['serial']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['serial', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
 
@@ -442,10 +419,9 @@ class Networks(object):
         """
         **List the events for the network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-events
-        
-        - networkId (string)
+        - networkId (string): (required)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
-        - direction (string): direction to paginate, either "prev" (default) or "next" page
+        - direction (string): direction to paginate, either "next" or "prev" (default) page
         - productType (string): The product type to fetch events for. This parameter is required for networks with multiple device types. Valid types are wireless, appliance, switch, systemsManager, camera, and cellularGateway
         - includedEventTypes (array): A list of event types. The returned events will be filtered to only include events with these types.
         - excludedEventTypes (array): A list of event types. The returned events will be filtered to exclude events with these types.
@@ -466,32 +442,30 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'monitor', 'events'],
-            'operation': 'getNetworkEvents',
+            'operation': 'getNetworkEvents'
         }
         resource = f'/networks/{networkId}/events'
 
-        query_params = ['productType', 'deviceMac', 'deviceSerial', 'deviceName', 'clientIp', 'clientMac', 'clientName', 'smDeviceMac', 'smDeviceName', 'perPage', 'startingAfter', 'endingBefore']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['productType', 'includedEventTypes', 'excludedEventTypes', 'deviceMac', 'deviceSerial', 'deviceName', 'clientIp', 'clientMac', 'clientName', 'smDeviceMac', 'smDeviceName', 'perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['includedEventTypes', 'excludedEventTypes']
-        for (k, v) in kwargs.items():
-            if k in array_params:
-                params[f'{k}[]'] = kwargs[f'{k}']
+        array_params = ['includedEventTypes', 'excludedEventTypes', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-
 
     def getNetworkEventsEventTypes(self, networkId: str):
         """
         **List the event type to human-readable description**
         https://developer.cisco.com/meraki/api-v1/#!get-network-events-event-types
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'monitor', 'events', 'eventTypes'],
-            'operation': 'getNetworkEventsEventTypes',
+            'operation': 'getNetworkEventsEventTypes'
         }
         resource = f'/networks/{networkId}/events/eventTypes'
 
@@ -501,9 +475,8 @@ class Networks(object):
         """
         **Updates the accessibility settings for the given service ('ICMP', 'web', or 'SNMP')**
         https://developer.cisco.com/meraki/api-v1/#!update-network-firewalled-service
-        
-        - networkId (string)
-        - service (string)
+        - networkId (string): (required)
+        - service (string): (required)
         - access (string): A string indicating the rule for which IPs are allowed to use the specified service. Acceptable values are "blocked" (no remote IPs can access the service), "restricted" (only whitelisted IPs can access the service), and "unrestriced" (any remote IP can access the service). This field is required
         - allowedIps (array): An array of whitelisted IPs that can access the service. This field is required if "access" is set to "restricted". Otherwise this field is ignored
         """
@@ -516,12 +489,12 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'configure', 'firewalledServices'],
-            'operation': 'updateNetworkFirewalledService',
+            'operation': 'updateNetworkFirewalledService'
         }
         resource = f'/networks/{networkId}/firewalledServices/{service}'
 
-        body_params = ['access', 'allowedIps']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['access', 'allowedIps', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -529,13 +502,12 @@ class Networks(object):
         """
         **List the floor plans that belong to your network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-floor-plans
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'configure', 'floorPlans'],
-            'operation': 'getNetworkFloorPlans',
+            'operation': 'getNetworkFloorPlans'
         }
         resource = f'/networks/{networkId}/floorPlans'
 
@@ -545,8 +517,7 @@ class Networks(object):
         """
         **Upload a floor plan**
         https://developer.cisco.com/meraki/api-v1/#!create-network-floor-plan
-        
-        - networkId (string)
+        - networkId (string): (required)
         - name (string): The name of your floor plan.
         - imageContents (string): The file contents (a base 64 encoded string) of your image. Supported formats are PNG, GIF, and JPG. Note that all images are saved as PNG files, regardless of the format they are uploaded in.
         - center (object): The longitude and latitude of the center of your floor plan. The 'center' or two adjacent corners (e.g. 'topLeftCorner' and 'bottomLeftCorner') must be specified. If 'center' is specified, the floor plan is placed over that point with no rotation. If two adjacent corners are specified, the floor plan is rotated to line up with the two specified points. The aspect ratio of the floor plan's image is preserved regardless of which corners/center are specified. (This means if that more than two corners are specified, only two corners may be used to preserve the floor plan's aspect ratio.). No two points can have the same latitude, longitude pair.
@@ -560,12 +531,12 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'configure', 'floorPlans'],
-            'operation': 'createNetworkFloorPlan',
+            'operation': 'createNetworkFloorPlan'
         }
         resource = f'/networks/{networkId}/floorPlans'
 
-        body_params = ['name', 'center', 'bottomLeftCorner', 'bottomRightCorner', 'topLeftCorner', 'topRightCorner', 'imageContents']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['name', 'center', 'bottomLeftCorner', 'bottomRightCorner', 'topLeftCorner', 'topRightCorner', 'imageContents', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
 
@@ -573,14 +544,13 @@ class Networks(object):
         """
         **Find a floor plan by ID**
         https://developer.cisco.com/meraki/api-v1/#!get-network-floor-plan
-        
-        - networkId (string)
-        - floorPlanId (string)
+        - networkId (string): (required)
+        - floorPlanId (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'configure', 'floorPlans'],
-            'operation': 'getNetworkFloorPlan',
+            'operation': 'getNetworkFloorPlan'
         }
         resource = f'/networks/{networkId}/floorPlans/{floorPlanId}'
 
@@ -590,9 +560,8 @@ class Networks(object):
         """
         **Update a floor plan's geolocation and other meta data**
         https://developer.cisco.com/meraki/api-v1/#!update-network-floor-plan
-        
-        - networkId (string)
-        - floorPlanId (string)
+        - networkId (string): (required)
+        - floorPlanId (string): (required)
         - name (string): The name of your floor plan.
         - center (object): The longitude and latitude of the center of your floor plan. If you want to change the geolocation data of your floor plan, either the 'center' or two adjacent corners (e.g. 'topLeftCorner' and 'bottomLeftCorner') must be specified. If 'center' is specified, the floor plan is placed over that point with no rotation. If two adjacent corners are specified, the floor plan is rotated to line up with the two specified points. The aspect ratio of the floor plan's image is preserved regardless of which corners/center are specified. (This means if that more than two corners are specified, only two corners may be used to preserve the floor plan's aspect ratio.). No two points can have the same latitude, longitude pair.
         - bottomLeftCorner (object): The longitude and latitude of the bottom left corner of your floor plan.
@@ -606,12 +575,12 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'configure', 'floorPlans'],
-            'operation': 'updateNetworkFloorPlan',
+            'operation': 'updateNetworkFloorPlan'
         }
         resource = f'/networks/{networkId}/floorPlans/{floorPlanId}'
 
-        body_params = ['name', 'center', 'bottomLeftCorner', 'bottomRightCorner', 'topLeftCorner', 'topRightCorner', 'imageContents']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['name', 'center', 'bottomLeftCorner', 'bottomRightCorner', 'topLeftCorner', 'topRightCorner', 'imageContents', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -619,14 +588,13 @@ class Networks(object):
         """
         **Destroy a floor plan**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-floor-plan
-        
-        - networkId (string)
-        - floorPlanId (string)
+        - networkId (string): (required)
+        - floorPlanId (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'configure', 'floorPlans'],
-            'operation': 'deleteNetworkFloorPlan',
+            'operation': 'deleteNetworkFloorPlan'
         }
         resource = f'/networks/{networkId}/floorPlans/{floorPlanId}'
 
@@ -636,13 +604,12 @@ class Networks(object):
         """
         **List the group policies in a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-group-policies
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'configure', 'groupPolicies'],
-            'operation': 'getNetworkGroupPolicies',
+            'operation': 'getNetworkGroupPolicies'
         }
         resource = f'/networks/{networkId}/groupPolicies'
 
@@ -652,8 +619,7 @@ class Networks(object):
         """
         **Create a group policy**
         https://developer.cisco.com/meraki/api-v1/#!create-network-group-policy
-        
-        - networkId (string)
+        - networkId (string): (required)
         - name (string): The name for your group policy. Required.
         - scheduling (object):     The schedule for the group policy. Schedules are applied to days of the week.
 
@@ -675,12 +641,12 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'configure', 'groupPolicies'],
-            'operation': 'createNetworkGroupPolicy',
+            'operation': 'createNetworkGroupPolicy'
         }
         resource = f'/networks/{networkId}/groupPolicies'
 
-        body_params = ['name', 'scheduling', 'bandwidth', 'firewallAndTrafficShaping', 'contentFiltering', 'splashAuthSettings', 'vlanTagging', 'bonjourForwarding']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['name', 'scheduling', 'bandwidth', 'firewallAndTrafficShaping', 'contentFiltering', 'splashAuthSettings', 'vlanTagging', 'bonjourForwarding', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
 
@@ -688,14 +654,13 @@ class Networks(object):
         """
         **Display a group policy**
         https://developer.cisco.com/meraki/api-v1/#!get-network-group-policy
-        
-        - networkId (string)
-        - groupPolicyId (string)
+        - networkId (string): (required)
+        - groupPolicyId (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'configure', 'groupPolicies'],
-            'operation': 'getNetworkGroupPolicy',
+            'operation': 'getNetworkGroupPolicy'
         }
         resource = f'/networks/{networkId}/groupPolicies/{groupPolicyId}'
 
@@ -705,9 +670,8 @@ class Networks(object):
         """
         **Update a group policy**
         https://developer.cisco.com/meraki/api-v1/#!update-network-group-policy
-        
-        - networkId (string)
-        - groupPolicyId (string)
+        - networkId (string): (required)
+        - groupPolicyId (string): (required)
         - name (string): The name for your group policy.
         - scheduling (object):     The schedule for the group policy. Schedules are applied to days of the week.
 
@@ -729,12 +693,12 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'configure', 'groupPolicies'],
-            'operation': 'updateNetworkGroupPolicy',
+            'operation': 'updateNetworkGroupPolicy'
         }
         resource = f'/networks/{networkId}/groupPolicies/{groupPolicyId}'
 
-        body_params = ['name', 'scheduling', 'bandwidth', 'firewallAndTrafficShaping', 'contentFiltering', 'splashAuthSettings', 'vlanTagging', 'bonjourForwarding']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['name', 'scheduling', 'bandwidth', 'firewallAndTrafficShaping', 'contentFiltering', 'splashAuthSettings', 'vlanTagging', 'bonjourForwarding', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -742,14 +706,13 @@ class Networks(object):
         """
         **Delete a group policy**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-group-policy
-        
-        - networkId (string)
-        - groupPolicyId (string)
+        - networkId (string): (required)
+        - groupPolicyId (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'configure', 'groupPolicies'],
-            'operation': 'deleteNetworkGroupPolicy',
+            'operation': 'deleteNetworkGroupPolicy'
         }
         resource = f'/networks/{networkId}/groupPolicies/{groupPolicyId}'
 
@@ -759,13 +722,12 @@ class Networks(object):
         """
         **List the HTTP servers for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-http-servers
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'configure', 'httpServers'],
-            'operation': 'getNetworkHttpServers',
+            'operation': 'getNetworkHttpServers'
         }
         resource = f'/networks/{networkId}/httpServers'
 
@@ -775,8 +737,7 @@ class Networks(object):
         """
         **Add an HTTP server to a network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-http-server
-        
-        - networkId (string)
+        - networkId (string): (required)
         - name (string): A name for easy reference to the HTTP server
         - url (string): The URL of the HTTP server
         - sharedSecret (string): A shared secret that will be included in POSTs sent to the HTTP server. This secret can be used to verify that the request was sent by Meraki.
@@ -786,12 +747,12 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'configure', 'httpServers'],
-            'operation': 'createNetworkHttpServer',
+            'operation': 'createNetworkHttpServer'
         }
         resource = f'/networks/{networkId}/httpServers'
 
-        body_params = ['name', 'url', 'sharedSecret']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['name', 'url', 'sharedSecret', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
 
@@ -799,8 +760,7 @@ class Networks(object):
         """
         **Send a test webhook for a network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-http-servers-webhook-test
-        
-        - networkId (string)
+        - networkId (string): (required)
         - url (string): The URL where the test webhook will be sent
         """
 
@@ -808,12 +768,12 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'configure', 'httpServers', 'webhookTests'],
-            'operation': 'createNetworkHttpServersWebhookTest',
+            'operation': 'createNetworkHttpServersWebhookTest'
         }
         resource = f'/networks/{networkId}/httpServers/webhookTests'
 
-        body_params = ['url']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['url', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
 
@@ -821,14 +781,13 @@ class Networks(object):
         """
         **Return the status of a webhook test for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-http-servers-webhook-test
-        
-        - networkId (string)
-        - id (string)
+        - networkId (string): (required)
+        - id (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'configure', 'httpServers', 'webhookTests'],
-            'operation': 'getNetworkHttpServersWebhookTest',
+            'operation': 'getNetworkHttpServersWebhookTest'
         }
         resource = f'/networks/{networkId}/httpServers/webhookTests/{id}'
 
@@ -838,14 +797,13 @@ class Networks(object):
         """
         **Return an HTTP server for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-http-server
-        
-        - networkId (string)
-        - id (string)
+        - networkId (string): (required)
+        - id (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'configure', 'httpServers'],
-            'operation': 'getNetworkHttpServer',
+            'operation': 'getNetworkHttpServer'
         }
         resource = f'/networks/{networkId}/httpServers/{id}'
 
@@ -855,9 +813,8 @@ class Networks(object):
         """
         **Update an HTTP server**
         https://developer.cisco.com/meraki/api-v1/#!update-network-http-server
-        
-        - networkId (string)
-        - id (string)
+        - networkId (string): (required)
+        - id (string): (required)
         - name (string): A name for easy reference to the HTTP server
         - url (string): The URL of the HTTP server
         - sharedSecret (string): A shared secret that will be included in POSTs sent to the HTTP server. This secret can be used to verify that the request was sent by Meraki.
@@ -867,12 +824,12 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'configure', 'httpServers'],
-            'operation': 'updateNetworkHttpServer',
+            'operation': 'updateNetworkHttpServer'
         }
         resource = f'/networks/{networkId}/httpServers/{id}'
 
-        body_params = ['name', 'url', 'sharedSecret']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['name', 'url', 'sharedSecret', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -880,14 +837,13 @@ class Networks(object):
         """
         **Delete an HTTP server from a network**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-http-server
-        
-        - networkId (string)
-        - id (string)
+        - networkId (string): (required)
+        - id (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'configure', 'httpServers'],
-            'operation': 'deleteNetworkHttpServer',
+            'operation': 'deleteNetworkHttpServer'
         }
         resource = f'/networks/{networkId}/httpServers/{id}'
 
@@ -897,13 +853,12 @@ class Networks(object):
         """
         **List the splash or RADIUS users configured under Meraki Authentication for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-meraki-auth-users
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'configure', 'merakiAuthUsers'],
-            'operation': 'getNetworkMerakiAuthUsers',
+            'operation': 'getNetworkMerakiAuthUsers'
         }
         resource = f'/networks/{networkId}/merakiAuthUsers'
 
@@ -913,14 +868,13 @@ class Networks(object):
         """
         **Return the Meraki Auth splash or RADIUS user**
         https://developer.cisco.com/meraki/api-v1/#!get-network-meraki-auth-user
-        
-        - networkId (string)
-        - merakiAuthUserId (string)
+        - networkId (string): (required)
+        - merakiAuthUserId (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'configure', 'merakiAuthUsers'],
-            'operation': 'getNetworkMerakiAuthUser',
+            'operation': 'getNetworkMerakiAuthUser'
         }
         resource = f'/networks/{networkId}/merakiAuthUsers/{merakiAuthUserId}'
 
@@ -930,13 +884,12 @@ class Networks(object):
         """
         **Return the NetFlow traffic reporting settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-netflow
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'configure', 'netflow'],
-            'operation': 'getNetworkNetflow',
+            'operation': 'getNetworkNetflow'
         }
         resource = f'/networks/{networkId}/netflow'
 
@@ -946,8 +899,7 @@ class Networks(object):
         """
         **Update the NetFlow traffic reporting settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-netflow
-        
-        - networkId (string)
+        - networkId (string): (required)
         - reportingEnabled (boolean): Boolean indicating whether NetFlow traffic reporting is enabled (true) or disabled (false).
         - collectorIp (string): The IPv4 address of the NetFlow collector.
         - collectorPort (integer): The port that the NetFlow collector will be listening on.
@@ -957,12 +909,12 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'configure', 'netflow'],
-            'operation': 'updateNetworkNetflow',
+            'operation': 'updateNetworkNetflow'
         }
         resource = f'/networks/{networkId}/netflow'
 
-        body_params = ['reportingEnabled', 'collectorIp', 'collectorPort']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['reportingEnabled', 'collectorIp', 'collectorPort', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -970,8 +922,7 @@ class Networks(object):
         """
         **Get the channel utilization over each radio for all APs in a network.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-network-health-channel-utilization
-        
-        - networkId (string)
+        - networkId (string): (required)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
@@ -987,22 +938,20 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'configure', 'networkHealth', 'channelUtilization'],
-            'operation': 'getNetworkNetworkHealthChannelUtilization',
+            'operation': 'getNetworkNetworkHealthChannelUtilization'
         }
         resource = f'/networks/{networkId}/networkHealth/channelUtilization'
 
-        query_params = ['t0', 't1', 'timespan', 'resolution', 'perPage', 'startingAfter', 'endingBefore']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['t0', 't1', 'timespan', 'resolution', 'perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-
 
     def getNetworkPiiPiiKeys(self, networkId: str, **kwargs):
         """
         **List the keys required to access Personally Identifiable Information (PII) for a given identifier. Exactly one identifier will be accepted. If the organization contains org-wide Systems Manager users matching the key provided then there will be an entry with the key "0" containing the applicable keys.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-pii-pii-keys
-        
-        - networkId (string)
+        - networkId (string): (required)
         - username (string): The username of a Systems Manager user
         - email (string): The email of a network user account or a Systems Manager device
         - mac (string): The MAC of a network client device or a Systems Manager device
@@ -1015,12 +964,12 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'configure', 'pii', 'piiKeys'],
-            'operation': 'getNetworkPiiPiiKeys',
+            'operation': 'getNetworkPiiPiiKeys'
         }
         resource = f'/networks/{networkId}/pii/piiKeys'
 
-        query_params = ['username', 'email', 'mac', 'serial', 'imei', 'bluetoothMac']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['username', 'email', 'mac', 'serial', 'imei', 'bluetoothMac', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
 
@@ -1028,13 +977,12 @@ class Networks(object):
         """
         **List the PII requests for this network or organization**
         https://developer.cisco.com/meraki/api-v1/#!get-network-pii-requests
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'configure', 'pii', 'requests'],
-            'operation': 'getNetworkPiiRequests',
+            'operation': 'getNetworkPiiRequests'
         }
         resource = f'/networks/{networkId}/pii/requests'
 
@@ -1044,8 +992,7 @@ class Networks(object):
         """
         **Submit a new delete or restrict processing PII request**
         https://developer.cisco.com/meraki/api-v1/#!create-network-pii-request
-        
-        - networkId (string)
+        - networkId (string): (required)
         - type (string): One of "delete" or "restrict processing"
         - datasets (array): The datasets related to the provided key that should be deleted. Only applies to "delete" requests. The value "all" will be expanded to all datasets applicable to this type. The datasets by applicable to each type are: mac (usage, events, traffic), email (users, loginAttempts), username (users, loginAttempts), bluetoothMac (client, connectivity), smDeviceId (device), smUserId (user)
         - username (string): The username of a network log in. Only applies to "delete" requests.
@@ -1063,12 +1010,12 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'configure', 'pii', 'requests'],
-            'operation': 'createNetworkPiiRequest',
+            'operation': 'createNetworkPiiRequest'
         }
         resource = f'/networks/{networkId}/pii/requests'
 
-        body_params = ['type', 'datasets', 'username', 'email', 'mac', 'smDeviceId', 'smUserId']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['type', 'datasets', 'username', 'email', 'mac', 'smDeviceId', 'smUserId', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
 
@@ -1076,14 +1023,13 @@ class Networks(object):
         """
         **Return a PII request**
         https://developer.cisco.com/meraki/api-v1/#!get-network-pii-request
-        
-        - networkId (string)
-        - requestId (string)
+        - networkId (string): (required)
+        - requestId (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'configure', 'pii', 'requests'],
-            'operation': 'getNetworkPiiRequest',
+            'operation': 'getNetworkPiiRequest'
         }
         resource = f'/networks/{networkId}/pii/requests/{requestId}'
 
@@ -1093,14 +1039,13 @@ class Networks(object):
         """
         **Delete a restrict processing PII request**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-pii-request
-        
-        - networkId (string)
-        - requestId (string)
+        - networkId (string): (required)
+        - requestId (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'configure', 'pii', 'requests'],
-            'operation': 'deleteNetworkPiiRequest',
+            'operation': 'deleteNetworkPiiRequest'
         }
         resource = f'/networks/{networkId}/pii/requests/{requestId}'
 
@@ -1110,8 +1055,7 @@ class Networks(object):
         """
         **Given a piece of Personally Identifiable Information (PII), return the Systems Manager device ID(s) associated with that identifier. These device IDs can be used with the Systems Manager API endpoints to retrieve device details. Exactly one identifier will be accepted.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-pii-sm-devices-for-key
-        
-        - networkId (string)
+        - networkId (string): (required)
         - username (string): The username of a Systems Manager user
         - email (string): The email of a network user account or a Systems Manager device
         - mac (string): The MAC of a network client device or a Systems Manager device
@@ -1124,12 +1068,12 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'configure', 'pii', 'smDevicesForKey'],
-            'operation': 'getNetworkPiiSmDevicesForKey',
+            'operation': 'getNetworkPiiSmDevicesForKey'
         }
         resource = f'/networks/{networkId}/pii/smDevicesForKey'
 
-        query_params = ['username', 'email', 'mac', 'serial', 'imei', 'bluetoothMac']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['username', 'email', 'mac', 'serial', 'imei', 'bluetoothMac', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
 
@@ -1137,8 +1081,7 @@ class Networks(object):
         """
         **Given a piece of Personally Identifiable Information (PII), return the Systems Manager owner ID(s) associated with that identifier. These owner IDs can be used with the Systems Manager API endpoints to retrieve owner details. Exactly one identifier will be accepted.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-pii-sm-owners-for-key
-        
-        - networkId (string)
+        - networkId (string): (required)
         - username (string): The username of a Systems Manager user
         - email (string): The email of a network user account or a Systems Manager device
         - mac (string): The MAC of a network client device or a Systems Manager device
@@ -1151,12 +1094,12 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'configure', 'pii', 'smOwnersForKey'],
-            'operation': 'getNetworkPiiSmOwnersForKey',
+            'operation': 'getNetworkPiiSmOwnersForKey'
         }
         resource = f'/networks/{networkId}/pii/smOwnersForKey'
 
-        query_params = ['username', 'email', 'mac', 'serial', 'imei', 'bluetoothMac']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['username', 'email', 'mac', 'serial', 'imei', 'bluetoothMac', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
 
@@ -1164,13 +1107,12 @@ class Networks(object):
         """
         **Return the settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-settings
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'configure', 'settings'],
-            'operation': 'getNetworkSettings',
+            'operation': 'getNetworkSettings'
         }
         resource = f'/networks/{networkId}/settings'
 
@@ -1180,8 +1122,7 @@ class Networks(object):
         """
         **Update the settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-settings
-        
-        - networkId (string)
+        - networkId (string): (required)
         - localStatusPageEnabled (boolean): Enables / disables the local device status pages (<a target='_blank' href='http://my.meraki.com/'>my.meraki.com, </a><a target='_blank' href='http://ap.meraki.com/'>ap.meraki.com, </a><a target='_blank' href='http://switch.meraki.com/'>switch.meraki.com, </a><a target='_blank' href='http://wired.meraki.com/'>wired.meraki.com</a>). Optional (defaults to false)
         - remoteStatusPageEnabled (boolean): Enables / disables access to the device status page (<a target='_blank'>http://[device's LAN IP])</a>. Optional. Can only be set if localStatusPageEnabled is set to true
         """
@@ -1190,12 +1131,12 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'configure', 'settings'],
-            'operation': 'updateNetworkSettings',
+            'operation': 'updateNetworkSettings'
         }
         resource = f'/networks/{networkId}/settings'
 
-        body_params = ['localStatusPageEnabled', 'remoteStatusPageEnabled']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['localStatusPageEnabled', 'remoteStatusPageEnabled', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -1203,13 +1144,12 @@ class Networks(object):
         """
         **Return the SNMP settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-snmp
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'configure', 'snmp'],
-            'operation': 'getNetworkSnmp',
+            'operation': 'getNetworkSnmp'
         }
         resource = f'/networks/{networkId}/snmp'
 
@@ -1219,8 +1159,7 @@ class Networks(object):
         """
         **Update the SNMP settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-snmp
-        
-        - networkId (string)
+        - networkId (string): (required)
         - access (string): The type of SNMP access. Can be one of 'none' (disabled), 'community' (V1/V2c), or 'users' (V3).
         - communityString (string): The SNMP community string. Only relevant if 'access' is set to 'community'.
         - users (array): The list of SNMP users. Only relevant if 'access' is set to 'users'.
@@ -1234,12 +1173,12 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'configure', 'snmp'],
-            'operation': 'updateNetworkSnmp',
+            'operation': 'updateNetworkSnmp'
         }
         resource = f'/networks/{networkId}/snmp'
 
-        body_params = ['access', 'communityString', 'users']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['access', 'communityString', 'users', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -1247,8 +1186,7 @@ class Networks(object):
         """
         **List the splash login attempts for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-splash-login-attempts
-        
-        - networkId (string)
+        - networkId (string): (required)
         - ssidNumber (integer): Only return the login attempts for the specified SSID
         - loginIdentifier (string): The username, email, or phone number used during login
         - timespan (integer): The timespan, in seconds, for the login attempts. The period will be from [timespan] seconds ago until now. The maximum timespan is 3 months
@@ -1262,12 +1200,12 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'monitor', 'splashLoginAttempts'],
-            'operation': 'getNetworkSplashLoginAttempts',
+            'operation': 'getNetworkSplashLoginAttempts'
         }
         resource = f'/networks/{networkId}/splashLoginAttempts'
 
-        query_params = ['ssidNumber', 'loginIdentifier', 'timespan']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['ssidNumber', 'loginIdentifier', 'timespan', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
 
@@ -1275,13 +1213,12 @@ class Networks(object):
         """
         **Split a combined network into individual networks for each type of device**
         https://developer.cisco.com/meraki/api-v1/#!split-network
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'configure'],
-            'operation': 'splitNetwork',
+            'operation': 'splitNetwork'
         }
         resource = f'/networks/{networkId}/split'
 
@@ -1291,13 +1228,12 @@ class Networks(object):
         """
         **List the syslog servers for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-syslog-servers
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'configure', 'syslogServers'],
-            'operation': 'getNetworkSyslogServers',
+            'operation': 'getNetworkSyslogServers'
         }
         resource = f'/networks/{networkId}/syslogServers'
 
@@ -1307,8 +1243,7 @@ class Networks(object):
         """
         **Update the syslog servers for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-syslog-servers
-        
-        - networkId (string)
+        - networkId (string): (required)
         - servers (array): A list of the syslog servers for this network
         """
 
@@ -1316,12 +1251,12 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'configure', 'syslogServers'],
-            'operation': 'updateNetworkSyslogServers',
+            'operation': 'updateNetworkSyslogServers'
         }
         resource = f'/networks/{networkId}/syslogServers'
 
-        body_params = ['servers']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['servers', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -1331,8 +1266,7 @@ class Networks(object):
     <a href="https://documentation.meraki.com/MR/Monitoring_and_Reporting/Hostname_Visibility">Traffic Analysis with Hostname Visibility</a> must be enabled on the network.
 **
         https://developer.cisco.com/meraki/api-v1/#!get-network-traffic
-        
-        - networkId (string)
+        - networkId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 30 days from today.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 30 days.
         - deviceType (string):     Filter the data by device type: 'combined', 'wireless', 'switch' or 'appliance'. Defaults to 'combined'.
@@ -1348,12 +1282,12 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'monitor', 'traffic'],
-            'operation': 'getNetworkTraffic',
+            'operation': 'getNetworkTraffic'
         }
         resource = f'/networks/{networkId}/traffic'
 
-        query_params = ['t0', 'timespan', 'deviceType']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['t0', 'timespan', 'deviceType', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
 
@@ -1361,13 +1295,12 @@ class Networks(object):
         """
         **Return the traffic analysis settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-traffic-analysis
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'configure', 'trafficAnalysis'],
-            'operation': 'getNetworkTrafficAnalysis',
+            'operation': 'getNetworkTrafficAnalysis'
         }
         resource = f'/networks/{networkId}/trafficAnalysis'
 
@@ -1377,8 +1310,7 @@ class Networks(object):
         """
         **Update the traffic analysis settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-traffic-analysis
-        
-        - networkId (string)
+        - networkId (string): (required)
         - mode (string):     The traffic analysis mode for the network. Can be one of 'disabled' (do not collect traffic types),
     'basic' (collect generic traffic categories), or 'detailed' (collect destination hostnames).
 
@@ -1393,12 +1325,12 @@ class Networks(object):
 
         metadata = {
             'tags': ['networks', 'configure', 'trafficAnalysis'],
-            'operation': 'updateNetworkTrafficAnalysis',
+            'operation': 'updateNetworkTrafficAnalysis'
         }
         resource = f'/networks/{networkId}/trafficAnalysis'
 
-        body_params = ['mode', 'customPieChartItems']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['mode', 'customPieChartItems', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -1406,13 +1338,12 @@ class Networks(object):
         """
         **Returns the application categories for traffic shaping rules.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-traffic-shaping-application-categories
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'configure', 'trafficShaping', 'applicationCategories'],
-            'operation': 'getNetworkTrafficShapingApplicationCategories',
+            'operation': 'getNetworkTrafficShapingApplicationCategories'
         }
         resource = f'/networks/{networkId}/trafficShaping/applicationCategories'
 
@@ -1422,13 +1353,12 @@ class Networks(object):
         """
         **Returns the available DSCP tagging options for your traffic shaping rules.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-traffic-shaping-dscp-tagging-options
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'configure', 'trafficShaping', 'dscpTaggingOptions'],
-            'operation': 'getNetworkTrafficShapingDscpTaggingOptions',
+            'operation': 'getNetworkTrafficShapingDscpTaggingOptions'
         }
         resource = f'/networks/{networkId}/trafficShaping/dscpTaggingOptions'
 
@@ -1438,15 +1368,13 @@ class Networks(object):
         """
         **Unbind a network from a template.**
         https://developer.cisco.com/meraki/api-v1/#!unbind-network
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['networks', 'configure'],
-            'operation': 'unbindNetwork',
+            'operation': 'unbindNetwork'
         }
         resource = f'/networks/{networkId}/unbind'
 
         return self._session.post(metadata, resource)
-

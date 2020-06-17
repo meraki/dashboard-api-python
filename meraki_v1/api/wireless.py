@@ -7,13 +7,12 @@ class Wireless(object):
         """
         **Return the bluetooth settings for a wireless device**
         https://developer.cisco.com/meraki/api-v1/#!get-device-wireless-bluetooth-settings
-        
-        - serial (string)
+        - serial (string): (required)
         """
 
         metadata = {
             'tags': ['wireless', 'configure', 'bluetooth', 'settings'],
-            'operation': 'getDeviceWirelessBluetoothSettings',
+            'operation': 'getDeviceWirelessBluetoothSettings'
         }
         resource = f'/devices/{serial}/wireless/bluetooth/settings'
 
@@ -23,8 +22,7 @@ class Wireless(object):
         """
         **Update the bluetooth settings for a wireless device**
         https://developer.cisco.com/meraki/api-v1/#!update-device-wireless-bluetooth-settings
-        
-        - serial (string)
+        - serial (string): (required)
         - uuid (string): Desired UUID of the beacon. If the value is set to null it will reset to Dashboard's automatically generated value.
         - major (integer): Desired major value of the beacon. If the value is set to null it will reset to Dashboard's automatically generated value.
         - minor (integer): Desired minor value of the beacon. If the value is set to null it will reset to Dashboard's automatically generated value.
@@ -34,12 +32,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'configure', 'bluetooth', 'settings'],
-            'operation': 'updateDeviceWirelessBluetoothSettings',
+            'operation': 'updateDeviceWirelessBluetoothSettings'
         }
         resource = f'/devices/{serial}/wireless/bluetooth/settings'
 
-        body_params = ['uuid', 'major', 'minor']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['uuid', 'major', 'minor', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -47,8 +45,7 @@ class Wireless(object):
         """
         **Aggregated connectivity info for a given AP on this network**
         https://developer.cisco.com/meraki/api-v1/#!get-device-wireless-connection-stats
-        
-        - serial (string)
+        - serial (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
@@ -61,12 +58,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'monitor', 'connectionStats'],
-            'operation': 'getDeviceWirelessConnectionStats',
+            'operation': 'getDeviceWirelessConnectionStats'
         }
         resource = f'/devices/{serial}/wireless/connectionStats'
 
-        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
 
@@ -74,8 +71,7 @@ class Wireless(object):
         """
         **Aggregated latency info for a given AP on this network**
         https://developer.cisco.com/meraki/api-v1/#!get-device-wireless-latency-stats
-        
-        - serial (string)
+        - serial (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
@@ -89,12 +85,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'monitor', 'latencyStats'],
-            'operation': 'getDeviceWirelessLatencyStats',
+            'operation': 'getDeviceWirelessLatencyStats'
         }
         resource = f'/devices/{serial}/wireless/latencyStats'
 
-        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', 'fields']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', 'fields', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
 
@@ -102,13 +98,12 @@ class Wireless(object):
         """
         **Return the radio settings of a device**
         https://developer.cisco.com/meraki/api-v1/#!get-device-wireless-radio-settings
-        
-        - serial (string)
+        - serial (string): (required)
         """
 
         metadata = {
             'tags': ['wireless', 'configure', 'radio', 'settings'],
-            'operation': 'getDeviceWirelessRadioSettings',
+            'operation': 'getDeviceWirelessRadioSettings'
         }
         resource = f'/devices/{serial}/wireless/radio/settings'
 
@@ -118,8 +113,7 @@ class Wireless(object):
         """
         **Update the radio settings of a device**
         https://developer.cisco.com/meraki/api-v1/#!update-device-wireless-radio-settings
-        
-        - serial (string)
+        - serial (string): (required)
         - rfProfileId (integer):     The ID of an RF profile to assign to the device. If the value of this parameter is null, the appropriate basic RF profile
     (indoor or outdoor) will be assigned to the device. Assigning an RF profile will clear ALL manually configured overrides
     on the device (channel width, channel, power).
@@ -130,12 +124,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'configure', 'radio', 'settings'],
-            'operation': 'updateDeviceWirelessRadioSettings',
+            'operation': 'updateDeviceWirelessRadioSettings'
         }
         resource = f'/devices/{serial}/wireless/radio/settings'
 
-        body_params = ['rfProfileId']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['rfProfileId', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -143,13 +137,12 @@ class Wireless(object):
         """
         **Return the SSID statuses of an access point**
         https://developer.cisco.com/meraki/api-v1/#!get-device-wireless-status
-        
-        - serial (string)
+        - serial (string): (required)
         """
 
         metadata = {
             'tags': ['wireless', 'monitor', 'status'],
-            'operation': 'getDeviceWirelessStatus',
+            'operation': 'getDeviceWirelessStatus'
         }
         resource = f'/devices/{serial}/wireless/status'
 
@@ -159,8 +152,7 @@ class Wireless(object):
         """
         **List Air Marshal scan results from a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-air-marshal
-        
-        - networkId (string)
+        - networkId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 31 days. The default is 7 days.
         """
@@ -169,12 +161,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'monitor', 'airMarshal'],
-            'operation': 'getNetworkWirelessAirMarshal',
+            'operation': 'getNetworkWirelessAirMarshal'
         }
         resource = f'/networks/{networkId}/wireless/airMarshal'
 
-        query_params = ['t0', 'timespan']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['t0', 'timespan', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
 
@@ -182,13 +174,12 @@ class Wireless(object):
         """
         **Return alternate management interface and devices with IP assigned**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-alternate-management-interface
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['wireless', 'configure', 'alternateManagementInterface'],
-            'operation': 'getNetworkWirelessAlternateManagementInterface',
+            'operation': 'getNetworkWirelessAlternateManagementInterface'
         }
         resource = f'/networks/{networkId}/wireless/alternateManagementInterface'
 
@@ -198,8 +189,7 @@ class Wireless(object):
         """
         **Update alternate management interface and device static IP**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-alternate-management-interface
-        
-        - networkId (string)
+        - networkId (string): (required)
         - enabled (boolean): Boolean value to enable or disable alternate management interface
         - vlanId (integer): Alternate management interface VLAN, must be between 1 and 4094
         - protocols (array): Can be one or more of the following values: 'radius', 'snmp', 'syslog' or 'ldap'
@@ -210,12 +200,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'configure', 'alternateManagementInterface'],
-            'operation': 'updateNetworkWirelessAlternateManagementInterface',
+            'operation': 'updateNetworkWirelessAlternateManagementInterface'
         }
         resource = f'/networks/{networkId}/wireless/alternateManagementInterface'
 
-        body_params = ['enabled', 'vlanId', 'protocols', 'accessPoints']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['enabled', 'vlanId', 'protocols', 'accessPoints', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -223,13 +213,12 @@ class Wireless(object):
         """
         **Return the Bluetooth settings for a network. <a href="https://documentation.meraki.com/MR/Bluetooth/Bluetooth_Low_Energy_(BLE)">Bluetooth settings</a> must be enabled on the network.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-bluetooth-settings
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['wireless', 'configure', 'bluetooth', 'settings'],
-            'operation': 'getNetworkWirelessBluetoothSettings',
+            'operation': 'getNetworkWirelessBluetoothSettings'
         }
         resource = f'/networks/{networkId}/wireless/bluetooth/settings'
 
@@ -239,8 +228,7 @@ class Wireless(object):
         """
         **Update the Bluetooth settings for a network. See the docs page for <a href="https://documentation.meraki.com/MR/Bluetooth/Bluetooth_Low_Energy_(BLE)">Bluetooth settings</a>.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-bluetooth-settings
-        
-        - networkId (string)
+        - networkId (string): (required)
         - scanningEnabled (boolean): Whether APs will scan for Bluetooth enabled clients. (true, false)
         - advertisingEnabled (boolean): Whether APs will advertise beacons. (true, false)
         - uuid (string): The UUID to be used in the beacon identifier.
@@ -257,12 +245,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'configure', 'bluetooth', 'settings'],
-            'operation': 'updateNetworkWirelessBluetoothSettings',
+            'operation': 'updateNetworkWirelessBluetoothSettings'
         }
         resource = f'/networks/{networkId}/wireless/bluetooth/settings'
 
-        body_params = ['scanningEnabled', 'advertisingEnabled', 'uuid', 'majorMinorAssignmentMode', 'major', 'minor']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['scanningEnabled', 'advertisingEnabled', 'uuid', 'majorMinorAssignmentMode', 'major', 'minor', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -270,8 +258,7 @@ class Wireless(object):
         """
         **Return AP channel utilization over time for a device or network client**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-channel-utilization-history
-        
-        - networkId (string)
+        - networkId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 7 days.
@@ -291,12 +278,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'monitor', 'channelUtilizationHistory'],
-            'operation': 'getNetworkWirelessChannelUtilizationHistory',
+            'operation': 'getNetworkWirelessChannelUtilizationHistory'
         }
         resource = f'/networks/{networkId}/wireless/channelUtilizationHistory'
 
-        query_params = ['t0', 't1', 'timespan', 'resolution', 'autoResolution', 'clientId', 'deviceSerial', 'apTag', 'band']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['t0', 't1', 'timespan', 'resolution', 'autoResolution', 'clientId', 'deviceSerial', 'apTag', 'band', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
 
@@ -304,8 +291,7 @@ class Wireless(object):
         """
         **Return wireless client counts over time for a network, device, or network client**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-client-count-history
-        
-        - networkId (string)
+        - networkId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 7 days.
@@ -326,12 +312,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'monitor', 'clientCountHistory'],
-            'operation': 'getNetworkWirelessClientCountHistory',
+            'operation': 'getNetworkWirelessClientCountHistory'
         }
         resource = f'/networks/{networkId}/wireless/clientCountHistory'
 
-        query_params = ['t0', 't1', 'timespan', 'resolution', 'autoResolution', 'clientId', 'deviceSerial', 'apTag', 'band', 'ssid']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['t0', 't1', 'timespan', 'resolution', 'autoResolution', 'clientId', 'deviceSerial', 'apTag', 'band', 'ssid', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
 
@@ -339,8 +325,7 @@ class Wireless(object):
         """
         **Aggregated connectivity info for this network, grouped by clients**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-clients-connection-stats
-        
-        - networkId (string)
+        - networkId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
@@ -353,12 +338,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'monitor', 'clients', 'connectionStats'],
-            'operation': 'getNetworkWirelessClientsConnectionStats',
+            'operation': 'getNetworkWirelessClientsConnectionStats'
         }
         resource = f'/networks/{networkId}/wireless/clients/connectionStats'
 
-        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
 
@@ -366,8 +351,7 @@ class Wireless(object):
         """
         **Aggregated latency info for this network, grouped by clients**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-clients-latency-stats
-        
-        - networkId (string)
+        - networkId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
@@ -381,12 +365,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'monitor', 'clients', 'latencyStats'],
-            'operation': 'getNetworkWirelessClientsLatencyStats',
+            'operation': 'getNetworkWirelessClientsLatencyStats'
         }
         resource = f'/networks/{networkId}/wireless/clients/latencyStats'
 
-        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', 'fields']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', 'fields', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
 
@@ -394,9 +378,8 @@ class Wireless(object):
         """
         **Aggregated connectivity info for a given client on this network. Clients are identified by their MAC.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-client-connection-stats
-        
-        - networkId (string)
-        - clientId (string)
+        - networkId (string): (required)
+        - clientId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
@@ -409,12 +392,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'monitor', 'clients', 'connectionStats'],
-            'operation': 'getNetworkWirelessClientConnectionStats',
+            'operation': 'getNetworkWirelessClientConnectionStats'
         }
         resource = f'/networks/{networkId}/wireless/clients/{clientId}/connectionStats'
 
-        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
 
@@ -422,9 +405,8 @@ class Wireless(object):
         """
         **List the wireless connectivity events for a client within a network in the timespan.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-client-connectivity-events
-        
-        - networkId (string)
-        - clientId (string)
+        - networkId (string): (required)
+        - clientId (string): (required)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000.
@@ -451,28 +433,26 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'monitor', 'clients', 'connectivityEvents'],
-            'operation': 'getNetworkWirelessClientConnectivityEvents',
+            'operation': 'getNetworkWirelessClientConnectivityEvents'
         }
         resource = f'/networks/{networkId}/wireless/clients/{clientId}/connectivityEvents'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', 'band', 'ssidNumber', 'deviceSerial']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', 'types', 'includedSeverities', 'band', 'ssidNumber', 'deviceSerial', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['types', 'includedSeverities']
-        for (k, v) in kwargs.items():
-            if k in array_params:
-                params[f'{k}[]'] = kwargs[f'{k}']
+        array_params = ['types', 'includedSeverities', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-
 
     def getNetworkWirelessClientLatencyHistory(self, networkId: str, clientId: str, **kwargs):
         """
         **Return the latency history for a client. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP. The latency data is from a sample of 2% of packets and is grouped into 4 traffic categories: background, best effort, video, voice. Within these categories the sampled packet counters are bucketed by latency in milliseconds.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-client-latency-history
-        
-        - networkId (string)
-        - clientId (string)
+        - networkId (string): (required)
+        - clientId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 791 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 791 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 791 days. The default is 1 day.
@@ -483,12 +463,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'monitor', 'clients', 'latencyHistory'],
-            'operation': 'getNetworkWirelessClientLatencyHistory',
+            'operation': 'getNetworkWirelessClientLatencyHistory'
         }
         resource = f'/networks/{networkId}/wireless/clients/{clientId}/latencyHistory'
 
-        query_params = ['t0', 't1', 'timespan', 'resolution']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['t0', 't1', 'timespan', 'resolution', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
 
@@ -496,9 +476,8 @@ class Wireless(object):
         """
         **Aggregated latency info for a given client on this network. Clients are identified by their MAC.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-client-latency-stats
-        
-        - networkId (string)
-        - clientId (string)
+        - networkId (string): (required)
+        - clientId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
@@ -512,12 +491,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'monitor', 'clients', 'latencyStats'],
-            'operation': 'getNetworkWirelessClientLatencyStats',
+            'operation': 'getNetworkWirelessClientLatencyStats'
         }
         resource = f'/networks/{networkId}/wireless/clients/{clientId}/latencyStats'
 
-        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', 'fields']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', 'fields', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
 
@@ -525,8 +504,7 @@ class Wireless(object):
         """
         **Aggregated connectivity info for this network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-connection-stats
-        
-        - networkId (string)
+        - networkId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
@@ -539,12 +517,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'monitor', 'connectionStats'],
-            'operation': 'getNetworkWirelessConnectionStats',
+            'operation': 'getNetworkWirelessConnectionStats'
         }
         resource = f'/networks/{networkId}/wireless/connectionStats'
 
-        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
 
@@ -552,8 +530,7 @@ class Wireless(object):
         """
         **Return PHY data rates over time for a network, device, or network client**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-data-rate-history
-        
-        - networkId (string)
+        - networkId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 7 days.
@@ -574,12 +551,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'monitor', 'dataRateHistory'],
-            'operation': 'getNetworkWirelessDataRateHistory',
+            'operation': 'getNetworkWirelessDataRateHistory'
         }
         resource = f'/networks/{networkId}/wireless/dataRateHistory'
 
-        query_params = ['t0', 't1', 'timespan', 'resolution', 'autoResolution', 'clientId', 'deviceSerial', 'apTag', 'band', 'ssid']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['t0', 't1', 'timespan', 'resolution', 'autoResolution', 'clientId', 'deviceSerial', 'apTag', 'band', 'ssid', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
 
@@ -587,8 +564,7 @@ class Wireless(object):
         """
         **Aggregated connectivity info for this network, grouped by node**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-devices-connection-stats
-        
-        - networkId (string)
+        - networkId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
@@ -601,12 +577,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'monitor', 'devices', 'connectionStats'],
-            'operation': 'getNetworkWirelessDevicesConnectionStats',
+            'operation': 'getNetworkWirelessDevicesConnectionStats'
         }
         resource = f'/networks/{networkId}/wireless/devices/connectionStats'
 
-        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
 
@@ -614,8 +590,7 @@ class Wireless(object):
         """
         **Aggregated latency info for this network, grouped by node**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-devices-latency-stats
-        
-        - networkId (string)
+        - networkId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
@@ -629,12 +604,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'monitor', 'devices', 'latencyStats'],
-            'operation': 'getNetworkWirelessDevicesLatencyStats',
+            'operation': 'getNetworkWirelessDevicesLatencyStats'
         }
         resource = f'/networks/{networkId}/wireless/devices/latencyStats'
 
-        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', 'fields']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', 'fields', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
 
@@ -642,8 +617,7 @@ class Wireless(object):
         """
         **List of all failed client connection events on this network in a given time range**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-failed-connections
-        
-        - networkId (string)
+        - networkId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
@@ -658,12 +632,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'monitor', 'failedConnections'],
-            'operation': 'getNetworkWirelessFailedConnections',
+            'operation': 'getNetworkWirelessFailedConnections'
         }
         resource = f'/networks/{networkId}/wireless/failedConnections'
 
-        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', 'serial', 'clientId']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', 'serial', 'clientId', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
 
@@ -671,8 +645,7 @@ class Wireless(object):
         """
         **Return average wireless latency over time for a network, device, or network client**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-latency-history
-        
-        - networkId (string)
+        - networkId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 7 days.
@@ -697,12 +670,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'monitor', 'latencyHistory'],
-            'operation': 'getNetworkWirelessLatencyHistory',
+            'operation': 'getNetworkWirelessLatencyHistory'
         }
         resource = f'/networks/{networkId}/wireless/latencyHistory'
 
-        query_params = ['t0', 't1', 'timespan', 'resolution', 'autoResolution', 'clientId', 'deviceSerial', 'apTag', 'band', 'ssid', 'accessCategory']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['t0', 't1', 'timespan', 'resolution', 'autoResolution', 'clientId', 'deviceSerial', 'apTag', 'band', 'ssid', 'accessCategory', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
 
@@ -710,8 +683,7 @@ class Wireless(object):
         """
         **Aggregated latency info for this network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-latency-stats
-        
-        - networkId (string)
+        - networkId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
@@ -725,12 +697,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'monitor', 'latencyStats'],
-            'operation': 'getNetworkWirelessLatencyStats',
+            'operation': 'getNetworkWirelessLatencyStats'
         }
         resource = f'/networks/{networkId}/wireless/latencyStats'
 
-        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', 'fields']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', 'fields', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
 
@@ -738,8 +710,7 @@ class Wireless(object):
         """
         **List wireless mesh statuses for repeaters**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-mesh-statuses
-        
-        - networkId (string)
+        - networkId (string): (required)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 500. Default is 50.
@@ -751,22 +722,20 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'monitor', 'meshStatuses'],
-            'operation': 'getNetworkWirelessMeshStatuses',
+            'operation': 'getNetworkWirelessMeshStatuses'
         }
         resource = f'/networks/{networkId}/wireless/meshStatuses'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-
 
     def getNetworkWirelessRfProfiles(self, networkId: str, **kwargs):
         """
         **List the non-basic RF profiles for this network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-rf-profiles
-        
-        - networkId (string)
+        - networkId (string): (required)
         - includeTemplateProfiles (boolean):     If the network is bound to a template, this parameter controls whether or not the non-basic RF profiles defined on the template
     should be included in the response alongside the non-basic profiles defined on the bound network. Defaults to false.
 
@@ -776,12 +745,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'configure', 'rfProfiles'],
-            'operation': 'getNetworkWirelessRfProfiles',
+            'operation': 'getNetworkWirelessRfProfiles'
         }
         resource = f'/networks/{networkId}/wireless/rfProfiles'
 
-        query_params = ['includeTemplateProfiles']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['includeTemplateProfiles', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
 
@@ -789,8 +758,7 @@ class Wireless(object):
         """
         **Creates new RF profile for this network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-wireless-rf-profile
-        
-        - networkId (string)
+        - networkId (string): (required)
         - name (string): The name of the new profile. Must be unique. This param is required on creation.
         - bandSelectionType (string): Band selection can be set to either 'ssid' or 'ap'. This param is required on creation.
         - clientBalancingEnabled (boolean): Steers client to best available access point. Can be either true or false. Defaults to true.
@@ -811,12 +779,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'configure', 'rfProfiles'],
-            'operation': 'createNetworkWirelessRfProfile',
+            'operation': 'createNetworkWirelessRfProfile'
         }
         resource = f'/networks/{networkId}/wireless/rfProfiles'
 
-        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
 
@@ -824,9 +792,8 @@ class Wireless(object):
         """
         **Updates specified RF profile for this network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-rf-profile
-        
-        - networkId (string)
-        - rfProfileId (string)
+        - networkId (string): (required)
+        - rfProfileId (string): (required)
         - name (string): The name of the new profile. Must be unique.
         - clientBalancingEnabled (boolean): Steers client to best available access point. Can be either true or false.
         - minBitrateType (string): Minimum bitrate can be set to either 'band' or 'ssid'.
@@ -847,12 +814,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'configure', 'rfProfiles'],
-            'operation': 'updateNetworkWirelessRfProfile',
+            'operation': 'updateNetworkWirelessRfProfile'
         }
         resource = f'/networks/{networkId}/wireless/rfProfiles/{rfProfileId}'
 
-        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -860,14 +827,13 @@ class Wireless(object):
         """
         **Delete a RF Profile**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-wireless-rf-profile
-        
-        - networkId (string)
-        - rfProfileId (string)
+        - networkId (string): (required)
+        - rfProfileId (string): (required)
         """
 
         metadata = {
             'tags': ['wireless', 'configure', 'rfProfiles'],
-            'operation': 'deleteNetworkWirelessRfProfile',
+            'operation': 'deleteNetworkWirelessRfProfile'
         }
         resource = f'/networks/{networkId}/wireless/rfProfiles/{rfProfileId}'
 
@@ -877,14 +843,13 @@ class Wireless(object):
         """
         **Return a RF profile**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-rf-profile
-        
-        - networkId (string)
-        - rfProfileId (string)
+        - networkId (string): (required)
+        - rfProfileId (string): (required)
         """
 
         metadata = {
             'tags': ['wireless', 'configure', 'rfProfiles'],
-            'operation': 'getNetworkWirelessRfProfile',
+            'operation': 'getNetworkWirelessRfProfile'
         }
         resource = f'/networks/{networkId}/wireless/rfProfiles/{rfProfileId}'
 
@@ -894,13 +859,12 @@ class Wireless(object):
         """
         **Return the wireless settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-settings
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['wireless', 'configure', 'settings'],
-            'operation': 'getNetworkWirelessSettings',
+            'operation': 'getNetworkWirelessSettings'
         }
         resource = f'/networks/{networkId}/wireless/settings'
 
@@ -910,8 +874,7 @@ class Wireless(object):
         """
         **Update the wireless settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-settings
-        
-        - networkId (string)
+        - networkId (string): (required)
         - meshingEnabled (boolean): Toggle for enabling or disabling meshing in a network
         - ipv6BridgeEnabled (boolean): Toggle for enabling or disabling IPv6 bridging in a network (Note: if enabled, SSIDs must also be configured to use bridge mode)
         - locationAnalyticsEnabled (boolean): Toggle for enabling or disabling location analytics for your network
@@ -927,12 +890,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'configure', 'settings'],
-            'operation': 'updateNetworkWirelessSettings',
+            'operation': 'updateNetworkWirelessSettings'
         }
         resource = f'/networks/{networkId}/wireless/settings'
 
-        body_params = ['meshingEnabled', 'ipv6BridgeEnabled', 'locationAnalyticsEnabled', 'upgradeStrategy', 'ledLightsOn']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['meshingEnabled', 'ipv6BridgeEnabled', 'locationAnalyticsEnabled', 'upgradeStrategy', 'ledLightsOn', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -940,8 +903,7 @@ class Wireless(object):
         """
         **Return signal quality (SNR/RSSI) over time for a device or network client**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-signal-quality-history
-        
-        - networkId (string)
+        - networkId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 7 days.
@@ -962,12 +924,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'monitor', 'signalQualityHistory'],
-            'operation': 'getNetworkWirelessSignalQualityHistory',
+            'operation': 'getNetworkWirelessSignalQualityHistory'
         }
         resource = f'/networks/{networkId}/wireless/signalQualityHistory'
 
-        query_params = ['t0', 't1', 'timespan', 'resolution', 'autoResolution', 'clientId', 'deviceSerial', 'apTag', 'band', 'ssid']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['t0', 't1', 'timespan', 'resolution', 'autoResolution', 'clientId', 'deviceSerial', 'apTag', 'band', 'ssid', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
 
@@ -975,13 +937,12 @@ class Wireless(object):
         """
         **List the SSIDs in a network. Supports networks with access points or wireless-enabled security appliances and teleworker gateways.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssids
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['wireless', 'configure', 'ssids'],
-            'operation': 'getNetworkWirelessSsids',
+            'operation': 'getNetworkWirelessSsids'
         }
         resource = f'/networks/{networkId}/wireless/ssids'
 
@@ -991,14 +952,13 @@ class Wireless(object):
         """
         **Return a single SSID**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssid
-        
-        - networkId (string)
-        - number (string)
+        - networkId (string): (required)
+        - number (string): (required)
         """
 
         metadata = {
             'tags': ['wireless', 'configure', 'ssids'],
-            'operation': 'getNetworkWirelessSsid',
+            'operation': 'getNetworkWirelessSsid'
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}'
 
@@ -1008,9 +968,8 @@ class Wireless(object):
         """
         **Update the attributes of an SSID**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid
-        
-        - networkId (string)
-        - number (string)
+        - networkId (string): (required)
+        - number (string): (required)
         - name (string): The name of the SSID
         - enabled (boolean): Whether or not the SSID is enabled
         - authMode (string): The association control method for the SSID ('open', 'psk', 'open-with-radius', '8021x-meraki', '8021x-radius', 'ipsk-with-radius' or 'ipsk-without-radius')
@@ -1072,12 +1031,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'configure', 'ssids'],
-            'operation': 'updateNetworkWirelessSsid',
+            'operation': 'updateNetworkWirelessSsid'
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}'
 
-        body_params = ['name', 'enabled', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk', 'wpaEncryptionMode', 'splashPage', 'radiusServers', 'radiusProxyEnabled', 'radiusCoaEnabled', 'radiusFailoverPolicy', 'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging', 'concentratorNetworkId', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 'walledGardenEnabled', 'walledGardenRanges', 'radiusOverride', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'lanIsolationEnabled', 'visible', 'availableOnAllAps', 'availabilityTags']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['name', 'enabled', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk', 'wpaEncryptionMode', 'splashPage', 'radiusServers', 'radiusProxyEnabled', 'radiusCoaEnabled', 'radiusFailoverPolicy', 'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging', 'concentratorNetworkId', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 'walledGardenEnabled', 'walledGardenRanges', 'radiusOverride', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'lanIsolationEnabled', 'visible', 'availableOnAllAps', 'availabilityTags', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -1085,14 +1044,13 @@ class Wireless(object):
         """
         **Return the L3 firewall rules for an SSID on an MR network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssid-firewall-l-3-firewall-rules
-        
-        - networkId (string)
-        - number (string)
+        - networkId (string): (required)
+        - number (string): (required)
         """
 
         metadata = {
             'tags': ['wireless', 'configure', 'ssids', 'firewall', 'l3FirewallRules'],
-            'operation': 'getNetworkWirelessSsidFirewallL3FirewallRules',
+            'operation': 'getNetworkWirelessSsidFirewallL3FirewallRules'
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}/firewall/l3FirewallRules'
 
@@ -1102,9 +1060,8 @@ class Wireless(object):
         """
         **Update the L3 firewall rules of an SSID on an MR network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-firewall-l-3-firewall-rules
-        
-        - networkId (string)
-        - number (string)
+        - networkId (string): (required)
+        - number (string): (required)
         - rules (array): An ordered array of the firewall rules for this SSID (not including the local LAN access rule or the default rule)
         - allowLanAccess (boolean): Allow wireless client access to local LAN (boolean value - true allows access and false denies access) (optional)
         """
@@ -1113,12 +1070,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'configure', 'ssids', 'firewall', 'l3FirewallRules'],
-            'operation': 'updateNetworkWirelessSsidFirewallL3FirewallRules',
+            'operation': 'updateNetworkWirelessSsidFirewallL3FirewallRules'
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}/firewall/l3FirewallRules'
 
-        body_params = ['rules', 'allowLanAccess']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['rules', 'allowLanAccess', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -1126,14 +1083,13 @@ class Wireless(object):
         """
         **Return the L7 firewall rules for an SSID on an MR network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssid-firewall-l-7-firewall-rules
-        
-        - networkId (string)
-        - number (string)
+        - networkId (string): (required)
+        - number (string): (required)
         """
 
         metadata = {
             'tags': ['wireless', 'configure', 'ssids', 'firewall', 'l7FirewallRules'],
-            'operation': 'getNetworkWirelessSsidFirewallL7FirewallRules',
+            'operation': 'getNetworkWirelessSsidFirewallL7FirewallRules'
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}/firewall/l7FirewallRules'
 
@@ -1143,9 +1099,8 @@ class Wireless(object):
         """
         **Update the L7 firewall rules of an SSID on an MR network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-firewall-l-7-firewall-rules
-        
-        - networkId (string)
-        - number (string)
+        - networkId (string): (required)
+        - number (string): (required)
         - rules (array): An array of L7 firewall rules for this SSID. Rules will get applied in the same order user has specified in request. Empty array will clear the L7 firewall rule configuration.
         """
 
@@ -1153,12 +1108,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'configure', 'ssids', 'firewall', 'l7FirewallRules'],
-            'operation': 'updateNetworkWirelessSsidFirewallL7FirewallRules',
+            'operation': 'updateNetworkWirelessSsidFirewallL7FirewallRules'
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}/firewall/l7FirewallRules'
 
-        body_params = ['rules']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['rules', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -1166,14 +1121,13 @@ class Wireless(object):
         """
         **List all Identity PSKs in a wireless network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssid-identity-psks
-        
-        - networkId (string)
-        - number (string)
+        - networkId (string): (required)
+        - number (string): (required)
         """
 
         metadata = {
             'tags': ['wireless', 'configure', 'ssids', 'identityPsks'],
-            'operation': 'getNetworkWirelessSsidIdentityPsks',
+            'operation': 'getNetworkWirelessSsidIdentityPsks'
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}/identityPsks'
 
@@ -1183,9 +1137,8 @@ class Wireless(object):
         """
         **Create an Identity PSK**
         https://developer.cisco.com/meraki/api-v1/#!create-network-wireless-ssid-identity-psk
-        
-        - networkId (string)
-        - number (string)
+        - networkId (string): (required)
+        - number (string): (required)
         - name (string): The name of the Identity PSK
         - passphrase (string): The passphrase for client authentication
         - groupPolicyId (string): The group policy to be applied to clients
@@ -1195,12 +1148,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'configure', 'ssids', 'identityPsks'],
-            'operation': 'createNetworkWirelessSsidIdentityPsk',
+            'operation': 'createNetworkWirelessSsidIdentityPsk'
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}/identityPsks'
 
-        body_params = ['name', 'passphrase', 'groupPolicyId']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['name', 'passphrase', 'groupPolicyId', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
 
@@ -1208,15 +1161,14 @@ class Wireless(object):
         """
         **Return an Identity PSK**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssid-identity-psk
-        
-        - networkId (string)
-        - number (string)
-        - identityPskId (string)
+        - networkId (string): (required)
+        - number (string): (required)
+        - identityPskId (string): (required)
         """
 
         metadata = {
             'tags': ['wireless', 'configure', 'ssids', 'identityPsks'],
-            'operation': 'getNetworkWirelessSsidIdentityPsk',
+            'operation': 'getNetworkWirelessSsidIdentityPsk'
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}/identityPsks/{identityPskId}'
 
@@ -1226,10 +1178,9 @@ class Wireless(object):
         """
         **Update an Identity PSK**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-identity-psk
-        
-        - networkId (string)
-        - number (string)
-        - identityPskId (string)
+        - networkId (string): (required)
+        - number (string): (required)
+        - identityPskId (string): (required)
         - name (string): The name of the Identity PSK
         - passphrase (string): The passphrase for client authentication
         - groupPolicyId (string): The group policy to be applied to clients
@@ -1239,12 +1190,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'configure', 'ssids', 'identityPsks'],
-            'operation': 'updateNetworkWirelessSsidIdentityPsk',
+            'operation': 'updateNetworkWirelessSsidIdentityPsk'
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}/identityPsks/{identityPskId}'
 
-        body_params = ['name', 'passphrase', 'groupPolicyId']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['name', 'passphrase', 'groupPolicyId', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -1252,15 +1203,14 @@ class Wireless(object):
         """
         **Delete an Identity PSK**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-wireless-ssid-identity-psk
-        
-        - networkId (string)
-        - number (string)
-        - identityPskId (string)
+        - networkId (string): (required)
+        - number (string): (required)
+        - identityPskId (string): (required)
         """
 
         metadata = {
             'tags': ['wireless', 'configure', 'ssids', 'identityPsks'],
-            'operation': 'deleteNetworkWirelessSsidIdentityPsk',
+            'operation': 'deleteNetworkWirelessSsidIdentityPsk'
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}/identityPsks/{identityPskId}'
 
@@ -1270,14 +1220,13 @@ class Wireless(object):
         """
         **Display the splash page settings for the given SSID**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssid-splash-settings
-        
-        - networkId (string)
-        - number (string)
+        - networkId (string): (required)
+        - number (string): (required)
         """
 
         metadata = {
             'tags': ['wireless', 'configure', 'ssids', 'splash', 'settings'],
-            'operation': 'getNetworkWirelessSsidSplashSettings',
+            'operation': 'getNetworkWirelessSsidSplashSettings'
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}/splash/settings'
 
@@ -1287,9 +1236,8 @@ class Wireless(object):
         """
         **Modify the splash page settings for the given SSID**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-splash-settings
-        
-        - networkId (string)
-        - number (string)
+        - networkId (string): (required)
+        - number (string): (required)
         - splashUrl (string): [optional] The custom splash URL of the click-through splash page. Note that the URL can be configured without necessarily being used. In order to enable the custom URL, see 'useSplashUrl'
         - useSplashUrl (boolean): [optional] Boolean indicating whether the user will be redirected to the custom splash url. A custom splash URL must be set if this is true. Note that depending on your SSID's access control settings, it may not be possible to use the custom splash URL.
         """
@@ -1298,12 +1246,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'configure', 'ssids', 'splash', 'settings'],
-            'operation': 'updateNetworkWirelessSsidSplashSettings',
+            'operation': 'updateNetworkWirelessSsidSplashSettings'
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}/splash/settings'
 
-        body_params = ['splashUrl', 'useSplashUrl']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['splashUrl', 'useSplashUrl', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -1311,9 +1259,8 @@ class Wireless(object):
         """
         **Update the traffic shaping settings for an SSID on an MR network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-traffic-shaping-rules
-        
-        - networkId (string)
-        - number (string)
+        - networkId (string): (required)
+        - number (string): (required)
         - trafficShapingEnabled (boolean): Whether traffic shaping rules are applied to clients on your SSID.
         - defaultRulesEnabled (boolean):     Whether default traffic shaping rules are enabled (true) or disabled (false).
     There are 4 default rules, which can
@@ -1330,12 +1277,12 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'configure', 'ssids', 'trafficShaping', 'rules'],
-            'operation': 'updateNetworkWirelessSsidTrafficShapingRules',
+            'operation': 'updateNetworkWirelessSsidTrafficShapingRules'
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}/trafficShaping/rules'
 
-        body_params = ['trafficShapingEnabled', 'defaultRulesEnabled', 'rules']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['trafficShapingEnabled', 'defaultRulesEnabled', 'rules', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -1343,14 +1290,13 @@ class Wireless(object):
         """
         **Display the traffic shaping settings for a SSID on an MR network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssid-traffic-shaping-rules
-        
-        - networkId (string)
-        - number (string)
+        - networkId (string): (required)
+        - number (string): (required)
         """
 
         metadata = {
             'tags': ['wireless', 'configure', 'ssids', 'trafficShaping', 'rules'],
-            'operation': 'getNetworkWirelessSsidTrafficShapingRules',
+            'operation': 'getNetworkWirelessSsidTrafficShapingRules'
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}/trafficShaping/rules'
 
@@ -1360,8 +1306,7 @@ class Wireless(object):
         """
         **Return AP usage over time for a device or network client**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-usage-history
-        
-        - networkId (string)
+        - networkId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 7 days.
@@ -1382,12 +1327,11 @@ class Wireless(object):
 
         metadata = {
             'tags': ['wireless', 'monitor', 'usageHistory'],
-            'operation': 'getNetworkWirelessUsageHistory',
+            'operation': 'getNetworkWirelessUsageHistory'
         }
         resource = f'/networks/{networkId}/wireless/usageHistory'
 
-        query_params = ['t0', 't1', 'timespan', 'resolution', 'autoResolution', 'clientId', 'deviceSerial', 'apTag', 'band', 'ssid']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['t0', 't1', 'timespan', 'resolution', 'autoResolution', 'clientId', 'deviceSerial', 'apTag', 'band', 'ssid', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-

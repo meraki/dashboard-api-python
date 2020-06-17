@@ -3,12 +3,11 @@ class AsyncSm:
         super().__init__()
         self._session = session
 
-    async def createNetworkSmBypassActivationLockAttempt(self, networkId: str, ids: list):
+    def createNetworkSmBypassActivationLockAttempt(self, networkId: str, ids: list):
         """
         **Bypass activation lock attempt**
         https://developer.cisco.com/meraki/api-v1/#!create-network-sm-bypass-activation-lock-attempt
-        
-        - networkId (string)
+        - networkId (string): (required)
         - ids (array): The ids of the devices to attempt activation lock bypass.
         """
 
@@ -16,38 +15,36 @@ class AsyncSm:
 
         metadata = {
             'tags': ['sm', 'configure', 'bypassActivationLockAttempts'],
-            'operation': 'createNetworkSmBypassActivationLockAttempt',
+            'operation': 'createNetworkSmBypassActivationLockAttempt'
         }
         resource = f'/networks/{networkId}/sm/bypassActivationLockAttempts'
 
-        body_params = ['ids']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['ids', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.post(metadata, resource, payload)
+        return self._session.post(metadata, resource, payload)
 
-    async def getNetworkSmBypassActivationLockAttempt(self, networkId: str, attemptId: str):
+    def getNetworkSmBypassActivationLockAttempt(self, networkId: str, attemptId: str):
         """
         **Bypass activation lock attempt status**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-bypass-activation-lock-attempt
-        
-        - networkId (string)
-        - attemptId (string)
+        - networkId (string): (required)
+        - attemptId (string): (required)
         """
 
         metadata = {
             'tags': ['sm', 'configure', 'bypassActivationLockAttempts'],
-            'operation': 'getNetworkSmBypassActivationLockAttempt',
+            'operation': 'getNetworkSmBypassActivationLockAttempt'
         }
         resource = f'/networks/{networkId}/sm/bypassActivationLockAttempts/{attemptId}'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def getNetworkSmDevices(self, networkId: str, total_pages=1, direction='next', **kwargs):
+    def getNetworkSmDevices(self, networkId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the devices enrolled in an SM network with various specified fields and filters**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-devices
-        
-        - networkId (string)
+        - networkId (string): (required)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - fields (string): Additional fields that will be displayed for each device. Multiple fields can be passed in as comma separated values.
@@ -70,22 +67,20 @@ class AsyncSm:
 
         metadata = {
             'tags': ['sm', 'configure', 'devices'],
-            'operation': 'getNetworkSmDevices',
+            'operation': 'getNetworkSmDevices'
         }
         resource = f'/networks/{networkId}/sm/devices'
 
-        query_params = ['fields', 'wifiMacs', 'serials', 'ids', 'scope', 'perPage', 'startingAfter', 'endingBefore']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['fields', 'wifiMacs', 'serials', 'ids', 'scope', 'perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        return await self._session.get_pages(metadata, resource, params, total_pages, direction)
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-
-    async def checkinNetworkSmDevices(self, networkId: str, **kwargs):
+    def checkinNetworkSmDevices(self, networkId: str, **kwargs):
         """
         **Force check-in a set of devices**
         https://developer.cisco.com/meraki/api-v1/#!checkin-network-sm-devices
-        
-        - networkId (string)
+        - networkId (string): (required)
         - wifiMacs (string): The wifiMacs of the devices to be checked-in.
         - ids (string): The ids of the devices to be checked-in.
         - serials (string): The serials of the devices to be checked-in.
@@ -96,21 +91,20 @@ class AsyncSm:
 
         metadata = {
             'tags': ['sm', 'configure', 'devices'],
-            'operation': 'checkinNetworkSmDevices',
+            'operation': 'checkinNetworkSmDevices'
         }
         resource = f'/networks/{networkId}/sm/devices/checkin'
 
-        body_params = ['wifiMacs', 'ids', 'serials', 'scope']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['wifiMacs', 'ids', 'serials', 'scope', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.post(metadata, resource, payload)
+        return self._session.post(metadata, resource, payload)
 
-    async def updateNetworkSmDevicesFields(self, networkId: str, deviceFields: dict, **kwargs):
+    def updateNetworkSmDevicesFields(self, networkId: str, deviceFields: dict, **kwargs):
         """
         **Modify the fields of a device**
         https://developer.cisco.com/meraki/api-v1/#!update-network-sm-devices-fields
-        
-        - networkId (string)
+        - networkId (string): (required)
         - deviceFields (object): The new fields of the device. Each field of this object is optional.
         - wifiMac (string): The wifiMac of the device to be modified.
         - id (string): The id of the device to be modified.
@@ -121,21 +115,20 @@ class AsyncSm:
 
         metadata = {
             'tags': ['sm', 'configure', 'devices', 'fields'],
-            'operation': 'updateNetworkSmDevicesFields',
+            'operation': 'updateNetworkSmDevicesFields'
         }
         resource = f'/networks/{networkId}/sm/devices/fields'
 
-        body_params = ['wifiMac', 'id', 'serial', 'deviceFields']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['wifiMac', 'id', 'serial', 'deviceFields', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.put(metadata, resource, payload)
+        return self._session.put(metadata, resource, payload)
 
-    async def lockNetworkSmDevices(self, networkId: str, **kwargs):
+    def lockNetworkSmDevices(self, networkId: str, **kwargs):
         """
         **Lock a set of devices**
         https://developer.cisco.com/meraki/api-v1/#!lock-network-sm-devices
-        
-        - networkId (string)
+        - networkId (string): (required)
         - wifiMacs (string): The wifiMacs of the devices to be locked.
         - ids (string): The ids of the devices to be locked.
         - serials (string): The serials of the devices to be locked.
@@ -147,21 +140,20 @@ class AsyncSm:
 
         metadata = {
             'tags': ['sm', 'configure', 'devices'],
-            'operation': 'lockNetworkSmDevices',
+            'operation': 'lockNetworkSmDevices'
         }
         resource = f'/networks/{networkId}/sm/devices/lock'
 
-        body_params = ['wifiMacs', 'ids', 'serials', 'scope', 'pin']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['wifiMacs', 'ids', 'serials', 'scope', 'pin', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.post(metadata, resource, payload)
+        return self._session.post(metadata, resource, payload)
 
-    async def modifyNetworkSmDevicesTags(self, networkId: str, tags: str, updateAction: str, **kwargs):
+    def modifyNetworkSmDevicesTags(self, networkId: str, tags: str, updateAction: str, **kwargs):
         """
         **Add, delete, or update the tags of a set of devices**
         https://developer.cisco.com/meraki/api-v1/#!modify-network-sm-devices-tags
-        
-        - networkId (string)
+        - networkId (string): (required)
         - tags (string): The tags to be added, deleted, or updated.
         - updateAction (string): One of add, delete, or update. Only devices that have been modified will be returned.
         - wifiMacs (string): The wifiMacs of the devices to be modified.
@@ -174,21 +166,20 @@ class AsyncSm:
 
         metadata = {
             'tags': ['sm', 'configure', 'devices'],
-            'operation': 'modifyNetworkSmDevicesTags',
+            'operation': 'modifyNetworkSmDevicesTags'
         }
         resource = f'/networks/{networkId}/sm/devices/modifyTags'
 
-        body_params = ['wifiMacs', 'ids', 'serials', 'scope', 'tags', 'updateAction']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['wifiMacs', 'ids', 'serials', 'scope', 'tags', 'updateAction', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.post(metadata, resource, payload)
+        return self._session.post(metadata, resource, payload)
 
-    async def moveNetworkSmDevices(self, networkId: str, newNetwork: str, **kwargs):
+    def moveNetworkSmDevices(self, networkId: str, newNetwork: str, **kwargs):
         """
         **Move a set of devices to a new network**
         https://developer.cisco.com/meraki/api-v1/#!move-network-sm-devices
-        
-        - networkId (string)
+        - networkId (string): (required)
         - newNetwork (string): The new network to which the devices will be moved.
         - wifiMacs (string): The wifiMacs of the devices to be moved.
         - ids (string): The ids of the devices to be moved.
@@ -200,21 +191,20 @@ class AsyncSm:
 
         metadata = {
             'tags': ['sm', 'configure', 'devices'],
-            'operation': 'moveNetworkSmDevices',
+            'operation': 'moveNetworkSmDevices'
         }
         resource = f'/networks/{networkId}/sm/devices/move'
 
-        body_params = ['wifiMacs', 'ids', 'serials', 'scope', 'newNetwork']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['wifiMacs', 'ids', 'serials', 'scope', 'newNetwork', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.post(metadata, resource, payload)
+        return self._session.post(metadata, resource, payload)
 
-    async def wipeNetworkSmDevices(self, networkId: str, **kwargs):
+    def wipeNetworkSmDevices(self, networkId: str, **kwargs):
         """
         **Wipe a device**
         https://developer.cisco.com/meraki/api-v1/#!wipe-network-sm-devices
-        
-        - networkId (string)
+        - networkId (string): (required)
         - wifiMac (string): The wifiMac of the device to be wiped.
         - id (string): The id of the device to be wiped.
         - serial (string): The serial of the device to be wiped.
@@ -225,56 +215,53 @@ class AsyncSm:
 
         metadata = {
             'tags': ['sm', 'configure', 'devices'],
-            'operation': 'wipeNetworkSmDevices',
+            'operation': 'wipeNetworkSmDevices'
         }
         resource = f'/networks/{networkId}/sm/devices/wipe'
 
-        body_params = ['wifiMac', 'id', 'serial', 'pin']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['wifiMac', 'id', 'serial', 'pin', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.post(metadata, resource, payload)
+        return self._session.post(metadata, resource, payload)
 
-    async def getNetworkSmDeviceCellularUsageHistory(self, networkId: str, deviceId: str):
+    def getNetworkSmDeviceCellularUsageHistory(self, networkId: str, deviceId: str):
         """
         **Return the client's daily cellular data usage history. Usage data is in kilobytes.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-cellular-usage-history
-        
-        - networkId (string)
-        - deviceId (string)
+        - networkId (string): (required)
+        - deviceId (string): (required)
         """
 
         metadata = {
             'tags': ['sm', 'monitor', 'devices', 'cellularUsageHistory'],
-            'operation': 'getNetworkSmDeviceCellularUsageHistory',
+            'operation': 'getNetworkSmDeviceCellularUsageHistory'
         }
         resource = f'/networks/{networkId}/sm/devices/{deviceId}/cellularUsageHistory'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def getNetworkSmDeviceCerts(self, networkId: str, deviceId: str):
+    def getNetworkSmDeviceCerts(self, networkId: str, deviceId: str):
         """
         **List the certs on a device**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-certs
-        
-        - networkId (string)
-        - deviceId (string)
+        - networkId (string): (required)
+        - deviceId (string): (required)
         """
 
         metadata = {
             'tags': ['sm', 'configure', 'devices', 'certs'],
-            'operation': 'getNetworkSmDeviceCerts',
+            'operation': 'getNetworkSmDeviceCerts'
         }
         resource = f'/networks/{networkId}/sm/devices/{deviceId}/certs'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def getNetworkSmDeviceConnectivity(self, networkId: str, deviceId: str, total_pages=1, direction='next', **kwargs):
+    def getNetworkSmDeviceConnectivity(self, networkId: str, deviceId: str, total_pages=1, direction='next', **kwargs):
         """
         **Returns historical connectivity data (whether a device is regularly checking in to Dashboard).**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-connectivity
-        
-        - networkId (string)
-        - deviceId (string)
+        - networkId (string): (required)
+        - deviceId (string): (required)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
@@ -286,23 +273,21 @@ class AsyncSm:
 
         metadata = {
             'tags': ['sm', 'monitor', 'devices', 'connectivity'],
-            'operation': 'getNetworkSmDeviceConnectivity',
+            'operation': 'getNetworkSmDeviceConnectivity'
         }
         resource = f'/networks/{networkId}/sm/devices/{deviceId}/connectivity'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        return await self._session.get_pages(metadata, resource, params, total_pages, direction)
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-
-    async def getNetworkSmDeviceDesktopLogs(self, networkId: str, deviceId: str, total_pages=1, direction='next', **kwargs):
+    def getNetworkSmDeviceDesktopLogs(self, networkId: str, deviceId: str, total_pages=1, direction='next', **kwargs):
         """
         **Return historical records of various Systems Manager network connection details for desktop devices.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-desktop-logs
-        
-        - networkId (string)
-        - deviceId (string)
+        - networkId (string): (required)
+        - deviceId (string): (required)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
@@ -314,17 +299,16 @@ class AsyncSm:
 
         metadata = {
             'tags': ['sm', 'monitor', 'devices', 'desktopLogs'],
-            'operation': 'getNetworkSmDeviceDesktopLogs',
+            'operation': 'getNetworkSmDeviceDesktopLogs'
         }
         resource = f'/networks/{networkId}/sm/devices/{deviceId}/desktopLogs'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        return await self._session.get_pages(metadata, resource, params, total_pages, direction)
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-
-    async def getNetworkSmDeviceDeviceCommandLogs(self, networkId: str, deviceId: str, total_pages=1, direction='next', **kwargs):
+    def getNetworkSmDeviceDeviceCommandLogs(self, networkId: str, deviceId: str, total_pages=1, direction='next', **kwargs):
         """
         **    Return historical records of commands sent to Systems Manager devices.
     <p>Note that this will include the name of the Dashboard user who initiated the command if it was generated
@@ -332,9 +316,8 @@ class AsyncSm:
     of any reports.</p>
 **
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-device-command-logs
-        
-        - networkId (string)
-        - deviceId (string)
+        - networkId (string): (required)
+        - deviceId (string): (required)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
@@ -346,57 +329,53 @@ class AsyncSm:
 
         metadata = {
             'tags': ['sm', 'monitor', 'devices', 'deviceCommandLogs'],
-            'operation': 'getNetworkSmDeviceDeviceCommandLogs',
+            'operation': 'getNetworkSmDeviceDeviceCommandLogs'
         }
         resource = f'/networks/{networkId}/sm/devices/{deviceId}/deviceCommandLogs'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        return await self._session.get_pages(metadata, resource, params, total_pages, direction)
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-
-    async def getNetworkSmDeviceDeviceProfiles(self, networkId: str, deviceId: str):
+    def getNetworkSmDeviceDeviceProfiles(self, networkId: str, deviceId: str):
         """
         **Get the profiles associated with a device**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-device-profiles
-        
-        - networkId (string)
-        - deviceId (string)
+        - networkId (string): (required)
+        - deviceId (string): (required)
         """
 
         metadata = {
             'tags': ['sm', 'configure', 'devices', 'deviceProfiles'],
-            'operation': 'getNetworkSmDeviceDeviceProfiles',
+            'operation': 'getNetworkSmDeviceDeviceProfiles'
         }
         resource = f'/networks/{networkId}/sm/devices/{deviceId}/deviceProfiles'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def getNetworkSmDeviceNetworkAdapters(self, networkId: str, deviceId: str):
+    def getNetworkSmDeviceNetworkAdapters(self, networkId: str, deviceId: str):
         """
         **List the network adapters of a device**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-network-adapters
-        
-        - networkId (string)
-        - deviceId (string)
+        - networkId (string): (required)
+        - deviceId (string): (required)
         """
 
         metadata = {
             'tags': ['sm', 'configure', 'devices', 'networkAdapters'],
-            'operation': 'getNetworkSmDeviceNetworkAdapters',
+            'operation': 'getNetworkSmDeviceNetworkAdapters'
         }
         resource = f'/networks/{networkId}/sm/devices/{deviceId}/networkAdapters'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def getNetworkSmDevicePerformanceHistory(self, networkId: str, deviceId: str, total_pages=1, direction='next', **kwargs):
+    def getNetworkSmDevicePerformanceHistory(self, networkId: str, deviceId: str, total_pages=1, direction='next', **kwargs):
         """
         **Return historical records of various Systems Manager client metrics for desktop devices.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-performance-history
-        
-        - networkId (string)
-        - deviceId (string)
+        - networkId (string): (required)
+        - deviceId (string): (required)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
@@ -408,140 +387,131 @@ class AsyncSm:
 
         metadata = {
             'tags': ['sm', 'monitor', 'devices', 'performanceHistory'],
-            'operation': 'getNetworkSmDevicePerformanceHistory',
+            'operation': 'getNetworkSmDevicePerformanceHistory'
         }
         resource = f'/networks/{networkId}/sm/devices/{deviceId}/performanceHistory'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        return await self._session.get_pages(metadata, resource, params, total_pages, direction)
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-
-    async def refreshNetworkSmDeviceDetails(self, networkId: str, deviceId: str):
+    def refreshNetworkSmDeviceDetails(self, networkId: str, deviceId: str):
         """
         **Refresh the details of a device**
         https://developer.cisco.com/meraki/api-v1/#!refresh-network-sm-device-details
-        
-        - networkId (string)
-        - deviceId (string)
+        - networkId (string): (required)
+        - deviceId (string): (required)
         """
 
         metadata = {
             'tags': ['sm', 'configure', 'devices'],
-            'operation': 'refreshNetworkSmDeviceDetails',
+            'operation': 'refreshNetworkSmDeviceDetails'
         }
         resource = f'/networks/{networkId}/sm/devices/{deviceId}/refreshDetails'
 
-        return await self._session.post(metadata, resource)
+        return self._session.post(metadata, resource)
 
-    async def getNetworkSmDeviceRestrictions(self, networkId: str, deviceId: str):
+    def getNetworkSmDeviceRestrictions(self, networkId: str, deviceId: str):
         """
         **List the restrictions on a device**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-restrictions
-        
-        - networkId (string)
-        - deviceId (string)
+        - networkId (string): (required)
+        - deviceId (string): (required)
         """
 
         metadata = {
             'tags': ['sm', 'configure', 'devices', 'restrictions'],
-            'operation': 'getNetworkSmDeviceRestrictions',
+            'operation': 'getNetworkSmDeviceRestrictions'
         }
         resource = f'/networks/{networkId}/sm/devices/{deviceId}/restrictions'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def getNetworkSmDeviceSecurityCenters(self, networkId: str, deviceId: str):
+    def getNetworkSmDeviceSecurityCenters(self, networkId: str, deviceId: str):
         """
         **List the security centers on a device**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-security-centers
-        
-        - networkId (string)
-        - deviceId (string)
+        - networkId (string): (required)
+        - deviceId (string): (required)
         """
 
         metadata = {
             'tags': ['sm', 'configure', 'devices', 'securityCenters'],
-            'operation': 'getNetworkSmDeviceSecurityCenters',
+            'operation': 'getNetworkSmDeviceSecurityCenters'
         }
         resource = f'/networks/{networkId}/sm/devices/{deviceId}/securityCenters'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def getNetworkSmDeviceSoftwares(self, networkId: str, deviceId: str):
+    def getNetworkSmDeviceSoftwares(self, networkId: str, deviceId: str):
         """
         **Get a list of softwares associated with a device**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-softwares
-        
-        - networkId (string)
-        - deviceId (string)
+        - networkId (string): (required)
+        - deviceId (string): (required)
         """
 
         metadata = {
             'tags': ['sm', 'configure', 'devices', 'softwares'],
-            'operation': 'getNetworkSmDeviceSoftwares',
+            'operation': 'getNetworkSmDeviceSoftwares'
         }
         resource = f'/networks/{networkId}/sm/devices/{deviceId}/softwares'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def unenrollNetworkSmDevice(self, networkId: str, deviceId: str):
+    def unenrollNetworkSmDevice(self, networkId: str, deviceId: str):
         """
         **Unenroll a device**
         https://developer.cisco.com/meraki/api-v1/#!unenroll-network-sm-device
-        
-        - networkId (string)
-        - deviceId (string)
+        - networkId (string): (required)
+        - deviceId (string): (required)
         """
 
         metadata = {
             'tags': ['sm', 'configure', 'devices'],
-            'operation': 'unenrollNetworkSmDevice',
+            'operation': 'unenrollNetworkSmDevice'
         }
         resource = f'/networks/{networkId}/sm/devices/{deviceId}/unenroll'
 
-        return await self._session.post(metadata, resource)
+        return self._session.post(metadata, resource)
 
-    async def getNetworkSmDeviceWlanLists(self, networkId: str, deviceId: str):
+    def getNetworkSmDeviceWlanLists(self, networkId: str, deviceId: str):
         """
         **List the saved SSID names on a device**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-wlan-lists
-        
-        - networkId (string)
-        - deviceId (string)
+        - networkId (string): (required)
+        - deviceId (string): (required)
         """
 
         metadata = {
             'tags': ['sm', 'configure', 'devices', 'wlanLists'],
-            'operation': 'getNetworkSmDeviceWlanLists',
+            'operation': 'getNetworkSmDeviceWlanLists'
         }
         resource = f'/networks/{networkId}/sm/devices/{deviceId}/wlanLists'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def getNetworkSmProfiles(self, networkId: str):
+    def getNetworkSmProfiles(self, networkId: str):
         """
         **List all profiles in a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-profiles
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['sm', 'configure', 'profiles'],
-            'operation': 'getNetworkSmProfiles',
+            'operation': 'getNetworkSmProfiles'
         }
         resource = f'/networks/{networkId}/sm/profiles'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def getNetworkSmTargetGroups(self, networkId: str, **kwargs):
+    def getNetworkSmTargetGroups(self, networkId: str, **kwargs):
         """
         **List the target groups in this network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-target-groups
-        
-        - networkId (string)
+        - networkId (string): (required)
         - withDetails (boolean): Boolean indicating if the the ids of the devices or users scoped by the target group should be included in the response
         """
 
@@ -549,21 +519,20 @@ class AsyncSm:
 
         metadata = {
             'tags': ['sm', 'configure', 'targetGroups'],
-            'operation': 'getNetworkSmTargetGroups',
+            'operation': 'getNetworkSmTargetGroups'
         }
         resource = f'/networks/{networkId}/sm/targetGroups'
 
-        query_params = ['withDetails']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['withDetails', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        return await self._session.get(metadata, resource, params)
+        return self._session.get(metadata, resource, params)
 
-    async def createNetworkSmTargetGroup(self, networkId: str, **kwargs):
+    def createNetworkSmTargetGroup(self, networkId: str, **kwargs):
         """
         **Add a target group**
         https://developer.cisco.com/meraki/api-v1/#!create-network-sm-target-group
-        
-        - networkId (string)
+        - networkId (string): (required)
         - name (string): The name of this target group
         - scope (string): The scope and tag options of the target group. Comma separated values beginning with one of withAny, withAll, withoutAny, withoutAll, all, none, followed by tags. Default to none if empty.
         """
@@ -572,22 +541,21 @@ class AsyncSm:
 
         metadata = {
             'tags': ['sm', 'configure', 'targetGroups'],
-            'operation': 'createNetworkSmTargetGroup',
+            'operation': 'createNetworkSmTargetGroup'
         }
         resource = f'/networks/{networkId}/sm/targetGroups'
 
-        body_params = ['name', 'scope']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['name', 'scope', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.post(metadata, resource, payload)
+        return self._session.post(metadata, resource, payload)
 
-    async def getNetworkSmTargetGroup(self, networkId: str, targetGroupId: str, **kwargs):
+    def getNetworkSmTargetGroup(self, networkId: str, targetGroupId: str, **kwargs):
         """
         **Return a target group**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-target-group
-        
-        - networkId (string)
-        - targetGroupId (string)
+        - networkId (string): (required)
+        - targetGroupId (string): (required)
         - withDetails (boolean): Boolean indicating if the the ids of the devices or users scoped by the target group should be included in the response
         """
 
@@ -595,22 +563,21 @@ class AsyncSm:
 
         metadata = {
             'tags': ['sm', 'configure', 'targetGroups'],
-            'operation': 'getNetworkSmTargetGroup',
+            'operation': 'getNetworkSmTargetGroup'
         }
         resource = f'/networks/{networkId}/sm/targetGroups/{targetGroupId}'
 
-        query_params = ['withDetails']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['withDetails', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        return await self._session.get(metadata, resource, params)
+        return self._session.get(metadata, resource, params)
 
-    async def updateNetworkSmTargetGroup(self, networkId: str, targetGroupId: str, **kwargs):
+    def updateNetworkSmTargetGroup(self, networkId: str, targetGroupId: str, **kwargs):
         """
         **Update a target group**
         https://developer.cisco.com/meraki/api-v1/#!update-network-sm-target-group
-        
-        - networkId (string)
-        - targetGroupId (string)
+        - networkId (string): (required)
+        - targetGroupId (string): (required)
         - name (string): The name of this target group
         - scope (string): The scope and tag options of the target group. Comma separated values beginning with one of withAny, withAll, withoutAny, withoutAll, all, none, followed by tags. Default to none if empty.
         """
@@ -619,38 +586,36 @@ class AsyncSm:
 
         metadata = {
             'tags': ['sm', 'configure', 'targetGroups'],
-            'operation': 'updateNetworkSmTargetGroup',
+            'operation': 'updateNetworkSmTargetGroup'
         }
         resource = f'/networks/{networkId}/sm/targetGroups/{targetGroupId}'
 
-        body_params = ['name', 'scope']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['name', 'scope', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.put(metadata, resource, payload)
+        return self._session.put(metadata, resource, payload)
 
-    async def deleteNetworkSmTargetGroup(self, networkId: str, targetGroupId: str):
+    def deleteNetworkSmTargetGroup(self, networkId: str, targetGroupId: str):
         """
         **Delete a target group from a network**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-sm-target-group
-        
-        - networkId (string)
-        - targetGroupId (string)
+        - networkId (string): (required)
+        - targetGroupId (string): (required)
         """
 
         metadata = {
             'tags': ['sm', 'configure', 'targetGroups'],
-            'operation': 'deleteNetworkSmTargetGroup',
+            'operation': 'deleteNetworkSmTargetGroup'
         }
         resource = f'/networks/{networkId}/sm/targetGroups/{targetGroupId}'
 
-        return await self._session.delete(metadata, resource)
+        return self._session.delete(metadata, resource)
 
-    async def getNetworkSmUsers(self, networkId: str, **kwargs):
+    def getNetworkSmUsers(self, networkId: str, **kwargs):
         """
         **List the owners in an SM network with various specified fields and filters**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-users
-        
-        - networkId (string)
+        - networkId (string): (required)
         - ids (string): Filter users by id(s). Multiple ids can be passed in as comma separated values.
         - usernames (string): Filter users by username(s). Multiple usernames can be passed in as comma separated values.
         - emails (string): Filter users by email(s). Multiple emails can be passed in as comma separated values.
@@ -661,95 +626,89 @@ class AsyncSm:
 
         metadata = {
             'tags': ['sm', 'configure', 'users'],
-            'operation': 'getNetworkSmUsers',
+            'operation': 'getNetworkSmUsers'
         }
         resource = f'/networks/{networkId}/sm/users'
 
-        query_params = ['ids', 'usernames', 'emails', 'scope']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['ids', 'usernames', 'emails', 'scope', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        return await self._session.get(metadata, resource, params)
+        return self._session.get(metadata, resource, params)
 
-    async def getNetworkSmUserDeviceProfiles(self, networkId: str, userId: str):
+    def getNetworkSmUserDeviceProfiles(self, networkId: str, userId: str):
         """
         **Get the profiles associated with a user**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-user-device-profiles
-        
-        - networkId (string)
-        - userId (string)
+        - networkId (string): (required)
+        - userId (string): (required)
         """
 
         metadata = {
             'tags': ['sm', 'configure', 'users', 'deviceProfiles'],
-            'operation': 'getNetworkSmUserDeviceProfiles',
+            'operation': 'getNetworkSmUserDeviceProfiles'
         }
         resource = f'/networks/{networkId}/sm/users/{userId}/deviceProfiles'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def getNetworkSmUserSoftwares(self, networkId: str, userId: str):
+    def getNetworkSmUserSoftwares(self, networkId: str, userId: str):
         """
         **Get a list of softwares associated with a user**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-user-softwares
-        
-        - networkId (string)
-        - userId (string)
+        - networkId (string): (required)
+        - userId (string): (required)
         """
 
         metadata = {
             'tags': ['sm', 'configure', 'users', 'softwares'],
-            'operation': 'getNetworkSmUserSoftwares',
+            'operation': 'getNetworkSmUserSoftwares'
         }
         resource = f'/networks/{networkId}/sm/users/{userId}/softwares'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def getOrganizationSmApnsCert(self, organizationId: str):
+    def getOrganizationSmApnsCert(self, organizationId: str):
         """
         **Get the organization's APNS certificate**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-sm-apns-cert
-        
-        - organizationId (string)
+        - organizationId (string): (required)
         """
 
         metadata = {
             'tags': ['sm', 'configure', 'apnsCert'],
-            'operation': 'getOrganizationSmApnsCert',
+            'operation': 'getOrganizationSmApnsCert'
         }
         resource = f'/organizations/{organizationId}/sm/apnsCert'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def getOrganizationSmVppAccounts(self, organizationId: str):
+    def getOrganizationSmVppAccounts(self, organizationId: str):
         """
         **List the VPP accounts in the organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-sm-vpp-accounts
-        
-        - organizationId (string)
+        - organizationId (string): (required)
         """
 
         metadata = {
             'tags': ['sm', 'configure', 'vppAccounts'],
-            'operation': 'getOrganizationSmVppAccounts',
+            'operation': 'getOrganizationSmVppAccounts'
         }
         resource = f'/organizations/{organizationId}/sm/vppAccounts'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def getOrganizationSmVppAccount(self, organizationId: str, vppAccountId: str):
+    def getOrganizationSmVppAccount(self, organizationId: str, vppAccountId: str):
         """
         **Get a hash containing the unparsed token of the VPP account with the given ID**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-sm-vpp-account
-        
-        - organizationId (string)
-        - vppAccountId (string)
+        - organizationId (string): (required)
+        - vppAccountId (string): (required)
         """
 
         metadata = {
             'tags': ['sm', 'configure', 'vppAccounts'],
-            'operation': 'getOrganizationSmVppAccount',
+            'operation': 'getOrganizationSmVppAccount'
         }
         resource = f'/organizations/{organizationId}/sm/vppAccounts/{vppAccountId}'
 
-        return await self._session.get(metadata, resource)
-
+        return self._session.get(metadata, resource)

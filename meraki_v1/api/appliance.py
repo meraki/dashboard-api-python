@@ -7,13 +7,12 @@ class Appliance(object):
         """
         **Return the DHCP subnet information for an appliance**
         https://developer.cisco.com/meraki/api-v1/#!get-device-appliance-dhcp-subnets
-        
-        - serial (string)
+        - serial (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'monitor', 'dhcp', 'subnets'],
-            'operation': 'getDeviceApplianceDhcpSubnets',
+            'operation': 'getDeviceApplianceDhcpSubnets'
         }
         resource = f'/devices/{serial}/appliance/dhcp/subnets'
 
@@ -23,13 +22,12 @@ class Appliance(object):
         """
         **Return the performance score for a single device. Only primary MX devices supported. If no data is available, a 204 error code is returned.**
         https://developer.cisco.com/meraki/api-v1/#!get-device-appliance-performance
-        
-        - serial (string)
+        - serial (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'monitor', 'performance'],
-            'operation': 'getDeviceAppliancePerformance',
+            'operation': 'getDeviceAppliancePerformance'
         }
         resource = f'/devices/{serial}/appliance/performance'
 
@@ -39,9 +37,8 @@ class Appliance(object):
         """
         **List the security events for a client. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-client-security-events
-        
-        - networkId (string)
-        - clientId (string)
+        - networkId (string): (required)
+        - clientId (string): (required)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 791 days from today.
@@ -61,27 +58,25 @@ class Appliance(object):
 
         metadata = {
             'tags': ['appliance', 'monitor', 'clients', 'security', 'events'],
-            'operation': 'getNetworkApplianceClientSecurityEvents',
+            'operation': 'getNetworkApplianceClientSecurityEvents'
         }
         resource = f'/networks/{networkId}/appliance/clients/{clientId}/security/events'
 
-        query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'sortOrder']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'sortOrder', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-
 
     def getNetworkApplianceConnectivityMonitoringDestinations(self, networkId: str):
         """
         **Return the connectivity testing destinations for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-connectivity-monitoring-destinations
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'connectivityMonitoringDestinations'],
-            'operation': 'getNetworkApplianceConnectivityMonitoringDestinations',
+            'operation': 'getNetworkApplianceConnectivityMonitoringDestinations'
         }
         resource = f'/networks/{networkId}/appliance/connectivityMonitoringDestinations'
 
@@ -91,8 +86,7 @@ class Appliance(object):
         """
         **Update the connectivity testing destinations for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-connectivity-monitoring-destinations
-        
-        - networkId (string)
+        - networkId (string): (required)
         - destinations (array): The list of connectivity monitoring destinations
         """
 
@@ -100,12 +94,12 @@ class Appliance(object):
 
         metadata = {
             'tags': ['appliance', 'configure', 'connectivityMonitoringDestinations'],
-            'operation': 'updateNetworkApplianceConnectivityMonitoringDestinations',
+            'operation': 'updateNetworkApplianceConnectivityMonitoringDestinations'
         }
         resource = f'/networks/{networkId}/appliance/connectivityMonitoringDestinations'
 
-        body_params = ['destinations']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['destinations', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -113,13 +107,12 @@ class Appliance(object):
         """
         **Return the content filtering settings for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-content-filtering
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'contentFiltering'],
-            'operation': 'getNetworkApplianceContentFiltering',
+            'operation': 'getNetworkApplianceContentFiltering'
         }
         resource = f'/networks/{networkId}/appliance/contentFiltering'
 
@@ -129,8 +122,7 @@ class Appliance(object):
         """
         **Update the content filtering settings for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-content-filtering
-        
-        - networkId (string)
+        - networkId (string): (required)
         - allowedUrlPatterns (array): A whitelist of URL patterns to allow
         - blockedUrlPatterns (array): A blacklist of URL patterns to block
         - blockedUrlCategories (array): A list of URL categories to block
@@ -145,12 +137,12 @@ class Appliance(object):
 
         metadata = {
             'tags': ['appliance', 'configure', 'contentFiltering'],
-            'operation': 'updateNetworkApplianceContentFiltering',
+            'operation': 'updateNetworkApplianceContentFiltering'
         }
         resource = f'/networks/{networkId}/appliance/contentFiltering'
 
-        body_params = ['allowedUrlPatterns', 'blockedUrlPatterns', 'blockedUrlCategories', 'urlCategoryListSize']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['allowedUrlPatterns', 'blockedUrlPatterns', 'blockedUrlCategories', 'urlCategoryListSize', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -158,13 +150,12 @@ class Appliance(object):
         """
         **List all available content filtering categories for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-content-filtering-categories
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'contentFiltering', 'categories'],
-            'operation': 'getNetworkApplianceContentFilteringCategories',
+            'operation': 'getNetworkApplianceContentFilteringCategories'
         }
         resource = f'/networks/{networkId}/appliance/contentFiltering/categories'
 
@@ -174,13 +165,12 @@ class Appliance(object):
         """
         **Return the cellular firewall rules for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-firewall-cellular-firewall-rules
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'firewall', 'cellularFirewallRules'],
-            'operation': 'getNetworkApplianceFirewallCellularFirewallRules',
+            'operation': 'getNetworkApplianceFirewallCellularFirewallRules'
         }
         resource = f'/networks/{networkId}/appliance/firewall/cellularFirewallRules'
 
@@ -190,8 +180,7 @@ class Appliance(object):
         """
         **Update the cellular firewall rules of an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-firewall-cellular-firewall-rules
-        
-        - networkId (string)
+        - networkId (string): (required)
         - rules (array): An ordered array of the firewall rules (not including the default rule)
         """
 
@@ -199,12 +188,12 @@ class Appliance(object):
 
         metadata = {
             'tags': ['appliance', 'configure', 'firewall', 'cellularFirewallRules'],
-            'operation': 'updateNetworkApplianceFirewallCellularFirewallRules',
+            'operation': 'updateNetworkApplianceFirewallCellularFirewallRules'
         }
         resource = f'/networks/{networkId}/appliance/firewall/cellularFirewallRules'
 
-        body_params = ['rules']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['rules', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -212,13 +201,12 @@ class Appliance(object):
         """
         **List the appliance services and their accessibility rules**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-firewall-firewalled-services
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'firewall', 'firewalledServices'],
-            'operation': 'getNetworkApplianceFirewallFirewalledServices',
+            'operation': 'getNetworkApplianceFirewallFirewalledServices'
         }
         resource = f'/networks/{networkId}/appliance/firewall/firewalledServices'
 
@@ -228,14 +216,13 @@ class Appliance(object):
         """
         **Return the accessibility settings of the given service ('ICMP', 'web', or 'SNMP')**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-firewall-firewalled-service
-        
-        - networkId (string)
-        - service (string)
+        - networkId (string): (required)
+        - service (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'firewall', 'firewalledServices'],
-            'operation': 'getNetworkApplianceFirewallFirewalledService',
+            'operation': 'getNetworkApplianceFirewallFirewalledService'
         }
         resource = f'/networks/{networkId}/appliance/firewall/firewalledServices/{service}'
 
@@ -245,13 +232,12 @@ class Appliance(object):
         """
         **Return the inbound firewall rules for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-firewall-inbound-firewall-rules
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'firewall', 'inboundFirewallRules'],
-            'operation': 'getNetworkApplianceFirewallInboundFirewallRules',
+            'operation': 'getNetworkApplianceFirewallInboundFirewallRules'
         }
         resource = f'/networks/{networkId}/appliance/firewall/inboundFirewallRules'
 
@@ -261,8 +247,7 @@ class Appliance(object):
         """
         **Update the inbound firewall rules of an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-firewall-inbound-firewall-rules
-        
-        - networkId (string)
+        - networkId (string): (required)
         - rules (array): An ordered array of the firewall rules (not including the default rule)
         - syslogDefaultRule (boolean): Log the special default rule (boolean value - enable only if you've configured a syslog server) (optional)
         """
@@ -271,12 +256,12 @@ class Appliance(object):
 
         metadata = {
             'tags': ['appliance', 'configure', 'firewall', 'inboundFirewallRules'],
-            'operation': 'updateNetworkApplianceFirewallInboundFirewallRules',
+            'operation': 'updateNetworkApplianceFirewallInboundFirewallRules'
         }
         resource = f'/networks/{networkId}/appliance/firewall/inboundFirewallRules'
 
-        body_params = ['rules', 'syslogDefaultRule']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['rules', 'syslogDefaultRule', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -284,13 +269,12 @@ class Appliance(object):
         """
         **Return the L3 firewall rules for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-firewall-l-3-firewall-rules
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'firewall', 'l3FirewallRules'],
-            'operation': 'getNetworkApplianceFirewallL3FirewallRules',
+            'operation': 'getNetworkApplianceFirewallL3FirewallRules'
         }
         resource = f'/networks/{networkId}/appliance/firewall/l3FirewallRules'
 
@@ -300,8 +284,7 @@ class Appliance(object):
         """
         **Update the L3 firewall rules of an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-firewall-l-3-firewall-rules
-        
-        - networkId (string)
+        - networkId (string): (required)
         - rules (array): An ordered array of the firewall rules (not including the default rule)
         - syslogDefaultRule (boolean): Log the special default rule (boolean value - enable only if you've configured a syslog server) (optional)
         """
@@ -310,12 +293,12 @@ class Appliance(object):
 
         metadata = {
             'tags': ['appliance', 'configure', 'firewall', 'l3FirewallRules'],
-            'operation': 'updateNetworkApplianceFirewallL3FirewallRules',
+            'operation': 'updateNetworkApplianceFirewallL3FirewallRules'
         }
         resource = f'/networks/{networkId}/appliance/firewall/l3FirewallRules'
 
-        body_params = ['rules', 'syslogDefaultRule']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['rules', 'syslogDefaultRule', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -323,13 +306,12 @@ class Appliance(object):
         """
         **List the MX L7 firewall rules for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-firewall-l-7-firewall-rules
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'firewall', 'l7FirewallRules'],
-            'operation': 'getNetworkApplianceFirewallL7FirewallRules',
+            'operation': 'getNetworkApplianceFirewallL7FirewallRules'
         }
         resource = f'/networks/{networkId}/appliance/firewall/l7FirewallRules'
 
@@ -339,8 +321,7 @@ class Appliance(object):
         """
         **Update the MX L7 firewall rules for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-firewall-l-7-firewall-rules
-        
-        - networkId (string)
+        - networkId (string): (required)
         - rules (array): An ordered array of the MX L7 firewall rules
         """
 
@@ -348,12 +329,12 @@ class Appliance(object):
 
         metadata = {
             'tags': ['appliance', 'configure', 'firewall', 'l7FirewallRules'],
-            'operation': 'updateNetworkApplianceFirewallL7FirewallRules',
+            'operation': 'updateNetworkApplianceFirewallL7FirewallRules'
         }
         resource = f'/networks/{networkId}/appliance/firewall/l7FirewallRules'
 
-        body_params = ['rules']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['rules', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -361,13 +342,12 @@ class Appliance(object):
         """
         **Return the L7 firewall application categories and their associated applications for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-firewall-l-7-firewall-rules-application-categories
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'firewall', 'l7FirewallRules', 'applicationCategories'],
-            'operation': 'getNetworkApplianceFirewallL7FirewallRulesApplicationCategories',
+            'operation': 'getNetworkApplianceFirewallL7FirewallRulesApplicationCategories'
         }
         resource = f'/networks/{networkId}/appliance/firewall/l7FirewallRules/applicationCategories'
 
@@ -377,13 +357,12 @@ class Appliance(object):
         """
         **Return the 1:Many NAT mapping rules for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-firewall-one-to-many-nat-rules
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'firewall', 'oneToManyNatRules'],
-            'operation': 'getNetworkApplianceFirewallOneToManyNatRules',
+            'operation': 'getNetworkApplianceFirewallOneToManyNatRules'
         }
         resource = f'/networks/{networkId}/appliance/firewall/oneToManyNatRules'
 
@@ -393,8 +372,7 @@ class Appliance(object):
         """
         **Set the 1:Many NAT mapping rules for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-firewall-one-to-many-nat-rules
-        
-        - networkId (string)
+        - networkId (string): (required)
         - rules (array): An array of 1:Many nat rules
         """
 
@@ -402,12 +380,12 @@ class Appliance(object):
 
         metadata = {
             'tags': ['appliance', 'configure', 'firewall', 'oneToManyNatRules'],
-            'operation': 'updateNetworkApplianceFirewallOneToManyNatRules',
+            'operation': 'updateNetworkApplianceFirewallOneToManyNatRules'
         }
         resource = f'/networks/{networkId}/appliance/firewall/oneToManyNatRules'
 
-        body_params = ['rules']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['rules', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -415,13 +393,12 @@ class Appliance(object):
         """
         **Return the 1:1 NAT mapping rules for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-firewall-one-to-one-nat-rules
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'firewall', 'oneToOneNatRules'],
-            'operation': 'getNetworkApplianceFirewallOneToOneNatRules',
+            'operation': 'getNetworkApplianceFirewallOneToOneNatRules'
         }
         resource = f'/networks/{networkId}/appliance/firewall/oneToOneNatRules'
 
@@ -431,8 +408,7 @@ class Appliance(object):
         """
         **Set the 1:1 NAT mapping rules for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-firewall-one-to-one-nat-rules
-        
-        - networkId (string)
+        - networkId (string): (required)
         - rules (array): An array of 1:1 nat rules
         """
 
@@ -440,12 +416,12 @@ class Appliance(object):
 
         metadata = {
             'tags': ['appliance', 'configure', 'firewall', 'oneToOneNatRules'],
-            'operation': 'updateNetworkApplianceFirewallOneToOneNatRules',
+            'operation': 'updateNetworkApplianceFirewallOneToOneNatRules'
         }
         resource = f'/networks/{networkId}/appliance/firewall/oneToOneNatRules'
 
-        body_params = ['rules']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['rules', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -453,13 +429,12 @@ class Appliance(object):
         """
         **Return the port forwarding rules for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-firewall-port-forwarding-rules
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'firewall', 'portForwardingRules'],
-            'operation': 'getNetworkApplianceFirewallPortForwardingRules',
+            'operation': 'getNetworkApplianceFirewallPortForwardingRules'
         }
         resource = f'/networks/{networkId}/appliance/firewall/portForwardingRules'
 
@@ -469,8 +444,7 @@ class Appliance(object):
         """
         **Update the port forwarding rules for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-firewall-port-forwarding-rules
-        
-        - networkId (string)
+        - networkId (string): (required)
         - rules (array): An array of port forwarding params
         """
 
@@ -478,12 +452,12 @@ class Appliance(object):
 
         metadata = {
             'tags': ['appliance', 'configure', 'firewall', 'portForwardingRules'],
-            'operation': 'updateNetworkApplianceFirewallPortForwardingRules',
+            'operation': 'updateNetworkApplianceFirewallPortForwardingRules'
         }
         resource = f'/networks/{networkId}/appliance/firewall/portForwardingRules'
 
-        body_params = ['rules']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['rules', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -491,13 +465,12 @@ class Appliance(object):
         """
         **List per-port VLAN settings for all ports of a MX.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-ports
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'ports'],
-            'operation': 'getNetworkAppliancePorts',
+            'operation': 'getNetworkAppliancePorts'
         }
         resource = f'/networks/{networkId}/appliance/ports'
 
@@ -507,14 +480,13 @@ class Appliance(object):
         """
         **Return per-port VLAN settings for a single MX port.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-port
-        
-        - networkId (string)
-        - portId (string)
+        - networkId (string): (required)
+        - portId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'ports'],
-            'operation': 'getNetworkAppliancePort',
+            'operation': 'getNetworkAppliancePort'
         }
         resource = f'/networks/{networkId}/appliance/ports/{portId}'
 
@@ -524,9 +496,8 @@ class Appliance(object):
         """
         **Update the per-port VLAN settings for a single MX port.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-port
-        
-        - networkId (string)
-        - portId (string)
+        - networkId (string): (required)
+        - portId (string): (required)
         - enabled (boolean): The status of the port
         - dropUntaggedTraffic (boolean): Trunk port can Drop all Untagged traffic. When true, no VLAN is required. Access ports cannot have dropUntaggedTraffic set to true.
         - type (string): The type of the port: 'access' or 'trunk'.
@@ -539,12 +510,12 @@ class Appliance(object):
 
         metadata = {
             'tags': ['appliance', 'configure', 'ports'],
-            'operation': 'updateNetworkAppliancePort',
+            'operation': 'updateNetworkAppliancePort'
         }
         resource = f'/networks/{networkId}/appliance/ports/{portId}'
 
-        body_params = ['enabled', 'dropUntaggedTraffic', 'type', 'vlan', 'allowedVlans', 'accessPolicy']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['enabled', 'dropUntaggedTraffic', 'type', 'vlan', 'allowedVlans', 'accessPolicy', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -552,8 +523,7 @@ class Appliance(object):
         """
         **List the security events for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-security-events
-        
-        - networkId (string)
+        - networkId (string): (required)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
@@ -573,27 +543,25 @@ class Appliance(object):
 
         metadata = {
             'tags': ['appliance', 'monitor', 'security', 'events'],
-            'operation': 'getNetworkApplianceSecurityEvents',
+            'operation': 'getNetworkApplianceSecurityEvents'
         }
         resource = f'/networks/{networkId}/appliance/security/events'
 
-        query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'sortOrder']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'sortOrder', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-
 
     def getNetworkApplianceSecurityIntrusion(self, networkId: str):
         """
         **Returns all supported intrusion settings for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-security-intrusion
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'security', 'intrusion'],
-            'operation': 'getNetworkApplianceSecurityIntrusion',
+            'operation': 'getNetworkApplianceSecurityIntrusion'
         }
         resource = f'/networks/{networkId}/appliance/security/intrusion'
 
@@ -603,8 +571,7 @@ class Appliance(object):
         """
         **Set the supported intrusion settings for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-security-intrusion
-        
-        - networkId (string)
+        - networkId (string): (required)
         - mode (string): Set mode to 'disabled'/'detection'/'prevention' (optional - omitting will leave current config unchanged)
         - idsRulesets (string): Set the detection ruleset 'connectivity'/'balanced'/'security' (optional - omitting will leave current config unchanged). Default value is 'balanced' if none currently saved
         - protectedNetworks (object): Set the included/excluded networks from the intrusion engine (optional - omitting will leave current config unchanged). This is available only in 'passthrough' mode
@@ -621,12 +588,12 @@ class Appliance(object):
 
         metadata = {
             'tags': ['appliance', 'configure', 'security', 'intrusion'],
-            'operation': 'updateNetworkApplianceSecurityIntrusion',
+            'operation': 'updateNetworkApplianceSecurityIntrusion'
         }
         resource = f'/networks/{networkId}/appliance/security/intrusion'
 
-        body_params = ['mode', 'idsRulesets', 'protectedNetworks']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['mode', 'idsRulesets', 'protectedNetworks', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -634,13 +601,12 @@ class Appliance(object):
         """
         **Returns all supported malware settings for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-security-malware
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'security', 'malware'],
-            'operation': 'getNetworkApplianceSecurityMalware',
+            'operation': 'getNetworkApplianceSecurityMalware'
         }
         resource = f'/networks/{networkId}/appliance/security/malware'
 
@@ -650,8 +616,7 @@ class Appliance(object):
         """
         **Set the supported malware settings for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-security-malware
-        
-        - networkId (string)
+        - networkId (string): (required)
         - mode (string): Set mode to 'enabled' to enable malware prevention, otherwise 'disabled'
         - allowedUrls (array): The urls that should be permitted by the malware detection engine. If omitted, the current config will remain unchanged. This is available only if your network supports AMP whitelisting
         - allowedFiles (array): The sha256 digests of files that should be permitted by the malware detection engine. If omitted, the current config will remain unchanged. This is available only if your network supports AMP whitelisting
@@ -665,12 +630,12 @@ class Appliance(object):
 
         metadata = {
             'tags': ['appliance', 'configure', 'security', 'malware'],
-            'operation': 'updateNetworkApplianceSecurityMalware',
+            'operation': 'updateNetworkApplianceSecurityMalware'
         }
         resource = f'/networks/{networkId}/appliance/security/malware'
 
-        body_params = ['mode', 'allowedUrls', 'allowedFiles']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['mode', 'allowedUrls', 'allowedFiles', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -678,13 +643,12 @@ class Appliance(object):
         """
         **Return single LAN configuration**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-single-lan
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'singleLan'],
-            'operation': 'getNetworkApplianceSingleLan',
+            'operation': 'getNetworkApplianceSingleLan'
         }
         resource = f'/networks/{networkId}/appliance/singleLan'
 
@@ -694,8 +658,7 @@ class Appliance(object):
         """
         **Update single LAN configuration**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-single-lan
-        
-        - networkId (string)
+        - networkId (string): (required)
         - subnet (string): The subnet of the single LAN configuration
         - applianceIp (string): The appliance IP address of the single LAN
         """
@@ -704,12 +667,12 @@ class Appliance(object):
 
         metadata = {
             'tags': ['appliance', 'configure', 'singleLan'],
-            'operation': 'updateNetworkApplianceSingleLan',
+            'operation': 'updateNetworkApplianceSingleLan'
         }
         resource = f'/networks/{networkId}/appliance/singleLan'
 
-        body_params = ['subnet', 'applianceIp']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['subnet', 'applianceIp', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -717,13 +680,12 @@ class Appliance(object):
         """
         **List the static routes for an MX or teleworker network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-static-routes
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'staticRoutes'],
-            'operation': 'getNetworkApplianceStaticRoutes',
+            'operation': 'getNetworkApplianceStaticRoutes'
         }
         resource = f'/networks/{networkId}/appliance/staticRoutes'
 
@@ -733,8 +695,7 @@ class Appliance(object):
         """
         **Add a static route for an MX or teleworker network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-appliance-static-route
-        
-        - networkId (string)
+        - networkId (string): (required)
         - name (string): The name of the new static route
         - subnet (string): The subnet of the static route
         - gatewayIp (string): The gateway IP (next hop) of the static route
@@ -744,12 +705,12 @@ class Appliance(object):
 
         metadata = {
             'tags': ['appliance', 'configure', 'staticRoutes'],
-            'operation': 'createNetworkApplianceStaticRoute',
+            'operation': 'createNetworkApplianceStaticRoute'
         }
         resource = f'/networks/{networkId}/appliance/staticRoutes'
 
-        body_params = ['name', 'subnet', 'gatewayIp']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['name', 'subnet', 'gatewayIp', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
 
@@ -757,14 +718,13 @@ class Appliance(object):
         """
         **Return a static route for an MX or teleworker network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-static-route
-        
-        - networkId (string)
-        - staticRouteId (string)
+        - networkId (string): (required)
+        - staticRouteId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'staticRoutes'],
-            'operation': 'getNetworkApplianceStaticRoute',
+            'operation': 'getNetworkApplianceStaticRoute'
         }
         resource = f'/networks/{networkId}/appliance/staticRoutes/{staticRouteId}'
 
@@ -774,9 +734,8 @@ class Appliance(object):
         """
         **Update a static route for an MX or teleworker network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-static-route
-        
-        - networkId (string)
-        - staticRouteId (string)
+        - networkId (string): (required)
+        - staticRouteId (string): (required)
         - name (string): The name of the static route
         - subnet (string): The subnet of the static route
         - gatewayIp (string): The gateway IP (next hop) of the static route
@@ -789,12 +748,12 @@ class Appliance(object):
 
         metadata = {
             'tags': ['appliance', 'configure', 'staticRoutes'],
-            'operation': 'updateNetworkApplianceStaticRoute',
+            'operation': 'updateNetworkApplianceStaticRoute'
         }
         resource = f'/networks/{networkId}/appliance/staticRoutes/{staticRouteId}'
 
-        body_params = ['name', 'subnet', 'gatewayIp', 'enabled', 'fixedIpAssignments', 'reservedIpRanges']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['name', 'subnet', 'gatewayIp', 'enabled', 'fixedIpAssignments', 'reservedIpRanges', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -802,14 +761,13 @@ class Appliance(object):
         """
         **Delete a static route from an MX or teleworker network**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-appliance-static-route
-        
-        - networkId (string)
-        - staticRouteId (string)
+        - networkId (string): (required)
+        - staticRouteId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'staticRoutes'],
-            'operation': 'deleteNetworkApplianceStaticRoute',
+            'operation': 'deleteNetworkApplianceStaticRoute'
         }
         resource = f'/networks/{networkId}/appliance/staticRoutes/{staticRouteId}'
 
@@ -819,13 +777,12 @@ class Appliance(object):
         """
         **List all custom performance classes for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-traffic-shaping-custom-performance-classes
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'trafficShaping', 'customPerformanceClasses'],
-            'operation': 'getNetworkApplianceTrafficShapingCustomPerformanceClasses',
+            'operation': 'getNetworkApplianceTrafficShapingCustomPerformanceClasses'
         }
         resource = f'/networks/{networkId}/appliance/trafficShaping/customPerformanceClasses'
 
@@ -835,8 +792,7 @@ class Appliance(object):
         """
         **Add a custom performance class for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-appliance-traffic-shaping-custom-performance-class
-        
-        - networkId (string)
+        - networkId (string): (required)
         - name (string): Name of the custom performance class
         - maxLatency (integer): Maximum latency in milliseconds
         - maxJitter (integer): Maximum jitter in milliseconds
@@ -847,12 +803,12 @@ class Appliance(object):
 
         metadata = {
             'tags': ['appliance', 'configure', 'trafficShaping', 'customPerformanceClasses'],
-            'operation': 'createNetworkApplianceTrafficShapingCustomPerformanceClass',
+            'operation': 'createNetworkApplianceTrafficShapingCustomPerformanceClass'
         }
         resource = f'/networks/{networkId}/appliance/trafficShaping/customPerformanceClasses'
 
-        body_params = ['name', 'maxLatency', 'maxJitter', 'maxLossPercentage']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['name', 'maxLatency', 'maxJitter', 'maxLossPercentage', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
 
@@ -860,14 +816,13 @@ class Appliance(object):
         """
         **Return a custom performance class for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-traffic-shaping-custom-performance-class
-        
-        - networkId (string)
-        - customPerformanceClassId (string)
+        - networkId (string): (required)
+        - customPerformanceClassId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'trafficShaping', 'customPerformanceClasses'],
-            'operation': 'getNetworkApplianceTrafficShapingCustomPerformanceClass',
+            'operation': 'getNetworkApplianceTrafficShapingCustomPerformanceClass'
         }
         resource = f'/networks/{networkId}/appliance/trafficShaping/customPerformanceClasses/{customPerformanceClassId}'
 
@@ -877,9 +832,8 @@ class Appliance(object):
         """
         **Update a custom performance class for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-traffic-shaping-custom-performance-class
-        
-        - networkId (string)
-        - customPerformanceClassId (string)
+        - networkId (string): (required)
+        - customPerformanceClassId (string): (required)
         - name (string): Name of the custom performance class
         - maxLatency (integer): Maximum latency in milliseconds
         - maxJitter (integer): Maximum jitter in milliseconds
@@ -890,12 +844,12 @@ class Appliance(object):
 
         metadata = {
             'tags': ['appliance', 'configure', 'trafficShaping', 'customPerformanceClasses'],
-            'operation': 'updateNetworkApplianceTrafficShapingCustomPerformanceClass',
+            'operation': 'updateNetworkApplianceTrafficShapingCustomPerformanceClass'
         }
         resource = f'/networks/{networkId}/appliance/trafficShaping/customPerformanceClasses/{customPerformanceClassId}'
 
-        body_params = ['name', 'maxLatency', 'maxJitter', 'maxLossPercentage']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['name', 'maxLatency', 'maxJitter', 'maxLossPercentage', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -903,14 +857,13 @@ class Appliance(object):
         """
         **Delete a custom performance class from an MX network**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-appliance-traffic-shaping-custom-performance-class
-        
-        - networkId (string)
-        - customPerformanceClassId (string)
+        - networkId (string): (required)
+        - customPerformanceClassId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'trafficShaping', 'customPerformanceClasses'],
-            'operation': 'deleteNetworkApplianceTrafficShapingCustomPerformanceClass',
+            'operation': 'deleteNetworkApplianceTrafficShapingCustomPerformanceClass'
         }
         resource = f'/networks/{networkId}/appliance/trafficShaping/customPerformanceClasses/{customPerformanceClassId}'
 
@@ -920,8 +873,7 @@ class Appliance(object):
         """
         **Update the traffic shaping settings for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-traffic-shaping-rules
-        
-        - networkId (string)
+        - networkId (string): (required)
         - defaultRulesEnabled (boolean):     Whether default traffic shaping rules are enabled (true) or disabled (false).
     There are 4 default rules, which can
     be seen on your network's traffic shaping page. Note that default rules
@@ -937,12 +889,12 @@ class Appliance(object):
 
         metadata = {
             'tags': ['appliance', 'configure', 'trafficShaping', 'rules'],
-            'operation': 'updateNetworkApplianceTrafficShapingRules',
+            'operation': 'updateNetworkApplianceTrafficShapingRules'
         }
         resource = f'/networks/{networkId}/appliance/trafficShaping/rules'
 
-        body_params = ['defaultRulesEnabled', 'rules']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['defaultRulesEnabled', 'rules', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -950,13 +902,12 @@ class Appliance(object):
         """
         **Display the traffic shaping settings for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-traffic-shaping-rules
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'trafficShaping', 'rules'],
-            'operation': 'getNetworkApplianceTrafficShapingRules',
+            'operation': 'getNetworkApplianceTrafficShapingRules'
         }
         resource = f'/networks/{networkId}/appliance/trafficShaping/rules'
 
@@ -966,13 +917,12 @@ class Appliance(object):
         """
         **Returns the uplink bandwidth settings for your MX network.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-traffic-shaping-uplink-bandwidth
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'trafficShaping', 'uplinkBandwidth'],
-            'operation': 'getNetworkApplianceTrafficShapingUplinkBandwidth',
+            'operation': 'getNetworkApplianceTrafficShapingUplinkBandwidth'
         }
         resource = f'/networks/{networkId}/appliance/trafficShaping/uplinkBandwidth'
 
@@ -982,8 +932,7 @@ class Appliance(object):
         """
         **Updates the uplink bandwidth settings for your MX network.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-traffic-shaping-uplink-bandwidth
-        
-        - networkId (string)
+        - networkId (string): (required)
         - bandwidthLimits (object): A mapping of uplinks to their bandwidth settings (be sure to check which uplinks are supported for your network)
         """
 
@@ -991,12 +940,12 @@ class Appliance(object):
 
         metadata = {
             'tags': ['appliance', 'configure', 'trafficShaping', 'uplinkBandwidth'],
-            'operation': 'updateNetworkApplianceTrafficShapingUplinkBandwidth',
+            'operation': 'updateNetworkApplianceTrafficShapingUplinkBandwidth'
         }
         resource = f'/networks/{networkId}/appliance/trafficShaping/uplinkBandwidth'
 
-        body_params = ['bandwidthLimits']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['bandwidthLimits', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -1004,13 +953,12 @@ class Appliance(object):
         """
         **Show uplink selection settings for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-traffic-shaping-uplink-selection
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'trafficShaping', 'uplinkSelection'],
-            'operation': 'getNetworkApplianceTrafficShapingUplinkSelection',
+            'operation': 'getNetworkApplianceTrafficShapingUplinkSelection'
         }
         resource = f'/networks/{networkId}/appliance/trafficShaping/uplinkSelection'
 
@@ -1020,8 +968,7 @@ class Appliance(object):
         """
         **Update uplink selection settings for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-traffic-shaping-uplink-selection
-        
-        - networkId (string)
+        - networkId (string): (required)
         - activeActiveAutoVpnEnabled (boolean): Toggle for enabling or disabling active-active AutoVPN
         - defaultUplink (string): The default uplink. Must be one of: 'wan1' or 'wan2'
         - loadBalancingEnabled (boolean): Toggle for enabling or disabling load balancing
@@ -1037,12 +984,12 @@ class Appliance(object):
 
         metadata = {
             'tags': ['appliance', 'configure', 'trafficShaping', 'uplinkSelection'],
-            'operation': 'updateNetworkApplianceTrafficShapingUplinkSelection',
+            'operation': 'updateNetworkApplianceTrafficShapingUplinkSelection'
         }
         resource = f'/networks/{networkId}/appliance/trafficShaping/uplinkSelection'
 
-        body_params = ['activeActiveAutoVpnEnabled', 'defaultUplink', 'loadBalancingEnabled', 'wanTrafficUplinkPreferences', 'vpnTrafficUplinkPreferences']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['activeActiveAutoVpnEnabled', 'defaultUplink', 'loadBalancingEnabled', 'wanTrafficUplinkPreferences', 'vpnTrafficUplinkPreferences', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -1050,13 +997,12 @@ class Appliance(object):
         """
         **List the VLANs for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-vlans
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'vlans'],
-            'operation': 'getNetworkApplianceVlans',
+            'operation': 'getNetworkApplianceVlans'
         }
         resource = f'/networks/{networkId}/appliance/vlans'
 
@@ -1066,8 +1012,7 @@ class Appliance(object):
         """
         **Add a VLAN**
         https://developer.cisco.com/meraki/api-v1/#!create-network-appliance-vlan
-        
-        - networkId (string)
+        - networkId (string): (required)
         - id (string): The VLAN ID of the new VLAN (must be between 1 and 4094)
         - name (string): The name of the new VLAN
         - subnet (string): The subnet of the VLAN
@@ -1079,12 +1024,12 @@ class Appliance(object):
 
         metadata = {
             'tags': ['appliance', 'configure', 'vlans'],
-            'operation': 'createNetworkApplianceVlan',
+            'operation': 'createNetworkApplianceVlan'
         }
         resource = f'/networks/{networkId}/appliance/vlans'
 
-        body_params = ['id', 'name', 'subnet', 'applianceIp', 'groupPolicyId']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['id', 'name', 'subnet', 'applianceIp', 'groupPolicyId', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
 
@@ -1092,13 +1037,12 @@ class Appliance(object):
         """
         **Returns the enabled status of VLANs for the network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-vlans-settings
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'vlans', 'settings'],
-            'operation': 'getNetworkApplianceVlansSettings',
+            'operation': 'getNetworkApplianceVlansSettings'
         }
         resource = f'/networks/{networkId}/appliance/vlans/settings'
 
@@ -1108,8 +1052,7 @@ class Appliance(object):
         """
         **Enable/Disable VLANs for the given network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-vlans-settings
-        
-        - networkId (string)
+        - networkId (string): (required)
         - vlansEnabled (boolean): Boolean indicating whether to enable (true) or disable (false) VLANs for the network
         """
 
@@ -1117,12 +1060,12 @@ class Appliance(object):
 
         metadata = {
             'tags': ['appliance', 'configure', 'vlans', 'settings'],
-            'operation': 'updateNetworkApplianceVlansSettings',
+            'operation': 'updateNetworkApplianceVlansSettings'
         }
         resource = f'/networks/{networkId}/appliance/vlans/settings'
 
-        body_params = ['vlansEnabled']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['vlansEnabled', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -1130,14 +1073,13 @@ class Appliance(object):
         """
         **Return a VLAN**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-vlan
-        
-        - networkId (string)
-        - vlanId (string)
+        - networkId (string): (required)
+        - vlanId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'vlans'],
-            'operation': 'getNetworkApplianceVlan',
+            'operation': 'getNetworkApplianceVlan'
         }
         resource = f'/networks/{networkId}/appliance/vlans/{vlanId}'
 
@@ -1147,9 +1089,8 @@ class Appliance(object):
         """
         **Update a VLAN**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-vlan
-        
-        - networkId (string)
-        - vlanId (string)
+        - networkId (string): (required)
+        - vlanId (string): (required)
         - name (string): The name of the VLAN
         - subnet (string): The subnet of the VLAN
         - applianceIp (string): The local IP of the appliance on the VLAN
@@ -1178,12 +1119,12 @@ class Appliance(object):
 
         metadata = {
             'tags': ['appliance', 'configure', 'vlans'],
-            'operation': 'updateNetworkApplianceVlan',
+            'operation': 'updateNetworkApplianceVlan'
         }
         resource = f'/networks/{networkId}/appliance/vlans/{vlanId}'
 
-        body_params = ['name', 'subnet', 'applianceIp', 'groupPolicyId', 'vpnNatSubnet', 'dhcpHandling', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dhcpBootOptionsEnabled', 'dhcpBootNextServer', 'dhcpBootFilename', 'fixedIpAssignments', 'reservedIpRanges', 'dnsNameservers', 'dhcpOptions']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['name', 'subnet', 'applianceIp', 'groupPolicyId', 'vpnNatSubnet', 'dhcpHandling', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dhcpBootOptionsEnabled', 'dhcpBootNextServer', 'dhcpBootFilename', 'fixedIpAssignments', 'reservedIpRanges', 'dnsNameservers', 'dhcpOptions', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -1191,14 +1132,13 @@ class Appliance(object):
         """
         **Delete a VLAN from a network**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-appliance-vlan
-        
-        - networkId (string)
-        - vlanId (string)
+        - networkId (string): (required)
+        - vlanId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'vlans'],
-            'operation': 'deleteNetworkApplianceVlan',
+            'operation': 'deleteNetworkApplianceVlan'
         }
         resource = f'/networks/{networkId}/appliance/vlans/{vlanId}'
 
@@ -1208,13 +1148,12 @@ class Appliance(object):
         """
         **Return the site-to-site VPN settings of a network. Only valid for MX networks.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-vpn-site-to-site-vpn
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'vpn', 'siteToSiteVpn'],
-            'operation': 'getNetworkApplianceVpnSiteToSiteVpn',
+            'operation': 'getNetworkApplianceVpnSiteToSiteVpn'
         }
         resource = f'/networks/{networkId}/appliance/vpn/siteToSiteVpn'
 
@@ -1224,8 +1163,7 @@ class Appliance(object):
         """
         **Update the site-to-site VPN settings of a network. Only valid for MX networks in NAT mode.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-vpn-site-to-site-vpn
-        
-        - networkId (string)
+        - networkId (string): (required)
         - mode (string): The site-to-site VPN mode. Can be one of 'none', 'spoke' or 'hub'
         - hubs (array): The list of VPN hubs, in order of preference. In spoke mode, at least 1 hub is required.
         - subnets (array): The list of subnets and their VPN presence.
@@ -1239,12 +1177,12 @@ class Appliance(object):
 
         metadata = {
             'tags': ['appliance', 'configure', 'vpn', 'siteToSiteVpn'],
-            'operation': 'updateNetworkApplianceVpnSiteToSiteVpn',
+            'operation': 'updateNetworkApplianceVpnSiteToSiteVpn'
         }
         resource = f'/networks/{networkId}/appliance/vpn/siteToSiteVpn'
 
-        body_params = ['mode', 'hubs', 'subnets']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['mode', 'hubs', 'subnets', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -1252,13 +1190,12 @@ class Appliance(object):
         """
         **Return MX warm spare settings**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-warm-spare
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'warmSpare'],
-            'operation': 'getNetworkApplianceWarmSpare',
+            'operation': 'getNetworkApplianceWarmSpare'
         }
         resource = f'/networks/{networkId}/appliance/warmSpare'
 
@@ -1268,8 +1205,7 @@ class Appliance(object):
         """
         **Update MX warm spare settings**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-warm-spare
-        
-        - networkId (string)
+        - networkId (string): (required)
         - enabled (boolean): Enable warm spare
         - spareSerial (string): Serial number of the warm spare appliance
         - uplinkMode (string): Uplink mode, either virtual or public
@@ -1281,12 +1217,12 @@ class Appliance(object):
 
         metadata = {
             'tags': ['appliance', 'configure', 'warmSpare'],
-            'operation': 'updateNetworkApplianceWarmSpare',
+            'operation': 'updateNetworkApplianceWarmSpare'
         }
         resource = f'/networks/{networkId}/appliance/warmSpare'
 
-        body_params = ['enabled', 'spareSerial', 'uplinkMode', 'virtualIp1', 'virtualIp2']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['enabled', 'spareSerial', 'uplinkMode', 'virtualIp1', 'virtualIp2', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -1294,13 +1230,12 @@ class Appliance(object):
         """
         **Swap MX primary and warm spare appliances**
         https://developer.cisco.com/meraki/api-v1/#!swap-network-appliance-warm-spare
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'warmSpare'],
-            'operation': 'swapNetworkApplianceWarmSpare',
+            'operation': 'swapNetworkApplianceWarmSpare'
         }
         resource = f'/networks/{networkId}/appliance/warmSpare/swap'
 
@@ -1310,8 +1245,7 @@ class Appliance(object):
         """
         **List the security events for an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-security-events
-        
-        - organizationId (string)
+        - organizationId (string): (required)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
@@ -1331,27 +1265,25 @@ class Appliance(object):
 
         metadata = {
             'tags': ['appliance', 'monitor', 'security', 'events'],
-            'operation': 'getOrganizationApplianceSecurityEvents',
+            'operation': 'getOrganizationApplianceSecurityEvents'
         }
         resource = f'/organizations/{organizationId}/appliance/security/events'
 
-        query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'sortOrder']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'sortOrder', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-
 
     def getOrganizationApplianceSecurityIntrusion(self, organizationId: str):
         """
         **Returns all supported intrusion settings for an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-security-intrusion
-        
-        - organizationId (string)
+        - organizationId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'security', 'intrusion'],
-            'operation': 'getOrganizationApplianceSecurityIntrusion',
+            'operation': 'getOrganizationApplianceSecurityIntrusion'
         }
         resource = f'/organizations/{organizationId}/appliance/security/intrusion'
 
@@ -1361,8 +1293,7 @@ class Appliance(object):
         """
         **Sets supported intrusion settings for an organization**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-appliance-security-intrusion
-        
-        - organizationId (string)
+        - organizationId (string): (required)
         - whitelistedRules (array): Sets a list of specific SNORT® signatures to whitelist
         """
 
@@ -1370,12 +1301,12 @@ class Appliance(object):
 
         metadata = {
             'tags': ['appliance', 'configure', 'security', 'intrusion'],
-            'operation': 'updateOrganizationApplianceSecurityIntrusion',
+            'operation': 'updateOrganizationApplianceSecurityIntrusion'
         }
         resource = f'/organizations/{organizationId}/appliance/security/intrusion'
 
-        body_params = ['whitelistedRules']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['whitelistedRules', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -1383,13 +1314,12 @@ class Appliance(object):
         """
         **Return the third party VPN peers for an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-third-party-v-p-n-peers
-        
-        - organizationId (string)
+        - organizationId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'thirdPartyVPNPeers'],
-            'operation': 'getOrganizationApplianceThirdPartyVPNPeers',
+            'operation': 'getOrganizationApplianceThirdPartyVPNPeers'
         }
         resource = f'/organizations/{organizationId}/appliance/thirdPartyVPNPeers'
 
@@ -1399,8 +1329,7 @@ class Appliance(object):
         """
         **Update the third party VPN peers for an organization**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-appliance-third-party-v-p-n-peers
-        
-        - organizationId (string)
+        - organizationId (string): (required)
         - peers (array): The list of VPN peers
         """
 
@@ -1408,12 +1337,12 @@ class Appliance(object):
 
         metadata = {
             'tags': ['appliance', 'configure', 'thirdPartyVPNPeers'],
-            'operation': 'updateOrganizationApplianceThirdPartyVPNPeers',
+            'operation': 'updateOrganizationApplianceThirdPartyVPNPeers'
         }
         resource = f'/organizations/{organizationId}/appliance/thirdPartyVPNPeers'
 
-        body_params = ['peers']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['peers', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
@@ -1421,13 +1350,12 @@ class Appliance(object):
         """
         **Return the firewall rules for an organization's site-to-site VPN**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-vpn-vpn-firewall-rules
-        
-        - organizationId (string)
+        - organizationId (string): (required)
         """
 
         metadata = {
             'tags': ['appliance', 'configure', 'vpn', 'vpnFirewallRules'],
-            'operation': 'getOrganizationApplianceVpnVpnFirewallRules',
+            'operation': 'getOrganizationApplianceVpnVpnFirewallRules'
         }
         resource = f'/organizations/{organizationId}/appliance/vpn/vpnFirewallRules'
 
@@ -1437,8 +1365,7 @@ class Appliance(object):
         """
         **Update the firewall rules of an organization's site-to-site VPN**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-appliance-vpn-vpn-firewall-rules
-        
-        - organizationId (string)
+        - organizationId (string): (required)
         - rules (array): An ordered array of the firewall rules (not including the default rule)
         - syslogDefaultRule (boolean): Log the special default rule (boolean value - enable only if you've configured a syslog server) (optional)
         """
@@ -1447,12 +1374,11 @@ class Appliance(object):
 
         metadata = {
             'tags': ['appliance', 'configure', 'vpn', 'vpnFirewallRules'],
-            'operation': 'updateOrganizationApplianceVpnVpnFirewallRules',
+            'operation': 'updateOrganizationApplianceVpnVpnFirewallRules'
         }
         resource = f'/organizations/{organizationId}/appliance/vpn/vpnFirewallRules'
 
-        body_params = ['rules', 'syslogDefaultRule']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['rules', 'syslogDefaultRule', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-

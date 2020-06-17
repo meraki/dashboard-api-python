@@ -8,7 +8,7 @@ from .api.networks import AsyncNetworks
 from .api.devices import AsyncDevices
 from .api.appliance import AsyncAppliance
 from .api.camera import AsyncCamera
-from .api.cellular_gateway import AsyncCellularGateway
+from .api.cellularGateway import AsyncCellularGateway
 from .api.insight import AsyncInsight
 from .api.sm import AsyncSm
 from .api.switch import AsyncSwitch
@@ -118,7 +118,7 @@ class AsyncDashboardAPI:
         self.devices = AsyncDevices(self._session)
         self.appliance = AsyncAppliance(self._session)
         self.camera = AsyncCamera(self._session)
-        self.cellulargateway = AsyncCellularGateway(self._session)
+        self.cellularGateway = AsyncCellularGateway(self._session)
         self.insight = AsyncInsight(self._session)
         self.switch = AsyncSwitch(self._session)
         self.sm = AsyncSm(self._session)

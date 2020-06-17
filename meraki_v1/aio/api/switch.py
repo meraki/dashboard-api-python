@@ -3,28 +3,26 @@ class AsyncSwitch:
         super().__init__()
         self._session = session
 
-    async def getDeviceSwitchPorts(self, serial: str):
+    def getDeviceSwitchPorts(self, serial: str):
         """
         **List the switch ports for a switch**
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-ports
-        
-        - serial (string)
+        - serial (string): (required)
         """
 
         metadata = {
             'tags': ['switch', 'configure', 'ports'],
-            'operation': 'getDeviceSwitchPorts',
+            'operation': 'getDeviceSwitchPorts'
         }
         resource = f'/devices/{serial}/switch/ports'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def cycleDeviceSwitchPorts(self, serial: str, ports: list):
+    def cycleDeviceSwitchPorts(self, serial: str, ports: list):
         """
         **Cycle a set of switch ports**
         https://developer.cisco.com/meraki/api-v1/#!cycle-device-switch-ports
-        
-        - serial (string)
+        - serial (string): (required)
         - ports (array): List of switch ports. Example: [1, 2-5, 1_MA-MOD-8X10G_1, 1_MA-MOD-8X10G_2-1_MA-MOD-8X10G_8]
         """
 
@@ -32,21 +30,20 @@ class AsyncSwitch:
 
         metadata = {
             'tags': ['switch', 'liveTools', 'ports'],
-            'operation': 'cycleDeviceSwitchPorts',
+            'operation': 'cycleDeviceSwitchPorts'
         }
         resource = f'/devices/{serial}/switch/ports/cycle'
 
-        body_params = ['ports']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['ports', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.post(metadata, resource, payload)
+        return self._session.post(metadata, resource, payload)
 
-    async def getDeviceSwitchPortsStatuses(self, serial: str, **kwargs):
+    def getDeviceSwitchPortsStatuses(self, serial: str, **kwargs):
         """
         **Return the status for all the ports of a switch**
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-ports-statuses
-        
-        - serial (string)
+        - serial (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
         """
@@ -55,21 +52,20 @@ class AsyncSwitch:
 
         metadata = {
             'tags': ['switch', 'monitor', 'ports', 'statuses'],
-            'operation': 'getDeviceSwitchPortsStatuses',
+            'operation': 'getDeviceSwitchPortsStatuses'
         }
         resource = f'/devices/{serial}/switch/ports/statuses'
 
-        query_params = ['t0', 'timespan']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['t0', 'timespan', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        return await self._session.get(metadata, resource, params)
+        return self._session.get(metadata, resource, params)
 
-    async def getDeviceSwitchPortsStatusesPackets(self, serial: str, **kwargs):
+    def getDeviceSwitchPortsStatusesPackets(self, serial: str, **kwargs):
         """
         **Return the packet counters for all the ports of a switch**
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-ports-statuses-packets
-        
-        - serial (string)
+        - serial (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 1 day from today.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 1 day. The default is 1 day.
         """
@@ -78,39 +74,37 @@ class AsyncSwitch:
 
         metadata = {
             'tags': ['switch', 'monitor', 'ports', 'statuses', 'packets'],
-            'operation': 'getDeviceSwitchPortsStatusesPackets',
+            'operation': 'getDeviceSwitchPortsStatusesPackets'
         }
         resource = f'/devices/{serial}/switch/ports/statuses/packets'
 
-        query_params = ['t0', 'timespan']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['t0', 'timespan', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        return await self._session.get(metadata, resource, params)
+        return self._session.get(metadata, resource, params)
 
-    async def getDeviceSwitchPort(self, serial: str, portId: str):
+    def getDeviceSwitchPort(self, serial: str, portId: str):
         """
         **Return a switch port**
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-port
-        
-        - serial (string)
-        - portId (string)
+        - serial (string): (required)
+        - portId (string): (required)
         """
 
         metadata = {
             'tags': ['switch', 'configure', 'ports'],
-            'operation': 'getDeviceSwitchPort',
+            'operation': 'getDeviceSwitchPort'
         }
         resource = f'/devices/{serial}/switch/ports/{portId}'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def updateDeviceSwitchPort(self, serial: str, portId: str, **kwargs):
+    def updateDeviceSwitchPort(self, serial: str, portId: str, **kwargs):
         """
         **Update a switch port**
         https://developer.cisco.com/meraki/api-v1/#!update-device-switch-port
-        
-        - serial (string)
-        - portId (string)
+        - serial (string): (required)
+        - portId (string): (required)
         - name (string): The name of the switch port
         - tags (array): The list of tags of the switch port
         - enabled (boolean): The status of the switch port
@@ -150,37 +144,144 @@ class AsyncSwitch:
 
         metadata = {
             'tags': ['switch', 'configure', 'ports'],
-            'operation': 'updateDeviceSwitchPort',
+            'operation': 'updateDeviceSwitchPort'
         }
         resource = f'/devices/{serial}/switch/ports/{portId}'
 
-        body_params = ['name', 'tags', 'enabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'poeEnabled', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macWhitelist', 'stickyMacWhitelist', 'stickyMacWhitelistLimit', 'stormControlEnabled']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['name', 'tags', 'enabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'poeEnabled', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macWhitelist', 'stickyMacWhitelist', 'stickyMacWhitelistLimit', 'stormControlEnabled', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.put(metadata, resource, payload)
+        return self._session.put(metadata, resource, payload)
 
-    async def getNetworkSwitchAccessControlLists(self, networkId: str):
+    def getDeviceSwitchRoutingInterfaces(self, serial: str):
+        """
+        **List layer 3 interfaces for a switch**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-switch-routing-interfaces
+        - serial (string): (required)
+        """
+
+        metadata = {
+            'tags': ['switch', 'configure', 'routing', 'interfaces'],
+            'operation': 'getDeviceSwitchRoutingInterfaces'
+        }
+        resource = f'/devices/{serial}/switch/routing/interfaces'
+
+        return self._session.get(metadata, resource)
+
+    def createDeviceSwitchRoutingInterface(self, serial: str, name: str, interfaceIp: str, vlanId: int, **kwargs):
+        """
+        **Create a layer 3 interface for a switch**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-switch-routing-interface
+        - serial (string): (required)
+        - name (string): A friendly name or description for the interface or VLAN.
+        - interfaceIp (string): The IP address this switch will use for layer 3 routing on this VLAN or subnet. This cannot be the same as the switch's management IP.
+        - vlanId (integer): The VLAN this routed interface is on. VLAN must be between 1 and 4094.
+        - subnet (string): The network that this routed interface is on, in CIDR notation (ex. 10.1.1.0/24).
+        - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are, 'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
+        - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route. This IP address must exist in a subnet with a routed interface.
+        - ospfSettings (object): The OSPF routing settings of the interface.
+        """
+
+        kwargs.update(locals())
+
+        if 'multicastRouting' in kwargs:
+            options = ['disabled', 'enabled', 'IGMP snooping querier']
+            assert kwargs['multicastRouting'] in options, f'''"multicastRouting" cannot be "{kwargs['multicastRouting']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['switch', 'configure', 'routing', 'interfaces'],
+            'operation': 'createDeviceSwitchRoutingInterface'
+        }
+        resource = f'/devices/{serial}/switch/routing/interfaces'
+
+        body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+
+    def getDeviceSwitchRoutingInterface(self, serial: str, interfaceId: str):
+        """
+        **Return a layer 3 interface for a switch**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-switch-routing-interface
+        - serial (string): (required)
+        - interfaceId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['switch', 'configure', 'routing', 'interfaces'],
+            'operation': 'getDeviceSwitchRoutingInterface'
+        }
+        resource = f'/devices/{serial}/switch/routing/interfaces/{interfaceId}'
+
+        return self._session.get(metadata, resource)
+
+    def updateDeviceSwitchRoutingInterface(self, serial: str, interfaceId: str, **kwargs):
+        """
+        **Update a layer 3 interface for a switch**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-switch-routing-interface
+        - serial (string): (required)
+        - interfaceId (string): (required)
+        - name (string): A friendly name or description for the interface or VLAN.
+        - subnet (string): The network that this routed interface is on, in CIDR notation (ex. 10.1.1.0/24).
+        - interfaceIp (string): The IP address this switch will use for layer 3 routing on this VLAN or subnet. This cannot be the same as the switch's management IP.
+        - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are, 'disabled', 'enabled' or 'IGMP snooping querier'.
+        - vlanId (integer): The VLAN this routed interface is on. VLAN must be between 1 and 4094.
+        - ospfSettings (object): The OSPF routing settings of the interface.
+        """
+
+        kwargs.update(locals())
+
+        if 'multicastRouting' in kwargs:
+            options = ['disabled', 'enabled', 'IGMP snooping querier']
+            assert kwargs['multicastRouting'] in options, f'''"multicastRouting" cannot be "{kwargs['multicastRouting']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['switch', 'configure', 'routing', 'interfaces'],
+            'operation': 'updateDeviceSwitchRoutingInterface'
+        }
+        resource = f'/devices/{serial}/switch/routing/interfaces/{interfaceId}'
+
+        body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'ospfSettings', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteDeviceSwitchRoutingInterface(self, serial: str, interfaceId: str):
+        """
+        **Delete a layer 3 interface from the switch**
+        https://developer.cisco.com/meraki/api-v1/#!delete-device-switch-routing-interface
+        - serial (string): (required)
+        - interfaceId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['switch', 'configure', 'routing', 'interfaces'],
+            'operation': 'deleteDeviceSwitchRoutingInterface'
+        }
+        resource = f'/devices/{serial}/switch/routing/interfaces/{interfaceId}'
+
+        return self._session.delete(metadata, resource)
+
+    def getNetworkSwitchAccessControlLists(self, networkId: str):
         """
         **Return the access control lists for a MS network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-access-control-lists
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['switch', 'configure', 'accessControlLists'],
-            'operation': 'getNetworkSwitchAccessControlLists',
+            'operation': 'getNetworkSwitchAccessControlLists'
         }
         resource = f'/networks/{networkId}/switch/accessControlLists'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def updateNetworkSwitchAccessControlLists(self, networkId: str, rules: list):
+    def updateNetworkSwitchAccessControlLists(self, networkId: str, rules: list):
         """
         **Update the access control lists for a MS network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-access-control-lists
-        
-        - networkId (string)
+        - networkId (string): (required)
         - rules (array): An ordered array of the access control list rules (not including the default rule). An empty array will clear the rules.
         """
 
@@ -188,53 +289,50 @@ class AsyncSwitch:
 
         metadata = {
             'tags': ['switch', 'configure', 'accessControlLists'],
-            'operation': 'updateNetworkSwitchAccessControlLists',
+            'operation': 'updateNetworkSwitchAccessControlLists'
         }
         resource = f'/networks/{networkId}/switch/accessControlLists'
 
-        body_params = ['rules']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['rules', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.put(metadata, resource, payload)
+        return self._session.put(metadata, resource, payload)
 
-    async def getNetworkSwitchAccessPolicies(self, networkId: str):
+    def getNetworkSwitchAccessPolicies(self, networkId: str):
         """
         **List the access policies for this network. Only valid for MS networks.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-access-policies
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['switch', 'configure', 'accessPolicies'],
-            'operation': 'getNetworkSwitchAccessPolicies',
+            'operation': 'getNetworkSwitchAccessPolicies'
         }
         resource = f'/networks/{networkId}/switch/accessPolicies'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def getNetworkSwitchDhcpServerPolicy(self, networkId: str):
+    def getNetworkSwitchDhcpServerPolicy(self, networkId: str):
         """
         **Return the DHCP server policy**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-dhcp-server-policy
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['switch', 'configure', 'dhcpServerPolicy'],
-            'operation': 'getNetworkSwitchDhcpServerPolicy',
+            'operation': 'getNetworkSwitchDhcpServerPolicy'
         }
         resource = f'/networks/{networkId}/switch/dhcpServerPolicy'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def updateNetworkSwitchDhcpServerPolicy(self, networkId: str, **kwargs):
+    def updateNetworkSwitchDhcpServerPolicy(self, networkId: str, **kwargs):
         """
         **Update the DHCP server policy**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-dhcp-server-policy
-        
-        - networkId (string)
+        - networkId (string): (required)
         - defaultPolicy (string): 'allow' or 'block' new DHCP servers. Default value is 'allow'.
         - allowedServers (array): List the MAC addresses of DHCP servers to permit on the network. Applicable only if defaultPolicy is set to block. An empty array will clear the entries.
         - blockedServers (array): List the MAC addresses of DHCP servers to block on the network. Applicable only if defaultPolicy is set to allow. An empty array will clear the entries.
@@ -248,37 +346,35 @@ class AsyncSwitch:
 
         metadata = {
             'tags': ['switch', 'configure', 'dhcpServerPolicy'],
-            'operation': 'updateNetworkSwitchDhcpServerPolicy',
+            'operation': 'updateNetworkSwitchDhcpServerPolicy'
         }
         resource = f'/networks/{networkId}/switch/dhcpServerPolicy'
 
-        body_params = ['defaultPolicy', 'allowedServers', 'blockedServers']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['defaultPolicy', 'allowedServers', 'blockedServers', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.put(metadata, resource, payload)
+        return self._session.put(metadata, resource, payload)
 
-    async def getNetworkSwitchDscpToCosMappings(self, networkId: str):
+    def getNetworkSwitchDscpToCosMappings(self, networkId: str):
         """
         **Return the DSCP to CoS mappings**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-dscp-to-cos-mappings
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['switch', 'configure', 'dscpToCosMappings'],
-            'operation': 'getNetworkSwitchDscpToCosMappings',
+            'operation': 'getNetworkSwitchDscpToCosMappings'
         }
         resource = f'/networks/{networkId}/switch/dscpToCosMappings'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def updateNetworkSwitchDscpToCosMappings(self, networkId: str, mappings: list):
+    def updateNetworkSwitchDscpToCosMappings(self, networkId: str, mappings: list):
         """
         **Update the DSCP to CoS mappings**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-dscp-to-cos-mappings
-        
-        - networkId (string)
+        - networkId (string): (required)
         - mappings (array): An array of DSCP to CoS mappings. An empty array will reset the mappings to default.
         """
 
@@ -286,37 +382,35 @@ class AsyncSwitch:
 
         metadata = {
             'tags': ['switch', 'configure', 'dscpToCosMappings'],
-            'operation': 'updateNetworkSwitchDscpToCosMappings',
+            'operation': 'updateNetworkSwitchDscpToCosMappings'
         }
         resource = f'/networks/{networkId}/switch/dscpToCosMappings'
 
-        body_params = ['mappings']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['mappings', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.put(metadata, resource, payload)
+        return self._session.put(metadata, resource, payload)
 
-    async def getNetworkSwitchLinkAggregations(self, networkId: str):
+    def getNetworkSwitchLinkAggregations(self, networkId: str):
         """
         **List link aggregation groups**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-link-aggregations
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['switch', 'configure', 'linkAggregations'],
-            'operation': 'getNetworkSwitchLinkAggregations',
+            'operation': 'getNetworkSwitchLinkAggregations'
         }
         resource = f'/networks/{networkId}/switch/linkAggregations'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def createNetworkSwitchLinkAggregation(self, networkId: str, **kwargs):
+    def createNetworkSwitchLinkAggregation(self, networkId: str, **kwargs):
         """
         **Create a link aggregation group**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-link-aggregation
-        
-        - networkId (string)
+        - networkId (string): (required)
         - switchPorts (array): Array of switch or stack ports for creating aggregation group. Minimum 2 and maximum 8 ports are supported.
         - switchProfilePorts (array): Array of switch profile ports for creating aggregation group. Minimum 2 and maximum 8 ports are supported.
         """
@@ -325,22 +419,21 @@ class AsyncSwitch:
 
         metadata = {
             'tags': ['switch', 'configure', 'linkAggregations'],
-            'operation': 'createNetworkSwitchLinkAggregation',
+            'operation': 'createNetworkSwitchLinkAggregation'
         }
         resource = f'/networks/{networkId}/switch/linkAggregations'
 
-        body_params = ['switchPorts', 'switchProfilePorts']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['switchPorts', 'switchProfilePorts', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.post(metadata, resource, payload)
+        return self._session.post(metadata, resource, payload)
 
-    async def updateNetworkSwitchLinkAggregation(self, networkId: str, linkAggregationId: str, **kwargs):
+    def updateNetworkSwitchLinkAggregation(self, networkId: str, linkAggregationId: str, **kwargs):
         """
         **Update a link aggregation group**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-link-aggregation
-        
-        - networkId (string)
-        - linkAggregationId (string)
+        - networkId (string): (required)
+        - linkAggregationId (string): (required)
         - switchPorts (array): Array of switch or stack ports for updating aggregation group. Minimum 2 and maximum 8 ports are supported.
         - switchProfilePorts (array): Array of switch profile ports for updating aggregation group. Minimum 2 and maximum 8 ports are supported.
         """
@@ -349,54 +442,51 @@ class AsyncSwitch:
 
         metadata = {
             'tags': ['switch', 'configure', 'linkAggregations'],
-            'operation': 'updateNetworkSwitchLinkAggregation',
+            'operation': 'updateNetworkSwitchLinkAggregation'
         }
         resource = f'/networks/{networkId}/switch/linkAggregations/{linkAggregationId}'
 
-        body_params = ['switchPorts', 'switchProfilePorts']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['switchPorts', 'switchProfilePorts', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.put(metadata, resource, payload)
+        return self._session.put(metadata, resource, payload)
 
-    async def deleteNetworkSwitchLinkAggregation(self, networkId: str, linkAggregationId: str):
+    def deleteNetworkSwitchLinkAggregation(self, networkId: str, linkAggregationId: str):
         """
         **Split a link aggregation group into separate ports**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-link-aggregation
-        
-        - networkId (string)
-        - linkAggregationId (string)
+        - networkId (string): (required)
+        - linkAggregationId (string): (required)
         """
 
         metadata = {
             'tags': ['switch', 'configure', 'linkAggregations'],
-            'operation': 'deleteNetworkSwitchLinkAggregation',
+            'operation': 'deleteNetworkSwitchLinkAggregation'
         }
         resource = f'/networks/{networkId}/switch/linkAggregations/{linkAggregationId}'
 
-        return await self._session.delete(metadata, resource)
+        return self._session.delete(metadata, resource)
 
-    async def getNetworkSwitchMtu(self, networkId: str):
+    def getNetworkSwitchMtu(self, networkId: str):
         """
         **Return the MTU configuration**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-mtu
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['switch', 'configure', 'mtu'],
-            'operation': 'getNetworkSwitchMtu',
+            'operation': 'getNetworkSwitchMtu'
         }
         resource = f'/networks/{networkId}/switch/mtu'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def updateNetworkSwitchMtu(self, networkId: str, **kwargs):
+    def updateNetworkSwitchMtu(self, networkId: str, **kwargs):
         """
         **Update the MTU configuration**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-mtu
-        
-        - networkId (string)
+        - networkId (string): (required)
         - defaultMtuSize (integer): MTU size for the entire network. Default value is 9578.
         - overrides (array): Override MTU size for individual switches or switch profiles. An empty array will clear overrides.
         """
@@ -405,37 +495,35 @@ class AsyncSwitch:
 
         metadata = {
             'tags': ['switch', 'configure', 'mtu'],
-            'operation': 'updateNetworkSwitchMtu',
+            'operation': 'updateNetworkSwitchMtu'
         }
         resource = f'/networks/{networkId}/switch/mtu'
 
-        body_params = ['defaultMtuSize', 'overrides']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['defaultMtuSize', 'overrides', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.put(metadata, resource, payload)
+        return self._session.put(metadata, resource, payload)
 
-    async def getNetworkSwitchPortSchedules(self, networkId: str):
+    def getNetworkSwitchPortSchedules(self, networkId: str):
         """
         **List switch port schedules**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-port-schedules
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['switch', 'configure', 'portSchedules'],
-            'operation': 'getNetworkSwitchPortSchedules',
+            'operation': 'getNetworkSwitchPortSchedules'
         }
         resource = f'/networks/{networkId}/switch/portSchedules'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def createNetworkSwitchPortSchedule(self, networkId: str, name: str, **kwargs):
+    def createNetworkSwitchPortSchedule(self, networkId: str, name: str, **kwargs):
         """
         **Add a switch port schedule**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-port-schedule
-        
-        - networkId (string)
+        - networkId (string): (required)
         - name (string): The name for your port schedule. Required
         - portSchedule (object):     The schedule for switch port scheduling. Schedules are applied to days of the week.
     When it's empty, default schedule with all days of a week are configured.
@@ -447,39 +535,37 @@ class AsyncSwitch:
 
         metadata = {
             'tags': ['switch', 'configure', 'portSchedules'],
-            'operation': 'createNetworkSwitchPortSchedule',
+            'operation': 'createNetworkSwitchPortSchedule'
         }
         resource = f'/networks/{networkId}/switch/portSchedules'
 
-        body_params = ['name', 'portSchedule']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['name', 'portSchedule', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.post(metadata, resource, payload)
+        return self._session.post(metadata, resource, payload)
 
-    async def deleteNetworkSwitchPortSchedule(self, networkId: str, portScheduleId: str):
+    def deleteNetworkSwitchPortSchedule(self, networkId: str, portScheduleId: str):
         """
         **Delete a switch port schedule**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-port-schedule
-        
-        - networkId (string)
-        - portScheduleId (string)
+        - networkId (string): (required)
+        - portScheduleId (string): (required)
         """
 
         metadata = {
             'tags': ['switch', 'configure', 'portSchedules'],
-            'operation': 'deleteNetworkSwitchPortSchedule',
+            'operation': 'deleteNetworkSwitchPortSchedule'
         }
         resource = f'/networks/{networkId}/switch/portSchedules/{portScheduleId}'
 
-        return await self._session.delete(metadata, resource)
+        return self._session.delete(metadata, resource)
 
-    async def updateNetworkSwitchPortSchedule(self, networkId: str, portScheduleId: str, **kwargs):
+    def updateNetworkSwitchPortSchedule(self, networkId: str, portScheduleId: str, **kwargs):
         """
         **Update a switch port schedule**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-port-schedule
-        
-        - networkId (string)
-        - portScheduleId (string)
+        - networkId (string): (required)
+        - portScheduleId (string): (required)
         - name (string): The name for your port schedule.
         - portSchedule (object):     The schedule for switch port scheduling. Schedules are applied to days of the week.
     When it's empty, default schedule with all days of a week are configured.
@@ -491,37 +577,35 @@ class AsyncSwitch:
 
         metadata = {
             'tags': ['switch', 'configure', 'portSchedules'],
-            'operation': 'updateNetworkSwitchPortSchedule',
+            'operation': 'updateNetworkSwitchPortSchedule'
         }
         resource = f'/networks/{networkId}/switch/portSchedules/{portScheduleId}'
 
-        body_params = ['name', 'portSchedule']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['name', 'portSchedule', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.put(metadata, resource, payload)
+        return self._session.put(metadata, resource, payload)
 
-    async def getNetworkSwitchQosRules(self, networkId: str):
+    def getNetworkSwitchQosRules(self, networkId: str):
         """
         **List quality of service rules**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-qos-rules
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['switch', 'configure', 'qosRules'],
-            'operation': 'getNetworkSwitchQosRules',
+            'operation': 'getNetworkSwitchQosRules'
         }
         resource = f'/networks/{networkId}/switch/qosRules'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def createNetworkSwitchQosRule(self, networkId: str, vlan: int, **kwargs):
+    def createNetworkSwitchQosRule(self, networkId: str, vlan: int, **kwargs):
         """
         **Add a quality of service rule**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-qos-rule
-        
-        - networkId (string)
+        - networkId (string): (required)
         - vlan (integer): The VLAN of the incoming packet. A null value will match any VLAN.
         - protocol (string): The protocol of the incoming packet. Can be one of "ANY", "TCP" or "UDP". Default value is "ANY"
         - srcPort (integer): The source port of the incoming packet. Applicable only if protocol is TCP or UDP.
@@ -539,37 +623,35 @@ class AsyncSwitch:
 
         metadata = {
             'tags': ['switch', 'configure', 'qosRules'],
-            'operation': 'createNetworkSwitchQosRule',
+            'operation': 'createNetworkSwitchQosRule'
         }
         resource = f'/networks/{networkId}/switch/qosRules'
 
-        body_params = ['vlan', 'protocol', 'srcPort', 'srcPortRange', 'dstPort', 'dstPortRange', 'dscp']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['vlan', 'protocol', 'srcPort', 'srcPortRange', 'dstPort', 'dstPortRange', 'dscp', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.post(metadata, resource, payload)
+        return self._session.post(metadata, resource, payload)
 
-    async def getNetworkSwitchQosRulesOrder(self, networkId: str):
+    def getNetworkSwitchQosRulesOrder(self, networkId: str):
         """
         **Return the quality of service rule IDs by order in which they will be processed by the switch**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-qos-rules-order
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['switch', 'configure', 'qosRules', 'order'],
-            'operation': 'getNetworkSwitchQosRulesOrder',
+            'operation': 'getNetworkSwitchQosRulesOrder'
         }
         resource = f'/networks/{networkId}/switch/qosRules/order'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def updateNetworkSwitchQosRulesOrder(self, networkId: str, ruleIds: list):
+    def updateNetworkSwitchQosRulesOrder(self, networkId: str, ruleIds: list):
         """
         **Update the order in which the rules should be processed by the switch**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-qos-rules-order
-        
-        - networkId (string)
+        - networkId (string): (required)
         - ruleIds (array): A list of quality of service rule IDs arranged in order in which they should be processed by the switch.
         """
 
@@ -577,56 +659,53 @@ class AsyncSwitch:
 
         metadata = {
             'tags': ['switch', 'configure', 'qosRules', 'order'],
-            'operation': 'updateNetworkSwitchQosRulesOrder',
+            'operation': 'updateNetworkSwitchQosRulesOrder'
         }
         resource = f'/networks/{networkId}/switch/qosRules/order'
 
-        body_params = ['ruleIds']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['ruleIds', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.put(metadata, resource, payload)
+        return self._session.put(metadata, resource, payload)
 
-    async def getNetworkSwitchQosRule(self, networkId: str, qosRuleId: str):
+    def getNetworkSwitchQosRule(self, networkId: str, qosRuleId: str):
         """
         **Return a quality of service rule**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-qos-rule
-        
-        - networkId (string)
-        - qosRuleId (string)
+        - networkId (string): (required)
+        - qosRuleId (string): (required)
         """
 
         metadata = {
             'tags': ['switch', 'configure', 'qosRules'],
-            'operation': 'getNetworkSwitchQosRule',
+            'operation': 'getNetworkSwitchQosRule'
         }
         resource = f'/networks/{networkId}/switch/qosRules/{qosRuleId}'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def deleteNetworkSwitchQosRule(self, networkId: str, qosRuleId: str):
+    def deleteNetworkSwitchQosRule(self, networkId: str, qosRuleId: str):
         """
         **Delete a quality of service rule**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-qos-rule
-        
-        - networkId (string)
-        - qosRuleId (string)
+        - networkId (string): (required)
+        - qosRuleId (string): (required)
         """
 
         metadata = {
             'tags': ['switch', 'configure', 'qosRules'],
-            'operation': 'deleteNetworkSwitchQosRule',
+            'operation': 'deleteNetworkSwitchQosRule'
         }
         resource = f'/networks/{networkId}/switch/qosRules/{qosRuleId}'
 
-        return await self._session.delete(metadata, resource)
+        return self._session.delete(metadata, resource)
 
-    async def updateNetworkSwitchQosRule(self, networkId: str, qosRuleId: str, **kwargs):
+    def updateNetworkSwitchQosRule(self, networkId: str, qosRuleId: str, **kwargs):
         """
         **Update a quality of service rule**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-qos-rule
-        
-        - networkId (string)
-        - qosRuleId (string)
+        - networkId (string): (required)
+        - qosRuleId (string): (required)
         - vlan (integer): The VLAN of the incoming packet. A null value will match any VLAN.
         - protocol (string): The protocol of the incoming packet. Can be one of "ANY", "TCP" or "UDP". Default value is "ANY".
         - srcPort (integer): The source port of the incoming packet. Applicable only if protocol is TCP or UDP.
@@ -644,37 +723,35 @@ class AsyncSwitch:
 
         metadata = {
             'tags': ['switch', 'configure', 'qosRules'],
-            'operation': 'updateNetworkSwitchQosRule',
+            'operation': 'updateNetworkSwitchQosRule'
         }
         resource = f'/networks/{networkId}/switch/qosRules/{qosRuleId}'
 
-        body_params = ['vlan', 'protocol', 'srcPort', 'srcPortRange', 'dstPort', 'dstPortRange', 'dscp']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['vlan', 'protocol', 'srcPort', 'srcPortRange', 'dstPort', 'dstPortRange', 'dscp', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.put(metadata, resource, payload)
+        return self._session.put(metadata, resource, payload)
 
-    async def getNetworkSwitchRoutingMulticast(self, networkId: str):
+    def getNetworkSwitchRoutingMulticast(self, networkId: str):
         """
         **Return multicast settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-routing-multicast
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['switch', 'configure', 'routing', 'multicast'],
-            'operation': 'getNetworkSwitchRoutingMulticast',
+            'operation': 'getNetworkSwitchRoutingMulticast'
         }
         resource = f'/networks/{networkId}/switch/routing/multicast'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def updateNetworkSwitchRoutingMulticast(self, networkId: str, **kwargs):
+    def updateNetworkSwitchRoutingMulticast(self, networkId: str, **kwargs):
         """
         **Update multicast settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-routing-multicast
-        
-        - networkId (string)
+        - networkId (string): (required)
         - defaultSettings (object): Default multicast setting for entire network. IGMP snooping and Flood unknown multicast traffic settings are enabled by default.
         - overrides (array): Array of paired switches/stacks/profiles and corresponding multicast settings. An empty array will clear the multicast settings.
         """
@@ -683,37 +760,35 @@ class AsyncSwitch:
 
         metadata = {
             'tags': ['switch', 'configure', 'routing', 'multicast'],
-            'operation': 'updateNetworkSwitchRoutingMulticast',
+            'operation': 'updateNetworkSwitchRoutingMulticast'
         }
         resource = f'/networks/{networkId}/switch/routing/multicast'
 
-        body_params = ['defaultSettings', 'overrides']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['defaultSettings', 'overrides', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.put(metadata, resource, payload)
+        return self._session.put(metadata, resource, payload)
 
-    async def getNetworkSwitchSettings(self, networkId: str):
+    def getNetworkSwitchSettings(self, networkId: str):
         """
         **Returns the switch network settings**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-settings
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['switch', 'configure', 'settings'],
-            'operation': 'getNetworkSwitchSettings',
+            'operation': 'getNetworkSwitchSettings'
         }
         resource = f'/networks/{networkId}/switch/settings'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def updateNetworkSwitchSettings(self, networkId: str, **kwargs):
+    def updateNetworkSwitchSettings(self, networkId: str, **kwargs):
         """
         **Update switch network settings**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-settings
-        
-        - networkId (string)
+        - networkId (string): (required)
         - vlan (integer): Management VLAN
         - useCombinedPower (boolean): The use Combined Power as the default behavior of secondary power supplies on supported devices.
         - powerExceptions (array): Exceptions on a per switch basis to "useCombinedPower"
@@ -723,37 +798,35 @@ class AsyncSwitch:
 
         metadata = {
             'tags': ['switch', 'configure', 'settings'],
-            'operation': 'updateNetworkSwitchSettings',
+            'operation': 'updateNetworkSwitchSettings'
         }
         resource = f'/networks/{networkId}/switch/settings'
 
-        body_params = ['vlan', 'useCombinedPower', 'powerExceptions']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['vlan', 'useCombinedPower', 'powerExceptions', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.put(metadata, resource, payload)
+        return self._session.put(metadata, resource, payload)
 
-    async def getNetworkSwitchStormControl(self, networkId: str):
+    def getNetworkSwitchStormControl(self, networkId: str):
         """
         **Return the storm control configuration for a switch network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-storm-control
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['switch', 'configure', 'stormControl'],
-            'operation': 'getNetworkSwitchStormControl',
+            'operation': 'getNetworkSwitchStormControl'
         }
         resource = f'/networks/{networkId}/switch/stormControl'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def updateNetworkSwitchStormControl(self, networkId: str, **kwargs):
+    def updateNetworkSwitchStormControl(self, networkId: str, **kwargs):
         """
         **Update the storm control configuration for a switch network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-storm-control
-        
-        - networkId (string)
+        - networkId (string): (required)
         - broadcastThreshold (integer): Percentage (1 to 99) of total available port bandwidth for broadcast traffic type. Default value 100 percent rate is to clear the configuration.
         - multicastThreshold (integer): Percentage (1 to 99) of total available port bandwidth for multicast traffic type. Default value 100 percent rate is to clear the configuration.
         - unknownUnicastThreshold (integer): Percentage (1 to 99) of total available port bandwidth for unknown unicast (dlf-destination lookup failure) traffic type. Default value 100 percent rate is to clear the configuration.
@@ -763,37 +836,35 @@ class AsyncSwitch:
 
         metadata = {
             'tags': ['switch', 'configure', 'stormControl'],
-            'operation': 'updateNetworkSwitchStormControl',
+            'operation': 'updateNetworkSwitchStormControl'
         }
         resource = f'/networks/{networkId}/switch/stormControl'
 
-        body_params = ['broadcastThreshold', 'multicastThreshold', 'unknownUnicastThreshold']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['broadcastThreshold', 'multicastThreshold', 'unknownUnicastThreshold', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.put(metadata, resource, payload)
+        return self._session.put(metadata, resource, payload)
 
-    async def getNetworkSwitchStp(self, networkId: str):
+    def getNetworkSwitchStp(self, networkId: str):
         """
         **Returns STP settings**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-stp
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['switch', 'configure', 'stp'],
-            'operation': 'getNetworkSwitchStp',
+            'operation': 'getNetworkSwitchStp'
         }
         resource = f'/networks/{networkId}/switch/stp'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def updateNetworkSwitchStp(self, networkId: str, **kwargs):
+    def updateNetworkSwitchStp(self, networkId: str, **kwargs):
         """
         **Updates STP settings**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-stp
-        
-        - networkId (string)
+        - networkId (string): (required)
         - rstpEnabled (boolean): The spanning tree protocol status in network
         - stpBridgePriority (array): STP bridge priority for switches/stacks or switch profiles. An empty array will clear the STP bridge priority settings.
         """
@@ -802,37 +873,35 @@ class AsyncSwitch:
 
         metadata = {
             'tags': ['switch', 'configure', 'stp'],
-            'operation': 'updateNetworkSwitchStp',
+            'operation': 'updateNetworkSwitchStp'
         }
         resource = f'/networks/{networkId}/switch/stp'
 
-        body_params = ['rstpEnabled', 'stpBridgePriority']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['rstpEnabled', 'stpBridgePriority', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.put(metadata, resource, payload)
+        return self._session.put(metadata, resource, payload)
 
-    async def getNetworkSwitchSwitchStacks(self, networkId: str):
+    def getNetworkSwitchSwitchStacks(self, networkId: str):
         """
         **List the switch stacks in a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-switch-stacks
-        
-        - networkId (string)
+        - networkId (string): (required)
         """
 
         metadata = {
             'tags': ['switch', 'configure', 'switchStacks'],
-            'operation': 'getNetworkSwitchSwitchStacks',
+            'operation': 'getNetworkSwitchSwitchStacks'
         }
         resource = f'/networks/{networkId}/switch/switchStacks'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def createNetworkSwitchSwitchStack(self, networkId: str, name: str, serials: list):
+    def createNetworkSwitchSwitchStack(self, networkId: str, name: str, serials: list):
         """
         **Create a stack**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-switch-stack
-        
-        - networkId (string)
+        - networkId (string): (required)
         - name (string): The name of the new stack
         - serials (array): An array of switch serials to be added into the new stack
         """
@@ -841,56 +910,53 @@ class AsyncSwitch:
 
         metadata = {
             'tags': ['switch', 'configure', 'switchStacks'],
-            'operation': 'createNetworkSwitchSwitchStack',
+            'operation': 'createNetworkSwitchSwitchStack'
         }
         resource = f'/networks/{networkId}/switch/switchStacks'
 
-        body_params = ['name', 'serials']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['name', 'serials', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.post(metadata, resource, payload)
+        return self._session.post(metadata, resource, payload)
 
-    async def getNetworkSwitchSwitchStack(self, networkId: str, switchStackId: str):
+    def getNetworkSwitchSwitchStack(self, networkId: str, switchStackId: str):
         """
         **Show a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-switch-stack
-        
-        - networkId (string)
-        - switchStackId (string)
+        - networkId (string): (required)
+        - switchStackId (string): (required)
         """
 
         metadata = {
             'tags': ['switch', 'configure', 'switchStacks'],
-            'operation': 'getNetworkSwitchSwitchStack',
+            'operation': 'getNetworkSwitchSwitchStack'
         }
         resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def deleteNetworkSwitchSwitchStack(self, networkId: str, switchStackId: str):
+    def deleteNetworkSwitchSwitchStack(self, networkId: str, switchStackId: str):
         """
         **Delete a stack**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-switch-stack
-        
-        - networkId (string)
-        - switchStackId (string)
+        - networkId (string): (required)
+        - switchStackId (string): (required)
         """
 
         metadata = {
             'tags': ['switch', 'configure', 'switchStacks'],
-            'operation': 'deleteNetworkSwitchSwitchStack',
+            'operation': 'deleteNetworkSwitchSwitchStack'
         }
         resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}'
 
-        return await self._session.delete(metadata, resource)
+        return self._session.delete(metadata, resource)
 
-    async def addNetworkSwitchSwitchStack(self, networkId: str, switchStackId: str, serial: str):
+    def addNetworkSwitchSwitchStack(self, networkId: str, switchStackId: str, serial: str):
         """
         **Add a switch to a stack**
         https://developer.cisco.com/meraki/api-v1/#!add-network-switch-switch-stack
-        
-        - networkId (string)
-        - switchStackId (string)
+        - networkId (string): (required)
+        - switchStackId (string): (required)
         - serial (string): The serial of the switch to be added
         """
 
@@ -898,22 +964,21 @@ class AsyncSwitch:
 
         metadata = {
             'tags': ['switch', 'configure', 'switchStacks'],
-            'operation': 'addNetworkSwitchSwitchStack',
+            'operation': 'addNetworkSwitchSwitchStack'
         }
         resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}/add'
 
-        body_params = ['serial']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['serial', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.post(metadata, resource, payload)
+        return self._session.post(metadata, resource, payload)
 
-    async def removeNetworkSwitchSwitchStack(self, networkId: str, switchStackId: str, serial: str):
+    def removeNetworkSwitchSwitchStack(self, networkId: str, switchStackId: str, serial: str):
         """
         **Remove a switch from a stack**
         https://developer.cisco.com/meraki/api-v1/#!remove-network-switch-switch-stack
-        
-        - networkId (string)
-        - switchStackId (string)
+        - networkId (string): (required)
+        - switchStackId (string): (required)
         - serial (string): The serial of the switch to be removed
         """
 
@@ -921,78 +986,188 @@ class AsyncSwitch:
 
         metadata = {
             'tags': ['switch', 'configure', 'switchStacks'],
-            'operation': 'removeNetworkSwitchSwitchStack',
+            'operation': 'removeNetworkSwitchSwitchStack'
         }
         resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}/remove'
 
-        body_params = ['serial']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['serial', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.post(metadata, resource, payload)
+        return self._session.post(metadata, resource, payload)
 
-    async def getOrganizationConfigTemplateSwitchProfiles(self, organizationId: str, configTemplateId: str):
+    def getNetworkSwitchSwitchStackRoutingInterfaces(self, networkId: str, switchStackId: str):
+        """
+        **List layer 3 interfaces for a switch stack**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-switch-stack-routing-interfaces
+        - networkId (string): (required)
+        - switchStackId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['switch', 'configure', 'switchStacks', 'routing', 'interfaces'],
+            'operation': 'getNetworkSwitchSwitchStackRoutingInterfaces'
+        }
+        resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}/routing/interfaces'
+
+        return self._session.get(metadata, resource)
+
+    def createNetworkSwitchSwitchStackRoutingInterface(self, networkId: str, switchStackId: str, name: str, subnet: str, interfaceIp: str, vlanId: int, **kwargs):
+        """
+        **Create a layer 3 interface for a switch stack**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-switch-switch-stack-routing-interface
+        - networkId (string): (required)
+        - switchStackId (string): (required)
+        - name (string): A friendly name or description for the interface or VLAN.
+        - subnet (string): The network that this routed interface is on, in CIDR notation (ex. 10.1.1.0/24).
+        - interfaceIp (string): The IP address this switch stack will use for layer 3 routing on this VLAN or subnet. This cannot be the same as the switch's management IP.
+        - vlanId (integer): The VLAN this routed interface is on. VLAN must be between 1 and 4094.
+        - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are, 'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
+        - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route. This IP address must exist in a subnet with a routed interface.
+        - ospfSettings (object): The OSPF routing settings of the interface.
+        """
+
+        kwargs.update(locals())
+
+        if 'multicastRouting' in kwargs:
+            options = ['disabled', 'enabled', 'IGMP snooping querier']
+            assert kwargs['multicastRouting'] in options, f'''"multicastRouting" cannot be "{kwargs['multicastRouting']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['switch', 'configure', 'switchStacks', 'routing', 'interfaces'],
+            'operation': 'createNetworkSwitchSwitchStackRoutingInterface'
+        }
+        resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}/routing/interfaces'
+
+        body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+
+    def getNetworkSwitchSwitchStackRoutingInterface(self, networkId: str, switchStackId: str, interfaceId: str):
+        """
+        **Return a layer 3 interface from a switch stack**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-switch-stack-routing-interface
+        - networkId (string): (required)
+        - switchStackId (string): (required)
+        - interfaceId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['switch', 'configure', 'switchStacks', 'routing', 'interfaces'],
+            'operation': 'getNetworkSwitchSwitchStackRoutingInterface'
+        }
+        resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}/routing/interfaces/{interfaceId}'
+
+        return self._session.get(metadata, resource)
+
+    def updateNetworkSwitchSwitchStackRoutingInterface(self, networkId: str, switchStackId: str, interfaceId: str, **kwargs):
+        """
+        **Update a layer 3 interface for a switch stack**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-switch-stack-routing-interface
+        - networkId (string): (required)
+        - switchStackId (string): (required)
+        - interfaceId (string): (required)
+        - name (string): A friendly name or description for the interface or VLAN.
+        - subnet (string): The network that this routed interface is on, in CIDR notation (ex. 10.1.1.0/24).
+        - interfaceIp (string): The IP address this switch stack will use for layer 3 routing on this VLAN or subnet. This cannot be the same as the switch's management IP.
+        - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are, 'disabled', 'enabled' or 'IGMP snooping querier'.
+        - vlanId (integer): The VLAN this routed interface is on. VLAN must be between 1 and 4094.
+        - ospfSettings (object): The OSPF routing settings of the interface.
+        """
+
+        kwargs.update(locals())
+
+        if 'multicastRouting' in kwargs:
+            options = ['disabled', 'enabled', 'IGMP snooping querier']
+            assert kwargs['multicastRouting'] in options, f'''"multicastRouting" cannot be "{kwargs['multicastRouting']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['switch', 'configure', 'switchStacks', 'routing', 'interfaces'],
+            'operation': 'updateNetworkSwitchSwitchStackRoutingInterface'
+        }
+        resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}/routing/interfaces/{interfaceId}'
+
+        body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'ospfSettings', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteNetworkSwitchSwitchStackRoutingInterface(self, networkId: str, switchStackId: str, interfaceId: str):
+        """
+        **Delete a layer 3 interface from a switch stack**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-switch-stack-routing-interface
+        - networkId (string): (required)
+        - switchStackId (string): (required)
+        - interfaceId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['switch', 'configure', 'switchStacks', 'routing', 'interfaces'],
+            'operation': 'deleteNetworkSwitchSwitchStackRoutingInterface'
+        }
+        resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}/routing/interfaces/{interfaceId}'
+
+        return self._session.delete(metadata, resource)
+
+    def getOrganizationConfigTemplateSwitchProfiles(self, organizationId: str, configTemplateId: str):
         """
         **List the switch profiles for your switch template configuration**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-config-template-switch-profiles
-        
-        - organizationId (string)
-        - configTemplateId (string)
+        - organizationId (string): (required)
+        - configTemplateId (string): (required)
         """
 
         metadata = {
             'tags': ['switch', 'configure', 'configTemplates', 'profiles'],
-            'operation': 'getOrganizationConfigTemplateSwitchProfiles',
+            'operation': 'getOrganizationConfigTemplateSwitchProfiles'
         }
         resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def getOrganizationConfigTemplateSwitchProfilePorts(self, organizationId: str, configTemplateId: str, profileId: str):
+    def getOrganizationConfigTemplateSwitchProfilePorts(self, organizationId: str, configTemplateId: str, profileId: str):
         """
         **Return all the ports of a switch profile**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-config-template-switch-profile-ports
-        
-        - organizationId (string)
-        - configTemplateId (string)
-        - profileId (string)
+        - organizationId (string): (required)
+        - configTemplateId (string): (required)
+        - profileId (string): (required)
         """
 
         metadata = {
             'tags': ['switch', 'configure', 'configTemplates', 'profiles', 'ports'],
-            'operation': 'getOrganizationConfigTemplateSwitchProfilePorts',
+            'operation': 'getOrganizationConfigTemplateSwitchProfilePorts'
         }
         resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles/{profileId}/ports'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def getOrganizationConfigTemplateSwitchProfilePort(self, organizationId: str, configTemplateId: str, profileId: str, portId: str):
+    def getOrganizationConfigTemplateSwitchProfilePort(self, organizationId: str, configTemplateId: str, profileId: str, portId: str):
         """
         **Return a switch profile port**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-config-template-switch-profile-port
-        
-        - organizationId (string)
-        - configTemplateId (string)
-        - profileId (string)
-        - portId (string)
+        - organizationId (string): (required)
+        - configTemplateId (string): (required)
+        - profileId (string): (required)
+        - portId (string): (required)
         """
 
         metadata = {
             'tags': ['switch', 'configure', 'configTemplates', 'profiles', 'ports'],
-            'operation': 'getOrganizationConfigTemplateSwitchProfilePort',
+            'operation': 'getOrganizationConfigTemplateSwitchProfilePort'
         }
         resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles/{profileId}/ports/{portId}'
 
-        return await self._session.get(metadata, resource)
+        return self._session.get(metadata, resource)
 
-    async def updateOrganizationConfigTemplateSwitchProfilePort(self, organizationId: str, configTemplateId: str, profileId: str, portId: str, **kwargs):
+    def updateOrganizationConfigTemplateSwitchProfilePort(self, organizationId: str, configTemplateId: str, profileId: str, portId: str, **kwargs):
         """
         **Update a switch profile port**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-config-template-switch-profile-port
-        
-        - organizationId (string)
-        - configTemplateId (string)
-        - profileId (string)
-        - portId (string)
+        - organizationId (string): (required)
+        - configTemplateId (string): (required)
+        - profileId (string): (required)
+        - portId (string): (required)
         - name (string): The name of the switch profile port
         - tags (array): The list of tags of the switch profile port
         - enabled (boolean): The status of the switch profile port
@@ -1032,12 +1207,11 @@ class AsyncSwitch:
 
         metadata = {
             'tags': ['switch', 'configure', 'configTemplates', 'profiles', 'ports'],
-            'operation': 'updateOrganizationConfigTemplateSwitchProfilePort',
+            'operation': 'updateOrganizationConfigTemplateSwitchProfilePort'
         }
         resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles/{profileId}/ports/{portId}'
 
-        body_params = ['name', 'tags', 'enabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'poeEnabled', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macWhitelist', 'stickyMacWhitelist', 'stickyMacWhitelistLimit', 'stormControlEnabled']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['name', 'tags', 'enabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'poeEnabled', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macWhitelist', 'stickyMacWhitelist', 'stickyMacWhitelistLimit', 'stormControlEnabled', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return await self._session.put(metadata, resource, payload)
-
+        return self._session.put(metadata, resource, payload)
