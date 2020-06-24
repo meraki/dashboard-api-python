@@ -7,6 +7,7 @@ class AsyncInsight:
         """
         **List the monitored media servers for this organization. Only valid for organizations with Meraki Insight.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-insight-monitored-media-servers
+
         - organizationId (string): (required)
         """
 
@@ -22,6 +23,7 @@ class AsyncInsight:
         """
         **Add a media server to be monitored for this organization. Only valid for organizations with Meraki Insight.**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-insight-monitored-media-server
+
         - organizationId (string): (required)
         - name (string): The name of the VoIP provider
         - address (string): The IP address (IPv4 only) or hostname of the media server to monitor
@@ -44,6 +46,7 @@ class AsyncInsight:
         """
         **Return a monitored media server for this organization. Only valid for organizations with Meraki Insight.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-insight-monitored-media-server
+
         - organizationId (string): (required)
         - monitoredMediaServerId (string): (required)
         """
@@ -60,6 +63,7 @@ class AsyncInsight:
         """
         **Update a monitored media server for this organization. Only valid for organizations with Meraki Insight.**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-insight-monitored-media-server
+
         - organizationId (string): (required)
         - monitoredMediaServerId (string): (required)
         - name (string): The name of the VoIP provider
@@ -83,6 +87,7 @@ class AsyncInsight:
         """
         **Delete a monitored media server from this organization. Only valid for organizations with Meraki Insight.**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-insight-monitored-media-server
+
         - organizationId (string): (required)
         - monitoredMediaServerId (string): (required)
         """

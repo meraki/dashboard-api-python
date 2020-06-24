@@ -79,6 +79,7 @@ class AsyncRestSession:
         super().__init__()
 
         # Initialize attributes and properties
+        self._version = __version__
         self._api_key = str(api_key)
         self._base_url = str(base_url)
         self._single_request_timeout = single_request_timeout
@@ -107,7 +108,7 @@ class AsyncRestSession:
         self._headers = {
             "Authorization": "Bearer " + self._api_key,
             "Content-Type": "application/json",
-            "User-Agent": f"python-meraki/aio-{__version__} " + user_agent_extended(self._be_geo_id, self._caller),
+            "User-Agent": f"python-meraki/aio-{self._version} " + user_agent_extended(self._be_geo_id, self._caller),
         }
         if self._certificate_path:
             self._sslcontext = ssl.create_default_context()
@@ -149,7 +150,7 @@ class AsyncRestSession:
         kwargs.setdefault("timeout", self._single_request_timeout)
 
         # Ensure proper base URL
-        if "meraki.com" in url:
+        if "meraki.com" in url or "meraki.cn" in url:
             abs_url = url
         else:
             abs_url = self._base_url + url
@@ -203,6 +204,8 @@ class AsyncRestSession:
                 elif 300 <= status < 400:
                     abs_url = response.headers["Location"]
                     substring = "meraki.com/api/v"
+                    if substring not in abs_url:
+                        substring = "meraki.cn/api/v"
                     self._base_url = abs_url[
                         : abs_url.find(substring) + len(substring) + 1
                     ]

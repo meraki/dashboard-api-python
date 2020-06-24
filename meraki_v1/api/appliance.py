@@ -7,6 +7,7 @@ class Appliance(object):
         """
         **Return the DHCP subnet information for an appliance**
         https://developer.cisco.com/meraki/api-v1/#!get-device-appliance-dhcp-subnets
+
         - serial (string): (required)
         """
 
@@ -22,6 +23,7 @@ class Appliance(object):
         """
         **Return the performance score for a single device. Only primary MX devices supported. If no data is available, a 204 error code is returned.**
         https://developer.cisco.com/meraki/api-v1/#!get-device-appliance-performance
+
         - serial (string): (required)
         """
 
@@ -37,6 +39,7 @@ class Appliance(object):
         """
         **List the security events for a client. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-client-security-events
+
         - networkId (string): (required)
         - clientId (string): (required)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
@@ -71,6 +74,7 @@ class Appliance(object):
         """
         **Return the connectivity testing destinations for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-connectivity-monitoring-destinations
+
         - networkId (string): (required)
         """
 
@@ -86,6 +90,7 @@ class Appliance(object):
         """
         **Update the connectivity testing destinations for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-connectivity-monitoring-destinations
+
         - networkId (string): (required)
         - destinations (array): The list of connectivity monitoring destinations
         """
@@ -107,6 +112,7 @@ class Appliance(object):
         """
         **Return the content filtering settings for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-content-filtering
+
         - networkId (string): (required)
         """
 
@@ -122,6 +128,7 @@ class Appliance(object):
         """
         **Update the content filtering settings for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-content-filtering
+
         - networkId (string): (required)
         - allowedUrlPatterns (array): A whitelist of URL patterns to allow
         - blockedUrlPatterns (array): A blacklist of URL patterns to block
@@ -150,6 +157,7 @@ class Appliance(object):
         """
         **List all available content filtering categories for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-content-filtering-categories
+
         - networkId (string): (required)
         """
 
@@ -165,6 +173,7 @@ class Appliance(object):
         """
         **Return the cellular firewall rules for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-firewall-cellular-firewall-rules
+
         - networkId (string): (required)
         """
 
@@ -180,6 +189,7 @@ class Appliance(object):
         """
         **Update the cellular firewall rules of an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-firewall-cellular-firewall-rules
+
         - networkId (string): (required)
         - rules (array): An ordered array of the firewall rules (not including the default rule)
         """
@@ -201,6 +211,7 @@ class Appliance(object):
         """
         **List the appliance services and their accessibility rules**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-firewall-firewalled-services
+
         - networkId (string): (required)
         """
 
@@ -216,6 +227,7 @@ class Appliance(object):
         """
         **Return the accessibility settings of the given service ('ICMP', 'web', or 'SNMP')**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-firewall-firewalled-service
+
         - networkId (string): (required)
         - service (string): (required)
         """
@@ -228,10 +240,39 @@ class Appliance(object):
 
         return self._session.get(metadata, resource)
 
+    def updateNetworkApplianceFirewallFirewalledService(self, networkId: str, service: str, access: str, **kwargs):
+        """
+        **Updates the accessibility settings for the given service ('ICMP', 'web', or 'SNMP')**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-firewall-firewalled-service
+
+        - networkId (string): (required)
+        - service (string): (required)
+        - access (string): A string indicating the rule for which IPs are allowed to use the specified service. Acceptable values are "blocked" (no remote IPs can access the service), "restricted" (only whitelisted IPs can access the service), and "unrestriced" (any remote IP can access the service). This field is required
+        - allowedIps (array): An array of whitelisted IPs that can access the service. This field is required if "access" is set to "restricted". Otherwise this field is ignored
+        """
+
+        kwargs.update(locals())
+
+        if 'access' in kwargs:
+            options = ['blocked', 'restricted', 'unrestricted']
+            assert kwargs['access'] in options, f'''"access" cannot be "{kwargs['access']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'firewall', 'firewalledServices'],
+            'operation': 'updateNetworkApplianceFirewallFirewalledService'
+        }
+        resource = f'/networks/{networkId}/appliance/firewall/firewalledServices/{service}'
+
+        body_params = ['access', 'allowedIps', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
     def getNetworkApplianceFirewallInboundFirewallRules(self, networkId: str):
         """
         **Return the inbound firewall rules for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-firewall-inbound-firewall-rules
+
         - networkId (string): (required)
         """
 
@@ -247,6 +288,7 @@ class Appliance(object):
         """
         **Update the inbound firewall rules of an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-firewall-inbound-firewall-rules
+
         - networkId (string): (required)
         - rules (array): An ordered array of the firewall rules (not including the default rule)
         - syslogDefaultRule (boolean): Log the special default rule (boolean value - enable only if you've configured a syslog server) (optional)
@@ -269,6 +311,7 @@ class Appliance(object):
         """
         **Return the L3 firewall rules for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-firewall-l-3-firewall-rules
+
         - networkId (string): (required)
         """
 
@@ -284,6 +327,7 @@ class Appliance(object):
         """
         **Update the L3 firewall rules of an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-firewall-l-3-firewall-rules
+
         - networkId (string): (required)
         - rules (array): An ordered array of the firewall rules (not including the default rule)
         - syslogDefaultRule (boolean): Log the special default rule (boolean value - enable only if you've configured a syslog server) (optional)
@@ -306,6 +350,7 @@ class Appliance(object):
         """
         **List the MX L7 firewall rules for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-firewall-l-7-firewall-rules
+
         - networkId (string): (required)
         """
 
@@ -321,6 +366,7 @@ class Appliance(object):
         """
         **Update the MX L7 firewall rules for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-firewall-l-7-firewall-rules
+
         - networkId (string): (required)
         - rules (array): An ordered array of the MX L7 firewall rules
         """
@@ -342,6 +388,7 @@ class Appliance(object):
         """
         **Return the L7 firewall application categories and their associated applications for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-firewall-l-7-firewall-rules-application-categories
+
         - networkId (string): (required)
         """
 
@@ -357,6 +404,7 @@ class Appliance(object):
         """
         **Return the 1:Many NAT mapping rules for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-firewall-one-to-many-nat-rules
+
         - networkId (string): (required)
         """
 
@@ -372,6 +420,7 @@ class Appliance(object):
         """
         **Set the 1:Many NAT mapping rules for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-firewall-one-to-many-nat-rules
+
         - networkId (string): (required)
         - rules (array): An array of 1:Many nat rules
         """
@@ -393,6 +442,7 @@ class Appliance(object):
         """
         **Return the 1:1 NAT mapping rules for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-firewall-one-to-one-nat-rules
+
         - networkId (string): (required)
         """
 
@@ -408,6 +458,7 @@ class Appliance(object):
         """
         **Set the 1:1 NAT mapping rules for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-firewall-one-to-one-nat-rules
+
         - networkId (string): (required)
         - rules (array): An array of 1:1 nat rules
         """
@@ -429,6 +480,7 @@ class Appliance(object):
         """
         **Return the port forwarding rules for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-firewall-port-forwarding-rules
+
         - networkId (string): (required)
         """
 
@@ -444,6 +496,7 @@ class Appliance(object):
         """
         **Update the port forwarding rules for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-firewall-port-forwarding-rules
+
         - networkId (string): (required)
         - rules (array): An array of port forwarding params
         """
@@ -465,6 +518,7 @@ class Appliance(object):
         """
         **List per-port VLAN settings for all ports of a MX.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-ports
+
         - networkId (string): (required)
         """
 
@@ -480,6 +534,7 @@ class Appliance(object):
         """
         **Return per-port VLAN settings for a single MX port.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-port
+
         - networkId (string): (required)
         - portId (string): (required)
         """
@@ -496,6 +551,7 @@ class Appliance(object):
         """
         **Update the per-port VLAN settings for a single MX port.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-port
+
         - networkId (string): (required)
         - portId (string): (required)
         - enabled (boolean): The status of the port
@@ -523,6 +579,7 @@ class Appliance(object):
         """
         **List the security events for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-security-events
+
         - networkId (string): (required)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
@@ -556,6 +613,7 @@ class Appliance(object):
         """
         **Returns all supported intrusion settings for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-security-intrusion
+
         - networkId (string): (required)
         """
 
@@ -571,6 +629,7 @@ class Appliance(object):
         """
         **Set the supported intrusion settings for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-security-intrusion
+
         - networkId (string): (required)
         - mode (string): Set mode to 'disabled'/'detection'/'prevention' (optional - omitting will leave current config unchanged)
         - idsRulesets (string): Set the detection ruleset 'connectivity'/'balanced'/'security' (optional - omitting will leave current config unchanged). Default value is 'balanced' if none currently saved
@@ -601,6 +660,7 @@ class Appliance(object):
         """
         **Returns all supported malware settings for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-security-malware
+
         - networkId (string): (required)
         """
 
@@ -616,6 +676,7 @@ class Appliance(object):
         """
         **Set the supported malware settings for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-security-malware
+
         - networkId (string): (required)
         - mode (string): Set mode to 'enabled' to enable malware prevention, otherwise 'disabled'
         - allowedUrls (array): The urls that should be permitted by the malware detection engine. If omitted, the current config will remain unchanged. This is available only if your network supports AMP whitelisting
@@ -643,6 +704,7 @@ class Appliance(object):
         """
         **Return single LAN configuration**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-single-lan
+
         - networkId (string): (required)
         """
 
@@ -658,6 +720,7 @@ class Appliance(object):
         """
         **Update single LAN configuration**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-single-lan
+
         - networkId (string): (required)
         - subnet (string): The subnet of the single LAN configuration
         - applianceIp (string): The appliance IP address of the single LAN
@@ -680,6 +743,7 @@ class Appliance(object):
         """
         **List the static routes for an MX or teleworker network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-static-routes
+
         - networkId (string): (required)
         """
 
@@ -695,6 +759,7 @@ class Appliance(object):
         """
         **Add a static route for an MX or teleworker network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-appliance-static-route
+
         - networkId (string): (required)
         - name (string): The name of the new static route
         - subnet (string): The subnet of the static route
@@ -718,6 +783,7 @@ class Appliance(object):
         """
         **Return a static route for an MX or teleworker network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-static-route
+
         - networkId (string): (required)
         - staticRouteId (string): (required)
         """
@@ -734,6 +800,7 @@ class Appliance(object):
         """
         **Update a static route for an MX or teleworker network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-static-route
+
         - networkId (string): (required)
         - staticRouteId (string): (required)
         - name (string): The name of the static route
@@ -761,6 +828,7 @@ class Appliance(object):
         """
         **Delete a static route from an MX or teleworker network**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-appliance-static-route
+
         - networkId (string): (required)
         - staticRouteId (string): (required)
         """
@@ -777,6 +845,7 @@ class Appliance(object):
         """
         **List all custom performance classes for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-traffic-shaping-custom-performance-classes
+
         - networkId (string): (required)
         """
 
@@ -792,6 +861,7 @@ class Appliance(object):
         """
         **Add a custom performance class for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-appliance-traffic-shaping-custom-performance-class
+
         - networkId (string): (required)
         - name (string): Name of the custom performance class
         - maxLatency (integer): Maximum latency in milliseconds
@@ -816,6 +886,7 @@ class Appliance(object):
         """
         **Return a custom performance class for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-traffic-shaping-custom-performance-class
+
         - networkId (string): (required)
         - customPerformanceClassId (string): (required)
         """
@@ -832,6 +903,7 @@ class Appliance(object):
         """
         **Update a custom performance class for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-traffic-shaping-custom-performance-class
+
         - networkId (string): (required)
         - customPerformanceClassId (string): (required)
         - name (string): Name of the custom performance class
@@ -857,6 +929,7 @@ class Appliance(object):
         """
         **Delete a custom performance class from an MX network**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-appliance-traffic-shaping-custom-performance-class
+
         - networkId (string): (required)
         - customPerformanceClassId (string): (required)
         """
@@ -873,6 +946,7 @@ class Appliance(object):
         """
         **Update the traffic shaping settings for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-traffic-shaping-rules
+
         - networkId (string): (required)
         - defaultRulesEnabled (boolean):     Whether default traffic shaping rules are enabled (true) or disabled (false).
     There are 4 default rules, which can
@@ -902,6 +976,7 @@ class Appliance(object):
         """
         **Display the traffic shaping settings for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-traffic-shaping-rules
+
         - networkId (string): (required)
         """
 
@@ -917,6 +992,7 @@ class Appliance(object):
         """
         **Returns the uplink bandwidth settings for your MX network.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-traffic-shaping-uplink-bandwidth
+
         - networkId (string): (required)
         """
 
@@ -932,6 +1008,7 @@ class Appliance(object):
         """
         **Updates the uplink bandwidth settings for your MX network.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-traffic-shaping-uplink-bandwidth
+
         - networkId (string): (required)
         - bandwidthLimits (object): A mapping of uplinks to their bandwidth settings (be sure to check which uplinks are supported for your network)
         """
@@ -953,6 +1030,7 @@ class Appliance(object):
         """
         **Show uplink selection settings for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-traffic-shaping-uplink-selection
+
         - networkId (string): (required)
         """
 
@@ -968,6 +1046,7 @@ class Appliance(object):
         """
         **Update uplink selection settings for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-traffic-shaping-uplink-selection
+
         - networkId (string): (required)
         - activeActiveAutoVpnEnabled (boolean): Toggle for enabling or disabling active-active AutoVPN
         - defaultUplink (string): The default uplink. Must be one of: 'wan1' or 'wan2'
@@ -997,6 +1076,7 @@ class Appliance(object):
         """
         **List the VLANs for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-vlans
+
         - networkId (string): (required)
         """
 
@@ -1012,6 +1092,7 @@ class Appliance(object):
         """
         **Add a VLAN**
         https://developer.cisco.com/meraki/api-v1/#!create-network-appliance-vlan
+
         - networkId (string): (required)
         - id (string): The VLAN ID of the new VLAN (must be between 1 and 4094)
         - name (string): The name of the new VLAN
@@ -1037,6 +1118,7 @@ class Appliance(object):
         """
         **Returns the enabled status of VLANs for the network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-vlans-settings
+
         - networkId (string): (required)
         """
 
@@ -1052,6 +1134,7 @@ class Appliance(object):
         """
         **Enable/Disable VLANs for the given network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-vlans-settings
+
         - networkId (string): (required)
         - vlansEnabled (boolean): Boolean indicating whether to enable (true) or disable (false) VLANs for the network
         """
@@ -1073,6 +1156,7 @@ class Appliance(object):
         """
         **Return a VLAN**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-vlan
+
         - networkId (string): (required)
         - vlanId (string): (required)
         """
@@ -1089,6 +1173,7 @@ class Appliance(object):
         """
         **Update a VLAN**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-vlan
+
         - networkId (string): (required)
         - vlanId (string): (required)
         - name (string): The name of the VLAN
@@ -1132,6 +1217,7 @@ class Appliance(object):
         """
         **Delete a VLAN from a network**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-appliance-vlan
+
         - networkId (string): (required)
         - vlanId (string): (required)
         """
@@ -1148,6 +1234,7 @@ class Appliance(object):
         """
         **Return the site-to-site VPN settings of a network. Only valid for MX networks.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-vpn-site-to-site-vpn
+
         - networkId (string): (required)
         """
 
@@ -1163,6 +1250,7 @@ class Appliance(object):
         """
         **Update the site-to-site VPN settings of a network. Only valid for MX networks in NAT mode.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-vpn-site-to-site-vpn
+
         - networkId (string): (required)
         - mode (string): The site-to-site VPN mode. Can be one of 'none', 'spoke' or 'hub'
         - hubs (array): The list of VPN hubs, in order of preference. In spoke mode, at least 1 hub is required.
@@ -1190,6 +1278,7 @@ class Appliance(object):
         """
         **Return MX warm spare settings**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-warm-spare
+
         - networkId (string): (required)
         """
 
@@ -1205,6 +1294,7 @@ class Appliance(object):
         """
         **Update MX warm spare settings**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-warm-spare
+
         - networkId (string): (required)
         - enabled (boolean): Enable warm spare
         - spareSerial (string): Serial number of the warm spare appliance
@@ -1230,6 +1320,7 @@ class Appliance(object):
         """
         **Swap MX primary and warm spare appliances**
         https://developer.cisco.com/meraki/api-v1/#!swap-network-appliance-warm-spare
+
         - networkId (string): (required)
         """
 
@@ -1245,6 +1336,7 @@ class Appliance(object):
         """
         **List the security events for an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-security-events
+
         - organizationId (string): (required)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
@@ -1278,6 +1370,7 @@ class Appliance(object):
         """
         **Returns all supported intrusion settings for an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-security-intrusion
+
         - organizationId (string): (required)
         """
 
@@ -1293,6 +1386,7 @@ class Appliance(object):
         """
         **Sets supported intrusion settings for an organization**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-appliance-security-intrusion
+
         - organizationId (string): (required)
         - whitelistedRules (array): Sets a list of specific SNORT® signatures to whitelist
         """
@@ -1310,25 +1404,27 @@ class Appliance(object):
 
         return self._session.put(metadata, resource, payload)
 
-    def getOrganizationApplianceThirdPartyVPNPeers(self, organizationId: str):
+    def getOrganizationApplianceVpnThirdPartyVPNPeers(self, organizationId: str):
         """
         **Return the third party VPN peers for an organization**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-third-party-v-p-n-peers
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-vpn-third-party-v-p-n-peers
+
         - organizationId (string): (required)
         """
 
         metadata = {
-            'tags': ['appliance', 'configure', 'thirdPartyVPNPeers'],
-            'operation': 'getOrganizationApplianceThirdPartyVPNPeers'
+            'tags': ['appliance', 'configure', 'vpn', 'thirdPartyVPNPeers'],
+            'operation': 'getOrganizationApplianceVpnThirdPartyVPNPeers'
         }
-        resource = f'/organizations/{organizationId}/appliance/thirdPartyVPNPeers'
+        resource = f'/organizations/{organizationId}/appliance/vpn/thirdPartyVPNPeers'
 
         return self._session.get(metadata, resource)
 
-    def updateOrganizationApplianceThirdPartyVPNPeers(self, organizationId: str, peers: list):
+    def updateOrganizationApplianceVpnThirdPartyVPNPeers(self, organizationId: str, peers: list):
         """
         **Update the third party VPN peers for an organization**
-        https://developer.cisco.com/meraki/api-v1/#!update-organization-appliance-third-party-v-p-n-peers
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-appliance-vpn-third-party-v-p-n-peers
+
         - organizationId (string): (required)
         - peers (array): The list of VPN peers
         """
@@ -1336,10 +1432,10 @@ class Appliance(object):
         kwargs = locals()
 
         metadata = {
-            'tags': ['appliance', 'configure', 'thirdPartyVPNPeers'],
-            'operation': 'updateOrganizationApplianceThirdPartyVPNPeers'
+            'tags': ['appliance', 'configure', 'vpn', 'thirdPartyVPNPeers'],
+            'operation': 'updateOrganizationApplianceVpnThirdPartyVPNPeers'
         }
-        resource = f'/organizations/{organizationId}/appliance/thirdPartyVPNPeers'
+        resource = f'/organizations/{organizationId}/appliance/vpn/thirdPartyVPNPeers'
 
         body_params = ['peers', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
@@ -1350,6 +1446,7 @@ class Appliance(object):
         """
         **Return the firewall rules for an organization's site-to-site VPN**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-vpn-vpn-firewall-rules
+
         - organizationId (string): (required)
         """
 
@@ -1365,6 +1462,7 @@ class Appliance(object):
         """
         **Update the firewall rules of an organization's site-to-site VPN**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-appliance-vpn-vpn-firewall-rules
+
         - organizationId (string): (required)
         - rules (array): An ordered array of the firewall rules (not including the default rule)
         - syslogDefaultRule (boolean): Log the special default rule (boolean value - enable only if you've configured a syslog server) (optional)

@@ -7,6 +7,7 @@ class AsyncSwitch:
         """
         **List the switch ports for a switch**
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-ports
+
         - serial (string): (required)
         """
 
@@ -22,6 +23,7 @@ class AsyncSwitch:
         """
         **Cycle a set of switch ports**
         https://developer.cisco.com/meraki/api-v1/#!cycle-device-switch-ports
+
         - serial (string): (required)
         - ports (array): List of switch ports. Example: [1, 2-5, 1_MA-MOD-8X10G_1, 1_MA-MOD-8X10G_2-1_MA-MOD-8X10G_8]
         """
@@ -43,6 +45,7 @@ class AsyncSwitch:
         """
         **Return the status for all the ports of a switch**
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-ports-statuses
+
         - serial (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
@@ -65,6 +68,7 @@ class AsyncSwitch:
         """
         **Return the packet counters for all the ports of a switch**
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-ports-statuses-packets
+
         - serial (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 1 day from today.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 1 day. The default is 1 day.
@@ -87,6 +91,7 @@ class AsyncSwitch:
         """
         **Return a switch port**
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-port
+
         - serial (string): (required)
         - portId (string): (required)
         """
@@ -103,6 +108,7 @@ class AsyncSwitch:
         """
         **Update a switch port**
         https://developer.cisco.com/meraki/api-v1/#!update-device-switch-port
+
         - serial (string): (required)
         - portId (string): (required)
         - name (string): The name of the switch port
@@ -157,6 +163,7 @@ class AsyncSwitch:
         """
         **List layer 3 interfaces for a switch**
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-routing-interfaces
+
         - serial (string): (required)
         """
 
@@ -172,6 +179,7 @@ class AsyncSwitch:
         """
         **Create a layer 3 interface for a switch**
         https://developer.cisco.com/meraki/api-v1/#!create-device-switch-routing-interface
+
         - serial (string): (required)
         - name (string): A friendly name or description for the interface or VLAN.
         - interfaceIp (string): The IP address this switch will use for layer 3 routing on this VLAN or subnet. This cannot be the same as the switch's management IP.
@@ -203,6 +211,7 @@ class AsyncSwitch:
         """
         **Return a layer 3 interface for a switch**
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-routing-interface
+
         - serial (string): (required)
         - interfaceId (string): (required)
         """
@@ -219,6 +228,7 @@ class AsyncSwitch:
         """
         **Update a layer 3 interface for a switch**
         https://developer.cisco.com/meraki/api-v1/#!update-device-switch-routing-interface
+
         - serial (string): (required)
         - interfaceId (string): (required)
         - name (string): A friendly name or description for the interface or VLAN.
@@ -250,6 +260,7 @@ class AsyncSwitch:
         """
         **Delete a layer 3 interface from the switch**
         https://developer.cisco.com/meraki/api-v1/#!delete-device-switch-routing-interface
+
         - serial (string): (required)
         - interfaceId (string): (required)
         """
@@ -262,10 +273,174 @@ class AsyncSwitch:
 
         return self._session.delete(metadata, resource)
 
+    def getDeviceSwitchRoutingInterfaceDhcp(self, serial: str, interfaceId: str):
+        """
+        **Return a layer 3 interface DHCP configuration for a switch**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-switch-routing-interface-dhcp
+
+        - serial (string): (required)
+        - interfaceId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['switch', 'configure', 'routing', 'interfaces', 'dhcp'],
+            'operation': 'getDeviceSwitchRoutingInterfaceDhcp'
+        }
+        resource = f'/devices/{serial}/switch/routing/interfaces/{interfaceId}/dhcp'
+
+        return self._session.get(metadata, resource)
+
+    def updateDeviceSwitchRoutingInterfaceDhcp(self, serial: str, interfaceId: str, **kwargs):
+        """
+        **Update a layer 3 interface DHCP configuration for a switch**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-switch-routing-interface-dhcp
+
+        - serial (string): (required)
+        - interfaceId (string): (required)
+        - dhcpMode (string): The DHCP mode options for the switch interface ('dhcpDisabled', 'dhcpRelay' or 'dhcpServer')
+        - dhcpRelayServerIps (array): The DHCP relay server IPs to which DHCP packets would get relayed for the switch interface
+        - dhcpLeaseTime (string): The DHCP lease time config for the dhcp server running on switch interface ('30 minutes', '1 hour', '4 hours', '12 hours', '1 day' or '1 week')
+        - dnsNameserversOption (string): The DHCP name server option for the dhcp server running on the switch interface ('googlePublicDns', 'openDns' or 'custom')
+        - dnsCustomNameservers (array): The DHCP name server IPs when DHCP name server option is 'custom'
+        - bootOptionsEnabled (boolean): Enable DHCP boot options to provide PXE boot options configs for the dhcp server running on the switch interface
+        - bootNextServer (string): The PXE boot server IP for the DHCP server running on the switch interface
+        - bootFileName (string): The PXE boot server filename for the DHCP server running on the switch interface
+        - dhcpOptions (array): Array of DHCP options consisting of code, type and value for the DHCP server running on the switch interface
+        - reservedIpRanges (array): Array of DHCP reserved IP assignments for the DHCP server running on the switch interface
+        - fixedIpAssignments (array): Array of DHCP fixed IP assignments for the DHCP server running on the switch interface
+        """
+
+        kwargs.update(locals())
+
+        if 'dhcpMode' in kwargs:
+            options = ['dhcpDisabled', 'dhcpRelay', 'dhcpServer']
+            assert kwargs['dhcpMode'] in options, f'''"dhcpMode" cannot be "{kwargs['dhcpMode']}", & must be set to one of: {options}'''
+        if 'dhcpLeaseTime' in kwargs:
+            options = ['30 minutes', '1 hour', '4 hours', '12 hours', '1 day', '1 week']
+            assert kwargs['dhcpLeaseTime'] in options, f'''"dhcpLeaseTime" cannot be "{kwargs['dhcpLeaseTime']}", & must be set to one of: {options}'''
+        if 'dnsNameserversOption' in kwargs:
+            options = ['googlePublicDns', 'openDns', 'custom']
+            assert kwargs['dnsNameserversOption'] in options, f'''"dnsNameserversOption" cannot be "{kwargs['dnsNameserversOption']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['switch', 'configure', 'routing', 'interfaces', 'dhcp'],
+            'operation': 'updateDeviceSwitchRoutingInterfaceDhcp'
+        }
+        resource = f'/devices/{serial}/switch/routing/interfaces/{interfaceId}/dhcp'
+
+        body_params = ['dhcpMode', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dnsNameserversOption', 'dnsCustomNameservers', 'bootOptionsEnabled', 'bootNextServer', 'bootFileName', 'dhcpOptions', 'reservedIpRanges', 'fixedIpAssignments', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
+    def getDeviceSwitchRoutingStaticRoutes(self, serial: str):
+        """
+        **List layer 3 static routes for a switch**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-switch-routing-static-routes
+
+        - serial (string): (required)
+        """
+
+        metadata = {
+            'tags': ['switch', 'configure', 'routing', 'staticRoutes'],
+            'operation': 'getDeviceSwitchRoutingStaticRoutes'
+        }
+        resource = f'/devices/{serial}/switch/routing/staticRoutes'
+
+        return self._session.get(metadata, resource)
+
+    def createDeviceSwitchRoutingStaticRoute(self, serial: str, subnet: str, nextHopIp: str, **kwargs):
+        """
+        **Create a layer 3 static route for a switch**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-switch-routing-static-route
+
+        - serial (string): (required)
+        - subnet (string): The subnet which is routed via this static route and should be specified in CIDR notation (ex. 1.2.3.0/24)
+        - nextHopIp (string): IP address of the next hop device to which the device sends its traffic for the subnet
+        - name (string): Name or description for layer 3 static route
+        - advertiseViaOspfEnabled (boolean): Option to advertise static route via OSPF
+        - preferOverOspfRoutesEnabled (boolean): Option to prefer static route over OSPF routes
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['switch', 'configure', 'routing', 'staticRoutes'],
+            'operation': 'createDeviceSwitchRoutingStaticRoute'
+        }
+        resource = f'/devices/{serial}/switch/routing/staticRoutes'
+
+        body_params = ['name', 'subnet', 'nextHopIp', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+
+    def getDeviceSwitchRoutingStaticRoute(self, serial: str, staticRouteId: str):
+        """
+        **Return a layer 3 static route for a switch**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-switch-routing-static-route
+
+        - serial (string): (required)
+        - staticRouteId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['switch', 'configure', 'routing', 'staticRoutes'],
+            'operation': 'getDeviceSwitchRoutingStaticRoute'
+        }
+        resource = f'/devices/{serial}/switch/routing/staticRoutes/{staticRouteId}'
+
+        return self._session.get(metadata, resource)
+
+    def updateDeviceSwitchRoutingStaticRoute(self, serial: str, staticRouteId: str, **kwargs):
+        """
+        **Update a layer 3 static route for a switch**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-switch-routing-static-route
+
+        - serial (string): (required)
+        - staticRouteId (string): (required)
+        - name (string): Name or description for layer 3 static route
+        - subnet (string): The subnet which is routed via this static route and should be specified in CIDR notation (ex. 1.2.3.0/24)
+        - nextHopIp (string): IP address of the next hop device to which the device sends its traffic for the subnet
+        - advertiseViaOspfEnabled (boolean): Option to advertise static route via OSPF
+        - preferOverOspfRoutesEnabled (boolean): Option to prefer static route over OSPF routes
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['switch', 'configure', 'routing', 'staticRoutes'],
+            'operation': 'updateDeviceSwitchRoutingStaticRoute'
+        }
+        resource = f'/devices/{serial}/switch/routing/staticRoutes/{staticRouteId}'
+
+        body_params = ['name', 'subnet', 'nextHopIp', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteDeviceSwitchRoutingStaticRoute(self, serial: str, staticRouteId: str):
+        """
+        **Delete a layer 3 static route for a switch**
+        https://developer.cisco.com/meraki/api-v1/#!delete-device-switch-routing-static-route
+
+        - serial (string): (required)
+        - staticRouteId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['switch', 'configure', 'routing', 'staticRoutes'],
+            'operation': 'deleteDeviceSwitchRoutingStaticRoute'
+        }
+        resource = f'/devices/{serial}/switch/routing/staticRoutes/{staticRouteId}'
+
+        return self._session.delete(metadata, resource)
+
     def getNetworkSwitchAccessControlLists(self, networkId: str):
         """
         **Return the access control lists for a MS network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-access-control-lists
+
         - networkId (string): (required)
         """
 
@@ -281,6 +456,7 @@ class AsyncSwitch:
         """
         **Update the access control lists for a MS network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-access-control-lists
+
         - networkId (string): (required)
         - rules (array): An ordered array of the access control list rules (not including the default rule). An empty array will clear the rules.
         """
@@ -302,6 +478,7 @@ class AsyncSwitch:
         """
         **List the access policies for this network. Only valid for MS networks.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-access-policies
+
         - networkId (string): (required)
         """
 
@@ -317,6 +494,7 @@ class AsyncSwitch:
         """
         **Return the DHCP server policy**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-dhcp-server-policy
+
         - networkId (string): (required)
         """
 
@@ -332,6 +510,7 @@ class AsyncSwitch:
         """
         **Update the DHCP server policy**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-dhcp-server-policy
+
         - networkId (string): (required)
         - defaultPolicy (string): 'allow' or 'block' new DHCP servers. Default value is 'allow'.
         - allowedServers (array): List the MAC addresses of DHCP servers to permit on the network. Applicable only if defaultPolicy is set to block. An empty array will clear the entries.
@@ -359,6 +538,7 @@ class AsyncSwitch:
         """
         **Return the DSCP to CoS mappings**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-dscp-to-cos-mappings
+
         - networkId (string): (required)
         """
 
@@ -374,6 +554,7 @@ class AsyncSwitch:
         """
         **Update the DSCP to CoS mappings**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-dscp-to-cos-mappings
+
         - networkId (string): (required)
         - mappings (array): An array of DSCP to CoS mappings. An empty array will reset the mappings to default.
         """
@@ -395,6 +576,7 @@ class AsyncSwitch:
         """
         **List link aggregation groups**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-link-aggregations
+
         - networkId (string): (required)
         """
 
@@ -410,6 +592,7 @@ class AsyncSwitch:
         """
         **Create a link aggregation group**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-link-aggregation
+
         - networkId (string): (required)
         - switchPorts (array): Array of switch or stack ports for creating aggregation group. Minimum 2 and maximum 8 ports are supported.
         - switchProfilePorts (array): Array of switch profile ports for creating aggregation group. Minimum 2 and maximum 8 ports are supported.
@@ -432,6 +615,7 @@ class AsyncSwitch:
         """
         **Update a link aggregation group**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-link-aggregation
+
         - networkId (string): (required)
         - linkAggregationId (string): (required)
         - switchPorts (array): Array of switch or stack ports for updating aggregation group. Minimum 2 and maximum 8 ports are supported.
@@ -455,6 +639,7 @@ class AsyncSwitch:
         """
         **Split a link aggregation group into separate ports**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-link-aggregation
+
         - networkId (string): (required)
         - linkAggregationId (string): (required)
         """
@@ -471,6 +656,7 @@ class AsyncSwitch:
         """
         **Return the MTU configuration**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-mtu
+
         - networkId (string): (required)
         """
 
@@ -486,6 +672,7 @@ class AsyncSwitch:
         """
         **Update the MTU configuration**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-mtu
+
         - networkId (string): (required)
         - defaultMtuSize (integer): MTU size for the entire network. Default value is 9578.
         - overrides (array): Override MTU size for individual switches or switch profiles. An empty array will clear overrides.
@@ -508,6 +695,7 @@ class AsyncSwitch:
         """
         **List switch port schedules**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-port-schedules
+
         - networkId (string): (required)
         """
 
@@ -523,6 +711,7 @@ class AsyncSwitch:
         """
         **Add a switch port schedule**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-port-schedule
+
         - networkId (string): (required)
         - name (string): The name for your port schedule. Required
         - portSchedule (object):     The schedule for switch port scheduling. Schedules are applied to days of the week.
@@ -548,6 +737,7 @@ class AsyncSwitch:
         """
         **Delete a switch port schedule**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-port-schedule
+
         - networkId (string): (required)
         - portScheduleId (string): (required)
         """
@@ -564,6 +754,7 @@ class AsyncSwitch:
         """
         **Update a switch port schedule**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-port-schedule
+
         - networkId (string): (required)
         - portScheduleId (string): (required)
         - name (string): The name for your port schedule.
@@ -590,6 +781,7 @@ class AsyncSwitch:
         """
         **List quality of service rules**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-qos-rules
+
         - networkId (string): (required)
         """
 
@@ -605,6 +797,7 @@ class AsyncSwitch:
         """
         **Add a quality of service rule**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-qos-rule
+
         - networkId (string): (required)
         - vlan (integer): The VLAN of the incoming packet. A null value will match any VLAN.
         - protocol (string): The protocol of the incoming packet. Can be one of "ANY", "TCP" or "UDP". Default value is "ANY"
@@ -636,6 +829,7 @@ class AsyncSwitch:
         """
         **Return the quality of service rule IDs by order in which they will be processed by the switch**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-qos-rules-order
+
         - networkId (string): (required)
         """
 
@@ -651,6 +845,7 @@ class AsyncSwitch:
         """
         **Update the order in which the rules should be processed by the switch**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-qos-rules-order
+
         - networkId (string): (required)
         - ruleIds (array): A list of quality of service rule IDs arranged in order in which they should be processed by the switch.
         """
@@ -672,6 +867,7 @@ class AsyncSwitch:
         """
         **Return a quality of service rule**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-qos-rule
+
         - networkId (string): (required)
         - qosRuleId (string): (required)
         """
@@ -688,6 +884,7 @@ class AsyncSwitch:
         """
         **Delete a quality of service rule**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-qos-rule
+
         - networkId (string): (required)
         - qosRuleId (string): (required)
         """
@@ -704,6 +901,7 @@ class AsyncSwitch:
         """
         **Update a quality of service rule**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-qos-rule
+
         - networkId (string): (required)
         - qosRuleId (string): (required)
         - vlan (integer): The VLAN of the incoming packet. A null value will match any VLAN.
@@ -736,6 +934,7 @@ class AsyncSwitch:
         """
         **Return multicast settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-routing-multicast
+
         - networkId (string): (required)
         """
 
@@ -751,6 +950,7 @@ class AsyncSwitch:
         """
         **Update multicast settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-routing-multicast
+
         - networkId (string): (required)
         - defaultSettings (object): Default multicast setting for entire network. IGMP snooping and Flood unknown multicast traffic settings are enabled by default.
         - overrides (array): Array of paired switches/stacks/profiles and corresponding multicast settings. An empty array will clear the multicast settings.
@@ -773,6 +973,7 @@ class AsyncSwitch:
         """
         **Returns the switch network settings**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-settings
+
         - networkId (string): (required)
         """
 
@@ -788,6 +989,7 @@ class AsyncSwitch:
         """
         **Update switch network settings**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-settings
+
         - networkId (string): (required)
         - vlan (integer): Management VLAN
         - useCombinedPower (boolean): The use Combined Power as the default behavior of secondary power supplies on supported devices.
@@ -811,6 +1013,7 @@ class AsyncSwitch:
         """
         **Return the storm control configuration for a switch network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-storm-control
+
         - networkId (string): (required)
         """
 
@@ -826,6 +1029,7 @@ class AsyncSwitch:
         """
         **Update the storm control configuration for a switch network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-storm-control
+
         - networkId (string): (required)
         - broadcastThreshold (integer): Percentage (1 to 99) of total available port bandwidth for broadcast traffic type. Default value 100 percent rate is to clear the configuration.
         - multicastThreshold (integer): Percentage (1 to 99) of total available port bandwidth for multicast traffic type. Default value 100 percent rate is to clear the configuration.
@@ -849,6 +1053,7 @@ class AsyncSwitch:
         """
         **Returns STP settings**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-stp
+
         - networkId (string): (required)
         """
 
@@ -864,6 +1069,7 @@ class AsyncSwitch:
         """
         **Updates STP settings**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-stp
+
         - networkId (string): (required)
         - rstpEnabled (boolean): The spanning tree protocol status in network
         - stpBridgePriority (array): STP bridge priority for switches/stacks or switch profiles. An empty array will clear the STP bridge priority settings.
@@ -886,6 +1092,7 @@ class AsyncSwitch:
         """
         **List the switch stacks in a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-switch-stacks
+
         - networkId (string): (required)
         """
 
@@ -901,6 +1108,7 @@ class AsyncSwitch:
         """
         **Create a stack**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-switch-stack
+
         - networkId (string): (required)
         - name (string): The name of the new stack
         - serials (array): An array of switch serials to be added into the new stack
@@ -923,6 +1131,7 @@ class AsyncSwitch:
         """
         **Show a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-switch-stack
+
         - networkId (string): (required)
         - switchStackId (string): (required)
         """
@@ -939,6 +1148,7 @@ class AsyncSwitch:
         """
         **Delete a stack**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-switch-stack
+
         - networkId (string): (required)
         - switchStackId (string): (required)
         """
@@ -955,6 +1165,7 @@ class AsyncSwitch:
         """
         **Add a switch to a stack**
         https://developer.cisco.com/meraki/api-v1/#!add-network-switch-switch-stack
+
         - networkId (string): (required)
         - switchStackId (string): (required)
         - serial (string): The serial of the switch to be added
@@ -977,6 +1188,7 @@ class AsyncSwitch:
         """
         **Remove a switch from a stack**
         https://developer.cisco.com/meraki/api-v1/#!remove-network-switch-switch-stack
+
         - networkId (string): (required)
         - switchStackId (string): (required)
         - serial (string): The serial of the switch to be removed
@@ -999,6 +1211,7 @@ class AsyncSwitch:
         """
         **List layer 3 interfaces for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-switch-stack-routing-interfaces
+
         - networkId (string): (required)
         - switchStackId (string): (required)
         """
@@ -1015,6 +1228,7 @@ class AsyncSwitch:
         """
         **Create a layer 3 interface for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-switch-stack-routing-interface
+
         - networkId (string): (required)
         - switchStackId (string): (required)
         - name (string): A friendly name or description for the interface or VLAN.
@@ -1047,6 +1261,7 @@ class AsyncSwitch:
         """
         **Return a layer 3 interface from a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-switch-stack-routing-interface
+
         - networkId (string): (required)
         - switchStackId (string): (required)
         - interfaceId (string): (required)
@@ -1064,6 +1279,7 @@ class AsyncSwitch:
         """
         **Update a layer 3 interface for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-switch-stack-routing-interface
+
         - networkId (string): (required)
         - switchStackId (string): (required)
         - interfaceId (string): (required)
@@ -1096,6 +1312,7 @@ class AsyncSwitch:
         """
         **Delete a layer 3 interface from a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-switch-stack-routing-interface
+
         - networkId (string): (required)
         - switchStackId (string): (required)
         - interfaceId (string): (required)
@@ -1109,10 +1326,181 @@ class AsyncSwitch:
 
         return self._session.delete(metadata, resource)
 
+    def getNetworkSwitchSwitchStackRoutingInterfaceDhcp(self, networkId: str, switchStackId: str, interfaceId: str):
+        """
+        **Return a layer 3 interface DHCP configuration for a switch stack**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-switch-stack-routing-interface-dhcp
+
+        - networkId (string): (required)
+        - switchStackId (string): (required)
+        - interfaceId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['switch', 'configure', 'switchStacks', 'routing', 'interfaces', 'dhcp'],
+            'operation': 'getNetworkSwitchSwitchStackRoutingInterfaceDhcp'
+        }
+        resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}/routing/interfaces/{interfaceId}/dhcp'
+
+        return self._session.get(metadata, resource)
+
+    def updateNetworkSwitchSwitchStackRoutingInterfaceDhcp(self, networkId: str, switchStackId: str, interfaceId: str, **kwargs):
+        """
+        **Update a layer 3 interface DHCP configuration for a switch stack**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-switch-stack-routing-interface-dhcp
+
+        - networkId (string): (required)
+        - switchStackId (string): (required)
+        - interfaceId (string): (required)
+        - dhcpMode (string): The DHCP mode options for the switch stack interface ('dhcpDisabled', 'dhcpRelay' or 'dhcpServer')
+        - dhcpRelayServerIps (array): The DHCP relay server IPs to which DHCP packets would get relayed for the switch stack interface
+        - dhcpLeaseTime (string): The DHCP lease time config for the dhcp server running on switch stack interface ('30 minutes', '1 hour', '4 hours', '12 hours', '1 day' or '1 week')
+        - dnsNameserversOption (string): The DHCP name server option for the dhcp server running on the switch stack interface ('googlePublicDns', 'openDns' or 'custom')
+        - dnsCustomNameservers (array): The DHCP name server IPs when DHCP name server option is 'custom'
+        - bootOptionsEnabled (boolean): Enable DHCP boot options to provide PXE boot options configs for the dhcp server running on the switch stack interface
+        - bootNextServer (string): The PXE boot server IP for the DHCP server running on the switch stack interface
+        - bootFileName (string): The PXE boot server file name for the DHCP server running on the switch stack interface
+        - dhcpOptions (array): Array of DHCP options consisting of code, type and value for the DHCP server running on the switch stack interface
+        - reservedIpRanges (array): Array of DHCP reserved IP assignments for the DHCP server running on the switch stack interface
+        - fixedIpAssignments (array): Array of DHCP fixed IP assignments for the DHCP server running on the switch stack interface
+        """
+
+        kwargs.update(locals())
+
+        if 'dhcpMode' in kwargs:
+            options = ['dhcpDisabled', 'dhcpRelay', 'dhcpServer']
+            assert kwargs['dhcpMode'] in options, f'''"dhcpMode" cannot be "{kwargs['dhcpMode']}", & must be set to one of: {options}'''
+        if 'dhcpLeaseTime' in kwargs:
+            options = ['30 minutes', '1 hour', '4 hours', '12 hours', '1 day', '1 week']
+            assert kwargs['dhcpLeaseTime'] in options, f'''"dhcpLeaseTime" cannot be "{kwargs['dhcpLeaseTime']}", & must be set to one of: {options}'''
+        if 'dnsNameserversOption' in kwargs:
+            options = ['googlePublicDns', 'openDns', 'custom']
+            assert kwargs['dnsNameserversOption'] in options, f'''"dnsNameserversOption" cannot be "{kwargs['dnsNameserversOption']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['switch', 'configure', 'switchStacks', 'routing', 'interfaces', 'dhcp'],
+            'operation': 'updateNetworkSwitchSwitchStackRoutingInterfaceDhcp'
+        }
+        resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}/routing/interfaces/{interfaceId}/dhcp'
+
+        body_params = ['dhcpMode', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dnsNameserversOption', 'dnsCustomNameservers', 'bootOptionsEnabled', 'bootNextServer', 'bootFileName', 'dhcpOptions', 'reservedIpRanges', 'fixedIpAssignments', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
+    def getNetworkSwitchSwitchStackRoutingStaticRoutes(self, networkId: str, switchStackId: str):
+        """
+        **List layer 3 static routes for a switch stack**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-switch-stack-routing-static-routes
+
+        - networkId (string): (required)
+        - switchStackId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['switch', 'configure', 'switchStacks', 'routing', 'staticRoutes'],
+            'operation': 'getNetworkSwitchSwitchStackRoutingStaticRoutes'
+        }
+        resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}/routing/staticRoutes'
+
+        return self._session.get(metadata, resource)
+
+    def createNetworkSwitchSwitchStackRoutingStaticRoute(self, networkId: str, switchStackId: str, subnet: str, nextHopIp: str, **kwargs):
+        """
+        **Create a layer 3 static route for a switch stack**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-switch-switch-stack-routing-static-route
+
+        - networkId (string): (required)
+        - switchStackId (string): (required)
+        - subnet (string): The subnet which is routed via this static route and should be specified in CIDR notation (ex. 1.2.3.0/24)
+        - nextHopIp (string): IP address of the next hop device to which the device sends its traffic for the subnet
+        - name (string): Name or description for layer 3 static route
+        - advertiseViaOspfEnabled (boolean): Option to advertise static route via OSPF
+        - preferOverOspfRoutesEnabled (boolean): Option to prefer static route over OSPF routes
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['switch', 'configure', 'switchStacks', 'routing', 'staticRoutes'],
+            'operation': 'createNetworkSwitchSwitchStackRoutingStaticRoute'
+        }
+        resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}/routing/staticRoutes'
+
+        body_params = ['name', 'subnet', 'nextHopIp', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+
+    def getNetworkSwitchSwitchStackRoutingStaticRoute(self, networkId: str, switchStackId: str, staticRouteId: str):
+        """
+        **Return a layer 3 static route for a switch stack**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-switch-stack-routing-static-route
+
+        - networkId (string): (required)
+        - switchStackId (string): (required)
+        - staticRouteId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['switch', 'configure', 'switchStacks', 'routing', 'staticRoutes'],
+            'operation': 'getNetworkSwitchSwitchStackRoutingStaticRoute'
+        }
+        resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}/routing/staticRoutes/{staticRouteId}'
+
+        return self._session.get(metadata, resource)
+
+    def updateNetworkSwitchSwitchStackRoutingStaticRoute(self, networkId: str, switchStackId: str, staticRouteId: str, **kwargs):
+        """
+        **Update a layer 3 static route for a switch stack**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-switch-stack-routing-static-route
+
+        - networkId (string): (required)
+        - switchStackId (string): (required)
+        - staticRouteId (string): (required)
+        - name (string): Name or description for layer 3 static route
+        - subnet (string): The subnet which is routed via this static route and should be specified in CIDR notation (ex. 1.2.3.0/24)
+        - nextHopIp (string): IP address of the next hop device to which the device sends its traffic for the subnet
+        - advertiseViaOspfEnabled (boolean): Option to advertise static route via OSPF
+        - preferOverOspfRoutesEnabled (boolean): Option to prefer static route over OSPF routes
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['switch', 'configure', 'switchStacks', 'routing', 'staticRoutes'],
+            'operation': 'updateNetworkSwitchSwitchStackRoutingStaticRoute'
+        }
+        resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}/routing/staticRoutes/{staticRouteId}'
+
+        body_params = ['name', 'subnet', 'nextHopIp', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteNetworkSwitchSwitchStackRoutingStaticRoute(self, networkId: str, switchStackId: str, staticRouteId: str):
+        """
+        **Delete a layer 3 static route for a switch stack**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-switch-stack-routing-static-route
+
+        - networkId (string): (required)
+        - switchStackId (string): (required)
+        - staticRouteId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['switch', 'configure', 'switchStacks', 'routing', 'staticRoutes'],
+            'operation': 'deleteNetworkSwitchSwitchStackRoutingStaticRoute'
+        }
+        resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}/routing/staticRoutes/{staticRouteId}'
+
+        return self._session.delete(metadata, resource)
+
     def getOrganizationConfigTemplateSwitchProfiles(self, organizationId: str, configTemplateId: str):
         """
         **List the switch profiles for your switch template configuration**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-config-template-switch-profiles
+
         - organizationId (string): (required)
         - configTemplateId (string): (required)
         """
@@ -1129,6 +1517,7 @@ class AsyncSwitch:
         """
         **Return all the ports of a switch profile**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-config-template-switch-profile-ports
+
         - organizationId (string): (required)
         - configTemplateId (string): (required)
         - profileId (string): (required)
@@ -1146,6 +1535,7 @@ class AsyncSwitch:
         """
         **Return a switch profile port**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-config-template-switch-profile-port
+
         - organizationId (string): (required)
         - configTemplateId (string): (required)
         - profileId (string): (required)
@@ -1164,6 +1554,7 @@ class AsyncSwitch:
         """
         **Update a switch profile port**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-config-template-switch-profile-port
+
         - organizationId (string): (required)
         - configTemplateId (string): (required)
         - profileId (string): (required)
