@@ -77,7 +77,7 @@ class RestSession(object):
         super(RestSession, self).__init__()
 
         # Initialize attributes and properties
-        sefl._version = __version__
+        self._version = __version__
         self._api_key = str(api_key)
         self._base_url = str(base_url)
         self._single_request_timeout = single_request_timeout
