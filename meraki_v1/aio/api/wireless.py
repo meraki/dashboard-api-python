@@ -1069,6 +1069,9 @@ class AsyncWireless:
         if 'radiusLoadBalancingPolicy' in kwargs:
             options = ['Strict priority order', 'Round robin']
             assert kwargs['radiusLoadBalancingPolicy'] in options, f'''"radiusLoadBalancingPolicy" cannot be "{kwargs['radiusLoadBalancingPolicy']}", & must be set to one of: {options}'''
+        if 'radiusAttributeForGroupPolicies' in kwargs:
+            options = ['Filter-Id', 'Reply-Message', 'Airespace-ACL-Name', 'Aruba-User-Role']
+            assert kwargs['radiusAttributeForGroupPolicies'] in options, f'''"radiusAttributeForGroupPolicies" cannot be "{kwargs['radiusAttributeForGroupPolicies']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['wireless', 'configure', 'ssids'],

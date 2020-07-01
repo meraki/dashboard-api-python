@@ -3,6 +3,22 @@ class AsyncNetworks:
         super().__init__()
         self._session = session
 
+    def getNetworkClientsPolicies(self, networkID: str):
+        """
+        **List the client policies within a wireless network.**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-clients-policies
+
+        - networkID (string): (required)
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'clients', 'policies'],
+            'operation': 'getNetworkClientsPolicies'
+        }
+        resource = f'/networks/{networkID}/clients/policies'
+
+        return self._session.get(metadata, resource)
+
     def getNetwork(self, networkId: str):
         """
         **Return a network**
@@ -893,6 +909,105 @@ class AsyncNetworks:
         resource = f'/networks/{networkId}/merakiAuthUsers/{merakiAuthUserId}'
 
         return self._session.get(metadata, resource)
+
+    def getNetworkMqttBrokers(self, networkId: str):
+        """
+        **List the MQTT brokers for this network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-mqtt-brokers
+
+        - networkId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'mqttBrokers'],
+            'operation': 'getNetworkMqttBrokers'
+        }
+        resource = f'/networks/{networkId}/mqttBrokers'
+
+        return self._session.get(metadata, resource)
+
+    def createNetworkMqttBroker(self, networkId: str, name: str, host: str, port: int):
+        """
+        **Add an MQTT broker**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-mqtt-broker
+
+        - networkId (string): (required)
+        - name (string): Name of the MQTT broker
+        - host (string): Host name/IP address where MQTT broker runs
+        - port (integer): Host port though which MQTT broker can be reached
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['networks', 'configure', 'mqttBrokers'],
+            'operation': 'createNetworkMqttBroker'
+        }
+        resource = f'/networks/{networkId}/mqttBrokers'
+
+        body_params = ['name', 'host', 'port', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+
+    def getNetworkMqttBroker(self, networkId: str, mqttBrokerId: str):
+        """
+        **Return an MQTT broker**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-mqtt-broker
+
+        - networkId (string): (required)
+        - mqttBrokerId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'mqttBrokers'],
+            'operation': 'getNetworkMqttBroker'
+        }
+        resource = f'/networks/{networkId}/mqttBrokers/{mqttBrokerId}'
+
+        return self._session.get(metadata, resource)
+
+    def updateNetworkMqttBroker(self, networkId: str, mqttBrokerId: str, **kwargs):
+        """
+        **Update an MQTT broker**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-mqtt-broker
+
+        - networkId (string): (required)
+        - mqttBrokerId (string): (required)
+        - name (string): Name of the mqtt config
+        - host (string): Host name where mqtt broker runs
+        - port (integer): Host port though which mqtt broker can be reached
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['networks', 'configure', 'mqttBrokers'],
+            'operation': 'updateNetworkMqttBroker'
+        }
+        resource = f'/networks/{networkId}/mqttBrokers/{mqttBrokerId}'
+
+        body_params = ['name', 'host', 'port', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteNetworkMqttBroker(self, networkId: str, mqttBrokerId: str):
+        """
+        **Delete an MQTT broker**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-mqtt-broker
+
+        - networkId (string): (required)
+        - mqttBrokerId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'mqttBrokers'],
+            'operation': 'deleteNetworkMqttBroker'
+        }
+        resource = f'/networks/{networkId}/mqttBrokers/{mqttBrokerId}'
+
+        return self._session.delete(metadata, resource)
 
     def getNetworkNetflow(self, networkId: str):
         """

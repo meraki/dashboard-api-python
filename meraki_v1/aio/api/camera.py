@@ -198,6 +198,62 @@ class AsyncCamera:
 
         return self._session.put(metadata, resource, payload)
 
+    def getDeviceCameraSense(self, serial: str):
+        """
+        **Returns sense settings for a given camera**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-camera-sense
+
+        - serial (string): (required)
+        """
+
+        metadata = {
+            'tags': ['camera', 'configure', 'sense'],
+            'operation': 'getDeviceCameraSense'
+        }
+        resource = f'/devices/{serial}/camera/sense'
+
+        return self._session.get(metadata, resource)
+
+    def updateDeviceCameraSense(self, serial: str, **kwargs):
+        """
+        **Update sense settings for the given camera**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-camera-sense
+
+        - serial (string): (required)
+        - senseEnabled (boolean): Boolean indicating if sense(license) is enabled(true) or disabled(false) on the camera
+        - mqttBrokerId (string): The ID of the MQTT broker to be enabled on the camera. A value of null will disable MQTT on the camera
+        - detectionModelId (string): The ID of the object detection model
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['camera', 'configure', 'sense'],
+            'operation': 'updateDeviceCameraSense'
+        }
+        resource = f'/devices/{serial}/camera/sense'
+
+        body_params = ['senseEnabled', 'mqttBrokerId', 'detectionModelId', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
+    def getDeviceCameraSenseObjectDetectionModels(self, serial: str):
+        """
+        **Returns the MV Sense object detection model list for the given camera**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-camera-sense-object-detection-models
+
+        - serial (string): (required)
+        """
+
+        metadata = {
+            'tags': ['camera', 'configure', 'sense', 'objectDetectionModels'],
+            'operation': 'getDeviceCameraSenseObjectDetectionModels'
+        }
+        resource = f'/devices/{serial}/camera/sense/objectDetectionModels'
+
+        return self._session.get(metadata, resource)
+
     def getDeviceCameraVideoSettings(self, serial: str):
         """
         **Returns video settings for the given camera**

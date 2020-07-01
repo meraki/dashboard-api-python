@@ -39,6 +39,44 @@ class Organizations(object):
 
         return self._session.post(metadata, resource, payload)
 
+    def getOrganizationSaml(self, orgId: str):
+        """
+        **Returns the SAML SSO enabled settings for an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-saml
+
+        - orgId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'saml'],
+            'operation': 'getOrganizationSaml'
+        }
+        resource = f'/organizations/{orgId}/saml'
+
+        return self._session.get(metadata, resource)
+
+    def updateOrganizationSaml(self, orgId: str, **kwargs):
+        """
+        **Updates the SAML SSO enabled settings for an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-saml
+
+        - orgId (string): (required)
+        - enabled (boolean): Boolean for updating SAML SSO enabled settings.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'saml'],
+            'operation': 'updateOrganizationSaml'
+        }
+        resource = f'/organizations/{orgId}/saml'
+
+        body_params = ['enabled', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
     def getOrganization(self, organizationId: str):
         """
         **Return an organization**
@@ -228,6 +266,7 @@ class Organizations(object):
         - orgAccess (string): The privilege of the dashboard administrator on the organization. Can be one of 'full', 'read-only', 'enterprise' or 'none'
         - tags (array): The list of tags that the dashboard administrator has privileges on
         - networks (array): The list of networks that the dashboard administrator has privileges on
+        - authenticationMethod (string): The method of authentication the user will use to sign in to the Meraki dashboard. Can be one of 'Email' or 'Cisco SecureX Sign-On'. The default is Email authentication
         """
 
         kwargs.update(locals())
@@ -235,6 +274,9 @@ class Organizations(object):
         if 'orgAccess' in kwargs:
             options = ['full', 'read-only', 'enterprise', 'none']
             assert kwargs['orgAccess'] in options, f'''"orgAccess" cannot be "{kwargs['orgAccess']}", & must be set to one of: {options}'''
+        if 'authenticationMethod' in kwargs:
+            options = ['Email', 'Cisco SecureX Sign-On']
+            assert kwargs['authenticationMethod'] in options, f'''"authenticationMethod" cannot be "{kwargs['authenticationMethod']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['organizations', 'configure', 'admins'],
@@ -242,7 +284,7 @@ class Organizations(object):
         }
         resource = f'/organizations/{organizationId}/admins'
 
-        body_params = ['email', 'name', 'orgAccess', 'tags', 'networks', ]
+        body_params = ['email', 'name', 'orgAccess', 'tags', 'networks', 'authenticationMethod', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -1070,6 +1112,103 @@ class Organizations(object):
 
         return self._session.get(metadata, resource)
 
+    def getOrganizationSamlIdps(self, organizationId: str):
+        """
+        **List the SAML IdPs in your organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-saml-idps
+
+        - organizationId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'saml', 'idps'],
+            'operation': 'getOrganizationSamlIdps'
+        }
+        resource = f'/organizations/{organizationId}/saml/idps'
+
+        return self._session.get(metadata, resource)
+
+    def createOrganizationSamlIdp(self, organizationId: str, x509certSha1Fingerprint: str, **kwargs):
+        """
+        **Create a SAML IdP for your organization.**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-saml-idp
+
+        - organizationId (string): (required)
+        - x509certSha1Fingerprint (string): Fingerprint (SHA1) of the SAML certificate provided by your Identity Provider (IdP). This will be used for encryption / validation.
+        - sloLogoutUrl (string): Dashboard will redirect users to this URL when they sign out.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'saml', 'idps'],
+            'operation': 'createOrganizationSamlIdp'
+        }
+        resource = f'/organizations/{organizationId}/saml/idps'
+
+        body_params = ['x509certSha1Fingerprint', 'sloLogoutUrl', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+
+    def updateOrganizationSamlIdp(self, organizationId: str, idpId: str, **kwargs):
+        """
+        **Update a SAML IdP in your organization**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-saml-idp
+
+        - organizationId (string): (required)
+        - idpId (string): (required)
+        - x509certSha1Fingerprint (string): Fingerprint (SHA1) of the SAML certificate provided by your Identity Provider (IdP). This will be used for encryption / validation.
+        - sloLogoutUrl (string): Dashboard will redirect users to this URL when they sign out.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'saml', 'idps'],
+            'operation': 'updateOrganizationSamlIdp'
+        }
+        resource = f'/organizations/{organizationId}/saml/idps/{idpId}'
+
+        body_params = ['x509certSha1Fingerprint', 'sloLogoutUrl', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
+    def getOrganizationSamlIdp(self, organizationId: str, idpId: str):
+        """
+        **Get a SAML IdP from your organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-saml-idp
+
+        - organizationId (string): (required)
+        - idpId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'saml', 'idps'],
+            'operation': 'getOrganizationSamlIdp'
+        }
+        resource = f'/organizations/{organizationId}/saml/idps/{idpId}'
+
+        return self._session.get(metadata, resource)
+
+    def deleteOrganizationSamlIdp(self, organizationId: str, idpId: str):
+        """
+        **Remove a SAML IdP in your organization.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-saml-idp
+
+        - organizationId (string): (required)
+        - idpId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'saml', 'idps'],
+            'operation': 'deleteOrganizationSamlIdp'
+        }
+        resource = f'/organizations/{organizationId}/saml/idps/{idpId}'
+
+        return self._session.delete(metadata, resource)
+
     def getOrganizationSamlRoles(self, organizationId: str):
         """
         **List the SAML roles for this organization**
@@ -1199,7 +1338,7 @@ class Organizations(object):
         - v3AuthPass (string): The SNMP version 3 authentication password. Must be at least 8 characters if specified.
         - v3PrivMode (string): The SNMP version 3 privacy mode. Can be either 'DES' or 'AES128'.
         - v3PrivPass (string): The SNMP version 3 privacy password. Must be at least 8 characters if specified.
-        - peerIps (string): The IPs that are allowed to access the SNMP server. This list should be IPv4 addresses separated by semi-colons (ie. "1.2.3.4;2.3.4.5").
+        - peerIps (array): The list of IPv4 addresses that are allowed to access the SNMP server.
         """
 
         kwargs.update(locals())

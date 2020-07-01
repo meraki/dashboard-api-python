@@ -122,7 +122,11 @@ class AsyncRestSession:
 
         # Log API calls
         self._logger = logger
-        self._parameters = locals()
+        self._parameters = {"version": self._version}
+        self._parameters.update(locals())
+        self._parameters.pop("self")
+        self._parameters.pop("logger")
+        self._parameters.pop("__class__")
         self._parameters["api_key"] = "*" * 36 + self._api_key[-4:]
         if self._logger:
             self._logger.info(f"Meraki dashboard API session initialized with these parameters: {self._parameters}")

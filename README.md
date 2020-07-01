@@ -10,11 +10,10 @@ While you can make direct HTTP requests to dashboard API in any programming lang
 
 * Support for all API endpoints, as it uses the [OpenAPI specification](https://api.meraki.com/api/v1/openapiSpec) to generate source code
 * Log all API requests made to a local file as well as on-screen console
-* Automatic retries upon 429 rate limit errors, using the [`Retry-After` field](https://developer.cisco.com/docs/meraki-api-v1/#!rate-limit) within response headers
+* Automatic retries upon 429 rate limit errors, using the [`Retry-After` field](https://developer.cisco.com/meraki/api-v1/#!rate-limit) within response headers
 * Get all (or a specified number of) pages of data with built-in pagination control
 * Tweak settings such as maximum retries, certificate path, suppress logging, and other options
 * Simulate POST/PUT/DELETE calls to preview first, so that network configuration does not get changed
-* Includes the legacy module's (version 0.34 and prior) functions for backward compatibility
 
 ## Setup
 
