@@ -2,7 +2,6 @@
         """
         **{{ description }}**
         {{ doc_url }}
-
         {% for d in descriptions %}
         - {{ d }}
         {% endfor %}
@@ -36,6 +35,7 @@
         for k, v in kwargs.items():
             if k.strip() in array_params:
                 params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
 
         {% endif %}
         {% if body_params|length > 0 %}

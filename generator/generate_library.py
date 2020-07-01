@@ -21,7 +21,7 @@ import sys
 import requests
 
 
-VERSION_NUMBER = '1.0.0b9'
+VERSION_NUMBER = 'custom'
 REVERSE_PAGINATION = ['getNetworkEvents', 'getOrganizationConfigurationChanges']
 
 
@@ -74,8 +74,6 @@ def parse_params(operation, parameters, param_filters=[]):
                 params[k]['description'] = keys[k]['description']
                 if 'enum' in keys[k]:
                     params[k]['enum'] = keys[k]['enum']
-                if 'example' in p['schema'] and k in p['schema']['example']:
-                    params[k]['example'] = p['schema']['example'][k]
         elif 'required' in p and p['required']:
             params[name] = {'required': True}
             params[name]['in'] = p['in']

@@ -207,7 +207,7 @@ def main():
                         elif p == 'organizationId':
                             required[p] = '549236'
                         elif p == 'networkId':
-                            required[p] = 'L_646829496481104079'
+                            required[p] = 'L_646829496481105433'    # DevNet Sandbox ALWAYS ON network @ https://n149.meraki.com/o/-t35Mb/manage/organization/overview
                         elif p == 'serial':
                             required[p] = 'Q2QN-9J8L-SLPD'
                         elif values['type'] == 'array':
