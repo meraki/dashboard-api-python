@@ -233,7 +233,10 @@ class AsyncRestSession:
                     try:
                         message = await response.json()
                     except aiohttp.client_exceptions.ContentTypeError:
-                        message = (await response.content())[:100]
+                        try:
+                            message = (await response.text())[:100]
+                        except:
+                            message = None
 
                     # Check specifically for action batch concurrency error
                     action_batch_concurrency_error = {

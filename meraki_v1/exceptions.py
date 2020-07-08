@@ -19,7 +19,9 @@ class APIError(Exception):
         try:
             self.message = self.response.json() if self.response is not None and self.response.json() else None
         except ValueError:
-            self.message = self.response.content[:100]
+            self.message = self.response.content[:100].decode('UTF-8').strip()
+            if self.status == 404 and self.reason == 'Not Found':
+                self.message += 'please wait a minute if the key or org was just newly created.'
         super(APIError, self).__init__(f'{self.tag}, {self.operation} - {self.status} {self.reason}, {self.message}')
 
     def __repr__(self):
@@ -34,6 +36,10 @@ class AsyncAPIError(Exception):
         self.status = response.status if response is not None and response.status else None
         self.reason = response.reason if response is not None and response.reason else None
         self.message = message
+        if type(self.message) == str:
+            self.message = self.message.strip()
+        if self.status == 404 and self.reason == 'Not Found':
+            self.message += 'please wait a minute if the key or org was just newly created.'
 
         super().__init__(
             f'{self.tag}, {self.operation} - {self.status} {self.reason}, {self.message}'

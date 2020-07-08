@@ -234,7 +234,7 @@ class AsyncRestSession:
                         message = await response.json()
                     except aiohttp.client_exceptions.ContentTypeError:
                         try:
-                            message = (await response.content())[:100]
+                            message = (await response.text())[:100]
                         except:
                             message = None
 

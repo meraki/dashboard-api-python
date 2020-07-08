@@ -7,7 +7,6 @@ class AsyncOrganizations:
         """
         **List the organizations that the user has privileges on**
         https://developer.cisco.com/meraki/api-v1/#!get-organizations
-
         """
 
         metadata = {
@@ -22,7 +21,6 @@ class AsyncOrganizations:
         """
         **Create a new organization**
         https://developer.cisco.com/meraki/api-v1/#!create-organization
-
         - name (string): The name of the organization
         """
 
@@ -43,7 +41,6 @@ class AsyncOrganizations:
         """
         **Returns the SAML SSO enabled settings for an organization.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-saml
-
         - orgId (string): (required)
         """
 
@@ -59,7 +56,6 @@ class AsyncOrganizations:
         """
         **Updates the SAML SSO enabled settings for an organization.**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-saml
-
         - orgId (string): (required)
         - enabled (boolean): Boolean for updating SAML SSO enabled settings.
         """
@@ -81,7 +77,6 @@ class AsyncOrganizations:
         """
         **Return an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization
-
         - organizationId (string): (required)
         """
 
@@ -97,7 +92,6 @@ class AsyncOrganizations:
         """
         **Update an organization**
         https://developer.cisco.com/meraki/api-v1/#!update-organization
-
         - organizationId (string): (required)
         - name (string): The name of the organization
         """
@@ -119,7 +113,6 @@ class AsyncOrganizations:
         """
         **Delete an organization**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization
-
         - organizationId (string): (required)
         """
 
@@ -135,7 +128,6 @@ class AsyncOrganizations:
         """
         **Create an action batch**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-action-batch
-
         - organizationId (string): (required)
         - actions (array): A set of changes to make as part of this action (<a href='https://developer.cisco.com/meraki/api/#/rest/guides/action-batches/'>more details</a>)
         - confirmed (boolean): Set to true for immediate execution. Set to false if the action should be previewed before executing. This property cannot be unset once it is true. Defaults to false.
@@ -159,7 +151,6 @@ class AsyncOrganizations:
         """
         **Return the list of action batches in the organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-action-batches
-
         - organizationId (string): (required)
         - status (string): Filter batches by status. Valid types are pending, completed, and failed.
         """
@@ -185,7 +176,6 @@ class AsyncOrganizations:
         """
         **Return an action batch**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-action-batch
-
         - organizationId (string): (required)
         - actionBatchId (string): (required)
         """
@@ -202,7 +192,6 @@ class AsyncOrganizations:
         """
         **Delete an action batch**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-action-batch
-
         - organizationId (string): (required)
         - actionBatchId (string): (required)
         """
@@ -219,7 +208,6 @@ class AsyncOrganizations:
         """
         **Update an action batch**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-action-batch
-
         - organizationId (string): (required)
         - actionBatchId (string): (required)
         - confirmed (boolean): A boolean representing whether or not the batch has been confirmed. This property cannot be unset once it is true.
@@ -243,7 +231,6 @@ class AsyncOrganizations:
         """
         **List the dashboard administrators in this organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-admins
-
         - organizationId (string): (required)
         """
 
@@ -259,7 +246,6 @@ class AsyncOrganizations:
         """
         **Create a new dashboard administrator**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-admin
-
         - organizationId (string): (required)
         - email (string): The email of the dashboard administrator. This attribute can not be updated.
         - name (string): The name of the dashboard administrator
@@ -293,7 +279,6 @@ class AsyncOrganizations:
         """
         **Update an administrator**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-admin
-
         - organizationId (string): (required)
         - id (string): (required)
         - name (string): The name of the dashboard administrator
@@ -323,7 +308,6 @@ class AsyncOrganizations:
         """
         **Revoke all access for a dashboard administrator within this organization**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-admin
-
         - organizationId (string): (required)
         - id (string): (required)
         """
@@ -340,7 +324,6 @@ class AsyncOrganizations:
         """
         **List the API requests made by an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-api-requests
-
         - organizationId (string): (required)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
@@ -374,7 +357,6 @@ class AsyncOrganizations:
         """
         **Return an aggregated overview of API requests data**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-api-requests-overview
-
         - organizationId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
@@ -398,7 +380,6 @@ class AsyncOrganizations:
         """
         **List the branding policies of an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-branding-policies
-
         - organizationId (string): (required)
         """
 
@@ -414,7 +395,6 @@ class AsyncOrganizations:
         """
         **Add a new branding policy to an organization**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-branding-policy
-
         - organizationId (string): (required)
         - name (string): Name of the Dashboard branding policy.
         - enabled (boolean): Boolean indicating whether this policy is enabled.
@@ -443,7 +423,6 @@ class AsyncOrganizations:
         """
         **Return the branding policy IDs of an organization in priority order. IDs are ordered in ascending order of priority (IDs later in the array have higher priority).**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-branding-policies-priorities
-
         - organizationId (string): (required)
         """
 
@@ -459,7 +438,6 @@ class AsyncOrganizations:
         """
         **Update the priority ordering of an organization's branding policies.**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-branding-policies-priorities
-
         - organizationId (string): (required)
         - brandingPolicyIds (array): A list of branding policy IDs arranged in ascending priority order (IDs later in the array have higher priority).
         """
@@ -481,7 +459,6 @@ class AsyncOrganizations:
         """
         **Return a branding policy**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-branding-policy
-
         - organizationId (string): (required)
         - brandingPolicyId (string): (required)
         """
@@ -498,7 +475,6 @@ class AsyncOrganizations:
         """
         **Update a branding policy**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-branding-policy
-
         - organizationId (string): (required)
         - brandingPolicyId (string): (required)
         - name (string): Name of the Dashboard branding policy.
@@ -528,7 +504,6 @@ class AsyncOrganizations:
         """
         **Delete a branding policy**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-branding-policy
-
         - organizationId (string): (required)
         - brandingPolicyId (string): (required)
         """
@@ -545,7 +520,6 @@ class AsyncOrganizations:
         """
         **Claim a list of devices, licenses, and/or orders into an organization. When claiming by order, all devices and licenses in the order will be claimed; licenses will be added to the organization and devices will be placed in the organization's inventory.**
         https://developer.cisco.com/meraki/api-v1/#!claim-into-organization
-
         - organizationId (string): (required)
         - orders (array): The numbers of the orders that should be claimed
         - serials (array): The serials of the devices that should be claimed
@@ -569,7 +543,6 @@ class AsyncOrganizations:
         """
         **Create a new organization by cloning the addressed organization**
         https://developer.cisco.com/meraki/api-v1/#!clone-organization
-
         - organizationId (string): (required)
         - name (string): The name of the new organization
         """
@@ -591,7 +564,6 @@ class AsyncOrganizations:
         """
         **List the configuration templates for this organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-config-templates
-
         - organizationId (string): (required)
         """
 
@@ -607,7 +579,6 @@ class AsyncOrganizations:
         """
         **Create a new configuration template**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-config-template
-
         - organizationId (string): (required)
         - name (string): The name of the configuration template
         - timeZone (string): The timezone of the configuration template. For a list of allowed timezones, please see the 'TZ' column in the table in <a target='_blank' href='https://en.wikipedia.org/wiki/List_of_tz_database_time_zones'>this article</a>. Not applicable if copying from existing network or template
@@ -631,7 +602,6 @@ class AsyncOrganizations:
         """
         **Update a configuration template**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-config-template
-
         - organizationId (string): (required)
         - configTemplateId (string): (required)
         - name (string): The name of the configuration template
@@ -655,7 +625,6 @@ class AsyncOrganizations:
         """
         **Remove a configuration template**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-config-template
-
         - organizationId (string): (required)
         - configTemplateId (string): (required)
         """
@@ -672,7 +641,6 @@ class AsyncOrganizations:
         """
         **Return a single configuration template**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-config-template
-
         - organizationId (string): (required)
         - configTemplateId (string): (required)
         """
@@ -689,7 +657,6 @@ class AsyncOrganizations:
         """
         **View the Change Log for your organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-configuration-changes
-
         - organizationId (string): (required)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" or "prev" (default) page
@@ -720,7 +687,6 @@ class AsyncOrganizations:
         """
         **List the devices in an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-devices
-
         - organizationId (string): (required)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
@@ -747,7 +713,6 @@ class AsyncOrganizations:
         """
         **List the status of every Meraki device in the organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-statuses
-
         - organizationId (string): (required)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
@@ -773,7 +738,6 @@ class AsyncOrganizations:
         """
         **Return the uplink loss and latency for every MX in the organization from at latest 2 minutes ago**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-uplinks-loss-and-latency
-
         - organizationId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 5 minutes after t0. The latest possible time that t1 can be is 2 minutes into the past.
@@ -803,16 +767,20 @@ class AsyncOrganizations:
         """
         **Return the device inventory for an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-inventory
-
         - organizationId (string): (required)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - usedState (string): Filter results by used or unused inventory. Accepted values are "used" or "unused".
         """
 
         kwargs.update(locals())
+
+        if 'usedState' in kwargs:
+            options = ['used', 'unused']
+            assert kwargs['usedState'] in options, f'''"usedState" cannot be "{kwargs['usedState']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['organizations', 'configure', 'inventory'],
@@ -820,7 +788,7 @@ class AsyncOrganizations:
         }
         resource = f'/organizations/{organizationId}/inventory'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'usedState', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -829,7 +797,6 @@ class AsyncOrganizations:
         """
         **List the licenses for an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-licenses
-
         - organizationId (string): (required)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
@@ -862,7 +829,6 @@ class AsyncOrganizations:
         """
         **Assign SM seats to a network. This will increase the managed SM device limit of the network**
         https://developer.cisco.com/meraki/api-v1/#!assign-organization-licenses-seats
-
         - organizationId (string): (required)
         - licenseId (string): The ID of the SM license to assign seats from
         - networkId (string): The ID of the SM network to assign the seats to
@@ -886,7 +852,6 @@ class AsyncOrganizations:
         """
         **Move licenses to another organization. This will also move any devices that the licenses are assigned to**
         https://developer.cisco.com/meraki/api-v1/#!move-organization-licenses
-
         - organizationId (string): (required)
         - destOrganizationId (string): The ID of the organization to move the licenses to
         - licenseIds (array): A list of IDs of licenses to move to the new organization
@@ -909,7 +874,6 @@ class AsyncOrganizations:
         """
         **Move SM seats to another organization**
         https://developer.cisco.com/meraki/api-v1/#!move-organization-licenses-seats
-
         - organizationId (string): (required)
         - destOrganizationId (string): The ID of the organization to move the SM seats to
         - licenseId (string): The ID of the SM license to move the seats from
@@ -933,7 +897,6 @@ class AsyncOrganizations:
         """
         **Return an overview of the license state for an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-licenses-overview
-
         - organizationId (string): (required)
         """
 
@@ -949,7 +912,6 @@ class AsyncOrganizations:
         """
         **Renew SM seats of a license. This will extend the license expiration date of managed SM devices covered by this license**
         https://developer.cisco.com/meraki/api-v1/#!renew-organization-licenses-seats
-
         - organizationId (string): (required)
         - licenseIdToRenew (string): The ID of the SM license to renew. This license must already be assigned to an SM network
         - unusedLicenseId (string): The SM license to use to renew the seats on 'licenseIdToRenew'. This license must have at least as many seats available as there are seats on 'licenseIdToRenew'
@@ -972,7 +934,6 @@ class AsyncOrganizations:
         """
         **Display a license**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-license
-
         - organizationId (string): (required)
         - licenseId (string): (required)
         """
@@ -989,7 +950,6 @@ class AsyncOrganizations:
         """
         **Update a license**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-license
-
         - organizationId (string): (required)
         - licenseId (string): (required)
         - deviceSerial (string): The serial number of the device to assign this license to. Set this to null to unassign the license. If a different license is already active on the device, this parameter will control queueing/dequeuing this license.
@@ -1012,7 +972,6 @@ class AsyncOrganizations:
         """
         **List the networks that the user has privileges on in an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-networks
-
         - organizationId (string): (required)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
@@ -1043,6 +1002,7 @@ class AsyncOrganizations:
         for k, v in kwargs.items():
             if k.strip() in array_params:
                 params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -1050,7 +1010,6 @@ class AsyncOrganizations:
         """
         **Create a network**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-network
-
         - organizationId (string): (required)
         - name (string): The name of the new network
         - productTypes (array): The product type(s) of the new network. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway. If more than one type is included, the network will be a combined network.
@@ -1076,7 +1035,6 @@ class AsyncOrganizations:
         """
         **Combine multiple networks into a single network**
         https://developer.cisco.com/meraki/api-v1/#!combine-organization-networks
-
         - organizationId (string): (required)
         - name (string): The name of the combined network
         - networkIds (array): A list of the network IDs that will be combined. If an ID of a combined network is included in this list, the other networks in the list will be grouped into that network
@@ -1100,7 +1058,6 @@ class AsyncOrganizations:
         """
         **Return the OpenAPI 2.0 Specification of the organization's API documentation in JSON**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-openapi-spec
-
         - organizationId (string): (required)
         """
 
@@ -1116,7 +1073,6 @@ class AsyncOrganizations:
         """
         **List the SAML IdPs in your organization.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-saml-idps
-
         - organizationId (string): (required)
         """
 
@@ -1132,7 +1088,6 @@ class AsyncOrganizations:
         """
         **Create a SAML IdP for your organization.**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-saml-idp
-
         - organizationId (string): (required)
         - x509certSha1Fingerprint (string): Fingerprint (SHA1) of the SAML certificate provided by your Identity Provider (IdP). This will be used for encryption / validation.
         - sloLogoutUrl (string): Dashboard will redirect users to this URL when they sign out.
@@ -1155,7 +1110,6 @@ class AsyncOrganizations:
         """
         **Update a SAML IdP in your organization**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-saml-idp
-
         - organizationId (string): (required)
         - idpId (string): (required)
         - x509certSha1Fingerprint (string): Fingerprint (SHA1) of the SAML certificate provided by your Identity Provider (IdP). This will be used for encryption / validation.
@@ -1179,7 +1133,6 @@ class AsyncOrganizations:
         """
         **Get a SAML IdP from your organization.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-saml-idp
-
         - organizationId (string): (required)
         - idpId (string): (required)
         """
@@ -1196,7 +1149,6 @@ class AsyncOrganizations:
         """
         **Remove a SAML IdP in your organization.**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-saml-idp
-
         - organizationId (string): (required)
         - idpId (string): (required)
         """
@@ -1213,7 +1165,6 @@ class AsyncOrganizations:
         """
         **List the SAML roles for this organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-saml-roles
-
         - organizationId (string): (required)
         """
 
@@ -1229,7 +1180,6 @@ class AsyncOrganizations:
         """
         **Create a SAML role**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-saml-role
-
         - organizationId (string): (required)
         - role (string): The role of the SAML administrator
         - orgAccess (string): The privilege of the SAML administrator on the organization
@@ -1254,7 +1204,6 @@ class AsyncOrganizations:
         """
         **Return a SAML role**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-saml-role
-
         - organizationId (string): (required)
         - samlRoleId (string): (required)
         """
@@ -1271,7 +1220,6 @@ class AsyncOrganizations:
         """
         **Update a SAML role**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-saml-role
-
         - organizationId (string): (required)
         - samlRoleId (string): (required)
         - role (string): The role of the SAML administrator
@@ -1297,7 +1245,6 @@ class AsyncOrganizations:
         """
         **Remove a SAML role**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-saml-role
-
         - organizationId (string): (required)
         - samlRoleId (string): (required)
         """
@@ -1314,7 +1261,6 @@ class AsyncOrganizations:
         """
         **Return the SNMP settings for an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-snmp
-
         - organizationId (string): (required)
         """
 
@@ -1330,7 +1276,6 @@ class AsyncOrganizations:
         """
         **Update the SNMP settings for an organization**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-snmp
-
         - organizationId (string): (required)
         - v2cEnabled (boolean): Boolean indicating whether SNMP version 2c is enabled for the organization.
         - v3Enabled (boolean): Boolean indicating whether SNMP version 3 is enabled for the organization.
@@ -1365,7 +1310,6 @@ class AsyncOrganizations:
         """
         **Return the log of webhook POSTs sent**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-webhook-logs
-
         - organizationId (string): (required)
         - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
