@@ -154,6 +154,7 @@ class AsyncRestSession:
         kwargs.setdefault("timeout", self._single_request_timeout)
 
         # Ensure proper base URL
+        url = str(url)
         if "meraki.com" in url or "meraki.cn" in url:
             abs_url = url
         else:
