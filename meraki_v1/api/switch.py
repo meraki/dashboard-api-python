@@ -7,6 +7,7 @@ class Switch(object):
         """
         **List the switch ports for a switch**
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-ports
+
         - serial (string): (required)
         """
 
@@ -22,6 +23,7 @@ class Switch(object):
         """
         **Cycle a set of switch ports**
         https://developer.cisco.com/meraki/api-v1/#!cycle-device-switch-ports
+
         - serial (string): (required)
         - ports (array): List of switch ports. Example: [1, 2-5, 1_MA-MOD-8X10G_1, 1_MA-MOD-8X10G_2-1_MA-MOD-8X10G_8]
         """
@@ -43,6 +45,7 @@ class Switch(object):
         """
         **Return the status for all the ports of a switch**
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-ports-statuses
+
         - serial (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
@@ -65,6 +68,7 @@ class Switch(object):
         """
         **Return the packet counters for all the ports of a switch**
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-ports-statuses-packets
+
         - serial (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 1 day from today.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 1 day. The default is 1 day.
@@ -87,6 +91,7 @@ class Switch(object):
         """
         **Return a switch port**
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-port
+
         - serial (string): (required)
         - portId (string): (required)
         """
@@ -103,6 +108,7 @@ class Switch(object):
         """
         **Update a switch port**
         https://developer.cisco.com/meraki/api-v1/#!update-device-switch-port
+
         - serial (string): (required)
         - portId (string): (required)
         - name (string): The name of the switch port
@@ -157,6 +163,7 @@ class Switch(object):
         """
         **List layer 3 interfaces for a switch**
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-routing-interfaces
+
         - serial (string): (required)
         """
 
@@ -172,6 +179,7 @@ class Switch(object):
         """
         **Create a layer 3 interface for a switch**
         https://developer.cisco.com/meraki/api-v1/#!create-device-switch-routing-interface
+
         - serial (string): (required)
         - name (string): A friendly name or description for the interface or VLAN.
         - interfaceIp (string): The IP address this switch will use for layer 3 routing on this VLAN or subnet. This cannot be the same as the switch's management IP.
@@ -203,6 +211,7 @@ class Switch(object):
         """
         **Return a layer 3 interface for a switch**
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-routing-interface
+
         - serial (string): (required)
         - interfaceId (string): (required)
         """
@@ -219,6 +228,7 @@ class Switch(object):
         """
         **Update a layer 3 interface for a switch**
         https://developer.cisco.com/meraki/api-v1/#!update-device-switch-routing-interface
+
         - serial (string): (required)
         - interfaceId (string): (required)
         - name (string): A friendly name or description for the interface or VLAN.
@@ -250,6 +260,7 @@ class Switch(object):
         """
         **Delete a layer 3 interface from the switch**
         https://developer.cisco.com/meraki/api-v1/#!delete-device-switch-routing-interface
+
         - serial (string): (required)
         - interfaceId (string): (required)
         """
@@ -266,6 +277,7 @@ class Switch(object):
         """
         **Return a layer 3 interface DHCP configuration for a switch**
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-routing-interface-dhcp
+
         - serial (string): (required)
         - interfaceId (string): (required)
         """
@@ -282,6 +294,7 @@ class Switch(object):
         """
         **Update a layer 3 interface DHCP configuration for a switch**
         https://developer.cisco.com/meraki/api-v1/#!update-device-switch-routing-interface-dhcp
+
         - serial (string): (required)
         - interfaceId (string): (required)
         - dhcpMode (string): The DHCP mode options for the switch interface ('dhcpDisabled', 'dhcpRelay' or 'dhcpServer')
@@ -324,6 +337,7 @@ class Switch(object):
         """
         **List layer 3 static routes for a switch**
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-routing-static-routes
+
         - serial (string): (required)
         """
 
@@ -339,6 +353,7 @@ class Switch(object):
         """
         **Create a layer 3 static route for a switch**
         https://developer.cisco.com/meraki/api-v1/#!create-device-switch-routing-static-route
+
         - serial (string): (required)
         - subnet (string): The subnet which is routed via this static route and should be specified in CIDR notation (ex. 1.2.3.0/24)
         - nextHopIp (string): IP address of the next hop device to which the device sends its traffic for the subnet
@@ -364,6 +379,7 @@ class Switch(object):
         """
         **Return a layer 3 static route for a switch**
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-routing-static-route
+
         - serial (string): (required)
         - staticRouteId (string): (required)
         """
@@ -380,6 +396,7 @@ class Switch(object):
         """
         **Update a layer 3 static route for a switch**
         https://developer.cisco.com/meraki/api-v1/#!update-device-switch-routing-static-route
+
         - serial (string): (required)
         - staticRouteId (string): (required)
         - name (string): Name or description for layer 3 static route
@@ -406,6 +423,7 @@ class Switch(object):
         """
         **Delete a layer 3 static route for a switch**
         https://developer.cisco.com/meraki/api-v1/#!delete-device-switch-routing-static-route
+
         - serial (string): (required)
         - staticRouteId (string): (required)
         """
@@ -418,10 +436,50 @@ class Switch(object):
 
         return self._session.delete(metadata, resource)
 
+    def getDeviceSwitchWarmSpare(self, serial: str):
+        """
+        **Return warm spare configuration for a switch**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-switch-warm-spare
+
+        - serial (string): (required)
+        """
+
+        metadata = {
+            'tags': ['switch', 'configure', 'warmSpare'],
+            'operation': 'getDeviceSwitchWarmSpare'
+        }
+        resource = f'/devices/{serial}/switch/warmSpare'
+
+        return self._session.get(metadata, resource)
+
+    def updateDeviceSwitchWarmSpare(self, serial: str, enabled: bool, **kwargs):
+        """
+        **Update warm spare configuration for a switch. The spare will use the same L3 configuration as the primary. Note that this will irreversibly destroy any existing L3 configuration on the spare.**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-switch-warm-spare
+
+        - serial (string): (required)
+        - enabled (boolean): Enable or disable warm spare for a switch
+        - spareSerial (string): Serial number of the warm spare switch
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['switch', 'configure', 'warmSpare'],
+            'operation': 'updateDeviceSwitchWarmSpare'
+        }
+        resource = f'/devices/{serial}/switch/warmSpare'
+
+        body_params = ['enabled', 'spareSerial', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
     def getNetworkSwitchAccessControlLists(self, networkId: str):
         """
         **Return the access control lists for a MS network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-access-control-lists
+
         - networkId (string): (required)
         """
 
@@ -437,6 +495,7 @@ class Switch(object):
         """
         **Update the access control lists for a MS network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-access-control-lists
+
         - networkId (string): (required)
         - rules (array): An ordered array of the access control list rules (not including the default rule). An empty array will clear the rules.
         """
@@ -458,6 +517,7 @@ class Switch(object):
         """
         **List the access policies for this network. Only valid for MS networks.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-access-policies
+
         - networkId (string): (required)
         """
 
@@ -473,6 +533,7 @@ class Switch(object):
         """
         **Return the DHCP server policy**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-dhcp-server-policy
+
         - networkId (string): (required)
         """
 
@@ -488,6 +549,7 @@ class Switch(object):
         """
         **Update the DHCP server policy**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-dhcp-server-policy
+
         - networkId (string): (required)
         - defaultPolicy (string): 'allow' or 'block' new DHCP servers. Default value is 'allow'.
         - allowedServers (array): List the MAC addresses of DHCP servers to permit on the network. Applicable only if defaultPolicy is set to block. An empty array will clear the entries.
@@ -515,6 +577,7 @@ class Switch(object):
         """
         **Return the DSCP to CoS mappings**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-dscp-to-cos-mappings
+
         - networkId (string): (required)
         """
 
@@ -530,6 +593,7 @@ class Switch(object):
         """
         **Update the DSCP to CoS mappings**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-dscp-to-cos-mappings
+
         - networkId (string): (required)
         - mappings (array): An array of DSCP to CoS mappings. An empty array will reset the mappings to default.
         """
@@ -551,6 +615,7 @@ class Switch(object):
         """
         **List link aggregation groups**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-link-aggregations
+
         - networkId (string): (required)
         """
 
@@ -566,6 +631,7 @@ class Switch(object):
         """
         **Create a link aggregation group**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-link-aggregation
+
         - networkId (string): (required)
         - switchPorts (array): Array of switch or stack ports for creating aggregation group. Minimum 2 and maximum 8 ports are supported.
         - switchProfilePorts (array): Array of switch profile ports for creating aggregation group. Minimum 2 and maximum 8 ports are supported.
@@ -588,6 +654,7 @@ class Switch(object):
         """
         **Update a link aggregation group**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-link-aggregation
+
         - networkId (string): (required)
         - linkAggregationId (string): (required)
         - switchPorts (array): Array of switch or stack ports for updating aggregation group. Minimum 2 and maximum 8 ports are supported.
@@ -611,6 +678,7 @@ class Switch(object):
         """
         **Split a link aggregation group into separate ports**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-link-aggregation
+
         - networkId (string): (required)
         - linkAggregationId (string): (required)
         """
@@ -627,6 +695,7 @@ class Switch(object):
         """
         **Return the MTU configuration**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-mtu
+
         - networkId (string): (required)
         """
 
@@ -642,6 +711,7 @@ class Switch(object):
         """
         **Update the MTU configuration**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-mtu
+
         - networkId (string): (required)
         - defaultMtuSize (integer): MTU size for the entire network. Default value is 9578.
         - overrides (array): Override MTU size for individual switches or switch profiles. An empty array will clear overrides.
@@ -664,6 +734,7 @@ class Switch(object):
         """
         **List switch port schedules**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-port-schedules
+
         - networkId (string): (required)
         """
 
@@ -679,6 +750,7 @@ class Switch(object):
         """
         **Add a switch port schedule**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-port-schedule
+
         - networkId (string): (required)
         - name (string): The name for your port schedule. Required
         - portSchedule (object):     The schedule for switch port scheduling. Schedules are applied to days of the week.
@@ -704,6 +776,7 @@ class Switch(object):
         """
         **Delete a switch port schedule**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-port-schedule
+
         - networkId (string): (required)
         - portScheduleId (string): (required)
         """
@@ -720,6 +793,7 @@ class Switch(object):
         """
         **Update a switch port schedule**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-port-schedule
+
         - networkId (string): (required)
         - portScheduleId (string): (required)
         - name (string): The name for your port schedule.
@@ -746,6 +820,7 @@ class Switch(object):
         """
         **List quality of service rules**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-qos-rules
+
         - networkId (string): (required)
         """
 
@@ -761,6 +836,7 @@ class Switch(object):
         """
         **Add a quality of service rule**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-qos-rule
+
         - networkId (string): (required)
         - vlan (integer): The VLAN of the incoming packet. A null value will match any VLAN.
         - protocol (string): The protocol of the incoming packet. Can be one of "ANY", "TCP" or "UDP". Default value is "ANY"
@@ -792,6 +868,7 @@ class Switch(object):
         """
         **Return the quality of service rule IDs by order in which they will be processed by the switch**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-qos-rules-order
+
         - networkId (string): (required)
         """
 
@@ -807,6 +884,7 @@ class Switch(object):
         """
         **Update the order in which the rules should be processed by the switch**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-qos-rules-order
+
         - networkId (string): (required)
         - ruleIds (array): A list of quality of service rule IDs arranged in order in which they should be processed by the switch.
         """
@@ -828,6 +906,7 @@ class Switch(object):
         """
         **Return a quality of service rule**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-qos-rule
+
         - networkId (string): (required)
         - qosRuleId (string): (required)
         """
@@ -844,6 +923,7 @@ class Switch(object):
         """
         **Delete a quality of service rule**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-qos-rule
+
         - networkId (string): (required)
         - qosRuleId (string): (required)
         """
@@ -860,6 +940,7 @@ class Switch(object):
         """
         **Update a quality of service rule**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-qos-rule
+
         - networkId (string): (required)
         - qosRuleId (string): (required)
         - vlan (integer): The VLAN of the incoming packet. A null value will match any VLAN.
@@ -892,6 +973,7 @@ class Switch(object):
         """
         **Return multicast settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-routing-multicast
+
         - networkId (string): (required)
         """
 
@@ -907,6 +989,7 @@ class Switch(object):
         """
         **Update multicast settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-routing-multicast
+
         - networkId (string): (required)
         - defaultSettings (object): Default multicast setting for entire network. IGMP snooping and Flood unknown multicast traffic settings are enabled by default.
         - overrides (array): Array of paired switches/stacks/profiles and corresponding multicast settings. An empty array will clear the multicast settings.
@@ -929,6 +1012,7 @@ class Switch(object):
         """
         **List multicast rendezvous points**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-routing-multicast-rendezvous-points
+
         - networkId (string): (required)
         """
 
@@ -944,6 +1028,7 @@ class Switch(object):
         """
         **Create a multicast rendezvous point**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-routing-multicast-rendezvous-point
+
         - networkId (string): (required)
         - interfaceIp (string): The IP address of the interface where the RP needs to be created.
         - multicastGroup (string): 'Any', or the IP address of a multicast group
@@ -966,6 +1051,7 @@ class Switch(object):
         """
         **Return a multicast rendezvous point**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-routing-multicast-rendezvous-point
+
         - networkId (string): (required)
         - rendezvousPointId (string): (required)
         """
@@ -982,6 +1068,7 @@ class Switch(object):
         """
         **Delete a multicast rendezvous point**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-routing-multicast-rendezvous-point
+
         - networkId (string): (required)
         - rendezvousPointId (string): (required)
         """
@@ -998,6 +1085,7 @@ class Switch(object):
         """
         **Update a multicast rendezvous point**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-routing-multicast-rendezvous-point
+
         - networkId (string): (required)
         - rendezvousPointId (string): (required)
         - interfaceIp (string): The IP address of the interface to use
@@ -1017,10 +1105,27 @@ class Switch(object):
 
         return self._session.put(metadata, resource, payload)
 
+    def getNetworkSwitchRoutingOspf(self, networkId: str):
+        """
+        **Return layer 3 OSPF routing configuration**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-routing-ospf
+
+        - networkId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['switch', 'configure', 'routing', 'ospf'],
+            'operation': 'getNetworkSwitchRoutingOspf'
+        }
+        resource = f'/networks/{networkId}/switch/routing/ospf'
+
+        return self._session.get(metadata, resource)
+
     def updateNetworkSwitchRoutingOspf(self, networkId: str, **kwargs):
         """
         **Update layer 3 OSPF routing configuration**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-routing-ospf
+
         - networkId (string): (required)
         - enabled (boolean): Boolean value to enable or disable OSPF routing. OSPF routing is disabled by default.
         - helloTimerInSeconds (integer): Time interval in seconds at which hello packet will be sent to OSPF neighbors to maintain connectivity. Value must be between 1 and 255. Default is 10 seconds
@@ -1047,6 +1152,7 @@ class Switch(object):
         """
         **Returns the switch network settings**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-settings
+
         - networkId (string): (required)
         """
 
@@ -1062,6 +1168,7 @@ class Switch(object):
         """
         **Update switch network settings**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-settings
+
         - networkId (string): (required)
         - vlan (integer): Management VLAN
         - useCombinedPower (boolean): The use Combined Power as the default behavior of secondary power supplies on supported devices.
@@ -1085,6 +1192,7 @@ class Switch(object):
         """
         **Return the storm control configuration for a switch network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-storm-control
+
         - networkId (string): (required)
         """
 
@@ -1100,6 +1208,7 @@ class Switch(object):
         """
         **Update the storm control configuration for a switch network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-storm-control
+
         - networkId (string): (required)
         - broadcastThreshold (integer): Percentage (1 to 99) of total available port bandwidth for broadcast traffic type. Default value 100 percent rate is to clear the configuration.
         - multicastThreshold (integer): Percentage (1 to 99) of total available port bandwidth for multicast traffic type. Default value 100 percent rate is to clear the configuration.
@@ -1123,6 +1232,7 @@ class Switch(object):
         """
         **Returns STP settings**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-stp
+
         - networkId (string): (required)
         """
 
@@ -1138,6 +1248,7 @@ class Switch(object):
         """
         **Updates STP settings**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-stp
+
         - networkId (string): (required)
         - rstpEnabled (boolean): The spanning tree protocol status in network
         - stpBridgePriority (array): STP bridge priority for switches/stacks or switch profiles. An empty array will clear the STP bridge priority settings.
@@ -1160,6 +1271,7 @@ class Switch(object):
         """
         **List the switch stacks in a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-switch-stacks
+
         - networkId (string): (required)
         """
 
@@ -1175,6 +1287,7 @@ class Switch(object):
         """
         **Create a stack**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-switch-stack
+
         - networkId (string): (required)
         - name (string): The name of the new stack
         - serials (array): An array of switch serials to be added into the new stack
@@ -1197,6 +1310,7 @@ class Switch(object):
         """
         **Show a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-switch-stack
+
         - networkId (string): (required)
         - switchStackId (string): (required)
         """
@@ -1213,6 +1327,7 @@ class Switch(object):
         """
         **Delete a stack**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-switch-stack
+
         - networkId (string): (required)
         - switchStackId (string): (required)
         """
@@ -1229,6 +1344,7 @@ class Switch(object):
         """
         **Add a switch to a stack**
         https://developer.cisco.com/meraki/api-v1/#!add-network-switch-switch-stack
+
         - networkId (string): (required)
         - switchStackId (string): (required)
         - serial (string): The serial of the switch to be added
@@ -1251,6 +1367,7 @@ class Switch(object):
         """
         **Remove a switch from a stack**
         https://developer.cisco.com/meraki/api-v1/#!remove-network-switch-switch-stack
+
         - networkId (string): (required)
         - switchStackId (string): (required)
         - serial (string): The serial of the switch to be removed
@@ -1273,6 +1390,7 @@ class Switch(object):
         """
         **List layer 3 interfaces for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-switch-stack-routing-interfaces
+
         - networkId (string): (required)
         - switchStackId (string): (required)
         """
@@ -1289,6 +1407,7 @@ class Switch(object):
         """
         **Create a layer 3 interface for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-switch-stack-routing-interface
+
         - networkId (string): (required)
         - switchStackId (string): (required)
         - name (string): A friendly name or description for the interface or VLAN.
@@ -1321,6 +1440,7 @@ class Switch(object):
         """
         **Return a layer 3 interface from a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-switch-stack-routing-interface
+
         - networkId (string): (required)
         - switchStackId (string): (required)
         - interfaceId (string): (required)
@@ -1338,6 +1458,7 @@ class Switch(object):
         """
         **Update a layer 3 interface for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-switch-stack-routing-interface
+
         - networkId (string): (required)
         - switchStackId (string): (required)
         - interfaceId (string): (required)
@@ -1370,6 +1491,7 @@ class Switch(object):
         """
         **Delete a layer 3 interface from a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-switch-stack-routing-interface
+
         - networkId (string): (required)
         - switchStackId (string): (required)
         - interfaceId (string): (required)
@@ -1387,6 +1509,7 @@ class Switch(object):
         """
         **Return a layer 3 interface DHCP configuration for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-switch-stack-routing-interface-dhcp
+
         - networkId (string): (required)
         - switchStackId (string): (required)
         - interfaceId (string): (required)
@@ -1404,6 +1527,7 @@ class Switch(object):
         """
         **Update a layer 3 interface DHCP configuration for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-switch-stack-routing-interface-dhcp
+
         - networkId (string): (required)
         - switchStackId (string): (required)
         - interfaceId (string): (required)
@@ -1447,6 +1571,7 @@ class Switch(object):
         """
         **List layer 3 static routes for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-switch-stack-routing-static-routes
+
         - networkId (string): (required)
         - switchStackId (string): (required)
         """
@@ -1463,6 +1588,7 @@ class Switch(object):
         """
         **Create a layer 3 static route for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-switch-stack-routing-static-route
+
         - networkId (string): (required)
         - switchStackId (string): (required)
         - subnet (string): The subnet which is routed via this static route and should be specified in CIDR notation (ex. 1.2.3.0/24)
@@ -1489,6 +1615,7 @@ class Switch(object):
         """
         **Return a layer 3 static route for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-switch-stack-routing-static-route
+
         - networkId (string): (required)
         - switchStackId (string): (required)
         - staticRouteId (string): (required)
@@ -1506,6 +1633,7 @@ class Switch(object):
         """
         **Update a layer 3 static route for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-switch-stack-routing-static-route
+
         - networkId (string): (required)
         - switchStackId (string): (required)
         - staticRouteId (string): (required)
@@ -1533,6 +1661,7 @@ class Switch(object):
         """
         **Delete a layer 3 static route for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-switch-stack-routing-static-route
+
         - networkId (string): (required)
         - switchStackId (string): (required)
         - staticRouteId (string): (required)
@@ -1550,6 +1679,7 @@ class Switch(object):
         """
         **List the switch profiles for your switch template configuration**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-config-template-switch-profiles
+
         - organizationId (string): (required)
         - configTemplateId (string): (required)
         """
@@ -1566,6 +1696,7 @@ class Switch(object):
         """
         **Return all the ports of a switch profile**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-config-template-switch-profile-ports
+
         - organizationId (string): (required)
         - configTemplateId (string): (required)
         - profileId (string): (required)
@@ -1583,6 +1714,7 @@ class Switch(object):
         """
         **Return a switch profile port**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-config-template-switch-profile-port
+
         - organizationId (string): (required)
         - configTemplateId (string): (required)
         - profileId (string): (required)
@@ -1601,6 +1733,7 @@ class Switch(object):
         """
         **Update a switch profile port**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-config-template-switch-profile-port
+
         - organizationId (string): (required)
         - configTemplateId (string): (required)
         - profileId (string): (required)
