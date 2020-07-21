@@ -901,17 +901,18 @@ def __listtotag(taglist):
     Args:
         taglist: Space separated list of tags in a single string
 
-    Returns: List type variable containing all tags
+    Returns: Space delimited string type variable containing all tags
 
     """
 
-    liststr = '  '
+    liststr = ''
 
-    if not isinstance(taglist, list):
-        taglist = list(taglist)
+    if isinstance(taglist, str):
+        taglist = taglist.split()
 
     for t in taglist:
-        liststr = liststr + t + '  '
+        liststr = liststr + t + ' '
+    liststr = liststr[:len(liststr)-1]
 
     return liststr
 
