@@ -933,6 +933,33 @@ class AsyncNetworks:
 
         return self._session.get(metadata, resource)
 
+    def createNetworkMerakiAuthUser(self, networkId: str, email: str, name: str, password: str, authorizations: list, **kwargs):
+        """
+        **Create a user configured with Meraki Authentication for a network (currently only 802.1X RADIUS users can be created, and currently, organizations have a 50,000 user cap)**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-meraki-auth-user
+
+        - networkId (string): (required)
+        - email (string): Email address of the user
+        - name (string): Name of the user
+        - password (string): The password for this user account
+        - authorizations (array): Authorization zones and expiration dates for the user.
+        - accountType (string): Authorization type for user (currently we only support 802.1X account types, which is the default)
+        - emailPasswordToUser (boolean): Whether or not Meraki should email the password to user. Default is false.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['networks', 'configure', 'merakiAuthUsers'],
+            'operation': 'createNetworkMerakiAuthUser'
+        }
+        resource = f'/networks/{networkId}/merakiAuthUsers'
+
+        body_params = ['email', 'name', 'password', 'accountType', 'emailPasswordToUser', 'authorizations', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+
     def getNetworkMerakiAuthUser(self, networkId: str, merakiAuthUserId: str):
         """
         **Return the Meraki Auth splash or RADIUS user**
@@ -949,6 +976,49 @@ class AsyncNetworks:
         resource = f'/networks/{networkId}/merakiAuthUsers/{merakiAuthUserId}'
 
         return self._session.get(metadata, resource)
+
+    def deleteNetworkMerakiAuthUser(self, networkId: str, merakiAuthUserId: str):
+        """
+        **Delete a user configured with Meraki Authentication (currently only 802.1X RADIUS users can be deleted)**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-meraki-auth-user
+
+        - networkId (string): (required)
+        - merakiAuthUserId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'merakiAuthUsers'],
+            'operation': 'deleteNetworkMerakiAuthUser'
+        }
+        resource = f'/networks/{networkId}/merakiAuthUsers/{merakiAuthUserId}'
+
+        return self._session.delete(metadata, resource)
+
+    def updateNetworkMerakiAuthUser(self, networkId: str, merakiAuthUserId: str, **kwargs):
+        """
+        **Update a user configured with Meraki Authentication (currently only 802.1X RADIUS users can be updated)**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-meraki-auth-user
+
+        - networkId (string): (required)
+        - merakiAuthUserId (string): (required)
+        - name (string): Name of the user
+        - password (string): The password for this user account
+        - emailPasswordToUser (boolean): Whether or not Meraki should email the password to user. Default is false.
+        - authorizations (array): Authorization zones and expiration dates for the user.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['networks', 'configure', 'merakiAuthUsers'],
+            'operation': 'updateNetworkMerakiAuthUser'
+        }
+        resource = f'/networks/{networkId}/merakiAuthUsers/{merakiAuthUserId}'
+
+        body_params = ['name', 'password', 'emailPasswordToUser', 'authorizations', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
 
     def getNetworkMqttBrokers(self, networkId: str):
         """

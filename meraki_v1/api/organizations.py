@@ -799,10 +799,10 @@ class Organizations(object):
 
         return self._session.get(metadata, resource, params)
 
-    def getOrganizationInventory(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationInventoryDevices(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **Return the device inventory for an organization**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-inventory
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-inventory-devices
 
         - organizationId (string): (required)
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
@@ -820,10 +820,10 @@ class Organizations(object):
             assert kwargs['usedState'] in options, f'''"usedState" cannot be "{kwargs['usedState']}", & must be set to one of: {options}'''
 
         metadata = {
-            'tags': ['organizations', 'configure', 'inventory'],
-            'operation': 'getOrganizationInventory'
+            'tags': ['organizations', 'configure', 'inventoryDevices'],
+            'operation': 'getOrganizationInventoryDevices'
         }
-        resource = f'/organizations/{organizationId}/inventory'
+        resource = f'/organizations/{organizationId}/inventoryDevices'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'usedState', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
