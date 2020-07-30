@@ -197,19 +197,3 @@ class AsyncDevices:
         resource = f'/devices/{serial}/reboot'
 
         return self._session.post(metadata, resource)
-
-    def getDeviceUplink(self, serial: str):
-        """
-        **Return the uplink information for a device.**
-        https://developer.cisco.com/meraki/api-v1/#!get-device-uplink
-
-        - serial (string): (required)
-        """
-
-        metadata = {
-            'tags': ['devices', 'monitor', 'uplink'],
-            'operation': 'getDeviceUplink'
-        }
-        resource = f'/devices/{serial}/uplink'
-
-        return self._session.get(metadata, resource)

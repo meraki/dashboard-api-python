@@ -39,44 +39,6 @@ class Organizations(object):
 
         return self._session.post(metadata, resource, payload)
 
-    def getOrganizationSaml(self, orgId: str):
-        """
-        **Returns the SAML SSO enabled settings for an organization.**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-saml
-
-        - orgId (string): (required)
-        """
-
-        metadata = {
-            'tags': ['organizations', 'configure', 'saml'],
-            'operation': 'getOrganizationSaml'
-        }
-        resource = f'/organizations/{orgId}/saml'
-
-        return self._session.get(metadata, resource)
-
-    def updateOrganizationSaml(self, orgId: str, **kwargs):
-        """
-        **Updates the SAML SSO enabled settings for an organization.**
-        https://developer.cisco.com/meraki/api-v1/#!update-organization-saml
-
-        - orgId (string): (required)
-        - enabled (boolean): Boolean for updating SAML SSO enabled settings.
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['organizations', 'configure', 'saml'],
-            'operation': 'updateOrganizationSaml'
-        }
-        resource = f'/organizations/{orgId}/saml'
-
-        body_params = ['enabled', ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-
-        return self._session.put(metadata, resource, payload)
-
     def getOrganization(self, organizationId: str):
         """
         **Return an organization**
@@ -1118,6 +1080,44 @@ class Organizations(object):
 
         return self._session.get(metadata, resource)
 
+    def getOrganizationSaml(self, organizationId: str):
+        """
+        **Returns the SAML SSO enabled settings for an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-saml
+
+        - organizationId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'saml'],
+            'operation': 'getOrganizationSaml'
+        }
+        resource = f'/organizations/{organizationId}/saml'
+
+        return self._session.get(metadata, resource)
+
+    def updateOrganizationSaml(self, organizationId: str, **kwargs):
+        """
+        **Updates the SAML SSO enabled settings for an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-saml
+
+        - organizationId (string): (required)
+        - enabled (boolean): Boolean for updating SAML SSO enabled settings.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'saml'],
+            'operation': 'updateOrganizationSaml'
+        }
+        resource = f'/organizations/{organizationId}/saml'
+
+        body_params = ['enabled', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
     def getOrganizationSamlIdps(self, organizationId: str):
         """
         **List the SAML IdPs in your organization.**
@@ -1367,10 +1367,10 @@ class Organizations(object):
 
         return self._session.put(metadata, resource, payload)
 
-    def getOrganizationWebhookLogs(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationWebhooksLogs(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **Return the log of webhook POSTs sent**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-webhook-logs
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-webhooks-logs
 
         - organizationId (string): (required)
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
@@ -1387,10 +1387,10 @@ class Organizations(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'webhookLogs'],
-            'operation': 'getOrganizationWebhookLogs'
+            'tags': ['organizations', 'monitor', 'webhooks', 'logs'],
+            'operation': 'getOrganizationWebhooksLogs'
         }
-        resource = f'/organizations/{organizationId}/webhookLogs'
+        resource = f'/organizations/{organizationId}/webhooks/logs'
 
         query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'url', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}

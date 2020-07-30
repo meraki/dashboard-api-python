@@ -226,7 +226,7 @@ class AsyncNetworks:
 
         - networkId (string): (required)
         - clients (array): The array of clients to provision
-        - devicePolicy (string): The policy to apply to the specified client. Can be 'Group policy', 'Whitelisted', 'Blocked', 'Per connection' or 'Normal'. Required.
+        - devicePolicy (string): The policy to apply to the specified client. Can be 'Group policy', 'Allowed', 'Blocked', 'Per connection' or 'Normal'. Required.
         - groupPolicyId (string): The ID of the desired group policy to apply to the client. Required if 'devicePolicy' is set to "Group policy". Otherwise this is ignored.
         - policiesBySecurityAppliance (object): An object, describing what the policy-connection association is for the security appliance. (Only relevant if the security appliance is actually within the network)
         - policiesBySsid (object): An object, describing the policy-connection associations for each active SSID within the network. Keys should be the number of enabled SSIDs, mapping to an object describing the client's policy
@@ -235,7 +235,7 @@ class AsyncNetworks:
         kwargs.update(locals())
 
         if 'devicePolicy' in kwargs:
-            options = ['Group policy', 'Whitelisted', 'Blocked', 'Per connection', 'Normal']
+            options = ['Group policy', 'Allowed', 'Blocked', 'Per connection', 'Normal']
             assert kwargs['devicePolicy'] in options, f'''"devicePolicy" cannot be "{kwargs['devicePolicy']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -775,145 +775,6 @@ class AsyncNetworks:
             'operation': 'deleteNetworkGroupPolicy'
         }
         resource = f'/networks/{networkId}/groupPolicies/{groupPolicyId}'
-
-        return self._session.delete(metadata, resource)
-
-    def getNetworkHttpServers(self, networkId: str):
-        """
-        **List the HTTP servers for a network**
-        https://developer.cisco.com/meraki/api-v1/#!get-network-http-servers
-
-        - networkId (string): (required)
-        """
-
-        metadata = {
-            'tags': ['networks', 'configure', 'httpServers'],
-            'operation': 'getNetworkHttpServers'
-        }
-        resource = f'/networks/{networkId}/httpServers'
-
-        return self._session.get(metadata, resource)
-
-    def createNetworkHttpServer(self, networkId: str, name: str, url: str, **kwargs):
-        """
-        **Add an HTTP server to a network**
-        https://developer.cisco.com/meraki/api-v1/#!create-network-http-server
-
-        - networkId (string): (required)
-        - name (string): A name for easy reference to the HTTP server
-        - url (string): The URL of the HTTP server
-        - sharedSecret (string): A shared secret that will be included in POSTs sent to the HTTP server. This secret can be used to verify that the request was sent by Meraki.
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['networks', 'configure', 'httpServers'],
-            'operation': 'createNetworkHttpServer'
-        }
-        resource = f'/networks/{networkId}/httpServers'
-
-        body_params = ['name', 'url', 'sharedSecret', ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-
-        return self._session.post(metadata, resource, payload)
-
-    def createNetworkHttpServersWebhookTest(self, networkId: str, url: str, **kwargs):
-        """
-        **Send a test webhook for a network**
-        https://developer.cisco.com/meraki/api-v1/#!create-network-http-servers-webhook-test
-
-        - networkId (string): (required)
-        - url (string): The URL where the test webhook will be sent
-        - sharedSecret (string): The shared secret the test webhook will send. Optional. Defaults to an empty string.
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['networks', 'configure', 'httpServers', 'webhookTests'],
-            'operation': 'createNetworkHttpServersWebhookTest'
-        }
-        resource = f'/networks/{networkId}/httpServers/webhookTests'
-
-        body_params = ['url', 'sharedSecret', ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-
-        return self._session.post(metadata, resource, payload)
-
-    def getNetworkHttpServersWebhookTest(self, networkId: str, id: str):
-        """
-        **Return the status of a webhook test for a network**
-        https://developer.cisco.com/meraki/api-v1/#!get-network-http-servers-webhook-test
-
-        - networkId (string): (required)
-        - id (string): (required)
-        """
-
-        metadata = {
-            'tags': ['networks', 'configure', 'httpServers', 'webhookTests'],
-            'operation': 'getNetworkHttpServersWebhookTest'
-        }
-        resource = f'/networks/{networkId}/httpServers/webhookTests/{id}'
-
-        return self._session.get(metadata, resource)
-
-    def getNetworkHttpServer(self, networkId: str, id: str):
-        """
-        **Return an HTTP server for a network**
-        https://developer.cisco.com/meraki/api-v1/#!get-network-http-server
-
-        - networkId (string): (required)
-        - id (string): (required)
-        """
-
-        metadata = {
-            'tags': ['networks', 'configure', 'httpServers'],
-            'operation': 'getNetworkHttpServer'
-        }
-        resource = f'/networks/{networkId}/httpServers/{id}'
-
-        return self._session.get(metadata, resource)
-
-    def updateNetworkHttpServer(self, networkId: str, id: str, **kwargs):
-        """
-        **Update an HTTP server**
-        https://developer.cisco.com/meraki/api-v1/#!update-network-http-server
-
-        - networkId (string): (required)
-        - id (string): (required)
-        - name (string): A name for easy reference to the HTTP server
-        - url (string): The URL of the HTTP server
-        - sharedSecret (string): A shared secret that will be included in POSTs sent to the HTTP server. This secret can be used to verify that the request was sent by Meraki.
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['networks', 'configure', 'httpServers'],
-            'operation': 'updateNetworkHttpServer'
-        }
-        resource = f'/networks/{networkId}/httpServers/{id}'
-
-        body_params = ['name', 'url', 'sharedSecret', ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-
-        return self._session.put(metadata, resource, payload)
-
-    def deleteNetworkHttpServer(self, networkId: str, id: str):
-        """
-        **Delete an HTTP server from a network**
-        https://developer.cisco.com/meraki/api-v1/#!delete-network-http-server
-
-        - networkId (string): (required)
-        - id (string): (required)
-        """
-
-        metadata = {
-            'tags': ['networks', 'configure', 'httpServers'],
-            'operation': 'deleteNetworkHttpServer'
-        }
-        resource = f'/networks/{networkId}/httpServers/{id}'
 
         return self._session.delete(metadata, resource)
 
@@ -1641,3 +1502,142 @@ class AsyncNetworks:
         resource = f'/networks/{networkId}/unbind'
 
         return self._session.post(metadata, resource)
+
+    def getNetworkWebhooksHttpServers(self, networkId: str):
+        """
+        **List the HTTP servers for a network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-webhooks-http-servers
+
+        - networkId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'webhooks', 'httpServers'],
+            'operation': 'getNetworkWebhooksHttpServers'
+        }
+        resource = f'/networks/{networkId}/webhooks/httpServers'
+
+        return self._session.get(metadata, resource)
+
+    def createNetworkWebhooksHttpServer(self, networkId: str, name: str, url: str, **kwargs):
+        """
+        **Add an HTTP server to a network**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-webhooks-http-server
+
+        - networkId (string): (required)
+        - name (string): A name for easy reference to the HTTP server
+        - url (string): The URL of the HTTP server
+        - sharedSecret (string): A shared secret that will be included in POSTs sent to the HTTP server. This secret can be used to verify that the request was sent by Meraki.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['networks', 'configure', 'webhooks', 'httpServers'],
+            'operation': 'createNetworkWebhooksHttpServer'
+        }
+        resource = f'/networks/{networkId}/webhooks/httpServers'
+
+        body_params = ['name', 'url', 'sharedSecret', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+
+    def getNetworkWebhooksHttpServer(self, networkId: str, httpServerId: str):
+        """
+        **Return an HTTP server for a network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-webhooks-http-server
+
+        - networkId (string): (required)
+        - httpServerId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'webhooks', 'httpServers'],
+            'operation': 'getNetworkWebhooksHttpServer'
+        }
+        resource = f'/networks/{networkId}/webhooks/httpServers/{httpServerId}'
+
+        return self._session.get(metadata, resource)
+
+    def updateNetworkWebhooksHttpServer(self, networkId: str, httpServerId: str, **kwargs):
+        """
+        **Update an HTTP server**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-webhooks-http-server
+
+        - networkId (string): (required)
+        - httpServerId (string): (required)
+        - name (string): A name for easy reference to the HTTP server
+        - url (string): The URL of the HTTP server
+        - sharedSecret (string): A shared secret that will be included in POSTs sent to the HTTP server. This secret can be used to verify that the request was sent by Meraki.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['networks', 'configure', 'webhooks', 'httpServers'],
+            'operation': 'updateNetworkWebhooksHttpServer'
+        }
+        resource = f'/networks/{networkId}/webhooks/httpServers/{httpServerId}'
+
+        body_params = ['name', 'url', 'sharedSecret', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteNetworkWebhooksHttpServer(self, networkId: str, httpServerId: str):
+        """
+        **Delete an HTTP server from a network**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-webhooks-http-server
+
+        - networkId (string): (required)
+        - httpServerId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'webhooks', 'httpServers'],
+            'operation': 'deleteNetworkWebhooksHttpServer'
+        }
+        resource = f'/networks/{networkId}/webhooks/httpServers/{httpServerId}'
+
+        return self._session.delete(metadata, resource)
+
+    def createNetworkWebhooksWebhookTest(self, networkId: str, url: str, **kwargs):
+        """
+        **Send a test webhook for a network**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-webhooks-webhook-test
+
+        - networkId (string): (required)
+        - url (string): The URL where the test webhook will be sent
+        - sharedSecret (string): The shared secret the test webhook will send. Optional. Defaults to an empty string.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['networks', 'configure', 'webhooks', 'webhookTests'],
+            'operation': 'createNetworkWebhooksWebhookTest'
+        }
+        resource = f'/networks/{networkId}/webhooks/webhookTests'
+
+        body_params = ['url', 'sharedSecret', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+
+    def getNetworkWebhooksWebhookTest(self, networkId: str, webhookTestId: str):
+        """
+        **Return the status of a webhook test for a network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-webhooks-webhook-test
+
+        - networkId (string): (required)
+        - webhookTestId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'webhooks', 'webhookTests'],
+            'operation': 'getNetworkWebhooksWebhookTest'
+        }
+        resource = f'/networks/{networkId}/webhooks/webhookTests/{webhookTestId}'
+
+        return self._session.get(metadata, resource)

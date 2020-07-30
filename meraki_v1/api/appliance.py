@@ -130,8 +130,8 @@ class Appliance(object):
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-content-filtering
 
         - networkId (string): (required)
-        - allowedUrlPatterns (array): A whitelist of URL patterns to allow
-        - blockedUrlPatterns (array): A blacklist of URL patterns to block
+        - allowedUrlPatterns (array): A list of URL patterns that are allowed
+        - blockedUrlPatterns (array): A list of URL patterns that are blocked
         - blockedUrlCategories (array): A list of URL categories to block
         - urlCategoryListSize (string): URL category list size which is either 'topSites' or 'fullList'
         """
@@ -247,8 +247,8 @@ class Appliance(object):
 
         - networkId (string): (required)
         - service (string): (required)
-        - access (string): A string indicating the rule for which IPs are allowed to use the specified service. Acceptable values are "blocked" (no remote IPs can access the service), "restricted" (only whitelisted IPs can access the service), and "unrestriced" (any remote IP can access the service). This field is required
-        - allowedIps (array): An array of whitelisted IPs that can access the service. This field is required if "access" is set to "restricted". Otherwise this field is ignored
+        - access (string): A string indicating the rule for which IPs are allowed to use the specified service. Acceptable values are "blocked" (no remote IPs can access the service), "restricted" (only allowed IPs can access the service), and "unrestriced" (any remote IP can access the service). This field is required
+        - allowedIps (array): An array of allowed IPs that can access the service. This field is required if "access" is set to "restricted". Otherwise this field is ignored
         """
 
         kwargs.update(locals())
@@ -679,8 +679,8 @@ class Appliance(object):
 
         - networkId (string): (required)
         - mode (string): Set mode to 'enabled' to enable malware prevention, otherwise 'disabled'
-        - allowedUrls (array): The urls that should be permitted by the malware detection engine. If omitted, the current config will remain unchanged. This is available only if your network supports AMP whitelisting
-        - allowedFiles (array): The sha256 digests of files that should be permitted by the malware detection engine. If omitted, the current config will remain unchanged. This is available only if your network supports AMP whitelisting
+        - allowedUrls (array): The urls that should be permitted by the malware detection engine. If omitted, the current config will remain unchanged. This is available only if your network supports AMP allow listing
+        - allowedFiles (array): The sha256 digests of files that should be permitted by the malware detection engine. If omitted, the current config will remain unchanged. This is available only if your network supports AMP allow listing
         """
 
         kwargs.update(locals())
