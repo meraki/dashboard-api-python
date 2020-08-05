@@ -70,6 +70,9 @@ Choose the folder where your notebook files are located, confirm the prompt, the
 
 ### Using Colab
 
+Depending on whether you'd like a new cell for code or text, click `+ Code` or `+ Text` at top left.
+
+![Colab notebook new cell screenshot](/.github/images/colab-notebook-new-cell-Annotation_2020-08-05_123920.png)
 
 ## Writing code in a notebook
 
