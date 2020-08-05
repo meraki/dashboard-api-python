@@ -25,6 +25,58 @@ That said, to open and create a notebook, you will need a compatible editor. The
 
 Regardless of how you choose to create them, notebooks are stored as `.ipnyb` files to distinguish them from standard `.py` Python scripts. In this guide, we will focus on using Google Colaboratory since it requires no download, but in some cases we will offer relevant instructions for other IDEs. In any case, if you prefer VS Code or JupyterLab, you can open the same notebook files covered in either IDE.
 
+## Setting up your environment variables
+
+Any use of the API requires the use of an _API key_ (also called _API token_) for authentication. Technically, you could include your API token in plaintext in your notebooks or Python scripts, but that would be like storing your password in plaintext, and make it risky to share or publish your work. A more secure approach is to store your API key in your local environment variables. The Meraki SDK will automatically check your `env` for the appropriate variable and use it if it exists.
+
+### Using Colab
+
+To simulate environment variables in Colab, we'll use the `colab-env` module. To set it up, you'll need a (free) Google account. `colab-env` creates a file called `vars.env` in your Google Drive to store the variables, and we'll use Python to add variables to it.
+
+1. Open [Colaboratory](https://colab.research.google.com/) in your browser.
+2. Sign in with a Google account if prompted.
+3. By default, Colab opens the "Welcome to Colaboratory" notebook.
+4. At the top, create a new code cell and paste in the following code:
+
+```
+%pip install colab-env -qU
+import colab_env
+import os
+```
+
+Then run the cell. It will give you a link to log into your Google account. 
+5. Click the link, complete the authentication, and copy the long code it gives you. 
+6. Paste the code into the form field provided by the code cell, then hit `Enter` or `Return`.
+7. You will then get one of the following outputs, depending on whether you've used the module with your Google account before:
+![Colab import colab_env output with new vars.env](/.github/images/colab-notebook-colab_env-import-new-instance_Annotation_2020-08-05_163942.png) ![Colab import colab_env output with existing vars.env](/.github/images/colab-notebook-colab_env-import-Annotation_2020-08-05_163815.png)
+8. In a new cell, paste in the following code block, and replace YOUR_API_KEY_HERE with your actual API key:
+
+```
+colab_env.envvar_handler.add_env(envname="MERAKI_DASHBOARD_API_KEY",envval="YOUR_API_KEY_HERE")
+print(os.getenv('MERAKI_DASHBOARD_API_KEY'))
+```
+
+9. Run the cell. You should see your API key printed in the output.
+
+### Using VS Code on Windows
+
+1. Click `Start` > `This PC` (type it if necessary) > Right-click on `This PC` > `Manage`
+2. Near top left, `Advanced system settings` > `Environment Variables...`
+3. Under the box labeled `User variables for YOUR_USERNAME`, `New...`. _NB: Avoid using the second, lower `New...` button under `System variables`. Others have access to that information._
+4. For `Variable name:`, type MERAKI_DASHBOARD_API_KEY
+5. For `Variable value:`, paste in your actual API key
+6. `OK`
+7. Reboot your computer. This ensures the value is available to any program that calls it.
+
+### Using VS Code on Mac
+
+Depending on your version of macOS, your default shell is either bash or zsh. User variables are stored in `~/.bash_profile` or `~/.zsh_profile` respectively. To find out which shell you're using, open Terminal, then run `echo $SHELL`.
+
+1. If `~/.bash_profile` or `~/.zsh_profile` doesn't already exist, create the one relevant to your shell, e.g. if you have zsh, then run `touch ~/.zsh_profile` in Terminal.
+2. Add this line to it, replacing the placeholder with your own API key: `export MERAKI_DASHBOARD_API_KEY=YOUR_API_KEY_HERE`
+3. Save the file.
+4. Reboot your computer. This ensures the value is available to any program that calls it.
+
 ## Create your first notebook
 
 ### Using Colab
@@ -33,7 +85,7 @@ When using Colab, the steps are as follows:
 
 1. Open [Colaboratory](https://colab.research.google.com/) in your browser.
 2. Sign in with a Google account if prompted.
-3. You're done! By default, Colab opens the "Welcome to Colaboratory" notebook that demonstrates what's possible.
+3. You're done! By default, Colab opens the "Welcome to Colaboratory" notebook.
 
 ### Using VS Code
 
@@ -65,6 +117,14 @@ Colab will open the notebook and you can get started!
 1. Download the notebook(s) you'd like to use locally. When working with VS Code, it's helpful to create a "workspace" folder free of any other files.
 2. Click __File__ > __Open Folder__
 3. Choose the folder where your notebook files are located, confirm the prompt, then select the notebook you'd like to use from the Explorer pane.
+
+## Installing dependencies
+
+### Using Colab
+
+
+
+### Using VS Code
 
 ## Creating new cells in a notebook
 
