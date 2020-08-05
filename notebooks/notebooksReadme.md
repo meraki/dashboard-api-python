@@ -36,25 +36,24 @@ To simulate environment variables in Colab, we'll use the `colab-env` module. To
 1. Open [Colaboratory](https://colab.research.google.com/) in your browser.
 2. Sign in with a Google account if prompted.
 3. By default, Colab opens the "Welcome to Colaboratory" notebook.
-4. At the top, create a new code cell and paste in the following code:
+4. At the top, create a new code cell and paste in the following code, then run the cell. It will give you a link to log into your Google account:
 
-```
-%pip install colab-env -qU
-import colab_env
-import os
-```
+    ```python
+    %pip install colab-env -qU
+    import colab_env
+    import os
+    ```
 
-Then run the cell. It will give you a link to log into your Google account. 
 5. Click the link, complete the authentication, and copy the long code it gives you. 
 6. Paste the code into the form field provided by the code cell, then hit `Enter` or `Return`.
 7. You will then get one of the following outputs, depending on whether you've used the module with your Google account before:
 ![Colab import colab_env output with new vars.env](/.github/images/colab-notebook-colab_env-import-new-instance_Annotation_2020-08-05_163942.png) ![Colab import colab_env output with existing vars.env](/.github/images/colab-notebook-colab_env-import-Annotation_2020-08-05_163815.png)
 8. In a new cell, paste in the following code block, and replace YOUR_API_KEY_HERE with your actual API key:
 
-```
-colab_env.envvar_handler.add_env(envname="MERAKI_DASHBOARD_API_KEY",envval="YOUR_API_KEY_HERE")
-print(os.getenv('MERAKI_DASHBOARD_API_KEY'))
-```
+    ```python
+    colab_env.envvar_handler.add_env(envname="MERAKI_DASHBOARD_API_KEY",envval="YOUR_API_KEY_HERE")
+    print(os.getenv('MERAKI_DASHBOARD_API_KEY'))
+    ```
 
 9. Run the cell. You should see your API key printed in the output.
 
