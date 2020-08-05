@@ -62,9 +62,9 @@ Colab will open the notebook and you can get started!
 
 ### Using VS Code
 
-Click __File__ > __Open Folder__
-
-Choose the folder where your notebook files are located, confirm the prompt, then select the notebook you'd like to use from the Explorer pane.
+1. Download the notebook(s) you'd like to use locally. When working with VS Code, it's helpful to create a "workspace" folder free of any other files.
+2. Click __File__ > __Open Folder__
+3. Choose the folder where your notebook files are located, confirm the prompt, then select the notebook you'd like to use from the Explorer pane.
 
 ## Creating new cells in a notebook
 
@@ -76,11 +76,27 @@ Depending on whether you'd like a new cell for code or text, click `+ Code` or `
 
 ## Writing code in a notebook
 
-### Using Colab
+### Using Colab or VS Code
+
+After you have either created a new code cell, or clicked into an existing one, you can write Python like you normally would. You can put as much or as little into a cell, but for our purposes we've segmented the code into logical blocks for ease of consumption.
 
 ## Running code in a notebook
 
-### Using Colab
+### Using Colab GUI
+
+Press the Run button at the top left of the code cell you'd like to run.
+
+![Colab notebook run button](/.github/images/colab-notebook-run-cell-Annotation_2020-08-05_143202.png)
+
+### Using Colab or VS Code hotkeys
+
+Notebook IDEs typically offer the hotkey `Shift + Enter` to run the current selected cell. This applies to both Colab and VS Code.
+
+### Colab authorship warning
+
+If you receive a warning, review the warning, then click `Run Anyway`:
+
+![Colab notebook authorship warning](/.github/images/colab-notebook-warning-run-cell-Annotation_2020-08-05_143410.png)
 
 ## Changing a cell's mode from code to text formatting (typically Markdown)
 
