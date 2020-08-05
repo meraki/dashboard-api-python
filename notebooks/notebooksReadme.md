@@ -56,7 +56,7 @@ You can manually upload notebooks you've saved locally, or you can clone a noteb
 
 Click GitHub, then type `meraki` in the search field, then click in the deadspace to leave the field. Colab automatically lists Meraki's GitHub repos. Choose `dashboard-api-python`. Then choose the desired notebook from the list.
 
-![Colab notebook selection screenshot](/.github/images/colab-notebook-selection-Annotation 2020-08-05 120229.png)
+![Colab notebook selection screenshot](.github/images/colab-notebook-selection-Annotation%202020-08-05%20120229.png)
 
 Colab will open the notebook and you can get started!
 
