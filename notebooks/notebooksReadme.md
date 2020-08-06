@@ -2,7 +2,7 @@
 
 ## Overview
 
-Jupyter notebooks are documents that take coding in Python (and potentially other languages) to a whole new level. With a Jupyter notebook, you can:
+Jupyter notebooks are documents that take coding in Python (and potentially other languages) to a whole new level. They are technically just fancy JSON files, but with a Jupyter notebook and a compatible IDE, you can:
 
 1. Write, run and re-run code in a block-by-block basis, while keeping all variables in an active, interactive kernel space. Those blocks are called "cells."
 2. Combine executable code, rich text, HTML, and even images in a single document, going way beyond standard Python comments and inserting HTML- or Markdown-formatted documentation inline with code in a way that never interferes with the operation of your code.
@@ -47,7 +47,11 @@ To simulate environment variables in Colab, we'll use the `colab-env` module. To
 5. Click the link, complete the authentication, and copy the long code it gives you. 
 6. Paste the code into the form field provided by the code cell, then hit `Enter` or `Return`.
 7. You will then get one of the following outputs, depending on whether you've used the module with your Google account before:
-![Colab import colab_env output with new vars.env](/.github/images/colab-notebook-colab_env-import-new-instance_Annotation_2020-08-05_163942.png) ![Colab import colab_env output with existing vars.env](/.github/images/colab-notebook-colab_env-import-Annotation_2020-08-05_163815.png)
+
+    | ![Colab import colab_env output with new vars.env](/.github/images/colab-notebook-colab_env-import-new-instance_Annotation_2020-08-05_163942.png) | ![Colab import colab_env output with existing vars.env](/.github/images/colab-notebook-colab_env-import-Annotation_2020-08-05_163815.png) |
+    |:--:|
+    | *First time* | *When `vars.env` exists* |
+
 8. In a new cell, paste in the following code block, and replace YOUR_API_KEY_HERE with your actual API key:
 
     ```python
