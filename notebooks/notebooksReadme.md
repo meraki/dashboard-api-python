@@ -49,7 +49,7 @@ To simulate environment variables in Colab, we'll use the `colab-env` module. To
 7. You will then get one of the following outputs, depending on whether you've used the module with your Google account before:
 
     | ![Colab import colab_env output with new vars.env](/.github/images/colab-notebook-colab_env-import-new-instance_Annotation_2020-08-05_163942.png) | ![Colab import colab_env output with existing vars.env](/.github/images/colab-notebook-colab_env-import-Annotation_2020-08-05_163815.png) |
-    |:--:|
+    |:--:|:--:|
     | *First time* | *When `vars.env` exists* |
 
 8. In a new cell, paste in the following code block, and replace YOUR_API_KEY_HERE with your actual API key:
