@@ -2,9 +2,9 @@
 
 ## Overview
 
-Jupyter notebooks are documents that take coding in Python (and potentially other languages) to a whole new level. They are technically just fancy JSON files, but with a Jupyter notebook and a compatible IDE, you can:
+Jupyter notebooks are documents that take coding in Python (and potentially other languages) to a whole new level. They are technically just fancy JSON files with a `.ipynb` extension, but with a Jupyter notebook and a compatible IDE, you can:
 
-1. Write, run and re-run code in a block-by-block basis, while keeping all variables in an active, interactive kernel space. Those blocks are called "cells."
+1. Write, run and re-run code in a block-by-block basis, while keeping all variables in an active and *interactive* kernel space. Those blocks are called "cells."
 2. Combine executable code, rich text, HTML, and even images in a single document, going way beyond standard Python comments and inserting HTML- or Markdown-formatted documentation inline with code in a way that never interferes with the operation of your code.
 3. Rearrange code and Markdown cells aribitrarily for verification, experimentation, or pure curiosity.
 4. Much more, if you are willing to learn!
@@ -27,11 +27,11 @@ Regardless of how you choose to create them, notebooks are stored as `.ipnyb` fi
 
 ## Setting up your environment variables
 
-Any use of the API requires the use of an _API key_ (also called _API token_) for authentication. Technically, you could include your API token in plaintext in your notebooks or Python scripts, but that would be like storing your password in plaintext, and make it risky to share or publish your work. A more secure approach is to store your API key in your local environment variables. The Meraki SDK will automatically check your `env` for the appropriate variable and use it if it exists.
+Any use of the API requires the use of an _API key_ (also called _API token_) for authentication. Technically, you could include your API key in plaintext in your notebooks or Python scripts, but that would be like storing your password in plaintext, and make it risky to share or publish your work. A more secure approach is to store your API key in your local environment variables. The Meraki SDK will automatically check your `env` for the appropriate variable and use it if it exists.
 
 ### Using Colab
 
-To simulate environment variables in Colab, we'll use the `colab-env` module. To set it up, you'll need a (free) Google account. `colab-env` creates a file called `vars.env` in your Google Drive to store the variables, and we'll use Python to add variables to it.
+To simulate environment variables in Colab, we'll use the `colab-env` package. To set it up, you'll need a (free) Google account. `colab-env` creates a file called `vars.env` in your Google Drive to store the variables, and we'll use Python to add variables to it.
 
 1. Open [Colaboratory](https://colab.research.google.com/) in your browser.
 2. Sign in with a Google account if prompted.
@@ -52,7 +52,7 @@ To simulate environment variables in Colab, we'll use the `colab-env` module. To
     |:--:|:--:|
     | *First time* | *When `vars.env` exists* |
 
-8. In a new cell, paste in the following code block, and replace YOUR_API_KEY_HERE with your actual API key:
+8. In a new cell, paste in the following code block, and replace `YOUR_API_KEY_HERE` with your actual API key:
 
     ```python
     colab_env.envvar_handler.add_env(envname="MERAKI_DASHBOARD_API_KEY",envval="YOUR_API_KEY_HERE")
@@ -125,9 +125,29 @@ Colab will open the notebook and you can get started!
 
 ### Using Colab
 
+Unlike local Python environments, Colab environments are not persistent. Therefore, whenever we expect to use a third-party package in Colab, we need to install it first using `pip`. The syntax is as follows:
 
+```python
+%pip install PACKAGE_NAME
+```
+
+For example, to install the Meraki SDK (replace `1.0.0b15` with whatever version you plan to use):
+
+```python
+%pip install meraki==1.0.0b15
+```
+
+If necessary, create a new code cell at the top of the notebook, paste in that code, and run it before working with the rest of your notebook.
 
 ### Using VS Code
+
+At a terminal, run:
+
+```shell
+pip install meraki==1.0.0b15
+```
+
+Other packages can be installed the same way using the relevant package name. Try it with `tablib`!
 
 ## Creating new cells in a notebook
 
@@ -161,6 +181,18 @@ If you receive a warning, review the warning, then click `Run Anyway`:
 
 ![Colab notebook authorship warning](/.github/images/colab-notebook-warning-run-cell-Annotation_2020-08-05_143410.png)
 
-## Changing a cell's mode from code to text formatting (typically Markdown)
+## Toggling a cell's mode between code and text
 
 ### Using Colab
+
+#### Convert code to text
+
+Select the cell, then hold `Ctrl` or `⌘` and type `MM`.
+
+#### Convert text to code
+
+Select the cell, then hold `Ctrl` or `⌘` and type `MY`.
+
+### Using VS Code
+
+Select the cell, then at the top of the cell click either `M` to convert to text, or `{}` to convert to code.
