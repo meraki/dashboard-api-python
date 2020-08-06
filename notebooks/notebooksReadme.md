@@ -59,7 +59,7 @@ To simulate environment variables in Colab, we'll use the `colab-env` module. To
     print(os.getenv('MERAKI_DASHBOARD_API_KEY'))
     ```
 
-9. Run the cell. You should see your API key printed in the output.
+9. Run the cell. You should see your API key printed in the output. If you do, that means your environment is configured!
 
 ### Using VS Code on Windows
 
