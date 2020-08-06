@@ -1,53 +1,53 @@
-class SM(object):
+class Sm(object):
     def __init__(self, session):
-        super(SM, self).__init__()
+        super(Sm, self).__init__()
         self._session = session
-    
+
     def createNetworkSmBypassActivationLockAttempt(self, networkId: str, ids: list):
         """
         **Bypass activation lock attempt**
-        https://developer.cisco.com/meraki/api/#!create-network-sm-bypass-activation-lock-attempt
-        
-        - networkId (string)
+        https://developer.cisco.com/meraki/api-v1/#!create-network-sm-bypass-activation-lock-attempt
+
+        - networkId (string): (required)
         - ids (array): The ids of the devices to attempt activation lock bypass.
         """
 
         kwargs = locals()
 
         metadata = {
-            'tags': ['SM'],
-            'operation': 'createNetworkSmBypassActivationLockAttempt',
+            'tags': ['sm', 'configure', 'bypassActivationLockAttempts'],
+            'operation': 'createNetworkSmBypassActivationLockAttempt'
         }
         resource = f'/networks/{networkId}/sm/bypassActivationLockAttempts'
 
-        body_params = ['ids']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['ids', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
 
     def getNetworkSmBypassActivationLockAttempt(self, networkId: str, attemptId: str):
         """
         **Bypass activation lock attempt status**
-        https://developer.cisco.com/meraki/api/#!get-network-sm-bypass-activation-lock-attempt
-        
-        - networkId (string)
-        - attemptId (string)
+        https://developer.cisco.com/meraki/api-v1/#!get-network-sm-bypass-activation-lock-attempt
+
+        - networkId (string): (required)
+        - attemptId (string): (required)
         """
 
         metadata = {
-            'tags': ['SM'],
-            'operation': 'getNetworkSmBypassActivationLockAttempt',
+            'tags': ['sm', 'configure', 'bypassActivationLockAttempts'],
+            'operation': 'getNetworkSmBypassActivationLockAttempt'
         }
         resource = f'/networks/{networkId}/sm/bypassActivationLockAttempts/{attemptId}'
 
         return self._session.get(metadata, resource)
 
-    def updateNetworkSmDeviceFields(self, networkId: str, deviceFields: dict, **kwargs):
+    def updateNetworkSmDevicesFields(self, networkId: str, deviceFields: dict, **kwargs):
         """
         **Modify the fields of a device**
-        https://developer.cisco.com/meraki/api/#!update-network-sm-device-fields
-        
-        - networkId (string)
+        https://developer.cisco.com/meraki/api-v1/#!update-network-sm-devices-fields
+
+        - networkId (string): (required)
         - deviceFields (object): The new fields of the device. Each field of this object is optional.
         - wifiMac (string): The wifiMac of the device to be modified.
         - id (string): The id of the device to be modified.
@@ -57,22 +57,22 @@ class SM(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['SM'],
-            'operation': 'updateNetworkSmDeviceFields',
+            'tags': ['sm', 'configure', 'devices', 'fields'],
+            'operation': 'updateNetworkSmDevicesFields'
         }
-        resource = f'/networks/{networkId}/sm/device/fields'
+        resource = f'/networks/{networkId}/sm/devices/fields'
 
-        body_params = ['wifiMac', 'id', 'serial', 'deviceFields']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['wifiMac', 'id', 'serial', 'deviceFields', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
-    def wipeNetworkSmDevice(self, networkId: str, **kwargs):
+    def wipeNetworkSmDevices(self, networkId: str, **kwargs):
         """
         **Wipe a device**
-        https://developer.cisco.com/meraki/api/#!wipe-network-sm-device
-        
-        - networkId (string)
+        https://developer.cisco.com/meraki/api-v1/#!wipe-network-sm-devices
+
+        - networkId (string): (required)
         - wifiMac (string): The wifiMac of the device to be wiped.
         - id (string): The id of the device to be wiped.
         - serial (string): The serial of the device to be wiped.
@@ -82,410 +82,58 @@ class SM(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['SM'],
-            'operation': 'wipeNetworkSmDevice',
+            'tags': ['sm', 'configure', 'devices'],
+            'operation': 'wipeNetworkSmDevices'
         }
-        resource = f'/networks/{networkId}/sm/device/wipe'
+        resource = f'/networks/{networkId}/sm/devices/wipe'
 
-        body_params = ['wifiMac', 'id', 'serial', 'pin']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
+        body_params = ['wifiMac', 'id', 'serial', 'pin', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        return self._session.put(metadata, resource, payload)
+        return self._session.post(metadata, resource, payload)
 
-    def refreshNetworkSmDeviceDetails(self, networkId: str, deviceId: str):
-        """
-        **Refresh the details of a device**
-        https://developer.cisco.com/meraki/api/#!refresh-network-sm-device-details
-        
-        - networkId (string)
-        - deviceId (string)
-        """
-
-        metadata = {
-            'tags': ['SM'],
-            'operation': 'refreshNetworkSmDeviceDetails',
-        }
-        resource = f'/networks/{networkId}/sm/device/{deviceId}/refreshDetails'
-
-        return self._session.post(metadata, resource)
-
-    def getNetworkSmDevices(self, networkId: str, **kwargs):
-        """
-        **List the devices enrolled in an SM network with various specified fields and filters**
-        https://developer.cisco.com/meraki/api/#!get-network-sm-devices
-        
-        - networkId (string)
-        - fields (string): Additional fields that will be displayed for each device. Multiple fields can be passed in as comma separated values.
-    The default fields are: id, name, tags, ssid, wifiMac, osName, systemModel, uuid, and serialNumber. The additional fields are: ip,
-    systemType, availableDeviceCapacity, kioskAppName, biosVersion, lastConnected, missingAppsCount, userSuppliedAddress, location, lastUser,
-    ownerEmail, ownerUsername, publicIp, phoneNumber, diskInfoJson, deviceCapacity, isManaged, hadMdm, isSupervised, meid, imei, iccid,
-    simCarrierNetwork, cellularDataUsed, isHotspotEnabled, createdAt, batteryEstCharge, quarantined, avName, avRunning, asName, fwName,
-    isRooted, loginRequired, screenLockEnabled, screenLockDelay, autoLoginDisabled, autoTags, hasMdm, hasDesktopAgent, diskEncryptionEnabled,
-    hardwareEncryptionCaps, passCodeLock, usesHardwareKeystore, and androidSecurityPatchVersion.
-        - wifiMacs (string): Filter devices by wifi mac(s). Multiple wifi macs can be passed in as comma separated values.
-        - serials (string): Filter devices by serial(s). Multiple serials can be passed in as comma separated values.
-        - ids (string): Filter devices by id(s). Multiple ids can be passed in as comma separated values.
-        - scope (string): Specify a scope (one of all, none, withAny, withAll, withoutAny, or withoutAll) and a set of tags as comma separated values.
-        - batchSize (integer): Number of devices to return, 1000 is the default as well as the max.
-        - batchToken (string): If the network has more devices than the batch size, a batch token will be returned
-    as a part of the device list. To see the remainder of the devices, pass in the batchToken as a parameter in the next request.
-    Requests made with the batchToken do not require additional parameters as the batchToken includes the parameters passed in
-    with the original request. Additional parameters passed in with the batchToken will be ignored.
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['SM'],
-            'operation': 'getNetworkSmDevices',
-        }
-        resource = f'/networks/{networkId}/sm/devices'
-
-        query_params = ['fields', 'wifiMacs', 'serials', 'ids', 'scope', 'batchSize', 'batchToken']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
-
-        return self._session.get(metadata, resource, params)
-
-    def checkinNetworkSmDevices(self, networkId: str, **kwargs):
-        """
-        **Force check-in a set of devices**
-        https://developer.cisco.com/meraki/api/#!checkin-network-sm-devices
-        
-        - networkId (string)
-        - wifiMacs (string): The wifiMacs of the devices to be checked-in.
-        - ids (string): The ids of the devices to be checked-in.
-        - serials (string): The serials of the devices to be checked-in.
-        - scope (string): The scope (one of all, none, withAny, withAll, withoutAny, or withoutAll) and a set of tags of the devices to be checked-in.
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['SM'],
-            'operation': 'checkinNetworkSmDevices',
-        }
-        resource = f'/networks/{networkId}/sm/devices/checkin'
-
-        body_params = ['wifiMacs', 'ids', 'serials', 'scope']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
-
-        return self._session.put(metadata, resource, payload)
-
-    def moveNetworkSmDevices(self, networkId: str, newNetwork: str, **kwargs):
-        """
-        **Move a set of devices to a new network**
-        https://developer.cisco.com/meraki/api/#!move-network-sm-devices
-        
-        - networkId (string)
-        - newNetwork (string): The new network to which the devices will be moved.
-        - wifiMacs (string): The wifiMacs of the devices to be moved.
-        - ids (string): The ids of the devices to be moved.
-        - serials (string): The serials of the devices to be moved.
-        - scope (string): The scope (one of all, none, withAny, withAll, withoutAny, or withoutAll) and a set of tags of the devices to be moved.
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['SM'],
-            'operation': 'moveNetworkSmDevices',
-        }
-        resource = f'/networks/{networkId}/sm/devices/move'
-
-        body_params = ['wifiMacs', 'ids', 'serials', 'scope', 'newNetwork']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
-
-        return self._session.put(metadata, resource, payload)
-
-    def updateNetworkSmDevicesTags(self, networkId: str, tags: str, updateAction: str, **kwargs):
-        """
-        **Add, delete, or update the tags of a set of devices**
-        https://developer.cisco.com/meraki/api/#!update-network-sm-devices-tags
-        
-        - networkId (string)
-        - tags (string): The tags to be added, deleted, or updated.
-        - updateAction (string): One of add, delete, or update. Only devices that have been modified will be returned.
-        - wifiMacs (string): The wifiMacs of the devices to be modified.
-        - ids (string): The ids of the devices to be modified.
-        - serials (string): The serials of the devices to be modified.
-        - scope (string): The scope (one of all, none, withAny, withAll, withoutAny, or withoutAll) and a set of tags of the devices to be modified.
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['SM'],
-            'operation': 'updateNetworkSmDevicesTags',
-        }
-        resource = f'/networks/{networkId}/sm/devices/tags'
-
-        body_params = ['wifiMacs', 'ids', 'serials', 'scope', 'tags', 'updateAction']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
-
-        return self._session.put(metadata, resource, payload)
-
-    def unenrollNetworkSmDevice(self, networkId: str, deviceId: str):
-        """
-        **Unenroll a device**
-        https://developer.cisco.com/meraki/api/#!unenroll-network-sm-device
-        
-        - networkId (string)
-        - deviceId (string)
-        """
-
-        metadata = {
-            'tags': ['SM'],
-            'operation': 'unenrollNetworkSmDevice',
-        }
-        resource = f'/networks/{networkId}/sm/devices/{deviceId}/unenroll'
-
-        return self._session.post(metadata, resource)
-
-    def getNetworkSmProfiles(self, networkId: str):
-        """
-        **List all the profiles in the network**
-        https://developer.cisco.com/meraki/api/#!get-network-sm-profiles
-        
-        - networkId (string)
-        """
-
-        metadata = {
-            'tags': ['SM'],
-            'operation': 'getNetworkSmProfiles',
-        }
-        resource = f'/networks/{networkId}/sm/profiles'
-
-        return self._session.get(metadata, resource)
-
-    def getNetworkSmUserDeviceProfiles(self, networkId: str, userId: str):
-        """
-        **Get the profiles associated with a user**
-        https://developer.cisco.com/meraki/api/#!get-network-sm-user-device-profiles
-        
-        - networkId (string)
-        - userId (string)
-        """
-
-        metadata = {
-            'tags': ['SM'],
-            'operation': 'getNetworkSmUserDeviceProfiles',
-        }
-        resource = f'/networks/{networkId}/sm/user/{userId}/deviceProfiles'
-
-        return self._session.get(metadata, resource)
-
-    def getNetworkSmUserSoftwares(self, networkId: str, userId: str):
-        """
-        **Get a list of softwares associated with a user**
-        https://developer.cisco.com/meraki/api/#!get-network-sm-user-softwares
-        
-        - networkId (string)
-        - userId (string)
-        """
-
-        metadata = {
-            'tags': ['SM'],
-            'operation': 'getNetworkSmUserSoftwares',
-        }
-        resource = f'/networks/{networkId}/sm/user/{userId}/softwares'
-
-        return self._session.get(metadata, resource)
-
-    def getNetworkSmUsers(self, networkId: str, **kwargs):
-        """
-        **List the owners in an SM network with various specified fields and filters**
-        https://developer.cisco.com/meraki/api/#!get-network-sm-users
-        
-        - networkId (string)
-        - ids (string): Filter users by id(s). Multiple ids can be passed in as comma separated values.
-        - usernames (string): Filter users by username(s). Multiple usernames can be passed in as comma separated values.
-        - emails (string): Filter users by email(s). Multiple emails can be passed in as comma separated values.
-        - scope (string): Specifiy a scope (one of all, none, withAny, withAll, withoutAny, withoutAll) and a set of tags as comma separated values.
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['SM'],
-            'operation': 'getNetworkSmUsers',
-        }
-        resource = f'/networks/{networkId}/sm/users'
-
-        query_params = ['ids', 'usernames', 'emails', 'scope']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
-
-        return self._session.get(metadata, resource, params)
-
-    def getNetworkSmCellularUsageHistory(self, networkId: str, deviceId: str):
+    def getNetworkSmDeviceCellularUsageHistory(self, networkId: str, deviceId: str):
         """
         **Return the client's daily cellular data usage history. Usage data is in kilobytes.**
-        https://developer.cisco.com/meraki/api/#!get-network-sm-cellular-usage-history
-        
-        - networkId (string)
-        - deviceId (string)
+        https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-cellular-usage-history
+
+        - networkId (string): (required)
+        - deviceId (string): (required)
         """
 
         metadata = {
-            'tags': ['SM'],
-            'operation': 'getNetworkSmCellularUsageHistory',
+            'tags': ['sm', 'monitor', 'devices', 'cellularUsageHistory'],
+            'operation': 'getNetworkSmDeviceCellularUsageHistory'
         }
-        resource = f'/networks/{networkId}/sm/{deviceId}/cellularUsageHistory'
+        resource = f'/networks/{networkId}/sm/devices/{deviceId}/cellularUsageHistory'
 
         return self._session.get(metadata, resource)
 
-    def getNetworkSmCerts(self, networkId: str, deviceId: str):
+    def getNetworkSmDeviceCerts(self, networkId: str, deviceId: str):
         """
         **List the certs on a device**
-        https://developer.cisco.com/meraki/api/#!get-network-sm-certs
-        
-        - networkId (string)
-        - deviceId (string)
+        https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-certs
+
+        - networkId (string): (required)
+        - deviceId (string): (required)
         """
 
         metadata = {
-            'tags': ['SM'],
-            'operation': 'getNetworkSmCerts',
+            'tags': ['sm', 'configure', 'devices', 'certs'],
+            'operation': 'getNetworkSmDeviceCerts'
         }
-        resource = f'/networks/{networkId}/sm/{deviceId}/certs'
+        resource = f'/networks/{networkId}/sm/devices/{deviceId}/certs'
 
         return self._session.get(metadata, resource)
 
-    def getNetworkSmDeviceProfiles(self, networkId: str, deviceId: str):
-        """
-        **Get the profiles associated with a device**
-        https://developer.cisco.com/meraki/api/#!get-network-sm-device-profiles
-        
-        - networkId (string)
-        - deviceId (string)
-        """
-
-        metadata = {
-            'tags': ['SM'],
-            'operation': 'getNetworkSmDeviceProfiles',
-        }
-        resource = f'/networks/{networkId}/sm/{deviceId}/deviceProfiles'
-
-        return self._session.get(metadata, resource)
-
-    def getNetworkSmNetworkAdapters(self, networkId: str, deviceId: str):
-        """
-        **List the network adapters of a device**
-        https://developer.cisco.com/meraki/api/#!get-network-sm-network-adapters
-        
-        - networkId (string)
-        - deviceId (string)
-        """
-
-        metadata = {
-            'tags': ['SM'],
-            'operation': 'getNetworkSmNetworkAdapters',
-        }
-        resource = f'/networks/{networkId}/sm/{deviceId}/networkAdapters'
-
-        return self._session.get(metadata, resource)
-
-    def getNetworkSmRestrictions(self, networkId: str, deviceId: str):
-        """
-        **List the restrictions on a device**
-        https://developer.cisco.com/meraki/api/#!get-network-sm-restrictions
-        
-        - networkId (string)
-        - deviceId (string)
-        """
-
-        metadata = {
-            'tags': ['SM'],
-            'operation': 'getNetworkSmRestrictions',
-        }
-        resource = f'/networks/{networkId}/sm/{deviceId}/restrictions'
-
-        return self._session.get(metadata, resource)
-
-    def getNetworkSmSecurityCenters(self, networkId: str, deviceId: str):
-        """
-        **List the security centers on a device**
-        https://developer.cisco.com/meraki/api/#!get-network-sm-security-centers
-        
-        - networkId (string)
-        - deviceId (string)
-        """
-
-        metadata = {
-            'tags': ['SM'],
-            'operation': 'getNetworkSmSecurityCenters',
-        }
-        resource = f'/networks/{networkId}/sm/{deviceId}/securityCenters'
-
-        return self._session.get(metadata, resource)
-
-    def getNetworkSmSoftwares(self, networkId: str, deviceId: str):
-        """
-        **Get a list of softwares associated with a device**
-        https://developer.cisco.com/meraki/api/#!get-network-sm-softwares
-        
-        - networkId (string)
-        - deviceId (string)
-        """
-
-        metadata = {
-            'tags': ['SM'],
-            'operation': 'getNetworkSmSoftwares',
-        }
-        resource = f'/networks/{networkId}/sm/{deviceId}/softwares'
-
-        return self._session.get(metadata, resource)
-
-    def getNetworkSmWlanLists(self, networkId: str, deviceId: str):
-        """
-        **List the saved SSID names on a device**
-        https://developer.cisco.com/meraki/api/#!get-network-sm-wlan-lists
-        
-        - networkId (string)
-        - deviceId (string)
-        """
-
-        metadata = {
-            'tags': ['SM'],
-            'operation': 'getNetworkSmWlanLists',
-        }
-        resource = f'/networks/{networkId}/sm/{deviceId}/wlanLists'
-
-        return self._session.get(metadata, resource)
-
-    def lockNetworkSmDevices(self, network_id: str, **kwargs):
-        """
-        **Lock a set of devices**
-        https://developer.cisco.com/meraki/api/#!lock-network-sm-devices
-        
-        - network_id (string)
-        - wifiMacs (string): The wifiMacs of the devices to be locked.
-        - ids (string): The ids of the devices to be locked.
-        - serials (string): The serials of the devices to be locked.
-        - scope (string): The scope (one of all, none, withAny, withAll, withoutAny, or withoutAll) and a set of tags of the devices to be wiped.
-        - pin (integer): The pin number for locking macOS devices (a six digit number). Required only for macOS devices.
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['SM'],
-            'operation': 'lockNetworkSmDevices',
-        }
-        resource = f'/networks/{network_id}/sm/devices/lock'
-
-        body_params = ['wifiMacs', 'ids', 'serials', 'scope', 'pin']
-        payload = {k: v for (k, v) in kwargs.items() if k in body_params}
-
-        return self._session.put(metadata, resource, payload)
-
-    def getNetworkSmConnectivity(self, network_id: str, id: str, total_pages=1, direction='next', **kwargs):
+    def getNetworkSmDeviceConnectivity(self, networkId: str, deviceId: str, total_pages=1, direction='next', **kwargs):
         """
         **Returns historical connectivity data (whether a device is regularly checking in to Dashboard).**
-        https://developer.cisco.com/meraki/api/#!get-network-sm-connectivity
-        
-        - network_id (string)
-        - id (string)
-        - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
+        https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-connectivity
+
+        - networkId (string): (required)
+        - deviceId (string): (required)
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
@@ -495,25 +143,24 @@ class SM(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['SM'],
-            'operation': 'getNetworkSmConnectivity',
+            'tags': ['sm', 'monitor', 'devices', 'connectivity'],
+            'operation': 'getNetworkSmDeviceConnectivity'
         }
-        resource = f'/networks/{network_id}/sm/{id}/connectivity'
+        resource = f'/networks/{networkId}/sm/devices/{deviceId}/connectivity'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-
-    def getNetworkSmDesktopLogs(self, network_id: str, id: str, total_pages=1, direction='next', **kwargs):
+    def getNetworkSmDeviceDesktopLogs(self, networkId: str, deviceId: str, total_pages=1, direction='next', **kwargs):
         """
         **Return historical records of various Systems Manager network connection details for desktop devices.**
-        https://developer.cisco.com/meraki/api/#!get-network-sm-desktop-logs
-        
-        - network_id (string)
-        - id (string)
-        - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
+        https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-desktop-logs
+
+        - networkId (string): (required)
+        - deviceId (string): (required)
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
@@ -523,29 +170,28 @@ class SM(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['SM'],
-            'operation': 'getNetworkSmDesktopLogs',
+            'tags': ['sm', 'monitor', 'devices', 'desktopLogs'],
+            'operation': 'getNetworkSmDeviceDesktopLogs'
         }
-        resource = f'/networks/{network_id}/sm/{id}/desktopLogs'
+        resource = f'/networks/{networkId}/sm/devices/{deviceId}/desktopLogs'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-
-    def getNetworkSmDeviceCommandLogs(self, network_id: str, id: str, total_pages=1, direction='next', **kwargs):
+    def getNetworkSmDeviceDeviceCommandLogs(self, networkId: str, deviceId: str, total_pages=1, direction='next', **kwargs):
         """
         **    Return historical records of commands sent to Systems Manager devices.
     <p>Note that this will include the name of the Dashboard user who initiated the command if it was generated
     by a Dashboard admin rather than the automatic behavior of the system; you may wish to filter this out
     of any reports.</p>
 **
-        https://developer.cisco.com/meraki/api/#!get-network-sm-device-command-logs
-        
-        - network_id (string)
-        - id (string)
-        - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
+        https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-device-command-logs
+
+        - networkId (string): (required)
+        - deviceId (string): (required)
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
@@ -555,25 +201,58 @@ class SM(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['SM'],
-            'operation': 'getNetworkSmDeviceCommandLogs',
+            'tags': ['sm', 'monitor', 'devices', 'deviceCommandLogs'],
+            'operation': 'getNetworkSmDeviceDeviceCommandLogs'
         }
-        resource = f'/networks/{network_id}/sm/{id}/deviceCommandLogs'
+        resource = f'/networks/{networkId}/sm/devices/{deviceId}/deviceCommandLogs'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
+    def getNetworkSmDeviceDeviceProfiles(self, networkId: str, deviceId: str):
+        """
+        **Get the profiles associated with a device**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-device-profiles
 
-    def getNetworkSmPerformanceHistory(self, network_id: str, id: str, total_pages=1, direction='next', **kwargs):
+        - networkId (string): (required)
+        - deviceId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['sm', 'configure', 'devices', 'deviceProfiles'],
+            'operation': 'getNetworkSmDeviceDeviceProfiles'
+        }
+        resource = f'/networks/{networkId}/sm/devices/{deviceId}/deviceProfiles'
+
+        return self._session.get(metadata, resource)
+
+    def getNetworkSmDeviceNetworkAdapters(self, networkId: str, deviceId: str):
+        """
+        **List the network adapters of a device**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-network-adapters
+
+        - networkId (string): (required)
+        - deviceId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['sm', 'configure', 'devices', 'networkAdapters'],
+            'operation': 'getNetworkSmDeviceNetworkAdapters'
+        }
+        resource = f'/networks/{networkId}/sm/devices/{deviceId}/networkAdapters'
+
+        return self._session.get(metadata, resource)
+
+    def getNetworkSmDevicePerformanceHistory(self, networkId: str, deviceId: str, total_pages=1, direction='next', **kwargs):
         """
         **Return historical records of various Systems Manager client metrics for desktop devices.**
-        https://developer.cisco.com/meraki/api/#!get-network-sm-performance-history
-        
-        - network_id (string)
-        - id (string)
-        - total_pages (integer or string): total number of pages to retrieve, -1 or "all" for all pages
+        https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-performance-history
+
+        - networkId (string): (required)
+        - deviceId (string): (required)
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
@@ -583,14 +262,322 @@ class SM(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['SM'],
-            'operation': 'getNetworkSmPerformanceHistory',
+            'tags': ['sm', 'monitor', 'devices', 'performanceHistory'],
+            'operation': 'getNetworkSmDevicePerformanceHistory'
         }
-        resource = f'/networks/{network_id}/sm/{id}/performanceHistory'
+        resource = f'/networks/{networkId}/sm/devices/{deviceId}/performanceHistory'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore']
-        params = {k: v for (k, v) in kwargs.items() if k in query_params}
+        query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
+    def refreshNetworkSmDeviceDetails(self, networkId: str, deviceId: str):
+        """
+        **Refresh the details of a device**
+        https://developer.cisco.com/meraki/api-v1/#!refresh-network-sm-device-details
 
+        - networkId (string): (required)
+        - deviceId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['sm', 'configure', 'devices'],
+            'operation': 'refreshNetworkSmDeviceDetails'
+        }
+        resource = f'/networks/{networkId}/sm/devices/{deviceId}/refreshDetails'
+
+        return self._session.post(metadata, resource)
+
+    def getNetworkSmDeviceRestrictions(self, networkId: str, deviceId: str):
+        """
+        **List the restrictions on a device**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-restrictions
+
+        - networkId (string): (required)
+        - deviceId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['sm', 'configure', 'devices', 'restrictions'],
+            'operation': 'getNetworkSmDeviceRestrictions'
+        }
+        resource = f'/networks/{networkId}/sm/devices/{deviceId}/restrictions'
+
+        return self._session.get(metadata, resource)
+
+    def getNetworkSmDeviceSecurityCenters(self, networkId: str, deviceId: str):
+        """
+        **List the security centers on a device**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-security-centers
+
+        - networkId (string): (required)
+        - deviceId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['sm', 'configure', 'devices', 'securityCenters'],
+            'operation': 'getNetworkSmDeviceSecurityCenters'
+        }
+        resource = f'/networks/{networkId}/sm/devices/{deviceId}/securityCenters'
+
+        return self._session.get(metadata, resource)
+
+    def getNetworkSmDeviceSoftwares(self, networkId: str, deviceId: str):
+        """
+        **Get a list of softwares associated with a device**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-softwares
+
+        - networkId (string): (required)
+        - deviceId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['sm', 'configure', 'devices', 'softwares'],
+            'operation': 'getNetworkSmDeviceSoftwares'
+        }
+        resource = f'/networks/{networkId}/sm/devices/{deviceId}/softwares'
+
+        return self._session.get(metadata, resource)
+
+    def unenrollNetworkSmDevice(self, networkId: str, deviceId: str):
+        """
+        **Unenroll a device**
+        https://developer.cisco.com/meraki/api-v1/#!unenroll-network-sm-device
+
+        - networkId (string): (required)
+        - deviceId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['sm', 'configure', 'devices'],
+            'operation': 'unenrollNetworkSmDevice'
+        }
+        resource = f'/networks/{networkId}/sm/devices/{deviceId}/unenroll'
+
+        return self._session.post(metadata, resource)
+
+    def getNetworkSmDeviceWlanLists(self, networkId: str, deviceId: str):
+        """
+        **List the saved SSID names on a device**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-wlan-lists
+
+        - networkId (string): (required)
+        - deviceId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['sm', 'configure', 'devices', 'wlanLists'],
+            'operation': 'getNetworkSmDeviceWlanLists'
+        }
+        resource = f'/networks/{networkId}/sm/devices/{deviceId}/wlanLists'
+
+        return self._session.get(metadata, resource)
+
+    def getNetworkSmProfiles(self, networkId: str):
+        """
+        **List all profiles in a network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-sm-profiles
+
+        - networkId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['sm', 'configure', 'profiles'],
+            'operation': 'getNetworkSmProfiles'
+        }
+        resource = f'/networks/{networkId}/sm/profiles'
+
+        return self._session.get(metadata, resource)
+
+    def getNetworkSmTargetGroups(self, networkId: str, **kwargs):
+        """
+        **List the target groups in this network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-sm-target-groups
+
+        - networkId (string): (required)
+        - withDetails (boolean): Boolean indicating if the the ids of the devices or users scoped by the target group should be included in the response
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['sm', 'configure', 'targetGroups'],
+            'operation': 'getNetworkSmTargetGroups'
+        }
+        resource = f'/networks/{networkId}/sm/targetGroups'
+
+        query_params = ['withDetails', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get(metadata, resource, params)
+
+    def createNetworkSmTargetGroup(self, networkId: str, **kwargs):
+        """
+        **Add a target group**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-sm-target-group
+
+        - networkId (string): (required)
+        - name (string): The name of this target group
+        - scope (string): The scope and tag options of the target group. Comma separated values beginning with one of withAny, withAll, withoutAny, withoutAll, all, none, followed by tags. Default to none if empty.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['sm', 'configure', 'targetGroups'],
+            'operation': 'createNetworkSmTargetGroup'
+        }
+        resource = f'/networks/{networkId}/sm/targetGroups'
+
+        body_params = ['name', 'scope', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+
+    def getNetworkSmTargetGroup(self, networkId: str, targetGroupId: str, **kwargs):
+        """
+        **Return a target group**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-sm-target-group
+
+        - networkId (string): (required)
+        - targetGroupId (string): (required)
+        - withDetails (boolean): Boolean indicating if the the ids of the devices or users scoped by the target group should be included in the response
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['sm', 'configure', 'targetGroups'],
+            'operation': 'getNetworkSmTargetGroup'
+        }
+        resource = f'/networks/{networkId}/sm/targetGroups/{targetGroupId}'
+
+        query_params = ['withDetails', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get(metadata, resource, params)
+
+    def updateNetworkSmTargetGroup(self, networkId: str, targetGroupId: str, **kwargs):
+        """
+        **Update a target group**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-sm-target-group
+
+        - networkId (string): (required)
+        - targetGroupId (string): (required)
+        - name (string): The name of this target group
+        - scope (string): The scope and tag options of the target group. Comma separated values beginning with one of withAny, withAll, withoutAny, withoutAll, all, none, followed by tags. Default to none if empty.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['sm', 'configure', 'targetGroups'],
+            'operation': 'updateNetworkSmTargetGroup'
+        }
+        resource = f'/networks/{networkId}/sm/targetGroups/{targetGroupId}'
+
+        body_params = ['name', 'scope', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteNetworkSmTargetGroup(self, networkId: str, targetGroupId: str):
+        """
+        **Delete a target group from a network**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-sm-target-group
+
+        - networkId (string): (required)
+        - targetGroupId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['sm', 'configure', 'targetGroups'],
+            'operation': 'deleteNetworkSmTargetGroup'
+        }
+        resource = f'/networks/{networkId}/sm/targetGroups/{targetGroupId}'
+
+        return self._session.delete(metadata, resource)
+
+    def getNetworkSmUserDeviceProfiles(self, networkId: str, userId: str):
+        """
+        **Get the profiles associated with a user**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-sm-user-device-profiles
+
+        - networkId (string): (required)
+        - userId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['sm', 'configure', 'users', 'deviceProfiles'],
+            'operation': 'getNetworkSmUserDeviceProfiles'
+        }
+        resource = f'/networks/{networkId}/sm/users/{userId}/deviceProfiles'
+
+        return self._session.get(metadata, resource)
+
+    def getNetworkSmUserSoftwares(self, networkId: str, userId: str):
+        """
+        **Get a list of softwares associated with a user**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-sm-user-softwares
+
+        - networkId (string): (required)
+        - userId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['sm', 'configure', 'users', 'softwares'],
+            'operation': 'getNetworkSmUserSoftwares'
+        }
+        resource = f'/networks/{networkId}/sm/users/{userId}/softwares'
+
+        return self._session.get(metadata, resource)
+
+    def getOrganizationSmApnsCert(self, organizationId: str):
+        """
+        **Get the organization's APNS certificate**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-sm-apns-cert
+
+        - organizationId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['sm', 'configure', 'apnsCert'],
+            'operation': 'getOrganizationSmApnsCert'
+        }
+        resource = f'/organizations/{organizationId}/sm/apnsCert'
+
+        return self._session.get(metadata, resource)
+
+    def getOrganizationSmVppAccounts(self, organizationId: str):
+        """
+        **List the VPP accounts in the organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-sm-vpp-accounts
+
+        - organizationId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['sm', 'configure', 'vppAccounts'],
+            'operation': 'getOrganizationSmVppAccounts'
+        }
+        resource = f'/organizations/{organizationId}/sm/vppAccounts'
+
+        return self._session.get(metadata, resource)
+
+    def getOrganizationSmVppAccount(self, organizationId: str, vppAccountId: str):
+        """
+        **Get a hash containing the unparsed token of the VPP account with the given ID**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-sm-vpp-account
+
+        - organizationId (string): (required)
+        - vppAccountId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['sm', 'configure', 'vppAccounts'],
+            'operation': 'getOrganizationSmVppAccount'
+        }
+        resource = f'/organizations/{organizationId}/sm/vppAccounts/{vppAccountId}'
+
+        return self._session.get(metadata, resource)

@@ -98,15 +98,15 @@ class AsyncRestSession:
         self._caller = caller
 
         # Check base URL
-        if 'v1' in self._base_url:
-            sys.exit(f'If you want to use the Python library with v1 paths ({self._base_url} was configured as the base'
-                     f' URL), then install the v1 library. See the "Setup" section @ https://github.com/meraki/dashboard-api-python/')
+        if 'v0' in self._base_url:
+            sys.exit(f'If you want to use the Python library with v0 paths ({self._base_url} was configured as the base'
+                     f' URL), then install the v0 library. See the "Setup" section @ https://github.com/meraki/dashboard-api-python/')
         elif self._base_url[-1] == '/':
             self._base_url = self._base_url[:-1]
 
         # Update the headers for the session
         self._headers = {
-            'X-Cisco-Meraki-API-Key': self._api_key,
+            "Authorization": "Bearer " + self._api_key,
             "Content-Type": "application/json",
             "User-Agent": f"python-meraki/aio-{self._version} " + user_agent_extended(self._be_geo_id, self._caller),
         }

@@ -4,7 +4,7 @@
 API_KEY_ENVIRONMENT_VARIABLE = 'MERAKI_DASHBOARD_API_KEY'
 
 # Base URL preceding all endpoint resources
-DEFAULT_BASE_URL = 'https://api.meraki.com/api/v0'
+DEFAULT_BASE_URL = 'https://api.meraki.com/api/v1'
 
 # Maximum number of seconds for each API call
 SINGLE_REQUEST_TIMEOUT = 60
