@@ -1,6 +1,6 @@
-class Appliance(object):
+class AsyncAppliance:
     def __init__(self, session):
-        super(Appliance, self).__init__()
+        super().__init__()
         self._session = session
 
     def getDeviceApplianceDhcpSubnets(self, serial: str):
@@ -44,7 +44,7 @@ class Appliance(object):
         - clientId (string): (required)
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 791 days from today.
+        - t0 (string): The beginning of the timespan for the data. Data is gathered after the specified t0 value. The maximum lookback period is 791 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 791 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 791 days. The default is 31 days.
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
@@ -583,7 +583,7 @@ class Appliance(object):
         - networkId (string): (required)
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
+        - t0 (string): The beginning of the timespan for the data. Data is gathered after the specified t0 value. The maximum lookback period is 365 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 365 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 365 days. The default is 31 days.
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
@@ -1340,7 +1340,7 @@ class Appliance(object):
         - organizationId (string): (required)
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
+        - t0 (string): The beginning of the timespan for the data. Data is gathered after the specified t0 value. The maximum lookback period is 365 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 365 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 365 days. The default is 31 days.
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
@@ -1382,13 +1382,13 @@ class Appliance(object):
 
         return self._session.get(metadata, resource)
 
-    def updateOrganizationApplianceSecurityIntrusion(self, organizationId: str, whitelistedRules: list):
+    def updateOrganizationApplianceSecurityIntrusion(self, organizationId: str, allowedRules: list):
         """
         **Sets supported intrusion settings for an organization**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-appliance-security-intrusion
 
         - organizationId (string): (required)
-        - whitelistedRules (array): Sets a list of specific SNORT® signatures to whitelist
+        - allowedRules (array): Sets a list of specific SNORT® signatures to allow
         """
 
         kwargs = locals()
@@ -1399,10 +1399,36 @@ class Appliance(object):
         }
         resource = f'/organizations/{organizationId}/appliance/security/intrusion'
 
-        body_params = ['whitelistedRules', ]
+        body_params = ['allowedRules', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+
+    def getOrganizationApplianceUplinkStatuses(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **List the uplink status of every Meraki MX and Z series appliances in the organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-uplink-statuses
+
+        - organizationId (string): (required)
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['appliance', 'monitor', 'uplink', 'statuses'],
+            'operation': 'getOrganizationApplianceUplinkStatuses'
+        }
+        resource = f'/organizations/{organizationId}/appliance/uplink/statuses'
+
+        query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationApplianceVpnStats(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """

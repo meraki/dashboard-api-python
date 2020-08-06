@@ -125,11 +125,11 @@ class AsyncSwitch:
         - linkNegotiation (string): The link speed for the switch port
         - portScheduleId (string): The ID of the port schedule. A value of null will clear the port schedule.
         - udld (string): The action to take when Unidirectional Link is detected (Alert only, Enforce). Default configuration is Alert only.
-        - accessPolicyType (string): The type of the access policy of the switch port. Only applicable to access ports. Can be one of 'Open', 'Custom access policy', 'MAC whitelist' or 'Sticky MAC whitelist'
+        - accessPolicyType (string): The type of the access policy of the switch port. Only applicable to access ports. Can be one of 'Open', 'Custom access policy', 'MAC allow list' or 'Sticky MAC allow list'
         - accessPolicyNumber (integer): The number of a custom access policy to configure on the switch port. Only applicable when 'accessPolicyType' is 'Custom access policy'
-        - macWhitelist (array): Only devices with MAC addresses specified in this list will have access to this port. Up to 20 MAC addresses can be defined. Only applicable when 'accessPolicyType' is 'MAC whitelist'
-        - stickyMacWhitelist (array): The initial list of MAC addresses for sticky Mac whitelist. Only applicable when 'accessPolicyType' is 'Sticky MAC whitelist'
-        - stickyMacWhitelistLimit (integer): The maximum number of MAC addresses for sticky MAC whitelist. Only applicable when 'accessPolicyType' is 'Sticky MAC whitelist'
+        - macAllowList (array): Only devices with MAC addresses specified in this list will have access to this port. Up to 20 MAC addresses can be defined. Only applicable when 'accessPolicyType' is 'MAC allow list'
+        - stickyMacAllowList (array): The initial list of MAC addresses for sticky Mac allow list. Only applicable when 'accessPolicyType' is 'Sticky MAC allow list'
+        - stickyMacAllowListLimit (integer): The maximum number of MAC addresses for sticky MAC allow list. Only applicable when 'accessPolicyType' is 'Sticky MAC allow list'
         - stormControlEnabled (boolean): The storm control status of the switch port
         """
 
@@ -145,7 +145,7 @@ class AsyncSwitch:
             options = ['Alert only', 'Enforce']
             assert kwargs['udld'] in options, f'''"udld" cannot be "{kwargs['udld']}", & must be set to one of: {options}'''
         if 'accessPolicyType' in kwargs:
-            options = ['Open', 'Custom access policy', 'MAC whitelist', 'Sticky MAC whitelist']
+            options = ['Open', 'Custom access policy', 'MAC allow list', 'Sticky MAC allow list']
             assert kwargs['accessPolicyType'] in options, f'''"accessPolicyType" cannot be "{kwargs['accessPolicyType']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -154,7 +154,7 @@ class AsyncSwitch:
         }
         resource = f'/devices/{serial}/switch/ports/{portId}'
 
-        body_params = ['name', 'tags', 'enabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'poeEnabled', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macWhitelist', 'stickyMacWhitelist', 'stickyMacWhitelistLimit', 'stormControlEnabled', ]
+        body_params = ['name', 'tags', 'enabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'poeEnabled', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -512,22 +512,6 @@ class AsyncSwitch:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-
-    def getNetworkSwitchAccessPolicies(self, networkId: str):
-        """
-        **List the access policies for this network. Only valid for MS networks.**
-        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-access-policies
-
-        - networkId (string): (required)
-        """
-
-        metadata = {
-            'tags': ['switch', 'configure', 'accessPolicies'],
-            'operation': 'getNetworkSwitchAccessPolicies'
-        }
-        resource = f'/networks/{networkId}/switch/accessPolicies'
-
-        return self._session.get(metadata, resource)
 
     def getNetworkSwitchDhcpServerPolicy(self, networkId: str):
         """
@@ -1188,6 +1172,414 @@ class AsyncSwitch:
 
         return self._session.put(metadata, resource, payload)
 
+    def getNetworkSwitchStacks(self, networkId: str):
+        """
+        **List the switch stacks in a network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-stacks
+
+        - networkId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['switch', 'configure', 'stacks'],
+            'operation': 'getNetworkSwitchStacks'
+        }
+        resource = f'/networks/{networkId}/switch/stacks'
+
+        return self._session.get(metadata, resource)
+
+    def createNetworkSwitchStack(self, networkId: str, name: str, serials: list):
+        """
+        **Create a stack**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-switch-stack
+
+        - networkId (string): (required)
+        - name (string): The name of the new stack
+        - serials (array): An array of switch serials to be added into the new stack
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['switch', 'configure', 'stacks'],
+            'operation': 'createNetworkSwitchStack'
+        }
+        resource = f'/networks/{networkId}/switch/stacks'
+
+        body_params = ['name', 'serials', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+
+    def getNetworkSwitchStack(self, networkId: str, switchStackId: str):
+        """
+        **Show a switch stack**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-stack
+
+        - networkId (string): (required)
+        - switchStackId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['switch', 'configure', 'stacks'],
+            'operation': 'getNetworkSwitchStack'
+        }
+        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}'
+
+        return self._session.get(metadata, resource)
+
+    def deleteNetworkSwitchStack(self, networkId: str, switchStackId: str):
+        """
+        **Delete a stack**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-stack
+
+        - networkId (string): (required)
+        - switchStackId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['switch', 'configure', 'stacks'],
+            'operation': 'deleteNetworkSwitchStack'
+        }
+        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}'
+
+        return self._session.delete(metadata, resource)
+
+    def addNetworkSwitchStack(self, networkId: str, switchStackId: str, serial: str):
+        """
+        **Add a switch to a stack**
+        https://developer.cisco.com/meraki/api-v1/#!add-network-switch-stack
+
+        - networkId (string): (required)
+        - switchStackId (string): (required)
+        - serial (string): The serial of the switch to be added
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['switch', 'configure', 'stacks'],
+            'operation': 'addNetworkSwitchStack'
+        }
+        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/add'
+
+        body_params = ['serial', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+
+    def removeNetworkSwitchStack(self, networkId: str, switchStackId: str, serial: str):
+        """
+        **Remove a switch from a stack**
+        https://developer.cisco.com/meraki/api-v1/#!remove-network-switch-stack
+
+        - networkId (string): (required)
+        - switchStackId (string): (required)
+        - serial (string): The serial of the switch to be removed
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['switch', 'configure', 'stacks'],
+            'operation': 'removeNetworkSwitchStack'
+        }
+        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/remove'
+
+        body_params = ['serial', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+
+    def getNetworkSwitchStackRoutingInterfaces(self, networkId: str, switchStackId: str):
+        """
+        **List layer 3 interfaces for a switch stack**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-stack-routing-interfaces
+
+        - networkId (string): (required)
+        - switchStackId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['switch', 'configure', 'stacks', 'routing', 'interfaces'],
+            'operation': 'getNetworkSwitchStackRoutingInterfaces'
+        }
+        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces'
+
+        return self._session.get(metadata, resource)
+
+    def createNetworkSwitchStackRoutingInterface(self, networkId: str, switchStackId: str, name: str, subnet: str, interfaceIp: str, vlanId: int, **kwargs):
+        """
+        **Create a layer 3 interface for a switch stack**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-switch-stack-routing-interface
+
+        - networkId (string): (required)
+        - switchStackId (string): (required)
+        - name (string): A friendly name or description for the interface or VLAN.
+        - subnet (string): The network that this routed interface is on, in CIDR notation (ex. 10.1.1.0/24).
+        - interfaceIp (string): The IP address this switch stack will use for layer 3 routing on this VLAN or subnet. This cannot be the same as the switch's management IP.
+        - vlanId (integer): The VLAN this routed interface is on. VLAN must be between 1 and 4094.
+        - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are, 'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
+        - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route. This IP address must exist in a subnet with a routed interface.
+        - ospfSettings (object): The OSPF routing settings of the interface.
+        """
+
+        kwargs.update(locals())
+
+        if 'multicastRouting' in kwargs:
+            options = ['disabled', 'enabled', 'IGMP snooping querier']
+            assert kwargs['multicastRouting'] in options, f'''"multicastRouting" cannot be "{kwargs['multicastRouting']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['switch', 'configure', 'stacks', 'routing', 'interfaces'],
+            'operation': 'createNetworkSwitchStackRoutingInterface'
+        }
+        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces'
+
+        body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+
+    def getNetworkSwitchStackRoutingInterface(self, networkId: str, switchStackId: str, interfaceId: str):
+        """
+        **Return a layer 3 interface from a switch stack**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-stack-routing-interface
+
+        - networkId (string): (required)
+        - switchStackId (string): (required)
+        - interfaceId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['switch', 'configure', 'stacks', 'routing', 'interfaces'],
+            'operation': 'getNetworkSwitchStackRoutingInterface'
+        }
+        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}'
+
+        return self._session.get(metadata, resource)
+
+    def updateNetworkSwitchStackRoutingInterface(self, networkId: str, switchStackId: str, interfaceId: str, **kwargs):
+        """
+        **Update a layer 3 interface for a switch stack**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-stack-routing-interface
+
+        - networkId (string): (required)
+        - switchStackId (string): (required)
+        - interfaceId (string): (required)
+        - name (string): A friendly name or description for the interface or VLAN.
+        - subnet (string): The network that this routed interface is on, in CIDR notation (ex. 10.1.1.0/24).
+        - interfaceIp (string): The IP address this switch stack will use for layer 3 routing on this VLAN or subnet. This cannot be the same as the switch's management IP.
+        - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are, 'disabled', 'enabled' or 'IGMP snooping querier'.
+        - vlanId (integer): The VLAN this routed interface is on. VLAN must be between 1 and 4094.
+        - ospfSettings (object): The OSPF routing settings of the interface.
+        """
+
+        kwargs.update(locals())
+
+        if 'multicastRouting' in kwargs:
+            options = ['disabled', 'enabled', 'IGMP snooping querier']
+            assert kwargs['multicastRouting'] in options, f'''"multicastRouting" cannot be "{kwargs['multicastRouting']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['switch', 'configure', 'stacks', 'routing', 'interfaces'],
+            'operation': 'updateNetworkSwitchStackRoutingInterface'
+        }
+        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}'
+
+        body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'ospfSettings', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteNetworkSwitchStackRoutingInterface(self, networkId: str, switchStackId: str, interfaceId: str):
+        """
+        **Delete a layer 3 interface from a switch stack**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-stack-routing-interface
+
+        - networkId (string): (required)
+        - switchStackId (string): (required)
+        - interfaceId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['switch', 'configure', 'stacks', 'routing', 'interfaces'],
+            'operation': 'deleteNetworkSwitchStackRoutingInterface'
+        }
+        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}'
+
+        return self._session.delete(metadata, resource)
+
+    def getNetworkSwitchStackRoutingInterfaceDhcp(self, networkId: str, switchStackId: str, interfaceId: str):
+        """
+        **Return a layer 3 interface DHCP configuration for a switch stack**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-stack-routing-interface-dhcp
+
+        - networkId (string): (required)
+        - switchStackId (string): (required)
+        - interfaceId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['switch', 'configure', 'stacks', 'routing', 'interfaces', 'dhcp'],
+            'operation': 'getNetworkSwitchStackRoutingInterfaceDhcp'
+        }
+        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}/dhcp'
+
+        return self._session.get(metadata, resource)
+
+    def updateNetworkSwitchStackRoutingInterfaceDhcp(self, networkId: str, switchStackId: str, interfaceId: str, **kwargs):
+        """
+        **Update a layer 3 interface DHCP configuration for a switch stack**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-stack-routing-interface-dhcp
+
+        - networkId (string): (required)
+        - switchStackId (string): (required)
+        - interfaceId (string): (required)
+        - dhcpMode (string): The DHCP mode options for the switch stack interface ('dhcpDisabled', 'dhcpRelay' or 'dhcpServer')
+        - dhcpRelayServerIps (array): The DHCP relay server IPs to which DHCP packets would get relayed for the switch stack interface
+        - dhcpLeaseTime (string): The DHCP lease time config for the dhcp server running on switch stack interface ('30 minutes', '1 hour', '4 hours', '12 hours', '1 day' or '1 week')
+        - dnsNameserversOption (string): The DHCP name server option for the dhcp server running on the switch stack interface ('googlePublicDns', 'openDns' or 'custom')
+        - dnsCustomNameservers (array): The DHCP name server IPs when DHCP name server option is 'custom'
+        - bootOptionsEnabled (boolean): Enable DHCP boot options to provide PXE boot options configs for the dhcp server running on the switch stack interface
+        - bootNextServer (string): The PXE boot server IP for the DHCP server running on the switch stack interface
+        - bootFileName (string): The PXE boot server file name for the DHCP server running on the switch stack interface
+        - dhcpOptions (array): Array of DHCP options consisting of code, type and value for the DHCP server running on the switch stack interface
+        - reservedIpRanges (array): Array of DHCP reserved IP assignments for the DHCP server running on the switch stack interface
+        - fixedIpAssignments (array): Array of DHCP fixed IP assignments for the DHCP server running on the switch stack interface
+        """
+
+        kwargs.update(locals())
+
+        if 'dhcpMode' in kwargs:
+            options = ['dhcpDisabled', 'dhcpRelay', 'dhcpServer']
+            assert kwargs['dhcpMode'] in options, f'''"dhcpMode" cannot be "{kwargs['dhcpMode']}", & must be set to one of: {options}'''
+        if 'dhcpLeaseTime' in kwargs:
+            options = ['30 minutes', '1 hour', '4 hours', '12 hours', '1 day', '1 week']
+            assert kwargs['dhcpLeaseTime'] in options, f'''"dhcpLeaseTime" cannot be "{kwargs['dhcpLeaseTime']}", & must be set to one of: {options}'''
+        if 'dnsNameserversOption' in kwargs:
+            options = ['googlePublicDns', 'openDns', 'custom']
+            assert kwargs['dnsNameserversOption'] in options, f'''"dnsNameserversOption" cannot be "{kwargs['dnsNameserversOption']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['switch', 'configure', 'stacks', 'routing', 'interfaces', 'dhcp'],
+            'operation': 'updateNetworkSwitchStackRoutingInterfaceDhcp'
+        }
+        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}/dhcp'
+
+        body_params = ['dhcpMode', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dnsNameserversOption', 'dnsCustomNameservers', 'bootOptionsEnabled', 'bootNextServer', 'bootFileName', 'dhcpOptions', 'reservedIpRanges', 'fixedIpAssignments', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
+    def getNetworkSwitchStackRoutingStaticRoutes(self, networkId: str, switchStackId: str):
+        """
+        **List layer 3 static routes for a switch stack**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-stack-routing-static-routes
+
+        - networkId (string): (required)
+        - switchStackId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['switch', 'configure', 'stacks', 'routing', 'staticRoutes'],
+            'operation': 'getNetworkSwitchStackRoutingStaticRoutes'
+        }
+        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes'
+
+        return self._session.get(metadata, resource)
+
+    def createNetworkSwitchStackRoutingStaticRoute(self, networkId: str, switchStackId: str, subnet: str, nextHopIp: str, **kwargs):
+        """
+        **Create a layer 3 static route for a switch stack**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-switch-stack-routing-static-route
+
+        - networkId (string): (required)
+        - switchStackId (string): (required)
+        - subnet (string): The subnet which is routed via this static route and should be specified in CIDR notation (ex. 1.2.3.0/24)
+        - nextHopIp (string): IP address of the next hop device to which the device sends its traffic for the subnet
+        - name (string): Name or description for layer 3 static route
+        - advertiseViaOspfEnabled (boolean): Option to advertise static route via OSPF
+        - preferOverOspfRoutesEnabled (boolean): Option to prefer static route over OSPF routes
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['switch', 'configure', 'stacks', 'routing', 'staticRoutes'],
+            'operation': 'createNetworkSwitchStackRoutingStaticRoute'
+        }
+        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes'
+
+        body_params = ['name', 'subnet', 'nextHopIp', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+
+    def getNetworkSwitchStackRoutingStaticRoute(self, networkId: str, switchStackId: str, staticRouteId: str):
+        """
+        **Return a layer 3 static route for a switch stack**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-stack-routing-static-route
+
+        - networkId (string): (required)
+        - switchStackId (string): (required)
+        - staticRouteId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['switch', 'configure', 'stacks', 'routing', 'staticRoutes'],
+            'operation': 'getNetworkSwitchStackRoutingStaticRoute'
+        }
+        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes/{staticRouteId}'
+
+        return self._session.get(metadata, resource)
+
+    def updateNetworkSwitchStackRoutingStaticRoute(self, networkId: str, switchStackId: str, staticRouteId: str, **kwargs):
+        """
+        **Update a layer 3 static route for a switch stack**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-stack-routing-static-route
+
+        - networkId (string): (required)
+        - switchStackId (string): (required)
+        - staticRouteId (string): (required)
+        - name (string): Name or description for layer 3 static route
+        - subnet (string): The subnet which is routed via this static route and should be specified in CIDR notation (ex. 1.2.3.0/24)
+        - nextHopIp (string): IP address of the next hop device to which the device sends its traffic for the subnet
+        - advertiseViaOspfEnabled (boolean): Option to advertise static route via OSPF
+        - preferOverOspfRoutesEnabled (boolean): Option to prefer static route over OSPF routes
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['switch', 'configure', 'stacks', 'routing', 'staticRoutes'],
+            'operation': 'updateNetworkSwitchStackRoutingStaticRoute'
+        }
+        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes/{staticRouteId}'
+
+        body_params = ['name', 'subnet', 'nextHopIp', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteNetworkSwitchStackRoutingStaticRoute(self, networkId: str, switchStackId: str, staticRouteId: str):
+        """
+        **Delete a layer 3 static route for a switch stack**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-stack-routing-static-route
+
+        - networkId (string): (required)
+        - switchStackId (string): (required)
+        - staticRouteId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['switch', 'configure', 'stacks', 'routing', 'staticRoutes'],
+            'operation': 'deleteNetworkSwitchStackRoutingStaticRoute'
+        }
+        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes/{staticRouteId}'
+
+        return self._session.delete(metadata, resource)
+
     def getNetworkSwitchStormControl(self, networkId: str):
         """
         **Return the storm control configuration for a switch network**
@@ -1267,414 +1659,6 @@ class AsyncSwitch:
 
         return self._session.put(metadata, resource, payload)
 
-    def getNetworkSwitchSwitchStacks(self, networkId: str):
-        """
-        **List the switch stacks in a network**
-        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-switch-stacks
-
-        - networkId (string): (required)
-        """
-
-        metadata = {
-            'tags': ['switch', 'configure', 'switchStacks'],
-            'operation': 'getNetworkSwitchSwitchStacks'
-        }
-        resource = f'/networks/{networkId}/switch/switchStacks'
-
-        return self._session.get(metadata, resource)
-
-    def createNetworkSwitchSwitchStack(self, networkId: str, name: str, serials: list):
-        """
-        **Create a stack**
-        https://developer.cisco.com/meraki/api-v1/#!create-network-switch-switch-stack
-
-        - networkId (string): (required)
-        - name (string): The name of the new stack
-        - serials (array): An array of switch serials to be added into the new stack
-        """
-
-        kwargs = locals()
-
-        metadata = {
-            'tags': ['switch', 'configure', 'switchStacks'],
-            'operation': 'createNetworkSwitchSwitchStack'
-        }
-        resource = f'/networks/{networkId}/switch/switchStacks'
-
-        body_params = ['name', 'serials', ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-
-        return self._session.post(metadata, resource, payload)
-
-    def getNetworkSwitchSwitchStack(self, networkId: str, switchStackId: str):
-        """
-        **Show a switch stack**
-        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-switch-stack
-
-        - networkId (string): (required)
-        - switchStackId (string): (required)
-        """
-
-        metadata = {
-            'tags': ['switch', 'configure', 'switchStacks'],
-            'operation': 'getNetworkSwitchSwitchStack'
-        }
-        resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}'
-
-        return self._session.get(metadata, resource)
-
-    def deleteNetworkSwitchSwitchStack(self, networkId: str, switchStackId: str):
-        """
-        **Delete a stack**
-        https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-switch-stack
-
-        - networkId (string): (required)
-        - switchStackId (string): (required)
-        """
-
-        metadata = {
-            'tags': ['switch', 'configure', 'switchStacks'],
-            'operation': 'deleteNetworkSwitchSwitchStack'
-        }
-        resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}'
-
-        return self._session.delete(metadata, resource)
-
-    def addNetworkSwitchSwitchStack(self, networkId: str, switchStackId: str, serial: str):
-        """
-        **Add a switch to a stack**
-        https://developer.cisco.com/meraki/api-v1/#!add-network-switch-switch-stack
-
-        - networkId (string): (required)
-        - switchStackId (string): (required)
-        - serial (string): The serial of the switch to be added
-        """
-
-        kwargs = locals()
-
-        metadata = {
-            'tags': ['switch', 'configure', 'switchStacks'],
-            'operation': 'addNetworkSwitchSwitchStack'
-        }
-        resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}/add'
-
-        body_params = ['serial', ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-
-        return self._session.post(metadata, resource, payload)
-
-    def removeNetworkSwitchSwitchStack(self, networkId: str, switchStackId: str, serial: str):
-        """
-        **Remove a switch from a stack**
-        https://developer.cisco.com/meraki/api-v1/#!remove-network-switch-switch-stack
-
-        - networkId (string): (required)
-        - switchStackId (string): (required)
-        - serial (string): The serial of the switch to be removed
-        """
-
-        kwargs = locals()
-
-        metadata = {
-            'tags': ['switch', 'configure', 'switchStacks'],
-            'operation': 'removeNetworkSwitchSwitchStack'
-        }
-        resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}/remove'
-
-        body_params = ['serial', ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-
-        return self._session.post(metadata, resource, payload)
-
-    def getNetworkSwitchSwitchStackRoutingInterfaces(self, networkId: str, switchStackId: str):
-        """
-        **List layer 3 interfaces for a switch stack**
-        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-switch-stack-routing-interfaces
-
-        - networkId (string): (required)
-        - switchStackId (string): (required)
-        """
-
-        metadata = {
-            'tags': ['switch', 'configure', 'switchStacks', 'routing', 'interfaces'],
-            'operation': 'getNetworkSwitchSwitchStackRoutingInterfaces'
-        }
-        resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}/routing/interfaces'
-
-        return self._session.get(metadata, resource)
-
-    def createNetworkSwitchSwitchStackRoutingInterface(self, networkId: str, switchStackId: str, name: str, subnet: str, interfaceIp: str, vlanId: int, **kwargs):
-        """
-        **Create a layer 3 interface for a switch stack**
-        https://developer.cisco.com/meraki/api-v1/#!create-network-switch-switch-stack-routing-interface
-
-        - networkId (string): (required)
-        - switchStackId (string): (required)
-        - name (string): A friendly name or description for the interface or VLAN.
-        - subnet (string): The network that this routed interface is on, in CIDR notation (ex. 10.1.1.0/24).
-        - interfaceIp (string): The IP address this switch stack will use for layer 3 routing on this VLAN or subnet. This cannot be the same as the switch's management IP.
-        - vlanId (integer): The VLAN this routed interface is on. VLAN must be between 1 and 4094.
-        - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are, 'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
-        - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route. This IP address must exist in a subnet with a routed interface.
-        - ospfSettings (object): The OSPF routing settings of the interface.
-        """
-
-        kwargs.update(locals())
-
-        if 'multicastRouting' in kwargs:
-            options = ['disabled', 'enabled', 'IGMP snooping querier']
-            assert kwargs['multicastRouting'] in options, f'''"multicastRouting" cannot be "{kwargs['multicastRouting']}", & must be set to one of: {options}'''
-
-        metadata = {
-            'tags': ['switch', 'configure', 'switchStacks', 'routing', 'interfaces'],
-            'operation': 'createNetworkSwitchSwitchStackRoutingInterface'
-        }
-        resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}/routing/interfaces'
-
-        body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-
-        return self._session.post(metadata, resource, payload)
-
-    def getNetworkSwitchSwitchStackRoutingInterface(self, networkId: str, switchStackId: str, interfaceId: str):
-        """
-        **Return a layer 3 interface from a switch stack**
-        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-switch-stack-routing-interface
-
-        - networkId (string): (required)
-        - switchStackId (string): (required)
-        - interfaceId (string): (required)
-        """
-
-        metadata = {
-            'tags': ['switch', 'configure', 'switchStacks', 'routing', 'interfaces'],
-            'operation': 'getNetworkSwitchSwitchStackRoutingInterface'
-        }
-        resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}/routing/interfaces/{interfaceId}'
-
-        return self._session.get(metadata, resource)
-
-    def updateNetworkSwitchSwitchStackRoutingInterface(self, networkId: str, switchStackId: str, interfaceId: str, **kwargs):
-        """
-        **Update a layer 3 interface for a switch stack**
-        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-switch-stack-routing-interface
-
-        - networkId (string): (required)
-        - switchStackId (string): (required)
-        - interfaceId (string): (required)
-        - name (string): A friendly name or description for the interface or VLAN.
-        - subnet (string): The network that this routed interface is on, in CIDR notation (ex. 10.1.1.0/24).
-        - interfaceIp (string): The IP address this switch stack will use for layer 3 routing on this VLAN or subnet. This cannot be the same as the switch's management IP.
-        - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are, 'disabled', 'enabled' or 'IGMP snooping querier'.
-        - vlanId (integer): The VLAN this routed interface is on. VLAN must be between 1 and 4094.
-        - ospfSettings (object): The OSPF routing settings of the interface.
-        """
-
-        kwargs.update(locals())
-
-        if 'multicastRouting' in kwargs:
-            options = ['disabled', 'enabled', 'IGMP snooping querier']
-            assert kwargs['multicastRouting'] in options, f'''"multicastRouting" cannot be "{kwargs['multicastRouting']}", & must be set to one of: {options}'''
-
-        metadata = {
-            'tags': ['switch', 'configure', 'switchStacks', 'routing', 'interfaces'],
-            'operation': 'updateNetworkSwitchSwitchStackRoutingInterface'
-        }
-        resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}/routing/interfaces/{interfaceId}'
-
-        body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'ospfSettings', ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-
-        return self._session.put(metadata, resource, payload)
-
-    def deleteNetworkSwitchSwitchStackRoutingInterface(self, networkId: str, switchStackId: str, interfaceId: str):
-        """
-        **Delete a layer 3 interface from a switch stack**
-        https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-switch-stack-routing-interface
-
-        - networkId (string): (required)
-        - switchStackId (string): (required)
-        - interfaceId (string): (required)
-        """
-
-        metadata = {
-            'tags': ['switch', 'configure', 'switchStacks', 'routing', 'interfaces'],
-            'operation': 'deleteNetworkSwitchSwitchStackRoutingInterface'
-        }
-        resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}/routing/interfaces/{interfaceId}'
-
-        return self._session.delete(metadata, resource)
-
-    def getNetworkSwitchSwitchStackRoutingInterfaceDhcp(self, networkId: str, switchStackId: str, interfaceId: str):
-        """
-        **Return a layer 3 interface DHCP configuration for a switch stack**
-        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-switch-stack-routing-interface-dhcp
-
-        - networkId (string): (required)
-        - switchStackId (string): (required)
-        - interfaceId (string): (required)
-        """
-
-        metadata = {
-            'tags': ['switch', 'configure', 'switchStacks', 'routing', 'interfaces', 'dhcp'],
-            'operation': 'getNetworkSwitchSwitchStackRoutingInterfaceDhcp'
-        }
-        resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}/routing/interfaces/{interfaceId}/dhcp'
-
-        return self._session.get(metadata, resource)
-
-    def updateNetworkSwitchSwitchStackRoutingInterfaceDhcp(self, networkId: str, switchStackId: str, interfaceId: str, **kwargs):
-        """
-        **Update a layer 3 interface DHCP configuration for a switch stack**
-        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-switch-stack-routing-interface-dhcp
-
-        - networkId (string): (required)
-        - switchStackId (string): (required)
-        - interfaceId (string): (required)
-        - dhcpMode (string): The DHCP mode options for the switch stack interface ('dhcpDisabled', 'dhcpRelay' or 'dhcpServer')
-        - dhcpRelayServerIps (array): The DHCP relay server IPs to which DHCP packets would get relayed for the switch stack interface
-        - dhcpLeaseTime (string): The DHCP lease time config for the dhcp server running on switch stack interface ('30 minutes', '1 hour', '4 hours', '12 hours', '1 day' or '1 week')
-        - dnsNameserversOption (string): The DHCP name server option for the dhcp server running on the switch stack interface ('googlePublicDns', 'openDns' or 'custom')
-        - dnsCustomNameservers (array): The DHCP name server IPs when DHCP name server option is 'custom'
-        - bootOptionsEnabled (boolean): Enable DHCP boot options to provide PXE boot options configs for the dhcp server running on the switch stack interface
-        - bootNextServer (string): The PXE boot server IP for the DHCP server running on the switch stack interface
-        - bootFileName (string): The PXE boot server file name for the DHCP server running on the switch stack interface
-        - dhcpOptions (array): Array of DHCP options consisting of code, type and value for the DHCP server running on the switch stack interface
-        - reservedIpRanges (array): Array of DHCP reserved IP assignments for the DHCP server running on the switch stack interface
-        - fixedIpAssignments (array): Array of DHCP fixed IP assignments for the DHCP server running on the switch stack interface
-        """
-
-        kwargs.update(locals())
-
-        if 'dhcpMode' in kwargs:
-            options = ['dhcpDisabled', 'dhcpRelay', 'dhcpServer']
-            assert kwargs['dhcpMode'] in options, f'''"dhcpMode" cannot be "{kwargs['dhcpMode']}", & must be set to one of: {options}'''
-        if 'dhcpLeaseTime' in kwargs:
-            options = ['30 minutes', '1 hour', '4 hours', '12 hours', '1 day', '1 week']
-            assert kwargs['dhcpLeaseTime'] in options, f'''"dhcpLeaseTime" cannot be "{kwargs['dhcpLeaseTime']}", & must be set to one of: {options}'''
-        if 'dnsNameserversOption' in kwargs:
-            options = ['googlePublicDns', 'openDns', 'custom']
-            assert kwargs['dnsNameserversOption'] in options, f'''"dnsNameserversOption" cannot be "{kwargs['dnsNameserversOption']}", & must be set to one of: {options}'''
-
-        metadata = {
-            'tags': ['switch', 'configure', 'switchStacks', 'routing', 'interfaces', 'dhcp'],
-            'operation': 'updateNetworkSwitchSwitchStackRoutingInterfaceDhcp'
-        }
-        resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}/routing/interfaces/{interfaceId}/dhcp'
-
-        body_params = ['dhcpMode', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dnsNameserversOption', 'dnsCustomNameservers', 'bootOptionsEnabled', 'bootNextServer', 'bootFileName', 'dhcpOptions', 'reservedIpRanges', 'fixedIpAssignments', ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-
-        return self._session.put(metadata, resource, payload)
-
-    def getNetworkSwitchSwitchStackRoutingStaticRoutes(self, networkId: str, switchStackId: str):
-        """
-        **List layer 3 static routes for a switch stack**
-        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-switch-stack-routing-static-routes
-
-        - networkId (string): (required)
-        - switchStackId (string): (required)
-        """
-
-        metadata = {
-            'tags': ['switch', 'configure', 'switchStacks', 'routing', 'staticRoutes'],
-            'operation': 'getNetworkSwitchSwitchStackRoutingStaticRoutes'
-        }
-        resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}/routing/staticRoutes'
-
-        return self._session.get(metadata, resource)
-
-    def createNetworkSwitchSwitchStackRoutingStaticRoute(self, networkId: str, switchStackId: str, subnet: str, nextHopIp: str, **kwargs):
-        """
-        **Create a layer 3 static route for a switch stack**
-        https://developer.cisco.com/meraki/api-v1/#!create-network-switch-switch-stack-routing-static-route
-
-        - networkId (string): (required)
-        - switchStackId (string): (required)
-        - subnet (string): The subnet which is routed via this static route and should be specified in CIDR notation (ex. 1.2.3.0/24)
-        - nextHopIp (string): IP address of the next hop device to which the device sends its traffic for the subnet
-        - name (string): Name or description for layer 3 static route
-        - advertiseViaOspfEnabled (boolean): Option to advertise static route via OSPF
-        - preferOverOspfRoutesEnabled (boolean): Option to prefer static route over OSPF routes
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['switch', 'configure', 'switchStacks', 'routing', 'staticRoutes'],
-            'operation': 'createNetworkSwitchSwitchStackRoutingStaticRoute'
-        }
-        resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}/routing/staticRoutes'
-
-        body_params = ['name', 'subnet', 'nextHopIp', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-
-        return self._session.post(metadata, resource, payload)
-
-    def getNetworkSwitchSwitchStackRoutingStaticRoute(self, networkId: str, switchStackId: str, staticRouteId: str):
-        """
-        **Return a layer 3 static route for a switch stack**
-        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-switch-stack-routing-static-route
-
-        - networkId (string): (required)
-        - switchStackId (string): (required)
-        - staticRouteId (string): (required)
-        """
-
-        metadata = {
-            'tags': ['switch', 'configure', 'switchStacks', 'routing', 'staticRoutes'],
-            'operation': 'getNetworkSwitchSwitchStackRoutingStaticRoute'
-        }
-        resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}/routing/staticRoutes/{staticRouteId}'
-
-        return self._session.get(metadata, resource)
-
-    def updateNetworkSwitchSwitchStackRoutingStaticRoute(self, networkId: str, switchStackId: str, staticRouteId: str, **kwargs):
-        """
-        **Update a layer 3 static route for a switch stack**
-        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-switch-stack-routing-static-route
-
-        - networkId (string): (required)
-        - switchStackId (string): (required)
-        - staticRouteId (string): (required)
-        - name (string): Name or description for layer 3 static route
-        - subnet (string): The subnet which is routed via this static route and should be specified in CIDR notation (ex. 1.2.3.0/24)
-        - nextHopIp (string): IP address of the next hop device to which the device sends its traffic for the subnet
-        - advertiseViaOspfEnabled (boolean): Option to advertise static route via OSPF
-        - preferOverOspfRoutesEnabled (boolean): Option to prefer static route over OSPF routes
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['switch', 'configure', 'switchStacks', 'routing', 'staticRoutes'],
-            'operation': 'updateNetworkSwitchSwitchStackRoutingStaticRoute'
-        }
-        resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}/routing/staticRoutes/{staticRouteId}'
-
-        body_params = ['name', 'subnet', 'nextHopIp', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-
-        return self._session.put(metadata, resource, payload)
-
-    def deleteNetworkSwitchSwitchStackRoutingStaticRoute(self, networkId: str, switchStackId: str, staticRouteId: str):
-        """
-        **Delete a layer 3 static route for a switch stack**
-        https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-switch-stack-routing-static-route
-
-        - networkId (string): (required)
-        - switchStackId (string): (required)
-        - staticRouteId (string): (required)
-        """
-
-        metadata = {
-            'tags': ['switch', 'configure', 'switchStacks', 'routing', 'staticRoutes'],
-            'operation': 'deleteNetworkSwitchSwitchStackRoutingStaticRoute'
-        }
-        resource = f'/networks/{networkId}/switch/switchStacks/{switchStackId}/routing/staticRoutes/{staticRouteId}'
-
-        return self._session.delete(metadata, resource)
-
     def getOrganizationConfigTemplateSwitchProfiles(self, organizationId: str, configTemplateId: str):
         """
         **List the switch profiles for your switch template configuration**
@@ -1752,11 +1736,11 @@ class AsyncSwitch:
         - linkNegotiation (string): The link speed for the switch profile port
         - portScheduleId (string): The ID of the port schedule. A value of null will clear the port schedule.
         - udld (string): The action to take when Unidirectional Link is detected (Alert only, Enforce). Default configuration is Alert only.
-        - accessPolicyType (string): The type of the access policy of the switch profile port. Only applicable to access ports. Can be one of 'Open', 'Custom access policy', 'MAC whitelist' or 'Sticky MAC whitelist'
+        - accessPolicyType (string): The type of the access policy of the switch profile port. Only applicable to access ports. Can be one of 'Open', 'Custom access policy', 'MAC allow list' or 'Sticky MAC allow list'
         - accessPolicyNumber (integer): The number of a custom access policy to configure on the switch profile port. Only applicable when 'accessPolicyType' is 'Custom access policy'
-        - macWhitelist (array): Only devices with MAC addresses specified in this list will have access to this port. Up to 20 MAC addresses can be defined. Only applicable when 'accessPolicyType' is 'MAC whitelist'
-        - stickyMacWhitelist (array): The initial list of MAC addresses for sticky Mac whitelist. Only applicable when 'accessPolicyType' is 'Sticky MAC whitelist'
-        - stickyMacWhitelistLimit (integer): The maximum number of MAC addresses for sticky MAC whitelist. Only applicable when 'accessPolicyType' is 'Sticky MAC whitelist'
+        - macAllowList (array): Only devices with MAC addresses specified in this list will have access to this port. Up to 20 MAC addresses can be defined. Only applicable when 'accessPolicyType' is 'MAC allow list'
+        - stickyMacAllowList (array): The initial list of MAC addresses for sticky Mac allow list. Only applicable when 'accessPolicyType' is 'Sticky MAC allow list'
+        - stickyMacAllowListLimit (integer): The maximum number of MAC addresses for sticky MAC allow list. Only applicable when 'accessPolicyType' is 'Sticky MAC allow list'
         - stormControlEnabled (boolean): The storm control status of the switch profile port
         """
 
@@ -1772,7 +1756,7 @@ class AsyncSwitch:
             options = ['Alert only', 'Enforce']
             assert kwargs['udld'] in options, f'''"udld" cannot be "{kwargs['udld']}", & must be set to one of: {options}'''
         if 'accessPolicyType' in kwargs:
-            options = ['Open', 'Custom access policy', 'MAC whitelist', 'Sticky MAC whitelist']
+            options = ['Open', 'Custom access policy', 'MAC allow list', 'Sticky MAC allow list']
             assert kwargs['accessPolicyType'] in options, f'''"accessPolicyType" cannot be "{kwargs['accessPolicyType']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -1781,7 +1765,7 @@ class AsyncSwitch:
         }
         resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles/{profileId}/ports/{portId}'
 
-        body_params = ['name', 'tags', 'enabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'poeEnabled', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macWhitelist', 'stickyMacWhitelist', 'stickyMacWhitelistLimit', 'stormControlEnabled', ]
+        body_params = ['name', 'tags', 'enabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'poeEnabled', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)

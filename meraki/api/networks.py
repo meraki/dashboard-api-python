@@ -3,22 +3,6 @@ class Networks(object):
         super(Networks, self).__init__()
         self._session = session
 
-    def getNetworkClientsPolicies(self, networkID: str):
-        """
-        **List the client policies within a wireless network.**
-        https://developer.cisco.com/meraki/api-v1/#!get-network-clients-policies
-
-        - networkID (string): (required)
-        """
-
-        metadata = {
-            'tags': ['networks', 'configure', 'clients', 'policies'],
-            'operation': 'getNetworkClientsPolicies'
-        }
-        resource = f'/networks/{networkID}/clients/policies'
-
-        return self._session.get(metadata, resource)
-
     def getNetwork(self, networkId: str):
         """
         **Return a network**

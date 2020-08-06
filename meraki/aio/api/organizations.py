@@ -1,6 +1,6 @@
-class Organizations(object):
+class AsyncOrganizations:
     def __init__(self, session):
-        super(Organizations, self).__init__()
+        super().__init__()
         self._session = session
 
     def getOrganizations(self):
@@ -251,13 +251,13 @@ class Organizations(object):
 
         return self._session.post(metadata, resource, payload)
 
-    def updateOrganizationAdmin(self, organizationId: str, id: str, **kwargs):
+    def updateOrganizationAdmin(self, organizationId: str, adminId: str, **kwargs):
         """
         **Update an administrator**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-admin
 
         - organizationId (string): (required)
-        - id (string): (required)
+        - adminId (string): (required)
         - name (string): The name of the dashboard administrator
         - orgAccess (string): The privilege of the dashboard administrator on the organization. Can be one of 'full', 'read-only', 'enterprise' or 'none'
         - tags (array): The list of tags that the dashboard administrator has privileges on
@@ -274,27 +274,27 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'admins'],
             'operation': 'updateOrganizationAdmin'
         }
-        resource = f'/organizations/{organizationId}/admins/{id}'
+        resource = f'/organizations/{organizationId}/admins/{adminId}'
 
         body_params = ['name', 'orgAccess', 'tags', 'networks', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
 
-    def deleteOrganizationAdmin(self, organizationId: str, id: str):
+    def deleteOrganizationAdmin(self, organizationId: str, adminId: str):
         """
         **Revoke all access for a dashboard administrator within this organization**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-admin
 
         - organizationId (string): (required)
-        - id (string): (required)
+        - adminId (string): (required)
         """
 
         metadata = {
             'tags': ['organizations', 'configure', 'admins'],
             'operation': 'deleteOrganizationAdmin'
         }
-        resource = f'/organizations/{organizationId}/admins/{id}'
+        resource = f'/organizations/{organizationId}/admins/{adminId}'
 
         return self._session.delete(metadata, resource)
 
@@ -1231,19 +1231,23 @@ class Organizations(object):
 
         return self._session.get(metadata, resource)
 
-    def createOrganizationSamlRole(self, organizationId: str, **kwargs):
+    def createOrganizationSamlRole(self, organizationId: str, role: str, orgAccess: str, **kwargs):
         """
         **Create a SAML role**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-saml-role
 
         - organizationId (string): (required)
         - role (string): The role of the SAML administrator
-        - orgAccess (string): The privilege of the SAML administrator on the organization
+        - orgAccess (string): The privilege of the SAML administrator on the organization. Can be one of 'none', 'read-only' or 'full'
         - tags (array): The list of tags that the SAML administrator has privleges on
         - networks (array): The list of networks that the SAML administrator has privileges on
         """
 
         kwargs.update(locals())
+
+        if 'orgAccess' in kwargs:
+            options = ['none', 'read-only', 'full']
+            assert kwargs['orgAccess'] in options, f'''"orgAccess" cannot be "{kwargs['orgAccess']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['organizations', 'configure', 'samlRoles'],
@@ -1281,12 +1285,16 @@ class Organizations(object):
         - organizationId (string): (required)
         - samlRoleId (string): (required)
         - role (string): The role of the SAML administrator
-        - orgAccess (string): The privilege of the SAML administrator on the organization
+        - orgAccess (string): The privilege of the SAML administrator on the organization. Can be one of 'none', 'read-only' or 'full'
         - tags (array): The list of tags that the SAML administrator has privleges on
         - networks (array): The list of networks that the SAML administrator has privileges on
         """
 
         kwargs.update(locals())
+
+        if 'orgAccess' in kwargs:
+            options = ['none', 'read-only', 'full']
+            assert kwargs['orgAccess'] in options, f'''"orgAccess" cannot be "{kwargs['orgAccess']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['organizations', 'configure', 'samlRoles'],

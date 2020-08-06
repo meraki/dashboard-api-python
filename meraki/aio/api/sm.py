@@ -1,6 +1,6 @@
-class Sm(object):
+class AsyncSm:
     def __init__(self, session):
-        super(Sm, self).__init__()
+        super().__init__()
         self._session = session
 
     def createNetworkSmBypassActivationLockAttempt(self, networkId: str, ids: list):
@@ -42,68 +42,6 @@ class Sm(object):
 
         return self._session.get(metadata, resource)
 
-    def getNetworkSmDevices(self, networkId: str, total_pages=1, direction='next', **kwargs):
-        """
-        **List the devices enrolled in an SM network with various specified fields and filters**
-        https://developer.cisco.com/meraki/api-v1/#!get-network-sm-devices
-
-        - networkId (string): (required)
-        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
-        - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - fields (string): Additional fields that will be displayed for each device. Multiple fields can be passed in as comma separated values.
-    The default fields are: id, name, tags, ssid, wifiMac, osName, systemModel, uuid, and serialNumber. The additional fields are: ip,
-    systemType, availableDeviceCapacity, kioskAppName, biosVersion, lastConnected, missingAppsCount, userSuppliedAddress, location, lastUser,
-    ownerEmail, ownerUsername, osBuild, publicIp, phoneNumber, diskInfoJson, deviceCapacity, isManaged, hadMdm, isSupervised, meid, imei, iccid,
-    simCarrierNetwork, cellularDataUsed, isHotspotEnabled, createdAt, batteryEstCharge, quarantined, avName, avRunning, asName, fwName,
-    isRooted, loginRequired, screenLockEnabled, screenLockDelay, autoLoginDisabled, autoTags, hasMdm, hasDesktopAgent, diskEncryptionEnabled,
-    hardwareEncryptionCaps, passCodeLock, usesHardwareKeystore, and androidSecurityPatchVersion.
-        - wifiMacs (string): Filter devices by wifi mac(s). Multiple wifi macs can be passed in as comma separated values.
-        - serials (string): Filter devices by serial(s). Multiple serials can be passed in as comma separated values.
-        - ids (string): Filter devices by id(s). Multiple ids can be passed in as comma separated values.
-        - scope (string): Specify a scope (one of all, none, withAny, withAll, withoutAny, or withoutAll) and a set of tags as comma separated values.
-        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
-        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['sm', 'configure', 'devices'],
-            'operation': 'getNetworkSmDevices'
-        }
-        resource = f'/networks/{networkId}/sm/devices'
-
-        query_params = ['fields', 'wifiMacs', 'serials', 'ids', 'scope', 'perPage', 'startingAfter', 'endingBefore', ]
-        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
-
-        return self._session.get_pages(metadata, resource, params, total_pages, direction)
-
-    def checkinNetworkSmDevices(self, networkId: str, **kwargs):
-        """
-        **Force check-in a set of devices**
-        https://developer.cisco.com/meraki/api-v1/#!checkin-network-sm-devices
-
-        - networkId (string): (required)
-        - wifiMacs (string): The wifiMacs of the devices to be checked-in.
-        - ids (string): The ids of the devices to be checked-in.
-        - serials (string): The serials of the devices to be checked-in.
-        - scope (string): The scope (one of all, none, withAny, withAll, withoutAny, or withoutAll) and a set of tags of the devices to be checked-in.
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['sm', 'configure', 'devices'],
-            'operation': 'checkinNetworkSmDevices'
-        }
-        resource = f'/networks/{networkId}/sm/devices/checkin'
-
-        body_params = ['wifiMacs', 'ids', 'serials', 'scope', ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-
-        return self._session.post(metadata, resource, payload)
-
     def updateNetworkSmDevicesFields(self, networkId: str, deviceFields: dict, **kwargs):
         """
         **Modify the fields of a device**
@@ -128,85 +66,6 @@ class Sm(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-
-    def lockNetworkSmDevices(self, networkId: str, **kwargs):
-        """
-        **Lock a set of devices**
-        https://developer.cisco.com/meraki/api-v1/#!lock-network-sm-devices
-
-        - networkId (string): (required)
-        - wifiMacs (string): The wifiMacs of the devices to be locked.
-        - ids (string): The ids of the devices to be locked.
-        - serials (string): The serials of the devices to be locked.
-        - scope (string): The scope (one of all, none, withAny, withAll, withoutAny, or withoutAll) and a set of tags of the devices to be wiped.
-        - pin (integer): The pin number for locking macOS devices (a six digit number). Required only for macOS devices.
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['sm', 'configure', 'devices'],
-            'operation': 'lockNetworkSmDevices'
-        }
-        resource = f'/networks/{networkId}/sm/devices/lock'
-
-        body_params = ['wifiMacs', 'ids', 'serials', 'scope', 'pin', ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-
-        return self._session.post(metadata, resource, payload)
-
-    def modifyNetworkSmDevicesTags(self, networkId: str, tags: str, updateAction: str, **kwargs):
-        """
-        **Add, delete, or update the tags of a set of devices**
-        https://developer.cisco.com/meraki/api-v1/#!modify-network-sm-devices-tags
-
-        - networkId (string): (required)
-        - tags (string): The tags to be added, deleted, or updated.
-        - updateAction (string): One of add, delete, or update. Only devices that have been modified will be returned.
-        - wifiMacs (string): The wifiMacs of the devices to be modified.
-        - ids (string): The ids of the devices to be modified.
-        - serials (string): The serials of the devices to be modified.
-        - scope (string): The scope (one of all, none, withAny, withAll, withoutAny, or withoutAll) and a set of tags of the devices to be modified.
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['sm', 'configure', 'devices'],
-            'operation': 'modifyNetworkSmDevicesTags'
-        }
-        resource = f'/networks/{networkId}/sm/devices/modifyTags'
-
-        body_params = ['wifiMacs', 'ids', 'serials', 'scope', 'tags', 'updateAction', ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-
-        return self._session.post(metadata, resource, payload)
-
-    def moveNetworkSmDevices(self, networkId: str, newNetwork: str, **kwargs):
-        """
-        **Move a set of devices to a new network**
-        https://developer.cisco.com/meraki/api-v1/#!move-network-sm-devices
-
-        - networkId (string): (required)
-        - newNetwork (string): The new network to which the devices will be moved.
-        - wifiMacs (string): The wifiMacs of the devices to be moved.
-        - ids (string): The ids of the devices to be moved.
-        - serials (string): The serials of the devices to be moved.
-        - scope (string): The scope (one of all, none, withAny, withAll, withoutAny, or withoutAll) and a set of tags of the devices to be moved.
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['sm', 'configure', 'devices'],
-            'operation': 'moveNetworkSmDevices'
-        }
-        resource = f'/networks/{networkId}/sm/devices/move'
-
-        body_params = ['wifiMacs', 'ids', 'serials', 'scope', 'newNetwork', ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-
-        return self._session.post(metadata, resource, payload)
 
     def wipeNetworkSmDevices(self, networkId: str, **kwargs):
         """
@@ -639,31 +498,6 @@ class Sm(object):
         resource = f'/networks/{networkId}/sm/targetGroups/{targetGroupId}'
 
         return self._session.delete(metadata, resource)
-
-    def getNetworkSmUsers(self, networkId: str, **kwargs):
-        """
-        **List the owners in an SM network with various specified fields and filters**
-        https://developer.cisco.com/meraki/api-v1/#!get-network-sm-users
-
-        - networkId (string): (required)
-        - ids (string): Filter users by id(s). Multiple ids can be passed in as comma separated values.
-        - usernames (string): Filter users by username(s). Multiple usernames can be passed in as comma separated values.
-        - emails (string): Filter users by email(s). Multiple emails can be passed in as comma separated values.
-        - scope (string): Specifiy a scope (one of all, none, withAny, withAll, withoutAny, withoutAll) and a set of tags as comma separated values.
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['sm', 'configure', 'users'],
-            'operation': 'getNetworkSmUsers'
-        }
-        resource = f'/networks/{networkId}/sm/users'
-
-        query_params = ['ids', 'usernames', 'emails', 'scope', ]
-        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
-
-        return self._session.get(metadata, resource, params)
 
     def getNetworkSmUserDeviceProfiles(self, networkId: str, userId: str):
         """

@@ -1,6 +1,6 @@
-class Wireless(object):
+class AsyncWireless:
     def __init__(self, session):
-        super(Wireless, self).__init__()
+        super().__init__()
         self._session = session
 
     def getDeviceWirelessBluetoothSettings(self, serial: str):
@@ -52,6 +52,7 @@ class Wireless(object):
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
+        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -59,13 +60,17 @@ class Wireless(object):
 
         kwargs.update(locals())
 
+        if 'band' in kwargs:
+            options = ['2.4', '5']
+            assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
+
         metadata = {
             'tags': ['wireless', 'monitor', 'connectionStats'],
             'operation': 'getDeviceWirelessConnectionStats'
         }
         resource = f'/devices/{serial}/wireless/connectionStats'
 
-        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', ]
+        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -79,6 +84,7 @@ class Wireless(object):
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
+        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -87,13 +93,17 @@ class Wireless(object):
 
         kwargs.update(locals())
 
+        if 'band' in kwargs:
+            options = ['2.4', '5']
+            assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
+
         metadata = {
             'tags': ['wireless', 'monitor', 'latencyStats'],
             'operation': 'getDeviceWirelessLatencyStats'
         }
         resource = f'/devices/{serial}/wireless/latencyStats'
 
-        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', 'fields', ]
+        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', 'fields', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -344,6 +354,7 @@ class Wireless(object):
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
+        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -351,13 +362,17 @@ class Wireless(object):
 
         kwargs.update(locals())
 
+        if 'band' in kwargs:
+            options = ['2.4', '5']
+            assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
+
         metadata = {
             'tags': ['wireless', 'monitor', 'clients', 'connectionStats'],
             'operation': 'getNetworkWirelessClientsConnectionStats'
         }
         resource = f'/networks/{networkId}/wireless/clients/connectionStats'
 
-        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', ]
+        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -371,6 +386,7 @@ class Wireless(object):
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
+        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -379,13 +395,17 @@ class Wireless(object):
 
         kwargs.update(locals())
 
+        if 'band' in kwargs:
+            options = ['2.4', '5']
+            assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
+
         metadata = {
             'tags': ['wireless', 'monitor', 'clients', 'latencyStats'],
             'operation': 'getNetworkWirelessClientsLatencyStats'
         }
         resource = f'/networks/{networkId}/wireless/clients/latencyStats'
 
-        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', 'fields', ]
+        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', 'fields', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -400,6 +420,7 @@ class Wireless(object):
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
+        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -407,13 +428,17 @@ class Wireless(object):
 
         kwargs.update(locals())
 
+        if 'band' in kwargs:
+            options = ['2.4', '5']
+            assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
+
         metadata = {
             'tags': ['wireless', 'monitor', 'clients', 'connectionStats'],
             'operation': 'getNetworkWirelessClientConnectionStats'
         }
         resource = f'/networks/{networkId}/wireless/clients/{clientId}/connectionStats'
 
-        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', ]
+        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -502,6 +527,7 @@ class Wireless(object):
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
+        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -510,13 +536,17 @@ class Wireless(object):
 
         kwargs.update(locals())
 
+        if 'band' in kwargs:
+            options = ['2.4', '5']
+            assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
+
         metadata = {
             'tags': ['wireless', 'monitor', 'clients', 'latencyStats'],
             'operation': 'getNetworkWirelessClientLatencyStats'
         }
         resource = f'/networks/{networkId}/wireless/clients/{clientId}/latencyStats'
 
-        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', 'fields', ]
+        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', 'fields', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -530,6 +560,7 @@ class Wireless(object):
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
+        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -537,13 +568,17 @@ class Wireless(object):
 
         kwargs.update(locals())
 
+        if 'band' in kwargs:
+            options = ['2.4', '5']
+            assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
+
         metadata = {
             'tags': ['wireless', 'monitor', 'connectionStats'],
             'operation': 'getNetworkWirelessConnectionStats'
         }
         resource = f'/networks/{networkId}/wireless/connectionStats'
 
-        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', ]
+        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -592,6 +627,7 @@ class Wireless(object):
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
+        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -599,13 +635,17 @@ class Wireless(object):
 
         kwargs.update(locals())
 
+        if 'band' in kwargs:
+            options = ['2.4', '5']
+            assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
+
         metadata = {
             'tags': ['wireless', 'monitor', 'devices', 'connectionStats'],
             'operation': 'getNetworkWirelessDevicesConnectionStats'
         }
         resource = f'/networks/{networkId}/wireless/devices/connectionStats'
 
-        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', ]
+        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -619,6 +659,7 @@ class Wireless(object):
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
+        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -627,13 +668,17 @@ class Wireless(object):
 
         kwargs.update(locals())
 
+        if 'band' in kwargs:
+            options = ['2.4', '5']
+            assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
+
         metadata = {
             'tags': ['wireless', 'monitor', 'devices', 'latencyStats'],
             'operation': 'getNetworkWirelessDevicesLatencyStats'
         }
         resource = f'/networks/{networkId}/wireless/devices/latencyStats'
 
-        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', 'fields', ]
+        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', 'fields', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -647,6 +692,7 @@ class Wireless(object):
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
+        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -656,13 +702,17 @@ class Wireless(object):
 
         kwargs.update(locals())
 
+        if 'band' in kwargs:
+            options = ['2.4', '5']
+            assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
+
         metadata = {
             'tags': ['wireless', 'monitor', 'failedConnections'],
             'operation': 'getNetworkWirelessFailedConnections'
         }
         resource = f'/networks/{networkId}/wireless/failedConnections'
 
-        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', 'serial', 'clientId', ]
+        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', 'serial', 'clientId', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -715,6 +765,7 @@ class Wireless(object):
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
+        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -723,13 +774,17 @@ class Wireless(object):
 
         kwargs.update(locals())
 
+        if 'band' in kwargs:
+            options = ['2.4', '5']
+            assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
+
         metadata = {
             'tags': ['wireless', 'monitor', 'latencyStats'],
             'operation': 'getNetworkWirelessLatencyStats'
         }
         resource = f'/networks/{networkId}/wireless/latencyStats'
 
-        query_params = ['t0', 't1', 'timespan', 'ssid', 'vlan', 'apTag', 'fields', ]
+        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', 'fields', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -972,7 +1027,7 @@ class Wireless(object):
 
     def getNetworkWirelessSsids(self, networkId: str):
         """
-        **List the SSIDs in a network. Supports networks with access points or wireless-enabled security appliances and teleworker gateways.**
+        **List the MR SSIDs in a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssids
 
         - networkId (string): (required)
@@ -988,7 +1043,7 @@ class Wireless(object):
 
     def getNetworkWirelessSsid(self, networkId: str, number: str):
         """
-        **Return a single SSID**
+        **Return a single MR SSID**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssid
 
         - networkId (string): (required)
@@ -1005,7 +1060,7 @@ class Wireless(object):
 
     def updateNetworkWirelessSsid(self, networkId: str, number: str, **kwargs):
         """
-        **Update the attributes of an SSID**
+        **Update the attributes of an MR SSID**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid
 
         - networkId (string): (required)
