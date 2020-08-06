@@ -131,10 +131,10 @@ Unlike local Python environments, Colab environments are not persistent. Therefo
 %pip install PACKAGE_NAME
 ```
 
-For example, to install the Meraki SDK (replace `1.0.0b15` with whatever version you plan to use):
+For example, to install the Meraki SDK:
 
 ```python
-%pip install meraki==1.0.0b15
+%pip install meraki
 ```
 
 If necessary, create a new code cell at the top of the notebook, paste in that code, and run it before working with the rest of your notebook.
@@ -144,7 +144,7 @@ If necessary, create a new code cell at the top of the notebook, paste in that c
 At a terminal, run:
 
 ```shell
-pip install meraki==1.0.0b15
+pip install meraki
 ```
 
 Other packages can be installed the same way using the relevant package name. Try it with `tablib`!
