@@ -944,7 +944,7 @@ class AsyncAppliance:
 
     def updateNetworkApplianceTrafficShapingRules(self, networkId: str, **kwargs):
         """
-        **Update the traffic shaping settings for an MX network**
+        **Update the traffic shaping settings rules for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-traffic-shaping-rules
 
         - networkId (string): (required)
@@ -974,7 +974,7 @@ class AsyncAppliance:
 
     def getNetworkApplianceTrafficShapingRules(self, networkId: str):
         """
-        **Display the traffic shaping settings for an MX network**
+        **Display the traffic shaping settings rules for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-traffic-shaping-rules
 
         - networkId (string): (required)
