@@ -841,6 +841,44 @@ class AsyncAppliance:
 
         return self._session.delete(metadata, resource)
 
+    def getNetworkApplianceTrafficShaping(self, networkId: str):
+        """
+        **Display the traffic shaping settings for an MX network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-traffic-shaping
+
+        - networkId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'trafficShaping'],
+            'operation': 'getNetworkApplianceTrafficShaping'
+        }
+        resource = f'/networks/{networkId}/appliance/trafficShaping'
+
+        return self._session.get(metadata, resource)
+
+    def updateNetworkApplianceTrafficShaping(self, networkId: str, **kwargs):
+        """
+        **Update the traffic shaping settings for an MX network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-traffic-shaping
+
+        - networkId (string): (required)
+        - globalBandwidthLimits (object): Global per-client bandwidth limit
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'trafficShaping'],
+            'operation': 'updateNetworkApplianceTrafficShaping'
+        }
+        resource = f'/networks/{networkId}/appliance/trafficShaping'
+
+        body_params = ['globalBandwidthLimits', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
     def getNetworkApplianceTrafficShapingCustomPerformanceClasses(self, networkId: str):
         """
         **List all custom performance classes for an MX network**
