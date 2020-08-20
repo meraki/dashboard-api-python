@@ -22,6 +22,7 @@ That said, to open and create a notebook, you will need a compatible editor. The
 * Project Jupyter offers [JupyterLab](https://jupyter.org/install.html), a web-based IDE with a local installer for running on a host machine (installation required)
 * Microsoft offers [Visual Studio Code](https://code.visualstudio.com/), a powerful, multi-language IDE which has native support for notebooks and Python (installation required)
 * Google offers [Colaboratory](https://colab.research.google.com/), a completely web-based notebook IDE which requires no download whatsoever. Google calls their notebooks "Colab notebooks," but they work in much the same way. To learn more, see [Overview of Colab](https://colab.research.google.com/notebooks/basic_features_overview.ipynb).
+* JetBrains offers [PyCharm Professional](https://www.jetbrains.com/pycharm/). Unfortunately, the free version of PyCharm does not support notebooks.
 
 Regardless of how you choose to create them, notebooks are stored as `.ipnyb` files to distinguish them from standard `.py` Python scripts. In this guide, we will focus on using Google Colaboratory since it requires no download, but in some cases we will offer relevant instructions for other IDEs. In any case, if you prefer VS Code or JupyterLab, you can open the same notebook files covered in either IDE.
 
