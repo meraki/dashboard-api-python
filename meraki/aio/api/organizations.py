@@ -792,6 +792,23 @@ class AsyncOrganizations:
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
+    def getOrganizationInventoryDevice(self, organizationId: str, serial: str):
+        """
+        **Return a single device from the inventory of an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-inventory-device
+
+        - organizationId (string): (required)
+        - serial (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'inventoryDevices'],
+            'operation': 'getOrganizationInventoryDevice'
+        }
+        resource = f'/organizations/{organizationId}/inventoryDevices/{serial}'
+
+        return self._session.get(metadata, resource)
+
     def getOrganizationLicenses(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the licenses for an organization**

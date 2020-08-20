@@ -34,8 +34,7 @@ def generate_pagination_parameters(operation):
         },
         'direction': {
             'type': 'string',
-            'description': 'direction to paginate, either "next" or "prev" (default) page' if operation in
-                           REVERSE_PAGINATION else 'direction to paginate, either "next" (default) or "prev" page',
+            'description': 'use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages','
         }
     }
     return ret
@@ -74,6 +73,8 @@ def parse_params(operation, parameters, param_filters=[]):
                 params[k]['description'] = keys[k]['description']
                 if 'enum' in keys[k]:
                     params[k]['enum'] = keys[k]['enum']
+                if 'example' in p['schema'] and k in p['schema']['example']:
+                    params[k]['example'] = p['schema']['example'][k]
         elif 'required' in p and p['required']:
             params[name] = {'required': True}
             params[name]['in'] = p['in']
@@ -137,7 +138,7 @@ def generate_library(spec):
     # Files that are not generated
     non_generated = ['__init__.py', 'config.py', 'exceptions.py', 'rest_session.py', 'api/__init__.py',
                      'aio/__init__.py', 'aio/rest_session.py', 'aio/api/__init__.py']
-    base_url = 'https://raw.githubusercontent.com/meraki/dashboard-api-python/master/meraki_v1/'
+    base_url = 'https://raw.githubusercontent.com/meraki/dashboard-api-python/master/meraki/'
     for file in non_generated:
         response = requests.get(f'{base_url}{file}')
         with open(f'meraki/{file}', 'w+') as fp:
