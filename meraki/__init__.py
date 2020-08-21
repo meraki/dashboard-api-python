@@ -69,26 +69,32 @@ class DashboardAPI(object):
         # Configure logging
         if not suppress_logging:
             self._logger = logging.getLogger(__name__)
+            self._logger.setLevel(logging.DEBUG)
+
+            formatter = logging.Formatter(
+                fmt='%(name)12s: %(levelname)8s > %(message)s',
+                datefmt='%Y-%m-%d %H:%M:%S'
+            )
+
             if log_path and log_path[-1] != '/':
                 log_path += '/'
             self._log_file = f'{log_path}{log_file_prefix}_log__{datetime.now():%Y-%m-%d_%H-%M-%S}.log'
-            if output_log:
-                logging.basicConfig(
-                    filename=self._log_file,
-                    level=logging.DEBUG,
-                    format='%(asctime)s %(name)12s: %(levelname)8s > %(message)s',
-                    datefmt='%Y-%m-%d %H:%M:%S')
+
+            handler_console = logging.StreamHandler()
+            handler_log = logging.FileHandler(
+                filename=self._log_file
+            )
+
+            handler_console.setFormatter(formatter)
+            handler_log.setFormatter(formatter)
+
+            if output_log and not self._logger.hasHandlers():
+                self._logger.addHandler(handler_log)
                 if print_console:
-                    console = logging.StreamHandler()
-                    console.setLevel(logging.INFO)
-                    formatter = logging.Formatter('%(name)12s: %(levelname)8s > %(message)s')
-                    console.setFormatter(formatter)
-                    logging.getLogger('').addHandler(console)
-            elif print_console:
-                logging.basicConfig(
-                    level=logging.DEBUG,
-                    format='%(asctime)s %(name)12s: %(levelname)8s > %(message)s',
-                    datefmt='%Y-%m-%d %H:%M:%S')
+                    handler_console.setLevel(logging.INFO)
+                    self._logger.addHandler(handler_console)
+            elif print_console and not self._logger.hasHandlers():
+                self._logger.addHandler(handler_console)
         else:
             self._logger = None
 
