@@ -72,7 +72,7 @@ class AsyncDashboardAPI:
             self._logger.setLevel(logging.DEBUG)
 
             formatter = logging.Formatter(
-                fmt='%(name)12s: %(levelname)8s > %(message)s',
+                fmt='%(asctime)s %(name)12s: %(levelname)8s > %(message)s',
                 datefmt='%Y-%m-%d %H:%M:%S'
             )
 

@@ -20,7 +20,7 @@ from .config import (
     SUPPRESS_LOGGING, SIMULATE_API_CALLS, BE_GEO_ID, MERAKI_PYTHON_SDK_CALLER
 )
 
-__version__ = '1.0.0b18'
+__version__ = '1.0.0b19'
 
 class DashboardAPI(object):
     """
@@ -72,7 +72,7 @@ class DashboardAPI(object):
             self._logger.setLevel(logging.DEBUG)
 
             formatter = logging.Formatter(
-                fmt='%(name)12s: %(levelname)8s > %(message)s',
+                fmt='%(asctime)s %(name)12s: %(levelname)8s > %(message)s',
                 datefmt='%Y-%m-%d %H:%M:%S'
             )
 

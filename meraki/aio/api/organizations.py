@@ -773,6 +773,7 @@ class AsyncOrganizations:
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - usedState (string): Filter results by used or unused inventory. Accepted values are "used" or "unused".
+        - search (string): Search for devices in inventory based on serial number, mac address, or model.
         """
 
         kwargs.update(locals())
@@ -787,7 +788,7 @@ class AsyncOrganizations:
         }
         resource = f'/organizations/{organizationId}/inventoryDevices'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'usedState', ]
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'usedState', 'search', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
