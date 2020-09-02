@@ -157,7 +157,8 @@ class RestSession(object):
                 try:
                     if response:
                         response.close()
-                    self._logger.info(f'{method} {abs_url}')
+                    if self._logger:
+                        self._logger.info(f'{method} {abs_url}')
                     response = self._req_session.request(method, abs_url, allow_redirects=False, **kwargs)
                     reason = response.reason if response.reason else ''
                     status = response.status_code

@@ -176,7 +176,8 @@ class AsyncRestSession:
             for _ in range(retries):
                 # Make the HTTP request to the API endpoint
                 try:
-                    self._logger.info(f'{method} {abs_url}')
+                    if self._logger:
+                        self._logger.info(f'{method} {abs_url}')
                     response = await self._req_session.request(method, abs_url, **kwargs)
                     reason = response.reason if response.reason else None
                     status = response.status
