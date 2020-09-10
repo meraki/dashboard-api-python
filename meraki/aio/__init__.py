@@ -75,19 +75,18 @@ class AsyncDashboardAPI:
                 fmt='%(asctime)s %(name)12s: %(levelname)8s > %(message)s',
                 datefmt='%Y-%m-%d %H:%M:%S'
             )
-
-            if log_path and log_path[-1] != '/':
-                log_path += '/'
-            self._log_file = f'{log_path}{log_file_prefix}_log__{datetime.now():%Y-%m-%d_%H-%M-%S}.log'
-
             handler_console = logging.StreamHandler()
-            handler_log = logging.FileHandler(
-                filename=self._log_file
-            )
-
             handler_console.setFormatter(formatter)
-            handler_log.setFormatter(formatter)
 
+            if output_log:
+                if log_path and log_path[-1] != '/':
+                    log_path += '/'
+                self._log_file = f'{log_path}{log_file_prefix}_log__{datetime.now():%Y-%m-%d_%H-%M-%S}.log'
+                handler_log = logging.FileHandler(
+                    filename=self._log_file
+                )
+                handler_log.setFormatter(formatter)
+            
             if output_log and not self._logger.hasHandlers():
                 self._logger.addHandler(handler_log)
                 if print_console:
