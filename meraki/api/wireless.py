@@ -1356,6 +1356,13 @@ class Wireless(object):
         - number (string): (required)
         - splashUrl (string): [optional] The custom splash URL of the click-through splash page. Note that the URL can be configured without necessarily being used. In order to enable the custom URL, see 'useSplashUrl'
         - useSplashUrl (boolean): [optional] Boolean indicating whether the users will be redirected to the custom splash url. A custom splash URL must be set if this is true. Note that depending on your SSID's access control settings, it may not be possible to use the custom splash URL.
+        - splashTimeout (integer): Splash timeout in minutes. This will determine how often users will see the splash page.
+        - redirectUrl (string): The custom redirect URL where the users will go after the splash page.
+        - useRedirectUrl (boolean): The Boolean indicating whether the the user will be redirected to the custom redirect URL after the splash page. A custom redirect URL must be set if this is true.
+        - welcomeMessage (string): The welcome message for the users on the splash page.
+        - splashLogo (object): The logo used in the splash page.
+        - splashImage (object): The image used in the splash page.
+        - splashPrepaidFront (object): The prepaid front image used in the splash page.
         """
 
         kwargs.update(locals())
@@ -1366,7 +1373,7 @@ class Wireless(object):
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}/splash/settings'
 
-        body_params = ['splashUrl', 'useSplashUrl', ]
+        body_params = ['splashUrl', 'useSplashUrl', 'splashTimeout', 'redirectUrl', 'useRedirectUrl', 'welcomeMessage', 'splashLogo', 'splashImage', 'splashPrepaidFront', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)

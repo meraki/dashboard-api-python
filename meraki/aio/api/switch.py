@@ -1771,3 +1771,26 @@ class AsyncSwitch:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+
+    def cloneOrganizationSwitchDevices(self, organizationId: str, sourceSerial: str, targetSerials: list):
+        """
+        **Clone port-level and some switch-level configuration settings (Aggregation Groups, Power Settings, Multicast Settings, MTU Configuration, STP Bridge priority, Port Mirroring) from a source switch to one or more target switches**
+        https://developer.cisco.com/meraki/api-v1/#!clone-organization-switch-devices
+
+        - organizationId (string): (required)
+        - sourceSerial (string): Serial number of the source switch (must be on a network not bound to a template)
+        - targetSerials (array): Array of serial numbers of one or more target switches (must be on a network not bound to a template)
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['switch', 'configure', 'devices'],
+            'operation': 'cloneOrganizationSwitchDevices'
+        }
+        resource = f'/organizations/{organizationId}/switch/devices/clone'
+
+        body_params = ['sourceSerial', 'targetSerials', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)

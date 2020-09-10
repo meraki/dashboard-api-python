@@ -828,7 +828,7 @@ class AsyncNetworks:
 
     def deleteNetworkMerakiAuthUser(self, networkId: str, merakiAuthUserId: str):
         """
-        **Delete a user configured with Meraki Authentication (currently only 802.1X RADIUS users can be deleted)**
+        **Delete a user configured with Meraki Authentication (currently, 802.1X RADIUS and Splash Guest users can be deleted)**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-meraki-auth-user
 
         - networkId (string): (required)
@@ -845,7 +845,7 @@ class AsyncNetworks:
 
     def updateNetworkMerakiAuthUser(self, networkId: str, merakiAuthUserId: str, **kwargs):
         """
-        **Update a user configured with Meraki Authentication (currently only 802.1X RADIUS users can be updated)**
+        **Update a user configured with Meraki Authentication (currently, 802.1X RADIUS and Splash Guest users can be updated)**
         https://developer.cisco.com/meraki/api-v1/#!update-network-meraki-auth-user
 
         - networkId (string): (required)
