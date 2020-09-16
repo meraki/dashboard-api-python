@@ -75,7 +75,7 @@ class Devices(object):
 
     def getDeviceClients(self, serial: str, **kwargs):
         """
-        **List the clients of a device, up to a maximum of a month ago. The usage of each client is returned in kilobytes. If the device is a switch, the switchport is returned; otherwise the switchport field is null.**
+        **List the clients of a device, up to a maximum of a month ago**
         https://developer.cisco.com/meraki/api-v1/#!get-device-clients
 
         - serial (string): (required)

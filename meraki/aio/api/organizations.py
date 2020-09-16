@@ -403,7 +403,7 @@ class AsyncOrganizations:
 
     def getOrganizationBrandingPoliciesPriorities(self, organizationId: str):
         """
-        **Return the branding policy IDs of an organization in priority order. IDs are ordered in ascending order of priority (IDs later in the array have higher priority).**
+        **Return the branding policy IDs of an organization in priority order**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-branding-policies-priorities
 
         - organizationId (string): (required)
@@ -505,7 +505,7 @@ class AsyncOrganizations:
 
     def claimIntoOrganization(self, organizationId: str, **kwargs):
         """
-        **Claim a list of devices, licenses, and/or orders into an organization. When claiming by order, all devices and licenses in the order will be claimed; licenses will be added to the organization and devices will be placed in the organization's inventory.**
+        **Claim a list of devices, licenses, and/or orders into an organization**
         https://developer.cisco.com/meraki/api-v1/#!claim-into-organization
 
         - organizationId (string): (required)
@@ -845,7 +845,7 @@ class AsyncOrganizations:
 
     def assignOrganizationLicensesSeats(self, organizationId: str, licenseId: str, networkId: str, seatCount: int):
         """
-        **Assign SM seats to a network. This will increase the managed SM device limit of the network**
+        **Assign SM seats to a network**
         https://developer.cisco.com/meraki/api-v1/#!assign-organization-licenses-seats
 
         - organizationId (string): (required)
@@ -869,7 +869,7 @@ class AsyncOrganizations:
 
     def moveOrganizationLicenses(self, organizationId: str, destOrganizationId: str, licenseIds: list):
         """
-        **Move licenses to another organization. This will also move any devices that the licenses are assigned to**
+        **Move licenses to another organization**
         https://developer.cisco.com/meraki/api-v1/#!move-organization-licenses
 
         - organizationId (string): (required)
@@ -932,7 +932,7 @@ class AsyncOrganizations:
 
     def renewOrganizationLicensesSeats(self, organizationId: str, licenseIdToRenew: str, unusedLicenseId: str):
         """
-        **Renew SM seats of a license. This will extend the license expiration date of managed SM devices covered by this license**
+        **Renew SM seats of a license**
         https://developer.cisco.com/meraki/api-v1/#!renew-organization-licenses-seats
 
         - organizationId (string): (required)

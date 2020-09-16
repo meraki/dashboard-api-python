@@ -241,7 +241,7 @@ class Sm(object):
 
     def getNetworkSmDeviceCellularUsageHistory(self, networkId: str, deviceId: str):
         """
-        **Return the client's daily cellular data usage history. Usage data is in kilobytes.**
+        **Return the client's daily cellular data usage history**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-cellular-usage-history
 
         - networkId (string): (required)
@@ -329,11 +329,7 @@ class Sm(object):
 
     def getNetworkSmDeviceDeviceCommandLogs(self, networkId: str, deviceId: str, total_pages=1, direction='next', **kwargs):
         """
-        **    Return historical records of commands sent to Systems Manager devices.
-    <p>Note that this will include the name of the Dashboard user who initiated the command if it was generated
-    by a Dashboard admin rather than the automatic behavior of the system; you may wish to filter this out
-    of any reports.</p>
-**
+        **Return historical records of commands sent to Systems Manager devices**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-device-command-logs
 
         - networkId (string): (required)

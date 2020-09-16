@@ -130,10 +130,7 @@ class AsyncWireless:
         https://developer.cisco.com/meraki/api-v1/#!update-device-wireless-radio-settings
 
         - serial (string): (required)
-        - rfProfileId (integer):     The ID of an RF profile to assign to the device. If the value of this parameter is null, the appropriate basic RF profile
-    (indoor or outdoor) will be assigned to the device. Assigning an RF profile will clear ALL manually configured overrides
-    on the device (channel width, channel, power).
-
+        - rfProfileId (integer): The ID of an RF profile to assign to the device. If the value of this parameter is null, the appropriate basic RF profile (indoor or outdoor) will be assigned to the device. Assigning an RF profile will clear ALL manually configured overrides on the device (channel width, channel, power).
         - twoFourGhzSettings (object): Manual radio settings for 2.4 GHz.
         - fiveGhzSettings (object): Manual radio settings for 5 GHz.
         """
@@ -249,7 +246,7 @@ class AsyncWireless:
 
     def updateNetworkWirelessBluetoothSettings(self, networkId: str, **kwargs):
         """
-        **Update the Bluetooth settings for a network. See the docs page for <a href="https://documentation.meraki.com/MR/Bluetooth/Bluetooth_Low_Energy_(BLE)">Bluetooth settings</a>.**
+        **Update the Bluetooth settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-bluetooth-settings
 
         - networkId (string): (required)
@@ -414,7 +411,7 @@ class AsyncWireless:
 
     def getNetworkWirelessClientConnectionStats(self, networkId: str, clientId: str, **kwargs):
         """
-        **Aggregated connectivity info for a given client on this network. Clients are identified by their MAC.**
+        **Aggregated connectivity info for a given client on this network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-client-connection-stats
 
         - networkId (string): (required)
@@ -495,7 +492,7 @@ class AsyncWireless:
 
     def getNetworkWirelessClientLatencyHistory(self, networkId: str, clientId: str, **kwargs):
         """
-        **Return the latency history for a client. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP. The latency data is from a sample of 2% of packets and is grouped into 4 traffic categories: background, best effort, video, voice. Within these categories the sampled packet counters are bucketed by latency in milliseconds.**
+        **Return the latency history for a client**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-client-latency-history
 
         - networkId (string): (required)
@@ -521,7 +518,7 @@ class AsyncWireless:
 
     def getNetworkWirelessClientLatencyStats(self, networkId: str, clientId: str, **kwargs):
         """
-        **Aggregated latency info for a given client on this network. Clients are identified by their MAC.**
+        **Aggregated latency info for a given client on this network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-client-latency-stats
 
         - networkId (string): (required)
@@ -823,9 +820,7 @@ class AsyncWireless:
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-rf-profiles
 
         - networkId (string): (required)
-        - includeTemplateProfiles (boolean):     If the network is bound to a template, this parameter controls whether or not the non-basic RF profiles defined on the template
-    should be included in the response alongside the non-basic profiles defined on the bound network. Defaults to false.
-
+        - includeTemplateProfiles (boolean): If the network is bound to a template, this parameter controls whether or not the non-basic RF profiles defined on the template should be included in the response alongside the non-basic profiles defined on the bound network. Defaults to false.
         """
 
         kwargs.update(locals())
@@ -1386,11 +1381,7 @@ class AsyncWireless:
         - networkId (string): (required)
         - number (string): (required)
         - trafficShapingEnabled (boolean): Whether traffic shaping rules are applied to clients on your SSID.
-        - defaultRulesEnabled (boolean):     Whether default traffic shaping rules are enabled (true) or disabled (false).
-    There are 4 default rules, which can
-    be seen on your network's traffic shaping page. Note that default rules
-    count against the rule limit of 8.
-
+        - defaultRulesEnabled (boolean): Whether default traffic shaping rules are enabled (true) or disabled (false). There are 4 default rules, which can be seen on your network's traffic shaping page. Note that default rules count against the rule limit of 8.
         - rules (array):     An array of traffic shaping rules. Rules are applied in the order that
     they are specified in. An empty list (or null) means no rules. Note that
     you are allowed a maximum of 8 rules.

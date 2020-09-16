@@ -455,7 +455,7 @@ class Switch(object):
 
     def updateDeviceSwitchWarmSpare(self, serial: str, enabled: bool, **kwargs):
         """
-        **Update warm spare configuration for a switch. The spare will use the same L3 configuration as the primary. Note that this will irreversibly destroy any existing L3 configuration on the spare.**
+        **Update warm spare configuration for a switch**
         https://developer.cisco.com/meraki/api-v1/#!update-device-switch-warm-spare
 
         - serial (string): (required)
@@ -1774,7 +1774,7 @@ class Switch(object):
 
     def cloneOrganizationSwitchDevices(self, organizationId: str, sourceSerial: str, targetSerials: list):
         """
-        **Clone port-level and some switch-level configuration settings (Aggregation Groups, Power Settings, Multicast Settings, MTU Configuration, STP Bridge priority, Port Mirroring) from a source switch to one or more target switches**
+        **Clone port-level and some switch-level configuration settings from a source switch to one or more target switches**
         https://developer.cisco.com/meraki/api-v1/#!clone-organization-switch-devices
 
         - organizationId (string): (required)

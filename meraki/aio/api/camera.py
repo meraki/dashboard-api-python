@@ -294,7 +294,7 @@ class AsyncCamera:
 
     def getDeviceCameraVideoLink(self, serial: str, **kwargs):
         """
-        **Returns video link to the specified camera. If a timestamp is supplied, it links to that timestamp.**
+        **Returns video link to the specified camera**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-video-link
 
         - serial (string): (required)

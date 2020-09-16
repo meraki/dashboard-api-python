@@ -153,7 +153,7 @@ class AsyncNetworks:
 
     def getNetworkBluetoothClient(self, networkId: str, bluetoothClientId: str, **kwargs):
         """
-        **Return a Bluetooth client. Bluetooth clients can be identified by their ID or their MAC.**
+        **Return a Bluetooth client**
         https://developer.cisco.com/meraki/api-v1/#!get-network-bluetooth-client
 
         - networkId (string): (required)
@@ -205,7 +205,7 @@ class AsyncNetworks:
 
     def provisionNetworkClients(self, networkId: str, clients: list, devicePolicy: str, **kwargs):
         """
-        **Provisions a client with a name and policy. Clients can be provisioned before they associate to the network.**
+        **Provisions a client with a name and policy**
         https://developer.cisco.com/meraki/api-v1/#!provision-network-clients
 
         - networkId (string): (required)
@@ -235,7 +235,7 @@ class AsyncNetworks:
 
     def getNetworkClient(self, networkId: str, clientId: str):
         """
-        **Return the client associated with the given identifier. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
+        **Return the client associated with the given identifier**
         https://developer.cisco.com/meraki/api-v1/#!get-network-client
 
         - networkId (string): (required)
@@ -252,7 +252,7 @@ class AsyncNetworks:
 
     def getNetworkClientPolicy(self, networkId: str, clientId: str):
         """
-        **Return the policy assigned to a client on the network. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
+        **Return the policy assigned to a client on the network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-client-policy
 
         - networkId (string): (required)
@@ -269,7 +269,7 @@ class AsyncNetworks:
 
     def updateNetworkClientPolicy(self, networkId: str, clientId: str, devicePolicy: str, **kwargs):
         """
-        **Update the policy assigned to a client on the network. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
+        **Update the policy assigned to a client on the network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-client-policy
 
         - networkId (string): (required)
@@ -293,7 +293,7 @@ class AsyncNetworks:
 
     def getNetworkClientSplashAuthorizationStatus(self, networkId: str, clientId: str):
         """
-        **Return the splash authorization for a client, for each SSID they've associated with through splash. Only enabled SSIDs with Click-through splash enabled will be included. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
+        **Return the splash authorization for a client, for each SSID they've associated with through splash**
         https://developer.cisco.com/meraki/api-v1/#!get-network-client-splash-authorization-status
 
         - networkId (string): (required)
@@ -310,7 +310,7 @@ class AsyncNetworks:
 
     def updateNetworkClientSplashAuthorizationStatus(self, networkId: str, clientId: str, ssids: dict):
         """
-        **Update a client's splash authorization. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
+        **Update a client's splash authorization**
         https://developer.cisco.com/meraki/api-v1/#!update-network-client-splash-authorization-status
 
         - networkId (string): (required)
@@ -333,7 +333,7 @@ class AsyncNetworks:
 
     def getNetworkClientTrafficHistory(self, networkId: str, clientId: str, total_pages=1, direction='next', **kwargs):
         """
-        **Return the client's network traffic data over time. Usage data is in kilobytes. This endpoint requires detailed traffic analysis to be enabled on the Network-wide > General page. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
+        **Return the client's network traffic data over time**
         https://developer.cisco.com/meraki/api-v1/#!get-network-client-traffic-history
 
         - networkId (string): (required)
@@ -360,7 +360,7 @@ class AsyncNetworks:
 
     def getNetworkClientUsageHistory(self, networkId: str, clientId: str):
         """
-        **Return the client's daily usage history. Usage data is in kilobytes. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
+        **Return the client's daily usage history**
         https://developer.cisco.com/meraki/api-v1/#!get-network-client-usage-history
 
         - networkId (string): (required)
@@ -1040,7 +1040,7 @@ class AsyncNetworks:
 
     def getNetworkPiiPiiKeys(self, networkId: str, **kwargs):
         """
-        **List the keys required to access Personally Identifiable Information (PII) for a given identifier. Exactly one identifier will be accepted. If the organization contains org-wide Systems Manager users matching the key provided then there will be an entry with the key "0" containing the applicable keys.**
+        **List the keys required to access Personally Identifiable Information (PII) for a given identifier**
         https://developer.cisco.com/meraki/api-v1/#!get-network-pii-pii-keys
 
         - networkId (string): (required)
@@ -1149,7 +1149,7 @@ class AsyncNetworks:
 
     def getNetworkPiiSmDevicesForKey(self, networkId: str, **kwargs):
         """
-        **Given a piece of Personally Identifiable Information (PII), return the Systems Manager device ID(s) associated with that identifier. These device IDs can be used with the Systems Manager API endpoints to retrieve device details. Exactly one identifier will be accepted.**
+        **Given a piece of Personally Identifiable Information (PII), return the Systems Manager device ID(s) associated with that identifier**
         https://developer.cisco.com/meraki/api-v1/#!get-network-pii-sm-devices-for-key
 
         - networkId (string): (required)
@@ -1176,7 +1176,7 @@ class AsyncNetworks:
 
     def getNetworkPiiSmOwnersForKey(self, networkId: str, **kwargs):
         """
-        **Given a piece of Personally Identifiable Information (PII), return the Systems Manager owner ID(s) associated with that identifier. These owner IDs can be used with the Systems Manager API endpoints to retrieve owner details. Exactly one identifier will be accepted.**
+        **Given a piece of Personally Identifiable Information (PII), return the Systems Manager owner ID(s) associated with that identifier**
         https://developer.cisco.com/meraki/api-v1/#!get-network-pii-sm-owners-for-key
 
         - networkId (string): (required)
@@ -1368,17 +1368,13 @@ class AsyncNetworks:
 
     def getNetworkTraffic(self, networkId: str, **kwargs):
         """
-        **    The traffic analysis data for this network.
-    <a href="https://documentation.meraki.com/MR/Monitoring_and_Reporting/Hostname_Visibility">Traffic Analysis with Hostname Visibility</a> must be enabled on the network.
-**
+        **Return the traffic analysis data for this network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-traffic
 
         - networkId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 30 days from today.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 30 days.
-        - deviceType (string):     Filter the data by device type: 'combined', 'wireless', 'switch' or 'appliance'. Defaults to 'combined'.
-    When using 'combined', for each rule the data will come from the device type with the most usage.
-
+        - deviceType (string): Filter the data by device type: 'combined', 'wireless', 'switch' or 'appliance'. Defaults to 'combined'. When using 'combined', for each rule the data will come from the device type with the most usage.
         """
 
         kwargs.update(locals())

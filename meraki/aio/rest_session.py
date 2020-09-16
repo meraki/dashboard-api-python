@@ -1,4 +1,5 @@
 import asyncio
+from datetime import datetime
 import json
 import platform
 import random
@@ -288,12 +289,20 @@ class AsyncRestSession:
             links = response.links
 
             # GET the subsequent page
-            if direction == 'next' and "next" in links:
+            if direction == "next" and "next" in links:
+                # Prevent getNetworkEvents from infinite loop when requesting events after specified endingBefore time
+                if metadata["operation"] == "getNetworkEvents":
+                    starting_after = urllib.parse.unquote(links["next"]["url"].split("startingAfter=")[1])
+                    delta = datetime.utcnow() - datetime.fromisoformat(starting_after[:-1])
+                    # Break out of loop if startingAfter returned from next link is within 5 minutes of current time
+                    if delta.total_seconds() < 300:
+                        break
+                
                 metadata["page"] += 1
                 response = await self.request(metadata, "GET", links["next"]["url"])
-            elif direction == 'prev' and "prev" in links:
-                metadata['page'] += 1
-                response = await self.request(metadata, 'GET', links["prev"]["url"])
+            elif direction == "prev" and "prev" in links:
+                metadata["page"] += 1
+                response = await self.request(metadata, "GET", links["prev"]["url"])
             else:
                 break
 

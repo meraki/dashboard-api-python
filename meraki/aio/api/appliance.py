@@ -21,7 +21,7 @@ class AsyncAppliance:
 
     def getDeviceAppliancePerformance(self, serial: str):
         """
-        **Return the performance score for a single device. Only primary MX devices supported. If no data is available, a 204 error code is returned.**
+        **Return the performance score for a single MX**
         https://developer.cisco.com/meraki/api-v1/#!get-device-appliance-performance
 
         - serial (string): (required)
@@ -37,7 +37,7 @@ class AsyncAppliance:
 
     def getNetworkApplianceClientSecurityEvents(self, networkId: str, clientId: str, total_pages=1, direction='next', **kwargs):
         """
-        **List the security events for a client. Clients can be identified by a client key or either the MAC or IP depending on whether the network uses Track-by-IP.**
+        **List the security events for a client**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-client-security-events
 
         - networkId (string): (required)
@@ -986,11 +986,7 @@ class AsyncAppliance:
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-traffic-shaping-rules
 
         - networkId (string): (required)
-        - defaultRulesEnabled (boolean):     Whether default traffic shaping rules are enabled (true) or disabled (false).
-    There are 4 default rules, which can
-    be seen on your network's traffic shaping page. Note that default rules
-    count against the rule limit of 8.
-
+        - defaultRulesEnabled (boolean): Whether default traffic shaping rules are enabled (true) or disabled (false). There are 4 default rules, which can be seen on your network's traffic shaping page. Note that default rules count against the rule limit of 8.
         - rules (array):     An array of traffic shaping rules. Rules are applied in the order that
     they are specified in. An empty list (or null) means no rules. Note that
     you are allowed a maximum of 8 rules.
@@ -1270,7 +1266,7 @@ class AsyncAppliance:
 
     def getNetworkApplianceVpnSiteToSiteVpn(self, networkId: str):
         """
-        **Return the site-to-site VPN settings of a network. Only valid for MX networks.**
+        **Return the site-to-site VPN settings of a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-vpn-site-to-site-vpn
 
         - networkId (string): (required)
@@ -1286,7 +1282,7 @@ class AsyncAppliance:
 
     def updateNetworkApplianceVpnSiteToSiteVpn(self, networkId: str, mode: str, **kwargs):
         """
-        **Update the site-to-site VPN settings of a network. Only valid for MX networks in NAT mode.**
+        **Update the site-to-site VPN settings of a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-vpn-site-to-site-vpn
 
         - networkId (string): (required)
