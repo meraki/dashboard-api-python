@@ -273,7 +273,7 @@ class RestSession(object):
             response.close()
         return ret
 
-    def get_pages(self, metadata, url, params=None, total_pages=-1, direction='next'):
+    def get_pages(self, metadata, url, params=None, total_pages=-1, direction='next', event_log_end_time=None):
         if type(total_pages) == str and total_pages.lower() == 'all':
             total_pages = -1
         elif type(total_pages) == str and total_pages.isnumeric():
@@ -283,6 +283,10 @@ class RestSession(object):
         response = self.request(metadata, 'GET', url, params=params)
         results = response.json()
 
+        # For event log endpoint when using 'next' direction, so results/events are sorted chronologically
+        if type(results) == dict and metadata['operation'] == 'getNetworkEvents' and direction == 'next':
+            results['events'] = results['events'][::-1]
+        
         # Get additional pages if more than one requested
         while total_pages != 1:
             links = response.links
@@ -291,17 +295,27 @@ class RestSession(object):
 
             # GET the subsequent page
             if direction == 'next' and 'next' in links:
-                # Prevent getNetworkEvents from infinite loop when requesting events after specified endingBefore time
+                # Prevent getNetworkEvents from infinite loop as time goes forward
                 if metadata['operation'] == 'getNetworkEvents':
                     starting_after = urllib.parse.unquote(links['next']['url'].split('startingAfter=')[1])
                     delta = datetime.utcnow() - datetime.fromisoformat(starting_after[:-1])
                     # Break out of loop if startingAfter returned from next link is within 5 minutes of current time
                     if delta.total_seconds() < 300:
                         break
+                    # Or if next page is past the specified window's end time
+                    elif event_log_end_time and starting_after > event_log_end_time:
+                        break
                 
                 metadata['page'] += 1
                 response = self.request(metadata, 'GET', links['next']['url'])
             elif direction == 'prev' and 'prev' in links:
+                # Prevent getNetworkEvents from infinite loop as time goes backward (to epoch 0)
+                if metadata['operation'] == 'getNetworkEvents':
+                    ending_before = urllib.parse.unquote(links['prev']['url'].split('endingBefore=')[1])
+                    # Break out of loop if endingBefore returned from prev link is before 2014
+                    if ending_before < '2014-01-01':
+                        break
+                
                 metadata['page'] += 1
                 response = self.request(metadata, 'GET', links['prev']['url'])
             else:
@@ -315,6 +329,8 @@ class RestSession(object):
                 start = response.json()['pageStartAt']
                 end = response.json()['pageEndAt']
                 events = response.json()['events']
+                if direction == 'next':
+                    events = events[::-1]
                 if start < results['pageStartAt']:
                     results['pageStartAt'] = start
                 if end > results['pageEndAt']:

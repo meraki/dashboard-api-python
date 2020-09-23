@@ -700,6 +700,22 @@ class Appliance(object):
 
         return self._session.put(metadata, resource, payload)
 
+    def getNetworkApplianceSettings(self, networkId: str):
+        """
+        **Return the appliance settings for a network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-settings
+
+        - networkId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'settings'],
+            'operation': 'getNetworkApplianceSettings'
+        }
+        resource = f'/networks/{networkId}/appliance/settings'
+
+        return self._session.get(metadata, resource)
+
     def getNetworkApplianceSingleLan(self, networkId: str):
         """
         **Return single LAN configuration**

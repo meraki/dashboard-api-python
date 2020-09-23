@@ -435,7 +435,59 @@ class AsyncNetworks:
 
         return self._session.post(metadata, resource, payload)
 
-    def getNetworkEvents(self, networkId: str, total_pages=1, direction='prev', **kwargs):
+    def getNetworkEnvironmentalEvents(self, networkId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **List the environmental events for the network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-environmental-events
+
+        - networkId (string): (required)
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - includedEventTypes (array): A list of event types. The returned events will be filtered to only include events with these types.
+        - excludedEventTypes (array): A list of event types. The returned events will be filtered to exclude events with these types.
+        - sensorSerial (string): The serial of the sensor device which the list of events will be filtered with
+        - gatewaySerial (string): The serial of the environmental gateway device which the list of events will be filtered with
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 10.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['networks', 'monitor', 'environmental', 'events'],
+            'operation': 'getNetworkEnvironmentalEvents'
+        }
+        resource = f'/networks/{networkId}/environmental/events'
+
+        query_params = ['includedEventTypes', 'excludedEventTypes', 'sensorSerial', 'gatewaySerial', 'perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['includedEventTypes', 'excludedEventTypes', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getNetworkEnvironmentalEventsEventTypes(self, networkId: str):
+        """
+        **List the event type to human-readable description**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-environmental-events-event-types
+
+        - networkId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'environmental', 'events', 'eventTypes'],
+            'operation': 'getNetworkEnvironmentalEventsEventTypes'
+        }
+        resource = f'/networks/{networkId}/environmental/events/eventTypes'
+
+        return self._session.get(metadata, resource)
+
+    def getNetworkEvents(self, networkId: str, total_pages=1, direction='prev', event_log_end_time=None, **kwargs):
         """
         **List the events for the network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-events
@@ -443,6 +495,7 @@ class AsyncNetworks:
         - networkId (string): (required)
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" or "prev" (default) page
+        - event_log_end_time (string): ISO8601 Zulu/UTC time, to use in conjunction with startingAfter, to retrieve events within a time window
         - productType (string): The product type to fetch events for. This parameter is required for networks with multiple device types. Valid types are wireless, appliance, switch, systemsManager, camera, and cellularGateway
         - includedEventTypes (array): A list of event types. The returned events will be filtered to only include events with these types.
         - excludedEventTypes (array): A list of event types. The returned events will be filtered to exclude events with these types.
@@ -476,7 +529,7 @@ class AsyncNetworks:
                 params[f'{k.strip()}[]'] = kwargs[f'{k}']
                 params.pop(k.strip())
 
-        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        return self._session.get_pages(metadata, resource, params, total_pages, direction, event_log_end_time)
 
     def getNetworkEventsEventTypes(self, networkId: str):
         """
@@ -764,7 +817,7 @@ class AsyncNetworks:
 
     def getNetworkMerakiAuthUsers(self, networkId: str):
         """
-        **List the splash or RADIUS users configured under Meraki Authentication for a network**
+        **List the users configured under Meraki Authentication for a network (splash guest or RADIUS users for a wireless network, or client VPN users for a wired network)**
         https://developer.cisco.com/meraki/api-v1/#!get-network-meraki-auth-users
 
         - networkId (string): (required)
@@ -780,7 +833,7 @@ class AsyncNetworks:
 
     def createNetworkMerakiAuthUser(self, networkId: str, email: str, name: str, password: str, authorizations: list, **kwargs):
         """
-        **Create a user configured with Meraki Authentication for a network (currently supports 802.1X and Splash Guest users, and currently, organizations have a 50,000 user cap)**
+        **Create a user configured with Meraki Authentication for a network (currently supports 802.1X, splash guest, and client VPN users, and currently, organizations have a 50,000 user cap)**
         https://developer.cisco.com/meraki/api-v1/#!create-network-meraki-auth-user
 
         - networkId (string): (required)
@@ -788,14 +841,14 @@ class AsyncNetworks:
         - name (string): Name of the user
         - password (string): The password for this user account
         - authorizations (array): Authorization zones and expiration dates for the user.
-        - accountType (string): Authorization type for user. Can be either 'Guest' or '802.1X'. Defaults to '802.1X'.
+        - accountType (string): Authorization type for user. Can be 'Guest' or '802.1X' for wireless networks, or 'Client VPN' for wired networks. Defaults to '802.1X'.
         - emailPasswordToUser (boolean): Whether or not Meraki should email the password to user. Default is false.
         """
 
         kwargs.update(locals())
 
         if 'accountType' in kwargs:
-            options = ['Guest', '802.1X']
+            options = ['Guest', '802.1X', 'Client VPN']
             assert kwargs['accountType'] in options, f'''"accountType" cannot be "{kwargs['accountType']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -811,7 +864,7 @@ class AsyncNetworks:
 
     def getNetworkMerakiAuthUser(self, networkId: str, merakiAuthUserId: str):
         """
-        **Return the Meraki Auth splash or RADIUS user**
+        **Return the Meraki Auth splash guest, RADIUS, or client VPN user**
         https://developer.cisco.com/meraki/api-v1/#!get-network-meraki-auth-user
 
         - networkId (string): (required)
@@ -828,7 +881,7 @@ class AsyncNetworks:
 
     def deleteNetworkMerakiAuthUser(self, networkId: str, merakiAuthUserId: str):
         """
-        **Delete a user configured with Meraki Authentication (currently, 802.1X RADIUS and Splash Guest users can be deleted)**
+        **Delete a user configured with Meraki Authentication (currently, 802.1X RADIUS, splash guest, and client VPN users can be deleted)**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-meraki-auth-user
 
         - networkId (string): (required)
@@ -845,7 +898,7 @@ class AsyncNetworks:
 
     def updateNetworkMerakiAuthUser(self, networkId: str, merakiAuthUserId: str, **kwargs):
         """
-        **Update a user configured with Meraki Authentication (currently, 802.1X RADIUS and Splash Guest users can be updated)**
+        **Update a user configured with Meraki Authentication (currently, 802.1X RADIUS, splash guest, and client VPN users can be deleted)**
         https://developer.cisco.com/meraki/api-v1/#!update-network-meraki-auth-user
 
         - networkId (string): (required)
