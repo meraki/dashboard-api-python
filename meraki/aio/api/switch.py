@@ -514,6 +514,139 @@ class AsyncSwitch:
 
         return self._session.put(metadata, resource, payload)
 
+    def getNetworkSwitchAccessPolicies(self, networkId: str):
+        """
+        **List the access policies for a switch network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-access-policies
+
+        - networkId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['switch', 'configure', 'accessPolicies'],
+            'operation': 'getNetworkSwitchAccessPolicies'
+        }
+        resource = f'/networks/{networkId}/switch/accessPolicies'
+
+        return self._session.get(metadata, resource)
+
+    def createNetworkSwitchAccessPolicy(self, networkId: str, name: str, radiusServers: list, radiusTestingEnabled: bool, radiusCoaSupportEnabled: bool, radiusAccountingEnabled: bool, hostMode: str, urlRedirectWalledGardenEnabled: bool, **kwargs):
+        """
+        **Create an access policy for a switch network**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-switch-access-policy
+
+        - networkId (string): (required)
+        - name (string): Name of the access policy
+        - radiusServers (array): List of RADIUS servers to require connecting devices to authenticate against before granting network access
+        - radiusTestingEnabled (boolean): If enabled, Meraki devices will periodically send access-request messages to these RADIUS servers
+        - radiusCoaSupportEnabled (boolean): Change of authentication for RADIUS re-authentication and disconnection
+        - radiusAccountingEnabled (boolean): Enable to send start, interim-update and stop messages to a configured RADIUS accounting server for tracking connected clients
+        - hostMode (string): Choose the Host Mode for the access policy.
+        - urlRedirectWalledGardenEnabled (boolean): Enable to restrict access for clients to a specific set of IP addresses or hostnames prior to authentication
+        - radiusAccountingServers (array): List of RADIUS accounting servers to require connecting devices to authenticate against before granting network access
+        - accessPolicyType (string): Access Type of the policy. Automatically 'Hybrid authentication' when hostMode is 'Multi-Domain'.
+        - increaseAccessSpeed (boolean): Enabling this option will make switches execute 802.1X and MAC-bypass authentication simultaneously so that clients authenticate faster. Only required when accessPolicyType is 'Hybrid Authentication.
+        - guestVlanId (integer): ID for the guest VLAN allow unauthorized devices access to limited network resources
+        - voiceVlanClients (boolean): CDP/LLDP capable voice clients will be able to use this VLAN. Automatically true when hostMode is 'Multi-Domain'.
+        - urlRedirectWalledGardenRanges (array): IP address ranges, in CIDR notation, to restrict access for clients to a specific set of IP addresses or hostnames prior to authentication
+        """
+
+        kwargs.update(locals())
+
+        if 'hostMode' in kwargs:
+            options = ['Single-Host', 'Multi-Domain', 'Multi-Host', 'Multi-Auth']
+            assert kwargs['hostMode'] in options, f'''"hostMode" cannot be "{kwargs['hostMode']}", & must be set to one of: {options}'''
+        if 'accessPolicyType' in kwargs:
+            options = ['802.1x', 'MAC authentication bypass', 'Hybrid authentication']
+            assert kwargs['accessPolicyType'] in options, f'''"accessPolicyType" cannot be "{kwargs['accessPolicyType']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['switch', 'configure', 'accessPolicies'],
+            'operation': 'createNetworkSwitchAccessPolicy'
+        }
+        resource = f'/networks/{networkId}/switch/accessPolicies'
+
+        body_params = ['name', 'radiusServers', 'radiusTestingEnabled', 'radiusCoaSupportEnabled', 'radiusAccountingEnabled', 'radiusAccountingServers', 'hostMode', 'accessPolicyType', 'increaseAccessSpeed', 'guestVlanId', 'voiceVlanClients', 'urlRedirectWalledGardenEnabled', 'urlRedirectWalledGardenRanges', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+
+    def getNetworkSwitchAccessPolicy(self, networkId: str, accessPolicyNumber: str):
+        """
+        **Return a specific access policy for a switch network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-access-policy
+
+        - networkId (string): (required)
+        - accessPolicyNumber (string): (required)
+        """
+
+        metadata = {
+            'tags': ['switch', 'configure', 'accessPolicies'],
+            'operation': 'getNetworkSwitchAccessPolicy'
+        }
+        resource = f'/networks/{networkId}/switch/accessPolicies/{accessPolicyNumber}'
+
+        return self._session.get(metadata, resource)
+
+    def updateNetworkSwitchAccessPolicy(self, networkId: str, accessPolicyNumber: str, **kwargs):
+        """
+        **Update an access policy for a switch network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-access-policy
+
+        - networkId (string): (required)
+        - accessPolicyNumber (string): (required)
+        - name (string): Name of the access policy
+        - radiusServers (array): List of RADIUS servers to require connecting devices to authenticate against before granting network access
+        - radiusTestingEnabled (boolean): If enabled, Meraki devices will periodically send access-request messages to these RADIUS servers
+        - radiusCoaSupportEnabled (boolean): Change of authentication for RADIUS re-authentication and disconnection
+        - radiusAccountingEnabled (boolean): Enable to send start, interim-update and stop messages to a configured RADIUS accounting server for tracking connected clients
+        - radiusAccountingServers (array): List of RADIUS accounting servers to require connecting devices to authenticate against before granting network access
+        - hostMode (string): Choose the Host Mode for the access policy.
+        - accessPolicyType (string): Access Type of the policy. Automatically 'Hybrid authentication' when hostMode is 'Multi-Domain'.
+        - increaseAccessSpeed (boolean): Enabling this option will make switches execute 802.1X and MAC-bypass authentication simultaneously so that clients authenticate faster. Only required when accessPolicyType is 'Hybrid Authentication.
+        - guestVlanId (integer): ID for the guest VLAN allow unauthorized devices access to limited network resources
+        - voiceVlanClients (boolean): CDP/LLDP capable voice clients will be able to use this VLAN. Automatically true when hostMode is 'Multi-Domain'.
+        - urlRedirectWalledGardenEnabled (boolean): Enable to restrict access for clients to a specific set of IP addresses or hostnames prior to authentication
+        - urlRedirectWalledGardenRanges (array): IP address ranges, in CIDR notation, to restrict access for clients to a specific set of IP addresses or hostnames prior to authentication
+        """
+
+        kwargs.update(locals())
+
+        if 'hostMode' in kwargs:
+            options = ['Single-Host', 'Multi-Domain', 'Multi-Host', 'Multi-Auth']
+            assert kwargs['hostMode'] in options, f'''"hostMode" cannot be "{kwargs['hostMode']}", & must be set to one of: {options}'''
+        if 'accessPolicyType' in kwargs:
+            options = ['802.1x', 'MAC authentication bypass', 'Hybrid authentication']
+            assert kwargs['accessPolicyType'] in options, f'''"accessPolicyType" cannot be "{kwargs['accessPolicyType']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['switch', 'configure', 'accessPolicies'],
+            'operation': 'updateNetworkSwitchAccessPolicy'
+        }
+        resource = f'/networks/{networkId}/switch/accessPolicies/{accessPolicyNumber}'
+
+        body_params = ['name', 'radiusServers', 'radiusTestingEnabled', 'radiusCoaSupportEnabled', 'radiusAccountingEnabled', 'radiusAccountingServers', 'hostMode', 'accessPolicyType', 'increaseAccessSpeed', 'guestVlanId', 'voiceVlanClients', 'urlRedirectWalledGardenEnabled', 'urlRedirectWalledGardenRanges', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteNetworkSwitchAccessPolicy(self, networkId: str, accessPolicyNumber: str):
+        """
+        **Delete an access policy for a switch network**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-access-policy
+
+        - networkId (string): (required)
+        - accessPolicyNumber (string): (required)
+        """
+
+        metadata = {
+            'tags': ['switch', 'configure', 'accessPolicies'],
+            'operation': 'deleteNetworkSwitchAccessPolicy'
+        }
+        resource = f'/networks/{networkId}/switch/accessPolicies/{accessPolicyNumber}'
+
+        return self._session.delete(metadata, resource)
+
     def getNetworkSwitchDhcpServerPolicy(self, networkId: str):
         """
         **Return the DHCP server policy**
