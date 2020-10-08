@@ -12,49 +12,7 @@ import aiohttp
 from ..config import *
 from ..exceptions import *
 from ..__init__ import __version__
-
-
-def user_agent_extended(be_geo_id, caller):
-    # Generate extended portion of the User-Agent
-    user_agent_extended = be_geo_id
-    user_agent_extended = {}
-
-    # Mimic pip system data collection per https://github.com/pypa/pip/blob/master/src/pip/_internal/network/session.py
-    user_agent_extended['implementation'] = {
-            "name": platform.python_implementation(),
-        }
-
-    if user_agent_extended["implementation"]["name"] in ('CPython','Jython','IronPython'):
-        user_agent_extended["implementation"]["version"] = platform.python_version()
-    elif user_agent_extended["implementation"]["name"] == 'PyPy':
-        if sys.pypy_version_info.releaselevel == 'final':
-            pypy_version_info = sys.pypy_version_info[:3]
-        else:
-            pypy_version_info = sys.pypy_version_info
-        user_agent_extended["implementation"]["version"] = ".".join(
-            [str(x) for x in pypy_version_info]
-        )
-
-    if sys.platform.startswith("darwin") and platform.mac_ver()[0]:
-        user_agent_extended["distro"] = {"name": "macOS", "version": platform.mac_ver()[0]}
-
-    if platform.system():
-        user_agent_extended.setdefault("system", {})["name"] = platform.system()
-
-    if platform.release():
-        user_agent_extended.setdefault("system", {})["release"] = platform.release()
-
-    if platform.machine():
-        user_agent_extended["cpu"] = platform.machine()
-
-    if be_geo_id:
-        user_agent_extended["be_geo_id"] = be_geo_id
-
-    if caller:
-        user_agent_extended["caller"] = caller
-
-    return urllib.parse.quote(json.dumps(user_agent_extended))
-
+from ..rest_session import user_agent_extended
 
 # Main module interface
 class AsyncRestSession:
