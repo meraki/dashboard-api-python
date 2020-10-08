@@ -34,7 +34,7 @@ def generate_pagination_parameters(operation):
         },
         'direction': {
             'type': 'string',
-            'description': 'use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages','
+            'description': 'use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages',
         }
     }
     return ret
