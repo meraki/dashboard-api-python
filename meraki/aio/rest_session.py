@@ -51,8 +51,7 @@ class AsyncRestSession:
         self._retry_4xx_error_wait_time = retry_4xx_error_wait_time
         self._maximum_retries = maximum_retries
         self._simulate = simulate
-        self._maximum_concurrent_sessions = maximum_concurrent_requests
-        self._current_sessions = 0
+        self._concurrent_requests_semaphore = asyncio.Semaphore(maximum_concurrent_requests)
         self._be_geo_id = be_geo_id
         self._caller = caller
 
@@ -91,14 +90,8 @@ class AsyncRestSession:
             self._logger.info(f"Meraki dashboard API session initialized with these parameters: {self._parameters}")
 
     async def request(self, metadata, method, url, **kwargs):
-        while self._current_sessions >= self._maximum_concurrent_sessions:
-            await asyncio.sleep(0.3)  # wait for a free slot
-
-        self._current_sessions = self._current_sessions + 1
-        try:
+        async with self._concurrent_requests_semaphore:
             return await self._request(metadata, method, url, allow_redirects=False, **kwargs)
-        finally:
-            self._current_sessions = self._current_sessions - 1
 
     async def _request(self, metadata, method, url, **kwargs):
         # Metadata on endpoint
