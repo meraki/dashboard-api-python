@@ -1280,6 +1280,47 @@ class Appliance(object):
 
         return self._session.delete(metadata, resource)
 
+    def getNetworkApplianceVpnBgp(self, networkId: str):
+        """
+        **Return a Hub BGP Configuration**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-vpn-bgp
+
+        - networkId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'vpn', 'bgp'],
+            'operation': 'getNetworkApplianceVpnBgp'
+        }
+        resource = f'/networks/{networkId}/appliance/vpn/bgp'
+
+        return self._session.get(metadata, resource)
+
+    def updateNetworkApplianceVpnBgp(self, networkId: str, enabled: bool, **kwargs):
+        """
+        **Update a Hub BGP Configuration**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-vpn-bgp
+
+        - networkId (string): (required)
+        - enabled (boolean): Boolean value to enable or disable the BGP configuration.
+        - asNumber (integer): An Autonomous System Number (ASN) is required if you are to run BGP and peer with another BGP Speaker outside of the Auto VPN domain. This ASN will be applied to the entire Auto VPN domain. The entire 4-byte ASN range is supported. So, the ASN must be an integer between 1 and 4294967295. When absent, this field is not updated. If no value exists then it defaults to 64512.
+        - ibgpHoldTimer (integer): The IBGP holdtimer in seconds. The IBGP holdtimer must be an integer between 12 and 240. When absent, this field is not updated. If no value exists then it defaults to 240.
+        - neighbors (array): List of BGP neighbors. This list replaces the existing set of neighbors. When absent, this field is not updated.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'vpn', 'bgp'],
+            'operation': 'updateNetworkApplianceVpnBgp'
+        }
+        resource = f'/networks/{networkId}/appliance/vpn/bgp'
+
+        body_params = ['enabled', 'asNumber', 'ibgpHoldTimer', 'neighbors', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
     def getNetworkApplianceVpnSiteToSiteVpn(self, networkId: str):
         """
         **Return the site-to-site VPN settings of a network**
