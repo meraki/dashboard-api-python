@@ -1442,6 +1442,22 @@ class AsyncOrganizations:
 
         return self._session.put(metadata, resource, payload)
 
+    def getOrganizationWebhooksAlertTypes(self, organizationId: str):
+        """
+        **Return a list of alert types to be used with managing webhook alerts**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-webhooks-alert-types
+
+        - organizationId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'monitor', 'webhooks', 'alertTypes'],
+            'operation': 'getOrganizationWebhooksAlertTypes'
+        }
+        resource = f'/organizations/{organizationId}/webhooks/alertTypes'
+
+        return self._session.get(metadata, resource)
+
     def getOrganizationWebhooksLogs(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **Return the log of webhook POSTs sent**
