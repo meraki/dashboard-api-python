@@ -1,0 +1,47 @@
+{
+	"networkId": "L_607985949695028389",
+	"vlans": {
+		"native": {
+			"id": 1,
+			"defaultGateway": "10.1.1.1",
+			"interfaceIp": "10.1.24.1"
+		},
+		"others": [{
+				"id": 9,
+				"interfaceIp": "192.168.9.2"
+			},
+			{
+				"id": 10,
+				"interfaceIp": "192.168.10.2"
+			},
+			{
+				"id": 100,
+				"interfaceIp": "192.168.100.2"
+			}
+		]
+	},
+	"fallbackModes": [{
+		"params": {
+			"names": {
+				"old": "dnsNameservers",
+				"new": "dnsNameserversOption",
+				"split": "dnsCustomNameservers"
+			},
+			"replacement": {
+				"dnsCustomNameservers": [
+					"10.1.5.1",
+					"45.90.28.214",
+					"45.90.30.214"
+				],
+				"dnsNameserversOption": "custom"
+			}
+		},
+		"old": "upstream_dns",
+		"new": "custom",
+		"new_options": [
+			"openDns",
+			"googlePublicDns",
+			"custom"
+		]
+	}]
+}

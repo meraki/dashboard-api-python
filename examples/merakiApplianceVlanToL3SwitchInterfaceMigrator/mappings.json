@@ -1,0 +1,113 @@
+{
+	"interface": {
+		"deprecatedParams": [
+			"applianceIp",
+			"networkId",
+			"groupPolicyId"
+		],
+		"renamedParams": [{
+			"purpose": "VLAN ID",
+			"names": {
+				"old": "id",
+				"new": "vlanId"
+			}
+		}],
+		"sameNameParams": [{
+				"purpose": "Network subnet",
+				"name": "subnet"
+			},
+			{
+				"purpose": "VLAN or interface name",
+				"name": "name"
+			}
+		],
+		"swappableParamsAndModes": [],
+		"specialParamsAndModes": []
+	},
+	"interfaceDhcp": {
+		"deprecatedParams": [],
+		"renamedParams": [{
+			"purpose": "DHCP boot options toggle",
+			"names": {
+				"old": "dhcpBootOptionsEnabled",
+				"new": "bootOptionsEnabled"
+			}
+		}],
+		"sameNameParams": [{
+				"purpose": "Reserved IP ranges",
+				"name": "reservedIpRanges"
+			},
+			{
+				"purpose": "DHCP lease time",
+				"name": "dhcpLeaseTime"
+			},
+			{
+				"purpose": "DHCP options",
+				"name": "dhcpOptions"
+			},
+			{
+				"purpose": "IP reservations top-level object and client MAC",
+				"name": "fixedIpAssignments"
+			}
+		],
+		"swappableParamsAndModes": [{
+			"purpose": "DNS Nameservers",
+			"names": {
+				"old": "dnsNameservers",
+				"new": "dnsNameserversOption"
+			},
+			"transformType": "swapOrSplit",
+			"delimiter": "\n",
+			"swappableModes": [{
+					"old": "opendns",
+					"new": "openDns"
+				},
+				{
+					"old": "google_dns",
+					"new": "googlePublicDns"
+				}
+			]
+		},
+		{
+			"purpose": "DHCP handling/mode",
+			"names": {
+				"old": "dhcpHandling",
+				"new": "dhcpMode"
+			},
+			"transformType": "swap",
+			"swappableModes": [{
+					"old": "Run a DHCP server",
+					"new": "dhcpServer"
+				},
+				{
+					"old": "Relay DHCP to another server",
+					"new": "dhcpRelay"
+				},
+				{
+					"old": "Do not respond to DHCP requests",
+					"new": "dhcpDisabled"
+				}
+			]
+		}],
+		"specialParamsAndModes": [{
+			"parent": {
+				"dynamicKeyName": "fixedIpAssignments",
+				"newParentKeyName": "fixedIpAssignments",
+				"newKeyName": "mac",
+				"purpose": "Client MAC address"
+
+			},
+			"transformType": "flattenDynamicKey",
+			"nestedParams": [{
+					"purpose": "IP reservation IP",
+					"name": "ip"
+				},
+				{
+					"purpose": "IP reservation Name",
+					"name": "name"
+				}
+			],
+			"remapNone": true
+		}]
+	}
+}
