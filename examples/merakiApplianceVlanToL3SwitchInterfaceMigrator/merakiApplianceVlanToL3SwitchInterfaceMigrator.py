@@ -1,4 +1,4 @@
-# Rely on meraki SDK, os, and tablib -- more on tablib later
+# Rely on meraki SDK, os, sys, copy
 import meraki
 import os
 import sys
