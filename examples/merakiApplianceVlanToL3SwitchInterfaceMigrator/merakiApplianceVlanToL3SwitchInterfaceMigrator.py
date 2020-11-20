@@ -394,7 +394,7 @@ def configure_interface_dhcp(dhcp_configs, serial, interfaces):
 
 
 # Automatically create the relevant interfaces and save the responses
-serial = "Q2AY-3EWG-749X"
+serial = "SWITCH_SERIAL_NUMBER_HERE"
 
 created_interfaces = create_interfaces(
 	interface_configs, serial
