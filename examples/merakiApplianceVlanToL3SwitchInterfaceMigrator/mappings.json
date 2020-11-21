@@ -1,162 +1,155 @@
 {
-	"knownParams": [
-	  {
-		"names": {
-		  "old": "applianceIp",
-		  "new": null
+	"knownParams": [{
+			"names": {
+				"old": "applianceIp",
+				"new": null
+			},
+			"purpose": "MX appliance IP interface address",
+			"status": "deprecated",
+			"newEndpoint": null
 		},
-		"purpose": "MX appliance IP interface address",
-		"status": "deprecated",
-		"newEndpoint": null
-	  },
-	  {
-		"names": {
-		  "old": "networkId",
-		  "new": null
+		{
+			"names": {
+				"old": "networkId",
+				"new": null
+			},
+			"purpose": "MX appliance network ID",
+			"status": "deprecated",
+			"newEndpoint": null
 		},
-		"purpose": "MX appliance network ID",
-		"status": "deprecated",
-		"newEndpoint": null
-	  },
-	  {
-		"names": {
-		  "old": "groupPolicyId",
-		  "new": null
+		{
+			"names": {
+				"old": "groupPolicyId",
+				"new": null
+			},
+			"status": "deprecated",
+			"purpose": "MX appliance VLAN group policy ID",
+			"newEndpoint": null
 		},
-		"status": "deprecated",
-		"purpose": "MX appliance VLAN group policy ID",
-		"newEndpoint": null
-	  },
-	  {
-		"names": {
-		  "old": "id",
-		  "new": "vlanId"
+		{
+			"names": {
+				"old": "id",
+				"new": "vlanId"
+			},
+			"status": "renamed",
+			"purpose": "VLAN ID of the interface VLAN",
+			"newEndpoint": "interface"
 		},
-		"status": "renamed",
-		"purpose": "VLAN ID of the interface VLAN",
-		"newEndpoint": "interface"
-	  },
-	  {
-		"names": {
-		  "old": "name",
-		  "new": "name"
+		{
+			"names": {
+				"old": "name",
+				"new": "name"
+			},
+			"status": "reused",
+			"purpose": "VLAN or interface name",
+			"newEndpoint": "interface"
 		},
-		"status": "reused",
-		"purpose": "VLAN or interface name",
-		"newEndpoint": "interface"
-	  },
-	  {
-		"names": {
-		  "old": "subnet",
-		  "new": "subnet"
+		{
+			"names": {
+				"old": "subnet",
+				"new": "subnet"
+			},
+			"status": "reused",
+			"purpose": "VLAN or interface subnet in CIDR format",
+			"newEndpoint": "interface"
 		},
-		"status": "reused",
-		"purpose": "VLAN or interface subnet in CIDR format",
-		"newEndpoint": "interface"
-	  },
-	  {
-		"names": {
-		  "old": "dhcpBootOptionsEnabled",
-		  "new": "bootOptionsEnabled"
+		{
+			"names": {
+				"old": "dhcpBootOptionsEnabled",
+				"new": "bootOptionsEnabled"
+			},
+			"status": "renamed",
+			"purpose": "DHCP boot options toggle",
+			"newEndpoint": "interfaceDhcp"
 		},
-		"status": "renamed",
-		"purpose": "DHCP boot options toggle",
-		"newEndpoint": "interfaceDhcp"
-	  },
-	  {
-		"names": {
-		  "old": "reservedIpRanges",
-		  "new": "reservedIpRanges"
+		{
+			"names": {
+				"old": "reservedIpRanges",
+				"new": "reservedIpRanges"
+			},
+			"status": "reused",
+			"newEndpoint": "interfaceDhcp"
 		},
-		"status": "reused",
-		"newEndpoint": "interfaceDhcp"
-	  },
-	  {
-		"names": {
-		  "old": "fixedIpAssignments",
-		  "new": "fixedIpAssignments",
-		  "newSubParam": "mac"
+		{
+			"names": {
+				"old": "fixedIpAssignments",
+				"new": "fixedIpAssignments",
+				"newSubParam": "mac"
+			},
+			"status": "transformed",
+			"transforms": [{
+					"type": "demote dynamic key",
+					"action": "make subparam"
+				},
+				{
+					"type": "rename None",
+					"action": "name"
+				}
+			],
+			"purpose": "DHCP reservation MAC",
+			"newEndpoint": "interfaceDhcp"
 		},
-		"status": "transformed",
-		"transforms": [
-		  {
-			"type": "demote dynamic key",
-			"action": "make subparam"
-		  },
-		  {
-			"type": "rename None",
-			"action": "name"
-		  }
-		],
-		"purpose": "DHCP reservation MAC",
-		"newEndpoint": "interfaceDhcp"
-	  },
-	  {
-		"names": {
-		  "old": "dnsNameservers",
-		  "new": "dnsNameserversOption"
+		{
+			"names": {
+				"old": "dnsNameservers",
+				"new": "dnsNameserversOption"
+			},
+			"status": "transformed",
+			"transforms": [{
+					"type": "rename mode",
+					"action": ""
+				},
+				{
+					"type": "split delimited strings",
+					"action": "\n"
+				},
+				{
+					"type": "add param",
+					"action": "dnsCustomNameservers",
+					"fallback": "custom"
+				}
+			],
+			"modes": [{
+					"old": "opendns",
+					"new": "openDns"
+				},
+				{
+					"old": "google_dns",
+					"new": "googlePublicDns"
+				},
+				{
+					"old": "upstream_dns",
+					"new": "custom"
+				}
+			],
+			"purpose": "DNS Nameserver assignment mode",
+			"newEndpoint": "interfaceDhcp"
 		},
-		"status": "transformed",
-		"transforms": [
-		  {
-			"type": "rename mode",
-			"action": ""
-		  },
-		  {
-			"type": "split delimited strings",
-			"action": "\n"
-		  },
-		  {
-			"type": "add param",
-			"action": "dnsCustomNameservers",
-			"fallback": "custom"
-		  }
-		],
-		"modes": [
-		  {
-			"old": "opendns",
-			"new": "openDns"
-		  },
-		  {
-			"old": "google_dns",
-			"new": "googlePublicDns"
-		  },
-		  {
-			"old": "upstream_dns",
-			"new": "custom"
-		  }
-		],
-		"purpose": "DNS Nameserver assignment mode",
-		"newEndpoint": "interfaceDhcp"
-	  },
-	  {
-		"names": {
-		  "old": "dhcpHandling",
-		  "new": "dhcpMode"
-		},
-		"status": "transformed",
-		"transforms": [
-		  {
-			"type": "rename mode",
-			"action": ""
-		  }
-		],
-		"modes": [
-		  {
-			"old": "Do not respond to DHCP requests",
-			"new": "dhcpDisabled"
-		  },
-		  {
-			"old": "Run a DHCP server",
-			"new": "dhcpServer"
-		  },
-		  {
-			"old": "Relay DHCP to another server",
-			"new": "dhcpRelay"
-		  }
-		],
-		"purpose": "DHCP mode",
-		"newEndpoint": "interfaceDhcp"
-	  }
+		{
+			"names": {
+				"old": "dhcpHandling",
+				"new": "dhcpMode"
+			},
+			"status": "transformed",
+			"transforms": [{
+				"type": "rename mode",
+				"action": ""
+			}],
+			"modes": [{
+					"old": "Do not respond to DHCP requests",
+					"new": "dhcpDisabled"
+				},
+				{
+					"old": "Run a DHCP server",
+					"new": "dhcpServer"
+				},
+				{
+					"old": "Relay DHCP to another server",
+					"new": "dhcpRelay"
+				}
+			],
+			"purpose": "DHCP mode",
+			"newEndpoint": "interfaceDhcp"
+		}
 	]
-  }
+}

@@ -385,10 +385,6 @@ def configure_interface_dhcp(dashboard, serial, switch_interfaces_with_dhcp, cre
 	return responses
 
 
-<<<<<<< Updated upstream
-# Automatically create the relevant interfaces and save the responses
-serial = "SWITCH_SERIAL_NUMBER_HERE"
-=======
 # DEFINE a main method that will drive the config through all necessary param and mode changes, and push the change to Dashboard.
 def main():
 	# INGEST settings and mappings--we need some of these to start the connection
@@ -475,7 +471,6 @@ def main():
 		switch_interfaces_with_dhcp,
 		created_interfaces
 	)
->>>>>>> Stashed changes
 
 	# CONFIRM
 	printj(created_interfaces)
@@ -483,10 +478,5 @@ def main():
 	print(GOODBYE)
 
 
-<<<<<<< Updated upstream
-printj(created_interfaces)
-printj(dhcp_updates)
-=======
 if __name__ == "__main__":
 	main()
->>>>>>> Stashed changes
