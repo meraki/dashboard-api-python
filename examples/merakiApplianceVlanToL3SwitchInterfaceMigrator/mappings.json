@@ -1,113 +1,162 @@
 {
-	"interface": {
-		"deprecatedParams": [
-			"applianceIp",
-			"networkId",
-			"groupPolicyId"
-		],
-		"renamedParams": [{
-			"purpose": "VLAN ID",
-			"names": {
-				"old": "id",
-				"new": "vlanId"
-			}
-		}],
-		"sameNameParams": [{
-				"purpose": "Network subnet",
-				"name": "subnet"
-			},
-			{
-				"purpose": "VLAN or interface name",
-				"name": "name"
-			}
-		],
-		"swappableParamsAndModes": [],
-		"specialParamsAndModes": []
-	},
-	"interfaceDhcp": {
-		"deprecatedParams": [],
-		"renamedParams": [{
-			"purpose": "DHCP boot options toggle",
-			"names": {
-				"old": "dhcpBootOptionsEnabled",
-				"new": "bootOptionsEnabled"
-			}
-		}],
-		"sameNameParams": [{
-				"purpose": "Reserved IP ranges",
-				"name": "reservedIpRanges"
-			},
-			{
-				"purpose": "DHCP lease time",
-				"name": "dhcpLeaseTime"
-			},
-			{
-				"purpose": "DHCP options",
-				"name": "dhcpOptions"
-			},
-			{
-				"purpose": "IP reservations top-level object and client MAC",
-				"name": "fixedIpAssignments"
-			}
-		],
-		"swappableParamsAndModes": [{
-			"purpose": "DNS Nameservers",
-			"names": {
-				"old": "dnsNameservers",
-				"new": "dnsNameserversOption"
-			},
-			"transformType": "swapOrSplit",
-			"delimiter": "\n",
-			"swappableModes": [{
-					"old": "opendns",
-					"new": "openDns"
-				},
-				{
-					"old": "google_dns",
-					"new": "googlePublicDns"
-				}
-			]
+	"knownParams": [
+	  {
+		"names": {
+		  "old": "applianceIp",
+		  "new": null
 		},
-		{
-			"purpose": "DHCP handling/mode",
-			"names": {
-				"old": "dhcpHandling",
-				"new": "dhcpMode"
-			},
-			"transformType": "swap",
-			"swappableModes": [{
-					"old": "Run a DHCP server",
-					"new": "dhcpServer"
-				},
-				{
-					"old": "Relay DHCP to another server",
-					"new": "dhcpRelay"
-				},
-				{
-					"old": "Do not respond to DHCP requests",
-					"new": "dhcpDisabled"
-				}
-			]
-		}],
-		"specialParamsAndModes": [{
-			"parent": {
-				"dynamicKeyName": "fixedIpAssignments",
-				"newParentKeyName": "fixedIpAssignments",
-				"newKeyName": "mac",
-				"purpose": "Client MAC address"
-
-			},
-			"transformType": "flattenDynamicKey",
-			"nestedParams": [{
-					"purpose": "IP reservation IP",
-					"name": "ip"
-				},
-				{
-					"purpose": "IP reservation Name",
-					"name": "name"
-				}
-			],
-			"remapNone": true
-		}]
-	}
-}
+		"purpose": "MX appliance IP interface address",
+		"status": "deprecated",
+		"newEndpoint": null
+	  },
+	  {
+		"names": {
+		  "old": "networkId",
+		  "new": null
+		},
+		"purpose": "MX appliance network ID",
+		"status": "deprecated",
+		"newEndpoint": null
+	  },
+	  {
+		"names": {
+		  "old": "groupPolicyId",
+		  "new": null
+		},
+		"status": "deprecated",
+		"purpose": "MX appliance VLAN group policy ID",
+		"newEndpoint": null
+	  },
+	  {
+		"names": {
+		  "old": "id",
+		  "new": "vlanId"
+		},
+		"status": "renamed",
+		"purpose": "VLAN ID of the interface VLAN",
+		"newEndpoint": "interface"
+	  },
+	  {
+		"names": {
+		  "old": "name",
+		  "new": "name"
+		},
+		"status": "reused",
+		"purpose": "VLAN or interface name",
+		"newEndpoint": "interface"
+	  },
+	  {
+		"names": {
+		  "old": "subnet",
+		  "new": "subnet"
+		},
+		"status": "reused",
+		"purpose": "VLAN or interface subnet in CIDR format",
+		"newEndpoint": "interface"
+	  },
+	  {
+		"names": {
+		  "old": "dhcpBootOptionsEnabled",
+		  "new": "bootOptionsEnabled"
+		},
+		"status": "renamed",
+		"purpose": "DHCP boot options toggle",
+		"newEndpoint": "interfaceDhcp"
+	  },
+	  {
+		"names": {
+		  "old": "reservedIpRanges",
+		  "new": "reservedIpRanges"
+		},
+		"status": "reused",
+		"newEndpoint": "interfaceDhcp"
+	  },
+	  {
+		"names": {
+		  "old": "fixedIpAssignments",
+		  "new": "fixedIpAssignments",
+		  "newSubParam": "mac"
+		},
+		"status": "transformed",
+		"transforms": [
+		  {
+			"type": "demote dynamic key",
+			"action": "make subparam"
+		  },
+		  {
+			"type": "rename None",
+			"action": "name"
+		  }
+		],
+		"purpose": "DHCP reservation MAC",
+		"newEndpoint": "interfaceDhcp"
+	  },
+	  {
+		"names": {
+		  "old": "dnsNameservers",
+		  "new": "dnsNameserversOption"
+		},
+		"status": "transformed",
+		"transforms": [
+		  {
+			"type": "rename mode",
+			"action": ""
+		  },
+		  {
+			"type": "split delimited strings",
+			"action": "\n"
+		  },
+		  {
+			"type": "add param",
+			"action": "dnsCustomNameservers",
+			"fallback": "custom"
+		  }
+		],
+		"modes": [
+		  {
+			"old": "opendns",
+			"new": "openDns"
+		  },
+		  {
+			"old": "google_dns",
+			"new": "googlePublicDns"
+		  },
+		  {
+			"old": "upstream_dns",
+			"new": "custom"
+		  }
+		],
+		"purpose": "DNS Nameserver assignment mode",
+		"newEndpoint": "interfaceDhcp"
+	  },
+	  {
+		"names": {
+		  "old": "dhcpHandling",
+		  "new": "dhcpMode"
+		},
+		"status": "transformed",
+		"transforms": [
+		  {
+			"type": "rename mode",
+			"action": ""
+		  }
+		],
+		"modes": [
+		  {
+			"old": "Do not respond to DHCP requests",
+			"new": "dhcpDisabled"
+		  },
+		  {
+			"old": "Run a DHCP server",
+			"new": "dhcpServer"
+		  },
+		  {
+			"old": "Relay DHCP to another server",
+			"new": "dhcpRelay"
+		  }
+		],
+		"purpose": "DHCP mode",
+		"newEndpoint": "interfaceDhcp"
+	  }
+	]
+  }
