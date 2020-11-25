@@ -4,7 +4,7 @@
 
 Jupyter notebooks are documents that take coding in Python (and potentially other languages) to a whole new level. They are technically just fancy JSON files with a `.ipynb` extension, but with a Jupyter notebook and a compatible IDE, you can:
 
-1. Write, run and re-run code in a block-by-block basis, while keeping all variables in an active and *interactive* kernel space. Those blocks are called "cells."
+1. Write, run and re-run code in a block-by-block basis, while keeping all variables in an active and *interactive* kernel space. Those blocks are called "cells." If you're unfamiliar with Python debugging, it may be easier to use notebooks than debuggers!
 2. Combine executable code, rich text, HTML, and even images in a single document, going way beyond standard Python comments and inserting HTML- or Markdown-formatted documentation inline with code in a way that never interferes with the operation of your code.
 3. Rearrange code and Markdown cells aribitrarily for verification, experimentation, or pure curiosity.
 4. Much more, if you are willing to learn!
