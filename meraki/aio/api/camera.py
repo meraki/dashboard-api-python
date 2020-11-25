@@ -7,7 +7,7 @@ class AsyncCamera:
         """
         **Returns live state from camera of analytics zones**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-analytics-live
-
+        
         - serial (string): (required)
         """
 
@@ -23,7 +23,7 @@ class AsyncCamera:
         """
         **Returns an overview of aggregate analytics data for a timespan**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-analytics-overview
-
+        
         - serial (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
@@ -52,7 +52,7 @@ class AsyncCamera:
         """
         **Returns most recent record for analytics zones**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-analytics-recent
-
+        
         - serial (string): (required)
         - objectType (string): [optional] The object type for which analytics will be retrieved. The default object type is person. The available types are [person, vehicle].
         """
@@ -78,7 +78,7 @@ class AsyncCamera:
         """
         **Returns all configured analytic zones for this camera**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-analytics-zones
-
+        
         - serial (string): (required)
         """
 
@@ -94,7 +94,7 @@ class AsyncCamera:
         """
         **Return historical records for analytic zones**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-analytics-zone-history
-
+        
         - serial (string): (required)
         - zoneId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
@@ -125,7 +125,7 @@ class AsyncCamera:
         """
         **Generate a snapshot of what the camera sees at the specified time and return a link to that image.**
         https://developer.cisco.com/meraki/api-v1/#!generate-device-camera-snapshot
-
+        
         - serial (string): (required)
         - timestamp (string): [optional] The snapshot will be taken from this time on the camera. The timestamp is expected to be in ISO 8601 format. If no timestamp is specified, we will assume current time.
         - fullframe (boolean): [optional] If set to "true" the snapshot will be taken at full sensor resolution. This will error if used with timestamp.
@@ -148,7 +148,7 @@ class AsyncCamera:
         """
         **Returns quality and retention settings for the given camera**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-quality-and-retention
-
+        
         - serial (string): (required)
         """
 
@@ -164,7 +164,7 @@ class AsyncCamera:
         """
         **Update quality and retention settings for the given camera**
         https://developer.cisco.com/meraki/api-v1/#!update-device-camera-quality-and-retention
-
+        
         - serial (string): (required)
         - profileId (string): The ID of a quality and retention profile to assign to the camera. The profile's settings will override all of the per-camera quality and retention settings. If the value of this parameter is null, any existing profile will be unassigned from the camera.
         - motionBasedRetentionEnabled (boolean): Boolean indicating if motion-based retention is enabled(true) or disabled(false) on the camera
@@ -202,7 +202,7 @@ class AsyncCamera:
         """
         **Returns sense settings for a given camera**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-sense
-
+        
         - serial (string): (required)
         """
 
@@ -218,7 +218,7 @@ class AsyncCamera:
         """
         **Update sense settings for the given camera**
         https://developer.cisco.com/meraki/api-v1/#!update-device-camera-sense
-
+        
         - serial (string): (required)
         - senseEnabled (boolean): Boolean indicating if sense(license) is enabled(true) or disabled(false) on the camera
         - mqttBrokerId (string): The ID of the MQTT broker to be enabled on the camera. A value of null will disable MQTT on the camera
@@ -242,7 +242,7 @@ class AsyncCamera:
         """
         **Returns the MV Sense object detection model list for the given camera**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-sense-object-detection-models
-
+        
         - serial (string): (required)
         """
 
@@ -258,7 +258,7 @@ class AsyncCamera:
         """
         **Returns video settings for the given camera**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-video-settings
-
+        
         - serial (string): (required)
         """
 
@@ -274,7 +274,7 @@ class AsyncCamera:
         """
         **Update video settings for the given camera**
         https://developer.cisco.com/meraki/api-v1/#!update-device-camera-video-settings
-
+        
         - serial (string): (required)
         - externalRtspEnabled (boolean): Boolean indicating if external rtsp stream is exposed
         """
@@ -296,7 +296,7 @@ class AsyncCamera:
         """
         **Returns video link to the specified camera**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-video-link
-
+        
         - serial (string): (required)
         - timestamp (string): [optional] The video link will start at this time. The timestamp should be a string in ISO8601 format. If no timestamp is specified, we will assume current time.
         """
@@ -318,7 +318,7 @@ class AsyncCamera:
         """
         **List the quality retention profiles for this network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-camera-quality-retention-profiles
-
+        
         - networkId (string): (required)
         """
 
@@ -334,7 +334,7 @@ class AsyncCamera:
         """
         **Creates new quality retention profile for this network.**
         https://developer.cisco.com/meraki/api-v1/#!create-network-camera-quality-retention-profile
-
+        
         - networkId (string): (required)
         - name (string): The name of the new profile. Must be unique. This parameter is required.
         - motionBasedRetentionEnabled (boolean): Deletes footage older than 3 days in which no motion was detected. Can be either true or false. Defaults to false.
@@ -364,7 +364,7 @@ class AsyncCamera:
         """
         **Retrieve a single quality retention profile**
         https://developer.cisco.com/meraki/api-v1/#!get-network-camera-quality-retention-profile
-
+        
         - networkId (string): (required)
         - qualityRetentionProfileId (string): (required)
         """
@@ -381,7 +381,7 @@ class AsyncCamera:
         """
         **Update an existing quality retention profile for this network.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-camera-quality-retention-profile
-
+        
         - networkId (string): (required)
         - qualityRetentionProfileId (string): (required)
         - name (string): The name of the new profile. Must be unique.
@@ -412,7 +412,7 @@ class AsyncCamera:
         """
         **Delete an existing quality retention profile for this network.**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-camera-quality-retention-profile
-
+        
         - networkId (string): (required)
         - qualityRetentionProfileId (string): (required)
         """
@@ -429,7 +429,7 @@ class AsyncCamera:
         """
         **Returns a list of all camera recording schedules.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-camera-schedules
-
+        
         - networkId (string): (required)
         """
 

@@ -20,7 +20,7 @@ from .config import (
     SUPPRESS_LOGGING, SIMULATE_API_CALLS, BE_GEO_ID, MERAKI_PYTHON_SDK_CALLER
 )
 
-__version__ = '1.3.0b2'
+__version__ = '1.3.0b3'
 
 class DashboardAPI(object):
     """

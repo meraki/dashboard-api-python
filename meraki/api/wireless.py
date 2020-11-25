@@ -7,7 +7,7 @@ class Wireless(object):
         """
         **Return the bluetooth settings for a wireless device**
         https://developer.cisco.com/meraki/api-v1/#!get-device-wireless-bluetooth-settings
-
+        
         - serial (string): (required)
         """
 
@@ -23,7 +23,7 @@ class Wireless(object):
         """
         **Update the bluetooth settings for a wireless device**
         https://developer.cisco.com/meraki/api-v1/#!update-device-wireless-bluetooth-settings
-
+        
         - serial (string): (required)
         - uuid (string): Desired UUID of the beacon. If the value is set to null it will reset to Dashboard's automatically generated value.
         - major (integer): Desired major value of the beacon. If the value is set to null it will reset to Dashboard's automatically generated value.
@@ -47,7 +47,7 @@ class Wireless(object):
         """
         **Aggregated connectivity info for a given AP on this network**
         https://developer.cisco.com/meraki/api-v1/#!get-device-wireless-connection-stats
-
+        
         - serial (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
@@ -79,7 +79,7 @@ class Wireless(object):
         """
         **Aggregated latency info for a given AP on this network**
         https://developer.cisco.com/meraki/api-v1/#!get-device-wireless-latency-stats
-
+        
         - serial (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
@@ -112,7 +112,7 @@ class Wireless(object):
         """
         **Return the radio settings of a device**
         https://developer.cisco.com/meraki/api-v1/#!get-device-wireless-radio-settings
-
+        
         - serial (string): (required)
         """
 
@@ -128,7 +128,7 @@ class Wireless(object):
         """
         **Update the radio settings of a device**
         https://developer.cisco.com/meraki/api-v1/#!update-device-wireless-radio-settings
-
+        
         - serial (string): (required)
         - rfProfileId (integer): The ID of an RF profile to assign to the device. If the value of this parameter is null, the appropriate basic RF profile (indoor or outdoor) will be assigned to the device. Assigning an RF profile will clear ALL manually configured overrides on the device (channel width, channel, power).
         - twoFourGhzSettings (object): Manual radio settings for 2.4 GHz.
@@ -152,7 +152,7 @@ class Wireless(object):
         """
         **Return the SSID statuses of an access point**
         https://developer.cisco.com/meraki/api-v1/#!get-device-wireless-status
-
+        
         - serial (string): (required)
         """
 
@@ -168,7 +168,7 @@ class Wireless(object):
         """
         **List Air Marshal scan results from a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-air-marshal
-
+        
         - networkId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 31 days. The default is 7 days.
@@ -191,7 +191,7 @@ class Wireless(object):
         """
         **Return alternate management interface and devices with IP assigned**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-alternate-management-interface
-
+        
         - networkId (string): (required)
         """
 
@@ -207,7 +207,7 @@ class Wireless(object):
         """
         **Update alternate management interface and device static IP**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-alternate-management-interface
-
+        
         - networkId (string): (required)
         - enabled (boolean): Boolean value to enable or disable alternate management interface
         - vlanId (integer): Alternate management interface VLAN, must be between 1 and 4094
@@ -232,7 +232,7 @@ class Wireless(object):
         """
         **Return the Bluetooth settings for a network. <a href="https://documentation.meraki.com/MR/Bluetooth/Bluetooth_Low_Energy_(BLE)">Bluetooth settings</a> must be enabled on the network.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-bluetooth-settings
-
+        
         - networkId (string): (required)
         """
 
@@ -248,7 +248,7 @@ class Wireless(object):
         """
         **Update the Bluetooth settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-bluetooth-settings
-
+        
         - networkId (string): (required)
         - scanningEnabled (boolean): Whether APs will scan for Bluetooth enabled clients. (true, false)
         - advertisingEnabled (boolean): Whether APs will advertise beacons. (true, false)
@@ -279,7 +279,7 @@ class Wireless(object):
         """
         **Return AP channel utilization over time for a device or network client**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-channel-utilization-history
-
+        
         - networkId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
@@ -313,7 +313,7 @@ class Wireless(object):
         """
         **Return wireless client counts over time for a network, device, or network client**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-client-count-history
-
+        
         - networkId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
@@ -348,7 +348,7 @@ class Wireless(object):
         """
         **Aggregated connectivity info for this network, grouped by clients**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-clients-connection-stats
-
+        
         - networkId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
@@ -380,7 +380,7 @@ class Wireless(object):
         """
         **Aggregated latency info for this network, grouped by clients**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-clients-latency-stats
-
+        
         - networkId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
@@ -413,7 +413,7 @@ class Wireless(object):
         """
         **Aggregated connectivity info for a given client on this network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-client-connection-stats
-
+        
         - networkId (string): (required)
         - clientId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
@@ -446,7 +446,7 @@ class Wireless(object):
         """
         **List the wireless connectivity events for a client within a network in the timespan.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-client-connectivity-events
-
+        
         - networkId (string): (required)
         - clientId (string): (required)
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
@@ -494,7 +494,7 @@ class Wireless(object):
         """
         **Return the latency history for a client**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-client-latency-history
-
+        
         - networkId (string): (required)
         - clientId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 791 days from today.
@@ -520,7 +520,7 @@ class Wireless(object):
         """
         **Aggregated latency info for a given client on this network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-client-latency-stats
-
+        
         - networkId (string): (required)
         - clientId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
@@ -554,7 +554,7 @@ class Wireless(object):
         """
         **Aggregated connectivity info for this network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-connection-stats
-
+        
         - networkId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
@@ -586,7 +586,7 @@ class Wireless(object):
         """
         **Return PHY data rates over time for a network, device, or network client**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-data-rate-history
-
+        
         - networkId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
@@ -621,7 +621,7 @@ class Wireless(object):
         """
         **Aggregated connectivity info for this network, grouped by node**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-devices-connection-stats
-
+        
         - networkId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
@@ -653,7 +653,7 @@ class Wireless(object):
         """
         **Aggregated latency info for this network, grouped by node**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-devices-latency-stats
-
+        
         - networkId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
@@ -686,7 +686,7 @@ class Wireless(object):
         """
         **List of all failed client connection events on this network in a given time range**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-failed-connections
-
+        
         - networkId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
@@ -720,7 +720,7 @@ class Wireless(object):
         """
         **Return average wireless latency over time for a network, device, or network client**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-latency-history
-
+        
         - networkId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
@@ -759,7 +759,7 @@ class Wireless(object):
         """
         **Aggregated latency info for this network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-latency-stats
-
+        
         - networkId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
@@ -792,7 +792,7 @@ class Wireless(object):
         """
         **List wireless mesh statuses for repeaters**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-mesh-statuses
-
+        
         - networkId (string): (required)
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
@@ -818,7 +818,7 @@ class Wireless(object):
         """
         **List the non-basic RF profiles for this network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-rf-profiles
-
+        
         - networkId (string): (required)
         - includeTemplateProfiles (boolean): If the network is bound to a template, this parameter controls whether or not the non-basic RF profiles defined on the template should be included in the response alongside the non-basic profiles defined on the bound network. Defaults to false.
         """
@@ -840,7 +840,7 @@ class Wireless(object):
         """
         **Creates new RF profile for this network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-wireless-rf-profile
-
+        
         - networkId (string): (required)
         - name (string): The name of the new profile. Must be unique. This param is required on creation.
         - bandSelectionType (string): Band selection can be set to either 'ssid' or 'ap'. This param is required on creation.
@@ -875,7 +875,7 @@ class Wireless(object):
         """
         **Updates specified RF profile for this network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-rf-profile
-
+        
         - networkId (string): (required)
         - rfProfileId (string): (required)
         - name (string): The name of the new profile. Must be unique.
@@ -911,7 +911,7 @@ class Wireless(object):
         """
         **Delete a RF Profile**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-wireless-rf-profile
-
+        
         - networkId (string): (required)
         - rfProfileId (string): (required)
         """
@@ -928,7 +928,7 @@ class Wireless(object):
         """
         **Return a RF profile**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-rf-profile
-
+        
         - networkId (string): (required)
         - rfProfileId (string): (required)
         """
@@ -945,7 +945,7 @@ class Wireless(object):
         """
         **Return the wireless settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-settings
-
+        
         - networkId (string): (required)
         """
 
@@ -961,7 +961,7 @@ class Wireless(object):
         """
         **Update the wireless settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-settings
-
+        
         - networkId (string): (required)
         - meshingEnabled (boolean): Toggle for enabling or disabling meshing in a network
         - ipv6BridgeEnabled (boolean): Toggle for enabling or disabling IPv6 bridging in a network (Note: if enabled, SSIDs must also be configured to use bridge mode)
@@ -991,7 +991,7 @@ class Wireless(object):
         """
         **Return signal quality (SNR/RSSI) over time for a device or network client**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-signal-quality-history
-
+        
         - networkId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
@@ -1026,7 +1026,7 @@ class Wireless(object):
         """
         **List the MR SSIDs in a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssids
-
+        
         - networkId (string): (required)
         """
 
@@ -1042,7 +1042,7 @@ class Wireless(object):
         """
         **Return a single MR SSID**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssid
-
+        
         - networkId (string): (required)
         - number (string): (required)
         """
@@ -1059,7 +1059,7 @@ class Wireless(object):
         """
         **Update the attributes of an MR SSID**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid
-
+        
         - networkId (string): (required)
         - number (string): (required)
         - name (string): The name of the SSID
@@ -1147,7 +1147,7 @@ class Wireless(object):
         """
         **Return the L3 firewall rules for an SSID on an MR network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssid-firewall-l-3-firewall-rules
-
+        
         - networkId (string): (required)
         - number (string): (required)
         """
@@ -1164,7 +1164,7 @@ class Wireless(object):
         """
         **Update the L3 firewall rules of an SSID on an MR network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-firewall-l-3-firewall-rules
-
+        
         - networkId (string): (required)
         - number (string): (required)
         - rules (array): An ordered array of the firewall rules for this SSID (not including the local LAN access rule or the default rule)
@@ -1188,7 +1188,7 @@ class Wireless(object):
         """
         **Return the L7 firewall rules for an SSID on an MR network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssid-firewall-l-7-firewall-rules
-
+        
         - networkId (string): (required)
         - number (string): (required)
         """
@@ -1205,7 +1205,7 @@ class Wireless(object):
         """
         **Update the L7 firewall rules of an SSID on an MR network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-firewall-l-7-firewall-rules
-
+        
         - networkId (string): (required)
         - number (string): (required)
         - rules (array): An array of L7 firewall rules for this SSID. Rules will get applied in the same order user has specified in request. Empty array will clear the L7 firewall rule configuration.
@@ -1228,7 +1228,7 @@ class Wireless(object):
         """
         **List all Identity PSKs in a wireless network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssid-identity-psks
-
+        
         - networkId (string): (required)
         - number (string): (required)
         """
@@ -1245,7 +1245,7 @@ class Wireless(object):
         """
         **Create an Identity PSK**
         https://developer.cisco.com/meraki/api-v1/#!create-network-wireless-ssid-identity-psk
-
+        
         - networkId (string): (required)
         - number (string): (required)
         - name (string): The name of the Identity PSK
@@ -1270,7 +1270,7 @@ class Wireless(object):
         """
         **Return an Identity PSK**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssid-identity-psk
-
+        
         - networkId (string): (required)
         - number (string): (required)
         - identityPskId (string): (required)
@@ -1288,7 +1288,7 @@ class Wireless(object):
         """
         **Update an Identity PSK**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-identity-psk
-
+        
         - networkId (string): (required)
         - number (string): (required)
         - identityPskId (string): (required)
@@ -1314,7 +1314,7 @@ class Wireless(object):
         """
         **Delete an Identity PSK**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-wireless-ssid-identity-psk
-
+        
         - networkId (string): (required)
         - number (string): (required)
         - identityPskId (string): (required)
@@ -1332,7 +1332,7 @@ class Wireless(object):
         """
         **Display the splash page settings for the given SSID**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssid-splash-settings
-
+        
         - networkId (string): (required)
         - number (string): (required)
         """
@@ -1349,7 +1349,7 @@ class Wireless(object):
         """
         **Modify the splash page settings for the given SSID**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-splash-settings
-
+        
         - networkId (string): (required)
         - number (string): (required)
         - splashUrl (string): [optional] The custom splash URL of the click-through splash page. Note that the URL can be configured without necessarily being used. In order to enable the custom URL, see 'useSplashUrl'
@@ -1380,7 +1380,7 @@ class Wireless(object):
         """
         **Update the traffic shaping settings for an SSID on an MR network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-traffic-shaping-rules
-
+        
         - networkId (string): (required)
         - number (string): (required)
         - trafficShapingEnabled (boolean): Whether traffic shaping rules are applied to clients on your SSID.
@@ -1408,7 +1408,7 @@ class Wireless(object):
         """
         **Display the traffic shaping settings for a SSID on an MR network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssid-traffic-shaping-rules
-
+        
         - networkId (string): (required)
         - number (string): (required)
         """
@@ -1425,7 +1425,7 @@ class Wireless(object):
         """
         **Return AP usage over time for a device or network client**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-usage-history
-
+        
         - networkId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.

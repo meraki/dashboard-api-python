@@ -7,7 +7,7 @@ class AsyncCellularGateway:
         """
         **Show the LAN Settings of a MG**
         https://developer.cisco.com/meraki/api-v1/#!get-device-cellular-gateway-lan
-
+        
         - serial (string): (required)
         """
 
@@ -23,7 +23,7 @@ class AsyncCellularGateway:
         """
         **Update the LAN Settings for a single MG.**
         https://developer.cisco.com/meraki/api-v1/#!update-device-cellular-gateway-lan
-
+        
         - serial (string): (required)
         - reservedIpRanges (array): list of all reserved IP ranges for a single MG
         - fixedIpAssignments (array): list of all fixed IP assignments for a single MG
@@ -46,7 +46,7 @@ class AsyncCellularGateway:
         """
         **Returns the port forwarding rules for a single MG.**
         https://developer.cisco.com/meraki/api-v1/#!get-device-cellular-gateway-port-forwarding-rules
-
+        
         - serial (string): (required)
         """
 
@@ -62,7 +62,7 @@ class AsyncCellularGateway:
         """
         **Updates the port forwarding rules for a single MG.**
         https://developer.cisco.com/meraki/api-v1/#!update-device-cellular-gateway-port-forwarding-rules
-
+        
         - serial (string): (required)
         - rules (array): An array of port forwarding params
         """
@@ -84,7 +84,7 @@ class AsyncCellularGateway:
         """
         **Return the connectivity testing destinations for an MG network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-cellular-gateway-connectivity-monitoring-destinations
-
+        
         - networkId (string): (required)
         """
 
@@ -100,7 +100,7 @@ class AsyncCellularGateway:
         """
         **Update the connectivity testing destinations for an MG network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-cellular-gateway-connectivity-monitoring-destinations
-
+        
         - networkId (string): (required)
         - destinations (array): The list of connectivity monitoring destinations
         """
@@ -122,7 +122,7 @@ class AsyncCellularGateway:
         """
         **List common DHCP settings of MGs**
         https://developer.cisco.com/meraki/api-v1/#!get-network-cellular-gateway-dhcp
-
+        
         - networkId (string): (required)
         """
 
@@ -138,7 +138,7 @@ class AsyncCellularGateway:
         """
         **Update common DHCP settings of MGs**
         https://developer.cisco.com/meraki/api-v1/#!update-network-cellular-gateway-dhcp
-
+        
         - networkId (string): (required)
         - dhcpLeaseTime (string): DHCP Lease time for all MG of the network. It can be '30 minutes', '1 hour', '4 hours', '12 hours', '1 day' or '1 week'.
         - dnsNameservers (string): DNS name servers mode for all MG of the network. It can take 4 different values: 'upstream_dns', 'google_dns', 'opendns', 'custom'.
@@ -162,7 +162,7 @@ class AsyncCellularGateway:
         """
         **Return the subnet pool and mask configured for MGs in the network.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-cellular-gateway-subnet-pool
-
+        
         - networkId (string): (required)
         """
 
@@ -178,7 +178,7 @@ class AsyncCellularGateway:
         """
         **Update the subnet pool and mask configuration for MGs in the network.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-cellular-gateway-subnet-pool
-
+        
         - networkId (string): (required)
         - mask (integer): Mask used for the subnet of all MGs in  this network.
         - cidr (string): CIDR of the pool of subnets. Each MG in this network will automatically pick a subnet from this pool.
@@ -201,7 +201,7 @@ class AsyncCellularGateway:
         """
         **Returns the uplink settings for your MG network.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-cellular-gateway-uplink
-
+        
         - networkId (string): (required)
         """
 
@@ -217,7 +217,7 @@ class AsyncCellularGateway:
         """
         **Updates the uplink settings for your MG network.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-cellular-gateway-uplink
-
+        
         - networkId (string): (required)
         - bandwidthLimits (object): The bandwidth settings for the 'cellular' uplink
         """

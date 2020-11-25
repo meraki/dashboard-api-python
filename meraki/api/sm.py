@@ -7,7 +7,7 @@ class Sm(object):
         """
         **Bypass activation lock attempt**
         https://developer.cisco.com/meraki/api-v1/#!create-network-sm-bypass-activation-lock-attempt
-
+        
         - networkId (string): (required)
         - ids (array): The ids of the devices to attempt activation lock bypass.
         """
@@ -29,7 +29,7 @@ class Sm(object):
         """
         **Bypass activation lock attempt status**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-bypass-activation-lock-attempt
-
+        
         - networkId (string): (required)
         - attemptId (string): (required)
         """
@@ -46,7 +46,7 @@ class Sm(object):
         """
         **List the devices enrolled in an SM network with various specified fields and filters**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-devices
-
+        
         - networkId (string): (required)
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
@@ -89,7 +89,7 @@ class Sm(object):
         """
         **Force check-in a set of devices**
         https://developer.cisco.com/meraki/api-v1/#!checkin-network-sm-devices
-
+        
         - networkId (string): (required)
         - wifiMacs (array): The wifiMacs of the devices to be checked-in.
         - ids (array): The ids of the devices to be checked-in.
@@ -114,7 +114,7 @@ class Sm(object):
         """
         **Modify the fields of a device**
         https://developer.cisco.com/meraki/api-v1/#!update-network-sm-devices-fields
-
+        
         - networkId (string): (required)
         - deviceFields (object): The new fields of the device. Each field of this object is optional.
         - wifiMac (string): The wifiMac of the device to be modified.
@@ -139,7 +139,7 @@ class Sm(object):
         """
         **Lock a set of devices**
         https://developer.cisco.com/meraki/api-v1/#!lock-network-sm-devices
-
+        
         - networkId (string): (required)
         - wifiMacs (array): The wifiMacs of the devices to be locked.
         - ids (array): The ids of the devices to be locked.
@@ -165,7 +165,7 @@ class Sm(object):
         """
         **Add, delete, or update the tags of a set of devices**
         https://developer.cisco.com/meraki/api-v1/#!modify-network-sm-devices-tags
-
+        
         - networkId (string): (required)
         - tags (array): The tags to be added, deleted, or updated.
         - updateAction (string): One of add, delete, or update. Only devices that have been modified will be returned.
@@ -192,7 +192,7 @@ class Sm(object):
         """
         **Move a set of devices to a new network**
         https://developer.cisco.com/meraki/api-v1/#!move-network-sm-devices
-
+        
         - networkId (string): (required)
         - newNetwork (string): The new network to which the devices will be moved.
         - wifiMacs (array): The wifiMacs of the devices to be moved.
@@ -218,7 +218,7 @@ class Sm(object):
         """
         **Wipe a device**
         https://developer.cisco.com/meraki/api-v1/#!wipe-network-sm-devices
-
+        
         - networkId (string): (required)
         - wifiMac (string): The wifiMac of the device to be wiped.
         - id (string): The id of the device to be wiped.
@@ -243,7 +243,7 @@ class Sm(object):
         """
         **Return the client's daily cellular data usage history**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-cellular-usage-history
-
+        
         - networkId (string): (required)
         - deviceId (string): (required)
         """
@@ -260,7 +260,7 @@ class Sm(object):
         """
         **List the certs on a device**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-certs
-
+        
         - networkId (string): (required)
         - deviceId (string): (required)
         """
@@ -277,7 +277,7 @@ class Sm(object):
         """
         **Returns historical connectivity data (whether a device is regularly checking in to Dashboard).**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-connectivity
-
+        
         - networkId (string): (required)
         - deviceId (string): (required)
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
@@ -304,7 +304,7 @@ class Sm(object):
         """
         **Return historical records of various Systems Manager network connection details for desktop devices.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-desktop-logs
-
+        
         - networkId (string): (required)
         - deviceId (string): (required)
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
@@ -331,7 +331,7 @@ class Sm(object):
         """
         **Return historical records of commands sent to Systems Manager devices**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-device-command-logs
-
+        
         - networkId (string): (required)
         - deviceId (string): (required)
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
@@ -358,7 +358,7 @@ class Sm(object):
         """
         **Get the profiles associated with a device**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-device-profiles
-
+        
         - networkId (string): (required)
         - deviceId (string): (required)
         """
@@ -375,7 +375,7 @@ class Sm(object):
         """
         **List the network adapters of a device**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-network-adapters
-
+        
         - networkId (string): (required)
         - deviceId (string): (required)
         """
@@ -392,7 +392,7 @@ class Sm(object):
         """
         **Return historical records of various Systems Manager client metrics for desktop devices.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-performance-history
-
+        
         - networkId (string): (required)
         - deviceId (string): (required)
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
@@ -419,7 +419,7 @@ class Sm(object):
         """
         **Refresh the details of a device**
         https://developer.cisco.com/meraki/api-v1/#!refresh-network-sm-device-details
-
+        
         - networkId (string): (required)
         - deviceId (string): (required)
         """
@@ -436,7 +436,7 @@ class Sm(object):
         """
         **List the restrictions on a device**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-restrictions
-
+        
         - networkId (string): (required)
         - deviceId (string): (required)
         """
@@ -453,7 +453,7 @@ class Sm(object):
         """
         **List the security centers on a device**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-security-centers
-
+        
         - networkId (string): (required)
         - deviceId (string): (required)
         """
@@ -470,7 +470,7 @@ class Sm(object):
         """
         **Get a list of softwares associated with a device**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-softwares
-
+        
         - networkId (string): (required)
         - deviceId (string): (required)
         """
@@ -487,7 +487,7 @@ class Sm(object):
         """
         **Unenroll a device**
         https://developer.cisco.com/meraki/api-v1/#!unenroll-network-sm-device
-
+        
         - networkId (string): (required)
         - deviceId (string): (required)
         """
@@ -504,7 +504,7 @@ class Sm(object):
         """
         **List the saved SSID names on a device**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-wlan-lists
-
+        
         - networkId (string): (required)
         - deviceId (string): (required)
         """
@@ -521,7 +521,7 @@ class Sm(object):
         """
         **List all profiles in a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-profiles
-
+        
         - networkId (string): (required)
         """
 
@@ -537,7 +537,7 @@ class Sm(object):
         """
         **List the target groups in this network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-target-groups
-
+        
         - networkId (string): (required)
         - withDetails (boolean): Boolean indicating if the the ids of the devices or users scoped by the target group should be included in the response
         """
@@ -559,7 +559,7 @@ class Sm(object):
         """
         **Add a target group**
         https://developer.cisco.com/meraki/api-v1/#!create-network-sm-target-group
-
+        
         - networkId (string): (required)
         - name (string): The name of this target group
         - scope (string): The scope and tag options of the target group. Comma separated values beginning with one of withAny, withAll, withoutAny, withoutAll, all, none, followed by tags. Default to none if empty.
@@ -582,7 +582,7 @@ class Sm(object):
         """
         **Return a target group**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-target-group
-
+        
         - networkId (string): (required)
         - targetGroupId (string): (required)
         - withDetails (boolean): Boolean indicating if the the ids of the devices or users scoped by the target group should be included in the response
@@ -605,7 +605,7 @@ class Sm(object):
         """
         **Update a target group**
         https://developer.cisco.com/meraki/api-v1/#!update-network-sm-target-group
-
+        
         - networkId (string): (required)
         - targetGroupId (string): (required)
         - name (string): The name of this target group
@@ -629,7 +629,7 @@ class Sm(object):
         """
         **Delete a target group from a network**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-sm-target-group
-
+        
         - networkId (string): (required)
         - targetGroupId (string): (required)
         """
@@ -646,7 +646,7 @@ class Sm(object):
         """
         **List the owners in an SM network with various specified fields and filters**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-users
-
+        
         - networkId (string): (required)
         - ids (array): Filter users by id(s).
         - usernames (array): Filter users by username(s).
@@ -677,7 +677,7 @@ class Sm(object):
         """
         **Get the profiles associated with a user**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-user-device-profiles
-
+        
         - networkId (string): (required)
         - userId (string): (required)
         """
@@ -694,7 +694,7 @@ class Sm(object):
         """
         **Get a list of softwares associated with a user**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-user-softwares
-
+        
         - networkId (string): (required)
         - userId (string): (required)
         """
@@ -711,7 +711,7 @@ class Sm(object):
         """
         **Get the organization's APNS certificate**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-sm-apns-cert
-
+        
         - organizationId (string): (required)
         """
 
@@ -727,7 +727,7 @@ class Sm(object):
         """
         **List the VPP accounts in the organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-sm-vpp-accounts
-
+        
         - organizationId (string): (required)
         """
 
@@ -743,7 +743,7 @@ class Sm(object):
         """
         **Get a hash containing the unparsed token of the VPP account with the given ID**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-sm-vpp-account
-
+        
         - organizationId (string): (required)
         - vppAccountId (string): (required)
         """
