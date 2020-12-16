@@ -1138,7 +1138,7 @@ class AsyncAppliance:
 
         return self._session.get(metadata, resource)
 
-    def createNetworkApplianceVlan(self, networkId: str, id: str, name: str, subnet: str, applianceIp: str, **kwargs):
+    def createNetworkApplianceVlan(self, networkId: str, id: str, name: str, **kwargs):
         """
         **Add a VLAN**
         https://developer.cisco.com/meraki/api-v1/#!create-network-appliance-vlan
@@ -1479,7 +1479,7 @@ class AsyncAppliance:
         https://developer.cisco.com/meraki/api-v1/#!update-organization-appliance-security-intrusion
         
         - organizationId (string): (required)
-        - allowedRules (array): Sets a list of specific SNORTÂ® signatures to allow
+        - allowedRules (array): Sets a list of specific SNORT® signatures to allow
         """
 
         kwargs = locals()
@@ -1506,6 +1506,9 @@ class AsyncAppliance:
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): A list of network IDs. The returned devices will be filtered to only include these networks.
+        - serials (array): A list of serial numbers. The returned devices will be filtered to only include these serials.
+        - iccids (array): A list of ICCIDs. The returned devices will be filtered to only include these ICCIDs.
         """
 
         kwargs.update(locals())
@@ -1516,8 +1519,14 @@ class AsyncAppliance:
         }
         resource = f'/organizations/{organizationId}/appliance/uplink/statuses'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'serials', 'iccids', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', 'serials', 'iccids', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 

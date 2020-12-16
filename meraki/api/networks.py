@@ -505,58 +505,6 @@ class Networks(object):
 
         return self._session.post(metadata, resource, payload)
 
-    def getNetworkEnvironmentalEvents(self, networkId: str, total_pages=1, direction='next', **kwargs):
-        """
-        **List the environmental events for the network**
-        https://developer.cisco.com/meraki/api-v1/#!get-network-environmental-events
-        
-        - networkId (string): (required)
-        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
-        - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - includedEventTypes (array): A list of event types. The returned events will be filtered to only include events with these types.
-        - excludedEventTypes (array): A list of event types. The returned events will be filtered to exclude events with these types.
-        - sensorSerial (string): The serial of the sensor device which the list of events will be filtered with
-        - gatewaySerial (string): The serial of the environmental gateway device which the list of events will be filtered with
-        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 10.
-        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['networks', 'monitor', 'environmental', 'events'],
-            'operation': 'getNetworkEnvironmentalEvents'
-        }
-        resource = f'/networks/{networkId}/environmental/events'
-
-        query_params = ['includedEventTypes', 'excludedEventTypes', 'sensorSerial', 'gatewaySerial', 'perPage', 'startingAfter', 'endingBefore', ]
-        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
-
-        array_params = ['includedEventTypes', 'excludedEventTypes', ]
-        for k, v in kwargs.items():
-            if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
-                params.pop(k.strip())
-
-        return self._session.get_pages(metadata, resource, params, total_pages, direction)
-
-    def getNetworkEnvironmentalEventsEventTypes(self, networkId: str):
-        """
-        **List the event type to human-readable description**
-        https://developer.cisco.com/meraki/api-v1/#!get-network-environmental-events-event-types
-        
-        - networkId (string): (required)
-        """
-
-        metadata = {
-            'tags': ['networks', 'configure', 'environmental', 'events', 'eventTypes'],
-            'operation': 'getNetworkEnvironmentalEventsEventTypes'
-        }
-        resource = f'/networks/{networkId}/environmental/events/eventTypes'
-
-        return self._session.get(metadata, resource)
-
     def getNetworkEvents(self, networkId: str, total_pages=1, direction='prev', event_log_end_time=None, **kwargs):
         """
         **List the events for the network**
