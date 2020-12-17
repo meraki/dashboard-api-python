@@ -139,7 +139,7 @@ class AsyncRestSession:
                     await asyncio.sleep(1)
                     continue
 
-                if status == 200:
+                if 200 <= status < 300:
                     if "page" in metadata:
                         counter = metadata["page"]
                         if self._logger:
