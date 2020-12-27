@@ -45,6 +45,7 @@ class AsyncDashboardAPI:
     - maximum_concurrent_requests (integer): number of concurrent API requests for asynchronous class
     - be_geo_id (string): optional partner identifier for API usage tracking; can also be set as an environment variable BE_GEO_ID
     - caller (string): optional identifier for API usage tracking; can also be set as an environment variable MERAKI_PYTHON_SDK_CALLER
+    - use_iterator_for_get_pages (boolean): list* methods will return an iterator with each object instead of a complete list with all items
     """
 
     def __init__(self, api_key=None, base_url=DEFAULT_BASE_URL, single_request_timeout=SINGLE_REQUEST_TIMEOUT,
@@ -54,7 +55,9 @@ class AsyncDashboardAPI:
                  retry_4xx_error_wait_time=RETRY_4XX_ERROR_WAIT_TIME, maximum_retries=MAXIMUM_RETRIES,
                  output_log=OUTPUT_LOG, log_path=LOG_PATH, log_file_prefix=LOG_FILE_PREFIX,
                  print_console=PRINT_TO_CONSOLE, suppress_logging=SUPPRESS_LOGGING, simulate=SIMULATE_API_CALLS,
-                 maximum_concurrent_requests=AIO_MAXIMUM_CONCURRENT_REQUESTS, be_geo_id=BE_GEO_ID, caller=MERAKI_PYTHON_SDK_CALLER):
+                 maximum_concurrent_requests=AIO_MAXIMUM_CONCURRENT_REQUESTS, be_geo_id=BE_GEO_ID, caller=MERAKI_PYTHON_SDK_CALLER,
+                 use_iterator_for_get_pages = False
+                 ):
         # Check API key
         api_key = api_key or os.environ.get(API_KEY_ENVIRONMENT_VARIABLE)
         if not api_key:
@@ -115,6 +118,7 @@ class AsyncDashboardAPI:
             maximum_concurrent_requests=maximum_concurrent_requests,
             be_geo_id=be_geo_id,
             caller=caller,
+            use_iterator_for_get_pages=use_iterator_for_get_pages,
         )
 
         # API endpoints by section

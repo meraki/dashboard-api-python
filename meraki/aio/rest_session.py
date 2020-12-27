@@ -76,6 +76,7 @@ class AsyncRestSession:
         maximum_concurrent_requests=AIO_MAXIMUM_CONCURRENT_REQUESTS,
         be_geo_id=BE_GEO_ID,
         caller=MERAKI_PYTHON_SDK_CALLER,
+        use_iterator_for_get_pages=False,
     ):
         super().__init__()
 
@@ -97,6 +98,7 @@ class AsyncRestSession:
         self._current_sessions = 0
         self._be_geo_id = be_geo_id
         self._caller = caller
+        self._use_iterator_for_get_pages = use_iterator_for_get_pages
 
         # Check base URL
         if 'v0' in self._base_url:
@@ -283,15 +285,12 @@ class AsyncRestSession:
             total_pages = int(total_pages)
         metadata["page"] = 1
 
-        response = await self.request(metadata, "GET", url, params=params)
-        results = await response.json()
-
-        # For event log endpoint when using 'next' direction, so results/events are sorted chronologically
-        if type(results) == dict and metadata["operation"] == "getNetworkEvents" and direction == "next":
-            results["events"] = results["events"][::-1]
-
+        future_request = asyncio.ensure_future(self.request(metadata, "GET", url, params=params))
+        ret = []
         # Get additional pages if more than one requested
-        while total_pages != 1:
+        while ret is None or total_pages != 1:
+            response = await future_request
+            results = await response.json()
             links = response.links
 
             # GET the subsequent page
@@ -308,7 +307,7 @@ class AsyncRestSession:
                         break
                 
                 metadata["page"] += 1
-                response = await self.request(metadata, "GET", links["next"]["url"])
+                future_request = asyncio.ensure_future(self.request(metadata, "GET", links["next"]["url"]))
             elif direction == "prev" and "prev" in links:
                 # Prevent getNetworkEvents from infinite loop as time goes backward (to epoch 0)
                 if metadata["operation"] == "getNetworkEvents":
@@ -318,30 +317,42 @@ class AsyncRestSession:
                         break
                 
                 metadata["page"] += 1
-                response = await self.request(metadata, "GET", links["prev"]["url"])
+                future_request = asyncio.ensure_future(self.request(metadata, "GET", links["prev"]["url"]))
             else:
                 break
-
-            # Append that page's results, depending on the endpoint
-            if type(results) == list:
-                results.extend(await response.json())
-            # For event log endpoint
-            elif type(results) == dict:
-                json_response = await response.json()
-                start = json_response["pageStartAt"]
-                end = json_response["pageEndAt"]
-                events = json_response["events"]
-                if direction == "next":
-                    events = events[::-1]
-                if start < results["pageStartAt"]:
-                    results["pageStartAt"] = start
-                if end > results["pageEndAt"]:
-                    results["pageEndAt"] = end
-                results["events"].extend(events)
+            result_type = type(results)
+            if ret is None:
+                ret = result_type()
+            
+            if self._use_iterator_for_get_pages:
+                # For event log endpoint
+                if result_type == dict:
+                    results = results["events"]
+                    if direction == "next":
+                        results = results[::-1]
+                for x in results:
+                    yield x
+            else:
+                # Append that page's results, depending on the endpoint
+                if result_type == list:
+                    ret.extend(results)
+                # For event log endpoint
+                elif result_type == dict:
+                    json_response = results
+                    start = json_response["pageStartAt"]
+                    end = json_response["pageEndAt"]
+                    events = json_response["events"]
+                    if direction == "next":
+                        events = events[::-1]
+                    if start < results["pageStartAt"]:
+                        results["pageStartAt"] = start
+                    if end > results["pageEndAt"]:
+                        results["pageEndAt"] = end
+                    ret["events"].extend(events)
 
             total_pages -= 1
-
-        return results
+        if not self._use_iterator_for_get_pages:
+            return ret
 
     async def post(self, metadata, url, json=None):
         metadata["method"] = "POST"
