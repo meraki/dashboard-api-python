@@ -1,4 +1,5 @@
 import json
+import os
 import re
 import shutil
 import sys
@@ -238,6 +239,9 @@ def main():
                 if operation == 'createNetworkGroupPolicy':
                     print(required)
                     print(optional)
+
+                if 'code_snippets' not in os.listdir():
+                    os.mkdir('code_snippets')
 
                 with open(f'code_snippets/{operation}.py', 'w') as fp:
                     if required.items():

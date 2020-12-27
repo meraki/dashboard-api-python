@@ -3,11 +3,81 @@ class AsyncNetworks:
         super().__init__()
         self._session = session
 
+    def getNetworkClientsApplicationUsage(self, networkID: str, clients: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Return the application usage data for clients**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-clients-application-usage
+        
+        - networkID (string): (required)
+        - clients (string): A list of client keys, MACs or IPs separated by comma.
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - ssidNumber (integer): An SSID number to include. If not specified, eveusage histories application usagents for all SSIDs will be returned.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        """
+
+        kwargs.update(locals())
+
+        if 'ssidNumber' in kwargs:
+            options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+            assert kwargs['ssidNumber'] in options, f'''"ssidNumber" cannot be "{kwargs['ssidNumber']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['networks', 'monitor', 'clients', 'applicationUsage'],
+            'operation': 'getNetworkClientsApplicationUsage'
+        }
+        resource = f'/networks/{networkID}/clients/applicationUsage'
+
+        query_params = ['clients', 'ssidNumber', 'perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getNetworkClientsUsageHistories(self, networkID: str, clients: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Return the usage histories for clients**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-clients-usage-histories
+        
+        - networkID (string): (required)
+        - clients (string): A list of client keys, MACs or IPs separated by comma.
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - ssidNumber (integer): An SSID number to include. If not specified, events for all SSIDs will be returned.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        """
+
+        kwargs.update(locals())
+
+        if 'ssidNumber' in kwargs:
+            options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+            assert kwargs['ssidNumber'] in options, f'''"ssidNumber" cannot be "{kwargs['ssidNumber']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['networks', 'monitor', 'clients', 'usageHistories'],
+            'operation': 'getNetworkClientsUsageHistories'
+        }
+        resource = f'/networks/{networkID}/clients/usageHistories'
+
+        query_params = ['clients', 'ssidNumber', 'perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
     def getNetwork(self, networkId: str):
         """
         **Return a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network
-
+        
         - networkId (string): (required)
         """
 
@@ -23,7 +93,7 @@ class AsyncNetworks:
         """
         **Update a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network
-
+        
         - networkId (string): (required)
         - name (string): The name of the network
         - timeZone (string): The timezone of the network. For a list of allowed timezones, please see the 'TZ' column in the table in <a target='_blank' href='https://en.wikipedia.org/wiki/List_of_tz_database_time_zones'>this article.</a>
@@ -48,7 +118,7 @@ class AsyncNetworks:
         """
         **Delete a network**
         https://developer.cisco.com/meraki/api-v1/#!delete-network
-
+        
         - networkId (string): (required)
         """
 
@@ -64,7 +134,7 @@ class AsyncNetworks:
         """
         **Return the alert configuration for this network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-alerts-settings
-
+        
         - networkId (string): (required)
         """
 
@@ -80,7 +150,7 @@ class AsyncNetworks:
         """
         **Update the alert configuration for this network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-alerts-settings
-
+        
         - networkId (string): (required)
         - defaultDestinations (object): The network-wide destinations for all alerts on the network.
         - alerts (array): Alert-specific configuration for each type. Only alerts that pertain to the network can be updated.
@@ -103,7 +173,7 @@ class AsyncNetworks:
         """
         **Bind a network to a template.**
         https://developer.cisco.com/meraki/api-v1/#!bind-network
-
+        
         - networkId (string): (required)
         - configTemplateId (string): The ID of the template to which the network should be bound.
         - autoBind (boolean): Optional boolean indicating whether the network's switches should automatically bind to profiles of the same model. Defaults to false if left unspecified. This option only affects switch networks and switch templates. Auto-bind is not valid unless the switch template has at least one profile and has at most one profile per switch model.
@@ -126,7 +196,7 @@ class AsyncNetworks:
         """
         **List the Bluetooth clients seen by APs in this network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-bluetooth-clients
-
+        
         - networkId (string): (required)
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
@@ -155,7 +225,7 @@ class AsyncNetworks:
         """
         **Return a Bluetooth client**
         https://developer.cisco.com/meraki/api-v1/#!get-network-bluetooth-client
-
+        
         - networkId (string): (required)
         - bluetoothClientId (string): (required)
         - includeConnectivityHistory (boolean): Include the connectivity history for this client
@@ -179,7 +249,7 @@ class AsyncNetworks:
         """
         **List the clients that have used this network in the timespan**
         https://developer.cisco.com/meraki/api-v1/#!get-network-clients
-
+        
         - networkId (string): (required)
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
@@ -207,7 +277,7 @@ class AsyncNetworks:
         """
         **Provisions a client with a name and policy**
         https://developer.cisco.com/meraki/api-v1/#!provision-network-clients
-
+        
         - networkId (string): (required)
         - clients (array): The array of clients to provision
         - devicePolicy (string): The policy to apply to the specified client. Can be 'Group policy', 'Allowed', 'Blocked', 'Per connection' or 'Normal'. Required.
@@ -237,7 +307,7 @@ class AsyncNetworks:
         """
         **Return the client associated with the given identifier**
         https://developer.cisco.com/meraki/api-v1/#!get-network-client
-
+        
         - networkId (string): (required)
         - clientId (string): (required)
         """
@@ -254,7 +324,7 @@ class AsyncNetworks:
         """
         **Return the policy assigned to a client on the network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-client-policy
-
+        
         - networkId (string): (required)
         - clientId (string): (required)
         """
@@ -271,7 +341,7 @@ class AsyncNetworks:
         """
         **Update the policy assigned to a client on the network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-client-policy
-
+        
         - networkId (string): (required)
         - clientId (string): (required)
         - devicePolicy (string): The policy to assign. Can be 'Whitelisted', 'Blocked', 'Normal' or 'Group policy'. Required.
@@ -295,7 +365,7 @@ class AsyncNetworks:
         """
         **Return the splash authorization for a client, for each SSID they've associated with through splash**
         https://developer.cisco.com/meraki/api-v1/#!get-network-client-splash-authorization-status
-
+        
         - networkId (string): (required)
         - clientId (string): (required)
         """
@@ -312,7 +382,7 @@ class AsyncNetworks:
         """
         **Update a client's splash authorization**
         https://developer.cisco.com/meraki/api-v1/#!update-network-client-splash-authorization-status
-
+        
         - networkId (string): (required)
         - clientId (string): (required)
         - ssids (object): The target SSIDs. Each SSID must be enabled and must have Click-through splash enabled. For each SSID where isAuthorized is true, the expiration time will automatically be set according to the SSID's splash frequency. Not all networks support configuring all SSIDs
@@ -335,7 +405,7 @@ class AsyncNetworks:
         """
         **Return the client's network traffic data over time**
         https://developer.cisco.com/meraki/api-v1/#!get-network-client-traffic-history
-
+        
         - networkId (string): (required)
         - clientId (string): (required)
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
@@ -362,7 +432,7 @@ class AsyncNetworks:
         """
         **Return the client's daily usage history**
         https://developer.cisco.com/meraki/api-v1/#!get-network-client-usage-history
-
+        
         - networkId (string): (required)
         - clientId (string): (required)
         """
@@ -379,7 +449,7 @@ class AsyncNetworks:
         """
         **List the devices in a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-devices
-
+        
         - networkId (string): (required)
         """
 
@@ -395,7 +465,7 @@ class AsyncNetworks:
         """
         **Claim devices into a network**
         https://developer.cisco.com/meraki/api-v1/#!claim-network-devices
-
+        
         - networkId (string): (required)
         - serials (array): A list of serials of devices to claim
         """
@@ -417,7 +487,7 @@ class AsyncNetworks:
         """
         **Remove a single device**
         https://developer.cisco.com/meraki/api-v1/#!remove-network-devices
-
+        
         - networkId (string): (required)
         - serial (string): The serial of a device
         """
@@ -435,63 +505,11 @@ class AsyncNetworks:
 
         return self._session.post(metadata, resource, payload)
 
-    def getNetworkEnvironmentalEvents(self, networkId: str, total_pages=1, direction='next', **kwargs):
-        """
-        **List the environmental events for the network**
-        https://developer.cisco.com/meraki/api-v1/#!get-network-environmental-events
-
-        - networkId (string): (required)
-        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
-        - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - includedEventTypes (array): A list of event types. The returned events will be filtered to only include events with these types.
-        - excludedEventTypes (array): A list of event types. The returned events will be filtered to exclude events with these types.
-        - sensorSerial (string): The serial of the sensor device which the list of events will be filtered with
-        - gatewaySerial (string): The serial of the environmental gateway device which the list of events will be filtered with
-        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 10.
-        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['networks', 'monitor', 'environmental', 'events'],
-            'operation': 'getNetworkEnvironmentalEvents'
-        }
-        resource = f'/networks/{networkId}/environmental/events'
-
-        query_params = ['includedEventTypes', 'excludedEventTypes', 'sensorSerial', 'gatewaySerial', 'perPage', 'startingAfter', 'endingBefore', ]
-        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
-
-        array_params = ['includedEventTypes', 'excludedEventTypes', ]
-        for k, v in kwargs.items():
-            if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
-                params.pop(k.strip())
-
-        return self._session.get_pages(metadata, resource, params, total_pages, direction)
-
-    def getNetworkEnvironmentalEventsEventTypes(self, networkId: str):
-        """
-        **List the event type to human-readable description**
-        https://developer.cisco.com/meraki/api-v1/#!get-network-environmental-events-event-types
-
-        - networkId (string): (required)
-        """
-
-        metadata = {
-            'tags': ['networks', 'configure', 'environmental', 'events', 'eventTypes'],
-            'operation': 'getNetworkEnvironmentalEventsEventTypes'
-        }
-        resource = f'/networks/{networkId}/environmental/events/eventTypes'
-
-        return self._session.get(metadata, resource)
-
     def getNetworkEvents(self, networkId: str, total_pages=1, direction='prev', event_log_end_time=None, **kwargs):
         """
         **List the events for the network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-events
-
+        
         - networkId (string): (required)
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" or "prev" (default) page
@@ -535,7 +553,7 @@ class AsyncNetworks:
         """
         **List the event type to human-readable description**
         https://developer.cisco.com/meraki/api-v1/#!get-network-events-event-types
-
+        
         - networkId (string): (required)
         """
 
@@ -551,7 +569,7 @@ class AsyncNetworks:
         """
         **Get current maintenance window for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-firmware-upgrades
-
+        
         - networkId (string): (required)
         """
 
@@ -567,7 +585,7 @@ class AsyncNetworks:
         """
         **Update current maintenance window for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-firmware-upgrades
-
+        
         - networkId (string): (required)
         - upgradeWindow (object): Upgrade window for devices in network
         """
@@ -589,7 +607,7 @@ class AsyncNetworks:
         """
         **List the floor plans that belong to your network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-floor-plans
-
+        
         - networkId (string): (required)
         """
 
@@ -605,7 +623,7 @@ class AsyncNetworks:
         """
         **Upload a floor plan**
         https://developer.cisco.com/meraki/api-v1/#!create-network-floor-plan
-
+        
         - networkId (string): (required)
         - name (string): The name of your floor plan.
         - imageContents (string): The file contents (a base 64 encoded string) of your image. Supported formats are PNG, GIF, and JPG. Note that all images are saved as PNG files, regardless of the format they are uploaded in.
@@ -633,7 +651,7 @@ class AsyncNetworks:
         """
         **Find a floor plan by ID**
         https://developer.cisco.com/meraki/api-v1/#!get-network-floor-plan
-
+        
         - networkId (string): (required)
         - floorPlanId (string): (required)
         """
@@ -650,7 +668,7 @@ class AsyncNetworks:
         """
         **Update a floor plan's geolocation and other meta data**
         https://developer.cisco.com/meraki/api-v1/#!update-network-floor-plan
-
+        
         - networkId (string): (required)
         - floorPlanId (string): (required)
         - name (string): The name of your floor plan.
@@ -679,7 +697,7 @@ class AsyncNetworks:
         """
         **Destroy a floor plan**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-floor-plan
-
+        
         - networkId (string): (required)
         - floorPlanId (string): (required)
         """
@@ -696,7 +714,7 @@ class AsyncNetworks:
         """
         **List the group policies in a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-group-policies
-
+        
         - networkId (string): (required)
         """
 
@@ -712,7 +730,7 @@ class AsyncNetworks:
         """
         **Create a group policy**
         https://developer.cisco.com/meraki/api-v1/#!create-network-group-policy
-
+        
         - networkId (string): (required)
         - name (string): The name for your group policy. Required.
         - scheduling (object):     The schedule for the group policy. Schedules are applied to days of the week.
@@ -748,7 +766,7 @@ class AsyncNetworks:
         """
         **Display a group policy**
         https://developer.cisco.com/meraki/api-v1/#!get-network-group-policy
-
+        
         - networkId (string): (required)
         - groupPolicyId (string): (required)
         """
@@ -765,7 +783,7 @@ class AsyncNetworks:
         """
         **Update a group policy**
         https://developer.cisco.com/meraki/api-v1/#!update-network-group-policy
-
+        
         - networkId (string): (required)
         - groupPolicyId (string): (required)
         - name (string): The name for your group policy.
@@ -802,7 +820,7 @@ class AsyncNetworks:
         """
         **Delete a group policy**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-group-policy
-
+        
         - networkId (string): (required)
         - groupPolicyId (string): (required)
         """
@@ -819,7 +837,7 @@ class AsyncNetworks:
         """
         **List the users configured under Meraki Authentication for a network (splash guest or RADIUS users for a wireless network, or client VPN users for a wired network)**
         https://developer.cisco.com/meraki/api-v1/#!get-network-meraki-auth-users
-
+        
         - networkId (string): (required)
         """
 
@@ -835,7 +853,7 @@ class AsyncNetworks:
         """
         **Create a user configured with Meraki Authentication for a network (currently supports 802.1X, splash guest, and client VPN users, and currently, organizations have a 50,000 user cap)**
         https://developer.cisco.com/meraki/api-v1/#!create-network-meraki-auth-user
-
+        
         - networkId (string): (required)
         - email (string): Email address of the user
         - name (string): Name of the user
@@ -866,7 +884,7 @@ class AsyncNetworks:
         """
         **Return the Meraki Auth splash guest, RADIUS, or client VPN user**
         https://developer.cisco.com/meraki/api-v1/#!get-network-meraki-auth-user
-
+        
         - networkId (string): (required)
         - merakiAuthUserId (string): (required)
         """
@@ -883,7 +901,7 @@ class AsyncNetworks:
         """
         **Delete a user configured with Meraki Authentication (currently, 802.1X RADIUS, splash guest, and client VPN users can be deleted)**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-meraki-auth-user
-
+        
         - networkId (string): (required)
         - merakiAuthUserId (string): (required)
         """
@@ -900,7 +918,7 @@ class AsyncNetworks:
         """
         **Update a user configured with Meraki Authentication (currently, 802.1X RADIUS, splash guest, and client VPN users can be deleted)**
         https://developer.cisco.com/meraki/api-v1/#!update-network-meraki-auth-user
-
+        
         - networkId (string): (required)
         - merakiAuthUserId (string): (required)
         - name (string): Name of the user
@@ -926,7 +944,7 @@ class AsyncNetworks:
         """
         **List the MQTT brokers for this network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-mqtt-brokers
-
+        
         - networkId (string): (required)
         """
 
@@ -942,7 +960,7 @@ class AsyncNetworks:
         """
         **Add an MQTT broker**
         https://developer.cisco.com/meraki/api-v1/#!create-network-mqtt-broker
-
+        
         - networkId (string): (required)
         - name (string): Name of the MQTT broker
         - host (string): Host name/IP address where MQTT broker runs
@@ -966,7 +984,7 @@ class AsyncNetworks:
         """
         **Return an MQTT broker**
         https://developer.cisco.com/meraki/api-v1/#!get-network-mqtt-broker
-
+        
         - networkId (string): (required)
         - mqttBrokerId (string): (required)
         """
@@ -983,7 +1001,7 @@ class AsyncNetworks:
         """
         **Update an MQTT broker**
         https://developer.cisco.com/meraki/api-v1/#!update-network-mqtt-broker
-
+        
         - networkId (string): (required)
         - mqttBrokerId (string): (required)
         - name (string): Name of the mqtt config
@@ -1008,7 +1026,7 @@ class AsyncNetworks:
         """
         **Delete an MQTT broker**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-mqtt-broker
-
+        
         - networkId (string): (required)
         - mqttBrokerId (string): (required)
         """
@@ -1025,7 +1043,7 @@ class AsyncNetworks:
         """
         **Return the NetFlow traffic reporting settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-netflow
-
+        
         - networkId (string): (required)
         """
 
@@ -1041,7 +1059,7 @@ class AsyncNetworks:
         """
         **Update the NetFlow traffic reporting settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-netflow
-
+        
         - networkId (string): (required)
         - reportingEnabled (boolean): Boolean indicating whether NetFlow traffic reporting is enabled (true) or disabled (false).
         - collectorIp (string): The IPv4 address of the NetFlow collector.
@@ -1065,7 +1083,7 @@ class AsyncNetworks:
         """
         **Get the channel utilization over each radio for all APs in a network.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-network-health-channel-utilization
-
+        
         - networkId (string): (required)
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
@@ -1095,7 +1113,7 @@ class AsyncNetworks:
         """
         **List the keys required to access Personally Identifiable Information (PII) for a given identifier**
         https://developer.cisco.com/meraki/api-v1/#!get-network-pii-pii-keys
-
+        
         - networkId (string): (required)
         - username (string): The username of a Systems Manager user
         - email (string): The email of a network user account or a Systems Manager device
@@ -1122,7 +1140,7 @@ class AsyncNetworks:
         """
         **List the PII requests for this network or organization**
         https://developer.cisco.com/meraki/api-v1/#!get-network-pii-requests
-
+        
         - networkId (string): (required)
         """
 
@@ -1138,7 +1156,7 @@ class AsyncNetworks:
         """
         **Submit a new delete or restrict processing PII request**
         https://developer.cisco.com/meraki/api-v1/#!create-network-pii-request
-
+        
         - networkId (string): (required)
         - type (string): One of "delete" or "restrict processing"
         - datasets (array): The datasets related to the provided key that should be deleted. Only applies to "delete" requests. The value "all" will be expanded to all datasets applicable to this type. The datasets by applicable to each type are: mac (usage, events, traffic), email (users, loginAttempts), username (users, loginAttempts), bluetoothMac (client, connectivity), smDeviceId (device), smUserId (user)
@@ -1170,7 +1188,7 @@ class AsyncNetworks:
         """
         **Return a PII request**
         https://developer.cisco.com/meraki/api-v1/#!get-network-pii-request
-
+        
         - networkId (string): (required)
         - requestId (string): (required)
         """
@@ -1187,7 +1205,7 @@ class AsyncNetworks:
         """
         **Delete a restrict processing PII request**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-pii-request
-
+        
         - networkId (string): (required)
         - requestId (string): (required)
         """
@@ -1204,7 +1222,7 @@ class AsyncNetworks:
         """
         **Given a piece of Personally Identifiable Information (PII), return the Systems Manager device ID(s) associated with that identifier**
         https://developer.cisco.com/meraki/api-v1/#!get-network-pii-sm-devices-for-key
-
+        
         - networkId (string): (required)
         - username (string): The username of a Systems Manager user
         - email (string): The email of a network user account or a Systems Manager device
@@ -1231,7 +1249,7 @@ class AsyncNetworks:
         """
         **Given a piece of Personally Identifiable Information (PII), return the Systems Manager owner ID(s) associated with that identifier**
         https://developer.cisco.com/meraki/api-v1/#!get-network-pii-sm-owners-for-key
-
+        
         - networkId (string): (required)
         - username (string): The username of a Systems Manager user
         - email (string): The email of a network user account or a Systems Manager device
@@ -1258,7 +1276,7 @@ class AsyncNetworks:
         """
         **Return the settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-settings
-
+        
         - networkId (string): (required)
         """
 
@@ -1274,7 +1292,7 @@ class AsyncNetworks:
         """
         **Update the settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-settings
-
+        
         - networkId (string): (required)
         - localStatusPageEnabled (boolean): Enables / disables the local device status pages (<a target='_blank' href='http://my.meraki.com/'>my.meraki.com, </a><a target='_blank' href='http://ap.meraki.com/'>ap.meraki.com, </a><a target='_blank' href='http://switch.meraki.com/'>switch.meraki.com, </a><a target='_blank' href='http://wired.meraki.com/'>wired.meraki.com</a>). Optional (defaults to false)
         - remoteStatusPageEnabled (boolean): Enables / disables access to the device status page (<a target='_blank'>http://[device's LAN IP])</a>. Optional. Can only be set if localStatusPageEnabled is set to true
@@ -1297,7 +1315,7 @@ class AsyncNetworks:
         """
         **Return the SNMP settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-snmp
-
+        
         - networkId (string): (required)
         """
 
@@ -1313,7 +1331,7 @@ class AsyncNetworks:
         """
         **Update the SNMP settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-snmp
-
+        
         - networkId (string): (required)
         - access (string): The type of SNMP access. Can be one of 'none' (disabled), 'community' (V1/V2c), or 'users' (V3).
         - communityString (string): The SNMP community string. Only relevant if 'access' is set to 'community'.
@@ -1341,7 +1359,7 @@ class AsyncNetworks:
         """
         **List the splash login attempts for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-splash-login-attempts
-
+        
         - networkId (string): (required)
         - ssidNumber (integer): Only return the login attempts for the specified SSID
         - loginIdentifier (string): The username, email, or phone number used during login
@@ -1369,7 +1387,7 @@ class AsyncNetworks:
         """
         **Split a combined network into individual networks for each type of device**
         https://developer.cisco.com/meraki/api-v1/#!split-network
-
+        
         - networkId (string): (required)
         """
 
@@ -1385,7 +1403,7 @@ class AsyncNetworks:
         """
         **List the syslog servers for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-syslog-servers
-
+        
         - networkId (string): (required)
         """
 
@@ -1401,7 +1419,7 @@ class AsyncNetworks:
         """
         **Update the syslog servers for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-syslog-servers
-
+        
         - networkId (string): (required)
         - servers (array): A list of the syslog servers for this network
         """
@@ -1423,7 +1441,7 @@ class AsyncNetworks:
         """
         **Return the traffic analysis data for this network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-traffic
-
+        
         - networkId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 30 days from today.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 30 days.
@@ -1451,7 +1469,7 @@ class AsyncNetworks:
         """
         **Return the traffic analysis settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-traffic-analysis
-
+        
         - networkId (string): (required)
         """
 
@@ -1467,7 +1485,7 @@ class AsyncNetworks:
         """
         **Update the traffic analysis settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-traffic-analysis
-
+        
         - networkId (string): (required)
         - mode (string):     The traffic analysis mode for the network. Can be one of 'disabled' (do not collect traffic types),
     'basic' (collect generic traffic categories), or 'detailed' (collect destination hostnames).
@@ -1496,7 +1514,7 @@ class AsyncNetworks:
         """
         **Returns the application categories for traffic shaping rules.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-traffic-shaping-application-categories
-
+        
         - networkId (string): (required)
         """
 
@@ -1512,7 +1530,7 @@ class AsyncNetworks:
         """
         **Returns the available DSCP tagging options for your traffic shaping rules.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-traffic-shaping-dscp-tagging-options
-
+        
         - networkId (string): (required)
         """
 
@@ -1528,7 +1546,7 @@ class AsyncNetworks:
         """
         **Unbind a network from a template.**
         https://developer.cisco.com/meraki/api-v1/#!unbind-network
-
+        
         - networkId (string): (required)
         """
 
@@ -1544,7 +1562,7 @@ class AsyncNetworks:
         """
         **List the HTTP servers for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-webhooks-http-servers
-
+        
         - networkId (string): (required)
         """
 
@@ -1560,7 +1578,7 @@ class AsyncNetworks:
         """
         **Add an HTTP server to a network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-webhooks-http-server
-
+        
         - networkId (string): (required)
         - name (string): A name for easy reference to the HTTP server
         - url (string): The URL of the HTTP server
@@ -1584,7 +1602,7 @@ class AsyncNetworks:
         """
         **Return an HTTP server for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-webhooks-http-server
-
+        
         - networkId (string): (required)
         - httpServerId (string): (required)
         """
@@ -1601,7 +1619,7 @@ class AsyncNetworks:
         """
         **Update an HTTP server**
         https://developer.cisco.com/meraki/api-v1/#!update-network-webhooks-http-server
-
+        
         - networkId (string): (required)
         - httpServerId (string): (required)
         - name (string): A name for easy reference to the HTTP server
@@ -1626,7 +1644,7 @@ class AsyncNetworks:
         """
         **Delete an HTTP server from a network**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-webhooks-http-server
-
+        
         - networkId (string): (required)
         - httpServerId (string): (required)
         """
@@ -1643,7 +1661,7 @@ class AsyncNetworks:
         """
         **Send a test webhook for a network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-webhooks-webhook-test
-
+        
         - networkId (string): (required)
         - url (string): The URL where the test webhook will be sent
         - sharedSecret (string): The shared secret the test webhook will send. Optional. Defaults to an empty string.
@@ -1666,7 +1684,7 @@ class AsyncNetworks:
         """
         **Return the status of a webhook test for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-webhooks-webhook-test
-
+        
         - networkId (string): (required)
         - webhookTestId (string): (required)
         """

@@ -7,7 +7,7 @@ class CellularGateway(object):
         """
         **Show the LAN Settings of a MG**
         https://developer.cisco.com/meraki/api-v1/#!get-device-cellular-gateway-lan
-
+        
         - serial (string): (required)
         """
 
@@ -23,7 +23,7 @@ class CellularGateway(object):
         """
         **Update the LAN Settings for a single MG.**
         https://developer.cisco.com/meraki/api-v1/#!update-device-cellular-gateway-lan
-
+        
         - serial (string): (required)
         - reservedIpRanges (array): list of all reserved IP ranges for a single MG
         - fixedIpAssignments (array): list of all fixed IP assignments for a single MG
@@ -46,7 +46,7 @@ class CellularGateway(object):
         """
         **Returns the port forwarding rules for a single MG.**
         https://developer.cisco.com/meraki/api-v1/#!get-device-cellular-gateway-port-forwarding-rules
-
+        
         - serial (string): (required)
         """
 
@@ -62,7 +62,7 @@ class CellularGateway(object):
         """
         **Updates the port forwarding rules for a single MG.**
         https://developer.cisco.com/meraki/api-v1/#!update-device-cellular-gateway-port-forwarding-rules
-
+        
         - serial (string): (required)
         - rules (array): An array of port forwarding params
         """
@@ -84,7 +84,7 @@ class CellularGateway(object):
         """
         **Return the connectivity testing destinations for an MG network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-cellular-gateway-connectivity-monitoring-destinations
-
+        
         - networkId (string): (required)
         """
 
@@ -100,7 +100,7 @@ class CellularGateway(object):
         """
         **Update the connectivity testing destinations for an MG network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-cellular-gateway-connectivity-monitoring-destinations
-
+        
         - networkId (string): (required)
         - destinations (array): The list of connectivity monitoring destinations
         """
@@ -122,7 +122,7 @@ class CellularGateway(object):
         """
         **List common DHCP settings of MGs**
         https://developer.cisco.com/meraki/api-v1/#!get-network-cellular-gateway-dhcp
-
+        
         - networkId (string): (required)
         """
 
@@ -138,7 +138,7 @@ class CellularGateway(object):
         """
         **Update common DHCP settings of MGs**
         https://developer.cisco.com/meraki/api-v1/#!update-network-cellular-gateway-dhcp
-
+        
         - networkId (string): (required)
         - dhcpLeaseTime (string): DHCP Lease time for all MG of the network. It can be '30 minutes', '1 hour', '4 hours', '12 hours', '1 day' or '1 week'.
         - dnsNameservers (string): DNS name servers mode for all MG of the network. It can take 4 different values: 'upstream_dns', 'google_dns', 'opendns', 'custom'.
@@ -162,7 +162,7 @@ class CellularGateway(object):
         """
         **Return the subnet pool and mask configured for MGs in the network.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-cellular-gateway-subnet-pool
-
+        
         - networkId (string): (required)
         """
 
@@ -178,7 +178,7 @@ class CellularGateway(object):
         """
         **Update the subnet pool and mask configuration for MGs in the network.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-cellular-gateway-subnet-pool
-
+        
         - networkId (string): (required)
         - mask (integer): Mask used for the subnet of all MGs in  this network.
         - cidr (string): CIDR of the pool of subnets. Each MG in this network will automatically pick a subnet from this pool.
@@ -201,7 +201,7 @@ class CellularGateway(object):
         """
         **Returns the uplink settings for your MG network.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-cellular-gateway-uplink
-
+        
         - networkId (string): (required)
         """
 
@@ -217,7 +217,7 @@ class CellularGateway(object):
         """
         **Updates the uplink settings for your MG network.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-cellular-gateway-uplink
-
+        
         - networkId (string): (required)
         - bandwidthLimits (object): The bandwidth settings for the 'cellular' uplink
         """
@@ -234,3 +234,38 @@ class CellularGateway(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+
+    def getOrganizationCellularGatewayUplinkStatuses(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **List the uplink status of every Meraki MG cellular gateway in the organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-cellular-gateway-uplink-statuses
+        
+        - organizationId (string): (required)
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): A list of network IDs. The returned devices will be filtered to only include these networks.
+        - serials (array): A list of serial numbers. The returned devices will be filtered to only include these serials.
+        - iccids (array): A list of ICCIDs. The returned devices will be filtered to only include these ICCIDs.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['cellularGateway', 'monitor', 'uplink', 'statuses'],
+            'operation': 'getOrganizationCellularGatewayUplinkStatuses'
+        }
+        resource = f'/organizations/{organizationId}/cellularGateway/uplink/statuses'
+
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'serials', 'iccids', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', 'serials', 'iccids', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)

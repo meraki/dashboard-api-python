@@ -7,7 +7,7 @@ class AsyncSwitch:
         """
         **List the switch ports for a switch**
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-ports
-
+        
         - serial (string): (required)
         """
 
@@ -23,7 +23,7 @@ class AsyncSwitch:
         """
         **Cycle a set of switch ports**
         https://developer.cisco.com/meraki/api-v1/#!cycle-device-switch-ports
-
+        
         - serial (string): (required)
         - ports (array): List of switch ports. Example: [1, 2-5, 1_MA-MOD-8X10G_1, 1_MA-MOD-8X10G_2-1_MA-MOD-8X10G_8]
         """
@@ -45,7 +45,7 @@ class AsyncSwitch:
         """
         **Return the status for all the ports of a switch**
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-ports-statuses
-
+        
         - serial (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
@@ -68,7 +68,7 @@ class AsyncSwitch:
         """
         **Return the packet counters for all the ports of a switch**
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-ports-statuses-packets
-
+        
         - serial (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 1 day from today.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 1 day. The default is 1 day.
@@ -91,7 +91,7 @@ class AsyncSwitch:
         """
         **Return a switch port**
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-port
-
+        
         - serial (string): (required)
         - portId (string): (required)
         """
@@ -108,7 +108,7 @@ class AsyncSwitch:
         """
         **Update a switch port**
         https://developer.cisco.com/meraki/api-v1/#!update-device-switch-port
-
+        
         - serial (string): (required)
         - portId (string): (required)
         - name (string): The name of the switch port
@@ -164,7 +164,7 @@ class AsyncSwitch:
         """
         **List layer 3 interfaces for a switch**
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-routing-interfaces
-
+        
         - serial (string): (required)
         """
 
@@ -180,7 +180,7 @@ class AsyncSwitch:
         """
         **Create a layer 3 interface for a switch**
         https://developer.cisco.com/meraki/api-v1/#!create-device-switch-routing-interface
-
+        
         - serial (string): (required)
         - name (string): A friendly name or description for the interface or VLAN.
         - interfaceIp (string): The IP address this switch will use for layer 3 routing on this VLAN or subnet. This cannot be the same as the switch's management IP.
@@ -212,7 +212,7 @@ class AsyncSwitch:
         """
         **Return a layer 3 interface for a switch**
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-routing-interface
-
+        
         - serial (string): (required)
         - interfaceId (string): (required)
         """
@@ -229,7 +229,7 @@ class AsyncSwitch:
         """
         **Update a layer 3 interface for a switch**
         https://developer.cisco.com/meraki/api-v1/#!update-device-switch-routing-interface
-
+        
         - serial (string): (required)
         - interfaceId (string): (required)
         - name (string): A friendly name or description for the interface or VLAN.
@@ -261,7 +261,7 @@ class AsyncSwitch:
         """
         **Delete a layer 3 interface from the switch**
         https://developer.cisco.com/meraki/api-v1/#!delete-device-switch-routing-interface
-
+        
         - serial (string): (required)
         - interfaceId (string): (required)
         """
@@ -278,7 +278,7 @@ class AsyncSwitch:
         """
         **Return a layer 3 interface DHCP configuration for a switch**
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-routing-interface-dhcp
-
+        
         - serial (string): (required)
         - interfaceId (string): (required)
         """
@@ -295,7 +295,7 @@ class AsyncSwitch:
         """
         **Update a layer 3 interface DHCP configuration for a switch**
         https://developer.cisco.com/meraki/api-v1/#!update-device-switch-routing-interface-dhcp
-
+        
         - serial (string): (required)
         - interfaceId (string): (required)
         - dhcpMode (string): The DHCP mode options for the switch interface ('dhcpDisabled', 'dhcpRelay' or 'dhcpServer')
@@ -338,7 +338,7 @@ class AsyncSwitch:
         """
         **List layer 3 static routes for a switch**
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-routing-static-routes
-
+        
         - serial (string): (required)
         """
 
@@ -354,7 +354,7 @@ class AsyncSwitch:
         """
         **Create a layer 3 static route for a switch**
         https://developer.cisco.com/meraki/api-v1/#!create-device-switch-routing-static-route
-
+        
         - serial (string): (required)
         - subnet (string): The subnet which is routed via this static route and should be specified in CIDR notation (ex. 1.2.3.0/24)
         - nextHopIp (string): IP address of the next hop device to which the device sends its traffic for the subnet
@@ -380,7 +380,7 @@ class AsyncSwitch:
         """
         **Return a layer 3 static route for a switch**
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-routing-static-route
-
+        
         - serial (string): (required)
         - staticRouteId (string): (required)
         """
@@ -397,7 +397,7 @@ class AsyncSwitch:
         """
         **Update a layer 3 static route for a switch**
         https://developer.cisco.com/meraki/api-v1/#!update-device-switch-routing-static-route
-
+        
         - serial (string): (required)
         - staticRouteId (string): (required)
         - name (string): Name or description for layer 3 static route
@@ -424,7 +424,7 @@ class AsyncSwitch:
         """
         **Delete a layer 3 static route for a switch**
         https://developer.cisco.com/meraki/api-v1/#!delete-device-switch-routing-static-route
-
+        
         - serial (string): (required)
         - staticRouteId (string): (required)
         """
@@ -441,7 +441,7 @@ class AsyncSwitch:
         """
         **Return warm spare configuration for a switch**
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-warm-spare
-
+        
         - serial (string): (required)
         """
 
@@ -457,7 +457,7 @@ class AsyncSwitch:
         """
         **Update warm spare configuration for a switch**
         https://developer.cisco.com/meraki/api-v1/#!update-device-switch-warm-spare
-
+        
         - serial (string): (required)
         - enabled (boolean): Enable or disable warm spare for a switch
         - spareSerial (string): Serial number of the warm spare switch
@@ -480,7 +480,7 @@ class AsyncSwitch:
         """
         **Return the access control lists for a MS network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-access-control-lists
-
+        
         - networkId (string): (required)
         """
 
@@ -496,7 +496,7 @@ class AsyncSwitch:
         """
         **Update the access control lists for a MS network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-access-control-lists
-
+        
         - networkId (string): (required)
         - rules (array): An ordered array of the access control list rules (not including the default rule). An empty array will clear the rules.
         """
@@ -518,7 +518,7 @@ class AsyncSwitch:
         """
         **List the access policies for a switch network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-access-policies
-
+        
         - networkId (string): (required)
         """
 
@@ -534,7 +534,7 @@ class AsyncSwitch:
         """
         **Create an access policy for a switch network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-access-policy
-
+        
         - networkId (string): (required)
         - name (string): Name of the access policy
         - radiusServers (array): List of RADIUS servers to require connecting devices to authenticate against before granting network access
@@ -575,7 +575,7 @@ class AsyncSwitch:
         """
         **Return a specific access policy for a switch network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-access-policy
-
+        
         - networkId (string): (required)
         - accessPolicyNumber (string): (required)
         """
@@ -592,7 +592,7 @@ class AsyncSwitch:
         """
         **Update an access policy for a switch network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-access-policy
-
+        
         - networkId (string): (required)
         - accessPolicyNumber (string): (required)
         - name (string): Name of the access policy
@@ -634,7 +634,7 @@ class AsyncSwitch:
         """
         **Delete an access policy for a switch network**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-access-policy
-
+        
         - networkId (string): (required)
         - accessPolicyNumber (string): (required)
         """
@@ -651,7 +651,7 @@ class AsyncSwitch:
         """
         **Return the DHCP server policy**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-dhcp-server-policy
-
+        
         - networkId (string): (required)
         """
 
@@ -667,7 +667,7 @@ class AsyncSwitch:
         """
         **Update the DHCP server policy**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-dhcp-server-policy
-
+        
         - networkId (string): (required)
         - defaultPolicy (string): 'allow' or 'block' new DHCP servers. Default value is 'allow'.
         - allowedServers (array): List the MAC addresses of DHCP servers to permit on the network. Applicable only if defaultPolicy is set to block. An empty array will clear the entries.
@@ -695,7 +695,7 @@ class AsyncSwitch:
         """
         **Return the DSCP to CoS mappings**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-dscp-to-cos-mappings
-
+        
         - networkId (string): (required)
         """
 
@@ -711,7 +711,7 @@ class AsyncSwitch:
         """
         **Update the DSCP to CoS mappings**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-dscp-to-cos-mappings
-
+        
         - networkId (string): (required)
         - mappings (array): An array of DSCP to CoS mappings. An empty array will reset the mappings to default.
         """
@@ -733,7 +733,7 @@ class AsyncSwitch:
         """
         **List link aggregation groups**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-link-aggregations
-
+        
         - networkId (string): (required)
         """
 
@@ -749,7 +749,7 @@ class AsyncSwitch:
         """
         **Create a link aggregation group**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-link-aggregation
-
+        
         - networkId (string): (required)
         - switchPorts (array): Array of switch or stack ports for creating aggregation group. Minimum 2 and maximum 8 ports are supported.
         - switchProfilePorts (array): Array of switch profile ports for creating aggregation group. Minimum 2 and maximum 8 ports are supported.
@@ -772,7 +772,7 @@ class AsyncSwitch:
         """
         **Update a link aggregation group**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-link-aggregation
-
+        
         - networkId (string): (required)
         - linkAggregationId (string): (required)
         - switchPorts (array): Array of switch or stack ports for updating aggregation group. Minimum 2 and maximum 8 ports are supported.
@@ -796,7 +796,7 @@ class AsyncSwitch:
         """
         **Split a link aggregation group into separate ports**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-link-aggregation
-
+        
         - networkId (string): (required)
         - linkAggregationId (string): (required)
         """
@@ -813,7 +813,7 @@ class AsyncSwitch:
         """
         **Return the MTU configuration**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-mtu
-
+        
         - networkId (string): (required)
         """
 
@@ -829,7 +829,7 @@ class AsyncSwitch:
         """
         **Update the MTU configuration**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-mtu
-
+        
         - networkId (string): (required)
         - defaultMtuSize (integer): MTU size for the entire network. Default value is 9578.
         - overrides (array): Override MTU size for individual switches or switch profiles. An empty array will clear overrides.
@@ -852,7 +852,7 @@ class AsyncSwitch:
         """
         **List switch port schedules**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-port-schedules
-
+        
         - networkId (string): (required)
         """
 
@@ -868,7 +868,7 @@ class AsyncSwitch:
         """
         **Add a switch port schedule**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-port-schedule
-
+        
         - networkId (string): (required)
         - name (string): The name for your port schedule. Required
         - portSchedule (object):     The schedule for switch port scheduling. Schedules are applied to days of the week.
@@ -894,7 +894,7 @@ class AsyncSwitch:
         """
         **Delete a switch port schedule**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-port-schedule
-
+        
         - networkId (string): (required)
         - portScheduleId (string): (required)
         """
@@ -911,7 +911,7 @@ class AsyncSwitch:
         """
         **Update a switch port schedule**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-port-schedule
-
+        
         - networkId (string): (required)
         - portScheduleId (string): (required)
         - name (string): The name for your port schedule.
@@ -938,7 +938,7 @@ class AsyncSwitch:
         """
         **List quality of service rules**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-qos-rules
-
+        
         - networkId (string): (required)
         """
 
@@ -954,7 +954,7 @@ class AsyncSwitch:
         """
         **Add a quality of service rule**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-qos-rule
-
+        
         - networkId (string): (required)
         - vlan (integer): The VLAN of the incoming packet. A null value will match any VLAN.
         - protocol (string): The protocol of the incoming packet. Can be one of "ANY", "TCP" or "UDP". Default value is "ANY"
@@ -986,7 +986,7 @@ class AsyncSwitch:
         """
         **Return the quality of service rule IDs by order in which they will be processed by the switch**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-qos-rules-order
-
+        
         - networkId (string): (required)
         """
 
@@ -1002,7 +1002,7 @@ class AsyncSwitch:
         """
         **Update the order in which the rules should be processed by the switch**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-qos-rules-order
-
+        
         - networkId (string): (required)
         - ruleIds (array): A list of quality of service rule IDs arranged in order in which they should be processed by the switch.
         """
@@ -1024,7 +1024,7 @@ class AsyncSwitch:
         """
         **Return a quality of service rule**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-qos-rule
-
+        
         - networkId (string): (required)
         - qosRuleId (string): (required)
         """
@@ -1041,7 +1041,7 @@ class AsyncSwitch:
         """
         **Delete a quality of service rule**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-qos-rule
-
+        
         - networkId (string): (required)
         - qosRuleId (string): (required)
         """
@@ -1058,7 +1058,7 @@ class AsyncSwitch:
         """
         **Update a quality of service rule**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-qos-rule
-
+        
         - networkId (string): (required)
         - qosRuleId (string): (required)
         - vlan (integer): The VLAN of the incoming packet. A null value will match any VLAN.
@@ -1091,7 +1091,7 @@ class AsyncSwitch:
         """
         **Return multicast settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-routing-multicast
-
+        
         - networkId (string): (required)
         """
 
@@ -1107,7 +1107,7 @@ class AsyncSwitch:
         """
         **Update multicast settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-routing-multicast
-
+        
         - networkId (string): (required)
         - defaultSettings (object): Default multicast setting for entire network. IGMP snooping and Flood unknown multicast traffic settings are enabled by default.
         - overrides (array): Array of paired switches/stacks/profiles and corresponding multicast settings. An empty array will clear the multicast settings.
@@ -1130,7 +1130,7 @@ class AsyncSwitch:
         """
         **List multicast rendezvous points**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-routing-multicast-rendezvous-points
-
+        
         - networkId (string): (required)
         """
 
@@ -1146,9 +1146,9 @@ class AsyncSwitch:
         """
         **Create a multicast rendezvous point**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-routing-multicast-rendezvous-point
-
+        
         - networkId (string): (required)
-        - interfaceIp (string): The IP address of the interface where the RP needs to be created.
+        - interfaceIp (string): The IP address of the interface where the RP needs to be created.
         - multicastGroup (string): 'Any', or the IP address of a multicast group
         """
 
@@ -1169,7 +1169,7 @@ class AsyncSwitch:
         """
         **Return a multicast rendezvous point**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-routing-multicast-rendezvous-point
-
+        
         - networkId (string): (required)
         - rendezvousPointId (string): (required)
         """
@@ -1186,7 +1186,7 @@ class AsyncSwitch:
         """
         **Delete a multicast rendezvous point**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-routing-multicast-rendezvous-point
-
+        
         - networkId (string): (required)
         - rendezvousPointId (string): (required)
         """
@@ -1203,7 +1203,7 @@ class AsyncSwitch:
         """
         **Update a multicast rendezvous point**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-routing-multicast-rendezvous-point
-
+        
         - networkId (string): (required)
         - rendezvousPointId (string): (required)
         - interfaceIp (string): The IP address of the interface to use
@@ -1227,7 +1227,7 @@ class AsyncSwitch:
         """
         **Return layer 3 OSPF routing configuration**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-routing-ospf
-
+        
         - networkId (string): (required)
         """
 
@@ -1243,7 +1243,7 @@ class AsyncSwitch:
         """
         **Update layer 3 OSPF routing configuration**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-routing-ospf
-
+        
         - networkId (string): (required)
         - enabled (boolean): Boolean value to enable or disable OSPF routing. OSPF routing is disabled by default.
         - helloTimerInSeconds (integer): Time interval in seconds at which hello packet will be sent to OSPF neighbors to maintain connectivity. Value must be between 1 and 255. Default is 10 seconds
@@ -1270,7 +1270,7 @@ class AsyncSwitch:
         """
         **Returns the switch network settings**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-settings
-
+        
         - networkId (string): (required)
         """
 
@@ -1286,7 +1286,7 @@ class AsyncSwitch:
         """
         **Update switch network settings**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-settings
-
+        
         - networkId (string): (required)
         - vlan (integer): Management VLAN
         - useCombinedPower (boolean): The use Combined Power as the default behavior of secondary power supplies on supported devices.
@@ -1310,7 +1310,7 @@ class AsyncSwitch:
         """
         **List the switch stacks in a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-stacks
-
+        
         - networkId (string): (required)
         """
 
@@ -1326,7 +1326,7 @@ class AsyncSwitch:
         """
         **Create a stack**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-stack
-
+        
         - networkId (string): (required)
         - name (string): The name of the new stack
         - serials (array): An array of switch serials to be added into the new stack
@@ -1349,7 +1349,7 @@ class AsyncSwitch:
         """
         **Show a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-stack
-
+        
         - networkId (string): (required)
         - switchStackId (string): (required)
         """
@@ -1366,7 +1366,7 @@ class AsyncSwitch:
         """
         **Delete a stack**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-stack
-
+        
         - networkId (string): (required)
         - switchStackId (string): (required)
         """
@@ -1383,7 +1383,7 @@ class AsyncSwitch:
         """
         **Add a switch to a stack**
         https://developer.cisco.com/meraki/api-v1/#!add-network-switch-stack
-
+        
         - networkId (string): (required)
         - switchStackId (string): (required)
         - serial (string): The serial of the switch to be added
@@ -1406,7 +1406,7 @@ class AsyncSwitch:
         """
         **Remove a switch from a stack**
         https://developer.cisco.com/meraki/api-v1/#!remove-network-switch-stack
-
+        
         - networkId (string): (required)
         - switchStackId (string): (required)
         - serial (string): The serial of the switch to be removed
@@ -1429,7 +1429,7 @@ class AsyncSwitch:
         """
         **List layer 3 interfaces for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-stack-routing-interfaces
-
+        
         - networkId (string): (required)
         - switchStackId (string): (required)
         """
@@ -1446,7 +1446,7 @@ class AsyncSwitch:
         """
         **Create a layer 3 interface for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-stack-routing-interface
-
+        
         - networkId (string): (required)
         - switchStackId (string): (required)
         - name (string): A friendly name or description for the interface or VLAN.
@@ -1479,7 +1479,7 @@ class AsyncSwitch:
         """
         **Return a layer 3 interface from a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-stack-routing-interface
-
+        
         - networkId (string): (required)
         - switchStackId (string): (required)
         - interfaceId (string): (required)
@@ -1497,7 +1497,7 @@ class AsyncSwitch:
         """
         **Update a layer 3 interface for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-stack-routing-interface
-
+        
         - networkId (string): (required)
         - switchStackId (string): (required)
         - interfaceId (string): (required)
@@ -1530,7 +1530,7 @@ class AsyncSwitch:
         """
         **Delete a layer 3 interface from a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-stack-routing-interface
-
+        
         - networkId (string): (required)
         - switchStackId (string): (required)
         - interfaceId (string): (required)
@@ -1548,7 +1548,7 @@ class AsyncSwitch:
         """
         **Return a layer 3 interface DHCP configuration for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-stack-routing-interface-dhcp
-
+        
         - networkId (string): (required)
         - switchStackId (string): (required)
         - interfaceId (string): (required)
@@ -1566,7 +1566,7 @@ class AsyncSwitch:
         """
         **Update a layer 3 interface DHCP configuration for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-stack-routing-interface-dhcp
-
+        
         - networkId (string): (required)
         - switchStackId (string): (required)
         - interfaceId (string): (required)
@@ -1610,7 +1610,7 @@ class AsyncSwitch:
         """
         **List layer 3 static routes for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-stack-routing-static-routes
-
+        
         - networkId (string): (required)
         - switchStackId (string): (required)
         """
@@ -1627,7 +1627,7 @@ class AsyncSwitch:
         """
         **Create a layer 3 static route for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-stack-routing-static-route
-
+        
         - networkId (string): (required)
         - switchStackId (string): (required)
         - subnet (string): The subnet which is routed via this static route and should be specified in CIDR notation (ex. 1.2.3.0/24)
@@ -1654,7 +1654,7 @@ class AsyncSwitch:
         """
         **Return a layer 3 static route for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-stack-routing-static-route
-
+        
         - networkId (string): (required)
         - switchStackId (string): (required)
         - staticRouteId (string): (required)
@@ -1672,7 +1672,7 @@ class AsyncSwitch:
         """
         **Update a layer 3 static route for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-stack-routing-static-route
-
+        
         - networkId (string): (required)
         - switchStackId (string): (required)
         - staticRouteId (string): (required)
@@ -1700,7 +1700,7 @@ class AsyncSwitch:
         """
         **Delete a layer 3 static route for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-stack-routing-static-route
-
+        
         - networkId (string): (required)
         - switchStackId (string): (required)
         - staticRouteId (string): (required)
@@ -1718,7 +1718,7 @@ class AsyncSwitch:
         """
         **Return the storm control configuration for a switch network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-storm-control
-
+        
         - networkId (string): (required)
         """
 
@@ -1734,7 +1734,7 @@ class AsyncSwitch:
         """
         **Update the storm control configuration for a switch network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-storm-control
-
+        
         - networkId (string): (required)
         - broadcastThreshold (integer): Percentage (1 to 99) of total available port bandwidth for broadcast traffic type. Default value 100 percent rate is to clear the configuration.
         - multicastThreshold (integer): Percentage (1 to 99) of total available port bandwidth for multicast traffic type. Default value 100 percent rate is to clear the configuration.
@@ -1758,7 +1758,7 @@ class AsyncSwitch:
         """
         **Returns STP settings**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-stp
-
+        
         - networkId (string): (required)
         """
 
@@ -1774,7 +1774,7 @@ class AsyncSwitch:
         """
         **Updates STP settings**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-stp
-
+        
         - networkId (string): (required)
         - rstpEnabled (boolean): The spanning tree protocol status in network
         - stpBridgePriority (array): STP bridge priority for switches/stacks or switch profiles. An empty array will clear the STP bridge priority settings.
@@ -1797,7 +1797,7 @@ class AsyncSwitch:
         """
         **List the switch profiles for your switch template configuration**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-config-template-switch-profiles
-
+        
         - organizationId (string): (required)
         - configTemplateId (string): (required)
         """
@@ -1814,7 +1814,7 @@ class AsyncSwitch:
         """
         **Return all the ports of a switch profile**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-config-template-switch-profile-ports
-
+        
         - organizationId (string): (required)
         - configTemplateId (string): (required)
         - profileId (string): (required)
@@ -1832,7 +1832,7 @@ class AsyncSwitch:
         """
         **Return a switch profile port**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-config-template-switch-profile-port
-
+        
         - organizationId (string): (required)
         - configTemplateId (string): (required)
         - profileId (string): (required)
@@ -1851,7 +1851,7 @@ class AsyncSwitch:
         """
         **Update a switch profile port**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-config-template-switch-profile-port
-
+        
         - organizationId (string): (required)
         - configTemplateId (string): (required)
         - profileId (string): (required)
@@ -1909,7 +1909,7 @@ class AsyncSwitch:
         """
         **Clone port-level and some switch-level configuration settings from a source switch to one or more target switches**
         https://developer.cisco.com/meraki/api-v1/#!clone-organization-switch-devices
-
+        
         - organizationId (string): (required)
         - sourceSerial (string): Serial number of the source switch (must be on a network not bound to a template)
         - targetSerials (array): Array of serial numbers of one or more target switches (must be on a network not bound to a template)

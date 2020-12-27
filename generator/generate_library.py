@@ -8,20 +8,19 @@ This script generates the Meraki Python library using either the public OpenAPI 
 ID as inputs, a specific dashboard org's OpenAPI spec.
 
 === USAGE ===
-python[3] generate_libirary.py -o <old_org> [-k <api_key>]
+python[3] generate_library.py [-o <org_id>] [-k <api_key>] [-v <version_number>]
 API key can, and is recommended to, be set as an environment variable named MERAKI_DASHBOARD_API_KEY. 
 """
 
 
 import getopt
-import jinja2
 import os
 import sys
 
+import jinja2
 import requests
 
 
-VERSION_NUMBER = 'custom'
 REVERSE_PAGINATION = ['getNetworkEvents', 'getOrganizationConfigurationChanges']
 
 
@@ -30,13 +29,16 @@ def generate_pagination_parameters(operation):
     ret = {
         'total_pages': {
             'type': 'integer or string',
-            'description': 'total number of pages to retrieve, -1 or "all" for all pages',
+            'description': 'use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages',
         },
         'direction': {
             'type': 'string',
-            'description': 'use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages','
+            'description': 'direction to paginate, either "next" or "prev" (default) page' if operation in
+                           REVERSE_PAGINATION else 'direction to paginate, either "next" (default) or "prev" page',
         }
     }
+    if operation == 'getNetworkEvents':
+        ret['event_log_end_time'] = {'type': 'string', 'description': 'ISO8601 Zulu/UTC time, to use in conjunction with startingAfter, to retrieve events within a time window'}
     return ret
 
 
@@ -121,7 +123,7 @@ def parse_params(operation, parameters, param_filters=[]):
         return ret
 
 
-def generate_library(spec):
+def generate_library(spec, version_number):
     # Only care about the first 10 tags, which are the 10 scopes for organizations, networks, devices, & 7 products
     # scopes = ['organizations', 'networks', 'devices',
     #           'appliance', 'camera', 'cellularGateway', 'insight', 'sm', 'switch', 'wireless']
@@ -146,7 +148,7 @@ def generate_library(spec):
             if file == '__init__.py':
                 start = contents.find('__version__ = ')
                 end = contents.find('\n', start)
-                contents =  f'{contents[:start]}__version__ = \'{VERSION_NUMBER}\'{contents[end:]}'
+                contents =  f'{contents[:start]}__version__ = \'{version_number}\'{contents[end:]}'
             fp.write(contents)
 
     # Organize data from OpenAPI specification
@@ -221,6 +223,8 @@ def generate_library(spec):
                                 definition += ", total_pages=1, direction='prev'"
                             else:
                                 definition += ", total_pages=1, direction='next'"
+                            if operation == 'getNetworkEvents':
+                                definition += ', event_log_end_time=None'
 
                         if parse_params(operation, parameters, ['optional']):
                             definition += f', **kwargs'
@@ -254,7 +258,10 @@ def generate_library(spec):
                         pagination_params = parse_params(operation, parameters, 'pagination')
                         if query_params or array_params:
                             if pagination_params:
-                                call_line = 'return self._session.get_pages(metadata, resource, params, total_pages, direction)'
+                                if operation == 'getNetworkEvents':
+                                    call_line = 'return self._session.get_pages(metadata, resource, params, total_pages, direction, event_log_end_time)'
+                                else:
+                                    call_line = 'return self._session.get_pages(metadata, resource, params, total_pages, direction)'
                             else:
                                 call_line = 'return self._session.get(metadata, resource, params)'
                         else:
@@ -327,9 +334,10 @@ def print_help():
 def main(inputs):
     api_key = os.environ.get('MERAKI_DASHBOARD_API_KEY')
     org_id = None
+    version_number = 'custom'
 
     try:
-        opts, args = getopt.getopt(inputs, 'ho:k:')
+        opts, args = getopt.getopt(inputs, 'ho:k:v:')
     except getopt.GetoptError:
         print_help()
         sys.exit(2)
@@ -341,6 +349,8 @@ def main(inputs):
             org_id = arg
         elif opt == '-k' and api_key is None:
             api_key = arg
+        elif opt == '-v':
+            version_number = arg
 
     # Retrieve latest OpenAPI specification
     if org_id:
@@ -348,8 +358,8 @@ def main(inputs):
             print_help()
             sys.exit(2)
         else:
-            response = requests.get(f'https://api-mp.meraki.com/api/v1/organizations/{org_id}/openapiSpec',
-                                    headers={'Authorization': f'Bearer {api_key}'})
+            response = requests.get(f'https://api.meraki.com/api/v1/organizations/{org_id}/openapiSpec',
+                                    headers={'X-Cisco-Meraki-API-Key': f'{api_key}'})
             if response.ok:
                 spec = response.json()
             else:
@@ -358,7 +368,7 @@ def main(inputs):
     else:
         spec = requests.get('https://api.meraki.com/api/v1/openapiSpec').json()
 
-    generate_library(spec)
+    generate_library(spec, version_number)
 
 
 if __name__ == '__main__':

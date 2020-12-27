@@ -7,7 +7,7 @@ class Devices(object):
         """
         **Return a single device**
         https://developer.cisco.com/meraki/api-v1/#!get-device
-
+        
         - serial (string): (required)
         """
 
@@ -23,7 +23,7 @@ class Devices(object):
         """
         **Update the attributes of a device**
         https://developer.cisco.com/meraki/api-v1/#!update-device
-
+        
         - serial (string): (required)
         - name (string): The name of a device
         - tags (array): The list of tags of a device
@@ -53,7 +53,7 @@ class Devices(object):
         """
         **Blink the LEDs on a device**
         https://developer.cisco.com/meraki/api-v1/#!blink-device-leds
-
+        
         - serial (string): (required)
         - duration (integer): The duration in seconds. Must be between 5 and 120. Default is 20 seconds
         - period (integer): The period in milliseconds. Must be between 100 and 1000. Default is 160 milliseconds
@@ -77,7 +77,7 @@ class Devices(object):
         """
         **List the clients of a device, up to a maximum of a month ago**
         https://developer.cisco.com/meraki/api-v1/#!get-device-clients
-
+        
         - serial (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
@@ -100,7 +100,7 @@ class Devices(object):
         """
         **List LLDP and CDP information for a device**
         https://developer.cisco.com/meraki/api-v1/#!get-device-lldp-cdp
-
+        
         - serial (string): (required)
         """
 
@@ -116,7 +116,7 @@ class Devices(object):
         """
         **Get the uplink loss percentage and latency in milliseconds for a wired network device.**
         https://developer.cisco.com/meraki/api-v1/#!get-device-loss-and-latency-history
-
+        
         - serial (string): (required)
         - ip (string): The destination IP used to obtain the requested stats. This is required.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
@@ -147,7 +147,7 @@ class Devices(object):
         """
         **Return the management interface settings for a device**
         https://developer.cisco.com/meraki/api-v1/#!get-device-management-interface
-
+        
         - serial (string): (required)
         """
 
@@ -163,7 +163,7 @@ class Devices(object):
         """
         **Update the management interface settings for a device**
         https://developer.cisco.com/meraki/api-v1/#!update-device-management-interface
-
+        
         - serial (string): (required)
         - wan1 (object): WAN 1 settings
         - wan2 (object): WAN 2 settings (only for MX devices)
@@ -186,7 +186,7 @@ class Devices(object):
         """
         **Reboot a device**
         https://developer.cisco.com/meraki/api-v1/#!reboot-device
-
+        
         - serial (string): (required)
         """
 

@@ -7,7 +7,7 @@ class Insight(object):
         """
         **List the monitored media servers for this organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-insight-monitored-media-servers
-
+        
         - organizationId (string): (required)
         """
 
@@ -23,7 +23,7 @@ class Insight(object):
         """
         **Add a media server to be monitored for this organization**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-insight-monitored-media-server
-
+        
         - organizationId (string): (required)
         - name (string): The name of the VoIP provider
         - address (string): The IP address (IPv4 only) or hostname of the media server to monitor
@@ -47,7 +47,7 @@ class Insight(object):
         """
         **Return a monitored media server for this organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-insight-monitored-media-server
-
+        
         - organizationId (string): (required)
         - monitoredMediaServerId (string): (required)
         """
@@ -64,7 +64,7 @@ class Insight(object):
         """
         **Update a monitored media server for this organization**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-insight-monitored-media-server
-
+        
         - organizationId (string): (required)
         - monitoredMediaServerId (string): (required)
         - name (string): The name of the VoIP provider
@@ -89,7 +89,7 @@ class Insight(object):
         """
         **Delete a monitored media server from this organization**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-insight-monitored-media-server
-
+        
         - organizationId (string): (required)
         - monitoredMediaServerId (string): (required)
         """
