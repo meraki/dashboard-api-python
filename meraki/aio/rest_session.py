@@ -126,6 +126,11 @@ class AsyncRestSession:
             response = None
             message = None
             for _ in range(retries):
+                # Make sure that the response object gets closed during retries
+                if response:
+                    response.release()
+                    response = None
+
                 # Make the HTTP request to the API endpoint
                 try:
                     if self._logger:
@@ -222,8 +227,8 @@ class AsyncRestSession:
         metadata["method"] = "GET"
         metadata["url"] = url
         metadata["params"] = params
-        response = await self.request(metadata, "GET", url, params=params)
-        return await response.json()
+        async with await self.request(metadata, "GET", url, params=params) as response:
+            return await response.json()
 
     async def get_pages(
         self, metadata, url, params=None, total_pages=-1, direction="next", event_log_end_time=None
@@ -234,17 +239,17 @@ class AsyncRestSession:
             total_pages = int(total_pages)
         metadata["page"] = 1
 
-        response = await self.request(metadata, "GET", url, params=params)
-        results = await response.json()
+        async with await self.request(metadata, "GET", url, params=params) as response:
+            results = await response.json()
 
-        # For event log endpoint when using 'next' direction, so results/events are sorted chronologically
-        if type(results) == dict and metadata["operation"] == "getNetworkEvents" and direction == "next":
-            results["events"] = results["events"][::-1]
+            # For event log endpoint when using 'next' direction, so results/events are sorted chronologically
+            if type(results) == dict and metadata["operation"] == "getNetworkEvents" and direction == "next":
+                results["events"] = results["events"][::-1]
+
+            links = response.links
 
         # Get additional pages if more than one requested
         while total_pages != 1:
-            links = response.links
-
             # GET the subsequent page
             if direction == "next" and "next" in links:
                 # Prevent getNetworkEvents from infinite loop as time goes forward
@@ -259,7 +264,7 @@ class AsyncRestSession:
                         break
                 
                 metadata["page"] += 1
-                response = await self.request(metadata, "GET", links["next"]["url"])
+                nextlink = links["next"]["url"]
             elif direction == "prev" and "prev" in links:
                 # Prevent getNetworkEvents from infinite loop as time goes backward (to epoch 0)
                 if metadata["operation"] == "getNetworkEvents":
@@ -269,28 +274,31 @@ class AsyncRestSession:
                         break
                 
                 metadata["page"] += 1
-                response = await self.request(metadata, "GET", links["prev"]["url"])
+                nextlink = links["prev"]["url"]
             else:
                 break
 
-            # Append that page's results, depending on the endpoint
-            if type(results) == list:
-                results.extend(await response.json())
-            # For event log endpoint
-            elif type(results) == dict:
-                json_response = await response.json()
-                start = json_response["pageStartAt"]
-                end = json_response["pageEndAt"]
-                events = json_response["events"]
-                if direction == "next":
-                    events = events[::-1]
-                if start < results["pageStartAt"]:
-                    results["pageStartAt"] = start
-                if end > results["pageEndAt"]:
-                    results["pageEndAt"] = end
-                results["events"].extend(events)
+            async with await self.request(metadata, "GET", nextlink) as response:
+                links = response.links
+                # Append that page's results, depending on the endpoint
+                if type(results) == list:
+                    results.extend(await response.json())
+                # For event log endpoint
+                elif type(results) == dict:
+                    json_response = await response.json()
+                    start = json_response["pageStartAt"]
+                    end = json_response["pageEndAt"]
+                    events = json_response["events"]
+                    if direction == "next":
+                        events = events[::-1]
+                    if start < results["pageStartAt"]:
+                        results["pageStartAt"] = start
+                    if end > results["pageEndAt"]:
+                        results["pageEndAt"] = end
+                    results["events"].extend(events)
 
-            total_pages -= 1
+                total_pages -= 1
+
 
         return results
 
@@ -298,21 +306,21 @@ class AsyncRestSession:
         metadata["method"] = "POST"
         metadata["url"] = url
         metadata["json"] = json
-        response = await self.request(metadata, "POST", url, json=json)
-        return await response.json()
+        async with await self.request(metadata, "POST", url, json=json) as response:
+            return await response.json()
 
     async def put(self, metadata, url, json=None):
         metadata["method"] = "PUT"
         metadata["url"] = url
         metadata["json"] = json
-        response = await self.request(metadata, "PUT", url, json=json)
-        return await response.json()
+        async with await self.request(metadata, "PUT", url, json=json) as response:
+            return await response.json()
 
     async def delete(self, metadata, url):
         metadata["method"] = "DELETE"
         metadata["url"] = url
-        await self.request(metadata, "DELETE", url)
-        return None
+        async with await self.request(metadata, "DELETE", url) as response:
+            return None
 
     async def close(self):
         await self._req_session.close()
