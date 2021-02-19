@@ -228,6 +228,45 @@ class Wireless(object):
 
         return self._session.put(metadata, resource, payload)
 
+    def getNetworkWirelessBilling(self, networkId: str):
+        """
+        **Return the billing settings of this network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-billing
+        
+        - networkId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'billing'],
+            'operation': 'getNetworkWirelessBilling'
+        }
+        resource = f'/networks/{networkId}/wireless/billing'
+
+        return self._session.get(metadata, resource)
+
+    def updateNetworkWirelessBilling(self, networkId: str, **kwargs):
+        """
+        **Update the billing settings**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-billing
+        
+        - networkId (string): (required)
+        - currency (string): The currency code of this node group's billing plans
+        - plans (array): Array of billing plans in the node group. (Can configure a maximum of 5)
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'billing'],
+            'operation': 'updateNetworkWirelessBilling'
+        }
+        resource = f'/networks/{networkId}/wireless/billing'
+
+        body_params = ['currency', 'plans', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
     def getNetworkWirelessBluetoothSettings(self, networkId: str):
         """
         **Return the Bluetooth settings for a network. <a href="https://documentation.meraki.com/MR/Bluetooth/Bluetooth_Low_Energy_(BLE)">Bluetooth settings</a> must be enabled on the network.**
@@ -1064,7 +1103,7 @@ class Wireless(object):
         - number (string): (required)
         - name (string): The name of the SSID
         - enabled (boolean): Whether or not the SSID is enabled
-        - authMode (string): The association control method for the SSID ('open', 'psk', 'open-with-radius', '8021x-meraki', '8021x-radius', 'ipsk-with-radius' or 'ipsk-without-radius')
+        - authMode (string): The association control method for the SSID ('open', 'psk', 'open-with-radius', '8021x-meraki', '8021x-radius', '8021x-google', '8021x-localradius', 'ipsk-with-radius' or 'ipsk-without-radius')
         - enterpriseAdminAccess (string): Whether or not an SSID is accessible by 'enterprise' administrators ('access disabled' or 'access enabled')
         - encryptionMode (string): The psk encryption mode for the SSID ('wep' or 'wpa'). This param is only valid if the authMode is 'psk'
         - psk (string): The passkey for the SSID. This param is only valid if the authMode is 'psk'
@@ -1072,13 +1111,23 @@ class Wireless(object):
         - dot11w (object): The current setting for Protected Management Frames (802.11w).
         - dot11r (object): The current setting for 802.11r
         - splashPage (string): The type of splash page for the SSID ('None', 'Click-through splash page', 'Billing', 'Password-protected with Meraki RADIUS', 'Password-protected with custom RADIUS', 'Password-protected with Active Directory', 'Password-protected with LDAP', 'SMS authentication', 'Systems Manager Sentry', 'Facebook Wi-Fi', 'Google OAuth', 'Sponsored guest' or 'Cisco ISE'). This attribute is not supported for template children.
+        - splashGuestSponsorDomains (array): Array of valid sponsor email domains for sponsored guest splash type.
+        - ldap (object): The current setting for LDAP. Only valid if splashPage is 'Password-protected with LDAP'.
+        - activeDirectory (object): The current setting for Active Directory. Only valid if splashPage is 'Password-protected with Active Directory'
         - radiusServers (array): The RADIUS 802.1X servers to be used for authentication. This param is only valid if the authMode is 'open-with-radius', '8021x-radius' or 'ipsk-with-radius'
         - radiusProxyEnabled (boolean): If true, Meraki devices will proxy RADIUS messages through the Meraki cloud to the configured RADIUS auth and accounting servers.
+        - radiusTestingEnabled (boolean): If true, Meraki devices will periodically send Access-Request messages to configured RADIUS servers using identity 'meraki_8021x_test' to ensure that the RADIUS servers are reachable.
+        - radiusCalledStationId (string): The template of the called station identifier to be used for RADIUS (ex. $NODE_MAC$:$VAP_NUM$).
+        - radiusAuthenticationNasId (string): The template of the NAS identifier to be used for RADIUS authentication (ex. $NODE_MAC$:$VAP_NUM$).
+        - radiusServerTimeout (integer): The amount of time for which a RADIUS client waits for a reply from the RADIUS server (must be between 1-10 seconds).
+        - radiusServerAttemptsLimit (integer): The maximum number of transmit attempts after which a RADIUS server is failed over (must be between 1-5).
+        - radiusFallbackEnabled (boolean): Whether or not higher priority RADIUS servers should be retried after 60 seconds.
         - radiusCoaEnabled (boolean): If true, Meraki devices will act as a RADIUS Dynamic Authorization Server and will respond to RADIUS Change-of-Authorization and Disconnect messages sent by the RADIUS server.
         - radiusFailoverPolicy (string): This policy determines how authentication requests should be handled in the event that all of the configured RADIUS servers are unreachable ('Deny access' or 'Allow access')
         - radiusLoadBalancingPolicy (string): This policy determines which RADIUS server will be contacted first in an authentication attempt and the ordering of any necessary retry attempts ('Strict priority order' or 'Round robin')
         - radiusAccountingEnabled (boolean): Whether or not RADIUS accounting is enabled. This param is only valid if the authMode is 'open-with-radius', '8021x-radius' or 'ipsk-with-radius'
         - radiusAccountingServers (array): The RADIUS accounting 802.1X servers to be used for authentication. This param is only valid if the authMode is 'open-with-radius', '8021x-radius' or 'ipsk-with-radius' and radiusAccountingEnabled is 'true'
+        - radiusAccountingInterimInterval (integer): The interval (in seconds) in which accounting information is updated and sent to the RADIUS accounting server.
         - radiusAttributeForGroupPolicies (string): Specify the RADIUS attribute used to look up group policies ('Filter-Id', 'Reply-Message', 'Airespace-ACL-Name' or 'Aruba-User-Role'). Access points must receive this attribute in the RADIUS Access-Accept message
         - ipAssignmentMode (string): The client IP assignment mode ('NAT mode', 'Bridge mode', 'Layer 3 roaming', 'Layer 3 roaming with a concentrator' or 'VPN')
         - useVlanTagging (boolean): Whether or not traffic should be directed to use specific VLANs. This param is only valid if the ipAssignmentMode is 'Bridge mode' or 'Layer 3 roaming'
@@ -1101,13 +1150,14 @@ class Wireless(object):
         - visible (boolean): Boolean indicating whether APs should advertise or hide this SSID. APs will only broadcast this SSID if set to true
         - availableOnAllAps (boolean): Boolean indicating whether all APs should broadcast the SSID or if it should be restricted to APs matching any availability tags. Can only be false if the SSID has availability tags.
         - availabilityTags (array): Accepts a list of tags for this SSID. If availableOnAllAps is false, then the SSID will only be broadcast by APs with tags matching any of the tags in this list.
-        - mandatoryDhcpEnabled (boolean): If true, Mandatory DHCP will enforce that clients connecting to this SSID must use the IP address assigned by the DHCP server. Clients who use a static IP address won't be able to associate.
+        - adaptivePolicyGroupId (string): Adaptive policy group ID this SSID is assigned to.
+        - mandatoryDhcpEnabled (boolean): If true, Mandatory DHCP will enforce that clients connecting to this SSID must use the IP address assigned by the DHCP server. Clients who use a static IP address won’t be able to associate.
         """
 
         kwargs.update(locals())
 
         if 'authMode' in kwargs:
-            options = ['open', 'psk', 'open-with-radius', '8021x-meraki', '8021x-radius', 'ipsk-with-radius', 'ipsk-without-radius']
+            options = ['open', 'psk', 'open-with-radius', '8021x-meraki', '8021x-radius', '8021x-google', '8021x-localradius', 'ipsk-with-radius', 'ipsk-without-radius']
             assert kwargs['authMode'] in options, f'''"authMode" cannot be "{kwargs['authMode']}", & must be set to one of: {options}'''
         if 'enterpriseAdminAccess' in kwargs:
             options = ['access disabled', 'access enabled']
@@ -1137,7 +1187,48 @@ class Wireless(object):
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}'
 
-        body_params = ['name', 'enabled', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk', 'wpaEncryptionMode', 'dot11w', 'dot11r', 'splashPage', 'radiusServers', 'radiusProxyEnabled', 'radiusCoaEnabled', 'radiusFailoverPolicy', 'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging', 'concentratorNetworkId', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 'walledGardenEnabled', 'walledGardenRanges', 'radiusOverride', 'radiusGuestVlanEnabled', 'radiusGuestVlanId', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'perSsidBandwidthLimitUp', 'perSsidBandwidthLimitDown', 'lanIsolationEnabled', 'visible', 'availableOnAllAps', 'availabilityTags', 'mandatoryDhcpEnabled', ]
+        body_params = ['name', 'enabled', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk', 'wpaEncryptionMode', 'dot11w', 'dot11r', 'splashPage', 'splashGuestSponsorDomains', 'ldap', 'activeDirectory', 'radiusServers', 'radiusProxyEnabled', 'radiusTestingEnabled', 'radiusCalledStationId', 'radiusAuthenticationNasId', 'radiusServerTimeout', 'radiusServerAttemptsLimit', 'radiusFallbackEnabled', 'radiusCoaEnabled', 'radiusFailoverPolicy', 'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusAccountingInterimInterval', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging', 'concentratorNetworkId', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 'walledGardenEnabled', 'walledGardenRanges', 'radiusOverride', 'radiusGuestVlanEnabled', 'radiusGuestVlanId', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'perSsidBandwidthLimitUp', 'perSsidBandwidthLimitDown', 'lanIsolationEnabled', 'visible', 'availableOnAllAps', 'availabilityTags', 'adaptivePolicyGroupId', 'mandatoryDhcpEnabled', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
+    def getNetworkWirelessSsidDeviceTypeGroupPolicies(self, networkId: str, number: str):
+        """
+        **List the device type group policies for the SSID**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssid-device-type-group-policies
+        
+        - networkId (string): (required)
+        - number (string): (required)
+        """
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ssids', 'deviceTypeGroupPolicies'],
+            'operation': 'getNetworkWirelessSsidDeviceTypeGroupPolicies'
+        }
+        resource = f'/networks/{networkId}/wireless/ssids/{number}/deviceTypeGroupPolicies'
+
+        return self._session.get(metadata, resource)
+
+    def updateNetworkWirelessSsidDeviceTypeGroupPolicies(self, networkId: str, number: str, **kwargs):
+        """
+        **Update the device type group policies for the SSID**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-device-type-group-policies
+        
+        - networkId (string): (required)
+        - number (string): (required)
+        - enabled (boolean): If true, the SSID device type group policies are enabled.
+        - deviceTypePolicies (array): List of device type policies.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ssids', 'deviceTypeGroupPolicies'],
+            'operation': 'updateNetworkWirelessSsidDeviceTypeGroupPolicies'
+        }
+        resource = f'/networks/{networkId}/wireless/ssids/{number}/deviceTypeGroupPolicies'
+
+        body_params = ['enabled', 'deviceTypePolicies', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1360,9 +1451,18 @@ class Wireless(object):
         - splashLogo (object): The logo used in the splash page.
         - splashImage (object): The image used in the splash page.
         - splashPrepaidFront (object): The prepaid front image used in the splash page.
+        - blockAllTrafficBeforeSignOn (boolean): How restricted allowing traffic should be. If true, all traffic types are blocked until the splash page is acknowledged. If false, all non-HTTP traffic is allowed before the splash page is acknowledged.
+        - controllerDisconnectionBehavior (string): How login attempts should be handled when the controller is unreachable. Can be either 'open', 'restricted', or 'default'.
+        - allowSimultaneousLogins (boolean): Whether or not to allow simultaneous logins from different devices.
+        - guestSponsorship (object): Details associated with guest sponsored splash.
+        - billing (object): Details associated with billing splash.
         """
 
         kwargs.update(locals())
+
+        if 'controllerDisconnectionBehavior' in kwargs:
+            options = ['open', 'restricted', 'default']
+            assert kwargs['controllerDisconnectionBehavior'] in options, f'''"controllerDisconnectionBehavior" cannot be "{kwargs['controllerDisconnectionBehavior']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['wireless', 'configure', 'ssids', 'splash', 'settings'],
@@ -1370,7 +1470,7 @@ class Wireless(object):
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}/splash/settings'
 
-        body_params = ['splashUrl', 'useSplashUrl', 'splashTimeout', 'redirectUrl', 'useRedirectUrl', 'welcomeMessage', 'splashLogo', 'splashImage', 'splashPrepaidFront', ]
+        body_params = ['splashUrl', 'useSplashUrl', 'splashTimeout', 'redirectUrl', 'useRedirectUrl', 'welcomeMessage', 'splashLogo', 'splashImage', 'splashPrepaidFront', 'blockAllTrafficBeforeSignOn', 'controllerDisconnectionBehavior', 'allowSimultaneousLogins', 'guestSponsorship', 'billing', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)

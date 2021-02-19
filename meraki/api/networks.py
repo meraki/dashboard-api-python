@@ -3,76 +3,6 @@ class Networks(object):
         super(Networks, self).__init__()
         self._session = session
 
-    def getNetworkClientsApplicationUsage(self, networkID: str, clients: str, total_pages=1, direction='next', **kwargs):
-        """
-        **Return the application usage data for clients**
-        https://developer.cisco.com/meraki/api-v1/#!get-network-clients-application-usage
-        
-        - networkID (string): (required)
-        - clients (string): A list of client keys, MACs or IPs separated by comma.
-        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
-        - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - ssidNumber (integer): An SSID number to include. If not specified, eveusage histories application usagents for all SSIDs will be returned.
-        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000.
-        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
-        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
-        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
-        """
-
-        kwargs.update(locals())
-
-        if 'ssidNumber' in kwargs:
-            options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-            assert kwargs['ssidNumber'] in options, f'''"ssidNumber" cannot be "{kwargs['ssidNumber']}", & must be set to one of: {options}'''
-
-        metadata = {
-            'tags': ['networks', 'monitor', 'clients', 'applicationUsage'],
-            'operation': 'getNetworkClientsApplicationUsage'
-        }
-        resource = f'/networks/{networkID}/clients/applicationUsage'
-
-        query_params = ['clients', 'ssidNumber', 'perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', ]
-        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
-
-        return self._session.get_pages(metadata, resource, params, total_pages, direction)
-
-    def getNetworkClientsUsageHistories(self, networkID: str, clients: str, total_pages=1, direction='next', **kwargs):
-        """
-        **Return the usage histories for clients**
-        https://developer.cisco.com/meraki/api-v1/#!get-network-clients-usage-histories
-        
-        - networkID (string): (required)
-        - clients (string): A list of client keys, MACs or IPs separated by comma.
-        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
-        - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - ssidNumber (integer): An SSID number to include. If not specified, events for all SSIDs will be returned.
-        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000.
-        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
-        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
-        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
-        """
-
-        kwargs.update(locals())
-
-        if 'ssidNumber' in kwargs:
-            options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-            assert kwargs['ssidNumber'] in options, f'''"ssidNumber" cannot be "{kwargs['ssidNumber']}", & must be set to one of: {options}'''
-
-        metadata = {
-            'tags': ['networks', 'monitor', 'clients', 'usageHistories'],
-            'operation': 'getNetworkClientsUsageHistories'
-        }
-        resource = f'/networks/{networkID}/clients/usageHistories'
-
-        query_params = ['clients', 'ssidNumber', 'perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', ]
-        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
-
-        return self._session.get_pages(metadata, resource, params, total_pages, direction)
-
     def getNetwork(self, networkId: str):
         """
         **Return a network**
@@ -99,6 +29,7 @@ class Networks(object):
         - timeZone (string): The timezone of the network. For a list of allowed timezones, please see the 'TZ' column in the table in <a target='_blank' href='https://en.wikipedia.org/wiki/List_of_tz_database_time_zones'>this article.</a>
         - tags (array): A list of tags to be applied to the network
         - enrollmentString (string): A unique identifier which can be used for device enrollment or easy access through the Meraki SM Registration page or the Self Service Portal. Please note that changing this field may cause existing bookmarks to break.
+        - notes (string): Add any notes or additional information about this network here.
         """
 
         kwargs.update(locals())
@@ -109,7 +40,7 @@ class Networks(object):
         }
         resource = f'/networks/{networkId}'
 
-        body_params = ['name', 'timeZone', 'tags', 'enrollmentString', ]
+        body_params = ['name', 'timeZone', 'tags', 'enrollmentString', 'notes', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -273,6 +204,41 @@ class Networks(object):
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
+    def getNetworkClientsApplicationUsage(self, networkId: str, clients: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Return the application usage data for clients**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-clients-application-usage
+        
+        - networkId (string): (required)
+        - clients (string): A list of client keys, MACs or IPs separated by comma.
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - ssidNumber (integer): An SSID number to include. If not specified, eveusage histories application usagents for all SSIDs will be returned.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        """
+
+        kwargs.update(locals())
+
+        if 'ssidNumber' in kwargs:
+            options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+            assert kwargs['ssidNumber'] in options, f'''"ssidNumber" cannot be "{kwargs['ssidNumber']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['networks', 'monitor', 'clients', 'applicationUsage'],
+            'operation': 'getNetworkClientsApplicationUsage'
+        }
+        resource = f'/networks/{networkId}/clients/applicationUsage'
+
+        query_params = ['clients', 'ssidNumber', 'perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
     def provisionNetworkClients(self, networkId: str, clients: list, devicePolicy: str, **kwargs):
         """
         **Provisions a client with a name and policy**
@@ -302,6 +268,41 @@ class Networks(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+
+    def getNetworkClientsUsageHistories(self, networkId: str, clients: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Return the usage histories for clients**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-clients-usage-histories
+        
+        - networkId (string): (required)
+        - clients (string): A list of client keys, MACs or IPs separated by comma.
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - ssidNumber (integer): An SSID number to include. If not specified, events for all SSIDs will be returned.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        """
+
+        kwargs.update(locals())
+
+        if 'ssidNumber' in kwargs:
+            options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+            assert kwargs['ssidNumber'] in options, f'''"ssidNumber" cannot be "{kwargs['ssidNumber']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['networks', 'monitor', 'clients', 'usageHistories'],
+            'operation': 'getNetworkClientsUsageHistories'
+        }
+        resource = f'/networks/{networkId}/clients/usageHistories'
+
+        query_params = ['clients', 'ssidNumber', 'perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getNetworkClient(self, networkId: str, clientId: str):
         """
@@ -851,7 +852,7 @@ class Networks(object):
 
     def createNetworkMerakiAuthUser(self, networkId: str, email: str, name: str, password: str, authorizations: list, **kwargs):
         """
-        **Create a user configured with Meraki Authentication for a network (currently supports 802.1X, splash guest, and client VPN users, and currently, organizations have a 50,000 user cap)**
+        **Authorize a user configured with Meraki Authentication for a network (currently supports 802.1X, splash guest, and client VPN users, and currently, organizations have a 50,000 user cap)**
         https://developer.cisco.com/meraki/api-v1/#!create-network-meraki-auth-user
         
         - networkId (string): (required)
@@ -899,7 +900,7 @@ class Networks(object):
 
     def deleteNetworkMerakiAuthUser(self, networkId: str, merakiAuthUserId: str):
         """
-        **Delete a user configured with Meraki Authentication (currently, 802.1X RADIUS, splash guest, and client VPN users can be deleted)**
+        **Deauthorize a user**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-meraki-auth-user
         
         - networkId (string): (required)
@@ -916,7 +917,7 @@ class Networks(object):
 
     def updateNetworkMerakiAuthUser(self, networkId: str, merakiAuthUserId: str, **kwargs):
         """
-        **Update a user configured with Meraki Authentication (currently, 802.1X RADIUS, splash guest, and client VPN users can be deleted)**
+        **Update a user configured with Meraki Authentication (currently, 802.1X RADIUS, splash guest, and client VPN users can be updated)**
         https://developer.cisco.com/meraki/api-v1/#!update-network-meraki-auth-user
         
         - networkId (string): (required)
@@ -1296,6 +1297,7 @@ class Networks(object):
         - networkId (string): (required)
         - localStatusPageEnabled (boolean): Enables / disables the local device status pages (<a target='_blank' href='http://my.meraki.com/'>my.meraki.com, </a><a target='_blank' href='http://ap.meraki.com/'>ap.meraki.com, </a><a target='_blank' href='http://switch.meraki.com/'>switch.meraki.com, </a><a target='_blank' href='http://wired.meraki.com/'>wired.meraki.com</a>). Optional (defaults to false)
         - remoteStatusPageEnabled (boolean): Enables / disables access to the device status page (<a target='_blank'>http://[device's LAN IP])</a>. Optional. Can only be set if localStatusPageEnabled is set to true
+        - secureConnect (object): A hash of SecureConnect options applied to the Network.
         """
 
         kwargs.update(locals())
@@ -1306,7 +1308,7 @@ class Networks(object):
         }
         resource = f'/networks/{networkId}/settings'
 
-        body_params = ['localStatusPageEnabled', 'remoteStatusPageEnabled', ]
+        body_params = ['localStatusPageEnabled', 'remoteStatusPageEnabled', 'secureConnect', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)

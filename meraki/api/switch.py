@@ -544,6 +544,7 @@ class Switch(object):
         - hostMode (string): Choose the Host Mode for the access policy.
         - urlRedirectWalledGardenEnabled (boolean): Enable to restrict access for clients to a specific set of IP addresses or hostnames prior to authentication
         - radiusAccountingServers (array): List of RADIUS accounting servers to require connecting devices to authenticate against before granting network access
+        - radiusGroupAttribute (string): Acceptable values are `""` for None, or `"11"` for Group Policies ACL
         - accessPolicyType (string): Access Type of the policy. Automatically 'Hybrid authentication' when hostMode is 'Multi-Domain'.
         - increaseAccessSpeed (boolean): Enabling this option will make switches execute 802.1X and MAC-bypass authentication simultaneously so that clients authenticate faster. Only required when accessPolicyType is 'Hybrid Authentication.
         - guestVlanId (integer): ID for the guest VLAN allow unauthorized devices access to limited network resources
@@ -566,7 +567,7 @@ class Switch(object):
         }
         resource = f'/networks/{networkId}/switch/accessPolicies'
 
-        body_params = ['name', 'radiusServers', 'radiusTestingEnabled', 'radiusCoaSupportEnabled', 'radiusAccountingEnabled', 'radiusAccountingServers', 'hostMode', 'accessPolicyType', 'increaseAccessSpeed', 'guestVlanId', 'voiceVlanClients', 'urlRedirectWalledGardenEnabled', 'urlRedirectWalledGardenRanges', ]
+        body_params = ['name', 'radiusServers', 'radiusTestingEnabled', 'radiusCoaSupportEnabled', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusGroupAttribute', 'hostMode', 'accessPolicyType', 'increaseAccessSpeed', 'guestVlanId', 'voiceVlanClients', 'urlRedirectWalledGardenEnabled', 'urlRedirectWalledGardenRanges', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -601,6 +602,7 @@ class Switch(object):
         - radiusCoaSupportEnabled (boolean): Change of authentication for RADIUS re-authentication and disconnection
         - radiusAccountingEnabled (boolean): Enable to send start, interim-update and stop messages to a configured RADIUS accounting server for tracking connected clients
         - radiusAccountingServers (array): List of RADIUS accounting servers to require connecting devices to authenticate against before granting network access
+        - radiusGroupAttribute (string): Can be either `""`, which means `None` on Dashboard, or `"11"`, which means `Filter-Id` on Dashboard and will use Group Policy ACLs when supported (firmware 14+)
         - hostMode (string): Choose the Host Mode for the access policy.
         - accessPolicyType (string): Access Type of the policy. Automatically 'Hybrid authentication' when hostMode is 'Multi-Domain'.
         - increaseAccessSpeed (boolean): Enabling this option will make switches execute 802.1X and MAC-bypass authentication simultaneously so that clients authenticate faster. Only required when accessPolicyType is 'Hybrid Authentication.
@@ -625,7 +627,7 @@ class Switch(object):
         }
         resource = f'/networks/{networkId}/switch/accessPolicies/{accessPolicyNumber}'
 
-        body_params = ['name', 'radiusServers', 'radiusTestingEnabled', 'radiusCoaSupportEnabled', 'radiusAccountingEnabled', 'radiusAccountingServers', 'hostMode', 'accessPolicyType', 'increaseAccessSpeed', 'guestVlanId', 'voiceVlanClients', 'urlRedirectWalledGardenEnabled', 'urlRedirectWalledGardenRanges', ]
+        body_params = ['name', 'radiusServers', 'radiusTestingEnabled', 'radiusCoaSupportEnabled', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusGroupAttribute', 'hostMode', 'accessPolicyType', 'increaseAccessSpeed', 'guestVlanId', 'voiceVlanClients', 'urlRedirectWalledGardenEnabled', 'urlRedirectWalledGardenRanges', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1148,7 +1150,7 @@ class Switch(object):
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-routing-multicast-rendezvous-point
         
         - networkId (string): (required)
-        - interfaceIp (string): The IP address of the interface where the RP needs to be created.
+        - interfaceIp (string): The IP address of the interface where the RP needs to be created.
         - multicastGroup (string): 'Any', or the IP address of a multicast group
         """
 

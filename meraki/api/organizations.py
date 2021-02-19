@@ -1092,6 +1092,7 @@ class Organizations(object):
         - tags (array): A list of tags to be applied to the network
         - timeZone (string): The timezone of the network. For a list of allowed timezones, please see the 'TZ' column in the table in <a target='_blank' href='https://en.wikipedia.org/wiki/List_of_tz_database_time_zones'>this article.</a>
         - copyFromNetworkId (string): The ID of the network to copy configuration from. Other provided parameters will override the copied configuration, except type which must match this network's type exactly.
+        - notes (string): Add any notes or additional information about this network here.
         """
 
         kwargs.update(locals())
@@ -1102,7 +1103,7 @@ class Organizations(object):
         }
         resource = f'/organizations/{organizationId}/networks'
 
-        body_params = ['name', 'productTypes', 'tags', 'timeZone', 'copyFromNetworkId', ]
+        body_params = ['name', 'productTypes', 'tags', 'timeZone', 'copyFromNetworkId', 'notes', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
