@@ -1479,7 +1479,7 @@ class AsyncAppliance:
         https://developer.cisco.com/meraki/api-v1/#!update-organization-appliance-security-intrusion
         
         - organizationId (string): (required)
-        - allowedRules (array): Sets a list of specific SNORT® signatures to allow
+        - allowedRules (array): Sets a list of specific SNORT signatures to allow
         """
 
         kwargs = locals()
