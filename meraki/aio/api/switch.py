@@ -1150,7 +1150,7 @@ class AsyncSwitch:
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-routing-multicast-rendezvous-point
         
         - networkId (string): (required)
-        - interfaceIp (string): The IP address of the interface where the RP needs to be created.
+        - interfaceIp (string): The IP address of the interface where the RP needs to be created.
         - multicastGroup (string): 'Any', or the IP address of a multicast group
         """
 
