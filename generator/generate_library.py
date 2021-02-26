@@ -16,7 +16,6 @@ API key can, and is recommended to, be set as an environment variable named MERA
 import getopt
 import os
 import sys
-import json
 
 import jinja2
 import requests
@@ -144,7 +143,7 @@ def generate_library(spec, version_number):
 	base_url = 'https://raw.githubusercontent.com/meraki/dashboard-api-python/master/meraki/'
 	for file in non_generated:
 		response = requests.get(f'{base_url}{file}')
-		with open(f'meraki/{file}', 'w+') as fp:
+		with open(f'meraki/{file}', 'w+', encoding='utf-8') as fp:
 			contents = response.text
 			if file == '__init__.py':
 				start = contents.find('__version__ = ')
@@ -173,8 +172,8 @@ def generate_library(spec, version_number):
 		print(f'...generating {scope}')
 		section = scopes[scope]
 
-		with open(f'meraki/api/{scope}.py', 'w') as output:
-			with open('class_template.jinja2') as fp:
+		with open(f'meraki/api/{scope}.py', 'w', encoding='utf-8') as output:
+			with open('class_template.jinja2', encoding='utf-8') as fp:
 				class_template = fp.read()
 				template = jinja_env.from_string(class_template)
 				output.write(
@@ -183,8 +182,8 @@ def generate_library(spec, version_number):
 					)
 				)
 
-			async_output = open(f'meraki/aio/api/{scope}.py', 'w')
-			with open('async_class_template.jinja2') as fp:
+			async_output = open(f'meraki/aio/api/{scope}.py', 'w', encoding='utf-8')
+			with open('async_class_template.jinja2', encoding='utf-8') as fp:
 				class_template = fp.read()
 				template = jinja_env.from_string(class_template)
 				async_output.write(
@@ -281,7 +280,7 @@ def generate_library(spec, version_number):
 						call_line = 'return self._session.delete(metadata, resource)'
 
 					# Add function to files
-					with open('function_template.jinja2') as fp:
+					with open('function_template.jinja2', encoding='utf-8') as fp:
 						function_template = fp.read()
 						template = jinja_env.from_string(function_template)
 						output.write(
@@ -368,12 +367,6 @@ def main(inputs):
 				sys.exit(f'API key provided does not have access to org {org_id}')
 	else:
 		spec = requests.get('https://api.meraki.com/api/v1/openapiSpec').json()
-
-	# There are cosmetic typos in the spec that require character replacement on certain platforms' Python distributions. 
-	spec_string = spec_string_clean = json.dumps(spec)
-	spec_string_clean = spec_string_clean.replace('\\u2019','\'')
-	spec_string_clean = spec_string_clean.replace('\\u00a0',' ')
-	spec = json.loads(spec_string_clean)
 
 	generate_library(spec, version_number)
 
