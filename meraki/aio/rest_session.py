@@ -34,7 +34,6 @@ class AsyncRestSession:
         maximum_concurrent_requests=AIO_MAXIMUM_CONCURRENT_REQUESTS,
         be_geo_id=BE_GEO_ID,
         caller=MERAKI_PYTHON_SDK_CALLER,
-        use_iterator_for_get_pages=False,
     ):
         super().__init__()
 
@@ -55,7 +54,6 @@ class AsyncRestSession:
         self._concurrent_requests_semaphore = asyncio.Semaphore(maximum_concurrent_requests)
         self._be_geo_id = be_geo_id
         self._caller = caller
-        self._use_iterator_for_get_pages = use_iterator_for_get_pages
 
         # Check base URL
         if 'v0' in self._base_url:
@@ -128,6 +126,11 @@ class AsyncRestSession:
             response = None
             message = None
             for _ in range(retries):
+                # Make sure that the response object gets closed during retries
+                if response:
+                    response.release()
+                    response = None
+
                 # Make the HTTP request to the API endpoint
                 try:
                     if self._logger:
@@ -224,8 +227,8 @@ class AsyncRestSession:
         metadata["method"] = "GET"
         metadata["url"] = url
         metadata["params"] = params
-        response = await self.request(metadata, "GET", url, params=params)
-        return await response.json()
+        async with await self.request(metadata, "GET", url, params=params) as response:
+            return await response.json()
 
     async def get_pages(
         self, metadata, url, params=None, total_pages=-1, direction="next", event_log_end_time=None
@@ -236,14 +239,17 @@ class AsyncRestSession:
             total_pages = int(total_pages)
         metadata["page"] = 1
 
-        future_request = asyncio.ensure_future(self.request(metadata, "GET", url, params=params))
-        ret = []
-        # Get additional pages if more than one requested
-        while ret is None or total_pages != 1:
-            response = await future_request
+        async with await self.request(metadata, "GET", url, params=params) as response:
             results = await response.json()
+
+            # For event log endpoint when using 'next' direction, so results/events are sorted chronologically
+            if type(results) == dict and metadata["operation"] == "getNetworkEvents" and direction == "next":
+                results["events"] = results["events"][::-1]
+
             links = response.links
 
+        # Get additional pages if more than one requested
+        while total_pages != 1:
             # GET the subsequent page
             if direction == "next" and "next" in links:
                 # Prevent getNetworkEvents from infinite loop as time goes forward
@@ -258,7 +264,7 @@ class AsyncRestSession:
                         break
                 
                 metadata["page"] += 1
-                future_request = asyncio.ensure_future(self.request(metadata, "GET", links["next"]["url"]))
+                nextlink = links["next"]["url"]
             elif direction == "prev" and "prev" in links:
                 # Prevent getNetworkEvents from infinite loop as time goes backward (to epoch 0)
                 if metadata["operation"] == "getNetworkEvents":
@@ -268,28 +274,18 @@ class AsyncRestSession:
                         break
                 
                 metadata["page"] += 1
-                future_request = asyncio.ensure_future(self.request(metadata, "GET", links["prev"]["url"]))
+                nextlink = links["prev"]["url"]
             else:
                 break
-            result_type = type(results)
-            if ret is None:
-                ret = result_type()
-            
-            if self._use_iterator_for_get_pages:
-                # For event log endpoint
-                if result_type == dict:
-                    results = results["events"]
-                    if direction == "next":
-                        results = results[::-1]
-                for x in results:
-                    yield x
-            else:
+
+            async with await self.request(metadata, "GET", nextlink) as response:
+                links = response.links
                 # Append that page's results, depending on the endpoint
-                if result_type == list:
-                    ret.extend(results)
+                if type(results) == list:
+                    results.extend(await response.json())
                 # For event log endpoint
-                elif result_type == dict:
-                    json_response = results
+                elif type(results) == dict:
+                    json_response = await response.json()
                     start = json_response["pageStartAt"]
                     end = json_response["pageEndAt"]
                     events = json_response["events"]
@@ -299,31 +295,32 @@ class AsyncRestSession:
                         results["pageStartAt"] = start
                     if end > results["pageEndAt"]:
                         results["pageEndAt"] = end
-                    ret["events"].extend(events)
+                    results["events"].extend(events)
 
-            total_pages -= 1
-        if not self._use_iterator_for_get_pages:
-            return ret
+                total_pages -= 1
+
+
+        return results
 
     async def post(self, metadata, url, json=None):
         metadata["method"] = "POST"
         metadata["url"] = url
         metadata["json"] = json
-        response = await self.request(metadata, "POST", url, json=json)
-        return await response.json()
+        async with await self.request(metadata, "POST", url, json=json) as response:
+            return await response.json()
 
     async def put(self, metadata, url, json=None):
         metadata["method"] = "PUT"
         metadata["url"] = url
         metadata["json"] = json
-        response = await self.request(metadata, "PUT", url, json=json)
-        return await response.json()
+        async with await self.request(metadata, "PUT", url, json=json) as response:
+            return await response.json()
 
     async def delete(self, metadata, url):
         metadata["method"] = "DELETE"
         metadata["url"] = url
-        await self.request(metadata, "DELETE", url)
-        return None
+        async with await self.request(metadata, "DELETE", url) as response:
+            return None
 
     async def close(self):
         await self._req_session.close()

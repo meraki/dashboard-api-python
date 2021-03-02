@@ -1,47 +1,47 @@
-    async def {{ operation }}(self{% if function_definition|length > 0 %}{{ function_definition }}{% endif %}):
-        """
-        **{{ description }}**
-        {{ doc_url }}
-        
-        {% for d in descriptions %}
-        - {{ d }}
-        {% endfor %}
-        """
+	async def {{ operation }}(self{% if function_definition|length > 0 %}{{ function_definition }}{% endif %}):
+		"""
+		**{{ description }}**
+		{{ doc_url }}
+		
+		{% for d in descriptions %}
+		- {{ d }}
+		{% endfor %}
+		"""
 
-        {% if kwarg_line|length > 0 %}
-        {{ kwarg_line }}
+		{% if kwarg_line|length > 0 %}
+		{{ kwarg_line }}
 
-        {% endif %}
-        {% if assert_blocks|length > 0 %}
-        {% for param, values in assert_blocks %}
-        if '{{ param }}' in kwargs:
-            options = {{ values }}
-            assert kwargs['{{ param }}'] in options, f'''"{{ param }}" cannot be "{kwargs['{{ param }}']}", & must be set to one of: {options}'''
-        {% endfor %}
+		{% endif %}
+		{% if assert_blocks|length > 0 %}
+		{% for param, values in assert_blocks %}
+		if '{{ param }}' in kwargs:
+			options = {{ values }}
+			assert kwargs['{{ param }}'] in options, f'''"{{ param }}" cannot be "{kwargs['{{ param }}']}", & must be set to one of: {options}'''
+		{% endfor %}
 
-        {% endif %}
-        metadata = {
-            'tags': {{ tags }},
-            'operation': '{{ operation }}'
-        }
-        resource = f'{{ resource }}'
+		{% endif %}
+		metadata = {
+			'tags': {{ tags }},
+			'operation': '{{ operation }}'
+		}
+		resource = f'{{ resource }}'
 
-        {% if query_params|length > 0 %}
-        query_params = [{% for param in query_params %}'{{ param }}', {% endfor %}]
-        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+		{% if query_params|length > 0 %}
+		query_params = [{% for param in query_params %}'{{ param }}', {% endfor %}]
+		params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        {% endif %}
-        {% if array_params|length > 0 %}
-        array_params = [{% for param in array_params %}'{{ param }}', {% endfor %}]
-        for k, v in kwargs.items():
-            if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
-                params.pop(k.strip())
+		{% endif %}
+		{% if array_params|length > 0 %}
+		array_params = [{% for param in array_params %}'{{ param }}', {% endfor %}]
+		for k, v in kwargs.items():
+			if k.strip() in array_params:
+				params[f'{k.strip()}[]'] = kwargs[f'{k}']
+				params.pop(k.strip())
 
-        {% endif %}
-        {% if body_params|length > 0 %}
-        body_params = [{% for param in body_params %}'{{ param }}', {% endfor %}]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+		{% endif %}
+		{% if body_params|length > 0 %}
+		body_params = [{% for param in body_params %}'{{ param }}', {% endfor %}]
+		payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
-        {% endif %}
-        {{ call_line }}
+		{% endif %}
+		{{ call_line }}
