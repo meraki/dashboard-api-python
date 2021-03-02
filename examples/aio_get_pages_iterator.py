@@ -14,8 +14,8 @@ import meraki.aio
 # for example, in Terminal on macOS:  export MERAKI_DASHBOARD_API_KEY=66839003d2861bc302b292eb66d3b247709f2d0d
 api_key = ""
 
-ORGANIZATION_ID = "619244948763444192"
-NETWORK_ID = "L_645140646620827530"
+ORGANIZATION_ID = ""
+NETWORK_ID = ""
 
 def timeit(func):
     async def process(func, *args, **params):
