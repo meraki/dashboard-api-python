@@ -314,7 +314,7 @@ class AsyncRestSession:
         )
 
         # Get additional pages if more than one requested
-        while True:
+        while total_pages != 0:
             response, results = await request_task
             links = response.links
 
@@ -354,9 +354,12 @@ class AsyncRestSession:
 
             response.release()
 
-            request_task = asyncio.create_task(
-                self._download_page(self.request(metadata, "GET", nextlink))
-            )
+            total_pages = total_pages - 1
+
+            if total_pages != 0:
+                request_task = asyncio.create_task(
+                    self._download_page(self.request(metadata, "GET", nextlink))
+                )
 
             return_items = []
             # just prepare the list
@@ -371,9 +374,6 @@ class AsyncRestSession:
 
             for item in return_items:
                 yield item
-
-            if total_pages != -1 and total_pages < metadata["page"]:
-                break
 
     async def _get_pages_legacy(
         self,
