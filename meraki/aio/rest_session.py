@@ -1,18 +1,19 @@
 import asyncio
-from datetime import datetime
 import json
 import platform
 import random
 import ssl
 import sys
 import urllib.parse
+from datetime import datetime
 
 import aiohttp
 
+from ..__init__ import __version__
 from ..config import *
 from ..exceptions import *
-from ..__init__ import __version__
 from ..rest_session import user_agent_extended
+
 
 # Main module interface
 class AsyncRestSession:
@@ -34,7 +35,7 @@ class AsyncRestSession:
         maximum_concurrent_requests=AIO_MAXIMUM_CONCURRENT_REQUESTS,
         be_geo_id=BE_GEO_ID,
         caller=MERAKI_PYTHON_SDK_CALLER,
-        use_iterator_for_get_pages = False
+        use_iterator_for_get_pages=False,
     ):
         super().__init__()
 
@@ -52,24 +53,29 @@ class AsyncRestSession:
         self._retry_4xx_error_wait_time = retry_4xx_error_wait_time
         self._maximum_retries = maximum_retries
         self._simulate = simulate
-        self._concurrent_requests_semaphore = asyncio.Semaphore(maximum_concurrent_requests)
+        self._concurrent_requests_semaphore = asyncio.Semaphore(
+            maximum_concurrent_requests
+        )
         self._be_geo_id = be_geo_id
         self._caller = caller
 
         self.use_iterator_for_get_pages = use_iterator_for_get_pages
 
         # Check base URL
-        if 'v0' in self._base_url:
-            sys.exit(f'If you want to use the Python library with v0 paths ({self._base_url} was configured as the base'
-                     f' URL), then install the v0 library. See the "Setup" section @ https://github.com/meraki/dashboard-api-python/')
-        elif self._base_url[-1] == '/':
+        if "v0" in self._base_url:
+            sys.exit(
+                f"If you want to use the Python library with v0 paths ({self._base_url} was configured as the base"
+                f' URL), then install the v0 library. See the "Setup" section @ https://github.com/meraki/dashboard-api-python/'
+            )
+        elif self._base_url[-1] == "/":
             self._base_url = self._base_url[:-1]
 
         # Update the headers for the session
         self._headers = {
             "Authorization": "Bearer " + self._api_key,
             "Content-Type": "application/json",
-            "User-Agent": f"python-meraki/aio-{self._version} " + user_agent_extended(self._be_geo_id, self._caller),
+            "User-Agent": f"python-meraki/aio-{self._version} "
+            + user_agent_extended(self._be_geo_id, self._caller),
         }
         if self._certificate_path:
             self._sslcontext = ssl.create_default_context()
@@ -90,8 +96,10 @@ class AsyncRestSession:
         self._parameters.pop("__class__")
         self._parameters["api_key"] = "*" * 36 + self._api_key[-4:]
         if self._logger:
-            self._logger.info(f"Meraki dashboard API session initialized with these parameters: {self._parameters}")
-    
+            self._logger.info(
+                f"Meraki dashboard API session initialized with these parameters: {self._parameters}"
+            )
+
     @property
     def use_iterator_for_get_pages(self):
         return self._use_iterator_for_get_pages
@@ -103,11 +111,13 @@ class AsyncRestSession:
         else:
             self.get_pages = self._get_pages_legacy
 
-        self._use_iterator_for_get_pages=value
+        self._use_iterator_for_get_pages = value
 
     async def request(self, metadata, method, url, **kwargs):
         async with self._concurrent_requests_semaphore:
-            return await self._request(metadata, method, url, allow_redirects=False, **kwargs)
+            return await self._request(
+                metadata, method, url, allow_redirects=False, **kwargs
+            )
 
     async def _request(self, metadata, method, url, **kwargs):
         # Metadata on endpoint
@@ -150,13 +160,17 @@ class AsyncRestSession:
                 # Make the HTTP request to the API endpoint
                 try:
                     if self._logger:
-                        self._logger.info(f'{method} {abs_url}')
-                    response = await self._req_session.request(method, abs_url, **kwargs)
+                        self._logger.info(f"{method} {abs_url}")
+                    response = await self._req_session.request(
+                        method, abs_url, **kwargs
+                    )
                     reason = response.reason if response.reason else None
                     status = response.status
                 except Exception as e:
                     if self._logger:
-                        self._logger.warning(f"{tag}, {operation} > {abs_url} - {e}, retrying in 1 second")
+                        self._logger.warning(
+                            f"{tag}, {operation} > {abs_url} - {e}, retrying in 1 second"
+                        )
                     await asyncio.sleep(1)
                     continue
 
@@ -164,10 +178,14 @@ class AsyncRestSession:
                     if "page" in metadata:
                         counter = metadata["page"]
                         if self._logger:
-                            self._logger.info(f"{tag}, {operation}; page {counter} > {abs_url} - {status} {reason}")
+                            self._logger.info(
+                                f"{tag}, {operation}; page {counter} > {abs_url} - {status} {reason}"
+                            )
                     else:
                         if self._logger:
-                            self._logger.info(f"{tag}, {operation} > {abs_url} - {status} {reason}")
+                            self._logger.info(
+                                f"{tag}, {operation} > {abs_url} - {status} {reason}"
+                            )
                     # For non-empty response to GET, ensure valid JSON
                     try:
                         if method == "GET":
@@ -178,7 +196,9 @@ class AsyncRestSession:
                         aiohttp.client_exceptions.ContentTypeError,
                     ) as e:
                         if self._logger:
-                            self._logger.warning(f"{tag}, {operation} > {abs_url} - {e}, retrying in 1 second")
+                            self._logger.warning(
+                                f"{tag}, {operation} > {abs_url} - {e}, retrying in 1 second"
+                            )
                         await asyncio.sleep(1)
                 # Handle 3XX redirects automatically
                 elif 300 <= status < 400:
@@ -197,12 +217,16 @@ class AsyncRestSession:
                     else:
                         wait = random.randint(1, self._nginx_429_retry_wait_time)
                     if self._logger:
-                        self._logger.warning(f"{tag}, {operation} > {abs_url} - {status} {reason}, retrying in {wait} seconds")
+                        self._logger.warning(
+                            f"{tag}, {operation} > {abs_url} - {status} {reason}, retrying in {wait} seconds"
+                        )
                     await asyncio.sleep(wait)
                 # 5XX errors
                 elif status >= 500:
                     if self._logger:
-                        self._logger.warning(f"{tag}, {operation} > {abs_url} - {status} {reason}, retrying in 1 second")
+                        self._logger.warning(
+                            f"{tag}, {operation} > {abs_url} - {status} {reason}, retrying in 1 second"
+                        )
                     await asyncio.sleep(1)
                 # 4XX errors
                 else:
@@ -223,21 +247,29 @@ class AsyncRestSession:
                     if message == action_batch_concurrency_error:
                         wait = self._action_batch_retry_wait_time
                         if self._logger:
-                            self._logger.warning(f"{tag}, {operation} > {abs_url} - {status} {reason}, retrying in {wait} seconds")
+                            self._logger.warning(
+                                f"{tag}, {operation} > {abs_url} - {status} {reason}, retrying in {wait} seconds"
+                            )
                         await asyncio.sleep(wait)
-                    
+
                     elif self._retry_4xx_error:
                         wait = random.randint(1, self._retry_4xx_error_wait_time)
                         if self._logger:
-                            self._logger.warning(f"{tag}, {operation} > {abs_url} - {status} {reason}, retrying in {wait} seconds")
+                            self._logger.warning(
+                                f"{tag}, {operation} > {abs_url} - {status} {reason}, retrying in {wait} seconds"
+                            )
                         await asyncio.sleep(wait)
 
                     # All other client-side errors
                     else:
                         if self._logger:
-                            self._logger.error(f"{tag}, {operation} > {abs_url} - {status} {reason}, {message}")
+                            self._logger.error(
+                                f"{tag}, {operation} > {abs_url} - {status} {reason}, {message}"
+                            )
                         raise AsyncAPIError(metadata, response, message)
-            raise AsyncAPIError(metadata, response, "Reached retry limit: " + str(message))
+            raise AsyncAPIError(
+                metadata, response, "Reached retry limit: " + str(message)
+            )
 
     async def get(self, metadata, url, params=None):
         metadata["method"] = "GET"
@@ -247,17 +279,29 @@ class AsyncRestSession:
             return await response.json()
 
     async def get_pages(
-        self, metadata, url, params=None, total_pages=-1, direction="next", event_log_end_time=None
+        self,
+        metadata,
+        url,
+        params=None,
+        total_pages=-1,
+        direction="next",
+        event_log_end_time=None,
     ):
         pass
 
     async def _download_page(self, request):
         response = await request
         result = await response.json()
-        return response,result
+        return response, result
 
     async def _get_pages_iterator(
-        self, metadata, url, params=None, total_pages=-1, direction="next", event_log_end_time=None
+        self,
+        metadata,
+        url,
+        params=None,
+        total_pages=-1,
+        direction="next",
+        event_log_end_time=None,
     ):
         if type(total_pages) == str and total_pages.lower() == "all":
             total_pages = -1
@@ -265,37 +309,44 @@ class AsyncRestSession:
             total_pages = int(total_pages)
         metadata["page"] = 1
 
-
-        request_task = asyncio.create_task(self._download_page(self.request(metadata, "GET", url, params=params)))
+        request_task = asyncio.create_task(
+            self._download_page(self.request(metadata, "GET", url, params=params))
+        )
 
         # Get additional pages if more than one requested
         while True:
-            response,results = await request_task
+            response, results = await request_task
             links = response.links
 
             # GET the subsequent page
             if direction == "next" and "next" in links:
                 # Prevent getNetworkEvents from infinite loop as time goes forward
                 if metadata["operation"] == "getNetworkEvents":
-                    starting_after = urllib.parse.unquote(str(links["next"]["url"]).split("startingAfter=")[1])
-                    delta = datetime.utcnow() - datetime.fromisoformat(starting_after[:-1])
+                    starting_after = urllib.parse.unquote(
+                        str(links["next"]["url"]).split("startingAfter=")[1]
+                    )
+                    delta = datetime.utcnow() - datetime.fromisoformat(
+                        starting_after[:-1]
+                    )
                     # Break out of loop if startingAfter returned from next link is within 5 minutes of current time
                     if delta.total_seconds() < 300:
                         break
                     # Or if next page is past the specified window's end time
                     elif event_log_end_time and starting_after > event_log_end_time:
                         break
-                
+
                 metadata["page"] += 1
                 nextlink = links["next"]["url"]
             elif direction == "prev" and "prev" in links:
                 # Prevent getNetworkEvents from infinite loop as time goes backward (to epoch 0)
                 if metadata["operation"] == "getNetworkEvents":
-                    ending_before = urllib.parse.unquote(str(links["prev"]["url"]).split("endingBefore=")[1])
+                    ending_before = urllib.parse.unquote(
+                        str(links["prev"]["url"]).split("endingBefore=")[1]
+                    )
                     # Break out of loop if endingBefore returned from prev link is before 2014
                     if ending_before < "2014-01-01":
                         break
-                
+
                 metadata["page"] += 1
                 nextlink = links["prev"]["url"]
             else:
@@ -303,18 +354,20 @@ class AsyncRestSession:
 
             response.release()
 
-            request_task = asyncio.create_task(self._download_page(self.request(metadata, "GET", nextlink)))
+            request_task = asyncio.create_task(
+                self._download_page(self.request(metadata, "GET", nextlink))
+            )
 
             return_items = []
             # just prepare the list
             if type(results) == list:
-                return_items = results                   
+                return_items = results
             # For event log endpoint
             elif type(results) == dict:
                 if direction == "next":
-                    return_items =  results["events"][::-1]
+                    return_items = results["events"][::-1]
                 else:
-                    return_items =  results["events"]
+                    return_items = results["events"]
 
             for item in return_items:
                 yield item
@@ -323,7 +376,13 @@ class AsyncRestSession:
                 break
 
     async def _get_pages_legacy(
-        self, metadata, url, params=None, total_pages=-1, direction="next", event_log_end_time=None
+        self,
+        metadata,
+        url,
+        params=None,
+        total_pages=-1,
+        direction="next",
+        event_log_end_time=None,
     ):
         if type(total_pages) == str and total_pages.lower() == "all":
             total_pages = -1
@@ -335,7 +394,11 @@ class AsyncRestSession:
             results = await response.json()
 
             # For event log endpoint when using 'next' direction, so results/events are sorted chronologically
-            if type(results) == dict and metadata["operation"] == "getNetworkEvents" and direction == "next":
+            if (
+                type(results) == dict
+                and metadata["operation"] == "getNetworkEvents"
+                and direction == "next"
+            ):
                 results["events"] = results["events"][::-1]
 
             links = response.links
@@ -346,31 +409,36 @@ class AsyncRestSession:
             if direction == "next" and "next" in links:
                 # Prevent getNetworkEvents from infinite loop as time goes forward
                 if metadata["operation"] == "getNetworkEvents":
-                    starting_after = urllib.parse.unquote(str(links["next"]["url"]).split("startingAfter=")[1])
-                    delta = datetime.utcnow() - datetime.fromisoformat(starting_after[:-1])
+                    starting_after = urllib.parse.unquote(
+                        str(links["next"]["url"]).split("startingAfter=")[1]
+                    )
+                    delta = datetime.utcnow() - datetime.fromisoformat(
+                        starting_after[:-1]
+                    )
                     # Break out of loop if startingAfter returned from next link is within 5 minutes of current time
                     if delta.total_seconds() < 300:
                         break
                     # Or if next page is past the specified window's end time
                     elif event_log_end_time and starting_after > event_log_end_time:
                         break
-                
+
                 metadata["page"] += 1
                 nextlink = links["next"]["url"]
             elif direction == "prev" and "prev" in links:
                 # Prevent getNetworkEvents from infinite loop as time goes backward (to epoch 0)
                 if metadata["operation"] == "getNetworkEvents":
-                    ending_before = urllib.parse.unquote(str(links["prev"]["url"]).split("endingBefore=")[1])
+                    ending_before = urllib.parse.unquote(
+                        str(links["prev"]["url"]).split("endingBefore=")[1]
+                    )
                     # Break out of loop if endingBefore returned from prev link is before 2014
                     if ending_before < "2014-01-01":
                         break
-                
+
                 metadata["page"] += 1
                 nextlink = links["prev"]["url"]
             else:
                 break
-            
-            
+
             async with await self.request(metadata, "GET", nextlink) as response:
                 links = response.links
                 # Append that page's results, depending on the endpoint
