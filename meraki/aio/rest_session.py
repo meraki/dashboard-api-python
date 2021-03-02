@@ -303,7 +303,6 @@ class AsyncRestSession:
 
             response.release()
 
-            self._logger.debug("Iterator: Downloading next page")
             request_task = asyncio.create_task(self._download_page(self.request(metadata, "GET", nextlink)))
 
             return_items = []
@@ -371,7 +370,7 @@ class AsyncRestSession:
             else:
                 break
             
-            self._logger.debug("Iterator: Downloading next page")
+            
             async with await self.request(metadata, "GET", nextlink) as response:
                 links = response.links
                 # Append that page's results, depending on the endpoint
