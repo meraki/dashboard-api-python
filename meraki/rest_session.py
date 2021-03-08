@@ -74,6 +74,7 @@ class RestSession(object):
         simulate=SIMULATE_API_CALLS,
         be_geo_id=BE_GEO_ID,
         caller=MERAKI_PYTHON_SDK_CALLER,
+        use_iterator_for_get_pages=False,
     ):
         super(RestSession, self).__init__()
 
@@ -93,6 +94,8 @@ class RestSession(object):
         self._simulate = simulate
         self._be_geo_id = be_geo_id
         self._caller = caller
+
+        self.use_iterator_for_get_pages = use_iterator_for_get_pages
 
         # Initialize a new `requests` session
         self._req_session = requests.session()
@@ -122,6 +125,19 @@ class RestSession(object):
         self._parameters['api_key'] = '*' * 36 + self._api_key[-4:]
         if self._logger:
             self._logger.info(f'Meraki dashboard API session initialized with these parameters: {self._parameters}')
+
+    @property
+    def use_iterator_for_get_pages(self):
+        return self._use_iterator_for_get_pages
+
+    @use_iterator_for_get_pages.setter
+    def use_iterator_for_get_pages(self, value):
+        if value:
+            self.get_pages = self._get_pages_iterator
+        else:
+            self.get_pages = self._get_pages_legacy
+
+        self._use_iterator_for_get_pages = value
 
     def request(self, metadata, method, url, **kwargs):
         # Metadata on endpoint
@@ -274,6 +290,87 @@ class RestSession(object):
         return ret
 
     def get_pages(self, metadata, url, params=None, total_pages=-1, direction='next', event_log_end_time=None):
+        pass
+
+    def _get_pages_iterator(
+        self,
+        metadata,
+        url,
+        params=None,
+        total_pages=-1,
+        direction="next",
+        event_log_end_time=None,
+    ):
+        if type(total_pages) == str and total_pages.lower() == "all":
+            total_pages = -1
+        elif type(total_pages) == str and total_pages.isnumeric():
+            total_pages = int(total_pages)
+        metadata["page"] = 1
+
+
+        response = self.request(metadata, 'GET', url, params=params)
+ 
+        # Get additional pages if more than one requested
+        while total_pages != 0:
+            results = response.json()
+            links = response.links
+
+            # GET the subsequent page
+            if direction == "next" and "next" in links:
+                # Prevent getNetworkEvents from infinite loop as time goes forward
+                if metadata["operation"] == "getNetworkEvents":
+                    starting_after = urllib.parse.unquote(
+                        str(links["next"]["url"]).split("startingAfter=")[1]
+                    )
+                    delta = datetime.utcnow() - datetime.fromisoformat(
+                        starting_after[:-1]
+                    )
+                    # Break out of loop if startingAfter returned from next link is within 5 minutes of current time
+                    if delta.total_seconds() < 300:
+                        break
+                    # Or if next page is past the specified window's end time
+                    elif event_log_end_time and starting_after > event_log_end_time:
+                        break
+
+                metadata["page"] += 1
+                nextlink = links["next"]["url"]
+            elif direction == "prev" and "prev" in links:
+                # Prevent getNetworkEvents from infinite loop as time goes backward (to epoch 0)
+                if metadata["operation"] == "getNetworkEvents":
+                    ending_before = urllib.parse.unquote(
+                        str(links["prev"]["url"]).split("endingBefore=")[1]
+                    )
+                    # Break out of loop if endingBefore returned from prev link is before 2014
+                    if ending_before < "2014-01-01":
+                        break
+
+                metadata["page"] += 1
+                nextlink = links["prev"]["url"]
+            else:
+                break
+
+            response.close()
+
+            return_items = []
+            # just prepare the list
+            if type(results) == list:
+                return_items = results
+            # For event log endpoint
+            elif type(results) == dict:
+                if direction == "next":
+                    return_items = results["events"][::-1]
+                else:
+                    return_items = results["events"]
+
+            for item in return_items:
+                yield item
+
+            total_pages = total_pages - 1
+
+            if total_pages != 0:
+                response = self.request(metadata, 'GET', nextlink)
+
+    def _get_pages_legacy(self, metadata, url, params=None, total_pages=-1, direction='next', event_log_end_time=None):
         if type(total_pages) == str and total_pages.lower() == 'all':
             total_pages = -1
         elif type(total_pages) == str and total_pages.isnumeric():
