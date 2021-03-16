@@ -114,7 +114,7 @@ class Devices(object):
 
 	def getDeviceLossAndLatencyHistory(self, serial: str, ip: str, **kwargs):
 		"""
-		**Get the uplink loss percentage and latency in milliseconds for a wired network device.**
+		**Get the uplink loss percentage and latency in milliseconds, and goodput in kilobits per second for a wired network device.**
 		https://developer.cisco.com/meraki/api-v1/#!get-device-loss-and-latency-history
 		
 		- serial (string): (required)
