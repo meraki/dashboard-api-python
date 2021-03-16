@@ -140,7 +140,7 @@ def generate_library(spec, version_number):
 
 	# Files that are not generated
 	non_generated = ['__init__.py', 'config.py', 'exceptions.py', 'rest_session.py', 'api/__init__.py',
-					 'aio/__init__.py', 'aio/rest_session.py', 'aio/api/__init__.py']
+					 'aio/__init__.py', 'aio/rest_session.py', 'aio/api/__init__.py', 'api/batch/__init__.py']
 	base_url = 'https://raw.githubusercontent.com/meraki/dashboard-api-python/master/meraki/'
 	for file in non_generated:
 		response = requests.get(f'{base_url}{file}')
