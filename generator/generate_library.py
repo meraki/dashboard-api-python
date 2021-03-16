@@ -130,9 +130,10 @@ def generate_library(spec, version_number):
 	tags = spec['tags']
 	paths = spec['paths']
 	scopes = {tag['name']: {} for tag in tags[:10]}
+	batchable_action_summaries = [action['summary'] for action in spec['x-batchable-actions']]
 
 	# Check paths and create sub-directories if needed
-	subdirs = ['meraki', 'meraki/api', 'meraki/aio', 'meraki/aio/api']
+	subdirs = ['meraki', 'meraki/api', 'meraki/api/batch', 'meraki/aio', 'meraki/aio/api', 'meraki/api/batch']
 	for dir in subdirs:
 		if not os.path.isdir(dir):
 			os.mkdir(dir)
@@ -182,6 +183,7 @@ def generate_library(spec, version_number):
 					)
 				)
 
+			# Generate Asyncio API libraries
 			async_output = open(f'meraki/aio/api/{scope}.py', 'w', encoding='utf-8')
 			with open('async_class_template.jinja2', encoding='utf-8') as fp:
 				class_template = fp.read()
@@ -192,6 +194,18 @@ def generate_library(spec, version_number):
 					)
 				)
 
+			# Generate Action Batch API libraries
+			batch_output = open(f'meraki/api/batch/{scope}.py', 'w', encoding='utf-8')
+			with open('batch_class_template.jinja2', encoding='utf-8') as fp:
+				class_template = fp.read()
+				template = jinja_env.from_string(class_template)
+				batch_output.write(
+					template.render(
+						class_name=scope[0].upper() + scope[1:],
+					)
+				)
+
+			# Generate API & Asyncio API functions
 			for path, methods in section.items():
 				for method, endpoint in methods.items():
 					# Get metadata
@@ -299,7 +313,7 @@ def generate_library(spec, version_number):
 								query_params=query_params,
 								array_params=array_params,
 								body_params=body_params,
-								call_line=call_line,
+								call_line=call_line
 							)
 						)
 						async_output.write(
@@ -318,9 +332,112 @@ def generate_library(spec, version_number):
 								query_params=query_params,
 								array_params=array_params,
 								body_params=body_params,
-								call_line=call_line,
+								call_line=call_line
 							)
 						)
+
+			# Generate API action batch functions
+			for path, methods in section.items():
+				for method, endpoint in methods.items():
+					if endpoint['description'] in batchable_action_summaries:
+						# Get metadata
+						tags = endpoint['tags']
+						operation = endpoint['operationId']
+						description = endpoint['summary']
+						parameters = endpoint['parameters'] if 'parameters' in endpoint else None
+						responses = endpoint['responses']  # not actually used here for library generation
+
+						# Function definition
+						definition = ''
+						if parameters:
+							for p, values in parse_params(operation, parameters, 'required').items():
+								if values['type'] == 'array':
+									definition += f', {p}: list'
+								elif values['type'] == 'number':
+									definition += f', {p}: float'
+								elif values['type'] == 'integer':
+									definition += f', {p}: int'
+								elif values['type'] == 'boolean':
+									definition += f', {p}: bool'
+								elif values['type'] == 'object':
+									definition += f', {p}: dict'
+								elif values['type'] == 'string':
+									definition += f', {p}: str'
+
+							if 'perPage' in parse_params(operation, parameters):
+								if operation in REVERSE_PAGINATION:
+									definition += ", total_pages=1, direction='prev'"
+								else:
+									definition += ", total_pages=1, direction='next'"
+								if operation == 'getNetworkEvents':
+									definition += ', event_log_end_time=None'
+
+							if parse_params(operation, parameters, ['optional']):
+								definition += f', **kwargs'
+
+						# Docstring
+						param_descriptions = []
+						all_params = parse_params(operation, parameters, ['required', 'pagination', 'optional'])
+						if all_params:
+							for p, values in all_params.items():
+								param_descriptions.append(f'{p} ({values["type"]}): {values["description"]}')
+
+						# Combine keyword args with locals
+						kwarg_line = ''
+						if parse_params(operation, parameters, ['optional']):
+							kwarg_line = 'kwargs.update(locals())'
+						elif parse_params(operation, parameters, ['query', 'array', 'body']):
+							kwarg_line = 'kwargs = locals()'
+
+						# Assert valid values for enum
+						enum_params = parse_params(operation, parameters, ['enum'])
+						assert_blocks = []
+						if enum_params:
+							for p, values in enum_params.items():
+								assert_blocks.append((p, values['enum']))
+
+						# Function body for GET endpoints
+						query_params = array_params = body_params = {}
+
+						# Function body for POST/PUT endpoints
+						if method == 'post' or method == 'put':
+							body_params = parse_params(operation, parameters, 'body')
+							if method == 'post':
+								batch_operation = 'create'
+							else:
+								batch_operation = 'update'
+
+						# Function body for DELETE endpoints
+						elif method == 'delete':
+							batch_operation = 'destroy'
+
+						# Function return statement
+						call_line = 'return action'
+
+						# Add function to files
+						with open('batch_function_template.jinja2', encoding='utf-8') as fp:
+							function_template = fp.read()
+							template = jinja_env.from_string(function_template)
+							batch_output.write(
+								'\n\n' +
+								template.render(
+									operation=operation,
+									function_definition=definition,
+									description=description,
+									doc_url=docs_url(operation),
+									descriptions=param_descriptions,
+									kwarg_line=kwarg_line,
+									all_params=list(all_params.keys()),
+									assert_blocks=assert_blocks,
+									tags=tags,
+									resource=path,
+									query_params=query_params,
+									array_params=array_params,
+									body_params=body_params,
+									call_line=call_line,
+									batch_operation=batch_operation
+								)
+							)
 
 
 # Prints READ_ME help message for user to read

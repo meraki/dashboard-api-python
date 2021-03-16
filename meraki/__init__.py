@@ -13,6 +13,20 @@ from .api.insight import Insight
 from .api.sm import Sm
 from .api.switch import Switch
 from .api.wireless import Wireless
+
+# Batch class imports
+from .api.batch.organizations import ActionBatchOrganizations
+from .api.batch.networks import ActionBatchNetworks
+from .api.batch.devices import ActionBatchDevices
+from .api.batch.appliance import ActionBatchAppliance
+from .api.batch.camera import ActionBatchCamera
+from .api.batch.cellularGateway import ActionBatchCellularGateway
+from .api.batch.insight import ActionBatchInsight
+from .api.batch.sm import ActionBatchSm
+from .api.batch.switch import ActionBatchSwitch
+from .api.batch.wireless import ActionBatchWireless
+
+# Config import
 from .config import (
     API_KEY_ENVIRONMENT_VARIABLE, DEFAULT_BASE_URL, SINGLE_REQUEST_TIMEOUT, CERTIFICATE_PATH, REQUESTS_PROXY,
     WAIT_ON_RATE_LIMIT, NGINX_429_RETRY_WAIT_TIME, ACTION_BATCH_RETRY_WAIT_TIME, RETRY_4XX_ERROR,
@@ -20,7 +34,8 @@ from .config import (
     SUPPRESS_LOGGING, SIMULATE_API_CALLS, BE_GEO_ID, MERAKI_PYTHON_SDK_CALLER
 )
 
-__version__ = '1.6.2'
+__version__ = '1.6.3a'
+
 
 class DashboardAPI(object):
     """
@@ -129,3 +144,23 @@ class DashboardAPI(object):
         self.sm = Sm(self._session)
         self.switch = Switch(self._session)
         self.wireless = Wireless(self._session)
+
+        # Batch class
+        class Batch:
+            def __init__(self):
+                pass
+
+        # Batch definitions
+        self.batch = Batch()
+
+        # Action Batch API endpoints by section
+        self.batch.organizations = ActionBatchOrganizations()
+        self.batch.networks = ActionBatchNetworks()
+        self.batch.devices = ActionBatchDevices()
+        self.batch.appliance = ActionBatchAppliance()
+        self.batch.camera = ActionBatchCamera()
+        self.batch.cellularGateway = ActionBatchCellularGateway()
+        self.batch.insight = ActionBatchInsight()
+        self.batch.sm = ActionBatchSm()
+        self.batch.switch = ActionBatchSwitch()
+        self.batch.wireless = ActionBatchWireless()
