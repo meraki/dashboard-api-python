@@ -15,16 +15,7 @@ from .api.switch import Switch
 from .api.wireless import Wireless
 
 # Batch class imports
-from .api.batch.organizations import ActionBatchOrganizations
-from .api.batch.networks import ActionBatchNetworks
-from .api.batch.devices import ActionBatchDevices
-from .api.batch.appliance import ActionBatchAppliance
-from .api.batch.camera import ActionBatchCamera
-from .api.batch.cellularGateway import ActionBatchCellularGateway
-from .api.batch.insight import ActionBatchInsight
-from .api.batch.sm import ActionBatchSm
-from .api.batch.switch import ActionBatchSwitch
-from .api.batch.wireless import ActionBatchWireless
+from .api.batch import Batch
 
 # Config import
 from .config import (
@@ -145,22 +136,5 @@ class DashboardAPI(object):
         self.switch = Switch(self._session)
         self.wireless = Wireless(self._session)
 
-        # Batch class
-        class Batch:
-            def __init__(self):
-                pass
-
         # Batch definitions
         self.batch = Batch()
-
-        # Action Batch API endpoints by section
-        self.batch.organizations = ActionBatchOrganizations()
-        self.batch.networks = ActionBatchNetworks()
-        self.batch.devices = ActionBatchDevices()
-        self.batch.appliance = ActionBatchAppliance()
-        self.batch.camera = ActionBatchCamera()
-        self.batch.cellularGateway = ActionBatchCellularGateway()
-        self.batch.insight = ActionBatchInsight()
-        self.batch.sm = ActionBatchSm()
-        self.batch.switch = ActionBatchSwitch()
-        self.batch.wireless = ActionBatchWireless()
