@@ -6,8 +6,8 @@ import time
 Cisco Meraki Bulk Firmware Upgrade Manager
 John M. Kuchta .:|:.:|:.  https://github.com/TKIPisalegacycipher
 This script will pull network IDs from an org and then create asynchronous action batches. Each batch will contain, for 
-each network, an action that will delay the upgrade datetime stamp by X days (configurable). Each batch can contain up 
-to 100 actions, therefore, each batch can modify up to 100 networks. 
+each network, an action that will either schedule a new upgrade, or delay an existing upgrade datetime stamp by X days
+(configurable). Each batch can contain up to 100 actions, therefore, each batch can modify up to 100 networks. 
 
 As always, you should read the docs before diving in. If you know how these features work, then it will be easier to 
 understand and leverage this tool.
@@ -104,7 +104,7 @@ def create_single_upgrade_action(network_id):
 	action_resource = f'/networks/{network_id}/firmwareUpgrades'
 	action_operation = 'update'
 	# Choose whether to reschedule an existing or start a new upgrade
-	action_body = action_schedule_new_upgrade
+	action_body = action_reschedule_existing
 
 	upgrade_action = format_single_action(action_resource, action_operation, action_body)
 
