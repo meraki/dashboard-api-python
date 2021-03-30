@@ -36,6 +36,8 @@ from .api.switch import AsyncSwitch
 from .api.wireless import AsyncWireless
 from .rest_session import *
 
+# Batch class imports
+from ..api.batch import Batch
 
 class AsyncDashboardAPI:
     """
@@ -160,6 +162,9 @@ class AsyncDashboardAPI:
         self.switch = AsyncSwitch(self._session)
         self.sm = AsyncSm(self._session)
         self.wireless = AsyncWireless(self._session)
+
+        # Batch definitions
+        self.batch = Batch()
 
     async def __aenter__(self):
         return self
