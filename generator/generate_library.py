@@ -130,7 +130,6 @@ def generate_library(spec, version_number):
 	tags = spec['tags']
 	paths = spec['paths']
 	scopes = {tag['name']: {} for tag in tags[:11]}
-	print(scopes)
 	batchable_action_summaries = [action['summary'] for action in spec['x-batchable-actions']]
 
 	# Check paths and create sub-directories if needed
