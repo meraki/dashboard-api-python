@@ -124,12 +124,13 @@ def parse_params(operation, parameters, param_filters=[]):
 
 
 def generate_library(spec, version_number):
-	# Only care about the first 10 tags, which are the 10 scopes for organizations, networks, devices, & 7 products
+	# Only care about the first 11 tags, which are the 11 scopes for organizations, networks, devices, & 7 products
 	# scopes = ['organizations', 'networks', 'devices',
-	#           'appliance', 'camera', 'cellularGateway', 'insight', 'sm', 'switch', 'wireless']
+	#           'appliance', 'camera', 'cellularGateway', 'insight', 'sm', 'switch', 'wireless', 'environmental']
 	tags = spec['tags']
 	paths = spec['paths']
-	scopes = {tag['name']: {} for tag in tags[:10]}
+	scopes = {tag['name']: {} for tag in tags[:11]}
+	print(scopes)
 	batchable_action_summaries = [action['summary'] for action in spec['x-batchable-actions']]
 
 	# Check paths and create sub-directories if needed
