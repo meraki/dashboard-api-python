@@ -124,7 +124,7 @@ def parse_params(operation, parameters, param_filters=[]):
 
 
 def generate_library(spec, version_number):
-	# Only care about the first 11 tags, which are the 11 scopes for organizations, networks, devices, & 7 products
+	# Only care about the first 11 tags, which are the 11 scopes for organizations, networks, devices, & 8 products
 	# scopes = ['organizations', 'networks', 'devices',
 	#           'appliance', 'camera', 'cellularGateway', 'insight', 'sm', 'switch', 'wireless', 'environmental']
 	tags = spec['tags']
