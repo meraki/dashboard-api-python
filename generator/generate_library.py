@@ -8,7 +8,7 @@ This script generates the Meraki Python library using either the public OpenAPI 
 ID as inputs, a specific dashboard org's OpenAPI spec.
 
 === USAGE ===
-python[3] generate_library.py [-o <org_id>] [-k <api_key>] [-v <version_number>]
+python[3] generate_library.py [-o <org_id>] [-k <api_key>] [-v <version_number>] [-p <base_tag_count>]
 API key can, and is recommended to, be set as an environment variable named MERAKI_DASHBOARD_API_KEY. 
 """
 
