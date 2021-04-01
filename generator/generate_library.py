@@ -123,13 +123,13 @@ def parse_params(operation, parameters, param_filters=[]):
 		return ret
 
 
-def generate_library(spec, version_number):
-	# Only care about the first 11 tags, which are the 11 scopes for organizations, networks, devices, & 8 products
+def generate_library(spec, version_number, parm_count):
+	# Only care about the first 10 tags, which are the 10 scopes for organizations, networks, devices, & 7 products
 	# scopes = ['organizations', 'networks', 'devices',
-	#           'appliance', 'camera', 'cellularGateway', 'insight', 'sm', 'switch', 'wireless', 'environmental']
+	#           'appliance', 'camera', 'cellularGateway', 'insight', 'sm', 'switch', 'wireless']
 	tags = spec['tags']
 	paths = spec['paths']
-	scopes = {tag['name']: {} for tag in tags[:11]}
+	scopes = {tag['name']: {} for tag in tags[:parm_count]}
 	batchable_action_summaries = [action['summary'] for action in spec['x-batchable-actions']]
 
 	# Check paths and create sub-directories if needed
@@ -452,9 +452,10 @@ def main(inputs):
 	api_key = os.environ.get('MERAKI_DASHBOARD_API_KEY')
 	org_id = None
 	version_number = 'custom'
+	parm_count = 10
 
 	try:
-		opts, args = getopt.getopt(inputs, 'ho:k:v:')
+		opts, args = getopt.getopt(inputs, 'ho:k:v:p:')
 	except getopt.GetoptError:
 		print_help()
 		sys.exit(2)
@@ -468,6 +469,11 @@ def main(inputs):
 			api_key = arg
 		elif opt == '-v':
 			version_number = arg
+		elif opt == '-p':
+			try:
+				parm_count = int(arg)
+			except Exception:
+				pass
 
 	# Retrieve latest OpenAPI specification
 	if org_id:
@@ -485,7 +491,7 @@ def main(inputs):
 	else:
 		spec = requests.get('https://api.meraki.com/api/v1/openapiSpec').json()
 
-	generate_library(spec, version_number)
+	generate_library(spec, version_number, parm_count)
 
 
 if __name__ == '__main__':
