@@ -1,6 +1,8 @@
 class ActionBatchOrganizations(object):
     def __init__(self):
         super(ActionBatchOrganizations, self).__init__()
+        
+
 
     def createOrganizationConfigTemplate(self, organizationId: str, name: str, **kwargs):
         """
@@ -29,6 +31,11 @@ class ActionBatchOrganizations(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateOrganizationConfigTemplate(self, organizationId: str, configTemplateId: str, **kwargs):
         """
@@ -57,6 +64,11 @@ class ActionBatchOrganizations(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def assignOrganizationLicensesSeats(self, organizationId: str, licenseId: str, networkId: str, seatCount: int):
         """
@@ -85,6 +97,11 @@ class ActionBatchOrganizations(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def moveOrganizationLicenses(self, organizationId: str, destOrganizationId: str, licenseIds: list):
         """
@@ -112,9 +129,13 @@ class ActionBatchOrganizations(object):
             "body": payload
         }
         return action
+        
 
-    def moveOrganizationLicensesSeats(self, organizationId: str, destOrganizationId: str, licenseId: str,
-                                      seatCount: int):
+
+
+
+
+    def moveOrganizationLicensesSeats(self, organizationId: str, destOrganizationId: str, licenseId: str, seatCount: int):
         """
         **Move SM seats to another organization**
         https://developer.cisco.com/meraki/api-v1/#!move-organization-licenses-seats
@@ -141,6 +162,11 @@ class ActionBatchOrganizations(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def renewOrganizationLicensesSeats(self, organizationId: str, licenseIdToRenew: str, unusedLicenseId: str):
         """
@@ -168,6 +194,11 @@ class ActionBatchOrganizations(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateOrganizationLicense(self, organizationId: str, licenseId: str, **kwargs):
         """
@@ -195,6 +226,11 @@ class ActionBatchOrganizations(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateOrganizationLoginSecurity(self, organizationId: str, **kwargs):
         """
@@ -224,10 +260,7 @@ class ActionBatchOrganizations(object):
         }
         resource = f'/organizations/{organizationId}/loginSecurity'
 
-        body_params = ['enforcePasswordExpiration', 'passwordExpirationDays', 'enforceDifferentPasswords',
-                       'numDifferentPasswords', 'enforceStrongPasswords', 'enforceAccountLockout',
-                       'accountLockoutAttempts', 'enforceIdleTimeout', 'idleTimeoutMinutes', 'enforceTwoFactorAuth',
-                       'enforceLoginIpRanges', 'loginIpRanges', ]
+        body_params = ['enforcePasswordExpiration', 'passwordExpirationDays', 'enforceDifferentPasswords', 'numDifferentPasswords', 'enforceStrongPasswords', 'enforceAccountLockout', 'accountLockoutAttempts', 'enforceIdleTimeout', 'idleTimeoutMinutes', 'enforceTwoFactorAuth', 'enforceLoginIpRanges', 'loginIpRanges', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -235,6 +268,11 @@ class ActionBatchOrganizations(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def createOrganizationNetwork(self, organizationId: str, name: str, productTypes: list, **kwargs):
         """
@@ -266,6 +304,11 @@ class ActionBatchOrganizations(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def combineOrganizationNetworks(self, organizationId: str, name: str, networkIds: list, **kwargs):
         """
@@ -294,6 +337,11 @@ class ActionBatchOrganizations(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def createOrganizationSamlIdp(self, organizationId: str, x509certSha1Fingerprint: str, **kwargs):
         """
@@ -321,6 +369,11 @@ class ActionBatchOrganizations(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateOrganizationSamlIdp(self, organizationId: str, idpId: str, **kwargs):
         """
@@ -349,6 +402,11 @@ class ActionBatchOrganizations(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def deleteOrganizationSamlIdp(self, organizationId: str, idpId: str):
         """
@@ -371,3 +429,7 @@ class ActionBatchOrganizations(object):
             "body": payload
         }
         return action
+        
+
+
+

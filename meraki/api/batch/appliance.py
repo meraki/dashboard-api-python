@@ -1,6 +1,8 @@
 class ActionBatchAppliance(object):
     def __init__(self):
         super(ActionBatchAppliance, self).__init__()
+        
+
 
     def updateNetworkApplianceConnectivityMonitoringDestinations(self, networkId: str, **kwargs):
         """
@@ -27,6 +29,11 @@ class ActionBatchAppliance(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateNetworkApplianceFirewallL7FirewallRules(self, networkId: str, **kwargs):
         """
@@ -53,6 +60,11 @@ class ActionBatchAppliance(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateNetworkAppliancePort(self, networkId: str, portId: str, **kwargs):
         """
@@ -85,6 +97,11 @@ class ActionBatchAppliance(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateNetworkApplianceSingleLan(self, networkId: str, **kwargs):
         """
@@ -112,6 +129,11 @@ class ActionBatchAppliance(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def createNetworkApplianceTrafficShapingCustomPerformanceClass(self, networkId: str, name: str, **kwargs):
         """
@@ -141,9 +163,13 @@ class ActionBatchAppliance(object):
             "body": payload
         }
         return action
+        
 
-    def updateNetworkApplianceTrafficShapingCustomPerformanceClass(self, networkId: str, customPerformanceClassId: str,
-                                                                   **kwargs):
+
+
+
+
+    def updateNetworkApplianceTrafficShapingCustomPerformanceClass(self, networkId: str, customPerformanceClassId: str, **kwargs):
         """
         **Update a custom performance class for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-traffic-shaping-custom-performance-class
@@ -172,6 +198,11 @@ class ActionBatchAppliance(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def deleteNetworkApplianceTrafficShapingCustomPerformanceClass(self, networkId: str, customPerformanceClassId: str):
         """
@@ -194,6 +225,11 @@ class ActionBatchAppliance(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateNetworkApplianceTrafficShapingRules(self, networkId: str, **kwargs):
         """
@@ -224,6 +260,11 @@ class ActionBatchAppliance(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateNetworkApplianceTrafficShapingUplinkBandwidth(self, networkId: str, **kwargs):
         """
@@ -250,6 +291,11 @@ class ActionBatchAppliance(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateNetworkApplianceTrafficShapingUplinkSelection(self, networkId: str, **kwargs):
         """
@@ -268,8 +314,7 @@ class ActionBatchAppliance(object):
 
         if 'defaultUplink' in kwargs:
             options = ['wan1', 'wan2']
-            assert kwargs[
-                       'defaultUplink'] in options, f'''"defaultUplink" cannot be "{kwargs['defaultUplink']}", & must be set to one of: {options}'''
+            assert kwargs['defaultUplink'] in options, f'''"defaultUplink" cannot be "{kwargs['defaultUplink']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['appliance', 'configure', 'trafficShaping', 'uplinkSelection'],
@@ -277,8 +322,7 @@ class ActionBatchAppliance(object):
         }
         resource = f'/networks/{networkId}/appliance/trafficShaping/uplinkSelection'
 
-        body_params = ['activeActiveAutoVpnEnabled', 'defaultUplink', 'loadBalancingEnabled',
-                       'wanTrafficUplinkPreferences', 'vpnTrafficUplinkPreferences', ]
+        body_params = ['activeActiveAutoVpnEnabled', 'defaultUplink', 'loadBalancingEnabled', 'wanTrafficUplinkPreferences', 'vpnTrafficUplinkPreferences', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -286,6 +330,11 @@ class ActionBatchAppliance(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def createNetworkApplianceVlan(self, networkId: str, id: str, name: str, **kwargs):
         """
@@ -316,6 +365,11 @@ class ActionBatchAppliance(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateNetworkApplianceVlansSettings(self, networkId: str, **kwargs):
         """
@@ -342,6 +396,11 @@ class ActionBatchAppliance(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateNetworkApplianceVlan(self, networkId: str, vlanId: str, **kwargs):
         """
@@ -371,12 +430,10 @@ class ActionBatchAppliance(object):
 
         if 'dhcpHandling' in kwargs:
             options = ['Run a DHCP server', 'Relay DHCP to another server', 'Do not respond to DHCP requests']
-            assert kwargs[
-                       'dhcpHandling'] in options, f'''"dhcpHandling" cannot be "{kwargs['dhcpHandling']}", & must be set to one of: {options}'''
+            assert kwargs['dhcpHandling'] in options, f'''"dhcpHandling" cannot be "{kwargs['dhcpHandling']}", & must be set to one of: {options}'''
         if 'dhcpLeaseTime' in kwargs:
             options = ['30 minutes', '1 hour', '4 hours', '12 hours', '1 day', '1 week']
-            assert kwargs[
-                       'dhcpLeaseTime'] in options, f'''"dhcpLeaseTime" cannot be "{kwargs['dhcpLeaseTime']}", & must be set to one of: {options}'''
+            assert kwargs['dhcpLeaseTime'] in options, f'''"dhcpLeaseTime" cannot be "{kwargs['dhcpLeaseTime']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['appliance', 'configure', 'vlans'],
@@ -384,9 +441,7 @@ class ActionBatchAppliance(object):
         }
         resource = f'/networks/{networkId}/appliance/vlans/{vlanId}'
 
-        body_params = ['name', 'subnet', 'applianceIp', 'groupPolicyId', 'vpnNatSubnet', 'dhcpHandling',
-                       'dhcpRelayServerIps', 'dhcpLeaseTime', 'dhcpBootOptionsEnabled', 'dhcpBootNextServer',
-                       'dhcpBootFilename', 'fixedIpAssignments', 'reservedIpRanges', 'dnsNameservers', 'dhcpOptions', ]
+        body_params = ['name', 'subnet', 'applianceIp', 'groupPolicyId', 'vpnNatSubnet', 'dhcpHandling', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dhcpBootOptionsEnabled', 'dhcpBootNextServer', 'dhcpBootFilename', 'fixedIpAssignments', 'reservedIpRanges', 'dnsNameservers', 'dhcpOptions', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -394,6 +449,11 @@ class ActionBatchAppliance(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def deleteNetworkApplianceVlan(self, networkId: str, vlanId: str):
         """
@@ -416,6 +476,11 @@ class ActionBatchAppliance(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateNetworkApplianceVpnBgp(self, networkId: str, enabled: bool, **kwargs):
         """
@@ -445,6 +510,11 @@ class ActionBatchAppliance(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateNetworkApplianceVpnSiteToSiteVpn(self, networkId: str, mode: str, **kwargs):
         """
@@ -461,8 +531,7 @@ class ActionBatchAppliance(object):
 
         if 'mode' in kwargs:
             options = ['none', 'spoke', 'hub']
-            assert kwargs[
-                       'mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
+            assert kwargs['mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['appliance', 'configure', 'vpn', 'siteToSiteVpn'],
@@ -478,6 +547,11 @@ class ActionBatchAppliance(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateNetworkApplianceWarmSpare(self, networkId: str, enabled: bool, **kwargs):
         """
@@ -508,6 +582,11 @@ class ActionBatchAppliance(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def swapNetworkApplianceWarmSpare(self, networkId: str):
         """
@@ -529,3 +608,7 @@ class ActionBatchAppliance(object):
             "body": payload
         }
         return action
+        
+
+
+

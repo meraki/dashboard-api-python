@@ -2,6 +2,8 @@ class Appliance(object):
     def __init__(self, session):
         super(Appliance, self).__init__()
         self._session = session
+        
+
 
     def getDeviceApplianceDhcpSubnets(self, serial: str):
         """
@@ -18,6 +20,8 @@ class Appliance(object):
         resource = f'/devices/{serial}/appliance/dhcp/subnets'
 
         return self._session.get(metadata, resource)
+        
+
 
     def getDeviceAppliancePerformance(self, serial: str):
         """
@@ -34,9 +38,10 @@ class Appliance(object):
         resource = f'/devices/{serial}/appliance/performance'
 
         return self._session.get(metadata, resource)
+        
 
-    def getNetworkApplianceClientSecurityEvents(self, networkId: str, clientId: str, total_pages=1, direction='next',
-                                                **kwargs):
+
+    def getNetworkApplianceClientSecurityEvents(self, networkId: str, clientId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the security events for a client**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-client-security-events
@@ -58,8 +63,7 @@ class Appliance(object):
 
         if 'sortOrder' in kwargs:
             options = ['ascending', 'descending']
-            assert kwargs[
-                       'sortOrder'] in options, f'''"sortOrder" cannot be "{kwargs['sortOrder']}", & must be set to one of: {options}'''
+            assert kwargs['sortOrder'] in options, f'''"sortOrder" cannot be "{kwargs['sortOrder']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['appliance', 'monitor', 'clients', 'security', 'events'],
@@ -71,6 +75,8 @@ class Appliance(object):
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
 
     def getNetworkApplianceConnectivityMonitoringDestinations(self, networkId: str):
         """
@@ -87,6 +93,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/connectivityMonitoringDestinations'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkApplianceConnectivityMonitoringDestinations(self, networkId: str, **kwargs):
         """
@@ -109,6 +117,8 @@ class Appliance(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkApplianceContentFiltering(self, networkId: str):
         """
@@ -125,6 +135,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/contentFiltering'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkApplianceContentFiltering(self, networkId: str, **kwargs):
         """
@@ -142,8 +154,7 @@ class Appliance(object):
 
         if 'urlCategoryListSize' in kwargs:
             options = ['topSites', 'fullList']
-            assert kwargs[
-                       'urlCategoryListSize'] in options, f'''"urlCategoryListSize" cannot be "{kwargs['urlCategoryListSize']}", & must be set to one of: {options}'''
+            assert kwargs['urlCategoryListSize'] in options, f'''"urlCategoryListSize" cannot be "{kwargs['urlCategoryListSize']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['appliance', 'configure', 'contentFiltering'],
@@ -155,6 +166,8 @@ class Appliance(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkApplianceContentFilteringCategories(self, networkId: str):
         """
@@ -171,6 +184,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/contentFiltering/categories'
 
         return self._session.get(metadata, resource)
+        
+
 
     def getNetworkApplianceFirewallCellularFirewallRules(self, networkId: str):
         """
@@ -187,6 +202,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/firewall/cellularFirewallRules'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkApplianceFirewallCellularFirewallRules(self, networkId: str, **kwargs):
         """
@@ -209,6 +226,8 @@ class Appliance(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkApplianceFirewallFirewalledServices(self, networkId: str):
         """
@@ -225,6 +244,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/firewall/firewalledServices'
 
         return self._session.get(metadata, resource)
+        
+
 
     def getNetworkApplianceFirewallFirewalledService(self, networkId: str, service: str):
         """
@@ -242,6 +263,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/firewall/firewalledServices/{service}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkApplianceFirewallFirewalledService(self, networkId: str, service: str, access: str, **kwargs):
         """
@@ -258,8 +281,7 @@ class Appliance(object):
 
         if 'access' in kwargs:
             options = ['blocked', 'restricted', 'unrestricted']
-            assert kwargs[
-                       'access'] in options, f'''"access" cannot be "{kwargs['access']}", & must be set to one of: {options}'''
+            assert kwargs['access'] in options, f'''"access" cannot be "{kwargs['access']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['appliance', 'configure', 'firewall', 'firewalledServices'],
@@ -271,6 +293,8 @@ class Appliance(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkApplianceFirewallInboundFirewallRules(self, networkId: str):
         """
@@ -287,6 +311,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/firewall/inboundFirewallRules'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkApplianceFirewallInboundFirewallRules(self, networkId: str, **kwargs):
         """
@@ -310,6 +336,8 @@ class Appliance(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkApplianceFirewallL3FirewallRules(self, networkId: str):
         """
@@ -326,6 +354,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/firewall/l3FirewallRules'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkApplianceFirewallL3FirewallRules(self, networkId: str, **kwargs):
         """
@@ -349,6 +379,8 @@ class Appliance(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkApplianceFirewallL7FirewallRules(self, networkId: str):
         """
@@ -365,6 +397,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/firewall/l7FirewallRules'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkApplianceFirewallL7FirewallRules(self, networkId: str, **kwargs):
         """
@@ -387,6 +421,8 @@ class Appliance(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkApplianceFirewallL7FirewallRulesApplicationCategories(self, networkId: str):
         """
@@ -403,6 +439,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/firewall/l7FirewallRules/applicationCategories'
 
         return self._session.get(metadata, resource)
+        
+
 
     def getNetworkApplianceFirewallOneToManyNatRules(self, networkId: str):
         """
@@ -419,6 +457,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/firewall/oneToManyNatRules'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkApplianceFirewallOneToManyNatRules(self, networkId: str, rules: list):
         """
@@ -441,6 +481,8 @@ class Appliance(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkApplianceFirewallOneToOneNatRules(self, networkId: str):
         """
@@ -457,6 +499,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/firewall/oneToOneNatRules'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkApplianceFirewallOneToOneNatRules(self, networkId: str, rules: list):
         """
@@ -479,6 +523,8 @@ class Appliance(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkApplianceFirewallPortForwardingRules(self, networkId: str):
         """
@@ -495,6 +541,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/firewall/portForwardingRules'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkApplianceFirewallPortForwardingRules(self, networkId: str, rules: list):
         """
@@ -517,6 +565,8 @@ class Appliance(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkAppliancePorts(self, networkId: str):
         """
@@ -533,6 +583,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/ports'
 
         return self._session.get(metadata, resource)
+        
+
 
     def getNetworkAppliancePort(self, networkId: str, portId: str):
         """
@@ -550,6 +602,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/ports/{portId}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkAppliancePort(self, networkId: str, portId: str, **kwargs):
         """
@@ -578,6 +632,8 @@ class Appliance(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkApplianceSecurityEvents(self, networkId: str, total_pages=1, direction='next', **kwargs):
         """
@@ -600,8 +656,7 @@ class Appliance(object):
 
         if 'sortOrder' in kwargs:
             options = ['ascending', 'descending']
-            assert kwargs[
-                       'sortOrder'] in options, f'''"sortOrder" cannot be "{kwargs['sortOrder']}", & must be set to one of: {options}'''
+            assert kwargs['sortOrder'] in options, f'''"sortOrder" cannot be "{kwargs['sortOrder']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['appliance', 'monitor', 'security', 'events'],
@@ -613,6 +668,8 @@ class Appliance(object):
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
 
     def getNetworkApplianceSecurityIntrusion(self, networkId: str):
         """
@@ -629,6 +686,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/security/intrusion'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkApplianceSecurityIntrusion(self, networkId: str, **kwargs):
         """
@@ -645,12 +704,10 @@ class Appliance(object):
 
         if 'mode' in kwargs:
             options = ['prevention', 'detection', 'disabled']
-            assert kwargs[
-                       'mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
+            assert kwargs['mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
         if 'idsRulesets' in kwargs:
             options = ['connectivity', 'balanced', 'security']
-            assert kwargs[
-                       'idsRulesets'] in options, f'''"idsRulesets" cannot be "{kwargs['idsRulesets']}", & must be set to one of: {options}'''
+            assert kwargs['idsRulesets'] in options, f'''"idsRulesets" cannot be "{kwargs['idsRulesets']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['appliance', 'configure', 'security', 'intrusion'],
@@ -662,6 +719,8 @@ class Appliance(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkApplianceSecurityMalware(self, networkId: str):
         """
@@ -678,6 +737,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/security/malware'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkApplianceSecurityMalware(self, networkId: str, mode: str, **kwargs):
         """
@@ -694,8 +755,7 @@ class Appliance(object):
 
         if 'mode' in kwargs:
             options = ['enabled', 'disabled']
-            assert kwargs[
-                       'mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
+            assert kwargs['mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['appliance', 'configure', 'security', 'malware'],
@@ -707,6 +767,8 @@ class Appliance(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkApplianceSettings(self, networkId: str):
         """
@@ -723,6 +785,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/settings'
 
         return self._session.get(metadata, resource)
+        
+
 
     def getNetworkApplianceSingleLan(self, networkId: str):
         """
@@ -739,6 +803,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/singleLan'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkApplianceSingleLan(self, networkId: str, **kwargs):
         """
@@ -762,6 +828,8 @@ class Appliance(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkApplianceStaticRoutes(self, networkId: str):
         """
@@ -778,6 +846,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/staticRoutes'
 
         return self._session.get(metadata, resource)
+        
+
 
     def createNetworkApplianceStaticRoute(self, networkId: str, name: str, subnet: str, gatewayIp: str):
         """
@@ -802,6 +872,8 @@ class Appliance(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getNetworkApplianceStaticRoute(self, networkId: str, staticRouteId: str):
         """
@@ -819,6 +891,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/staticRoutes/{staticRouteId}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkApplianceStaticRoute(self, networkId: str, staticRouteId: str, **kwargs):
         """
@@ -847,6 +921,8 @@ class Appliance(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def deleteNetworkApplianceStaticRoute(self, networkId: str, staticRouteId: str):
         """
@@ -864,6 +940,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/staticRoutes/{staticRouteId}'
 
         return self._session.delete(metadata, resource)
+        
+
 
     def getNetworkApplianceTrafficShaping(self, networkId: str):
         """
@@ -880,6 +958,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/trafficShaping'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkApplianceTrafficShaping(self, networkId: str, **kwargs):
         """
@@ -902,6 +982,8 @@ class Appliance(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkApplianceTrafficShapingCustomPerformanceClasses(self, networkId: str):
         """
@@ -918,6 +1000,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/trafficShaping/customPerformanceClasses'
 
         return self._session.get(metadata, resource)
+        
+
 
     def createNetworkApplianceTrafficShapingCustomPerformanceClass(self, networkId: str, name: str, **kwargs):
         """
@@ -943,6 +1027,8 @@ class Appliance(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getNetworkApplianceTrafficShapingCustomPerformanceClass(self, networkId: str, customPerformanceClassId: str):
         """
@@ -960,9 +1046,10 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/trafficShaping/customPerformanceClasses/{customPerformanceClassId}'
 
         return self._session.get(metadata, resource)
+        
 
-    def updateNetworkApplianceTrafficShapingCustomPerformanceClass(self, networkId: str, customPerformanceClassId: str,
-                                                                   **kwargs):
+
+    def updateNetworkApplianceTrafficShapingCustomPerformanceClass(self, networkId: str, customPerformanceClassId: str, **kwargs):
         """
         **Update a custom performance class for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-traffic-shaping-custom-performance-class
@@ -987,6 +1074,8 @@ class Appliance(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def deleteNetworkApplianceTrafficShapingCustomPerformanceClass(self, networkId: str, customPerformanceClassId: str):
         """
@@ -1004,6 +1093,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/trafficShaping/customPerformanceClasses/{customPerformanceClassId}'
 
         return self._session.delete(metadata, resource)
+        
+
 
     def updateNetworkApplianceTrafficShapingRules(self, networkId: str, **kwargs):
         """
@@ -1030,6 +1121,8 @@ class Appliance(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkApplianceTrafficShapingRules(self, networkId: str):
         """
@@ -1046,6 +1139,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/trafficShaping/rules'
 
         return self._session.get(metadata, resource)
+        
+
 
     def getNetworkApplianceTrafficShapingUplinkBandwidth(self, networkId: str):
         """
@@ -1062,6 +1157,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/trafficShaping/uplinkBandwidth'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkApplianceTrafficShapingUplinkBandwidth(self, networkId: str, **kwargs):
         """
@@ -1084,6 +1181,8 @@ class Appliance(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkApplianceTrafficShapingUplinkSelection(self, networkId: str):
         """
@@ -1100,6 +1199,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/trafficShaping/uplinkSelection'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkApplianceTrafficShapingUplinkSelection(self, networkId: str, **kwargs):
         """
@@ -1118,8 +1219,7 @@ class Appliance(object):
 
         if 'defaultUplink' in kwargs:
             options = ['wan1', 'wan2']
-            assert kwargs[
-                       'defaultUplink'] in options, f'''"defaultUplink" cannot be "{kwargs['defaultUplink']}", & must be set to one of: {options}'''
+            assert kwargs['defaultUplink'] in options, f'''"defaultUplink" cannot be "{kwargs['defaultUplink']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['appliance', 'configure', 'trafficShaping', 'uplinkSelection'],
@@ -1127,11 +1227,12 @@ class Appliance(object):
         }
         resource = f'/networks/{networkId}/appliance/trafficShaping/uplinkSelection'
 
-        body_params = ['activeActiveAutoVpnEnabled', 'defaultUplink', 'loadBalancingEnabled',
-                       'wanTrafficUplinkPreferences', 'vpnTrafficUplinkPreferences', ]
+        body_params = ['activeActiveAutoVpnEnabled', 'defaultUplink', 'loadBalancingEnabled', 'wanTrafficUplinkPreferences', 'vpnTrafficUplinkPreferences', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkApplianceVlans(self, networkId: str):
         """
@@ -1148,6 +1249,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/vlans'
 
         return self._session.get(metadata, resource)
+        
+
 
     def createNetworkApplianceVlan(self, networkId: str, id: str, name: str, **kwargs):
         """
@@ -1174,6 +1277,8 @@ class Appliance(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getNetworkApplianceVlansSettings(self, networkId: str):
         """
@@ -1190,6 +1295,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/vlans/settings'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkApplianceVlansSettings(self, networkId: str, **kwargs):
         """
@@ -1212,6 +1319,8 @@ class Appliance(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkApplianceVlan(self, networkId: str, vlanId: str):
         """
@@ -1229,6 +1338,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/vlans/{vlanId}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkApplianceVlan(self, networkId: str, vlanId: str, **kwargs):
         """
@@ -1258,12 +1369,10 @@ class Appliance(object):
 
         if 'dhcpHandling' in kwargs:
             options = ['Run a DHCP server', 'Relay DHCP to another server', 'Do not respond to DHCP requests']
-            assert kwargs[
-                       'dhcpHandling'] in options, f'''"dhcpHandling" cannot be "{kwargs['dhcpHandling']}", & must be set to one of: {options}'''
+            assert kwargs['dhcpHandling'] in options, f'''"dhcpHandling" cannot be "{kwargs['dhcpHandling']}", & must be set to one of: {options}'''
         if 'dhcpLeaseTime' in kwargs:
             options = ['30 minutes', '1 hour', '4 hours', '12 hours', '1 day', '1 week']
-            assert kwargs[
-                       'dhcpLeaseTime'] in options, f'''"dhcpLeaseTime" cannot be "{kwargs['dhcpLeaseTime']}", & must be set to one of: {options}'''
+            assert kwargs['dhcpLeaseTime'] in options, f'''"dhcpLeaseTime" cannot be "{kwargs['dhcpLeaseTime']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['appliance', 'configure', 'vlans'],
@@ -1271,12 +1380,12 @@ class Appliance(object):
         }
         resource = f'/networks/{networkId}/appliance/vlans/{vlanId}'
 
-        body_params = ['name', 'subnet', 'applianceIp', 'groupPolicyId', 'vpnNatSubnet', 'dhcpHandling',
-                       'dhcpRelayServerIps', 'dhcpLeaseTime', 'dhcpBootOptionsEnabled', 'dhcpBootNextServer',
-                       'dhcpBootFilename', 'fixedIpAssignments', 'reservedIpRanges', 'dnsNameservers', 'dhcpOptions', ]
+        body_params = ['name', 'subnet', 'applianceIp', 'groupPolicyId', 'vpnNatSubnet', 'dhcpHandling', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dhcpBootOptionsEnabled', 'dhcpBootNextServer', 'dhcpBootFilename', 'fixedIpAssignments', 'reservedIpRanges', 'dnsNameservers', 'dhcpOptions', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def deleteNetworkApplianceVlan(self, networkId: str, vlanId: str):
         """
@@ -1294,6 +1403,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/vlans/{vlanId}'
 
         return self._session.delete(metadata, resource)
+        
+
 
     def getNetworkApplianceVpnBgp(self, networkId: str):
         """
@@ -1310,6 +1421,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/vpn/bgp'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkApplianceVpnBgp(self, networkId: str, enabled: bool, **kwargs):
         """
@@ -1335,6 +1448,8 @@ class Appliance(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkApplianceVpnSiteToSiteVpn(self, networkId: str):
         """
@@ -1351,6 +1466,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/vpn/siteToSiteVpn'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkApplianceVpnSiteToSiteVpn(self, networkId: str, mode: str, **kwargs):
         """
@@ -1367,8 +1484,7 @@ class Appliance(object):
 
         if 'mode' in kwargs:
             options = ['none', 'spoke', 'hub']
-            assert kwargs[
-                       'mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
+            assert kwargs['mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['appliance', 'configure', 'vpn', 'siteToSiteVpn'],
@@ -1380,6 +1496,8 @@ class Appliance(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkApplianceWarmSpare(self, networkId: str):
         """
@@ -1396,6 +1514,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/warmSpare'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkApplianceWarmSpare(self, networkId: str, enabled: bool, **kwargs):
         """
@@ -1422,6 +1542,8 @@ class Appliance(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def swapNetworkApplianceWarmSpare(self, networkId: str):
         """
@@ -1438,6 +1560,8 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/warmSpare/swap'
 
         return self._session.post(metadata, resource)
+        
+
 
     def getOrganizationApplianceSecurityEvents(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
@@ -1460,8 +1584,7 @@ class Appliance(object):
 
         if 'sortOrder' in kwargs:
             options = ['ascending', 'descending']
-            assert kwargs[
-                       'sortOrder'] in options, f'''"sortOrder" cannot be "{kwargs['sortOrder']}", & must be set to one of: {options}'''
+            assert kwargs['sortOrder'] in options, f'''"sortOrder" cannot be "{kwargs['sortOrder']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['appliance', 'monitor', 'security', 'events'],
@@ -1473,6 +1596,8 @@ class Appliance(object):
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
 
     def getOrganizationApplianceSecurityIntrusion(self, organizationId: str):
         """
@@ -1489,6 +1614,8 @@ class Appliance(object):
         resource = f'/organizations/{organizationId}/appliance/security/intrusion'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateOrganizationApplianceSecurityIntrusion(self, organizationId: str, allowedRules: list):
         """
@@ -1511,6 +1638,8 @@ class Appliance(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getOrganizationApplianceUplinkStatuses(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
@@ -1546,6 +1675,8 @@ class Appliance(object):
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
 
     def getOrganizationApplianceVpnStats(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
@@ -1582,6 +1713,8 @@ class Appliance(object):
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
 
     def getOrganizationApplianceVpnStatuses(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
@@ -1615,6 +1748,8 @@ class Appliance(object):
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
 
     def getOrganizationApplianceVpnThirdPartyVPNPeers(self, organizationId: str):
         """
@@ -1631,6 +1766,8 @@ class Appliance(object):
         resource = f'/organizations/{organizationId}/appliance/vpn/thirdPartyVPNPeers'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateOrganizationApplianceVpnThirdPartyVPNPeers(self, organizationId: str, peers: list):
         """
@@ -1653,6 +1790,8 @@ class Appliance(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getOrganizationApplianceVpnVpnFirewallRules(self, organizationId: str):
         """
@@ -1669,6 +1808,8 @@ class Appliance(object):
         resource = f'/organizations/{organizationId}/appliance/vpn/vpnFirewallRules'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateOrganizationApplianceVpnVpnFirewallRules(self, organizationId: str, **kwargs):
         """
@@ -1692,3 +1833,4 @@ class Appliance(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        

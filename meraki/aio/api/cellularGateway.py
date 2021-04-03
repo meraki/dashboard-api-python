@@ -2,6 +2,8 @@ class AsyncCellularGateway:
     def __init__(self, session):
         super().__init__()
         self._session = session
+        
+
 
     def getDeviceCellularGatewayLan(self, serial: str):
         """
@@ -18,6 +20,8 @@ class AsyncCellularGateway:
         resource = f'/devices/{serial}/cellularGateway/lan'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateDeviceCellularGatewayLan(self, serial: str, **kwargs):
         """
@@ -41,6 +45,8 @@ class AsyncCellularGateway:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getDeviceCellularGatewayPortForwardingRules(self, serial: str):
         """
@@ -57,6 +63,8 @@ class AsyncCellularGateway:
         resource = f'/devices/{serial}/cellularGateway/portForwardingRules'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateDeviceCellularGatewayPortForwardingRules(self, serial: str, **kwargs):
         """
@@ -79,6 +87,8 @@ class AsyncCellularGateway:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkCellularGatewayConnectivityMonitoringDestinations(self, networkId: str):
         """
@@ -95,6 +105,8 @@ class AsyncCellularGateway:
         resource = f'/networks/{networkId}/cellularGateway/connectivityMonitoringDestinations'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkCellularGatewayConnectivityMonitoringDestinations(self, networkId: str, **kwargs):
         """
@@ -117,6 +129,8 @@ class AsyncCellularGateway:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkCellularGatewayDhcp(self, networkId: str):
         """
@@ -133,6 +147,8 @@ class AsyncCellularGateway:
         resource = f'/networks/{networkId}/cellularGateway/dhcp'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkCellularGatewayDhcp(self, networkId: str, **kwargs):
         """
@@ -157,6 +173,8 @@ class AsyncCellularGateway:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkCellularGatewaySubnetPool(self, networkId: str):
         """
@@ -173,6 +191,8 @@ class AsyncCellularGateway:
         resource = f'/networks/{networkId}/cellularGateway/subnetPool'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkCellularGatewaySubnetPool(self, networkId: str, **kwargs):
         """
@@ -196,6 +216,8 @@ class AsyncCellularGateway:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkCellularGatewayUplink(self, networkId: str):
         """
@@ -212,6 +234,8 @@ class AsyncCellularGateway:
         resource = f'/networks/{networkId}/cellularGateway/uplink'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkCellularGatewayUplink(self, networkId: str, **kwargs):
         """
@@ -234,9 +258,10 @@ class AsyncCellularGateway:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
 
-    def getOrganizationCellularGatewayUplinkStatuses(self, organizationId: str, total_pages=1, direction='next',
-                                                     **kwargs):
+
+    def getOrganizationCellularGatewayUplinkStatuses(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the uplink status of every Meraki MG cellular gateway in the organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-cellular-gateway-uplink-statuses
@@ -270,3 +295,4 @@ class AsyncCellularGateway:
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        

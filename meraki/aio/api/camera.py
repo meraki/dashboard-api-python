@@ -2,6 +2,8 @@ class AsyncCamera:
     def __init__(self, session):
         super().__init__()
         self._session = session
+        
+
 
     def getDeviceCameraAnalyticsLive(self, serial: str):
         """
@@ -18,6 +20,8 @@ class AsyncCamera:
         resource = f'/devices/{serial}/camera/analytics/live'
 
         return self._session.get(metadata, resource)
+        
+
 
     def getDeviceCameraAnalyticsOverview(self, serial: str, **kwargs):
         """
@@ -35,8 +39,7 @@ class AsyncCamera:
 
         if 'objectType' in kwargs:
             options = ['person', 'vehicle']
-            assert kwargs[
-                       'objectType'] in options, f'''"objectType" cannot be "{kwargs['objectType']}", & must be set to one of: {options}'''
+            assert kwargs['objectType'] in options, f'''"objectType" cannot be "{kwargs['objectType']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['camera', 'monitor', 'analytics', 'overview'],
@@ -48,6 +51,8 @@ class AsyncCamera:
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
+        
+
 
     def getDeviceCameraAnalyticsRecent(self, serial: str, **kwargs):
         """
@@ -62,8 +67,7 @@ class AsyncCamera:
 
         if 'objectType' in kwargs:
             options = ['person', 'vehicle']
-            assert kwargs[
-                       'objectType'] in options, f'''"objectType" cannot be "{kwargs['objectType']}", & must be set to one of: {options}'''
+            assert kwargs['objectType'] in options, f'''"objectType" cannot be "{kwargs['objectType']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['camera', 'monitor', 'analytics', 'recent'],
@@ -75,6 +79,8 @@ class AsyncCamera:
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
+        
+
 
     def getDeviceCameraAnalyticsZones(self, serial: str):
         """
@@ -91,6 +97,8 @@ class AsyncCamera:
         resource = f'/devices/{serial}/camera/analytics/zones'
 
         return self._session.get(metadata, resource)
+        
+
 
     def getDeviceCameraAnalyticsZoneHistory(self, serial: str, zoneId: str, **kwargs):
         """
@@ -110,8 +118,7 @@ class AsyncCamera:
 
         if 'objectType' in kwargs:
             options = ['person', 'vehicle']
-            assert kwargs[
-                       'objectType'] in options, f'''"objectType" cannot be "{kwargs['objectType']}", & must be set to one of: {options}'''
+            assert kwargs['objectType'] in options, f'''"objectType" cannot be "{kwargs['objectType']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['camera', 'monitor', 'analytics', 'zones', 'history'],
@@ -123,6 +130,8 @@ class AsyncCamera:
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
+        
+
 
     def generateDeviceCameraSnapshot(self, serial: str, **kwargs):
         """
@@ -146,6 +155,8 @@ class AsyncCamera:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getDeviceCameraQualityAndRetention(self, serial: str):
         """
@@ -162,6 +173,8 @@ class AsyncCamera:
         resource = f'/devices/{serial}/camera/qualityAndRetention'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateDeviceCameraQualityAndRetention(self, serial: str, **kwargs):
         """
@@ -182,16 +195,13 @@ class AsyncCamera:
 
         if 'quality' in kwargs:
             options = ['Standard', 'High', 'Enhanced']
-            assert kwargs[
-                       'quality'] in options, f'''"quality" cannot be "{kwargs['quality']}", & must be set to one of: {options}'''
+            assert kwargs['quality'] in options, f'''"quality" cannot be "{kwargs['quality']}", & must be set to one of: {options}'''
         if 'resolution' in kwargs:
             options = ['1280x720', '1920x1080', '1080x1080', '2058x2058']
-            assert kwargs[
-                       'resolution'] in options, f'''"resolution" cannot be "{kwargs['resolution']}", & must be set to one of: {options}'''
+            assert kwargs['resolution'] in options, f'''"resolution" cannot be "{kwargs['resolution']}", & must be set to one of: {options}'''
         if 'motionDetectorVersion' in kwargs:
             options = [1, 2]
-            assert kwargs[
-                       'motionDetectorVersion'] in options, f'''"motionDetectorVersion" cannot be "{kwargs['motionDetectorVersion']}", & must be set to one of: {options}'''
+            assert kwargs['motionDetectorVersion'] in options, f'''"motionDetectorVersion" cannot be "{kwargs['motionDetectorVersion']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['camera', 'configure', 'qualityAndRetention'],
@@ -199,11 +209,12 @@ class AsyncCamera:
         }
         resource = f'/devices/{serial}/camera/qualityAndRetention'
 
-        body_params = ['profileId', 'motionBasedRetentionEnabled', 'audioRecordingEnabled',
-                       'restrictedBandwidthModeEnabled', 'quality', 'resolution', 'motionDetectorVersion', ]
+        body_params = ['profileId', 'motionBasedRetentionEnabled', 'audioRecordingEnabled', 'restrictedBandwidthModeEnabled', 'quality', 'resolution', 'motionDetectorVersion', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getDeviceCameraSense(self, serial: str):
         """
@@ -220,6 +231,8 @@ class AsyncCamera:
         resource = f'/devices/{serial}/camera/sense'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateDeviceCameraSense(self, serial: str, **kwargs):
         """
@@ -244,6 +257,8 @@ class AsyncCamera:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getDeviceCameraSenseObjectDetectionModels(self, serial: str):
         """
@@ -260,6 +275,8 @@ class AsyncCamera:
         resource = f'/devices/{serial}/camera/sense/objectDetectionModels'
 
         return self._session.get(metadata, resource)
+        
+
 
     def getDeviceCameraVideoSettings(self, serial: str):
         """
@@ -276,6 +293,8 @@ class AsyncCamera:
         resource = f'/devices/{serial}/camera/video/settings'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateDeviceCameraVideoSettings(self, serial: str, **kwargs):
         """
@@ -298,6 +317,8 @@ class AsyncCamera:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getDeviceCameraVideoLink(self, serial: str, **kwargs):
         """
@@ -320,6 +341,8 @@ class AsyncCamera:
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
+        
+
 
     def getNetworkCameraQualityRetentionProfiles(self, networkId: str):
         """
@@ -336,6 +359,8 @@ class AsyncCamera:
         resource = f'/networks/{networkId}/camera/qualityRetentionProfiles'
 
         return self._session.get(metadata, resource)
+        
+
 
     def createNetworkCameraQualityRetentionProfile(self, networkId: str, name: str, **kwargs):
         """
@@ -362,12 +387,12 @@ class AsyncCamera:
         }
         resource = f'/networks/{networkId}/camera/qualityRetentionProfiles'
 
-        body_params = ['name', 'motionBasedRetentionEnabled', 'restrictedBandwidthModeEnabled', 'audioRecordingEnabled',
-                       'cloudArchiveEnabled', 'motionDetectorVersion', 'scheduleId', 'maxRetentionDays',
-                       'videoSettings', ]
+        body_params = ['name', 'motionBasedRetentionEnabled', 'restrictedBandwidthModeEnabled', 'audioRecordingEnabled', 'cloudArchiveEnabled', 'motionDetectorVersion', 'scheduleId', 'maxRetentionDays', 'videoSettings', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str):
         """
@@ -385,6 +410,8 @@ class AsyncCamera:
         resource = f'/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str, **kwargs):
         """
@@ -412,12 +439,12 @@ class AsyncCamera:
         }
         resource = f'/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}'
 
-        body_params = ['name', 'motionBasedRetentionEnabled', 'restrictedBandwidthModeEnabled', 'audioRecordingEnabled',
-                       'cloudArchiveEnabled', 'motionDetectorVersion', 'scheduleId', 'maxRetentionDays',
-                       'videoSettings', ]
+        body_params = ['name', 'motionBasedRetentionEnabled', 'restrictedBandwidthModeEnabled', 'audioRecordingEnabled', 'cloudArchiveEnabled', 'motionDetectorVersion', 'scheduleId', 'maxRetentionDays', 'videoSettings', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def deleteNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str):
         """
@@ -435,6 +462,8 @@ class AsyncCamera:
         resource = f'/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}'
 
         return self._session.delete(metadata, resource)
+        
+
 
     def getNetworkCameraSchedules(self, networkId: str):
         """
@@ -451,3 +480,4 @@ class AsyncCamera:
         resource = f'/networks/{networkId}/camera/schedules'
 
         return self._session.get(metadata, resource)
+        

@@ -1,6 +1,8 @@
 class ActionBatchInsight(object):
     def __init__(self):
         super(ActionBatchInsight, self).__init__()
+        
+
 
     def createOrganizationInsightMonitoredMediaServer(self, organizationId: str, name: str, address: str, **kwargs):
         """
@@ -29,6 +31,11 @@ class ActionBatchInsight(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateOrganizationInsightMonitoredMediaServer(self, organizationId: str, monitoredMediaServerId: str, **kwargs):
         """
@@ -58,6 +65,11 @@ class ActionBatchInsight(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def deleteOrganizationInsightMonitoredMediaServer(self, organizationId: str, monitoredMediaServerId: str):
         """
@@ -80,3 +92,7 @@ class ActionBatchInsight(object):
             "body": payload
         }
         return action
+        
+
+
+

@@ -2,6 +2,8 @@ class Switch(object):
     def __init__(self, session):
         super(Switch, self).__init__()
         self._session = session
+        
+
 
     def getDeviceSwitchPorts(self, serial: str):
         """
@@ -18,6 +20,8 @@ class Switch(object):
         resource = f'/devices/{serial}/switch/ports'
 
         return self._session.get(metadata, resource)
+        
+
 
     def cycleDeviceSwitchPorts(self, serial: str, ports: list):
         """
@@ -40,6 +44,8 @@ class Switch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getDeviceSwitchPortsStatuses(self, serial: str, **kwargs):
         """
@@ -63,6 +69,8 @@ class Switch(object):
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
+        
+
 
     def getDeviceSwitchPortsStatusesPackets(self, serial: str, **kwargs):
         """
@@ -86,6 +94,8 @@ class Switch(object):
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
+        
+
 
     def getDeviceSwitchPort(self, serial: str, portId: str):
         """
@@ -103,6 +113,8 @@ class Switch(object):
         resource = f'/devices/{serial}/switch/ports/{portId}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateDeviceSwitchPort(self, serial: str, portId: str, **kwargs):
         """
@@ -138,20 +150,16 @@ class Switch(object):
 
         if 'type' in kwargs:
             options = ['trunk', 'access']
-            assert kwargs[
-                       'type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
+            assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
         if 'stpGuard' in kwargs:
             options = ['disabled', 'root guard', 'bpdu guard', 'loop guard']
-            assert kwargs[
-                       'stpGuard'] in options, f'''"stpGuard" cannot be "{kwargs['stpGuard']}", & must be set to one of: {options}'''
+            assert kwargs['stpGuard'] in options, f'''"stpGuard" cannot be "{kwargs['stpGuard']}", & must be set to one of: {options}'''
         if 'udld' in kwargs:
             options = ['Alert only', 'Enforce']
-            assert kwargs[
-                       'udld'] in options, f'''"udld" cannot be "{kwargs['udld']}", & must be set to one of: {options}'''
+            assert kwargs['udld'] in options, f'''"udld" cannot be "{kwargs['udld']}", & must be set to one of: {options}'''
         if 'accessPolicyType' in kwargs:
             options = ['Open', 'Custom access policy', 'MAC allow list', 'Sticky MAC allow list']
-            assert kwargs[
-                       'accessPolicyType'] in options, f'''"accessPolicyType" cannot be "{kwargs['accessPolicyType']}", & must be set to one of: {options}'''
+            assert kwargs['accessPolicyType'] in options, f'''"accessPolicyType" cannot be "{kwargs['accessPolicyType']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['switch', 'configure', 'ports'],
@@ -159,13 +167,12 @@ class Switch(object):
         }
         resource = f'/devices/{serial}/switch/ports/{portId}'
 
-        body_params = ['name', 'tags', 'enabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'poeEnabled',
-                       'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld',
-                       'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'stickyMacAllowList',
-                       'stickyMacAllowListLimit', 'stormControlEnabled', 'flexibleStackingEnabled', ]
+        body_params = ['name', 'tags', 'enabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'poeEnabled', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', 'flexibleStackingEnabled', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getDeviceSwitchRoutingInterfaces(self, serial: str):
         """
@@ -182,6 +189,8 @@ class Switch(object):
         resource = f'/devices/{serial}/switch/routing/interfaces'
 
         return self._session.get(metadata, resource)
+        
+
 
     def createDeviceSwitchRoutingInterface(self, serial: str, name: str, interfaceIp: str, vlanId: int, **kwargs):
         """
@@ -202,8 +211,7 @@ class Switch(object):
 
         if 'multicastRouting' in kwargs:
             options = ['disabled', 'enabled', 'IGMP snooping querier']
-            assert kwargs[
-                       'multicastRouting'] in options, f'''"multicastRouting" cannot be "{kwargs['multicastRouting']}", & must be set to one of: {options}'''
+            assert kwargs['multicastRouting'] in options, f'''"multicastRouting" cannot be "{kwargs['multicastRouting']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['switch', 'configure', 'routing', 'interfaces'],
@@ -211,11 +219,12 @@ class Switch(object):
         }
         resource = f'/devices/{serial}/switch/routing/interfaces'
 
-        body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway',
-                       'ospfSettings', ]
+        body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getDeviceSwitchRoutingInterface(self, serial: str, interfaceId: str):
         """
@@ -233,6 +242,8 @@ class Switch(object):
         resource = f'/devices/{serial}/switch/routing/interfaces/{interfaceId}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateDeviceSwitchRoutingInterface(self, serial: str, interfaceId: str, **kwargs):
         """
@@ -253,8 +264,7 @@ class Switch(object):
 
         if 'multicastRouting' in kwargs:
             options = ['disabled', 'enabled', 'IGMP snooping querier']
-            assert kwargs[
-                       'multicastRouting'] in options, f'''"multicastRouting" cannot be "{kwargs['multicastRouting']}", & must be set to one of: {options}'''
+            assert kwargs['multicastRouting'] in options, f'''"multicastRouting" cannot be "{kwargs['multicastRouting']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['switch', 'configure', 'routing', 'interfaces'],
@@ -266,6 +276,8 @@ class Switch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def deleteDeviceSwitchRoutingInterface(self, serial: str, interfaceId: str):
         """
@@ -283,6 +295,8 @@ class Switch(object):
         resource = f'/devices/{serial}/switch/routing/interfaces/{interfaceId}'
 
         return self._session.delete(metadata, resource)
+        
+
 
     def getDeviceSwitchRoutingInterfaceDhcp(self, serial: str, interfaceId: str):
         """
@@ -300,6 +314,8 @@ class Switch(object):
         resource = f'/devices/{serial}/switch/routing/interfaces/{interfaceId}/dhcp'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateDeviceSwitchRoutingInterfaceDhcp(self, serial: str, interfaceId: str, **kwargs):
         """
@@ -325,16 +341,13 @@ class Switch(object):
 
         if 'dhcpMode' in kwargs:
             options = ['dhcpDisabled', 'dhcpRelay', 'dhcpServer']
-            assert kwargs[
-                       'dhcpMode'] in options, f'''"dhcpMode" cannot be "{kwargs['dhcpMode']}", & must be set to one of: {options}'''
+            assert kwargs['dhcpMode'] in options, f'''"dhcpMode" cannot be "{kwargs['dhcpMode']}", & must be set to one of: {options}'''
         if 'dhcpLeaseTime' in kwargs:
             options = ['30 minutes', '1 hour', '4 hours', '12 hours', '1 day', '1 week']
-            assert kwargs[
-                       'dhcpLeaseTime'] in options, f'''"dhcpLeaseTime" cannot be "{kwargs['dhcpLeaseTime']}", & must be set to one of: {options}'''
+            assert kwargs['dhcpLeaseTime'] in options, f'''"dhcpLeaseTime" cannot be "{kwargs['dhcpLeaseTime']}", & must be set to one of: {options}'''
         if 'dnsNameserversOption' in kwargs:
             options = ['googlePublicDns', 'openDns', 'custom']
-            assert kwargs[
-                       'dnsNameserversOption'] in options, f'''"dnsNameserversOption" cannot be "{kwargs['dnsNameserversOption']}", & must be set to one of: {options}'''
+            assert kwargs['dnsNameserversOption'] in options, f'''"dnsNameserversOption" cannot be "{kwargs['dnsNameserversOption']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['switch', 'configure', 'routing', 'interfaces', 'dhcp'],
@@ -342,12 +355,12 @@ class Switch(object):
         }
         resource = f'/devices/{serial}/switch/routing/interfaces/{interfaceId}/dhcp'
 
-        body_params = ['dhcpMode', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dnsNameserversOption',
-                       'dnsCustomNameservers', 'bootOptionsEnabled', 'bootNextServer', 'bootFileName', 'dhcpOptions',
-                       'reservedIpRanges', 'fixedIpAssignments', ]
+        body_params = ['dhcpMode', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dnsNameserversOption', 'dnsCustomNameservers', 'bootOptionsEnabled', 'bootNextServer', 'bootFileName', 'dhcpOptions', 'reservedIpRanges', 'fixedIpAssignments', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getDeviceSwitchRoutingStaticRoutes(self, serial: str):
         """
@@ -364,6 +377,8 @@ class Switch(object):
         resource = f'/devices/{serial}/switch/routing/staticRoutes'
 
         return self._session.get(metadata, resource)
+        
+
 
     def createDeviceSwitchRoutingStaticRoute(self, serial: str, subnet: str, nextHopIp: str, **kwargs):
         """
@@ -390,6 +405,8 @@ class Switch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getDeviceSwitchRoutingStaticRoute(self, serial: str, staticRouteId: str):
         """
@@ -407,6 +424,8 @@ class Switch(object):
         resource = f'/devices/{serial}/switch/routing/staticRoutes/{staticRouteId}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateDeviceSwitchRoutingStaticRoute(self, serial: str, staticRouteId: str, **kwargs):
         """
@@ -434,6 +453,8 @@ class Switch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def deleteDeviceSwitchRoutingStaticRoute(self, serial: str, staticRouteId: str):
         """
@@ -451,6 +472,8 @@ class Switch(object):
         resource = f'/devices/{serial}/switch/routing/staticRoutes/{staticRouteId}'
 
         return self._session.delete(metadata, resource)
+        
+
 
     def getDeviceSwitchWarmSpare(self, serial: str):
         """
@@ -467,6 +490,8 @@ class Switch(object):
         resource = f'/devices/{serial}/switch/warmSpare'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateDeviceSwitchWarmSpare(self, serial: str, enabled: bool, **kwargs):
         """
@@ -490,6 +515,8 @@ class Switch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkSwitchAccessControlLists(self, networkId: str):
         """
@@ -506,6 +533,8 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/accessControlLists'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkSwitchAccessControlLists(self, networkId: str, rules: list):
         """
@@ -528,6 +557,8 @@ class Switch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkSwitchAccessPolicies(self, networkId: str):
         """
@@ -544,11 +575,10 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/accessPolicies'
 
         return self._session.get(metadata, resource)
+        
 
-    def createNetworkSwitchAccessPolicy(self, networkId: str, name: str, radiusServers: list,
-                                        radiusTestingEnabled: bool, radiusCoaSupportEnabled: bool,
-                                        radiusAccountingEnabled: bool, hostMode: str,
-                                        urlRedirectWalledGardenEnabled: bool, **kwargs):
+
+    def createNetworkSwitchAccessPolicy(self, networkId: str, name: str, radiusServers: list, radiusTestingEnabled: bool, radiusCoaSupportEnabled: bool, radiusAccountingEnabled: bool, hostMode: str, urlRedirectWalledGardenEnabled: bool, **kwargs):
         """
         **Create an access policy for a switch network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-access-policy
@@ -574,12 +604,10 @@ class Switch(object):
 
         if 'hostMode' in kwargs:
             options = ['Single-Host', 'Multi-Domain', 'Multi-Host', 'Multi-Auth']
-            assert kwargs[
-                       'hostMode'] in options, f'''"hostMode" cannot be "{kwargs['hostMode']}", & must be set to one of: {options}'''
+            assert kwargs['hostMode'] in options, f'''"hostMode" cannot be "{kwargs['hostMode']}", & must be set to one of: {options}'''
         if 'accessPolicyType' in kwargs:
             options = ['802.1x', 'MAC authentication bypass', 'Hybrid authentication']
-            assert kwargs[
-                       'accessPolicyType'] in options, f'''"accessPolicyType" cannot be "{kwargs['accessPolicyType']}", & must be set to one of: {options}'''
+            assert kwargs['accessPolicyType'] in options, f'''"accessPolicyType" cannot be "{kwargs['accessPolicyType']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['switch', 'configure', 'accessPolicies'],
@@ -587,13 +615,12 @@ class Switch(object):
         }
         resource = f'/networks/{networkId}/switch/accessPolicies'
 
-        body_params = ['name', 'radiusServers', 'radiusTestingEnabled', 'radiusCoaSupportEnabled',
-                       'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusGroupAttribute', 'hostMode',
-                       'accessPolicyType', 'increaseAccessSpeed', 'guestVlanId', 'voiceVlanClients',
-                       'urlRedirectWalledGardenEnabled', 'urlRedirectWalledGardenRanges', ]
+        body_params = ['name', 'radiusServers', 'radiusTestingEnabled', 'radiusCoaSupportEnabled', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusGroupAttribute', 'hostMode', 'accessPolicyType', 'increaseAccessSpeed', 'guestVlanId', 'voiceVlanClients', 'urlRedirectWalledGardenEnabled', 'urlRedirectWalledGardenRanges', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getNetworkSwitchAccessPolicy(self, networkId: str, accessPolicyNumber: str):
         """
@@ -611,6 +638,8 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/accessPolicies/{accessPolicyNumber}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkSwitchAccessPolicy(self, networkId: str, accessPolicyNumber: str, **kwargs):
         """
@@ -639,12 +668,10 @@ class Switch(object):
 
         if 'hostMode' in kwargs:
             options = ['Single-Host', 'Multi-Domain', 'Multi-Host', 'Multi-Auth']
-            assert kwargs[
-                       'hostMode'] in options, f'''"hostMode" cannot be "{kwargs['hostMode']}", & must be set to one of: {options}'''
+            assert kwargs['hostMode'] in options, f'''"hostMode" cannot be "{kwargs['hostMode']}", & must be set to one of: {options}'''
         if 'accessPolicyType' in kwargs:
             options = ['802.1x', 'MAC authentication bypass', 'Hybrid authentication']
-            assert kwargs[
-                       'accessPolicyType'] in options, f'''"accessPolicyType" cannot be "{kwargs['accessPolicyType']}", & must be set to one of: {options}'''
+            assert kwargs['accessPolicyType'] in options, f'''"accessPolicyType" cannot be "{kwargs['accessPolicyType']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['switch', 'configure', 'accessPolicies'],
@@ -652,13 +679,12 @@ class Switch(object):
         }
         resource = f'/networks/{networkId}/switch/accessPolicies/{accessPolicyNumber}'
 
-        body_params = ['name', 'radiusServers', 'radiusTestingEnabled', 'radiusCoaSupportEnabled',
-                       'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusGroupAttribute', 'hostMode',
-                       'accessPolicyType', 'increaseAccessSpeed', 'guestVlanId', 'voiceVlanClients',
-                       'urlRedirectWalledGardenEnabled', 'urlRedirectWalledGardenRanges', ]
+        body_params = ['name', 'radiusServers', 'radiusTestingEnabled', 'radiusCoaSupportEnabled', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusGroupAttribute', 'hostMode', 'accessPolicyType', 'increaseAccessSpeed', 'guestVlanId', 'voiceVlanClients', 'urlRedirectWalledGardenEnabled', 'urlRedirectWalledGardenRanges', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def deleteNetworkSwitchAccessPolicy(self, networkId: str, accessPolicyNumber: str):
         """
@@ -676,6 +702,8 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/accessPolicies/{accessPolicyNumber}'
 
         return self._session.delete(metadata, resource)
+        
+
 
     def getNetworkSwitchAlternateManagementInterface(self, networkId: str):
         """
@@ -692,6 +720,8 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/alternateManagementInterface'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkSwitchAlternateManagementInterface(self, networkId: str, **kwargs):
         """
@@ -717,6 +747,8 @@ class Switch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkSwitchDhcpServerPolicy(self, networkId: str):
         """
@@ -733,6 +765,8 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/dhcpServerPolicy'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkSwitchDhcpServerPolicy(self, networkId: str, **kwargs):
         """
@@ -749,8 +783,7 @@ class Switch(object):
 
         if 'defaultPolicy' in kwargs:
             options = ['allow', 'block']
-            assert kwargs[
-                       'defaultPolicy'] in options, f'''"defaultPolicy" cannot be "{kwargs['defaultPolicy']}", & must be set to one of: {options}'''
+            assert kwargs['defaultPolicy'] in options, f'''"defaultPolicy" cannot be "{kwargs['defaultPolicy']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['switch', 'configure', 'dhcpServerPolicy'],
@@ -762,6 +795,8 @@ class Switch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkSwitchDscpToCosMappings(self, networkId: str):
         """
@@ -778,6 +813,8 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/dscpToCosMappings'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkSwitchDscpToCosMappings(self, networkId: str, mappings: list):
         """
@@ -800,6 +837,8 @@ class Switch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkSwitchLinkAggregations(self, networkId: str):
         """
@@ -816,6 +855,8 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/linkAggregations'
 
         return self._session.get(metadata, resource)
+        
+
 
     def createNetworkSwitchLinkAggregation(self, networkId: str, **kwargs):
         """
@@ -839,6 +880,8 @@ class Switch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def updateNetworkSwitchLinkAggregation(self, networkId: str, linkAggregationId: str, **kwargs):
         """
@@ -863,6 +906,8 @@ class Switch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def deleteNetworkSwitchLinkAggregation(self, networkId: str, linkAggregationId: str):
         """
@@ -880,6 +925,8 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/linkAggregations/{linkAggregationId}'
 
         return self._session.delete(metadata, resource)
+        
+
 
     def getNetworkSwitchMtu(self, networkId: str):
         """
@@ -896,6 +943,8 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/mtu'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkSwitchMtu(self, networkId: str, **kwargs):
         """
@@ -919,6 +968,8 @@ class Switch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkSwitchPortSchedules(self, networkId: str):
         """
@@ -935,6 +986,8 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/portSchedules'
 
         return self._session.get(metadata, resource)
+        
+
 
     def createNetworkSwitchPortSchedule(self, networkId: str, name: str, **kwargs):
         """
@@ -961,6 +1014,8 @@ class Switch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def deleteNetworkSwitchPortSchedule(self, networkId: str, portScheduleId: str):
         """
@@ -978,6 +1033,8 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/portSchedules/{portScheduleId}'
 
         return self._session.delete(metadata, resource)
+        
+
 
     def updateNetworkSwitchPortSchedule(self, networkId: str, portScheduleId: str, **kwargs):
         """
@@ -1005,6 +1062,8 @@ class Switch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkSwitchQosRules(self, networkId: str):
         """
@@ -1021,6 +1080,8 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/qosRules'
 
         return self._session.get(metadata, resource)
+        
+
 
     def createNetworkSwitchQosRule(self, networkId: str, vlan: int, **kwargs):
         """
@@ -1041,8 +1102,7 @@ class Switch(object):
 
         if 'protocol' in kwargs:
             options = ['ANY', 'TCP', 'UDP']
-            assert kwargs[
-                       'protocol'] in options, f'''"protocol" cannot be "{kwargs['protocol']}", & must be set to one of: {options}'''
+            assert kwargs['protocol'] in options, f'''"protocol" cannot be "{kwargs['protocol']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['switch', 'configure', 'qosRules'],
@@ -1054,6 +1114,8 @@ class Switch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getNetworkSwitchQosRulesOrder(self, networkId: str):
         """
@@ -1070,6 +1132,8 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/qosRules/order'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkSwitchQosRulesOrder(self, networkId: str, ruleIds: list):
         """
@@ -1092,6 +1156,8 @@ class Switch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkSwitchQosRule(self, networkId: str, qosRuleId: str):
         """
@@ -1109,6 +1175,8 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/qosRules/{qosRuleId}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def deleteNetworkSwitchQosRule(self, networkId: str, qosRuleId: str):
         """
@@ -1126,6 +1194,8 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/qosRules/{qosRuleId}'
 
         return self._session.delete(metadata, resource)
+        
+
 
     def updateNetworkSwitchQosRule(self, networkId: str, qosRuleId: str, **kwargs):
         """
@@ -1147,8 +1217,7 @@ class Switch(object):
 
         if 'protocol' in kwargs:
             options = ['ANY', 'TCP', 'UDP']
-            assert kwargs[
-                       'protocol'] in options, f'''"protocol" cannot be "{kwargs['protocol']}", & must be set to one of: {options}'''
+            assert kwargs['protocol'] in options, f'''"protocol" cannot be "{kwargs['protocol']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['switch', 'configure', 'qosRules'],
@@ -1160,6 +1229,8 @@ class Switch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkSwitchRoutingMulticast(self, networkId: str):
         """
@@ -1176,6 +1247,8 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/routing/multicast'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkSwitchRoutingMulticast(self, networkId: str, **kwargs):
         """
@@ -1199,6 +1272,8 @@ class Switch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkSwitchRoutingMulticastRendezvousPoints(self, networkId: str):
         """
@@ -1215,6 +1290,8 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/routing/multicast/rendezvousPoints'
 
         return self._session.get(metadata, resource)
+        
+
 
     def createNetworkSwitchRoutingMulticastRendezvousPoint(self, networkId: str, interfaceIp: str, multicastGroup: str):
         """
@@ -1238,6 +1315,8 @@ class Switch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getNetworkSwitchRoutingMulticastRendezvousPoint(self, networkId: str, rendezvousPointId: str):
         """
@@ -1255,6 +1334,8 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/routing/multicast/rendezvousPoints/{rendezvousPointId}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def deleteNetworkSwitchRoutingMulticastRendezvousPoint(self, networkId: str, rendezvousPointId: str):
         """
@@ -1272,9 +1353,10 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/routing/multicast/rendezvousPoints/{rendezvousPointId}'
 
         return self._session.delete(metadata, resource)
+        
 
-    def updateNetworkSwitchRoutingMulticastRendezvousPoint(self, networkId: str, rendezvousPointId: str,
-                                                           interfaceIp: str, multicastGroup: str):
+
+    def updateNetworkSwitchRoutingMulticastRendezvousPoint(self, networkId: str, rendezvousPointId: str, interfaceIp: str, multicastGroup: str):
         """
         **Update a multicast rendezvous point**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-routing-multicast-rendezvous-point
@@ -1297,6 +1379,8 @@ class Switch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkSwitchRoutingOspf(self, networkId: str):
         """
@@ -1313,6 +1397,8 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/routing/ospf'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkSwitchRoutingOspf(self, networkId: str, **kwargs):
         """
@@ -1336,11 +1422,12 @@ class Switch(object):
         }
         resource = f'/networks/{networkId}/switch/routing/ospf'
 
-        body_params = ['enabled', 'helloTimerInSeconds', 'deadTimerInSeconds', 'areas', 'md5AuthenticationEnabled',
-                       'md5AuthenticationKey', ]
+        body_params = ['enabled', 'helloTimerInSeconds', 'deadTimerInSeconds', 'areas', 'md5AuthenticationEnabled', 'md5AuthenticationKey', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkSwitchSettings(self, networkId: str):
         """
@@ -1357,6 +1444,8 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/settings'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkSwitchSettings(self, networkId: str, **kwargs):
         """
@@ -1381,6 +1470,8 @@ class Switch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkSwitchStacks(self, networkId: str):
         """
@@ -1397,6 +1488,8 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/stacks'
 
         return self._session.get(metadata, resource)
+        
+
 
     def createNetworkSwitchStack(self, networkId: str, name: str, serials: list):
         """
@@ -1420,6 +1513,8 @@ class Switch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getNetworkSwitchStack(self, networkId: str, switchStackId: str):
         """
@@ -1437,6 +1532,8 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def deleteNetworkSwitchStack(self, networkId: str, switchStackId: str):
         """
@@ -1454,6 +1551,8 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}'
 
         return self._session.delete(metadata, resource)
+        
+
 
     def addNetworkSwitchStack(self, networkId: str, switchStackId: str, serial: str):
         """
@@ -1477,6 +1576,8 @@ class Switch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def removeNetworkSwitchStack(self, networkId: str, switchStackId: str, serial: str):
         """
@@ -1500,6 +1601,8 @@ class Switch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getNetworkSwitchStackRoutingInterfaces(self, networkId: str, switchStackId: str):
         """
@@ -1517,9 +1620,10 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces'
 
         return self._session.get(metadata, resource)
+        
 
-    def createNetworkSwitchStackRoutingInterface(self, networkId: str, switchStackId: str, name: str, subnet: str,
-                                                 interfaceIp: str, vlanId: int, **kwargs):
+
+    def createNetworkSwitchStackRoutingInterface(self, networkId: str, switchStackId: str, name: str, subnet: str, interfaceIp: str, vlanId: int, **kwargs):
         """
         **Create a layer 3 interface for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-stack-routing-interface
@@ -1539,8 +1643,7 @@ class Switch(object):
 
         if 'multicastRouting' in kwargs:
             options = ['disabled', 'enabled', 'IGMP snooping querier']
-            assert kwargs[
-                       'multicastRouting'] in options, f'''"multicastRouting" cannot be "{kwargs['multicastRouting']}", & must be set to one of: {options}'''
+            assert kwargs['multicastRouting'] in options, f'''"multicastRouting" cannot be "{kwargs['multicastRouting']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['switch', 'configure', 'stacks', 'routing', 'interfaces'],
@@ -1548,11 +1651,12 @@ class Switch(object):
         }
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces'
 
-        body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway',
-                       'ospfSettings', ]
+        body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getNetworkSwitchStackRoutingInterface(self, networkId: str, switchStackId: str, interfaceId: str):
         """
@@ -1571,6 +1675,8 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkSwitchStackRoutingInterface(self, networkId: str, switchStackId: str, interfaceId: str, **kwargs):
         """
@@ -1592,8 +1698,7 @@ class Switch(object):
 
         if 'multicastRouting' in kwargs:
             options = ['disabled', 'enabled', 'IGMP snooping querier']
-            assert kwargs[
-                       'multicastRouting'] in options, f'''"multicastRouting" cannot be "{kwargs['multicastRouting']}", & must be set to one of: {options}'''
+            assert kwargs['multicastRouting'] in options, f'''"multicastRouting" cannot be "{kwargs['multicastRouting']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['switch', 'configure', 'stacks', 'routing', 'interfaces'],
@@ -1605,6 +1710,8 @@ class Switch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def deleteNetworkSwitchStackRoutingInterface(self, networkId: str, switchStackId: str, interfaceId: str):
         """
@@ -1623,6 +1730,8 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}'
 
         return self._session.delete(metadata, resource)
+        
+
 
     def getNetworkSwitchStackRoutingInterfaceDhcp(self, networkId: str, switchStackId: str, interfaceId: str):
         """
@@ -1641,9 +1750,10 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}/dhcp'
 
         return self._session.get(metadata, resource)
+        
 
-    def updateNetworkSwitchStackRoutingInterfaceDhcp(self, networkId: str, switchStackId: str, interfaceId: str,
-                                                     **kwargs):
+
+    def updateNetworkSwitchStackRoutingInterfaceDhcp(self, networkId: str, switchStackId: str, interfaceId: str, **kwargs):
         """
         **Update a layer 3 interface DHCP configuration for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-stack-routing-interface-dhcp
@@ -1668,16 +1778,13 @@ class Switch(object):
 
         if 'dhcpMode' in kwargs:
             options = ['dhcpDisabled', 'dhcpRelay', 'dhcpServer']
-            assert kwargs[
-                       'dhcpMode'] in options, f'''"dhcpMode" cannot be "{kwargs['dhcpMode']}", & must be set to one of: {options}'''
+            assert kwargs['dhcpMode'] in options, f'''"dhcpMode" cannot be "{kwargs['dhcpMode']}", & must be set to one of: {options}'''
         if 'dhcpLeaseTime' in kwargs:
             options = ['30 minutes', '1 hour', '4 hours', '12 hours', '1 day', '1 week']
-            assert kwargs[
-                       'dhcpLeaseTime'] in options, f'''"dhcpLeaseTime" cannot be "{kwargs['dhcpLeaseTime']}", & must be set to one of: {options}'''
+            assert kwargs['dhcpLeaseTime'] in options, f'''"dhcpLeaseTime" cannot be "{kwargs['dhcpLeaseTime']}", & must be set to one of: {options}'''
         if 'dnsNameserversOption' in kwargs:
             options = ['googlePublicDns', 'openDns', 'custom']
-            assert kwargs[
-                       'dnsNameserversOption'] in options, f'''"dnsNameserversOption" cannot be "{kwargs['dnsNameserversOption']}", & must be set to one of: {options}'''
+            assert kwargs['dnsNameserversOption'] in options, f'''"dnsNameserversOption" cannot be "{kwargs['dnsNameserversOption']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['switch', 'configure', 'stacks', 'routing', 'interfaces', 'dhcp'],
@@ -1685,12 +1792,12 @@ class Switch(object):
         }
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}/dhcp'
 
-        body_params = ['dhcpMode', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dnsNameserversOption',
-                       'dnsCustomNameservers', 'bootOptionsEnabled', 'bootNextServer', 'bootFileName', 'dhcpOptions',
-                       'reservedIpRanges', 'fixedIpAssignments', ]
+        body_params = ['dhcpMode', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dnsNameserversOption', 'dnsCustomNameservers', 'bootOptionsEnabled', 'bootNextServer', 'bootFileName', 'dhcpOptions', 'reservedIpRanges', 'fixedIpAssignments', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkSwitchStackRoutingStaticRoutes(self, networkId: str, switchStackId: str):
         """
@@ -1708,9 +1815,10 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes'
 
         return self._session.get(metadata, resource)
+        
 
-    def createNetworkSwitchStackRoutingStaticRoute(self, networkId: str, switchStackId: str, subnet: str,
-                                                   nextHopIp: str, **kwargs):
+
+    def createNetworkSwitchStackRoutingStaticRoute(self, networkId: str, switchStackId: str, subnet: str, nextHopIp: str, **kwargs):
         """
         **Create a layer 3 static route for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-stack-routing-static-route
@@ -1736,6 +1844,8 @@ class Switch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getNetworkSwitchStackRoutingStaticRoute(self, networkId: str, switchStackId: str, staticRouteId: str):
         """
@@ -1754,9 +1864,10 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes/{staticRouteId}'
 
         return self._session.get(metadata, resource)
+        
 
-    def updateNetworkSwitchStackRoutingStaticRoute(self, networkId: str, switchStackId: str, staticRouteId: str,
-                                                   **kwargs):
+
+    def updateNetworkSwitchStackRoutingStaticRoute(self, networkId: str, switchStackId: str, staticRouteId: str, **kwargs):
         """
         **Update a layer 3 static route for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-stack-routing-static-route
@@ -1783,6 +1894,8 @@ class Switch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def deleteNetworkSwitchStackRoutingStaticRoute(self, networkId: str, switchStackId: str, staticRouteId: str):
         """
@@ -1801,6 +1914,8 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes/{staticRouteId}'
 
         return self._session.delete(metadata, resource)
+        
+
 
     def getNetworkSwitchStormControl(self, networkId: str):
         """
@@ -1817,6 +1932,8 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/stormControl'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkSwitchStormControl(self, networkId: str, **kwargs):
         """
@@ -1841,6 +1958,8 @@ class Switch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkSwitchStp(self, networkId: str):
         """
@@ -1857,6 +1976,8 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/stp'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkSwitchStp(self, networkId: str, **kwargs):
         """
@@ -1880,6 +2001,8 @@ class Switch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getOrganizationConfigTemplateSwitchProfiles(self, organizationId: str, configTemplateId: str):
         """
@@ -1897,9 +2020,10 @@ class Switch(object):
         resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles'
 
         return self._session.get(metadata, resource)
+        
 
-    def getOrganizationConfigTemplateSwitchProfilePorts(self, organizationId: str, configTemplateId: str,
-                                                        profileId: str):
+
+    def getOrganizationConfigTemplateSwitchProfilePorts(self, organizationId: str, configTemplateId: str, profileId: str):
         """
         **Return all the ports of a switch profile**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-config-template-switch-profile-ports
@@ -1916,9 +2040,10 @@ class Switch(object):
         resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles/{profileId}/ports'
 
         return self._session.get(metadata, resource)
+        
 
-    def getOrganizationConfigTemplateSwitchProfilePort(self, organizationId: str, configTemplateId: str, profileId: str,
-                                                       portId: str):
+
+    def getOrganizationConfigTemplateSwitchProfilePort(self, organizationId: str, configTemplateId: str, profileId: str, portId: str):
         """
         **Return a switch profile port**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-config-template-switch-profile-port
@@ -1936,9 +2061,10 @@ class Switch(object):
         resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles/{profileId}/ports/{portId}'
 
         return self._session.get(metadata, resource)
+        
 
-    def updateOrganizationConfigTemplateSwitchProfilePort(self, organizationId: str, configTemplateId: str,
-                                                          profileId: str, portId: str, **kwargs):
+
+    def updateOrganizationConfigTemplateSwitchProfilePort(self, organizationId: str, configTemplateId: str, profileId: str, portId: str, **kwargs):
         """
         **Update a switch profile port**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-config-template-switch-profile-port
@@ -1974,20 +2100,16 @@ class Switch(object):
 
         if 'type' in kwargs:
             options = ['trunk', 'access']
-            assert kwargs[
-                       'type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
+            assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
         if 'stpGuard' in kwargs:
             options = ['disabled', 'root guard', 'bpdu guard', 'loop guard']
-            assert kwargs[
-                       'stpGuard'] in options, f'''"stpGuard" cannot be "{kwargs['stpGuard']}", & must be set to one of: {options}'''
+            assert kwargs['stpGuard'] in options, f'''"stpGuard" cannot be "{kwargs['stpGuard']}", & must be set to one of: {options}'''
         if 'udld' in kwargs:
             options = ['Alert only', 'Enforce']
-            assert kwargs[
-                       'udld'] in options, f'''"udld" cannot be "{kwargs['udld']}", & must be set to one of: {options}'''
+            assert kwargs['udld'] in options, f'''"udld" cannot be "{kwargs['udld']}", & must be set to one of: {options}'''
         if 'accessPolicyType' in kwargs:
             options = ['Open', 'Custom access policy', 'MAC allow list', 'Sticky MAC allow list']
-            assert kwargs[
-                       'accessPolicyType'] in options, f'''"accessPolicyType" cannot be "{kwargs['accessPolicyType']}", & must be set to one of: {options}'''
+            assert kwargs['accessPolicyType'] in options, f'''"accessPolicyType" cannot be "{kwargs['accessPolicyType']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['switch', 'configure', 'configTemplates', 'profiles', 'ports'],
@@ -1995,13 +2117,12 @@ class Switch(object):
         }
         resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles/{profileId}/ports/{portId}'
 
-        body_params = ['name', 'tags', 'enabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'poeEnabled',
-                       'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld',
-                       'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'stickyMacAllowList',
-                       'stickyMacAllowListLimit', 'stormControlEnabled', 'flexibleStackingEnabled', ]
+        body_params = ['name', 'tags', 'enabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'poeEnabled', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', 'flexibleStackingEnabled', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def cloneOrganizationSwitchDevices(self, organizationId: str, sourceSerial: str, targetSerials: list):
         """
@@ -2025,3 +2146,4 @@ class Switch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        

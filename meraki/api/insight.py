@@ -2,6 +2,8 @@ class Insight(object):
     def __init__(self, session):
         super(Insight, self).__init__()
         self._session = session
+        
+
 
     def getOrganizationInsightMonitoredMediaServers(self, organizationId: str):
         """
@@ -18,6 +20,8 @@ class Insight(object):
         resource = f'/organizations/{organizationId}/insight/monitoredMediaServers'
 
         return self._session.get(metadata, resource)
+        
+
 
     def createOrganizationInsightMonitoredMediaServer(self, organizationId: str, name: str, address: str, **kwargs):
         """
@@ -42,6 +46,8 @@ class Insight(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getOrganizationInsightMonitoredMediaServer(self, organizationId: str, monitoredMediaServerId: str):
         """
@@ -59,6 +65,8 @@ class Insight(object):
         resource = f'/organizations/{organizationId}/insight/monitoredMediaServers/{monitoredMediaServerId}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateOrganizationInsightMonitoredMediaServer(self, organizationId: str, monitoredMediaServerId: str, **kwargs):
         """
@@ -84,6 +92,8 @@ class Insight(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def deleteOrganizationInsightMonitoredMediaServer(self, organizationId: str, monitoredMediaServerId: str):
         """
@@ -101,3 +111,4 @@ class Insight(object):
         resource = f'/organizations/{organizationId}/insight/monitoredMediaServers/{monitoredMediaServerId}'
 
         return self._session.delete(metadata, resource)
+        

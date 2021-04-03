@@ -1,6 +1,8 @@
 class ActionBatchDevices(object):
     def __init__(self):
         super(ActionBatchDevices, self).__init__()
+        
+
 
     def updateDevice(self, serial: str, **kwargs):
         """
@@ -27,8 +29,7 @@ class ActionBatchDevices(object):
         }
         resource = f'/devices/{serial}'
 
-        body_params = ['name', 'tags', 'lat', 'lng', 'address', 'notes', 'moveMapMarker', 'switchProfileId',
-                       'floorPlanId', ]
+        body_params = ['name', 'tags', 'lat', 'lng', 'address', 'notes', 'moveMapMarker', 'switchProfileId', 'floorPlanId', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -36,6 +37,11 @@ class ActionBatchDevices(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateDeviceManagementInterface(self, serial: str, **kwargs):
         """
@@ -63,3 +69,7 @@ class ActionBatchDevices(object):
             "body": payload
         }
         return action
+        
+
+
+

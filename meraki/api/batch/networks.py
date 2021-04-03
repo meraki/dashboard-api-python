@@ -1,6 +1,8 @@
 class ActionBatchNetworks(object):
     def __init__(self):
         super(ActionBatchNetworks, self).__init__()
+        
+
 
     def updateNetwork(self, networkId: str, **kwargs):
         """
@@ -31,6 +33,11 @@ class ActionBatchNetworks(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def deleteNetwork(self, networkId: str):
         """
@@ -52,6 +59,11 @@ class ActionBatchNetworks(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def bindNetwork(self, networkId: str, configTemplateId: str, **kwargs):
         """
@@ -79,6 +91,11 @@ class ActionBatchNetworks(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def provisionNetworkClients(self, networkId: str, clients: list, devicePolicy: str, **kwargs):
         """
@@ -97,8 +114,7 @@ class ActionBatchNetworks(object):
 
         if 'devicePolicy' in kwargs:
             options = ['Group policy', 'Allowed', 'Blocked', 'Per connection', 'Normal']
-            assert kwargs[
-                       'devicePolicy'] in options, f'''"devicePolicy" cannot be "{kwargs['devicePolicy']}", & must be set to one of: {options}'''
+            assert kwargs['devicePolicy'] in options, f'''"devicePolicy" cannot be "{kwargs['devicePolicy']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['networks', 'configure', 'clients'],
@@ -114,6 +130,11 @@ class ActionBatchNetworks(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def claimNetworkDevices(self, networkId: str, serials: list):
         """
@@ -140,6 +161,11 @@ class ActionBatchNetworks(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def removeNetworkDevices(self, networkId: str, serial: str):
         """
@@ -166,14 +192,21 @@ class ActionBatchNetworks(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateNetworkFirmwareUpgrades(self, networkId: str, **kwargs):
         """
-        **Update current maintenance window for a network**
+        **Update firmware upgrade information for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-firmware-upgrades
 
         - networkId (string): (required)
         - upgradeWindow (object): Upgrade window for devices in network
+        - timezone (string): The timezone for the network
+        - products (object): Contains information about the network to update
         """
 
         kwargs.update(locals())
@@ -184,7 +217,7 @@ class ActionBatchNetworks(object):
         }
         resource = f'/networks/{networkId}/firmwareUpgrades'
 
-        body_params = ['upgradeWindow', ]
+        body_params = ['upgradeWindow', 'timezone', 'products', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -192,6 +225,49 @@ class ActionBatchNetworks(object):
             "body": payload
         }
         return action
+        
+
+
+
+
+
+    def createNetworkFirmwareUpgradesRollback(self, networkId: str, reasons: list, **kwargs):
+        """
+        **Rollback a Firmware Upgrade For A Network**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-firmware-upgrades-rollback
+
+        - networkId (string): (required)
+        - reasons (array): Reasons for the rollback
+        - product (string): Product type to rollback (if the network is a combined network)
+        - time (string): Scheduled time for the rollback
+        - toVersion (object): Version to downgrade to (if the network has firmware flexibility)
+        """
+
+        kwargs.update(locals())
+
+        if 'product' in kwargs:
+            options = ['wireless', 'switch', 'appliance', 'camera', 'vmxHost', 'cellularGateway']
+            assert kwargs['product'] in options, f'''"product" cannot be "{kwargs['product']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['networks', 'configure', 'firmwareUpgrades', 'rollbacks'],
+            'operation': 'createNetworkFirmwareUpgradesRollback'
+        }
+        resource = f'/networks/{networkId}/firmwareUpgrades/rollbacks'
+
+        body_params = ['product', 'time', 'reasons', 'toVersion', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
 
     def updateNetworkFloorPlan(self, networkId: str, floorPlanId: str, **kwargs):
         """
@@ -217,8 +293,7 @@ class ActionBatchNetworks(object):
         }
         resource = f'/networks/{networkId}/floorPlans/{floorPlanId}'
 
-        body_params = ['name', 'center', 'bottomLeftCorner', 'bottomRightCorner', 'topLeftCorner', 'topRightCorner',
-                       'imageContents', ]
+        body_params = ['name', 'center', 'bottomLeftCorner', 'bottomRightCorner', 'topLeftCorner', 'topRightCorner', 'imageContents', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -226,6 +301,11 @@ class ActionBatchNetworks(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def deleteNetworkFloorPlan(self, networkId: str, floorPlanId: str):
         """
@@ -248,6 +328,11 @@ class ActionBatchNetworks(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def createNetworkGroupPolicy(self, networkId: str, name: str, **kwargs):
         """
@@ -272,8 +357,7 @@ class ActionBatchNetworks(object):
 
         if 'splashAuthSettings' in kwargs:
             options = ['network default', 'bypass']
-            assert kwargs[
-                       'splashAuthSettings'] in options, f'''"splashAuthSettings" cannot be "{kwargs['splashAuthSettings']}", & must be set to one of: {options}'''
+            assert kwargs['splashAuthSettings'] in options, f'''"splashAuthSettings" cannot be "{kwargs['splashAuthSettings']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['networks', 'configure', 'groupPolicies'],
@@ -281,8 +365,7 @@ class ActionBatchNetworks(object):
         }
         resource = f'/networks/{networkId}/groupPolicies'
 
-        body_params = ['name', 'scheduling', 'bandwidth', 'firewallAndTrafficShaping', 'contentFiltering',
-                       'splashAuthSettings', 'vlanTagging', 'bonjourForwarding', ]
+        body_params = ['name', 'scheduling', 'bandwidth', 'firewallAndTrafficShaping', 'contentFiltering', 'splashAuthSettings', 'vlanTagging', 'bonjourForwarding', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -290,6 +373,11 @@ class ActionBatchNetworks(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateNetworkGroupPolicy(self, networkId: str, groupPolicyId: str, **kwargs):
         """
@@ -315,8 +403,7 @@ class ActionBatchNetworks(object):
 
         if 'splashAuthSettings' in kwargs:
             options = ['network default', 'bypass']
-            assert kwargs[
-                       'splashAuthSettings'] in options, f'''"splashAuthSettings" cannot be "{kwargs['splashAuthSettings']}", & must be set to one of: {options}'''
+            assert kwargs['splashAuthSettings'] in options, f'''"splashAuthSettings" cannot be "{kwargs['splashAuthSettings']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['networks', 'configure', 'groupPolicies'],
@@ -324,8 +411,7 @@ class ActionBatchNetworks(object):
         }
         resource = f'/networks/{networkId}/groupPolicies/{groupPolicyId}'
 
-        body_params = ['name', 'scheduling', 'bandwidth', 'firewallAndTrafficShaping', 'contentFiltering',
-                       'splashAuthSettings', 'vlanTagging', 'bonjourForwarding', ]
+        body_params = ['name', 'scheduling', 'bandwidth', 'firewallAndTrafficShaping', 'contentFiltering', 'splashAuthSettings', 'vlanTagging', 'bonjourForwarding', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -333,6 +419,11 @@ class ActionBatchNetworks(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def deleteNetworkGroupPolicy(self, networkId: str, groupPolicyId: str):
         """
@@ -355,9 +446,13 @@ class ActionBatchNetworks(object):
             "body": payload
         }
         return action
+        
 
-    def createNetworkMerakiAuthUser(self, networkId: str, email: str, name: str, password: str, authorizations: list,
-                                    **kwargs):
+
+
+
+
+    def createNetworkMerakiAuthUser(self, networkId: str, email: str, name: str, password: str, authorizations: list, **kwargs):
         """
         **Authorize a user configured with Meraki Authentication for a network (currently supports 802.1X, splash guest, and client VPN users, and currently, organizations have a 50,000 user cap)**
         https://developer.cisco.com/meraki/api-v1/#!create-network-meraki-auth-user
@@ -375,8 +470,7 @@ class ActionBatchNetworks(object):
 
         if 'accountType' in kwargs:
             options = ['Guest', '802.1X', 'Client VPN']
-            assert kwargs[
-                       'accountType'] in options, f'''"accountType" cannot be "{kwargs['accountType']}", & must be set to one of: {options}'''
+            assert kwargs['accountType'] in options, f'''"accountType" cannot be "{kwargs['accountType']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['networks', 'configure', 'merakiAuthUsers'],
@@ -392,6 +486,11 @@ class ActionBatchNetworks(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def deleteNetworkMerakiAuthUser(self, networkId: str, merakiAuthUserId: str):
         """
@@ -414,6 +513,11 @@ class ActionBatchNetworks(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateNetworkMerakiAuthUser(self, networkId: str, merakiAuthUserId: str, **kwargs):
         """
@@ -444,6 +548,11 @@ class ActionBatchNetworks(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def createNetworkMqttBroker(self, networkId: str, name: str, host: str, port: int):
         """
@@ -472,6 +581,11 @@ class ActionBatchNetworks(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateNetworkMqttBroker(self, networkId: str, mqttBrokerId: str, **kwargs):
         """
@@ -501,6 +615,11 @@ class ActionBatchNetworks(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def deleteNetworkMqttBroker(self, networkId: str, mqttBrokerId: str):
         """
@@ -523,6 +642,11 @@ class ActionBatchNetworks(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateNetworkSettings(self, networkId: str, **kwargs):
         """
@@ -551,6 +675,11 @@ class ActionBatchNetworks(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def splitNetwork(self, networkId: str):
         """
@@ -572,3 +701,7 @@ class ActionBatchNetworks(object):
             "body": payload
         }
         return action
+        
+
+
+

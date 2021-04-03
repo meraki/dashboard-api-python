@@ -2,6 +2,8 @@ class Networks(object):
     def __init__(self, session):
         super(Networks, self).__init__()
         self._session = session
+        
+
 
     def getNetwork(self, networkId: str):
         """
@@ -18,6 +20,8 @@ class Networks(object):
         resource = f'/networks/{networkId}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetwork(self, networkId: str, **kwargs):
         """
@@ -44,6 +48,8 @@ class Networks(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def deleteNetwork(self, networkId: str):
         """
@@ -60,6 +66,8 @@ class Networks(object):
         resource = f'/networks/{networkId}'
 
         return self._session.delete(metadata, resource)
+        
+
 
     def getNetworkAlertsSettings(self, networkId: str):
         """
@@ -76,6 +84,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/alerts/settings'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkAlertsSettings(self, networkId: str, **kwargs):
         """
@@ -99,6 +109,8 @@ class Networks(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def bindNetwork(self, networkId: str, configTemplateId: str, **kwargs):
         """
@@ -122,6 +134,8 @@ class Networks(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getNetworkBluetoothClients(self, networkId: str, total_pages=1, direction='next', **kwargs):
         """
@@ -151,6 +165,8 @@ class Networks(object):
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
 
     def getNetworkBluetoothClient(self, networkId: str, bluetoothClientId: str, **kwargs):
         """
@@ -175,6 +191,8 @@ class Networks(object):
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
+        
+
 
     def getNetworkClients(self, networkId: str, total_pages=1, direction='next', **kwargs):
         """
@@ -203,9 +221,10 @@ class Networks(object):
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
 
-    def getNetworkClientsApplicationUsage(self, networkId: str, clients: str, total_pages=1, direction='next',
-                                          **kwargs):
+
+    def getNetworkClientsApplicationUsage(self, networkId: str, clients: str, total_pages=1, direction='next', **kwargs):
         """
         **Return the application usage data for clients**
         https://developer.cisco.com/meraki/api-v1/#!get-network-clients-application-usage
@@ -227,8 +246,7 @@ class Networks(object):
 
         if 'ssidNumber' in kwargs:
             options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-            assert kwargs[
-                       'ssidNumber'] in options, f'''"ssidNumber" cannot be "{kwargs['ssidNumber']}", & must be set to one of: {options}'''
+            assert kwargs['ssidNumber'] in options, f'''"ssidNumber" cannot be "{kwargs['ssidNumber']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['networks', 'monitor', 'clients', 'applicationUsage'],
@@ -240,6 +258,8 @@ class Networks(object):
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
 
     def provisionNetworkClients(self, networkId: str, clients: list, devicePolicy: str, **kwargs):
         """
@@ -258,8 +278,7 @@ class Networks(object):
 
         if 'devicePolicy' in kwargs:
             options = ['Group policy', 'Allowed', 'Blocked', 'Per connection', 'Normal']
-            assert kwargs[
-                       'devicePolicy'] in options, f'''"devicePolicy" cannot be "{kwargs['devicePolicy']}", & must be set to one of: {options}'''
+            assert kwargs['devicePolicy'] in options, f'''"devicePolicy" cannot be "{kwargs['devicePolicy']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['networks', 'configure', 'clients'],
@@ -271,6 +290,8 @@ class Networks(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getNetworkClientsUsageHistories(self, networkId: str, clients: str, total_pages=1, direction='next', **kwargs):
         """
@@ -294,8 +315,7 @@ class Networks(object):
 
         if 'ssidNumber' in kwargs:
             options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-            assert kwargs[
-                       'ssidNumber'] in options, f'''"ssidNumber" cannot be "{kwargs['ssidNumber']}", & must be set to one of: {options}'''
+            assert kwargs['ssidNumber'] in options, f'''"ssidNumber" cannot be "{kwargs['ssidNumber']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['networks', 'monitor', 'clients', 'usageHistories'],
@@ -307,6 +327,8 @@ class Networks(object):
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
 
     def getNetworkClient(self, networkId: str, clientId: str):
         """
@@ -324,6 +346,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/clients/{clientId}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def getNetworkClientPolicy(self, networkId: str, clientId: str):
         """
@@ -341,6 +365,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/clients/{clientId}/policy'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkClientPolicy(self, networkId: str, clientId: str, devicePolicy: str, **kwargs):
         """
@@ -365,6 +391,8 @@ class Networks(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkClientSplashAuthorizationStatus(self, networkId: str, clientId: str):
         """
@@ -382,6 +410,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/clients/{clientId}/splashAuthorizationStatus'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkClientSplashAuthorizationStatus(self, networkId: str, clientId: str, ssids: dict):
         """
@@ -405,6 +435,8 @@ class Networks(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkClientTrafficHistory(self, networkId: str, clientId: str, total_pages=1, direction='next', **kwargs):
         """
@@ -432,6 +464,8 @@ class Networks(object):
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
 
     def getNetworkClientUsageHistory(self, networkId: str, clientId: str):
         """
@@ -449,6 +483,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/clients/{clientId}/usageHistory'
 
         return self._session.get(metadata, resource)
+        
+
 
     def getNetworkDevices(self, networkId: str):
         """
@@ -465,6 +501,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/devices'
 
         return self._session.get(metadata, resource)
+        
+
 
     def claimNetworkDevices(self, networkId: str, serials: list):
         """
@@ -487,6 +525,8 @@ class Networks(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def removeNetworkDevices(self, networkId: str, serial: str):
         """
@@ -509,6 +549,8 @@ class Networks(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getNetworkEvents(self, networkId: str, total_pages=1, direction='prev', event_log_end_time=None, **kwargs):
         """
@@ -543,9 +585,7 @@ class Networks(object):
         }
         resource = f'/networks/{networkId}/events'
 
-        query_params = ['productType', 'includedEventTypes', 'excludedEventTypes', 'deviceMac', 'deviceSerial',
-                        'deviceName', 'clientIp', 'clientMac', 'clientName', 'smDeviceMac', 'smDeviceName', 'perPage',
-                        'startingAfter', 'endingBefore', ]
+        query_params = ['productType', 'includedEventTypes', 'excludedEventTypes', 'deviceMac', 'deviceSerial', 'deviceName', 'clientIp', 'clientMac', 'clientName', 'smDeviceMac', 'smDeviceName', 'perPage', 'startingAfter', 'endingBefore', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['includedEventTypes', 'excludedEventTypes', ]
@@ -555,6 +595,8 @@ class Networks(object):
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction, event_log_end_time)
+        
+
 
     def getNetworkEventsEventTypes(self, networkId: str):
         """
@@ -571,10 +613,12 @@ class Networks(object):
         resource = f'/networks/{networkId}/events/eventTypes'
 
         return self._session.get(metadata, resource)
+        
+
 
     def getNetworkFirmwareUpgrades(self, networkId: str):
         """
-        **Get current maintenance window for a network**
+        **Get firmware upgrade information for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-firmware-upgrades
 
         - networkId (string): (required)
@@ -587,14 +631,18 @@ class Networks(object):
         resource = f'/networks/{networkId}/firmwareUpgrades'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkFirmwareUpgrades(self, networkId: str, **kwargs):
         """
-        **Update current maintenance window for a network**
+        **Update firmware upgrade information for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-firmware-upgrades
 
         - networkId (string): (required)
         - upgradeWindow (object): Upgrade window for devices in network
+        - timezone (string): The timezone for the network
+        - products (object): Contains information about the network to update
         """
 
         kwargs.update(locals())
@@ -605,10 +653,43 @@ class Networks(object):
         }
         resource = f'/networks/{networkId}/firmwareUpgrades'
 
-        body_params = ['upgradeWindow', ]
+        body_params = ['upgradeWindow', 'timezone', 'products', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
+
+    def createNetworkFirmwareUpgradesRollback(self, networkId: str, reasons: list, **kwargs):
+        """
+        **Rollback a Firmware Upgrade For A Network**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-firmware-upgrades-rollback
+
+        - networkId (string): (required)
+        - reasons (array): Reasons for the rollback
+        - product (string): Product type to rollback (if the network is a combined network)
+        - time (string): Scheduled time for the rollback
+        - toVersion (object): Version to downgrade to (if the network has firmware flexibility)
+        """
+
+        kwargs.update(locals())
+
+        if 'product' in kwargs:
+            options = ['wireless', 'switch', 'appliance', 'camera', 'vmxHost', 'cellularGateway']
+            assert kwargs['product'] in options, f'''"product" cannot be "{kwargs['product']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['networks', 'configure', 'firmwareUpgrades', 'rollbacks'],
+            'operation': 'createNetworkFirmwareUpgradesRollback'
+        }
+        resource = f'/networks/{networkId}/firmwareUpgrades/rollbacks'
+
+        body_params = ['product', 'time', 'reasons', 'toVersion', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
 
     def getNetworkFloorPlans(self, networkId: str):
         """
@@ -625,6 +706,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/floorPlans'
 
         return self._session.get(metadata, resource)
+        
+
 
     def createNetworkFloorPlan(self, networkId: str, name: str, imageContents: str, **kwargs):
         """
@@ -649,11 +732,12 @@ class Networks(object):
         }
         resource = f'/networks/{networkId}/floorPlans'
 
-        body_params = ['name', 'center', 'bottomLeftCorner', 'bottomRightCorner', 'topLeftCorner', 'topRightCorner',
-                       'imageContents', ]
+        body_params = ['name', 'center', 'bottomLeftCorner', 'bottomRightCorner', 'topLeftCorner', 'topRightCorner', 'imageContents', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getNetworkFloorPlan(self, networkId: str, floorPlanId: str):
         """
@@ -671,6 +755,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/floorPlans/{floorPlanId}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkFloorPlan(self, networkId: str, floorPlanId: str, **kwargs):
         """
@@ -696,11 +782,12 @@ class Networks(object):
         }
         resource = f'/networks/{networkId}/floorPlans/{floorPlanId}'
 
-        body_params = ['name', 'center', 'bottomLeftCorner', 'bottomRightCorner', 'topLeftCorner', 'topRightCorner',
-                       'imageContents', ]
+        body_params = ['name', 'center', 'bottomLeftCorner', 'bottomRightCorner', 'topLeftCorner', 'topRightCorner', 'imageContents', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def deleteNetworkFloorPlan(self, networkId: str, floorPlanId: str):
         """
@@ -718,6 +805,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/floorPlans/{floorPlanId}'
 
         return self._session.delete(metadata, resource)
+        
+
 
     def getNetworkGroupPolicies(self, networkId: str):
         """
@@ -734,6 +823,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/groupPolicies'
 
         return self._session.get(metadata, resource)
+        
+
 
     def createNetworkGroupPolicy(self, networkId: str, name: str, **kwargs):
         """
@@ -758,8 +849,7 @@ class Networks(object):
 
         if 'splashAuthSettings' in kwargs:
             options = ['network default', 'bypass']
-            assert kwargs[
-                       'splashAuthSettings'] in options, f'''"splashAuthSettings" cannot be "{kwargs['splashAuthSettings']}", & must be set to one of: {options}'''
+            assert kwargs['splashAuthSettings'] in options, f'''"splashAuthSettings" cannot be "{kwargs['splashAuthSettings']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['networks', 'configure', 'groupPolicies'],
@@ -767,11 +857,12 @@ class Networks(object):
         }
         resource = f'/networks/{networkId}/groupPolicies'
 
-        body_params = ['name', 'scheduling', 'bandwidth', 'firewallAndTrafficShaping', 'contentFiltering',
-                       'splashAuthSettings', 'vlanTagging', 'bonjourForwarding', ]
+        body_params = ['name', 'scheduling', 'bandwidth', 'firewallAndTrafficShaping', 'contentFiltering', 'splashAuthSettings', 'vlanTagging', 'bonjourForwarding', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getNetworkGroupPolicy(self, networkId: str, groupPolicyId: str):
         """
@@ -789,6 +880,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/groupPolicies/{groupPolicyId}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkGroupPolicy(self, networkId: str, groupPolicyId: str, **kwargs):
         """
@@ -814,8 +907,7 @@ class Networks(object):
 
         if 'splashAuthSettings' in kwargs:
             options = ['network default', 'bypass']
-            assert kwargs[
-                       'splashAuthSettings'] in options, f'''"splashAuthSettings" cannot be "{kwargs['splashAuthSettings']}", & must be set to one of: {options}'''
+            assert kwargs['splashAuthSettings'] in options, f'''"splashAuthSettings" cannot be "{kwargs['splashAuthSettings']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['networks', 'configure', 'groupPolicies'],
@@ -823,11 +915,12 @@ class Networks(object):
         }
         resource = f'/networks/{networkId}/groupPolicies/{groupPolicyId}'
 
-        body_params = ['name', 'scheduling', 'bandwidth', 'firewallAndTrafficShaping', 'contentFiltering',
-                       'splashAuthSettings', 'vlanTagging', 'bonjourForwarding', ]
+        body_params = ['name', 'scheduling', 'bandwidth', 'firewallAndTrafficShaping', 'contentFiltering', 'splashAuthSettings', 'vlanTagging', 'bonjourForwarding', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def deleteNetworkGroupPolicy(self, networkId: str, groupPolicyId: str):
         """
@@ -845,6 +938,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/groupPolicies/{groupPolicyId}'
 
         return self._session.delete(metadata, resource)
+        
+
 
     def getNetworkMerakiAuthUsers(self, networkId: str):
         """
@@ -861,9 +956,10 @@ class Networks(object):
         resource = f'/networks/{networkId}/merakiAuthUsers'
 
         return self._session.get(metadata, resource)
+        
 
-    def createNetworkMerakiAuthUser(self, networkId: str, email: str, name: str, password: str, authorizations: list,
-                                    **kwargs):
+
+    def createNetworkMerakiAuthUser(self, networkId: str, email: str, name: str, password: str, authorizations: list, **kwargs):
         """
         **Authorize a user configured with Meraki Authentication for a network (currently supports 802.1X, splash guest, and client VPN users, and currently, organizations have a 50,000 user cap)**
         https://developer.cisco.com/meraki/api-v1/#!create-network-meraki-auth-user
@@ -881,8 +977,7 @@ class Networks(object):
 
         if 'accountType' in kwargs:
             options = ['Guest', '802.1X', 'Client VPN']
-            assert kwargs[
-                       'accountType'] in options, f'''"accountType" cannot be "{kwargs['accountType']}", & must be set to one of: {options}'''
+            assert kwargs['accountType'] in options, f'''"accountType" cannot be "{kwargs['accountType']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['networks', 'configure', 'merakiAuthUsers'],
@@ -894,6 +989,8 @@ class Networks(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getNetworkMerakiAuthUser(self, networkId: str, merakiAuthUserId: str):
         """
@@ -911,6 +1008,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/merakiAuthUsers/{merakiAuthUserId}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def deleteNetworkMerakiAuthUser(self, networkId: str, merakiAuthUserId: str):
         """
@@ -928,6 +1027,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/merakiAuthUsers/{merakiAuthUserId}'
 
         return self._session.delete(metadata, resource)
+        
+
 
     def updateNetworkMerakiAuthUser(self, networkId: str, merakiAuthUserId: str, **kwargs):
         """
@@ -954,6 +1055,8 @@ class Networks(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkMqttBrokers(self, networkId: str):
         """
@@ -970,6 +1073,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/mqttBrokers'
 
         return self._session.get(metadata, resource)
+        
+
 
     def createNetworkMqttBroker(self, networkId: str, name: str, host: str, port: int):
         """
@@ -994,6 +1099,8 @@ class Networks(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getNetworkMqttBroker(self, networkId: str, mqttBrokerId: str):
         """
@@ -1011,6 +1118,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/mqttBrokers/{mqttBrokerId}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkMqttBroker(self, networkId: str, mqttBrokerId: str, **kwargs):
         """
@@ -1036,6 +1145,8 @@ class Networks(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def deleteNetworkMqttBroker(self, networkId: str, mqttBrokerId: str):
         """
@@ -1053,6 +1164,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/mqttBrokers/{mqttBrokerId}'
 
         return self._session.delete(metadata, resource)
+        
+
 
     def getNetworkNetflow(self, networkId: str):
         """
@@ -1069,6 +1182,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/netflow'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkNetflow(self, networkId: str, **kwargs):
         """
@@ -1093,6 +1208,8 @@ class Networks(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkNetworkHealthChannelUtilization(self, networkId: str, total_pages=1, direction='next', **kwargs):
         """
@@ -1123,6 +1240,8 @@ class Networks(object):
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
 
     def getNetworkPiiPiiKeys(self, networkId: str, **kwargs):
         """
@@ -1150,6 +1269,8 @@ class Networks(object):
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
+        
+
 
     def getNetworkPiiRequests(self, networkId: str):
         """
@@ -1166,6 +1287,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/pii/requests'
 
         return self._session.get(metadata, resource)
+        
+
 
     def createNetworkPiiRequest(self, networkId: str, **kwargs):
         """
@@ -1186,8 +1309,7 @@ class Networks(object):
 
         if 'type' in kwargs:
             options = ['delete', 'restrict processing']
-            assert kwargs[
-                       'type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
+            assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['networks', 'configure', 'pii', 'requests'],
@@ -1199,6 +1321,8 @@ class Networks(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getNetworkPiiRequest(self, networkId: str, requestId: str):
         """
@@ -1216,6 +1340,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/pii/requests/{requestId}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def deleteNetworkPiiRequest(self, networkId: str, requestId: str):
         """
@@ -1233,6 +1359,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/pii/requests/{requestId}'
 
         return self._session.delete(metadata, resource)
+        
+
 
     def getNetworkPiiSmDevicesForKey(self, networkId: str, **kwargs):
         """
@@ -1260,6 +1388,8 @@ class Networks(object):
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
+        
+
 
     def getNetworkPiiSmOwnersForKey(self, networkId: str, **kwargs):
         """
@@ -1287,6 +1417,8 @@ class Networks(object):
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
+        
+
 
     def getNetworkSettings(self, networkId: str):
         """
@@ -1303,6 +1435,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/settings'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkSettings(self, networkId: str, **kwargs):
         """
@@ -1327,6 +1461,8 @@ class Networks(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkSnmp(self, networkId: str):
         """
@@ -1343,6 +1479,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/snmp'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkSnmp(self, networkId: str, **kwargs):
         """
@@ -1359,8 +1497,7 @@ class Networks(object):
 
         if 'access' in kwargs:
             options = ['none', 'community', 'users']
-            assert kwargs[
-                       'access'] in options, f'''"access" cannot be "{kwargs['access']}", & must be set to one of: {options}'''
+            assert kwargs['access'] in options, f'''"access" cannot be "{kwargs['access']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['networks', 'configure', 'snmp'],
@@ -1372,6 +1509,8 @@ class Networks(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkSplashLoginAttempts(self, networkId: str, **kwargs):
         """
@@ -1388,8 +1527,7 @@ class Networks(object):
 
         if 'ssidNumber' in kwargs:
             options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-            assert kwargs[
-                       'ssidNumber'] in options, f'''"ssidNumber" cannot be "{kwargs['ssidNumber']}", & must be set to one of: {options}'''
+            assert kwargs['ssidNumber'] in options, f'''"ssidNumber" cannot be "{kwargs['ssidNumber']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['networks', 'monitor', 'splashLoginAttempts'],
@@ -1401,6 +1539,8 @@ class Networks(object):
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
+        
+
 
     def splitNetwork(self, networkId: str):
         """
@@ -1417,6 +1557,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/split'
 
         return self._session.post(metadata, resource)
+        
+
 
     def getNetworkSyslogServers(self, networkId: str):
         """
@@ -1433,6 +1575,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/syslogServers'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkSyslogServers(self, networkId: str, servers: list):
         """
@@ -1455,6 +1599,8 @@ class Networks(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkTraffic(self, networkId: str, **kwargs):
         """
@@ -1471,8 +1617,7 @@ class Networks(object):
 
         if 'deviceType' in kwargs:
             options = ['combined', 'wireless', 'switch', 'appliance']
-            assert kwargs[
-                       'deviceType'] in options, f'''"deviceType" cannot be "{kwargs['deviceType']}", & must be set to one of: {options}'''
+            assert kwargs['deviceType'] in options, f'''"deviceType" cannot be "{kwargs['deviceType']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['networks', 'monitor', 'traffic'],
@@ -1484,6 +1629,8 @@ class Networks(object):
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
+        
+
 
     def getNetworkTrafficAnalysis(self, networkId: str):
         """
@@ -1500,6 +1647,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/trafficAnalysis'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkTrafficAnalysis(self, networkId: str, **kwargs):
         """
@@ -1517,8 +1666,7 @@ class Networks(object):
 
         if 'mode' in kwargs:
             options = ['disabled', 'basic', 'detailed']
-            assert kwargs[
-                       'mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
+            assert kwargs['mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['networks', 'configure', 'trafficAnalysis'],
@@ -1530,6 +1678,8 @@ class Networks(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getNetworkTrafficShapingApplicationCategories(self, networkId: str):
         """
@@ -1546,6 +1696,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/trafficShaping/applicationCategories'
 
         return self._session.get(metadata, resource)
+        
+
 
     def getNetworkTrafficShapingDscpTaggingOptions(self, networkId: str):
         """
@@ -1562,6 +1714,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/trafficShaping/dscpTaggingOptions'
 
         return self._session.get(metadata, resource)
+        
+
 
     def unbindNetwork(self, networkId: str):
         """
@@ -1578,6 +1732,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/unbind'
 
         return self._session.post(metadata, resource)
+        
+
 
     def getNetworkWebhooksHttpServers(self, networkId: str):
         """
@@ -1594,6 +1750,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/webhooks/httpServers'
 
         return self._session.get(metadata, resource)
+        
+
 
     def createNetworkWebhooksHttpServer(self, networkId: str, name: str, url: str, **kwargs):
         """
@@ -1618,6 +1776,8 @@ class Networks(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getNetworkWebhooksHttpServer(self, networkId: str, httpServerId: str):
         """
@@ -1635,6 +1795,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/webhooks/httpServers/{httpServerId}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateNetworkWebhooksHttpServer(self, networkId: str, httpServerId: str, **kwargs):
         """
@@ -1660,6 +1822,8 @@ class Networks(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def deleteNetworkWebhooksHttpServer(self, networkId: str, httpServerId: str):
         """
@@ -1677,6 +1841,8 @@ class Networks(object):
         resource = f'/networks/{networkId}/webhooks/httpServers/{httpServerId}'
 
         return self._session.delete(metadata, resource)
+        
+
 
     def createNetworkWebhooksWebhookTest(self, networkId: str, url: str, **kwargs):
         """
@@ -1700,6 +1866,8 @@ class Networks(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getNetworkWebhooksWebhookTest(self, networkId: str, webhookTestId: str):
         """
@@ -1717,3 +1885,4 @@ class Networks(object):
         resource = f'/networks/{networkId}/webhooks/webhookTests/{webhookTestId}'
 
         return self._session.get(metadata, resource)
+        

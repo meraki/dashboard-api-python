@@ -2,6 +2,8 @@ class Devices(object):
     def __init__(self, session):
         super(Devices, self).__init__()
         self._session = session
+        
+
 
     def getDevice(self, serial: str):
         """
@@ -18,6 +20,8 @@ class Devices(object):
         resource = f'/devices/{serial}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateDevice(self, serial: str, **kwargs):
         """
@@ -44,11 +48,12 @@ class Devices(object):
         }
         resource = f'/devices/{serial}'
 
-        body_params = ['name', 'tags', 'lat', 'lng', 'address', 'notes', 'moveMapMarker', 'switchProfileId',
-                       'floorPlanId', ]
+        body_params = ['name', 'tags', 'lat', 'lng', 'address', 'notes', 'moveMapMarker', 'switchProfileId', 'floorPlanId', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def blinkDeviceLeds(self, serial: str, **kwargs):
         """
@@ -73,6 +78,8 @@ class Devices(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getDeviceClients(self, serial: str, **kwargs):
         """
@@ -96,6 +103,8 @@ class Devices(object):
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
+        
+
 
     def getDeviceLldpCdp(self, serial: str):
         """
@@ -112,6 +121,8 @@ class Devices(object):
         resource = f'/devices/{serial}/lldpCdp'
 
         return self._session.get(metadata, resource)
+        
+
 
     def getDeviceLossAndLatencyHistory(self, serial: str, ip: str, **kwargs):
         """
@@ -131,8 +142,7 @@ class Devices(object):
 
         if 'uplink' in kwargs:
             options = ['wan1', 'wan2', 'cellular']
-            assert kwargs[
-                       'uplink'] in options, f'''"uplink" cannot be "{kwargs['uplink']}", & must be set to one of: {options}'''
+            assert kwargs['uplink'] in options, f'''"uplink" cannot be "{kwargs['uplink']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['devices', 'monitor', 'lossAndLatencyHistory'],
@@ -144,6 +154,8 @@ class Devices(object):
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
+        
+
 
     def getDeviceManagementInterface(self, serial: str):
         """
@@ -160,6 +172,8 @@ class Devices(object):
         resource = f'/devices/{serial}/managementInterface'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateDeviceManagementInterface(self, serial: str, **kwargs):
         """
@@ -183,6 +197,8 @@ class Devices(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def rebootDevice(self, serial: str):
         """
@@ -199,3 +215,4 @@ class Devices(object):
         resource = f'/devices/{serial}/reboot'
 
         return self._session.post(metadata, resource)
+        

@@ -168,7 +168,7 @@ def generate_library(spec, version_number):
     print(f'Total of {len(operations)} endpoints found from OpenAPI spec...')
 
     # Generate API libraries
-    jinja_env = jinja2.Environment(trim_blocks=True, lstrip_blocks=True)
+    jinja_env = jinja2.Environment(trim_blocks=True, lstrip_blocks=True, keep_trailing_newline=True)
     for scope in scopes:
         print(f'...generating {scope}')
         section = scopes[scope]

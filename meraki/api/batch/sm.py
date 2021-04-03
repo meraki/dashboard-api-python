@@ -1,6 +1,8 @@
 class ActionBatchSm(object):
     def __init__(self):
         super(ActionBatchSm, self).__init__()
+        
+
 
     def deleteNetworkSmUserAccessDevice(self, networkId: str, userAccessDeviceId: str):
         """
@@ -23,3 +25,7 @@ class ActionBatchSm(object):
             "body": payload
         }
         return action
+        
+
+
+

@@ -2,6 +2,8 @@ class AsyncOrganizations:
     def __init__(self, session):
         super().__init__()
         self._session = session
+        
+
 
     def getOrganizations(self):
         """
@@ -17,6 +19,8 @@ class AsyncOrganizations:
         resource = f'/organizations'
 
         return self._session.get(metadata, resource)
+        
+
 
     def createOrganization(self, name: str):
         """
@@ -38,6 +42,8 @@ class AsyncOrganizations:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getOrganization(self, organizationId: str):
         """
@@ -54,6 +60,8 @@ class AsyncOrganizations:
         resource = f'/organizations/{organizationId}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateOrganization(self, organizationId: str, **kwargs):
         """
@@ -76,6 +84,8 @@ class AsyncOrganizations:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def deleteOrganization(self, organizationId: str):
         """
@@ -92,6 +102,8 @@ class AsyncOrganizations:
         resource = f'/organizations/{organizationId}'
 
         return self._session.delete(metadata, resource)
+        
+
 
     def createOrganizationActionBatch(self, organizationId: str, actions: list, **kwargs):
         """
@@ -116,6 +128,8 @@ class AsyncOrganizations:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getOrganizationActionBatches(self, organizationId: str, **kwargs):
         """
@@ -130,8 +144,7 @@ class AsyncOrganizations:
 
         if 'status' in kwargs:
             options = ['pending', 'completed', 'failed']
-            assert kwargs[
-                       'status'] in options, f'''"status" cannot be "{kwargs['status']}", & must be set to one of: {options}'''
+            assert kwargs['status'] in options, f'''"status" cannot be "{kwargs['status']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['organizations', 'configure', 'actionBatches'],
@@ -143,6 +156,8 @@ class AsyncOrganizations:
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
+        
+
 
     def getOrganizationActionBatch(self, organizationId: str, actionBatchId: str):
         """
@@ -160,6 +175,8 @@ class AsyncOrganizations:
         resource = f'/organizations/{organizationId}/actionBatches/{actionBatchId}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def deleteOrganizationActionBatch(self, organizationId: str, actionBatchId: str):
         """
@@ -177,6 +194,8 @@ class AsyncOrganizations:
         resource = f'/organizations/{organizationId}/actionBatches/{actionBatchId}'
 
         return self._session.delete(metadata, resource)
+        
+
 
     def updateOrganizationActionBatch(self, organizationId: str, actionBatchId: str, **kwargs):
         """
@@ -201,6 +220,8 @@ class AsyncOrganizations:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getOrganizationAdmins(self, organizationId: str):
         """
@@ -217,6 +238,8 @@ class AsyncOrganizations:
         resource = f'/organizations/{organizationId}/admins'
 
         return self._session.get(metadata, resource)
+        
+
 
     def createOrganizationAdmin(self, organizationId: str, email: str, name: str, orgAccess: str, **kwargs):
         """
@@ -236,12 +259,10 @@ class AsyncOrganizations:
 
         if 'orgAccess' in kwargs:
             options = ['full', 'read-only', 'enterprise', 'none']
-            assert kwargs[
-                       'orgAccess'] in options, f'''"orgAccess" cannot be "{kwargs['orgAccess']}", & must be set to one of: {options}'''
+            assert kwargs['orgAccess'] in options, f'''"orgAccess" cannot be "{kwargs['orgAccess']}", & must be set to one of: {options}'''
         if 'authenticationMethod' in kwargs:
             options = ['Email', 'Cisco SecureX Sign-On']
-            assert kwargs[
-                       'authenticationMethod'] in options, f'''"authenticationMethod" cannot be "{kwargs['authenticationMethod']}", & must be set to one of: {options}'''
+            assert kwargs['authenticationMethod'] in options, f'''"authenticationMethod" cannot be "{kwargs['authenticationMethod']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['organizations', 'configure', 'admins'],
@@ -253,6 +274,8 @@ class AsyncOrganizations:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def updateOrganizationAdmin(self, organizationId: str, adminId: str, **kwargs):
         """
@@ -271,8 +294,7 @@ class AsyncOrganizations:
 
         if 'orgAccess' in kwargs:
             options = ['full', 'read-only', 'enterprise', 'none']
-            assert kwargs[
-                       'orgAccess'] in options, f'''"orgAccess" cannot be "{kwargs['orgAccess']}", & must be set to one of: {options}'''
+            assert kwargs['orgAccess'] in options, f'''"orgAccess" cannot be "{kwargs['orgAccess']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['organizations', 'configure', 'admins'],
@@ -284,6 +306,8 @@ class AsyncOrganizations:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def deleteOrganizationAdmin(self, organizationId: str, adminId: str):
         """
@@ -301,6 +325,8 @@ class AsyncOrganizations:
         resource = f'/organizations/{organizationId}/admins/{adminId}'
 
         return self._session.delete(metadata, resource)
+        
+
 
     def getOrganizationApiRequests(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
@@ -331,11 +357,12 @@ class AsyncOrganizations:
         }
         resource = f'/organizations/{organizationId}/apiRequests'
 
-        query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'adminId', 'path', 'method',
-                        'responseCode', 'sourceIp', ]
+        query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'adminId', 'path', 'method', 'responseCode', 'sourceIp', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
 
     def getOrganizationApiRequestsOverview(self, organizationId: str, **kwargs):
         """
@@ -360,6 +387,8 @@ class AsyncOrganizations:
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
+        
+
 
     def getOrganizationBrandingPolicies(self, organizationId: str):
         """
@@ -376,9 +405,10 @@ class AsyncOrganizations:
         resource = f'/organizations/{organizationId}/brandingPolicies'
 
         return self._session.get(metadata, resource)
+        
 
-    def createOrganizationBrandingPolicy(self, organizationId: str, name: str, enabled: bool, adminSettings: dict,
-                                         **kwargs):
+
+    def createOrganizationBrandingPolicy(self, organizationId: str, name: str, enabled: bool, adminSettings: dict, **kwargs):
         """
         **Add a new branding policy to an organization**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-branding-policy
@@ -406,6 +436,8 @@ class AsyncOrganizations:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getOrganizationBrandingPoliciesPriorities(self, organizationId: str):
         """
@@ -422,6 +454,8 @@ class AsyncOrganizations:
         resource = f'/organizations/{organizationId}/brandingPolicies/priorities'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateOrganizationBrandingPoliciesPriorities(self, organizationId: str, brandingPolicyIds: list):
         """
@@ -444,6 +478,8 @@ class AsyncOrganizations:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getOrganizationBrandingPolicy(self, organizationId: str, brandingPolicyId: str):
         """
@@ -461,6 +497,8 @@ class AsyncOrganizations:
         resource = f'/organizations/{organizationId}/brandingPolicies/{brandingPolicyId}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateOrganizationBrandingPolicy(self, organizationId: str, brandingPolicyId: str, **kwargs):
         """
@@ -491,6 +529,8 @@ class AsyncOrganizations:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def deleteOrganizationBrandingPolicy(self, organizationId: str, brandingPolicyId: str):
         """
@@ -508,6 +548,8 @@ class AsyncOrganizations:
         resource = f'/organizations/{organizationId}/brandingPolicies/{brandingPolicyId}'
 
         return self._session.delete(metadata, resource)
+        
+
 
     def claimIntoOrganization(self, organizationId: str, **kwargs):
         """
@@ -532,6 +574,8 @@ class AsyncOrganizations:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def cloneOrganization(self, organizationId: str, name: str):
         """
@@ -554,6 +598,8 @@ class AsyncOrganizations:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getOrganizationConfigTemplates(self, organizationId: str):
         """
@@ -570,6 +616,8 @@ class AsyncOrganizations:
         resource = f'/organizations/{organizationId}/configTemplates'
 
         return self._session.get(metadata, resource)
+        
+
 
     def createOrganizationConfigTemplate(self, organizationId: str, name: str, **kwargs):
         """
@@ -594,6 +642,8 @@ class AsyncOrganizations:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def updateOrganizationConfigTemplate(self, organizationId: str, configTemplateId: str, **kwargs):
         """
@@ -618,6 +668,8 @@ class AsyncOrganizations:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def deleteOrganizationConfigTemplate(self, organizationId: str, configTemplateId: str):
         """
@@ -635,6 +687,8 @@ class AsyncOrganizations:
         resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}'
 
         return self._session.delete(metadata, resource)
+        
+
 
     def getOrganizationConfigTemplate(self, organizationId: str, configTemplateId: str):
         """
@@ -652,6 +706,8 @@ class AsyncOrganizations:
         resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def getOrganizationConfigurationChanges(self, organizationId: str, total_pages=1, direction='prev', **kwargs):
         """
@@ -683,6 +739,8 @@ class AsyncOrganizations:
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
 
     def getOrganizationDevices(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
@@ -710,6 +768,8 @@ class AsyncOrganizations:
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
 
     def getOrganizationDevicesStatuses(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
@@ -736,6 +796,8 @@ class AsyncOrganizations:
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
 
     def getOrganizationDevicesUplinksLossAndLatency(self, organizationId: str, **kwargs):
         """
@@ -754,8 +816,7 @@ class AsyncOrganizations:
 
         if 'uplink' in kwargs:
             options = ['wan1', 'wan2', 'cellular']
-            assert kwargs[
-                       'uplink'] in options, f'''"uplink" cannot be "{kwargs['uplink']}", & must be set to one of: {options}'''
+            assert kwargs['uplink'] in options, f'''"uplink" cannot be "{kwargs['uplink']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['organizations', 'monitor', 'devices', 'uplinksLossAndLatency'],
@@ -767,6 +828,8 @@ class AsyncOrganizations:
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
+        
+
 
     def getOrganizationInventoryDevices(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
@@ -787,8 +850,7 @@ class AsyncOrganizations:
 
         if 'usedState' in kwargs:
             options = ['used', 'unused']
-            assert kwargs[
-                       'usedState'] in options, f'''"usedState" cannot be "{kwargs['usedState']}", & must be set to one of: {options}'''
+            assert kwargs['usedState'] in options, f'''"usedState" cannot be "{kwargs['usedState']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['organizations', 'configure', 'inventoryDevices'],
@@ -800,6 +862,8 @@ class AsyncOrganizations:
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
 
     def getOrganizationInventoryDevice(self, organizationId: str, serial: str):
         """
@@ -817,6 +881,8 @@ class AsyncOrganizations:
         resource = f'/organizations/{organizationId}/inventoryDevices/{serial}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def getOrganizationLicenses(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
@@ -838,8 +904,7 @@ class AsyncOrganizations:
 
         if 'state' in kwargs:
             options = ['active', 'expired', 'expiring', 'unused', 'unusedActive', 'recentlyQueued']
-            assert kwargs[
-                       'state'] in options, f'''"state" cannot be "{kwargs['state']}", & must be set to one of: {options}'''
+            assert kwargs['state'] in options, f'''"state" cannot be "{kwargs['state']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['organizations', 'configure', 'licenses'],
@@ -851,6 +916,8 @@ class AsyncOrganizations:
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
 
     def assignOrganizationLicensesSeats(self, organizationId: str, licenseId: str, networkId: str, seatCount: int):
         """
@@ -875,6 +942,8 @@ class AsyncOrganizations:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def moveOrganizationLicenses(self, organizationId: str, destOrganizationId: str, licenseIds: list):
         """
@@ -898,9 +967,10 @@ class AsyncOrganizations:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
 
-    def moveOrganizationLicensesSeats(self, organizationId: str, destOrganizationId: str, licenseId: str,
-                                      seatCount: int):
+
+    def moveOrganizationLicensesSeats(self, organizationId: str, destOrganizationId: str, licenseId: str, seatCount: int):
         """
         **Move SM seats to another organization**
         https://developer.cisco.com/meraki/api-v1/#!move-organization-licenses-seats
@@ -923,6 +993,8 @@ class AsyncOrganizations:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getOrganizationLicensesOverview(self, organizationId: str):
         """
@@ -939,6 +1011,8 @@ class AsyncOrganizations:
         resource = f'/organizations/{organizationId}/licenses/overview'
 
         return self._session.get(metadata, resource)
+        
+
 
     def renewOrganizationLicensesSeats(self, organizationId: str, licenseIdToRenew: str, unusedLicenseId: str):
         """
@@ -962,6 +1036,8 @@ class AsyncOrganizations:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getOrganizationLicense(self, organizationId: str, licenseId: str):
         """
@@ -979,6 +1055,8 @@ class AsyncOrganizations:
         resource = f'/organizations/{organizationId}/licenses/{licenseId}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateOrganizationLicense(self, organizationId: str, licenseId: str, **kwargs):
         """
@@ -1002,6 +1080,8 @@ class AsyncOrganizations:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getOrganizationLoginSecurity(self, organizationId: str):
         """
@@ -1018,6 +1098,8 @@ class AsyncOrganizations:
         resource = f'/organizations/{organizationId}/loginSecurity'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateOrganizationLoginSecurity(self, organizationId: str, **kwargs):
         """
@@ -1047,13 +1129,12 @@ class AsyncOrganizations:
         }
         resource = f'/organizations/{organizationId}/loginSecurity'
 
-        body_params = ['enforcePasswordExpiration', 'passwordExpirationDays', 'enforceDifferentPasswords',
-                       'numDifferentPasswords', 'enforceStrongPasswords', 'enforceAccountLockout',
-                       'accountLockoutAttempts', 'enforceIdleTimeout', 'idleTimeoutMinutes', 'enforceTwoFactorAuth',
-                       'enforceLoginIpRanges', 'loginIpRanges', ]
+        body_params = ['enforcePasswordExpiration', 'passwordExpirationDays', 'enforceDifferentPasswords', 'numDifferentPasswords', 'enforceStrongPasswords', 'enforceAccountLockout', 'accountLockoutAttempts', 'enforceIdleTimeout', 'idleTimeoutMinutes', 'enforceTwoFactorAuth', 'enforceLoginIpRanges', 'loginIpRanges', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getOrganizationNetworks(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
@@ -1075,8 +1156,7 @@ class AsyncOrganizations:
 
         if 'tagsFilterType' in kwargs:
             options = ['withAnyTags', 'withAllTags']
-            assert kwargs[
-                       'tagsFilterType'] in options, f'''"tagsFilterType" cannot be "{kwargs['tagsFilterType']}", & must be set to one of: {options}'''
+            assert kwargs['tagsFilterType'] in options, f'''"tagsFilterType" cannot be "{kwargs['tagsFilterType']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['organizations', 'configure', 'networks'],
@@ -1094,6 +1174,8 @@ class AsyncOrganizations:
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
 
     def createOrganizationNetwork(self, organizationId: str, name: str, productTypes: list, **kwargs):
         """
@@ -1121,6 +1203,8 @@ class AsyncOrganizations:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def combineOrganizationNetworks(self, organizationId: str, name: str, networkIds: list, **kwargs):
         """
@@ -1145,6 +1229,8 @@ class AsyncOrganizations:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getOrganizationOpenapiSpec(self, organizationId: str):
         """
@@ -1161,6 +1247,8 @@ class AsyncOrganizations:
         resource = f'/organizations/{organizationId}/openapiSpec'
 
         return self._session.get(metadata, resource)
+        
+
 
     def getOrganizationSaml(self, organizationId: str):
         """
@@ -1177,6 +1265,8 @@ class AsyncOrganizations:
         resource = f'/organizations/{organizationId}/saml'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateOrganizationSaml(self, organizationId: str, **kwargs):
         """
@@ -1199,6 +1289,8 @@ class AsyncOrganizations:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getOrganizationSamlIdps(self, organizationId: str):
         """
@@ -1215,6 +1307,8 @@ class AsyncOrganizations:
         resource = f'/organizations/{organizationId}/saml/idps'
 
         return self._session.get(metadata, resource)
+        
+
 
     def createOrganizationSamlIdp(self, organizationId: str, x509certSha1Fingerprint: str, **kwargs):
         """
@@ -1238,6 +1332,8 @@ class AsyncOrganizations:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def updateOrganizationSamlIdp(self, organizationId: str, idpId: str, **kwargs):
         """
@@ -1262,6 +1358,8 @@ class AsyncOrganizations:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getOrganizationSamlIdp(self, organizationId: str, idpId: str):
         """
@@ -1279,6 +1377,8 @@ class AsyncOrganizations:
         resource = f'/organizations/{organizationId}/saml/idps/{idpId}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def deleteOrganizationSamlIdp(self, organizationId: str, idpId: str):
         """
@@ -1296,6 +1396,8 @@ class AsyncOrganizations:
         resource = f'/organizations/{organizationId}/saml/idps/{idpId}'
 
         return self._session.delete(metadata, resource)
+        
+
 
     def getOrganizationSamlRoles(self, organizationId: str):
         """
@@ -1312,6 +1414,8 @@ class AsyncOrganizations:
         resource = f'/organizations/{organizationId}/samlRoles'
 
         return self._session.get(metadata, resource)
+        
+
 
     def createOrganizationSamlRole(self, organizationId: str, role: str, orgAccess: str, **kwargs):
         """
@@ -1329,8 +1433,7 @@ class AsyncOrganizations:
 
         if 'orgAccess' in kwargs:
             options = ['none', 'read-only', 'full']
-            assert kwargs[
-                       'orgAccess'] in options, f'''"orgAccess" cannot be "{kwargs['orgAccess']}", & must be set to one of: {options}'''
+            assert kwargs['orgAccess'] in options, f'''"orgAccess" cannot be "{kwargs['orgAccess']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['organizations', 'configure', 'samlRoles'],
@@ -1342,6 +1445,8 @@ class AsyncOrganizations:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getOrganizationSamlRole(self, organizationId: str, samlRoleId: str):
         """
@@ -1359,6 +1464,8 @@ class AsyncOrganizations:
         resource = f'/organizations/{organizationId}/samlRoles/{samlRoleId}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateOrganizationSamlRole(self, organizationId: str, samlRoleId: str, **kwargs):
         """
@@ -1377,8 +1484,7 @@ class AsyncOrganizations:
 
         if 'orgAccess' in kwargs:
             options = ['none', 'read-only', 'full']
-            assert kwargs[
-                       'orgAccess'] in options, f'''"orgAccess" cannot be "{kwargs['orgAccess']}", & must be set to one of: {options}'''
+            assert kwargs['orgAccess'] in options, f'''"orgAccess" cannot be "{kwargs['orgAccess']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['organizations', 'configure', 'samlRoles'],
@@ -1390,6 +1496,8 @@ class AsyncOrganizations:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def deleteOrganizationSamlRole(self, organizationId: str, samlRoleId: str):
         """
@@ -1407,6 +1515,8 @@ class AsyncOrganizations:
         resource = f'/organizations/{organizationId}/samlRoles/{samlRoleId}'
 
         return self._session.delete(metadata, resource)
+        
+
 
     def getOrganizationSnmp(self, organizationId: str):
         """
@@ -1423,6 +1533,8 @@ class AsyncOrganizations:
         resource = f'/organizations/{organizationId}/snmp'
 
         return self._session.get(metadata, resource)
+        
+
 
     def updateOrganizationSnmp(self, organizationId: str, **kwargs):
         """
@@ -1443,12 +1555,10 @@ class AsyncOrganizations:
 
         if 'v3AuthMode' in kwargs:
             options = ['MD5', 'SHA']
-            assert kwargs[
-                       'v3AuthMode'] in options, f'''"v3AuthMode" cannot be "{kwargs['v3AuthMode']}", & must be set to one of: {options}'''
+            assert kwargs['v3AuthMode'] in options, f'''"v3AuthMode" cannot be "{kwargs['v3AuthMode']}", & must be set to one of: {options}'''
         if 'v3PrivMode' in kwargs:
             options = ['DES', 'AES128']
-            assert kwargs[
-                       'v3PrivMode'] in options, f'''"v3PrivMode" cannot be "{kwargs['v3PrivMode']}", & must be set to one of: {options}'''
+            assert kwargs['v3PrivMode'] in options, f'''"v3PrivMode" cannot be "{kwargs['v3PrivMode']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['organizations', 'configure', 'snmp'],
@@ -1460,6 +1570,8 @@ class AsyncOrganizations:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def getOrganizationUplinksStatuses(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
@@ -1495,6 +1607,8 @@ class AsyncOrganizations:
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
 
     def getOrganizationWebhooksAlertTypes(self, organizationId: str):
         """
@@ -1511,6 +1625,8 @@ class AsyncOrganizations:
         resource = f'/organizations/{organizationId}/webhooks/alertTypes'
 
         return self._session.get(metadata, resource)
+        
+
 
     def getOrganizationWebhooksLogs(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
@@ -1541,3 +1657,4 @@ class AsyncOrganizations:
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        

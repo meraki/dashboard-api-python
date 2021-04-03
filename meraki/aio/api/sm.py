@@ -2,6 +2,8 @@ class AsyncSm:
     def __init__(self, session):
         super().__init__()
         self._session = session
+        
+
 
     def createNetworkSmBypassActivationLockAttempt(self, networkId: str, ids: list):
         """
@@ -24,6 +26,8 @@ class AsyncSm:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getNetworkSmBypassActivationLockAttempt(self, networkId: str, attemptId: str):
         """
@@ -41,6 +45,8 @@ class AsyncSm:
         resource = f'/networks/{networkId}/sm/bypassActivationLockAttempts/{attemptId}'
 
         return self._session.get(metadata, resource)
+        
+
 
     def getNetworkSmDevices(self, networkId: str, total_pages=1, direction='next', **kwargs):
         """
@@ -84,6 +90,8 @@ class AsyncSm:
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
 
     def checkinNetworkSmDevices(self, networkId: str, **kwargs):
         """
@@ -109,6 +117,8 @@ class AsyncSm:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def updateNetworkSmDevicesFields(self, networkId: str, deviceFields: dict, **kwargs):
         """
@@ -134,6 +144,8 @@ class AsyncSm:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def lockNetworkSmDevices(self, networkId: str, **kwargs):
         """
@@ -160,6 +172,8 @@ class AsyncSm:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def modifyNetworkSmDevicesTags(self, networkId: str, tags: list, updateAction: str, **kwargs):
         """
@@ -187,6 +201,8 @@ class AsyncSm:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def moveNetworkSmDevices(self, networkId: str, newNetwork: str, **kwargs):
         """
@@ -213,6 +229,8 @@ class AsyncSm:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def wipeNetworkSmDevices(self, networkId: str, **kwargs):
         """
@@ -238,6 +256,8 @@ class AsyncSm:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getNetworkSmDeviceCellularUsageHistory(self, networkId: str, deviceId: str):
         """
@@ -255,6 +275,8 @@ class AsyncSm:
         resource = f'/networks/{networkId}/sm/devices/{deviceId}/cellularUsageHistory'
 
         return self._session.get(metadata, resource)
+        
+
 
     def getNetworkSmDeviceCerts(self, networkId: str, deviceId: str):
         """
@@ -272,6 +294,8 @@ class AsyncSm:
         resource = f'/networks/{networkId}/sm/devices/{deviceId}/certs'
 
         return self._session.get(metadata, resource)
+        
+
 
     def getNetworkSmDeviceConnectivity(self, networkId: str, deviceId: str, total_pages=1, direction='next', **kwargs):
         """
@@ -299,6 +323,8 @@ class AsyncSm:
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
 
     def getNetworkSmDeviceDesktopLogs(self, networkId: str, deviceId: str, total_pages=1, direction='next', **kwargs):
         """
@@ -326,9 +352,10 @@ class AsyncSm:
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
 
-    def getNetworkSmDeviceDeviceCommandLogs(self, networkId: str, deviceId: str, total_pages=1, direction='next',
-                                            **kwargs):
+
+    def getNetworkSmDeviceDeviceCommandLogs(self, networkId: str, deviceId: str, total_pages=1, direction='next', **kwargs):
         """
         **Return historical records of commands sent to Systems Manager devices**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-device-command-logs
@@ -354,6 +381,8 @@ class AsyncSm:
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
 
     def getNetworkSmDeviceDeviceProfiles(self, networkId: str, deviceId: str):
         """
@@ -371,6 +400,8 @@ class AsyncSm:
         resource = f'/networks/{networkId}/sm/devices/{deviceId}/deviceProfiles'
 
         return self._session.get(metadata, resource)
+        
+
 
     def getNetworkSmDeviceNetworkAdapters(self, networkId: str, deviceId: str):
         """
@@ -388,9 +419,10 @@ class AsyncSm:
         resource = f'/networks/{networkId}/sm/devices/{deviceId}/networkAdapters'
 
         return self._session.get(metadata, resource)
+        
 
-    def getNetworkSmDevicePerformanceHistory(self, networkId: str, deviceId: str, total_pages=1, direction='next',
-                                             **kwargs):
+
+    def getNetworkSmDevicePerformanceHistory(self, networkId: str, deviceId: str, total_pages=1, direction='next', **kwargs):
         """
         **Return historical records of various Systems Manager client metrics for desktop devices.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-performance-history
@@ -416,6 +448,8 @@ class AsyncSm:
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
 
     def refreshNetworkSmDeviceDetails(self, networkId: str, deviceId: str):
         """
@@ -433,6 +467,8 @@ class AsyncSm:
         resource = f'/networks/{networkId}/sm/devices/{deviceId}/refreshDetails'
 
         return self._session.post(metadata, resource)
+        
+
 
     def getNetworkSmDeviceRestrictions(self, networkId: str, deviceId: str):
         """
@@ -450,6 +486,8 @@ class AsyncSm:
         resource = f'/networks/{networkId}/sm/devices/{deviceId}/restrictions'
 
         return self._session.get(metadata, resource)
+        
+
 
     def getNetworkSmDeviceSecurityCenters(self, networkId: str, deviceId: str):
         """
@@ -467,6 +505,8 @@ class AsyncSm:
         resource = f'/networks/{networkId}/sm/devices/{deviceId}/securityCenters'
 
         return self._session.get(metadata, resource)
+        
+
 
     def getNetworkSmDeviceSoftwares(self, networkId: str, deviceId: str):
         """
@@ -484,6 +524,8 @@ class AsyncSm:
         resource = f'/networks/{networkId}/sm/devices/{deviceId}/softwares'
 
         return self._session.get(metadata, resource)
+        
+
 
     def unenrollNetworkSmDevice(self, networkId: str, deviceId: str):
         """
@@ -501,6 +543,8 @@ class AsyncSm:
         resource = f'/networks/{networkId}/sm/devices/{deviceId}/unenroll'
 
         return self._session.post(metadata, resource)
+        
+
 
     def getNetworkSmDeviceWlanLists(self, networkId: str, deviceId: str):
         """
@@ -518,6 +562,8 @@ class AsyncSm:
         resource = f'/networks/{networkId}/sm/devices/{deviceId}/wlanLists'
 
         return self._session.get(metadata, resource)
+        
+
 
     def getNetworkSmProfiles(self, networkId: str):
         """
@@ -534,6 +580,8 @@ class AsyncSm:
         resource = f'/networks/{networkId}/sm/profiles'
 
         return self._session.get(metadata, resource)
+        
+
 
     def getNetworkSmTargetGroups(self, networkId: str, **kwargs):
         """
@@ -556,6 +604,8 @@ class AsyncSm:
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
+        
+
 
     def createNetworkSmTargetGroup(self, networkId: str, **kwargs):
         """
@@ -579,6 +629,8 @@ class AsyncSm:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
 
     def getNetworkSmTargetGroup(self, networkId: str, targetGroupId: str, **kwargs):
         """
@@ -602,6 +654,8 @@ class AsyncSm:
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
+        
+
 
     def updateNetworkSmTargetGroup(self, networkId: str, targetGroupId: str, **kwargs):
         """
@@ -626,6 +680,8 @@ class AsyncSm:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
 
     def deleteNetworkSmTargetGroup(self, networkId: str, targetGroupId: str):
         """
@@ -643,6 +699,8 @@ class AsyncSm:
         resource = f'/networks/{networkId}/sm/targetGroups/{targetGroupId}'
 
         return self._session.delete(metadata, resource)
+        
+
 
     def getNetworkSmUserAccessDevices(self, networkId: str, total_pages=1, direction='next', **kwargs):
         """
@@ -669,6 +727,8 @@ class AsyncSm:
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
 
     def deleteNetworkSmUserAccessDevice(self, networkId: str, userAccessDeviceId: str):
         """
@@ -686,6 +746,8 @@ class AsyncSm:
         resource = f'/networks/{networkId}/sm/userAccessDevices/{userAccessDeviceId}'
 
         return self._session.delete(metadata, resource)
+        
+
 
     def getNetworkSmUsers(self, networkId: str, **kwargs):
         """
@@ -717,6 +779,8 @@ class AsyncSm:
                 params.pop(k.strip())
 
         return self._session.get(metadata, resource, params)
+        
+
 
     def getNetworkSmUserDeviceProfiles(self, networkId: str, userId: str):
         """
@@ -734,6 +798,8 @@ class AsyncSm:
         resource = f'/networks/{networkId}/sm/users/{userId}/deviceProfiles'
 
         return self._session.get(metadata, resource)
+        
+
 
     def getNetworkSmUserSoftwares(self, networkId: str, userId: str):
         """
@@ -751,6 +817,8 @@ class AsyncSm:
         resource = f'/networks/{networkId}/sm/users/{userId}/softwares'
 
         return self._session.get(metadata, resource)
+        
+
 
     def getOrganizationSmApnsCert(self, organizationId: str):
         """
@@ -767,6 +835,8 @@ class AsyncSm:
         resource = f'/organizations/{organizationId}/sm/apnsCert'
 
         return self._session.get(metadata, resource)
+        
+
 
     def getOrganizationSmVppAccounts(self, organizationId: str):
         """
@@ -783,6 +853,8 @@ class AsyncSm:
         resource = f'/organizations/{organizationId}/sm/vppAccounts'
 
         return self._session.get(metadata, resource)
+        
+
 
     def getOrganizationSmVppAccount(self, organizationId: str, vppAccountId: str):
         """
@@ -800,3 +872,4 @@ class AsyncSm:
         resource = f'/organizations/{organizationId}/sm/vppAccounts/{vppAccountId}'
 
         return self._session.get(metadata, resource)
+        

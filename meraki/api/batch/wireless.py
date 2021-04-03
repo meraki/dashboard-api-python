@@ -1,6 +1,8 @@
 class ActionBatchWireless(object):
     def __init__(self):
         super(ActionBatchWireless, self).__init__()
+        
+
 
     def updateDeviceWirelessBluetoothSettings(self, serial: str, **kwargs):
         """
@@ -29,6 +31,11 @@ class ActionBatchWireless(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateDeviceWirelessRadioSettings(self, serial: str, **kwargs):
         """
@@ -57,6 +64,11 @@ class ActionBatchWireless(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateNetworkWirelessAlternateManagementInterface(self, networkId: str, **kwargs):
         """
@@ -86,6 +98,11 @@ class ActionBatchWireless(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateNetworkWirelessBilling(self, networkId: str, **kwargs):
         """
@@ -113,6 +130,11 @@ class ActionBatchWireless(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def createNetworkWirelessRfProfile(self, networkId: str, name: str, bandSelectionType: str, **kwargs):
         """
@@ -133,12 +155,10 @@ class ActionBatchWireless(object):
 
         if 'minBitrateType' in kwargs:
             options = ['band', 'ssid']
-            assert kwargs[
-                       'minBitrateType'] in options, f'''"minBitrateType" cannot be "{kwargs['minBitrateType']}", & must be set to one of: {options}'''
+            assert kwargs['minBitrateType'] in options, f'''"minBitrateType" cannot be "{kwargs['minBitrateType']}", & must be set to one of: {options}'''
         if 'bandSelectionType' in kwargs:
             options = ['ssid', 'ap']
-            assert kwargs[
-                       'bandSelectionType'] in options, f'''"bandSelectionType" cannot be "{kwargs['bandSelectionType']}", & must be set to one of: {options}'''
+            assert kwargs['bandSelectionType'] in options, f'''"bandSelectionType" cannot be "{kwargs['bandSelectionType']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['wireless', 'configure', 'rfProfiles'],
@@ -146,8 +166,7 @@ class ActionBatchWireless(object):
         }
         resource = f'/networks/{networkId}/wireless/rfProfiles'
 
-        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings',
-                       'twoFourGhzSettings', 'fiveGhzSettings', ]
+        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -155,6 +174,11 @@ class ActionBatchWireless(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateNetworkWirelessRfProfile(self, networkId: str, rfProfileId: str, **kwargs):
         """
@@ -176,12 +200,10 @@ class ActionBatchWireless(object):
 
         if 'minBitrateType' in kwargs:
             options = ['band', 'ssid']
-            assert kwargs[
-                       'minBitrateType'] in options, f'''"minBitrateType" cannot be "{kwargs['minBitrateType']}", & must be set to one of: {options}'''
+            assert kwargs['minBitrateType'] in options, f'''"minBitrateType" cannot be "{kwargs['minBitrateType']}", & must be set to one of: {options}'''
         if 'bandSelectionType' in kwargs:
             options = ['ssid', 'ap']
-            assert kwargs[
-                       'bandSelectionType'] in options, f'''"bandSelectionType" cannot be "{kwargs['bandSelectionType']}", & must be set to one of: {options}'''
+            assert kwargs['bandSelectionType'] in options, f'''"bandSelectionType" cannot be "{kwargs['bandSelectionType']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['wireless', 'configure', 'rfProfiles'],
@@ -189,8 +211,7 @@ class ActionBatchWireless(object):
         }
         resource = f'/networks/{networkId}/wireless/rfProfiles/{rfProfileId}'
 
-        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings',
-                       'twoFourGhzSettings', 'fiveGhzSettings', ]
+        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -198,6 +219,11 @@ class ActionBatchWireless(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def deleteNetworkWirelessRfProfile(self, networkId: str, rfProfileId: str):
         """
@@ -220,6 +246,11 @@ class ActionBatchWireless(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateNetworkWirelessSettings(self, networkId: str, **kwargs):
         """
@@ -238,8 +269,7 @@ class ActionBatchWireless(object):
 
         if 'upgradeStrategy' in kwargs:
             options = ['minimizeUpgradeTime', 'minimizeClientDowntime']
-            assert kwargs[
-                       'upgradeStrategy'] in options, f'''"upgradeStrategy" cannot be "{kwargs['upgradeStrategy']}", & must be set to one of: {options}'''
+            assert kwargs['upgradeStrategy'] in options, f'''"upgradeStrategy" cannot be "{kwargs['upgradeStrategy']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['wireless', 'configure', 'settings'],
@@ -247,8 +277,7 @@ class ActionBatchWireless(object):
         }
         resource = f'/networks/{networkId}/wireless/settings'
 
-        body_params = ['meshingEnabled', 'ipv6BridgeEnabled', 'locationAnalyticsEnabled', 'upgradeStrategy',
-                       'ledLightsOn', ]
+        body_params = ['meshingEnabled', 'ipv6BridgeEnabled', 'locationAnalyticsEnabled', 'upgradeStrategy', 'ledLightsOn', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -256,6 +285,11 @@ class ActionBatchWireless(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateNetworkWirelessSsid(self, networkId: str, number: str, **kwargs):
         """
@@ -273,8 +307,10 @@ class ActionBatchWireless(object):
         - wpaEncryptionMode (string): The types of WPA encryption. ('WPA1 only', 'WPA1 and WPA2', 'WPA2 only', 'WPA3 Transition Mode' or 'WPA3 only')
         - dot11w (object): The current setting for Protected Management Frames (802.11w).
         - dot11r (object): The current setting for 802.11r
-        - splashPage (string): The type of splash page for the SSID ('None', 'Click-through splash page', 'Billing', 'Password-protected with Meraki RADIUS', 'Password-protected with custom RADIUS', 'Password-protected with Active Directory', 'Password-protected with LDAP', 'SMS authentication', 'Systems Manager Sentry', 'Facebook Wi-Fi', 'Google OAuth', 'Sponsored guest' or 'Cisco ISE'). This attribute is not supported for template children.
+        - splashPage (string): The type of splash page for the SSID ('None', 'Click-through splash page', 'Billing', 'Password-protected with Meraki RADIUS', 'Password-protected with custom RADIUS', 'Password-protected with Active Directory', 'Password-protected with LDAP', 'SMS authentication', 'Systems Manager Sentry', 'Facebook Wi-Fi', 'Google OAuth', 'Sponsored guest', 'Cisco ISE' or 'Google Apps domain'). This attribute is not supported for template children.
         - splashGuestSponsorDomains (array): Array of valid sponsor email domains for sponsored guest splash type.
+        - oauth (object): The OAuth settings of this SSID. Only valid if splashPage is 'Google OAuth'.
+        - localRadius (object): The current setting for Local Authentication, a built-in RADIUS server on the access point. Only valid if authMode is '8021x-localradius'.
         - ldap (object): The current setting for LDAP. Only valid if splashPage is 'Password-protected with LDAP'.
         - activeDirectory (object): The current setting for Active Directory. Only valid if splashPage is 'Password-protected with Active Directory'
         - radiusServers (array): The RADIUS 802.1X servers to be used for authentication. This param is only valid if the authMode is 'open-with-radius', '8021x-radius' or 'ipsk-with-radius'
@@ -313,49 +349,37 @@ class ActionBatchWireless(object):
         - visible (boolean): Boolean indicating whether APs should advertise or hide this SSID. APs will only broadcast this SSID if set to true
         - availableOnAllAps (boolean): Boolean indicating whether all APs should broadcast the SSID or if it should be restricted to APs matching any availability tags. Can only be false if the SSID has availability tags.
         - availabilityTags (array): Accepts a list of tags for this SSID. If availableOnAllAps is false, then the SSID will only be broadcast by APs with tags matching any of the tags in this list.
-        - adaptivePolicyGroupId (string): Adaptive policy group ID this SSID is assigned to.
         - mandatoryDhcpEnabled (boolean): If true, Mandatory DHCP will enforce that clients connecting to this SSID must use the IP address assigned by the DHCP server. Clients who use a static IP address won't be able to associate.
         - adultContentFilteringEnabled (boolean): Boolean indicating whether or not adult content will be blocked
+        - dnsRewrite (object): DNS servers rewrite settings
         """
 
         kwargs.update(locals())
 
         if 'authMode' in kwargs:
-            options = ['open', 'psk', 'open-with-radius', '8021x-meraki', '8021x-radius', '8021x-google',
-                       '8021x-localradius', 'ipsk-with-radius', 'ipsk-without-radius']
-            assert kwargs[
-                       'authMode'] in options, f'''"authMode" cannot be "{kwargs['authMode']}", & must be set to one of: {options}'''
+            options = ['open', 'psk', 'open-with-radius', '8021x-meraki', '8021x-radius', '8021x-google', '8021x-localradius', 'ipsk-with-radius', 'ipsk-without-radius']
+            assert kwargs['authMode'] in options, f'''"authMode" cannot be "{kwargs['authMode']}", & must be set to one of: {options}'''
         if 'enterpriseAdminAccess' in kwargs:
             options = ['access disabled', 'access enabled']
-            assert kwargs[
-                       'enterpriseAdminAccess'] in options, f'''"enterpriseAdminAccess" cannot be "{kwargs['enterpriseAdminAccess']}", & must be set to one of: {options}'''
+            assert kwargs['enterpriseAdminAccess'] in options, f'''"enterpriseAdminAccess" cannot be "{kwargs['enterpriseAdminAccess']}", & must be set to one of: {options}'''
         if 'encryptionMode' in kwargs:
             options = ['wep', 'wpa']
-            assert kwargs[
-                       'encryptionMode'] in options, f'''"encryptionMode" cannot be "{kwargs['encryptionMode']}", & must be set to one of: {options}'''
+            assert kwargs['encryptionMode'] in options, f'''"encryptionMode" cannot be "{kwargs['encryptionMode']}", & must be set to one of: {options}'''
         if 'wpaEncryptionMode' in kwargs:
             options = ['WPA1 only', 'WPA1 and WPA2', 'WPA2 only', 'WPA3 Transition Mode', 'WPA3 only']
-            assert kwargs[
-                       'wpaEncryptionMode'] in options, f'''"wpaEncryptionMode" cannot be "{kwargs['wpaEncryptionMode']}", & must be set to one of: {options}'''
+            assert kwargs['wpaEncryptionMode'] in options, f'''"wpaEncryptionMode" cannot be "{kwargs['wpaEncryptionMode']}", & must be set to one of: {options}'''
         if 'splashPage' in kwargs:
-            options = ['None', 'Click-through splash page', 'Billing', 'Password-protected with Meraki RADIUS',
-                       'Password-protected with custom RADIUS', 'Password-protected with Active Directory',
-                       'Password-protected with LDAP', 'SMS authentication', 'Systems Manager Sentry', 'Facebook Wi-Fi',
-                       'Google OAuth', 'Sponsored guest', 'Cisco ISE']
-            assert kwargs[
-                       'splashPage'] in options, f'''"splashPage" cannot be "{kwargs['splashPage']}", & must be set to one of: {options}'''
+            options = ['None', 'Click-through splash page', 'Billing', 'Password-protected with Meraki RADIUS', 'Password-protected with custom RADIUS', 'Password-protected with Active Directory', 'Password-protected with LDAP', 'SMS authentication', 'Systems Manager Sentry', 'Facebook Wi-Fi', 'Google OAuth', 'Sponsored guest', 'Cisco ISE', 'Google Apps domain']
+            assert kwargs['splashPage'] in options, f'''"splashPage" cannot be "{kwargs['splashPage']}", & must be set to one of: {options}'''
         if 'radiusFailoverPolicy' in kwargs:
             options = ['Deny access', 'Allow access']
-            assert kwargs[
-                       'radiusFailoverPolicy'] in options, f'''"radiusFailoverPolicy" cannot be "{kwargs['radiusFailoverPolicy']}", & must be set to one of: {options}'''
+            assert kwargs['radiusFailoverPolicy'] in options, f'''"radiusFailoverPolicy" cannot be "{kwargs['radiusFailoverPolicy']}", & must be set to one of: {options}'''
         if 'radiusLoadBalancingPolicy' in kwargs:
             options = ['Strict priority order', 'Round robin']
-            assert kwargs[
-                       'radiusLoadBalancingPolicy'] in options, f'''"radiusLoadBalancingPolicy" cannot be "{kwargs['radiusLoadBalancingPolicy']}", & must be set to one of: {options}'''
+            assert kwargs['radiusLoadBalancingPolicy'] in options, f'''"radiusLoadBalancingPolicy" cannot be "{kwargs['radiusLoadBalancingPolicy']}", & must be set to one of: {options}'''
         if 'radiusAttributeForGroupPolicies' in kwargs:
             options = ['Filter-Id', 'Reply-Message', 'Airespace-ACL-Name', 'Aruba-User-Role']
-            assert kwargs[
-                       'radiusAttributeForGroupPolicies'] in options, f'''"radiusAttributeForGroupPolicies" cannot be "{kwargs['radiusAttributeForGroupPolicies']}", & must be set to one of: {options}'''
+            assert kwargs['radiusAttributeForGroupPolicies'] in options, f'''"radiusAttributeForGroupPolicies" cannot be "{kwargs['radiusAttributeForGroupPolicies']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['wireless', 'configure', 'ssids'],
@@ -363,19 +387,7 @@ class ActionBatchWireless(object):
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}'
 
-        body_params = ['name', 'enabled', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk',
-                       'wpaEncryptionMode', 'dot11w', 'dot11r', 'splashPage', 'splashGuestSponsorDomains', 'ldap',
-                       'activeDirectory', 'radiusServers', 'radiusProxyEnabled', 'radiusTestingEnabled',
-                       'radiusCalledStationId', 'radiusAuthenticationNasId', 'radiusServerTimeout',
-                       'radiusServerAttemptsLimit', 'radiusFallbackEnabled', 'radiusCoaEnabled', 'radiusFailoverPolicy',
-                       'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers',
-                       'radiusAccountingInterimInterval', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode',
-                       'useVlanTagging', 'concentratorNetworkId', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds',
-                       'walledGardenEnabled', 'walledGardenRanges', 'radiusOverride', 'radiusGuestVlanEnabled',
-                       'radiusGuestVlanId', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp',
-                       'perClientBandwidthLimitDown', 'perSsidBandwidthLimitUp', 'perSsidBandwidthLimitDown',
-                       'lanIsolationEnabled', 'visible', 'availableOnAllAps', 'availabilityTags',
-                       'adaptivePolicyGroupId', 'mandatoryDhcpEnabled', 'adultContentFilteringEnabled', ]
+        body_params = ['name', 'enabled', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk', 'wpaEncryptionMode', 'dot11w', 'dot11r', 'splashPage', 'splashGuestSponsorDomains', 'oauth', 'localRadius', 'ldap', 'activeDirectory', 'radiusServers', 'radiusProxyEnabled', 'radiusTestingEnabled', 'radiusCalledStationId', 'radiusAuthenticationNasId', 'radiusServerTimeout', 'radiusServerAttemptsLimit', 'radiusFallbackEnabled', 'radiusCoaEnabled', 'radiusFailoverPolicy', 'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusAccountingInterimInterval', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging', 'concentratorNetworkId', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 'walledGardenEnabled', 'walledGardenRanges', 'radiusOverride', 'radiusGuestVlanEnabled', 'radiusGuestVlanId', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'perSsidBandwidthLimitUp', 'perSsidBandwidthLimitDown', 'lanIsolationEnabled', 'visible', 'availableOnAllAps', 'availabilityTags', 'mandatoryDhcpEnabled', 'adultContentFilteringEnabled', 'dnsRewrite', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -383,6 +395,44 @@ class ActionBatchWireless(object):
             "body": payload
         }
         return action
+        
+
+
+
+
+
+    def updateNetworkWirelessSsidBonjourForwarding(self, networkId: str, number: str, **kwargs):
+        """
+        **Update the bonjour forwarding setting and rules for the SSID**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-bonjour-forwarding
+
+        - networkId (string): (required)
+        - number (string): (required)
+        - enabled (boolean): If true, Bonjour forwarding is enabled on this SSID.
+        - rules (array): List of bonjour forwarding rules.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ssids', 'bonjourForwarding'],
+            'operation': 'updateNetworkWirelessSsidBonjourForwarding'
+        }
+        resource = f'/networks/{networkId}/wireless/ssids/{number}/bonjourForwarding'
+
+        body_params = ['enabled', 'rules', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
 
     def updateNetworkWirelessSsidDeviceTypeGroupPolicies(self, networkId: str, number: str, **kwargs):
         """
@@ -411,6 +461,11 @@ class ActionBatchWireless(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateNetworkWirelessSsidFirewallL7FirewallRules(self, networkId: str, number: str, **kwargs):
         """
@@ -438,9 +493,13 @@ class ActionBatchWireless(object):
             "body": payload
         }
         return action
+        
 
-    def createNetworkWirelessSsidIdentityPsk(self, networkId: str, number: str, name: str, passphrase: str,
-                                             groupPolicyId: str):
+
+
+
+
+    def createNetworkWirelessSsidIdentityPsk(self, networkId: str, number: str, name: str, passphrase: str, groupPolicyId: str):
         """
         **Create an Identity PSK**
         https://developer.cisco.com/meraki/api-v1/#!create-network-wireless-ssid-identity-psk
@@ -468,6 +527,11 @@ class ActionBatchWireless(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateNetworkWirelessSsidIdentityPsk(self, networkId: str, number: str, identityPskId: str, **kwargs):
         """
@@ -498,6 +562,11 @@ class ActionBatchWireless(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def deleteNetworkWirelessSsidIdentityPsk(self, networkId: str, number: str, identityPskId: str):
         """
@@ -521,6 +590,11 @@ class ActionBatchWireless(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateNetworkWirelessSsidSplashSettings(self, networkId: str, number: str, **kwargs):
         """
@@ -549,8 +623,7 @@ class ActionBatchWireless(object):
 
         if 'controllerDisconnectionBehavior' in kwargs:
             options = ['open', 'restricted', 'default']
-            assert kwargs[
-                       'controllerDisconnectionBehavior'] in options, f'''"controllerDisconnectionBehavior" cannot be "{kwargs['controllerDisconnectionBehavior']}", & must be set to one of: {options}'''
+            assert kwargs['controllerDisconnectionBehavior'] in options, f'''"controllerDisconnectionBehavior" cannot be "{kwargs['controllerDisconnectionBehavior']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['wireless', 'configure', 'ssids', 'splash', 'settings'],
@@ -558,9 +631,7 @@ class ActionBatchWireless(object):
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}/splash/settings'
 
-        body_params = ['splashUrl', 'useSplashUrl', 'splashTimeout', 'redirectUrl', 'useRedirectUrl', 'welcomeMessage',
-                       'splashLogo', 'splashImage', 'splashPrepaidFront', 'blockAllTrafficBeforeSignOn',
-                       'controllerDisconnectionBehavior', 'allowSimultaneousLogins', 'guestSponsorship', 'billing', ]
+        body_params = ['splashUrl', 'useSplashUrl', 'splashTimeout', 'redirectUrl', 'useRedirectUrl', 'welcomeMessage', 'splashLogo', 'splashImage', 'splashPrepaidFront', 'blockAllTrafficBeforeSignOn', 'controllerDisconnectionBehavior', 'allowSimultaneousLogins', 'guestSponsorship', 'billing', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -568,6 +639,11 @@ class ActionBatchWireless(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateNetworkWirelessSsidTrafficShapingRules(self, networkId: str, number: str, **kwargs):
         """
@@ -600,3 +676,39 @@ class ActionBatchWireless(object):
             "body": payload
         }
         return action
+        
+
+
+
+
+
+    def updateNetworkWirelessSsidVpn(self, networkId: str, number: str, **kwargs):
+        """
+        **Update the VPN settings for the SSID**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-vpn
+
+        - networkId (string): (required)
+        - number (string): (required)
+        - splitTunnel (object): The VPN split tunnel settings for this SSID.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ssids', 'vpn'],
+            'operation': 'updateNetworkWirelessSsidVpn'
+        }
+        resource = f'/networks/{networkId}/wireless/ssids/{number}/vpn'
+
+        body_params = ['splitTunnel', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+

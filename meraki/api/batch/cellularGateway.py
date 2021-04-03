@@ -1,6 +1,8 @@
 class ActionBatchCellularGateway(object):
     def __init__(self):
         super(ActionBatchCellularGateway, self).__init__()
+        
+
 
     def updateDeviceCellularGatewayLan(self, serial: str, **kwargs):
         """
@@ -28,6 +30,11 @@ class ActionBatchCellularGateway(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateDeviceCellularGatewayPortForwardingRules(self, serial: str, **kwargs):
         """
@@ -54,6 +61,11 @@ class ActionBatchCellularGateway(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateNetworkCellularGatewayConnectivityMonitoringDestinations(self, networkId: str, **kwargs):
         """
@@ -80,6 +92,11 @@ class ActionBatchCellularGateway(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateNetworkCellularGatewayDhcp(self, networkId: str, **kwargs):
         """
@@ -108,6 +125,11 @@ class ActionBatchCellularGateway(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateNetworkCellularGatewaySubnetPool(self, networkId: str, **kwargs):
         """
@@ -135,6 +157,11 @@ class ActionBatchCellularGateway(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateNetworkCellularGatewayUplink(self, networkId: str, **kwargs):
         """
@@ -161,3 +188,7 @@ class ActionBatchCellularGateway(object):
             "body": payload
         }
         return action
+        
+
+
+

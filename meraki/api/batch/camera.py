@@ -1,6 +1,8 @@
 class ActionBatchCamera(object):
     def __init__(self):
         super(ActionBatchCamera, self).__init__()
+        
+
 
     def updateDeviceCameraQualityAndRetention(self, serial: str, **kwargs):
         """
@@ -21,16 +23,13 @@ class ActionBatchCamera(object):
 
         if 'quality' in kwargs:
             options = ['Standard', 'High', 'Enhanced']
-            assert kwargs[
-                       'quality'] in options, f'''"quality" cannot be "{kwargs['quality']}", & must be set to one of: {options}'''
+            assert kwargs['quality'] in options, f'''"quality" cannot be "{kwargs['quality']}", & must be set to one of: {options}'''
         if 'resolution' in kwargs:
             options = ['1280x720', '1920x1080', '1080x1080', '2058x2058']
-            assert kwargs[
-                       'resolution'] in options, f'''"resolution" cannot be "{kwargs['resolution']}", & must be set to one of: {options}'''
+            assert kwargs['resolution'] in options, f'''"resolution" cannot be "{kwargs['resolution']}", & must be set to one of: {options}'''
         if 'motionDetectorVersion' in kwargs:
             options = [1, 2]
-            assert kwargs[
-                       'motionDetectorVersion'] in options, f'''"motionDetectorVersion" cannot be "{kwargs['motionDetectorVersion']}", & must be set to one of: {options}'''
+            assert kwargs['motionDetectorVersion'] in options, f'''"motionDetectorVersion" cannot be "{kwargs['motionDetectorVersion']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['camera', 'configure', 'qualityAndRetention'],
@@ -38,8 +37,7 @@ class ActionBatchCamera(object):
         }
         resource = f'/devices/{serial}/camera/qualityAndRetention'
 
-        body_params = ['profileId', 'motionBasedRetentionEnabled', 'audioRecordingEnabled',
-                       'restrictedBandwidthModeEnabled', 'quality', 'resolution', 'motionDetectorVersion', ]
+        body_params = ['profileId', 'motionBasedRetentionEnabled', 'audioRecordingEnabled', 'restrictedBandwidthModeEnabled', 'quality', 'resolution', 'motionDetectorVersion', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -47,6 +45,11 @@ class ActionBatchCamera(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateDeviceCameraSense(self, serial: str, **kwargs):
         """
@@ -75,6 +78,11 @@ class ActionBatchCamera(object):
             "body": payload
         }
         return action
+        
+
+
+
+
 
     def updateDeviceCameraVideoSettings(self, serial: str, **kwargs):
         """
@@ -101,3 +109,7 @@ class ActionBatchCamera(object):
             "body": payload
         }
         return action
+        
+
+
+
