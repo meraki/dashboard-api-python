@@ -18,24 +18,24 @@ from ..rest_session import user_agent_extended
 # Main module interface
 class AsyncRestSession:
     def __init__(
-        self,
-        logger,
-        api_key,
-        base_url=DEFAULT_BASE_URL,
-        single_request_timeout=SINGLE_REQUEST_TIMEOUT,
-        certificate_path=CERTIFICATE_PATH,
-        requests_proxy=REQUESTS_PROXY,
-        wait_on_rate_limit=WAIT_ON_RATE_LIMIT,
-        nginx_429_retry_wait_time=NGINX_429_RETRY_WAIT_TIME,
-        action_batch_retry_wait_time=ACTION_BATCH_RETRY_WAIT_TIME,
-        retry_4xx_error=RETRY_4XX_ERROR,
-        retry_4xx_error_wait_time=RETRY_4XX_ERROR_WAIT_TIME,
-        maximum_retries=MAXIMUM_RETRIES,
-        simulate=SIMULATE_API_CALLS,
-        maximum_concurrent_requests=AIO_MAXIMUM_CONCURRENT_REQUESTS,
-        be_geo_id=BE_GEO_ID,
-        caller=MERAKI_PYTHON_SDK_CALLER,
-        use_iterator_for_get_pages=False,
+            self,
+            logger,
+            api_key,
+            base_url=DEFAULT_BASE_URL,
+            single_request_timeout=SINGLE_REQUEST_TIMEOUT,
+            certificate_path=CERTIFICATE_PATH,
+            requests_proxy=REQUESTS_PROXY,
+            wait_on_rate_limit=WAIT_ON_RATE_LIMIT,
+            nginx_429_retry_wait_time=NGINX_429_RETRY_WAIT_TIME,
+            action_batch_retry_wait_time=ACTION_BATCH_RETRY_WAIT_TIME,
+            retry_4xx_error=RETRY_4XX_ERROR,
+            retry_4xx_error_wait_time=RETRY_4XX_ERROR_WAIT_TIME,
+            maximum_retries=MAXIMUM_RETRIES,
+            simulate=SIMULATE_API_CALLS,
+            maximum_concurrent_requests=AIO_MAXIMUM_CONCURRENT_REQUESTS,
+            be_geo_id=BE_GEO_ID,
+            caller=MERAKI_PYTHON_SDK_CALLER,
+            use_iterator_for_get_pages=False,
     ):
         super().__init__()
 
@@ -75,7 +75,7 @@ class AsyncRestSession:
             "Authorization": "Bearer " + self._api_key,
             "Content-Type": "application/json",
             "User-Agent": f"python-meraki/aio-{self._version} "
-            + user_agent_extended(self._be_geo_id, self._caller),
+                          + user_agent_extended(self._be_geo_id, self._caller),
         }
         if self._certificate_path:
             self._sslcontext = ssl.create_default_context()
@@ -192,8 +192,8 @@ class AsyncRestSession:
                             await response.json()
                         return response
                     except (
-                        json.decoder.JSONDecodeError,
-                        aiohttp.client_exceptions.ContentTypeError,
+                            json.decoder.JSONDecodeError,
+                            aiohttp.client_exceptions.ContentTypeError,
                     ) as e:
                         if self._logger:
                             self._logger.warning(
@@ -207,8 +207,8 @@ class AsyncRestSession:
                     if substring not in abs_url:
                         substring = "meraki.cn/api/v"
                     self._base_url = abs_url[
-                        : abs_url.find(substring) + len(substring) + 1
-                    ]
+                                     : abs_url.find(substring) + len(substring) + 1
+                                     ]
                 # Rate limit 429 errors
                 elif status == 429:
                     wait = 0
@@ -279,13 +279,13 @@ class AsyncRestSession:
             return await response.json()
 
     async def get_pages(
-        self,
-        metadata,
-        url,
-        params=None,
-        total_pages=-1,
-        direction="next",
-        event_log_end_time=None,
+            self,
+            metadata,
+            url,
+            params=None,
+            total_pages=-1,
+            direction="next",
+            event_log_end_time=None,
     ):
         pass
 
@@ -295,13 +295,13 @@ class AsyncRestSession:
         return response, result
 
     async def _get_pages_iterator(
-        self,
-        metadata,
-        url,
-        params=None,
-        total_pages=-1,
-        direction="next",
-        event_log_end_time=None,
+            self,
+            metadata,
+            url,
+            params=None,
+            total_pages=-1,
+            direction="next",
+            event_log_end_time=None,
     ):
         if type(total_pages) == str and total_pages.lower() == "all":
             total_pages = -1
@@ -376,13 +376,13 @@ class AsyncRestSession:
                 yield item
 
     async def _get_pages_legacy(
-        self,
-        metadata,
-        url,
-        params=None,
-        total_pages=-1,
-        direction="next",
-        event_log_end_time=None,
+            self,
+            metadata,
+            url,
+            params=None,
+            total_pages=-1,
+            direction="next",
+            event_log_end_time=None,
     ):
         if type(total_pages) == str and total_pages.lower() == "all":
             total_pages = -1
@@ -395,9 +395,9 @@ class AsyncRestSession:
 
             # For event log endpoint when using 'next' direction, so results/events are sorted chronologically
             if (
-                type(results) == dict
-                and metadata["operation"] == "getNetworkEvents"
-                and direction == "next"
+                    type(results) == dict
+                    and metadata["operation"] == "getNetworkEvents"
+                    and direction == "next"
             ):
                 results["events"] = results["events"][::-1]
 

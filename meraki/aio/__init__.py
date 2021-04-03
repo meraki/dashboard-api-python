@@ -39,6 +39,7 @@ from .rest_session import *
 # Batch class imports
 from ..api.batch import Batch
 
+
 class AsyncDashboardAPI:
     """
     **Creates a persistent Meraki dashboard API session**
@@ -67,28 +68,28 @@ class AsyncDashboardAPI:
     """
 
     def __init__(
-        self,
-        api_key=None,
-        base_url=DEFAULT_BASE_URL,
-        single_request_timeout=SINGLE_REQUEST_TIMEOUT,
-        certificate_path=CERTIFICATE_PATH,
-        requests_proxy=REQUESTS_PROXY,
-        wait_on_rate_limit=WAIT_ON_RATE_LIMIT,
-        nginx_429_retry_wait_time=NGINX_429_RETRY_WAIT_TIME,
-        action_batch_retry_wait_time=ACTION_BATCH_RETRY_WAIT_TIME,
-        retry_4xx_error=RETRY_4XX_ERROR,
-        retry_4xx_error_wait_time=RETRY_4XX_ERROR_WAIT_TIME,
-        maximum_retries=MAXIMUM_RETRIES,
-        output_log=OUTPUT_LOG,
-        log_path=LOG_PATH,
-        log_file_prefix=LOG_FILE_PREFIX,
-        print_console=PRINT_TO_CONSOLE,
-        suppress_logging=SUPPRESS_LOGGING,
-        simulate=SIMULATE_API_CALLS,
-        maximum_concurrent_requests=AIO_MAXIMUM_CONCURRENT_REQUESTS,
-        be_geo_id=BE_GEO_ID,
-        caller=MERAKI_PYTHON_SDK_CALLER,
-        use_iterator_for_get_pages=False,
+            self,
+            api_key=None,
+            base_url=DEFAULT_BASE_URL,
+            single_request_timeout=SINGLE_REQUEST_TIMEOUT,
+            certificate_path=CERTIFICATE_PATH,
+            requests_proxy=REQUESTS_PROXY,
+            wait_on_rate_limit=WAIT_ON_RATE_LIMIT,
+            nginx_429_retry_wait_time=NGINX_429_RETRY_WAIT_TIME,
+            action_batch_retry_wait_time=ACTION_BATCH_RETRY_WAIT_TIME,
+            retry_4xx_error=RETRY_4XX_ERROR,
+            retry_4xx_error_wait_time=RETRY_4XX_ERROR_WAIT_TIME,
+            maximum_retries=MAXIMUM_RETRIES,
+            output_log=OUTPUT_LOG,
+            log_path=LOG_PATH,
+            log_file_prefix=LOG_FILE_PREFIX,
+            print_console=PRINT_TO_CONSOLE,
+            suppress_logging=SUPPRESS_LOGGING,
+            simulate=SIMULATE_API_CALLS,
+            maximum_concurrent_requests=AIO_MAXIMUM_CONCURRENT_REQUESTS,
+            be_geo_id=BE_GEO_ID,
+            caller=MERAKI_PYTHON_SDK_CALLER,
+            use_iterator_for_get_pages=False,
     ):
         # Check API key
         api_key = api_key or os.environ.get(API_KEY_ENVIRONMENT_VARIABLE)
