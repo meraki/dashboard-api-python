@@ -13,7 +13,7 @@ from .wireless import ActionBatchWireless
 # Batch class
 class Batch:
     def __init__(self):
-        # Action Batch API endpoints by section
+        # Action Batch helper API endpoints by section
         self.organizations = ActionBatchOrganizations()
         self.networks = ActionBatchNetworks()
         self.devices = ActionBatchDevices()
