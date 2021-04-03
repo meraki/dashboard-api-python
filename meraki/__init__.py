@@ -93,7 +93,7 @@ class DashboardAPI(object):
                     filename=self._log_file
                 )
                 handler_log.setFormatter(formatter)
-            
+
             if output_log and not self._logger.hasHandlers():
                 self._logger.addHandler(handler_log)
                 if print_console:

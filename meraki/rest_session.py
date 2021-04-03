@@ -20,10 +20,10 @@ def user_agent_extended(be_geo_id, caller):
 
     # Mimic pip system data collection per https://github.com/pypa/pip/blob/master/src/pip/_internal/network/session.py
     user_agent_extended['implementation'] = {
-            "name": platform.python_implementation(),
-        }
+        "name": platform.python_implementation(),
+    }
 
-    if user_agent_extended["implementation"]["name"] in ('CPython','Jython','IronPython'):
+    if user_agent_extended["implementation"]["name"] in ('CPython', 'Jython', 'IronPython'):
         user_agent_extended["implementation"]["version"] = platform.python_version()
     elif user_agent_extended["implementation"]["name"] == 'PyPy':
         if sys.pypy_version_info.releaselevel == 'final':
@@ -307,9 +307,8 @@ class RestSession(object):
             total_pages = int(total_pages)
         metadata["page"] = 1
 
-
         response = self.request(metadata, 'GET', url, params=params)
- 
+
         # Get additional pages if more than one requested
         while total_pages != 0:
             results = response.json()
@@ -383,7 +382,7 @@ class RestSession(object):
         # For event log endpoint when using 'next' direction, so results/events are sorted chronologically
         if type(results) == dict and metadata['operation'] == 'getNetworkEvents' and direction == 'next':
             results['events'] = results['events'][::-1]
-        
+
         # Get additional pages if more than one requested
         while total_pages != 1:
             links = response.links
@@ -402,7 +401,7 @@ class RestSession(object):
                     # Or if next page is past the specified window's end time
                     elif event_log_end_time and starting_after > event_log_end_time:
                         break
-                
+
                 metadata['page'] += 1
                 response = self.request(metadata, 'GET', links['next']['url'])
             elif direction == 'prev' and 'prev' in links:
@@ -412,7 +411,7 @@ class RestSession(object):
                     # Break out of loop if endingBefore returned from prev link is before 2014
                     if ending_before < '2014-01-01':
                         break
-                
+
                 metadata['page'] += 1
                 response = self.request(metadata, 'GET', links['prev']['url'])
             else:
