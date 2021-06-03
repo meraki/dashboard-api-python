@@ -705,3 +705,29 @@ class ActionBatchNetworks(object):
 
 
 
+
+
+    def unbindNetwork(self, networkId: str):
+        """
+        **Unbind a network from a template.**
+        https://developer.cisco.com/meraki/api-v1/#!unbind-network
+
+        - networkId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure'],
+            'operation': 'unbindNetwork'
+        }
+        resource = f'/networks/{networkId}/unbind'
+
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+

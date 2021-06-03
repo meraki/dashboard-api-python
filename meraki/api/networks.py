@@ -261,6 +261,33 @@ class Networks(object):
         
 
 
+    def getNetworkClientsOverview(self, networkId: str, **kwargs):
+        """
+        **Return overview statistics for network clients**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-clients-overview
+
+        - networkId (string): (required)
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        - resolution (integer): The time resolution in seconds for returned data. The valid resolutions are: 7200, 86400, 604800, 2592000. The default is 604800.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['networks', 'monitor', 'clients', 'overview'],
+            'operation': 'getNetworkClientsOverview'
+        }
+        resource = f'/networks/{networkId}/clients/overview'
+
+        query_params = ['t0', 't1', 'timespan', 'resolution', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get(metadata, resource, params)
+        
+
+
     def provisionNetworkClients(self, networkId: str, clients: list, devicePolicy: str, **kwargs):
         """
         **Provisions a client with a name and policy**

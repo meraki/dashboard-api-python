@@ -499,7 +499,7 @@ class ActionBatchWireless(object):
 
 
 
-    def createNetworkWirelessSsidIdentityPsk(self, networkId: str, number: str, name: str, passphrase: str, groupPolicyId: str):
+    def createNetworkWirelessSsidIdentityPsk(self, networkId: str, number: str, name: str, groupPolicyId: str, **kwargs):
         """
         **Create an Identity PSK**
         https://developer.cisco.com/meraki/api-v1/#!create-network-wireless-ssid-identity-psk
@@ -507,11 +507,11 @@ class ActionBatchWireless(object):
         - networkId (string): (required)
         - number (string): (required)
         - name (string): The name of the Identity PSK
-        - passphrase (string): The passphrase for client authentication
         - groupPolicyId (string): The group policy to be applied to clients
+        - passphrase (string): The passphrase for client authentication. If left blank, one will be auto-generated.
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         metadata = {
             'tags': ['wireless', 'configure', 'ssids', 'identityPsks'],
@@ -587,6 +587,40 @@ class ActionBatchWireless(object):
         action = {
             "resource": resource,
             "operation": "destroy",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def updateNetworkWirelessSsidSchedules(self, networkId: str, number: str, **kwargs):
+        """
+        **Update the outage schedule for the SSID**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-schedules
+
+        - networkId (string): (required)
+        - number (string): (required)
+        - enabled (boolean): If true, the SSID outage schedule is enabled.
+        - ranges (array): List of outage ranges. Has a start date and time, and end date and time. If this parameter is passed in along with rangesInSeconds parameter, this will take precedence.
+        - rangesInSeconds (array): List of outage ranges in seconds since Sunday at Midnight. Has a start and end. If this parameter is passed in along with the ranges parameter, ranges will take precedence.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ssids', 'schedules'],
+            'operation': 'updateNetworkWirelessSsidSchedules'
+        }
+        resource = f'/networks/{networkId}/wireless/ssids/{number}/schedules'
+
+        body_params = ['enabled', 'ranges', 'rangesInSeconds', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
             "body": payload
         }
         return action
