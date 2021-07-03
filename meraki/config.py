@@ -52,7 +52,7 @@ SUPPRESS_LOGGING = False
 SIMULATE_API_CALLS = False
 
 # Number of concurrent API requests for asynchronous class
-AIO_MAXIMUM_CONCURRENT_REQUESTS = 3
+AIO_MAXIMUM_CONCURRENT_REQUESTS = 8
 
 # Optional partner identifier for API usage tracking; can also be set as an environment variable BE_GEO_ID
 BE_GEO_ID = ''
