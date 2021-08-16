@@ -1234,6 +1234,33 @@ class Appliance(object):
         
 
 
+    def getNetworkApplianceUplinksUsageHistory(self, networkId: str, **kwargs):
+        """
+        **Get the sent and received bytes for each uplink of a network.**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-uplinks-usage-history
+
+        - networkId (string): (required)
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 14 days. The default is 10 minutes.
+        - resolution (integer): The time resolution in seconds for returned data. The valid resolutions are: 60, 300, 600, 1800, 3600, 86400. The default is 60.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['appliance', 'monitor', 'uplinks', 'usageHistory'],
+            'operation': 'getNetworkApplianceUplinksUsageHistory'
+        }
+        resource = f'/networks/{networkId}/appliance/uplinks/usageHistory'
+
+        query_params = ['t0', 't1', 'timespan', 'resolution', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get(metadata, resource, params)
+        
+
+
     def getNetworkApplianceVlans(self, networkId: str):
         """
         **List the VLANs for an MX network**

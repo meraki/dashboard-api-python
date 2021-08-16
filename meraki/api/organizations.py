@@ -70,6 +70,7 @@ class Organizations(object):
 
         - organizationId (string): (required)
         - name (string): The name of the organization
+        - api (object): API-specific settings
         """
 
         kwargs.update(locals())
@@ -80,7 +81,7 @@ class Organizations(object):
         }
         resource = f'/organizations/{organizationId}'
 
-        body_params = ['name', ]
+        body_params = ['name', 'api', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -217,6 +218,167 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/actionBatches/{actionBatchId}'
 
         body_params = ['confirmed', 'synchronous', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def getOrganizationAdaptivePolicyAcls(self, organizationId: str):
+        """
+        **List adaptive policy ACLs in a organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-adaptive-policy-acls
+
+        - organizationId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'acls'],
+            'operation': 'getOrganizationAdaptivePolicyAcls'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/acls'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def createOrganizationAdaptivePolicyAcl(self, organizationId: str, name: str, rules: list, ipVersion: str, **kwargs):
+        """
+        **Creates new adaptive policy ACL**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-adaptive-policy-acl
+
+        - organizationId (string): (required)
+        - name (string): Name of the adaptive policy ACL
+        - rules (array): An ordered array of the adaptive policy ACL rules.
+        - ipVersion (string): IP version of adpative policy ACL. One of: 'any', 'ipv4' or 'ipv6'
+        - description (string): Description of the adaptive policy ACL
+        """
+
+        kwargs.update(locals())
+
+        if 'ipVersion' in kwargs:
+            options = ['any', 'ipv4', 'ipv6']
+            assert kwargs['ipVersion'] in options, f'''"ipVersion" cannot be "{kwargs['ipVersion']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'acls'],
+            'operation': 'createOrganizationAdaptivePolicyAcl'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/acls'
+
+        body_params = ['name', 'description', 'rules', 'ipVersion', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getOrganizationAdaptivePolicyAcl(self, organizationId: str, id: str):
+        """
+        **Returns the adaptive policy ACL information**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-adaptive-policy-acl
+
+        - organizationId (string): (required)
+        - id (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'acls'],
+            'operation': 'getOrganizationAdaptivePolicyAcl'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/acls/{id}'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def updateOrganizationAdaptivePolicyAcl(self, organizationId: str, id: str, **kwargs):
+        """
+        **Updates an adaptive policy ACL**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-adaptive-policy-acl
+
+        - organizationId (string): (required)
+        - id (string): (required)
+        - name (string): Name of the adaptive policy ACL
+        - description (string): Description of the adaptive policy ACL
+        - rules (array): An ordered array of the adaptive policy ACL rules. An empty array will clear the rules.
+        - ipVersion (string): IP version of adpative policy ACL. One of: 'any', 'ipv4' or 'ipv6'
+        """
+
+        kwargs.update(locals())
+
+        if 'ipVersion' in kwargs:
+            options = ['any', 'ipv4', 'ipv6']
+            assert kwargs['ipVersion'] in options, f'''"ipVersion" cannot be "{kwargs['ipVersion']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'acls'],
+            'operation': 'updateOrganizationAdaptivePolicyAcl'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/acls/{id}'
+
+        body_params = ['name', 'description', 'rules', 'ipVersion', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def deleteOrganizationAdaptivePolicyAcl(self, organizationId: str, id: str):
+        """
+        **Deletes the specified adaptive policy ACL**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-adaptive-policy-acl
+
+        - organizationId (string): (required)
+        - id (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'acls'],
+            'operation': 'deleteOrganizationAdaptivePolicyAcl'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/acls/{id}'
+
+        return self._session.delete(metadata, resource)
+        
+
+
+    def getOrganizationAdaptivePolicySettings(self, organizationId: str):
+        """
+        **Returns global adaptive policy settings in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-adaptive-policy-settings
+
+        - organizationId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'settings'],
+            'operation': 'getOrganizationAdaptivePolicySettings'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/settings'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def updateOrganizationAdaptivePolicySettings(self, organizationId: str, **kwargs):
+        """
+        **Update global adaptive policy settings**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-adaptive-policy-settings
+
+        - organizationId (string): (required)
+        - enabledNetworks (array): List of network IDs with adaptive policy enabled
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'settings'],
+            'operation': 'updateOrganizationAdaptivePolicySettings'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/settings'
+
+        body_params = ['enabledNetworks', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -782,6 +944,7 @@ class Organizations(object):
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - components (object): components
         """
 
         kwargs.update(locals())
@@ -792,7 +955,7 @@ class Organizations(object):
         }
         resource = f'/organizations/{organizationId}/devices/statuses'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'components', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -1184,7 +1347,7 @@ class Organizations(object):
 
         - organizationId (string): (required)
         - name (string): The name of the new network
-        - productTypes (array): The product type(s) of the new network. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, environmental. If more than one type is included, the network will be a combined network.
+        - productTypes (array): The product type(s) of the new network. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, environmental. If more than one type is included, the network will be a combined network.
         - tags (array): A list of tags to be applied to the network
         - timeZone (string): The timezone of the network. For a list of allowed timezones, please see the 'TZ' column in the table in <a target='_blank' href='https://en.wikipedia.org/wiki/List_of_tz_database_time_zones'>this article.</a>
         - copyFromNetworkId (string): The ID of the network to copy configuration from. Other provided parameters will override the copied configuration, except type which must match this network's type exactly.

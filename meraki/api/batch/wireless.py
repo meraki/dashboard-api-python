@@ -467,6 +467,41 @@ class ActionBatchWireless(object):
 
 
 
+    def updateNetworkWirelessSsidEapOverride(self, networkId: str, number: str, **kwargs):
+        """
+        **Update the EAP overridden parameters for an SSID.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-eap-override
+
+        - networkId (string): (required)
+        - number (string): (required)
+        - timeout (integer): General EAP timeout in seconds.
+        - identity (object): EAP settings for identity requests.
+        - maxRetries (integer): Maximum number of general EAP retries.
+        - eapolKey (object): EAPOL Key settings.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ssids', 'eapOverride'],
+            'operation': 'updateNetworkWirelessSsidEapOverride'
+        }
+        resource = f'/networks/{networkId}/wireless/ssids/{number}/eapOverride'
+
+        body_params = ['timeout', 'identity', 'maxRetries', 'eapolKey', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
     def updateNetworkWirelessSsidFirewallL7FirewallRules(self, networkId: str, number: str, **kwargs):
         """
         **Update the L7 firewall rules of an SSID on an MR network**
@@ -486,6 +521,49 @@ class ActionBatchWireless(object):
         resource = f'/networks/{networkId}/wireless/ssids/{number}/firewall/l7FirewallRules'
 
         body_params = ['rules', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def updateNetworkWirelessSsidHotspot20(self, networkId: str, number: str, **kwargs):
+        """
+        **Update the Hotspot 2.0 settings of an SSID**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-hotspot-2-0
+
+        - networkId (string): (required)
+        - number (string): (required)
+        - enabled (boolean): Whether or not Hotspot 2.0 for this SSID is enabled
+        - operator (object): Operator settings for this SSID
+        - venue (object): Venue settings for this SSID
+        - networkAccessType (string): The network type of this SSID ('Private network', 'Private network with guest access', 'Chargeable public network', 'Free public network', 'Personal device network', 'Emergency services only network', 'Test or experimental', 'Wildcard')
+        - domains (array): An array of domain names
+        - roamConsortOis (array): An array of roaming consortium OIs (hexadecimal number 3-5 octets in length)
+        - mccMncs (array): An array of MCC/MNC pairs
+        - naiRealms (array): An array of NAI realms
+        """
+
+        kwargs.update(locals())
+
+        if 'networkAccessType' in kwargs:
+            options = ['Private network', 'Private network with guest access', 'Chargeable public network', 'Free public network', 'Personal device network', 'Emergency services only network', 'Test or experimental', 'Wildcard']
+            assert kwargs['networkAccessType'] in options, f'''"networkAccessType" cannot be "{kwargs['networkAccessType']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ssids', 'hotspot20'],
+            'operation': 'updateNetworkWirelessSsidHotspot20'
+        }
+        resource = f'/networks/{networkId}/wireless/ssids/{number}/hotspot20'
+
+        body_params = ['enabled', 'operator', 'venue', 'networkAccessType', 'domains', 'roamConsortOis', 'mccMncs', 'naiRealms', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -651,6 +729,7 @@ class ActionBatchWireless(object):
         - allowSimultaneousLogins (boolean): Whether or not to allow simultaneous logins from different devices.
         - guestSponsorship (object): Details associated with guest sponsored splash.
         - billing (object): Details associated with billing splash.
+        - sentryEnrollment (object): Systems Manager sentry enrollment splash settings.
         """
 
         kwargs.update(locals())
@@ -665,7 +744,7 @@ class ActionBatchWireless(object):
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}/splash/settings'
 
-        body_params = ['splashUrl', 'useSplashUrl', 'splashTimeout', 'redirectUrl', 'useRedirectUrl', 'welcomeMessage', 'splashLogo', 'splashImage', 'splashPrepaidFront', 'blockAllTrafficBeforeSignOn', 'controllerDisconnectionBehavior', 'allowSimultaneousLogins', 'guestSponsorship', 'billing', ]
+        body_params = ['splashUrl', 'useSplashUrl', 'splashTimeout', 'redirectUrl', 'useRedirectUrl', 'welcomeMessage', 'splashLogo', 'splashImage', 'splashPrepaidFront', 'blockAllTrafficBeforeSignOn', 'controllerDisconnectionBehavior', 'allowSimultaneousLogins', 'guestSponsorship', 'billing', 'sentryEnrollment', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,

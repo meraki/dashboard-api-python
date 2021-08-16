@@ -207,6 +207,14 @@ class AsyncNetworks:
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 10.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - statuses (array): Filters clients based on status. Can be one of 'Online' or 'Offline'.
+        - ip (string): Filters clients based on a partial or full match for the ip address field.
+        - ip6 (string): Filters clients based on a partial or full match for the ip6 address field.
+        - ip6Local (string): Filters clients based on a partial or full match for the ip6Local address field.
+        - mac (string): Filters clients based on a partial or full match for the mac address field.
+        - os (string): Filters clients based on a partial or full match for the os (operating system) field.
+        - description (string): Filters clients based on a partial or full match for the description field.
+        - recentDeviceConnections (array): Filters clients based on recent connection type. Can be one of 'Wired' or 'Wireless'.
         """
 
         kwargs.update(locals())
@@ -217,8 +225,14 @@ class AsyncNetworks:
         }
         resource = f'/networks/{networkId}/clients'
 
-        query_params = ['t0', 'timespan', 'perPage', 'startingAfter', 'endingBefore', ]
+        query_params = ['t0', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'statuses', 'ip', 'ip6', 'ip6Local', 'mac', 'os', 'description', 'recentDeviceConnections', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['statuses', 'recentDeviceConnections', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
         
@@ -588,7 +602,7 @@ class AsyncNetworks:
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" or "prev" (default) page
         - event_log_end_time (string): ISO8601 Zulu/UTC time, to use in conjunction with startingAfter, to retrieve events within a time window
-        - productType (string): The product type to fetch events for. This parameter is required for networks with multiple device types. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, and environmental
+        - productType (string): The product type to fetch events for. This parameter is required for networks with multiple device types. Valid types are wireless, appliance, switch, systemsManager, camera, and cellularGateway
         - includedEventTypes (array): A list of event types. The returned events will be filtered to only include events with these types.
         - excludedEventTypes (array): A list of event types. The returned events will be filtered to exclude events with these types.
         - deviceMac (string): The MAC address of the Meraki device which the list of events will be filtered with
@@ -605,6 +619,10 @@ class AsyncNetworks:
         """
 
         kwargs.update(locals())
+
+        if 'productType' in kwargs:
+            options = ['wireless', 'appliance', 'switch', 'systemsManager', 'camera', 'cellularGateway']
+            assert kwargs['productType'] in options, f'''"productType" cannot be "{kwargs['productType']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['networks', 'monitor', 'events'],
@@ -1221,6 +1239,8 @@ class AsyncNetworks:
         - reportingEnabled (boolean): Boolean indicating whether NetFlow traffic reporting is enabled (true) or disabled (false).
         - collectorIp (string): The IPv4 address of the NetFlow collector.
         - collectorPort (integer): The port that the NetFlow collector will be listening on.
+        - etaEnabled (boolean): Boolean indicating whether Encrypted Traffic Analysis is enabled (true) or disabled (false).
+        - etaDstPort (integer): The port that the Encrypted Traffic Analysis collector will be listening on.
         """
 
         kwargs.update(locals())
@@ -1231,7 +1251,7 @@ class AsyncNetworks:
         }
         resource = f'/networks/{networkId}/netflow'
 
-        body_params = ['reportingEnabled', 'collectorIp', 'collectorPort', ]
+        body_params = ['reportingEnabled', 'collectorIp', 'collectorPort', 'etaEnabled', 'etaDstPort', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)

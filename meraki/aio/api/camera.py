@@ -185,7 +185,7 @@ class AsyncCamera:
         - profileId (string): The ID of a quality and retention profile to assign to the camera. The profile's settings will override all of the per-camera quality and retention settings. If the value of this parameter is null, any existing profile will be unassigned from the camera.
         - motionBasedRetentionEnabled (boolean): Boolean indicating if motion-based retention is enabled(true) or disabled(false) on the camera.
         - audioRecordingEnabled (boolean): Boolean indicating if audio recording is enabled(true) or disabled(false) on the camera
-        - restrictedBandwidthModeEnabled (boolean): Boolean indicating if restricted bandwidth is enabled(true) or disabled(false) on the camera
+        - restrictedBandwidthModeEnabled (boolean): Boolean indicating if restricted bandwidth is enabled(true) or disabled(false) on the camera. This setting does not apply to MV2 cameras.
         - quality (string): Quality of the camera. Can be one of 'Standard', 'High' or 'Enhanced'. Not all qualities are supported by every camera model.
         - resolution (string): Resolution of the camera. Can be one of '1280x720', '1920x1080', '1080x1080' or '2058x2058'. Not all resolutions are supported by every camera model.
         - motionDetectorVersion (integer): The version of the motion detector that will be used by the camera. Only applies to Gen 2 cameras. Defaults to v2.
@@ -412,8 +412,8 @@ class AsyncCamera:
 
         - networkId (string): (required)
         - name (string): The name of the new profile. Must be unique. This parameter is required.
-        - motionBasedRetentionEnabled (boolean): Deletes footage older than 3 days in which no motion was detected. Can be either true or false. Defaults to false.
-        - restrictedBandwidthModeEnabled (boolean): Disable features that require additional bandwidth such as Motion Recap. Can be either true or false. Defaults to false.
+        - motionBasedRetentionEnabled (boolean): Deletes footage older than 3 days in which no motion was detected. Can be either true or false. Defaults to false. This setting does not apply to MV2 cameras.
+        - restrictedBandwidthModeEnabled (boolean): Disable features that require additional bandwidth such as Motion Recap. Can be either true or false. Defaults to false. This setting does not apply to MV2 cameras.
         - audioRecordingEnabled (boolean): Whether or not to record audio. Can be either true or false. Defaults to false.
         - cloudArchiveEnabled (boolean): Create redundant video backup using Cloud Archive. Can be either true or false. Defaults to false.
         - motionDetectorVersion (integer): The version of the motion detector that will be used by the camera. Only applies to Gen 2 cameras. Defaults to v2.
@@ -464,8 +464,8 @@ class AsyncCamera:
         - networkId (string): (required)
         - qualityRetentionProfileId (string): (required)
         - name (string): The name of the new profile. Must be unique.
-        - motionBasedRetentionEnabled (boolean): Deletes footage older than 3 days in which no motion was detected. Can be either true or false. Defaults to false.
-        - restrictedBandwidthModeEnabled (boolean): Disable features that require additional bandwidth such as Motion Recap. Can be either true or false. Defaults to false.
+        - motionBasedRetentionEnabled (boolean): Deletes footage older than 3 days in which no motion was detected. Can be either true or false. Defaults to false. This setting does not apply to MV2 cameras.
+        - restrictedBandwidthModeEnabled (boolean): Disable features that require additional bandwidth such as Motion Recap. Can be either true or false. Defaults to false. This setting does not apply to MV2 cameras.
         - audioRecordingEnabled (boolean): Whether or not to record audio. Can be either true or false. Defaults to false.
         - cloudArchiveEnabled (boolean): Create redundant video backup using Cloud Archive. Can be either true or false. Defaults to false.
         - motionDetectorVersion (integer): The version of the motion detector that will be used by the camera. Only applies to Gen 2 cameras. Defaults to v2.

@@ -5,13 +5,13 @@ class AsyncInsight:
         
 
 
-    def getNetworkInsightApplicationHealthByTime(self, network_id: str, application_id: str, **kwargs):
+    def getNetworkInsightApplicationHealthByTime(self, networkId: str, applicationId: str, **kwargs):
         """
         **Get application health by time**
         https://developer.cisco.com/meraki/api-v1/#!get-network-insight-application-health-by-time
 
-        - network_id (string): (required)
-        - application_id (string): (required)
+        - networkId (string): (required)
+        - applicationId (string): (required)
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 7 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days. The default is 2 hours.
@@ -24,12 +24,30 @@ class AsyncInsight:
             'tags': ['insight', 'monitor', 'applications', 'healthByTime'],
             'operation': 'getNetworkInsightApplicationHealthByTime'
         }
-        resource = f'/networks/{network_id}/insight/applications/{application_id}/healthByTime'
+        resource = f'/networks/{networkId}/insight/applications/{applicationId}/healthByTime'
 
         query_params = ['t0', 't1', 'timespan', 'resolution', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
+        
+
+
+    def getOrganizationInsightApplications(self, organizationId: str):
+        """
+        **List all Insight tracked applications**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-insight-applications
+
+        - organizationId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['insight', 'configure', 'applications'],
+            'operation': 'getOrganizationInsightApplications'
+        }
+        resource = f'/organizations/{organizationId}/insight/applications'
+
+        return self._session.get(metadata, resource)
         
 
 
@@ -139,22 +157,4 @@ class AsyncInsight:
         resource = f'/organizations/{organizationId}/insight/monitoredMediaServers/{monitoredMediaServerId}'
 
         return self._session.delete(metadata, resource)
-        
-
-
-    def getOrganizationInsightApplications(self, organization_id: str):
-        """
-        **List all Insight tracked applications**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-insight-applications
-
-        - organization_id (string): (required)
-        """
-
-        metadata = {
-            'tags': ['insight', 'configure', 'applications'],
-            'operation': 'getOrganizationInsightApplications'
-        }
-        resource = f'/organizations/{organization_id}/insight/applications'
-
-        return self._session.get(metadata, resource)
         

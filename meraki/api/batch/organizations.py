@@ -4,6 +4,141 @@ class ActionBatchOrganizations(object):
         
 
 
+    def createOrganizationAdaptivePolicyAcl(self, organizationId: str, name: str, rules: list, ipVersion: str, **kwargs):
+        """
+        **Creates new adaptive policy ACL**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-adaptive-policy-acl
+
+        - organizationId (string): (required)
+        - name (string): Name of the adaptive policy ACL
+        - rules (array): An ordered array of the adaptive policy ACL rules.
+        - ipVersion (string): IP version of adpative policy ACL. One of: 'any', 'ipv4' or 'ipv6'
+        - description (string): Description of the adaptive policy ACL
+        """
+
+        kwargs.update(locals())
+
+        if 'ipVersion' in kwargs:
+            options = ['any', 'ipv4', 'ipv6']
+            assert kwargs['ipVersion'] in options, f'''"ipVersion" cannot be "{kwargs['ipVersion']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'acls'],
+            'operation': 'createOrganizationAdaptivePolicyAcl'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/acls'
+
+        body_params = ['name', 'description', 'rules', 'ipVersion', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def updateOrganizationAdaptivePolicyAcl(self, organizationId: str, id: str, **kwargs):
+        """
+        **Updates an adaptive policy ACL**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-adaptive-policy-acl
+
+        - organizationId (string): (required)
+        - id (string): (required)
+        - name (string): Name of the adaptive policy ACL
+        - description (string): Description of the adaptive policy ACL
+        - rules (array): An ordered array of the adaptive policy ACL rules. An empty array will clear the rules.
+        - ipVersion (string): IP version of adpative policy ACL. One of: 'any', 'ipv4' or 'ipv6'
+        """
+
+        kwargs.update(locals())
+
+        if 'ipVersion' in kwargs:
+            options = ['any', 'ipv4', 'ipv6']
+            assert kwargs['ipVersion'] in options, f'''"ipVersion" cannot be "{kwargs['ipVersion']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'acls'],
+            'operation': 'updateOrganizationAdaptivePolicyAcl'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/acls/{id}'
+
+        body_params = ['name', 'description', 'rules', 'ipVersion', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def deleteOrganizationAdaptivePolicyAcl(self, organizationId: str, id: str):
+        """
+        **Deletes the specified adaptive policy ACL**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-adaptive-policy-acl
+
+        - organizationId (string): (required)
+        - id (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'acls'],
+            'operation': 'deleteOrganizationAdaptivePolicyAcl'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/acls/{id}'
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def updateOrganizationAdaptivePolicySettings(self, organizationId: str, **kwargs):
+        """
+        **Update global adaptive policy settings**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-adaptive-policy-settings
+
+        - organizationId (string): (required)
+        - enabledNetworks (array): List of network IDs with adaptive policy enabled
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'settings'],
+            'operation': 'updateOrganizationAdaptivePolicySettings'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/settings'
+
+        body_params = ['enabledNetworks', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
     def createOrganizationConfigTemplate(self, organizationId: str, name: str, **kwargs):
         """
         **Create a new configuration template**
@@ -281,7 +416,7 @@ class ActionBatchOrganizations(object):
 
         - organizationId (string): (required)
         - name (string): The name of the new network
-        - productTypes (array): The product type(s) of the new network. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, environmental. If more than one type is included, the network will be a combined network.
+        - productTypes (array): The product type(s) of the new network. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, environmental. If more than one type is included, the network will be a combined network.
         - tags (array): A list of tags to be applied to the network
         - timeZone (string): The timezone of the network. For a list of allowed timezones, please see the 'TZ' column in the table in <a target='_blank' href='https://en.wikipedia.org/wiki/List_of_tz_database_time_zones'>this article.</a>
         - copyFromNetworkId (string): The ID of the network to copy configuration from. Other provided parameters will override the copied configuration, except type which must match this network's type exactly.
