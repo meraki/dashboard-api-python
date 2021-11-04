@@ -167,6 +167,41 @@ class ActionBatchNetworks(object):
 
 
 
+    def vmxNetworkDevicesClaim(self, networkId: str, size: str):
+        """
+        **Claim a vMX into a network**
+        https://developer.cisco.com/meraki/api-v1/#!vmx-network-devices-claim
+
+        - networkId (string): (required)
+        - size (string): The size of the vMX you claim. It can be one of: small, medium, large, 100
+        """
+
+        kwargs = locals()
+
+        if 'size' in kwargs:
+            options = ['small', 'medium', 'large', '100']
+            assert kwargs['size'] in options, f'''"size" cannot be "{kwargs['size']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['networks', 'configure', 'devices', 'claim'],
+            'operation': 'vmxNetworkDevicesClaim'
+        }
+        resource = f'/networks/{networkId}/devices/claim/vmx'
+
+        body_params = ['size', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
     def removeNetworkDevices(self, networkId: str, serial: str):
         """
         **Remove a single device**
@@ -554,18 +589,20 @@ class ActionBatchNetworks(object):
 
 
 
-    def createNetworkMqttBroker(self, networkId: str, name: str, host: str, port: int):
+    def createNetworkMqttBroker(self, networkId: str, name: str, host: str, port: int, **kwargs):
         """
         **Add an MQTT broker**
         https://developer.cisco.com/meraki/api-v1/#!create-network-mqtt-broker
 
         - networkId (string): (required)
-        - name (string): Name of the MQTT broker
-        - host (string): Host name/IP address where MQTT broker runs
-        - port (integer): Host port though which MQTT broker can be reached
+        - name (string): Name of the MQTT broker.
+        - host (string): Host name/IP address where the MQTT broker runs.
+        - port (integer): Host port though which the MQTT broker can be reached.
+        - security (object): Security settings of the MQTT broker.
+        - authentication (object): Authentication settings of the MQTT broker
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         metadata = {
             'tags': ['networks', 'configure', 'mqttBrokers'],
@@ -573,7 +610,7 @@ class ActionBatchNetworks(object):
         }
         resource = f'/networks/{networkId}/mqttBrokers'
 
-        body_params = ['name', 'host', 'port', ]
+        body_params = ['name', 'host', 'port', 'security', 'authentication', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -594,9 +631,11 @@ class ActionBatchNetworks(object):
 
         - networkId (string): (required)
         - mqttBrokerId (string): (required)
-        - name (string): Name of the mqtt config
-        - host (string): Host name where mqtt broker runs
-        - port (integer): Host port though which mqtt broker can be reached
+        - name (string): Name of the MQTT broker.
+        - host (string): Host name/IP address where the MQTT broker runs.
+        - port (integer): Host port though which the MQTT broker can be reached.
+        - security (object): Security settings of the MQTT broker.
+        - authentication (object): Authentication settings of the MQTT broker
         """
 
         kwargs.update(locals())
@@ -607,7 +646,7 @@ class ActionBatchNetworks(object):
         }
         resource = f'/networks/{networkId}/mqttBrokers/{mqttBrokerId}'
 
-        body_params = ['name', 'host', 'port', ]
+        body_params = ['name', 'host', 'port', 'security', 'authentication', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,

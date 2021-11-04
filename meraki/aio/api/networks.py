@@ -275,6 +275,32 @@ class AsyncNetworks:
         
 
 
+    def getNetworkClientsBandwidthUsageHistory(self, networkId: str, **kwargs):
+        """
+        **Returns a timeseries of total traffic consumption rates for all clients on a network within a given timespan, in megabits per second.**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-clients-bandwidth-usage-history
+
+        - networkId (string): (required)
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 30 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['networks', 'monitor', 'clients', 'bandwidthUsageHistory'],
+            'operation': 'getNetworkClientsBandwidthUsageHistory'
+        }
+        resource = f'/networks/{networkId}/clients/bandwidthUsageHistory'
+
+        query_params = ['t0', 't1', 'timespan', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get(metadata, resource, params)
+        
+
+
     def getNetworkClientsOverview(self, networkId: str, **kwargs):
         """
         **Return overview statistics for network clients**
@@ -563,6 +589,34 @@ class AsyncNetworks:
         resource = f'/networks/{networkId}/devices/claim'
 
         body_params = ['serials', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def vmxNetworkDevicesClaim(self, networkId: str, size: str):
+        """
+        **Claim a vMX into a network**
+        https://developer.cisco.com/meraki/api-v1/#!vmx-network-devices-claim
+
+        - networkId (string): (required)
+        - size (string): The size of the vMX you claim. It can be one of: small, medium, large, 100
+        """
+
+        kwargs = locals()
+
+        if 'size' in kwargs:
+            options = ['small', 'medium', 'large', '100']
+            assert kwargs['size'] in options, f'''"size" cannot be "{kwargs['size']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['networks', 'configure', 'devices', 'claim'],
+            'operation': 'vmxNetworkDevicesClaim'
+        }
+        resource = f'/networks/{networkId}/devices/claim/vmx'
+
+        body_params = ['size', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -986,6 +1040,24 @@ class AsyncNetworks:
         
 
 
+    def getNetworkHealthAlerts(self, networkId: str):
+        """
+        **Return all global alerts on this network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-health-alerts
+
+        - networkId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'health', 'alerts'],
+            'operation': 'getNetworkHealthAlerts'
+        }
+        resource = f'/networks/{networkId}/health/alerts'
+
+        return self._session.get(metadata, resource)
+        
+
+
     def getNetworkMerakiAuthUsers(self, networkId: str):
         """
         **List the users configured under Meraki Authentication for a network (splash guest or RADIUS users for a wireless network, or client VPN users for a wired network)**
@@ -1121,18 +1193,20 @@ class AsyncNetworks:
         
 
 
-    def createNetworkMqttBroker(self, networkId: str, name: str, host: str, port: int):
+    def createNetworkMqttBroker(self, networkId: str, name: str, host: str, port: int, **kwargs):
         """
         **Add an MQTT broker**
         https://developer.cisco.com/meraki/api-v1/#!create-network-mqtt-broker
 
         - networkId (string): (required)
-        - name (string): Name of the MQTT broker
-        - host (string): Host name/IP address where MQTT broker runs
-        - port (integer): Host port though which MQTT broker can be reached
+        - name (string): Name of the MQTT broker.
+        - host (string): Host name/IP address where the MQTT broker runs.
+        - port (integer): Host port though which the MQTT broker can be reached.
+        - security (object): Security settings of the MQTT broker.
+        - authentication (object): Authentication settings of the MQTT broker
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         metadata = {
             'tags': ['networks', 'configure', 'mqttBrokers'],
@@ -1140,7 +1214,7 @@ class AsyncNetworks:
         }
         resource = f'/networks/{networkId}/mqttBrokers'
 
-        body_params = ['name', 'host', 'port', ]
+        body_params = ['name', 'host', 'port', 'security', 'authentication', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -1173,9 +1247,11 @@ class AsyncNetworks:
 
         - networkId (string): (required)
         - mqttBrokerId (string): (required)
-        - name (string): Name of the mqtt config
-        - host (string): Host name where mqtt broker runs
-        - port (integer): Host port though which mqtt broker can be reached
+        - name (string): Name of the MQTT broker.
+        - host (string): Host name/IP address where the MQTT broker runs.
+        - port (integer): Host port though which the MQTT broker can be reached.
+        - security (object): Security settings of the MQTT broker.
+        - authentication (object): Authentication settings of the MQTT broker
         """
 
         kwargs.update(locals())
@@ -1186,7 +1262,7 @@ class AsyncNetworks:
         }
         resource = f'/networks/{networkId}/mqttBrokers/{mqttBrokerId}'
 
-        body_params = ['name', 'host', 'port', ]
+        body_params = ['name', 'host', 'port', 'security', 'authentication', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1239,8 +1315,8 @@ class AsyncNetworks:
         - reportingEnabled (boolean): Boolean indicating whether NetFlow traffic reporting is enabled (true) or disabled (false).
         - collectorIp (string): The IPv4 address of the NetFlow collector.
         - collectorPort (integer): The port that the NetFlow collector will be listening on.
-        - etaEnabled (boolean): Boolean indicating whether Encrypted Traffic Analysis is enabled (true) or disabled (false).
-        - etaDstPort (integer): The port that the Encrypted Traffic Analysis collector will be listening on.
+        - etaEnabled (boolean): Boolean indicating whether Encrypted Traffic Analytics is enabled (true) or disabled (false).
+        - etaDstPort (integer): The port that the Encrypted Traffic Analytics collector will be listening on.
         """
 
         kwargs.update(locals())
@@ -1649,6 +1725,24 @@ class AsyncNetworks:
         
 
 
+    def getNetworkTopologyLinkLayer(self, networkId: str):
+        """
+        **List of devices and connections among them within the network.**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-topology-link-layer
+
+        - networkId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'topology', 'linkLayer'],
+            'operation': 'getNetworkTopologyLinkLayer'
+        }
+        resource = f'/networks/{networkId}/topology/linkLayer'
+
+        return self._session.get(metadata, resource)
+        
+
+
     def getNetworkTraffic(self, networkId: str, **kwargs):
         """
         **Return the traffic analysis data for this network**
@@ -1807,8 +1901,9 @@ class AsyncNetworks:
 
         - networkId (string): (required)
         - name (string): A name for easy reference to the HTTP server
-        - url (string): The URL of the HTTP server
+        - url (string): The URL of the HTTP server. Once set, cannot be updated.
         - sharedSecret (string): A shared secret that will be included in POSTs sent to the HTTP server. This secret can be used to verify that the request was sent by Meraki.
+        - payloadTemplate (object): The payload template to use when posting data to the HTTP server.
         """
 
         kwargs.update(locals())
@@ -1819,7 +1914,7 @@ class AsyncNetworks:
         }
         resource = f'/networks/{networkId}/webhooks/httpServers'
 
-        body_params = ['name', 'url', 'sharedSecret', ]
+        body_params = ['name', 'url', 'sharedSecret', 'payloadTemplate', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -1853,8 +1948,8 @@ class AsyncNetworks:
         - networkId (string): (required)
         - httpServerId (string): (required)
         - name (string): A name for easy reference to the HTTP server
-        - url (string): The URL of the HTTP server
         - sharedSecret (string): A shared secret that will be included in POSTs sent to the HTTP server. This secret can be used to verify that the request was sent by Meraki.
+        - payloadTemplate (object): The payload template to use when posting data to the HTTP server.
         """
 
         kwargs.update(locals())
@@ -1865,7 +1960,7 @@ class AsyncNetworks:
         }
         resource = f'/networks/{networkId}/webhooks/httpServers/{httpServerId}'
 
-        body_params = ['name', 'url', 'sharedSecret', ]
+        body_params = ['name', 'sharedSecret', 'payloadTemplate', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1899,6 +1994,8 @@ class AsyncNetworks:
         - networkId (string): (required)
         - url (string): The URL where the test webhook will be sent
         - sharedSecret (string): The shared secret the test webhook will send. Optional. Defaults to an empty string.
+        - payloadTemplateId (string): The ID of the payload template of the test webhook. Defaults to the HTTP server's template ID if one exists for the given URL, or Generic template ID otherwise
+        - alertTypeId (string): The type of alert which the test webhook will send. Optional. Defaults to power_supply_down.
         """
 
         kwargs.update(locals())
@@ -1909,7 +2006,7 @@ class AsyncNetworks:
         }
         resource = f'/networks/{networkId}/webhooks/webhookTests'
 
-        body_params = ['url', 'sharedSecret', ]
+        body_params = ['url', 'sharedSecret', 'payloadTemplateId', 'alertTypeId', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)

@@ -849,7 +849,7 @@ class Appliance(object):
         
 
 
-    def createNetworkApplianceStaticRoute(self, networkId: str, name: str, subnet: str, gatewayIp: str):
+    def createNetworkApplianceStaticRoute(self, networkId: str, name: str, subnet: str, gatewayIp: str, **kwargs):
         """
         **Add a static route for an MX or teleworker network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-appliance-static-route
@@ -858,9 +858,10 @@ class Appliance(object):
         - name (string): The name of the new static route
         - subnet (string): The subnet of the static route
         - gatewayIp (string): The gateway IP (next hop) of the static route
+        - gatewayVlanId (string): The gateway IP (next hop) VLAN ID of the static route
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         metadata = {
             'tags': ['appliance', 'configure', 'staticRoutes'],
@@ -868,7 +869,7 @@ class Appliance(object):
         }
         resource = f'/networks/{networkId}/appliance/staticRoutes'
 
-        body_params = ['name', 'subnet', 'gatewayIp', ]
+        body_params = ['name', 'subnet', 'gatewayIp', 'gatewayVlanId', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -904,6 +905,7 @@ class Appliance(object):
         - name (string): The name of the static route
         - subnet (string): The subnet of the static route
         - gatewayIp (string): The gateway IP (next hop) of the static route
+        - gatewayVlanId (string): The gateway IP (next hop) VLAN ID of the static route
         - enabled (boolean): The enabled state of the static route
         - fixedIpAssignments (object): The DHCP fixed IP assignments on the static route. This should be an object that contains mappings from MAC addresses to objects that themselves each contain "ip" and "name" string fields. See the sample request/response for more details.
         - reservedIpRanges (array): The DHCP reserved IP ranges on the static route
@@ -917,7 +919,7 @@ class Appliance(object):
         }
         resource = f'/networks/{networkId}/appliance/staticRoutes/{staticRouteId}'
 
-        body_params = ['name', 'subnet', 'gatewayIp', 'enabled', 'fixedIpAssignments', 'reservedIpRanges', ]
+        body_params = ['name', 'subnet', 'gatewayIp', 'gatewayVlanId', 'enabled', 'fixedIpAssignments', 'reservedIpRanges', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)

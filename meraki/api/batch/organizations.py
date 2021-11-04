@@ -139,6 +139,113 @@ class ActionBatchOrganizations(object):
 
 
 
+    def createOrganizationAlertsProfile(self, organizationId: str, type: str, alertCondition: dict, recipients: dict, networkTags: list, **kwargs):
+        """
+        **Create an organization-wide alert configuration**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-alerts-profile
+
+        - organizationId (string): (required)
+        - type (string): The alert type
+        - alertCondition (object): The conditions that determine if the alert triggers
+        - recipients (object): List of recipients that will recieve the alert.
+        - networkTags (array): Networks with these tags will be monitored for the alert
+        - description (string): User supplied description of the alert
+        """
+
+        kwargs.update(locals())
+
+        if 'type' in kwargs:
+            options = ['voipJitter', 'voipPacketLoss', 'voipMos', 'wanLatency', 'wanPacketLoss', 'wanUtilization', 'wanStatus']
+            assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'alerts', 'profiles'],
+            'operation': 'createOrganizationAlertsProfile'
+        }
+        resource = f'/organizations/{organizationId}/alerts/profiles'
+
+        body_params = ['type', 'alertCondition', 'recipients', 'networkTags', 'description', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def updateOrganizationAlertsProfile(self, organizationId: str, alertConfigId: str, **kwargs):
+        """
+        **Update an organization-wide alert config**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-alerts-profile
+
+        - organizationId (string): (required)
+        - alertConfigId (string): (required)
+        - enabled (boolean): Is the alert config enabled
+        - type (string): The alert type
+        - alertCondition (object): The conditions that determine if the alert triggers
+        - recipients (object): List of recipients that will recieve the alert.
+        - networkTags (array): Networks with these tags will be monitored for the alert
+        - description (string): User supplied description of the alert
+        """
+
+        kwargs.update(locals())
+
+        if 'type' in kwargs:
+            options = ['voipJitter', 'voipPacketLoss', 'voipMos', 'wanLatency', 'wanPacketLoss', 'wanUtilization', 'wanStatus']
+            assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'alerts', 'profiles'],
+            'operation': 'updateOrganizationAlertsProfile'
+        }
+        resource = f'/organizations/{organizationId}/alerts/profiles/{alertConfigId}'
+
+        body_params = ['enabled', 'type', 'alertCondition', 'recipients', 'networkTags', 'description', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def deleteOrganizationAlertsProfile(self, organizationId: str, alertConfigId: str):
+        """
+        **Removes an organization-wide alert config**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-alerts-profile
+
+        - organizationId (string): (required)
+        - alertConfigId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'alerts', 'profiles'],
+            'operation': 'deleteOrganizationAlertsProfile'
+        }
+        resource = f'/organizations/{organizationId}/alerts/profiles/{alertConfigId}'
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
     def createOrganizationConfigTemplate(self, organizationId: str, name: str, **kwargs):
         """
         **Create a new configuration template**
