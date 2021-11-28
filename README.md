@@ -1,8 +1,8 @@
 # Meraki Dashboard API Python Library
 
-The Meraki Dashboard API Python library provides all current Meraki [Dashboard API](https://developer.cisco.com/meraki/api-v1/) calls to interface with the Cisco Meraki cloud-managed platform. The library is open-source and community-supported, works on Python 3.7+, and you can install it via [PyPI](https://pypi.org/project/meraki/):
+The Meraki Dashboard API Python library provides all current Meraki [dashboard API](https://developer.cisco.com/meraki/api-v1/) calls to interface with the Cisco Meraki cloud-managed platform. Meraki generates the library based on dashboard API's OpenAPI spec to keep it up to date with the latest API releases, and provides the full source code for the library including the tools used to generate the library, if you are participating in the Early Access program or would like to contribute to the development of the library. Meraki welcomes constructive pull requests that maintain backwards compatibility with prior versions. The library requires Python 3.7+, receives support from the community, and you can install it via [PyPI](https://pypi.org/project/meraki/):
 
-    pip install meraki
+    pip install --upgrade meraki
 
 ## Features
 
