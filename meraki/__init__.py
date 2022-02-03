@@ -48,7 +48,7 @@ class DashboardAPI(object):
     - log_file_prefix (string): log file name appended with date and timestamp
     - print_console (boolean): print logging output to console?
     - suppress_logging (boolean): disable all logging? you're on your own then!
-    - inherit_logging_config (boolean): Inherits you're own logging scheme
+    - inherit_logging_config (boolean): Inherits your own logger instance
     - simulate (boolean): simulate POST/PUT/DELETE calls to prevent changes?
     - be_geo_id (string): optional partner identifier for API usage tracking; can also be set as an environment variable BE_GEO_ID
     - caller (string): optional identifier for API usage tracking; can also be set as an environment variable MERAKI_PYTHON_SDK_CALLER
@@ -73,8 +73,8 @@ class DashboardAPI(object):
                  simulate=SIMULATE_API_CALLS,
                  be_geo_id=BE_GEO_ID, 
                  caller=MERAKI_PYTHON_SDK_CALLER, 
-                 inherit_logging_config= INHERIT_LOGGING_CONFIG,
-                 use_iterator_for_get_pages=False):
+                 inherit_logging_config=INHERIT_LOGGING_CONFIG,
+                 use_iterator_for_get_pages=USE_ITERATOR_FOR_GET_PAGES):
 
         # Check API key
         api_key = api_key or os.environ.get(API_KEY_ENVIRONMENT_VARIABLE)

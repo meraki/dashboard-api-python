@@ -61,7 +61,7 @@ class AsyncDashboardAPI:
     - log_file_prefix (string): log file name appended with date and timestamp
     - print_console (boolean): print logging output to console?
     - suppress_logging (boolean): disable all logging? you're on your own then!
-    - inherit_logging_config (boolean): Inherits you're own logging scheme
+    - inherit_logging_config (boolean): Inherits your own logger instance
     - simulate (boolean): simulate POST/PUT/DELETE calls to prevent changes?
     - maximum_concurrent_requests (integer): number of concurrent API requests for asynchronous class
     - be_geo_id (string): optional partner identifier for API usage tracking; can also be set as an environment variable BE_GEO_ID
@@ -91,7 +91,7 @@ class AsyncDashboardAPI:
             maximum_concurrent_requests=AIO_MAXIMUM_CONCURRENT_REQUESTS,
             be_geo_id=BE_GEO_ID,
             caller=MERAKI_PYTHON_SDK_CALLER,
-            use_iterator_for_get_pages=False,
+            use_iterator_for_get_pages=USE_ITERATOR_FOR_GET_PAGES,
             inherit_logging_config=INHERIT_LOGGING_CONFIG
     ):
         # Check API key
