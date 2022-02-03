@@ -214,6 +214,7 @@ class Networks(object):
         - mac (string): Filters clients based on a partial or full match for the mac address field.
         - os (string): Filters clients based on a partial or full match for the os (operating system) field.
         - description (string): Filters clients based on a partial or full match for the description field.
+        - vlan (string): Filters clients based on the full match for the VLAN field.
         - recentDeviceConnections (array): Filters clients based on recent connection type. Can be one of 'Wired' or 'Wireless'.
         """
 
@@ -225,7 +226,7 @@ class Networks(object):
         }
         resource = f'/networks/{networkId}/clients'
 
-        query_params = ['t0', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'statuses', 'ip', 'ip6', 'ip6Local', 'mac', 'os', 'description', 'recentDeviceConnections', ]
+        query_params = ['t0', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'statuses', 'ip', 'ip6', 'ip6Local', 'mac', 'os', 'description', 'vlan', 'recentDeviceConnections', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['statuses', 'recentDeviceConnections', ]
@@ -275,15 +276,20 @@ class Networks(object):
         
 
 
-    def getNetworkClientsBandwidthUsageHistory(self, networkId: str, **kwargs):
+    def getNetworkClientsBandwidthUsageHistory(self, networkId: str, total_pages=1, direction='next', **kwargs):
         """
         **Returns a timeseries of total traffic consumption rates for all clients on a network within a given timespan, in megabits per second.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-clients-bandwidth-usage-history
 
         - networkId (string): (required)
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 30 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
         kwargs.update(locals())
@@ -294,10 +300,10 @@ class Networks(object):
         }
         resource = f'/networks/{networkId}/clients/bandwidthUsageHistory'
 
-        query_params = ['t0', 't1', 'timespan', ]
+        query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        return self._session.get(metadata, resource, params)
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
         
 
 
@@ -1570,6 +1576,7 @@ class Networks(object):
         - localStatusPageEnabled (boolean): Enables / disables the local device status pages (<a target='_blank' href='http://my.meraki.com/'>my.meraki.com, </a><a target='_blank' href='http://ap.meraki.com/'>ap.meraki.com, </a><a target='_blank' href='http://switch.meraki.com/'>switch.meraki.com, </a><a target='_blank' href='http://wired.meraki.com/'>wired.meraki.com</a>). Optional (defaults to false)
         - remoteStatusPageEnabled (boolean): Enables / disables access to the device status page (<a target='_blank'>http://[device's LAN IP])</a>. Optional. Can only be set if localStatusPageEnabled is set to true
         - secureConnect (object): A hash of SecureConnect options applied to the Network.
+        - localStatusPage (object): A hash of Local Status page(s) options applied to the Network.
         """
 
         kwargs.update(locals())
@@ -1580,7 +1587,7 @@ class Networks(object):
         }
         resource = f'/networks/{networkId}/settings'
 
-        body_params = ['localStatusPageEnabled', 'remoteStatusPageEnabled', 'secureConnect', ]
+        body_params = ['localStatusPageEnabled', 'remoteStatusPageEnabled', 'secureConnect', 'localStatusPage', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1986,6 +1993,119 @@ class Networks(object):
         
 
 
+    def getNetworkWebhooksPayloadTemplates(self, networkId: str):
+        """
+        **List the webhook payload templates for a network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-webhooks-payload-templates
+
+        - networkId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'webhooks', 'payloadTemplates'],
+            'operation': 'getNetworkWebhooksPayloadTemplates'
+        }
+        resource = f'/networks/{networkId}/webhooks/payloadTemplates'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def createNetworkWebhooksPayloadTemplate(self, networkId: str, name: str, **kwargs):
+        """
+        **Create a webhook payload template for a network**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-webhooks-payload-template
+
+        - networkId (string): (required)
+        - name (string): The name of the new template
+        - body (string): The liquid template used for the body of the webhook message. Either `body` or `bodyFile` must be specified.
+        - headers (string): The liquid template used with the webhook headers.
+        - bodyFile (string): A file containing liquid template used for the body of the webhook message. Either `body` or `bodyFile` must be specified.
+        - headersFile (string): A file containing the liquid template used with the webhook headers.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['networks', 'configure', 'webhooks', 'payloadTemplates'],
+            'operation': 'createNetworkWebhooksPayloadTemplate'
+        }
+        resource = f'/networks/{networkId}/webhooks/payloadTemplates'
+
+        body_params = ['name', 'body', 'headers', 'bodyFile', 'headersFile', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getNetworkWebhooksPayloadTemplate(self, networkId: str, payloadTemplateId: str):
+        """
+        **Get the webhook payload template for a network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-webhooks-payload-template
+
+        - networkId (string): (required)
+        - payloadTemplateId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'webhooks', 'payloadTemplates'],
+            'operation': 'getNetworkWebhooksPayloadTemplate'
+        }
+        resource = f'/networks/{networkId}/webhooks/payloadTemplates/{payloadTemplateId}'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def deleteNetworkWebhooksPayloadTemplate(self, networkId: str, payloadTemplateId: str):
+        """
+        **Destroy a webhook payload template for a network**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-webhooks-payload-template
+
+        - networkId (string): (required)
+        - payloadTemplateId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'webhooks', 'payloadTemplates'],
+            'operation': 'deleteNetworkWebhooksPayloadTemplate'
+        }
+        resource = f'/networks/{networkId}/webhooks/payloadTemplates/{payloadTemplateId}'
+
+        return self._session.delete(metadata, resource)
+        
+
+
+    def updateNetworkWebhooksPayloadTemplate(self, networkId: str, payloadTemplateId: str, **kwargs):
+        """
+        **Update a webhook payload template for a network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-webhooks-payload-template
+
+        - networkId (string): (required)
+        - payloadTemplateId (string): (required)
+        - name (string): The name of the template
+        - body (string): The liquid template used for the body of the webhook message.
+        - headers (string): The liquid template used with the webhook headers.
+        - bodyFile (string): A file containing liquid template used for the body of the webhook message.
+        - headersFile (string): A file containing the liquid template used with the webhook headers.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['networks', 'configure', 'webhooks', 'payloadTemplates'],
+            'operation': 'updateNetworkWebhooksPayloadTemplate'
+        }
+        resource = f'/networks/{networkId}/webhooks/payloadTemplates/{payloadTemplateId}'
+
+        body_params = ['name', 'body', 'headers', 'bodyFile', 'headersFile', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
     def createNetworkWebhooksWebhookTest(self, networkId: str, url: str, **kwargs):
         """
         **Send a test webhook for a network**
@@ -1995,6 +2115,7 @@ class Networks(object):
         - url (string): The URL where the test webhook will be sent
         - sharedSecret (string): The shared secret the test webhook will send. Optional. Defaults to an empty string.
         - payloadTemplateId (string): The ID of the payload template of the test webhook. Defaults to the HTTP server's template ID if one exists for the given URL, or Generic template ID otherwise
+        - payloadTemplateName (string): The name of the payload template.
         - alertTypeId (string): The type of alert which the test webhook will send. Optional. Defaults to power_supply_down.
         """
 
@@ -2006,7 +2127,7 @@ class Networks(object):
         }
         resource = f'/networks/{networkId}/webhooks/webhookTests'
 
-        body_params = ['url', 'sharedSecret', 'payloadTemplateId', 'alertTypeId', ]
+        body_params = ['url', 'sharedSecret', 'payloadTemplateId', 'payloadTemplateName', 'alertTypeId', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)

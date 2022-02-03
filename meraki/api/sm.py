@@ -386,7 +386,7 @@ class Sm(object):
 
     def getNetworkSmDeviceDeviceProfiles(self, networkId: str, deviceId: str):
         """
-        **Get the profiles associated with a device**
+        **Get the installed profiles associated with a device**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-device-device-profiles
 
         - networkId (string): (required)

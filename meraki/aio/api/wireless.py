@@ -58,7 +58,7 @@ class AsyncWireless:
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
-        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
+        - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -67,7 +67,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -92,7 +92,7 @@ class AsyncWireless:
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
-        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
+        - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -102,7 +102,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -358,13 +358,13 @@ class AsyncWireless:
         - clientId (string): Filter results by network client to return per-device, per-band AP channel utilization metrics inner joined by the queried client's connection history.
         - deviceSerial (string): Filter results by device to return AP channel utilization metrics for the queried device; either :band or :clientId must be jointly specified.
         - apTag (string): Filter results by AP tag to return AP channel utilization metrics for devices labeled with the given tag; either :clientId or :deviceSerial must be jointly specified.
-        - band (string): Filter results by band (either '2.4' or '5').
+        - band (string): Filter results by band (either '2.4', '5' or '6').
         """
 
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -394,14 +394,14 @@ class AsyncWireless:
         - clientId (string): Filter results by network client to return per-device client counts over time inner joined by the queried client's connection history.
         - deviceSerial (string): Filter results by device.
         - apTag (string): Filter results by AP tag.
-        - band (string): Filter results by band (either '2.4' or '5').
+        - band (string): Filter results by band (either '2.4', '5' or '6').
         - ssid (integer): Filter results by SSID number.
         """
 
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -426,7 +426,7 @@ class AsyncWireless:
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
-        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
+        - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -435,7 +435,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -460,7 +460,7 @@ class AsyncWireless:
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
-        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
+        - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -470,7 +470,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -496,7 +496,7 @@ class AsyncWireless:
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
-        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
+        - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -505,7 +505,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -538,7 +538,7 @@ class AsyncWireless:
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
         - types (array): A list of event types to include. If not specified, events of all types will be returned. Valid types are 'assoc', 'disassoc', 'auth', 'deauth', 'dns', 'dhcp', 'roam', 'connection' and/or 'sticky'.
         - includedSeverities (array): A list of severities to include. If not specified, events of all severities will be returned. Valid severities are 'good', 'info', 'warn' and/or 'bad'.
-        - band (string): Filter results by band (either '2.4' or '5').
+        - band (string): Filter results by band (either '2.4', '5', '6').
         - ssidNumber (integer): An SSID number to include. If not specified, events for all SSIDs will be returned.
         - deviceSerial (string): Filter results by an AP's serial number.
         """
@@ -546,7 +546,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
         if 'ssidNumber' in kwargs:
             options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
@@ -609,7 +609,7 @@ class AsyncWireless:
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
-        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
+        - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -619,7 +619,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -644,7 +644,7 @@ class AsyncWireless:
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
-        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
+        - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -653,7 +653,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -683,14 +683,14 @@ class AsyncWireless:
         - clientId (string): Filter results by network client.
         - deviceSerial (string): Filter results by device.
         - apTag (string): Filter results by AP tag.
-        - band (string): Filter results by band (either '2.4' or '5').
+        - band (string): Filter results by band (either '2.4', '5' or '6').
         - ssid (integer): Filter results by SSID number.
         """
 
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -715,7 +715,7 @@ class AsyncWireless:
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
-        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
+        - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -724,7 +724,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -749,7 +749,7 @@ class AsyncWireless:
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
-        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
+        - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -759,7 +759,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -784,7 +784,7 @@ class AsyncWireless:
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
-        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
+        - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -795,7 +795,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -825,7 +825,7 @@ class AsyncWireless:
         - clientId (string): Filter results by network client.
         - deviceSerial (string): Filter results by device.
         - apTag (string): Filter results by AP tag.
-        - band (string): Filter results by band (either '2.4' or '5').
+        - band (string): Filter results by band (either '2.4', '5' or '6').
         - ssid (integer): Filter results by SSID number.
         - accessCategory (string): Filter by access category.
         """
@@ -833,7 +833,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
         if 'accessCategory' in kwargs:
             options = ['backgroundTraffic', 'bestEffortTraffic', 'videoTraffic', 'voiceTraffic']
@@ -861,7 +861,7 @@ class AsyncWireless:
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
-        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
+        - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -871,7 +871,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -1116,14 +1116,14 @@ class AsyncWireless:
         - clientId (string): Filter results by network client.
         - deviceSerial (string): Filter results by device.
         - apTag (string): Filter results by AP tag; either :clientId or :deviceSerial must be jointly specified.
-        - band (string): Filter results by band (either '2.4' or '5').
+        - band (string): Filter results by band (either '2.4', '5' or '6').
         - ssid (integer): Filter results by SSID number.
         """
 
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -1221,6 +1221,7 @@ class AsyncWireless:
         - apTagsAndVlanIds (array): The list of tags and VLAN IDs used for VLAN tagging. This param is only valid when the ipAssignmentMode is 'Bridge mode' or 'Layer 3 roaming'
         - walledGardenEnabled (boolean): Allow access to a configurable list of IP ranges, which users may access prior to sign-on.
         - walledGardenRanges (array): Specify your walled garden by entering an array of addresses, ranges using CIDR notation, domain names, and domain wildcards (e.g. '192.168.1.1/24', '192.168.37.10/32', 'www.yahoo.com', '*.google.com']). Meraki's splash page is automatically included in your walled garden.
+        - gre (object): Ethernet over GRE settings
         - radiusOverride (boolean): If true, the RADIUS response can override VLAN tag. This is not valid when ipAssignmentMode is 'NAT mode'.
         - radiusGuestVlanEnabled (boolean): Whether or not RADIUS Guest VLAN is enabled. This param is only valid if the authMode is 'open-with-radius' and addressing mode is not set to 'isolated' or 'nat' mode
         - radiusGuestVlanId (integer): VLAN ID of the RADIUS Guest VLAN. This param is only valid if the authMode is 'open-with-radius' and addressing mode is not set to 'isolated' or 'nat' mode
@@ -1272,7 +1273,7 @@ class AsyncWireless:
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}'
 
-        body_params = ['name', 'enabled', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk', 'wpaEncryptionMode', 'dot11w', 'dot11r', 'splashPage', 'splashGuestSponsorDomains', 'oauth', 'localRadius', 'ldap', 'activeDirectory', 'radiusServers', 'radiusProxyEnabled', 'radiusTestingEnabled', 'radiusCalledStationId', 'radiusAuthenticationNasId', 'radiusServerTimeout', 'radiusServerAttemptsLimit', 'radiusFallbackEnabled', 'radiusCoaEnabled', 'radiusFailoverPolicy', 'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusAccountingInterimInterval', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging', 'concentratorNetworkId', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 'walledGardenEnabled', 'walledGardenRanges', 'radiusOverride', 'radiusGuestVlanEnabled', 'radiusGuestVlanId', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'perSsidBandwidthLimitUp', 'perSsidBandwidthLimitDown', 'lanIsolationEnabled', 'visible', 'availableOnAllAps', 'availabilityTags', 'mandatoryDhcpEnabled', 'adultContentFilteringEnabled', 'dnsRewrite', ]
+        body_params = ['name', 'enabled', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk', 'wpaEncryptionMode', 'dot11w', 'dot11r', 'splashPage', 'splashGuestSponsorDomains', 'oauth', 'localRadius', 'ldap', 'activeDirectory', 'radiusServers', 'radiusProxyEnabled', 'radiusTestingEnabled', 'radiusCalledStationId', 'radiusAuthenticationNasId', 'radiusServerTimeout', 'radiusServerAttemptsLimit', 'radiusFallbackEnabled', 'radiusCoaEnabled', 'radiusFailoverPolicy', 'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusAccountingInterimInterval', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging', 'concentratorNetworkId', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 'walledGardenEnabled', 'walledGardenRanges', 'gre', 'radiusOverride', 'radiusGuestVlanEnabled', 'radiusGuestVlanId', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'perSsidBandwidthLimitUp', 'perSsidBandwidthLimitDown', 'lanIsolationEnabled', 'visible', 'availableOnAllAps', 'availabilityTags', 'mandatoryDhcpEnabled', 'adultContentFilteringEnabled', 'dnsRewrite', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1858,6 +1859,7 @@ class AsyncWireless:
         - networkId (string): (required)
         - number (string): (required)
         - splitTunnel (object): The VPN split tunnel settings for this SSID.
+        - failover (object): Secondary VPN concentrator settings. This is only used when two VPN concentrators are configured on the SSID.
         """
 
         kwargs.update(locals())
@@ -1868,7 +1870,7 @@ class AsyncWireless:
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}/vpn'
 
-        body_params = ['splitTunnel', ]
+        body_params = ['splitTunnel', 'failover', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1889,14 +1891,14 @@ class AsyncWireless:
         - clientId (string): Filter results by network client to return per-device AP usage over time inner joined by the queried client's connection history.
         - deviceSerial (string): Filter results by device. Requires :band.
         - apTag (string): Filter results by AP tag; either :clientId or :deviceSerial must be jointly specified.
-        - band (string): Filter results by band (either '2.4' or '5').
+        - band (string): Filter results by band (either '2.4', '5' or '6').
         - ssid (integer): Filter results by SSID number.
         """
 
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {

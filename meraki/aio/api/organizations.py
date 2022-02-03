@@ -343,6 +343,262 @@ class AsyncOrganizations:
         
 
 
+    def getOrganizationAdaptivePolicyGroups(self, organizationId: str):
+        """
+        **List adaptive policy groups in a organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-adaptive-policy-groups
+
+        - organizationId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'groups'],
+            'operation': 'getOrganizationAdaptivePolicyGroups'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/groups'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def createOrganizationAdaptivePolicyGroup(self, organizationId: str, name: str, sgt: int, **kwargs):
+        """
+        **Creates a new adaptive policy group**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-adaptive-policy-group
+
+        - organizationId (string): (required)
+        - name (string): Name of the group
+        - sgt (integer): SGT value of the group
+        - description (string): Description of the group (default: "")
+        - policyObjects (array): The policy objects that belong to this group; traffic from addresses specified by these policy objects will be tagged with this group's SGT value if no other tagging scheme is being used (each requires one unique attribute) (default: [])
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'groups'],
+            'operation': 'createOrganizationAdaptivePolicyGroup'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/groups'
+
+        body_params = ['name', 'sgt', 'description', 'policyObjects', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getOrganizationAdaptivePolicyGroup(self, organizationId: str, groupId: str):
+        """
+        **Returns an adaptive policy group**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-adaptive-policy-group
+
+        - organizationId (string): (required)
+        - groupId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'groups'],
+            'operation': 'getOrganizationAdaptivePolicyGroup'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/groups/{groupId}'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def deleteOrganizationAdaptivePolicyGroup(self, organizationId: str, groupId: str):
+        """
+        **Deletes the specified adaptive policy group and any associated policies and references**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-adaptive-policy-group
+
+        - organizationId (string): (required)
+        - groupId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'groups'],
+            'operation': 'deleteOrganizationAdaptivePolicyGroup'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/groups/{groupId}'
+
+        return self._session.delete(metadata, resource)
+        
+
+
+    def updateOrganizationAdaptivePolicyGroup(self, organizationId: str, groupId: str, **kwargs):
+        """
+        **Updates an adaptive policy group**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-adaptive-policy-group
+
+        - organizationId (string): (required)
+        - groupId (string): (required)
+        - name (string): Name of the group
+        - sgt (integer): SGT value of the group
+        - description (string): Description of the group
+        - policyObjects (array): The policy objects that belong to this group; traffic from addresses specified by these policy objects will be tagged with this group's SGT value if no other tagging scheme is being used (each requires one unique attribute)
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'groups'],
+            'operation': 'updateOrganizationAdaptivePolicyGroup'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/groups/{groupId}'
+
+        body_params = ['name', 'sgt', 'description', 'policyObjects', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def getOrganizationAdaptivePolicyOverview(self, organizationId: str):
+        """
+        **Returns adaptive policy aggregate statistics for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-adaptive-policy-overview
+
+        - organizationId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'monitor', 'adaptivePolicy', 'overview'],
+            'operation': 'getOrganizationAdaptivePolicyOverview'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/overview'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def getOrganizationAdaptivePolicyPolicies(self, organizationId: str):
+        """
+        **List adaptive policies in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-adaptive-policy-policies
+
+        - organizationId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'policies'],
+            'operation': 'getOrganizationAdaptivePolicyPolicies'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/policies'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def createOrganizationAdaptivePolicyPolicy(self, organizationId: str, sourceGroup: dict, destinationGroup: dict, **kwargs):
+        """
+        **Add an Adaptive Policy**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-adaptive-policy-policy
+
+        - organizationId (string): (required)
+        - sourceGroup (object): The source adaptive policy group (requires one unique attribute)
+
+        - destinationGroup (object): The destination adaptive policy group (requires one unique attribute)
+
+        - acls (array): An ordered array of adaptive policy ACLs (each requires one unique attribute) that apply to this policy (default: [])
+
+        - lastEntryRule (string): The rule to apply if there is no matching ACL (default: "default")
+
+        """
+
+        kwargs.update(locals())
+
+        if 'lastEntryRule' in kwargs:
+            options = ['default', 'allow', 'deny']
+            assert kwargs['lastEntryRule'] in options, f'''"lastEntryRule" cannot be "{kwargs['lastEntryRule']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'policies'],
+            'operation': 'createOrganizationAdaptivePolicyPolicy'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/policies'
+
+        body_params = ['sourceGroup', 'destinationGroup', 'acls', 'lastEntryRule', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getOrganizationAdaptivePolicyPolicy(self, organizationId: str, adaptivePolicyId: str):
+        """
+        **Return an adaptive policy**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-adaptive-policy-policy
+
+        - organizationId (string): (required)
+        - adaptivePolicyId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'policies'],
+            'operation': 'getOrganizationAdaptivePolicyPolicy'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/policies/{adaptivePolicyId}'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def updateOrganizationAdaptivePolicyPolicy(self, organizationId: str, adaptivePolicyId: str, **kwargs):
+        """
+        **Update an Adaptive Policy**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-adaptive-policy-policy
+
+        - organizationId (string): (required)
+        - adaptivePolicyId (string): (required)
+        - sourceGroup (object): The source adaptive policy group (requires one unique attribute)
+
+        - destinationGroup (object): The destination adaptive policy group (requires one unique attribute)
+
+        - acls (array): An ordered array of adaptive policy ACLs (each requires one unique attribute) that apply to this policy
+
+        - lastEntryRule (string): The rule to apply if there is no matching ACL
+
+        """
+
+        kwargs.update(locals())
+
+        if 'lastEntryRule' in kwargs:
+            options = ['default', 'allow', 'deny']
+            assert kwargs['lastEntryRule'] in options, f'''"lastEntryRule" cannot be "{kwargs['lastEntryRule']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'policies'],
+            'operation': 'updateOrganizationAdaptivePolicyPolicy'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/policies/{adaptivePolicyId}'
+
+        body_params = ['sourceGroup', 'destinationGroup', 'acls', 'lastEntryRule', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def deleteOrganizationAdaptivePolicyPolicy(self, organizationId: str, adaptivePolicyId: str):
+        """
+        **Delete an Adaptive Policy**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-adaptive-policy-policy
+
+        - organizationId (string): (required)
+        - adaptivePolicyId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'policies'],
+            'operation': 'deleteOrganizationAdaptivePolicyPolicy'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/policies/{adaptivePolicyId}'
+
+        return self._session.delete(metadata, resource)
+        
+
+
     def getOrganizationAdaptivePolicySettings(self, organizationId: str):
         """
         **Returns global adaptive policy settings in an organization**
@@ -1155,7 +1411,6 @@ class AsyncOrganizations:
         - serials (array): Optional parameter to filter devices by serials.
         - statuses (array): Optional parameter to filter devices by statuses. Valid statuses are ["online", "alerting", "offline", "dormant"].
         - productTypes (array): An optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, and sensor.
-        - components (object): components
         - models (array): Optional parameter to filter devices by models.
         - tags (array): An optional parameter to filter devices by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below).
         - tagsFilterType (string): An optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return devices which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
@@ -1173,7 +1428,7 @@ class AsyncOrganizations:
         }
         resource = f'/organizations/{organizationId}/devices/statuses'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'serials', 'statuses', 'productTypes', 'components', 'models', 'tags', 'tagsFilterType', ]
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'serials', 'statuses', 'productTypes', 'models', 'tags', 'tagsFilterType', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['networkIds', 'serials', 'statuses', 'productTypes', 'models', 'tags', ]
@@ -2226,13 +2481,20 @@ class AsyncOrganizations:
         
 
 
-    def getOrganizationWebhooksAlertTypes(self, organizationId: str):
+    def getOrganizationWebhooksAlertTypes(self, organizationId: str, **kwargs):
         """
         **Return a list of alert types to be used with managing webhook alerts**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-webhooks-alert-types
 
         - organizationId (string): (required)
+        - productType (string): Filter sample alerts to a specific product type
         """
+
+        kwargs.update(locals())
+
+        if 'productType' in kwargs:
+            options = ['appliance', 'camera', 'cellularGateway', 'platform', 'sm', 'switch', 'wireless']
+            assert kwargs['productType'] in options, f'''"productType" cannot be "{kwargs['productType']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['organizations', 'monitor', 'webhooks', 'alertTypes'],
@@ -2240,7 +2502,10 @@ class AsyncOrganizations:
         }
         resource = f'/organizations/{organizationId}/webhooks/alertTypes'
 
-        return self._session.get(metadata, resource)
+        query_params = ['productType', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get(metadata, resource, params)
         
 
 

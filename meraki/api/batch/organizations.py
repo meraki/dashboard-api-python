@@ -108,6 +108,214 @@ class ActionBatchOrganizations(object):
 
 
 
+    def createOrganizationAdaptivePolicyGroup(self, organizationId: str, name: str, sgt: int, **kwargs):
+        """
+        **Creates a new adaptive policy group**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-adaptive-policy-group
+
+        - organizationId (string): (required)
+        - name (string): Name of the group
+        - sgt (integer): SGT value of the group
+        - description (string): Description of the group (default: "")
+        - policyObjects (array): The policy objects that belong to this group; traffic from addresses specified by these policy objects will be tagged with this group's SGT value if no other tagging scheme is being used (each requires one unique attribute) (default: [])
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'groups'],
+            'operation': 'createOrganizationAdaptivePolicyGroup'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/groups'
+
+        body_params = ['name', 'sgt', 'description', 'policyObjects', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def deleteOrganizationAdaptivePolicyGroup(self, organizationId: str, groupId: str):
+        """
+        **Deletes the specified adaptive policy group and any associated policies and references**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-adaptive-policy-group
+
+        - organizationId (string): (required)
+        - groupId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'groups'],
+            'operation': 'deleteOrganizationAdaptivePolicyGroup'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/groups/{groupId}'
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def updateOrganizationAdaptivePolicyGroup(self, organizationId: str, groupId: str, **kwargs):
+        """
+        **Updates an adaptive policy group**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-adaptive-policy-group
+
+        - organizationId (string): (required)
+        - groupId (string): (required)
+        - name (string): Name of the group
+        - sgt (integer): SGT value of the group
+        - description (string): Description of the group
+        - policyObjects (array): The policy objects that belong to this group; traffic from addresses specified by these policy objects will be tagged with this group's SGT value if no other tagging scheme is being used (each requires one unique attribute)
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'groups'],
+            'operation': 'updateOrganizationAdaptivePolicyGroup'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/groups/{groupId}'
+
+        body_params = ['name', 'sgt', 'description', 'policyObjects', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def createOrganizationAdaptivePolicyPolicy(self, organizationId: str, sourceGroup: dict, destinationGroup: dict, **kwargs):
+        """
+        **Add an Adaptive Policy**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-adaptive-policy-policy
+
+        - organizationId (string): (required)
+        - sourceGroup (object): The source adaptive policy group (requires one unique attribute)
+
+        - destinationGroup (object): The destination adaptive policy group (requires one unique attribute)
+
+        - acls (array): An ordered array of adaptive policy ACLs (each requires one unique attribute) that apply to this policy (default: [])
+
+        - lastEntryRule (string): The rule to apply if there is no matching ACL (default: "default")
+
+        """
+
+        kwargs.update(locals())
+
+        if 'lastEntryRule' in kwargs:
+            options = ['default', 'allow', 'deny']
+            assert kwargs['lastEntryRule'] in options, f'''"lastEntryRule" cannot be "{kwargs['lastEntryRule']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'policies'],
+            'operation': 'createOrganizationAdaptivePolicyPolicy'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/policies'
+
+        body_params = ['sourceGroup', 'destinationGroup', 'acls', 'lastEntryRule', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def updateOrganizationAdaptivePolicyPolicy(self, organizationId: str, adaptivePolicyId: str, **kwargs):
+        """
+        **Update an Adaptive Policy**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-adaptive-policy-policy
+
+        - organizationId (string): (required)
+        - adaptivePolicyId (string): (required)
+        - sourceGroup (object): The source adaptive policy group (requires one unique attribute)
+
+        - destinationGroup (object): The destination adaptive policy group (requires one unique attribute)
+
+        - acls (array): An ordered array of adaptive policy ACLs (each requires one unique attribute) that apply to this policy
+
+        - lastEntryRule (string): The rule to apply if there is no matching ACL
+
+        """
+
+        kwargs.update(locals())
+
+        if 'lastEntryRule' in kwargs:
+            options = ['default', 'allow', 'deny']
+            assert kwargs['lastEntryRule'] in options, f'''"lastEntryRule" cannot be "{kwargs['lastEntryRule']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'policies'],
+            'operation': 'updateOrganizationAdaptivePolicyPolicy'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/policies/{adaptivePolicyId}'
+
+        body_params = ['sourceGroup', 'destinationGroup', 'acls', 'lastEntryRule', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def deleteOrganizationAdaptivePolicyPolicy(self, organizationId: str, adaptivePolicyId: str):
+        """
+        **Delete an Adaptive Policy**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-adaptive-policy-policy
+
+        - organizationId (string): (required)
+        - adaptivePolicyId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'policies'],
+            'operation': 'deleteOrganizationAdaptivePolicyPolicy'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/policies/{adaptivePolicyId}'
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
     def updateOrganizationAdaptivePolicySettings(self, organizationId: str, **kwargs):
         """
         **Update global adaptive policy settings**

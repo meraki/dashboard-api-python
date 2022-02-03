@@ -192,19 +192,20 @@ class Switch(object):
         
 
 
-    def createDeviceSwitchRoutingInterface(self, serial: str, name: str, interfaceIp: str, vlanId: int, **kwargs):
+    def createDeviceSwitchRoutingInterface(self, serial: str, name: str, vlanId: int, **kwargs):
         """
         **Create a layer 3 interface for a switch**
         https://developer.cisco.com/meraki/api-v1/#!create-device-switch-routing-interface
 
         - serial (string): (required)
         - name (string): A friendly name or description for the interface or VLAN.
-        - interfaceIp (string): The IP address this switch will use for layer 3 routing on this VLAN or subnet. This cannot be the same as the switch's management IP.
         - vlanId (integer): The VLAN this routed interface is on. VLAN must be between 1 and 4094.
         - subnet (string): The network that this routed interface is on, in CIDR notation (ex. 10.1.1.0/24).
+        - interfaceIp (string): The IP address this switch will use for layer 3 routing on this VLAN or subnet. This cannot be the same as the switch's management IP.
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are, 'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
         - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route. This IP address must exist in a subnet with a routed interface.
         - ospfSettings (object): The OSPF routing settings of the interface.
+        - ipv6 (object): The IPv6 settings of the interface.
         """
 
         kwargs.update(locals())
@@ -219,7 +220,7 @@ class Switch(object):
         }
         resource = f'/devices/{serial}/switch/routing/interfaces'
 
-        body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', ]
+        body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ipv6', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -257,7 +258,9 @@ class Switch(object):
         - interfaceIp (string): The IP address this switch will use for layer 3 routing on this VLAN or subnet. This cannot be the same as the switch's management IP.
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are, 'disabled', 'enabled' or 'IGMP snooping querier'.
         - vlanId (integer): The VLAN this routed interface is on. VLAN must be between 1 and 4094.
+        - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route. This IP address must exist in a subnet with a routed interface.
         - ospfSettings (object): The OSPF routing settings of the interface.
+        - ipv6 (object): The IPv6 settings of the interface.
         """
 
         kwargs.update(locals())
@@ -272,7 +275,7 @@ class Switch(object):
         }
         resource = f'/devices/{serial}/switch/routing/interfaces/{interfaceId}'
 
-        body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'ospfSettings', ]
+        body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ipv6', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1409,9 +1412,10 @@ class Switch(object):
 
         - networkId (string): (required)
         - enabled (boolean): Boolean value to enable or disable OSPF routing. OSPF routing is disabled by default.
-        - helloTimerInSeconds (integer): Time interval in seconds at which hello packet will be sent to OSPF neighbors to maintain connectivity. Value must be between 1 and 255. Default is 10 seconds
-        - deadTimerInSeconds (integer): Time interval to determine when the peer will be declare inactive/dead. Value must be between 1 and 65535
+        - helloTimerInSeconds (integer): Time interval in seconds at which hello packet will be sent to OSPF neighbors to maintain connectivity. Value must be between 1 and 255. Default is 10 seconds.
+        - deadTimerInSeconds (integer): Time interval to determine when the peer will be declared inactive/dead. Value must be between 1 and 65535
         - areas (array): OSPF areas
+        - v3 (object): OSPF v3 configuration
         - md5AuthenticationEnabled (boolean): Boolean value to enable or disable MD5 authentication. MD5 authentication is disabled by default.
         - md5AuthenticationKey (object): MD5 authentication credentials. This param is only relevant if md5AuthenticationEnabled is true
         """
@@ -1424,7 +1428,7 @@ class Switch(object):
         }
         resource = f'/networks/{networkId}/switch/routing/ospf'
 
-        body_params = ['enabled', 'helloTimerInSeconds', 'deadTimerInSeconds', 'areas', 'md5AuthenticationEnabled', 'md5AuthenticationKey', ]
+        body_params = ['enabled', 'helloTimerInSeconds', 'deadTimerInSeconds', 'areas', 'v3', 'md5AuthenticationEnabled', 'md5AuthenticationKey', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1625,7 +1629,7 @@ class Switch(object):
         
 
 
-    def createNetworkSwitchStackRoutingInterface(self, networkId: str, switchStackId: str, name: str, subnet: str, interfaceIp: str, vlanId: int, **kwargs):
+    def createNetworkSwitchStackRoutingInterface(self, networkId: str, switchStackId: str, name: str, vlanId: int, **kwargs):
         """
         **Create a layer 3 interface for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-stack-routing-interface
@@ -1633,12 +1637,13 @@ class Switch(object):
         - networkId (string): (required)
         - switchStackId (string): (required)
         - name (string): A friendly name or description for the interface or VLAN.
+        - vlanId (integer): The VLAN this routed interface is on. VLAN must be between 1 and 4094.
         - subnet (string): The network that this routed interface is on, in CIDR notation (ex. 10.1.1.0/24).
         - interfaceIp (string): The IP address this switch stack will use for layer 3 routing on this VLAN or subnet. This cannot be the same as the switch's management IP.
-        - vlanId (integer): The VLAN this routed interface is on. VLAN must be between 1 and 4094.
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are, 'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
         - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route. This IP address must exist in a subnet with a routed interface.
         - ospfSettings (object): The OSPF routing settings of the interface.
+        - ipv6 (object): The IPv6 settings of the interface.
         """
 
         kwargs.update(locals())
@@ -1653,7 +1658,7 @@ class Switch(object):
         }
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces'
 
-        body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', ]
+        body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ipv6', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -1693,7 +1698,9 @@ class Switch(object):
         - interfaceIp (string): The IP address this switch stack will use for layer 3 routing on this VLAN or subnet. This cannot be the same as the switch's management IP.
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are, 'disabled', 'enabled' or 'IGMP snooping querier'.
         - vlanId (integer): The VLAN this routed interface is on. VLAN must be between 1 and 4094.
+        - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route. This IP address must exist in a subnet with a routed interface.
         - ospfSettings (object): The OSPF routing settings of the interface.
+        - ipv6 (object): The IPv6 settings of the interface.
         """
 
         kwargs.update(locals())
@@ -1708,7 +1715,7 @@ class Switch(object):
         }
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}'
 
-        body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'ospfSettings', ]
+        body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ipv6', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
