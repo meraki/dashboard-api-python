@@ -22,7 +22,8 @@ from .config import (
     API_KEY_ENVIRONMENT_VARIABLE, DEFAULT_BASE_URL, SINGLE_REQUEST_TIMEOUT, CERTIFICATE_PATH, REQUESTS_PROXY,
     WAIT_ON_RATE_LIMIT, NGINX_429_RETRY_WAIT_TIME, ACTION_BATCH_RETRY_WAIT_TIME, RETRY_4XX_ERROR,
     RETRY_4XX_ERROR_WAIT_TIME, MAXIMUM_RETRIES, OUTPUT_LOG, LOG_PATH, LOG_FILE_PREFIX, PRINT_TO_CONSOLE,
-    SUPPRESS_LOGGING, SIMULATE_API_CALLS, BE_GEO_ID, MERAKI_PYTHON_SDK_CALLER, INHERIT_LOGGING_CONFIG 
+    SUPPRESS_LOGGING, SIMULATE_API_CALLS, BE_GEO_ID, MERAKI_PYTHON_SDK_CALLER, USE_ITERATOR_FOR_GET_PAGES,
+    INHERIT_LOGGING_CONFIG
 )
 
 __version__ = '1.15.0'
@@ -87,6 +88,8 @@ class DashboardAPI(object):
         # Pull the caller from an environment variable if present
         caller = caller or os.environ.get('MERAKI_PYTHON_SDK_CALLER')
 
+        inherit_logging_config = inherit_logging_config
+
         # Configure logging
         if not suppress_logging:
             self._logger = logging.getLogger(__name__)
@@ -137,7 +140,7 @@ class DashboardAPI(object):
             simulate=simulate,
             be_geo_id=be_geo_id,
             caller=caller,
-            use_iterator_for_get_pages=use_iterator_for_get_pages,
+            use_iterator_for_get_pages=use_iterator_for_get_pages
         )
 
         # API endpoints by section

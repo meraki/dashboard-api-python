@@ -35,7 +35,7 @@ class AsyncRestSession:
             maximum_concurrent_requests=AIO_MAXIMUM_CONCURRENT_REQUESTS,
             be_geo_id=BE_GEO_ID,
             caller=MERAKI_PYTHON_SDK_CALLER,
-            use_iterator_for_get_pages=False,
+            use_iterator_for_get_pages=USE_ITERATOR_FOR_GET_PAGES,
     ):
         super().__init__()
 
@@ -58,8 +58,7 @@ class AsyncRestSession:
         )
         self._be_geo_id = be_geo_id
         self._caller = caller
-
-        self.use_iterator_for_get_pages = use_iterator_for_get_pages
+        self._use_iterator_for_get_pages = use_iterator_for_get_pages
 
         # Check base URL
         if "v0" in self._base_url:
