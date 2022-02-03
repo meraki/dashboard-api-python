@@ -23,6 +23,7 @@ from ..config import (
     SINGLE_REQUEST_TIMEOUT,
     SUPPRESS_LOGGING,
     WAIT_ON_RATE_LIMIT,
+    INHERIT_LOGGING_CONFIG
 )
 from .api.appliance import AsyncAppliance
 from .api.camera import AsyncCamera
@@ -60,6 +61,7 @@ class AsyncDashboardAPI:
     - log_file_prefix (string): log file name appended with date and timestamp
     - print_console (boolean): print logging output to console?
     - suppress_logging (boolean): disable all logging? you're on your own then!
+    - inherit_logging_config (boolean): Inherits you're own logging scheme
     - simulate (boolean): simulate POST/PUT/DELETE calls to prevent changes?
     - maximum_concurrent_requests (integer): number of concurrent API requests for asynchronous class
     - be_geo_id (string): optional partner identifier for API usage tracking; can also be set as an environment variable BE_GEO_ID
@@ -90,6 +92,7 @@ class AsyncDashboardAPI:
             be_geo_id=BE_GEO_ID,
             caller=MERAKI_PYTHON_SDK_CALLER,
             use_iterator_for_get_pages=False,
+            inherit_logging_config=INHERIT_LOGGING_CONFIG
     ):
         # Check API key
         api_key = api_key or os.environ.get(API_KEY_ENVIRONMENT_VARIABLE)
@@ -105,29 +108,31 @@ class AsyncDashboardAPI:
         # Configure logging
         if not suppress_logging:
             self._logger = logging.getLogger(__name__)
-            self._logger.setLevel(logging.DEBUG)
 
-            formatter = logging.Formatter(
-                fmt="%(asctime)s %(name)12s: %(levelname)8s > %(message)s",
-                datefmt="%Y-%m-%d %H:%M:%S",
-            )
-            handler_console = logging.StreamHandler()
-            handler_console.setFormatter(formatter)
+            if not inherit_logging_config:
+                self._logger.setLevel(logging.DEBUG)
 
-            if output_log:
-                if log_path and log_path[-1] != "/":
-                    log_path += "/"
-                self._log_file = f"{log_path}{log_file_prefix}_log__{datetime.now():%Y-%m-%d_%H-%M-%S}.log"
-                handler_log = logging.FileHandler(filename=self._log_file)
-                handler_log.setFormatter(formatter)
+                formatter = logging.Formatter(
+                    fmt="%(asctime)s %(name)12s: %(levelname)8s > %(message)s",
+                    datefmt="%Y-%m-%d %H:%M:%S",
+                )
+                handler_console = logging.StreamHandler()
+                handler_console.setFormatter(formatter)
 
-            if output_log and not self._logger.hasHandlers():
-                self._logger.addHandler(handler_log)
-                if print_console:
-                    handler_console.setLevel(logging.INFO)
+                if output_log:
+                    if log_path and log_path[-1] != "/":
+                        log_path += "/"
+                    self._log_file = f"{log_path}{log_file_prefix}_log__{datetime.now():%Y-%m-%d_%H-%M-%S}.log"
+                    handler_log = logging.FileHandler(filename=self._log_file)
+                    handler_log.setFormatter(formatter)
+
+                if output_log and not self._logger.hasHandlers():
+                    self._logger.addHandler(handler_log)
+                    if print_console:
+                        handler_console.setLevel(logging.INFO)
+                        self._logger.addHandler(handler_console)
+                elif print_console and not self._logger.hasHandlers():
                     self._logger.addHandler(handler_console)
-            elif print_console and not self._logger.hasHandlers():
-                self._logger.addHandler(handler_console)
         else:
             self._logger = None
 

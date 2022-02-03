@@ -48,6 +48,11 @@ PRINT_TO_CONSOLE = True
 # Disable all logging? You're on your own then!
 SUPPRESS_LOGGING = False
 
+# Some use cases might integrate the library where a logging scheme is already
+# defined, so no handlers, formatters etc, are needed, just the logger instance
+# itself
+INHERIT_LOGGING_CONFIG = False
+
 # Simulate POST/PUT/DELETE calls to prevent changes?
 SIMULATE_API_CALLS = False
 
