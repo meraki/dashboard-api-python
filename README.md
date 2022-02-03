@@ -121,3 +121,17 @@ You can find fully working example scripts in the **examples** folder.
 |-------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **aio_org_wide_clients.py** | That code is a asyncio port from org_wide_clients.py and collects the clients of all networks, in all orgs to which the key has access. No changes are made, since only GET endpoints are called, and the data is written to local CSV output files.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | **aio_ips2firewall.py**     |  That code will collect the source IP of security events and creates L7 firewall rules to block them. `usage: aio_ips2firewall.py [-h] -o ORGANIZATIONS [ORGANIZATIONS ...] [-f FILTER] [-s] [-d DAYS]` |
+
+
+## Note for application developers and ecosystem partners
+
+We're so glad that you're leveraging our Python library. It's best practice to identify your application with every API request that you make. You can easily do this automatically just by following the format defined in [config.py](https://github.com/meraki/dashboard-api-python/blob/master/meraki/config.py) and passing the session kwarg:
+
+``` Python
+MERAKI_PYTHON_SDK_CALLER
+```
+
+Unless you are an ecosystem partner, this identifier is optional. 
+
+1. If you are an ecosystem partner and you have questions about this requirement, please reach out to your ecosystem rep.
+2. If you have any questions about the formatting, please ask your question by opening an issue in this repo.
