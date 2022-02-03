@@ -17,6 +17,7 @@ api_key = ""
 ORGANIZATION_ID = ""
 NETWORK_ID = ""
 
+
 def timeit(func):
     async def process(func, *args, **params):
         if asyncio.iscoroutinefunction(func):
@@ -39,6 +40,7 @@ def timeit(func):
 
     return helper
 
+
 @timeit
 async def getNetworksLegacy(aiomeraki: meraki.aio.AsyncDashboardAPI, perPage=5):
     count = 0
@@ -46,6 +48,7 @@ async def getNetworksLegacy(aiomeraki: meraki.aio.AsyncDashboardAPI, perPage=5):
         print(f"{x['id']} - {x['name']}")
         count = count + 1
     print(f"Found {count} networks")
+
 
 @timeit
 async def getNetworksIterator(aiomeraki: meraki.aio.AsyncDashboardAPI, perPage=5):
@@ -65,6 +68,7 @@ async def getNetworkEventsLegacy(aiomeraki: meraki.aio.AsyncDashboardAPI, perPag
         count = count + 1
     print(f"Found {count} events")
 
+
 @timeit
 async def getNetworkEventsIterator(aiomeraki: meraki.aio.AsyncDashboardAPI, perPage=5):
     count = 0
@@ -72,6 +76,7 @@ async def getNetworkEventsIterator(aiomeraki: meraki.aio.AsyncDashboardAPI, perP
         print(f"{x['occurredAt']}")
         count = count + 1
     print(f"Found {count} events")
+
 
 async def main():
 
