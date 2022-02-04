@@ -101,7 +101,7 @@ class AsyncRestSession:
 
     @property
     def use_iterator_for_get_pages(self):
-        return self.use_iterator_for_get_pages
+        return self._use_iterator_for_get_pages
 
     @use_iterator_for_get_pages.setter
     def use_iterator_for_get_pages(self, value):
@@ -110,7 +110,7 @@ class AsyncRestSession:
         else:
             self.get_pages = self._get_pages_legacy
 
-        self.use_iterator_for_get_pages = value
+        self._use_iterator_for_get_pages = value
 
     async def request(self, metadata, method, url, **kwargs):
         async with self._concurrent_requests_semaphore:
