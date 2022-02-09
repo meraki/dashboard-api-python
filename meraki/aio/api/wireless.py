@@ -952,6 +952,7 @@ class AsyncWireless:
         - apBandSettings (object): Settings that will be enabled if selectionType is set to 'ap'.
         - twoFourGhzSettings (object): Settings related to 2.4Ghz band
         - fiveGhzSettings (object): Settings related to 5Ghz band
+        - perSsidSettings (object): Per-SSID radio settings by number.
         """
 
         kwargs.update(locals())
@@ -969,7 +970,7 @@ class AsyncWireless:
         }
         resource = f'/networks/{networkId}/wireless/rfProfiles'
 
-        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', ]
+        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', 'perSsidSettings', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -990,6 +991,7 @@ class AsyncWireless:
         - apBandSettings (object): Settings that will be enabled if selectionType is set to 'ap'.
         - twoFourGhzSettings (object): Settings related to 2.4Ghz band
         - fiveGhzSettings (object): Settings related to 5Ghz band
+        - perSsidSettings (object): Per-SSID radio settings by number.
         """
 
         kwargs.update(locals())
@@ -1007,7 +1009,7 @@ class AsyncWireless:
         }
         resource = f'/networks/{networkId}/wireless/rfProfiles/{rfProfileId}'
 
-        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', ]
+        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', 'perSsidSettings', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1213,7 +1215,7 @@ class AsyncWireless:
         - radiusAccountingServers (array): The RADIUS accounting 802.1X servers to be used for authentication. This param is only valid if the authMode is 'open-with-radius', '8021x-radius' or 'ipsk-with-radius' and radiusAccountingEnabled is 'true'
         - radiusAccountingInterimInterval (integer): The interval (in seconds) in which accounting information is updated and sent to the RADIUS accounting server.
         - radiusAttributeForGroupPolicies (string): Specify the RADIUS attribute used to look up group policies ('Filter-Id', 'Reply-Message', 'Airespace-ACL-Name' or 'Aruba-User-Role'). Access points must receive this attribute in the RADIUS Access-Accept message
-        - ipAssignmentMode (string): The client IP assignment mode ('NAT mode', 'Bridge mode', 'Layer 3 roaming', 'Layer 3 roaming with a concentrator' or 'VPN')
+        - ipAssignmentMode (string): The client IP assignment mode ('NAT mode', 'Bridge mode', 'Layer 3 roaming', 'Ethernet over GRE', 'Layer 3 roaming with a concentrator' or 'VPN')
         - useVlanTagging (boolean): Whether or not traffic should be directed to use specific VLANs. This param is only valid if the ipAssignmentMode is 'Bridge mode' or 'Layer 3 roaming'
         - concentratorNetworkId (string): The concentrator to use when the ipAssignmentMode is 'Layer 3 roaming with a concentrator' or 'VPN'.
         - vlanId (integer): The VLAN ID used for VLAN tagging. This param is only valid when the ipAssignmentMode is 'Layer 3 roaming with a concentrator' or 'VPN'

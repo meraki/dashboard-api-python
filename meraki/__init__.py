@@ -42,7 +42,7 @@ from .config import (
     USE_ITERATOR_FOR_GET_PAGES,
 )
 
-__version__ = '1.18.1'
+__version__ = '1.18.2'
 
 
 class DashboardAPI(object):
