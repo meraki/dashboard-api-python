@@ -106,6 +106,93 @@ class Devices(object):
         
 
 
+    def createDeviceLiveToolsPing(self, serial: str, target: str, **kwargs):
+        """
+        **Enqueue a job to ping a target host from the device**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-ping
+
+        - serial (string): (required)
+        - target (string): FQDN, IPv4 or IPv6 address
+        - count (integer): Count parameter to pass to ping. [1..5], default 5
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['devices', 'liveTools', 'ping'],
+            'operation': 'createDeviceLiveToolsPing'
+        }
+        resource = f'/devices/{serial}/liveTools/ping'
+
+        body_params = ['target', 'count', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getDeviceLiveToolsPing(self, serial: str, id: str):
+        """
+        **Return a ping job**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-live-tools-ping
+
+        - serial (string): (required)
+        - id (string): (required)
+        """
+
+        metadata = {
+            'tags': ['devices', 'liveTools', 'ping'],
+            'operation': 'getDeviceLiveToolsPing'
+        }
+        resource = f'/devices/{serial}/liveTools/ping/{id}'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def createDeviceLiveToolsPingDevice(self, serial: str, **kwargs):
+        """
+        **Enqueue a job to check connectivity status to the device**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-ping-device
+
+        - serial (string): (required)
+        - count (integer): Count parameter to pass to ping. [1..5], default 5
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['devices', 'liveTools', 'pingDevice'],
+            'operation': 'createDeviceLiveToolsPingDevice'
+        }
+        resource = f'/devices/{serial}/liveTools/pingDevice'
+
+        body_params = ['count', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getDeviceLiveToolsPingDevice(self, serial: str, id: str):
+        """
+        **Return a ping job**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-live-tools-ping-device
+
+        - serial (string): (required)
+        - id (string): (required)
+        """
+
+        metadata = {
+            'tags': ['devices', 'liveTools', 'pingDevice'],
+            'operation': 'getDeviceLiveToolsPingDevice'
+        }
+        resource = f'/devices/{serial}/liveTools/pingDevice/{id}'
+
+        return self._session.get(metadata, resource)
+        
+
+
     def getDeviceLldpCdp(self, serial: str):
         """
         **List LLDP and CDP information for a device**

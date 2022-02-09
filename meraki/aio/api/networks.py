@@ -207,6 +207,15 @@ class AsyncNetworks:
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 10.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - statuses (array): Filters clients based on status. Can be one of 'Online' or 'Offline'.
+        - ip (string): Filters clients based on a partial or full match for the ip address field.
+        - ip6 (string): Filters clients based on a partial or full match for the ip6 address field.
+        - ip6Local (string): Filters clients based on a partial or full match for the ip6Local address field.
+        - mac (string): Filters clients based on a partial or full match for the mac address field.
+        - os (string): Filters clients based on a partial or full match for the os (operating system) field.
+        - description (string): Filters clients based on a partial or full match for the description field.
+        - vlan (string): Filters clients based on the full match for the VLAN field.
+        - recentDeviceConnections (array): Filters clients based on recent connection type. Can be one of 'Wired' or 'Wireless'.
         """
 
         kwargs.update(locals())
@@ -217,8 +226,14 @@ class AsyncNetworks:
         }
         resource = f'/networks/{networkId}/clients'
 
-        query_params = ['t0', 'timespan', 'perPage', 'startingAfter', 'endingBefore', ]
+        query_params = ['t0', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'statuses', 'ip', 'ip6', 'ip6Local', 'mac', 'os', 'description', 'vlan', 'recentDeviceConnections', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['statuses', 'recentDeviceConnections', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
         
@@ -258,6 +273,64 @@ class AsyncNetworks:
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def getNetworkClientsBandwidthUsageHistory(self, networkId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Returns a timeseries of total traffic consumption rates for all clients on a network within a given timespan, in megabits per second.**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-clients-bandwidth-usage-history
+
+        - networkId (string): (required)
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 30 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['networks', 'monitor', 'clients', 'bandwidthUsageHistory'],
+            'operation': 'getNetworkClientsBandwidthUsageHistory'
+        }
+        resource = f'/networks/{networkId}/clients/bandwidthUsageHistory'
+
+        query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def getNetworkClientsOverview(self, networkId: str, **kwargs):
+        """
+        **Return overview statistics for network clients**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-clients-overview
+
+        - networkId (string): (required)
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        - resolution (integer): The time resolution in seconds for returned data. The valid resolutions are: 7200, 86400, 604800, 2592000. The default is 604800.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['networks', 'monitor', 'clients', 'overview'],
+            'operation': 'getNetworkClientsOverview'
+        }
+        resource = f'/networks/{networkId}/clients/overview'
+
+        query_params = ['t0', 't1', 'timespan', 'resolution', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get(metadata, resource, params)
         
 
 
@@ -528,6 +601,34 @@ class AsyncNetworks:
         
 
 
+    def vmxNetworkDevicesClaim(self, networkId: str, size: str):
+        """
+        **Claim a vMX into a network**
+        https://developer.cisco.com/meraki/api-v1/#!vmx-network-devices-claim
+
+        - networkId (string): (required)
+        - size (string): The size of the vMX you claim. It can be one of: small, medium, large, 100
+        """
+
+        kwargs = locals()
+
+        if 'size' in kwargs:
+            options = ['small', 'medium', 'large', '100']
+            assert kwargs['size'] in options, f'''"size" cannot be "{kwargs['size']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['networks', 'configure', 'devices', 'claim'],
+            'operation': 'vmxNetworkDevicesClaim'
+        }
+        resource = f'/networks/{networkId}/devices/claim/vmx'
+
+        body_params = ['size', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
     def removeNetworkDevices(self, networkId: str, serial: str):
         """
         **Remove a single device**
@@ -561,7 +662,7 @@ class AsyncNetworks:
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" or "prev" (default) page
         - event_log_end_time (string): ISO8601 Zulu/UTC time, to use in conjunction with startingAfter, to retrieve events within a time window
-        - productType (string): The product type to fetch events for. This parameter is required for networks with multiple device types. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, and environmental
+        - productType (string): The product type to fetch events for. This parameter is required for networks with multiple device types. Valid types are wireless, appliance, switch, systemsManager, camera, and cellularGateway
         - includedEventTypes (array): A list of event types. The returned events will be filtered to only include events with these types.
         - excludedEventTypes (array): A list of event types. The returned events will be filtered to exclude events with these types.
         - deviceMac (string): The MAC address of the Meraki device which the list of events will be filtered with
@@ -578,6 +679,10 @@ class AsyncNetworks:
         """
 
         kwargs.update(locals())
+
+        if 'productType' in kwargs:
+            options = ['wireless', 'appliance', 'switch', 'systemsManager', 'camera', 'cellularGateway']
+            assert kwargs['productType'] in options, f'''"productType" cannot be "{kwargs['productType']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['networks', 'monitor', 'events'],
@@ -941,6 +1046,24 @@ class AsyncNetworks:
         
 
 
+    def getNetworkHealthAlerts(self, networkId: str):
+        """
+        **Return all global alerts on this network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-health-alerts
+
+        - networkId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'health', 'alerts'],
+            'operation': 'getNetworkHealthAlerts'
+        }
+        resource = f'/networks/{networkId}/health/alerts'
+
+        return self._session.get(metadata, resource)
+        
+
+
     def getNetworkMerakiAuthUsers(self, networkId: str):
         """
         **List the users configured under Meraki Authentication for a network (splash guest or RADIUS users for a wireless network, or client VPN users for a wired network)**
@@ -1076,18 +1199,20 @@ class AsyncNetworks:
         
 
 
-    def createNetworkMqttBroker(self, networkId: str, name: str, host: str, port: int):
+    def createNetworkMqttBroker(self, networkId: str, name: str, host: str, port: int, **kwargs):
         """
         **Add an MQTT broker**
         https://developer.cisco.com/meraki/api-v1/#!create-network-mqtt-broker
 
         - networkId (string): (required)
-        - name (string): Name of the MQTT broker
-        - host (string): Host name/IP address where MQTT broker runs
-        - port (integer): Host port though which MQTT broker can be reached
+        - name (string): Name of the MQTT broker.
+        - host (string): Host name/IP address where the MQTT broker runs.
+        - port (integer): Host port though which the MQTT broker can be reached.
+        - security (object): Security settings of the MQTT broker.
+        - authentication (object): Authentication settings of the MQTT broker
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         metadata = {
             'tags': ['networks', 'configure', 'mqttBrokers'],
@@ -1095,7 +1220,7 @@ class AsyncNetworks:
         }
         resource = f'/networks/{networkId}/mqttBrokers'
 
-        body_params = ['name', 'host', 'port', ]
+        body_params = ['name', 'host', 'port', 'security', 'authentication', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -1128,9 +1253,11 @@ class AsyncNetworks:
 
         - networkId (string): (required)
         - mqttBrokerId (string): (required)
-        - name (string): Name of the mqtt config
-        - host (string): Host name where mqtt broker runs
-        - port (integer): Host port though which mqtt broker can be reached
+        - name (string): Name of the MQTT broker.
+        - host (string): Host name/IP address where the MQTT broker runs.
+        - port (integer): Host port though which the MQTT broker can be reached.
+        - security (object): Security settings of the MQTT broker.
+        - authentication (object): Authentication settings of the MQTT broker
         """
 
         kwargs.update(locals())
@@ -1141,7 +1268,7 @@ class AsyncNetworks:
         }
         resource = f'/networks/{networkId}/mqttBrokers/{mqttBrokerId}'
 
-        body_params = ['name', 'host', 'port', ]
+        body_params = ['name', 'host', 'port', 'security', 'authentication', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1194,6 +1321,8 @@ class AsyncNetworks:
         - reportingEnabled (boolean): Boolean indicating whether NetFlow traffic reporting is enabled (true) or disabled (false).
         - collectorIp (string): The IPv4 address of the NetFlow collector.
         - collectorPort (integer): The port that the NetFlow collector will be listening on.
+        - etaEnabled (boolean): Boolean indicating whether Encrypted Traffic Analytics is enabled (true) or disabled (false).
+        - etaDstPort (integer): The port that the Encrypted Traffic Analytics collector will be listening on.
         """
 
         kwargs.update(locals())
@@ -1204,7 +1333,7 @@ class AsyncNetworks:
         }
         resource = f'/networks/{networkId}/netflow'
 
-        body_params = ['reportingEnabled', 'collectorIp', 'collectorPort', ]
+        body_params = ['reportingEnabled', 'collectorIp', 'collectorPort', 'etaEnabled', 'etaDstPort', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1447,6 +1576,7 @@ class AsyncNetworks:
         - localStatusPageEnabled (boolean): Enables / disables the local device status pages (<a target='_blank' href='http://my.meraki.com/'>my.meraki.com, </a><a target='_blank' href='http://ap.meraki.com/'>ap.meraki.com, </a><a target='_blank' href='http://switch.meraki.com/'>switch.meraki.com, </a><a target='_blank' href='http://wired.meraki.com/'>wired.meraki.com</a>). Optional (defaults to false)
         - remoteStatusPageEnabled (boolean): Enables / disables access to the device status page (<a target='_blank'>http://[device's LAN IP])</a>. Optional. Can only be set if localStatusPageEnabled is set to true
         - secureConnect (object): A hash of SecureConnect options applied to the Network.
+        - localStatusPage (object): A hash of Local Status page(s) options applied to the Network.
         """
 
         kwargs.update(locals())
@@ -1457,7 +1587,7 @@ class AsyncNetworks:
         }
         resource = f'/networks/{networkId}/settings'
 
-        body_params = ['localStatusPageEnabled', 'remoteStatusPageEnabled', 'secureConnect', ]
+        body_params = ['localStatusPageEnabled', 'remoteStatusPageEnabled', 'secureConnect', 'localStatusPage', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1599,6 +1729,24 @@ class AsyncNetworks:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
+
+    def getNetworkTopologyLinkLayer(self, networkId: str):
+        """
+        **List of devices and connections among them within the network.**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-topology-link-layer
+
+        - networkId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'topology', 'linkLayer'],
+            'operation': 'getNetworkTopologyLinkLayer'
+        }
+        resource = f'/networks/{networkId}/topology/linkLayer'
+
+        return self._session.get(metadata, resource)
         
 
 
@@ -1760,8 +1908,9 @@ class AsyncNetworks:
 
         - networkId (string): (required)
         - name (string): A name for easy reference to the HTTP server
-        - url (string): The URL of the HTTP server
+        - url (string): The URL of the HTTP server. Once set, cannot be updated.
         - sharedSecret (string): A shared secret that will be included in POSTs sent to the HTTP server. This secret can be used to verify that the request was sent by Meraki.
+        - payloadTemplate (object): The payload template to use when posting data to the HTTP server.
         """
 
         kwargs.update(locals())
@@ -1772,7 +1921,7 @@ class AsyncNetworks:
         }
         resource = f'/networks/{networkId}/webhooks/httpServers'
 
-        body_params = ['name', 'url', 'sharedSecret', ]
+        body_params = ['name', 'url', 'sharedSecret', 'payloadTemplate', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -1806,8 +1955,8 @@ class AsyncNetworks:
         - networkId (string): (required)
         - httpServerId (string): (required)
         - name (string): A name for easy reference to the HTTP server
-        - url (string): The URL of the HTTP server
         - sharedSecret (string): A shared secret that will be included in POSTs sent to the HTTP server. This secret can be used to verify that the request was sent by Meraki.
+        - payloadTemplate (object): The payload template to use when posting data to the HTTP server.
         """
 
         kwargs.update(locals())
@@ -1818,7 +1967,7 @@ class AsyncNetworks:
         }
         resource = f'/networks/{networkId}/webhooks/httpServers/{httpServerId}'
 
-        body_params = ['name', 'url', 'sharedSecret', ]
+        body_params = ['name', 'sharedSecret', 'payloadTemplate', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1844,6 +1993,119 @@ class AsyncNetworks:
         
 
 
+    def getNetworkWebhooksPayloadTemplates(self, networkId: str):
+        """
+        **List the webhook payload templates for a network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-webhooks-payload-templates
+
+        - networkId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'webhooks', 'payloadTemplates'],
+            'operation': 'getNetworkWebhooksPayloadTemplates'
+        }
+        resource = f'/networks/{networkId}/webhooks/payloadTemplates'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def createNetworkWebhooksPayloadTemplate(self, networkId: str, name: str, **kwargs):
+        """
+        **Create a webhook payload template for a network**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-webhooks-payload-template
+
+        - networkId (string): (required)
+        - name (string): The name of the new template
+        - body (string): The liquid template used for the body of the webhook message. Either `body` or `bodyFile` must be specified.
+        - headers (string): The liquid template used with the webhook headers.
+        - bodyFile (string): A file containing liquid template used for the body of the webhook message. Either `body` or `bodyFile` must be specified.
+        - headersFile (string): A file containing the liquid template used with the webhook headers.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['networks', 'configure', 'webhooks', 'payloadTemplates'],
+            'operation': 'createNetworkWebhooksPayloadTemplate'
+        }
+        resource = f'/networks/{networkId}/webhooks/payloadTemplates'
+
+        body_params = ['name', 'body', 'headers', 'bodyFile', 'headersFile', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getNetworkWebhooksPayloadTemplate(self, networkId: str, payloadTemplateId: str):
+        """
+        **Get the webhook payload template for a network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-webhooks-payload-template
+
+        - networkId (string): (required)
+        - payloadTemplateId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'webhooks', 'payloadTemplates'],
+            'operation': 'getNetworkWebhooksPayloadTemplate'
+        }
+        resource = f'/networks/{networkId}/webhooks/payloadTemplates/{payloadTemplateId}'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def deleteNetworkWebhooksPayloadTemplate(self, networkId: str, payloadTemplateId: str):
+        """
+        **Destroy a webhook payload template for a network**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-webhooks-payload-template
+
+        - networkId (string): (required)
+        - payloadTemplateId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'webhooks', 'payloadTemplates'],
+            'operation': 'deleteNetworkWebhooksPayloadTemplate'
+        }
+        resource = f'/networks/{networkId}/webhooks/payloadTemplates/{payloadTemplateId}'
+
+        return self._session.delete(metadata, resource)
+        
+
+
+    def updateNetworkWebhooksPayloadTemplate(self, networkId: str, payloadTemplateId: str, **kwargs):
+        """
+        **Update a webhook payload template for a network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-webhooks-payload-template
+
+        - networkId (string): (required)
+        - payloadTemplateId (string): (required)
+        - name (string): The name of the template
+        - body (string): The liquid template used for the body of the webhook message.
+        - headers (string): The liquid template used with the webhook headers.
+        - bodyFile (string): A file containing liquid template used for the body of the webhook message.
+        - headersFile (string): A file containing the liquid template used with the webhook headers.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['networks', 'configure', 'webhooks', 'payloadTemplates'],
+            'operation': 'updateNetworkWebhooksPayloadTemplate'
+        }
+        resource = f'/networks/{networkId}/webhooks/payloadTemplates/{payloadTemplateId}'
+
+        body_params = ['name', 'body', 'headers', 'bodyFile', 'headersFile', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
     def createNetworkWebhooksWebhookTest(self, networkId: str, url: str, **kwargs):
         """
         **Send a test webhook for a network**
@@ -1852,6 +2114,9 @@ class AsyncNetworks:
         - networkId (string): (required)
         - url (string): The URL where the test webhook will be sent
         - sharedSecret (string): The shared secret the test webhook will send. Optional. Defaults to an empty string.
+        - payloadTemplateId (string): The ID of the payload template of the test webhook. Defaults to the HTTP server's template ID if one exists for the given URL, or Generic template ID otherwise
+        - payloadTemplateName (string): The name of the payload template.
+        - alertTypeId (string): The type of alert which the test webhook will send. Optional. Defaults to power_supply_down.
         """
 
         kwargs.update(locals())
@@ -1862,7 +2127,7 @@ class AsyncNetworks:
         }
         resource = f'/networks/{networkId}/webhooks/webhookTests'
 
-        body_params = ['url', 'sharedSecret', ]
+        body_params = ['url', 'sharedSecret', 'payloadTemplateId', 'payloadTemplateName', 'alertTypeId', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)

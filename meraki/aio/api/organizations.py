@@ -70,6 +70,7 @@ class AsyncOrganizations:
 
         - organizationId (string): (required)
         - name (string): The name of the organization
+        - api (object): API-specific settings
         """
 
         kwargs.update(locals())
@@ -80,7 +81,7 @@ class AsyncOrganizations:
         }
         resource = f'/organizations/{organizationId}'
 
-        body_params = ['name', ]
+        body_params = ['name', 'api', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -223,6 +224,423 @@ class AsyncOrganizations:
         
 
 
+    def getOrganizationAdaptivePolicyAcls(self, organizationId: str):
+        """
+        **List adaptive policy ACLs in a organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-adaptive-policy-acls
+
+        - organizationId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'acls'],
+            'operation': 'getOrganizationAdaptivePolicyAcls'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/acls'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def createOrganizationAdaptivePolicyAcl(self, organizationId: str, name: str, rules: list, ipVersion: str, **kwargs):
+        """
+        **Creates new adaptive policy ACL**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-adaptive-policy-acl
+
+        - organizationId (string): (required)
+        - name (string): Name of the adaptive policy ACL
+        - rules (array): An ordered array of the adaptive policy ACL rules.
+        - ipVersion (string): IP version of adpative policy ACL. One of: 'any', 'ipv4' or 'ipv6'
+        - description (string): Description of the adaptive policy ACL
+        """
+
+        kwargs.update(locals())
+
+        if 'ipVersion' in kwargs:
+            options = ['any', 'ipv4', 'ipv6']
+            assert kwargs['ipVersion'] in options, f'''"ipVersion" cannot be "{kwargs['ipVersion']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'acls'],
+            'operation': 'createOrganizationAdaptivePolicyAcl'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/acls'
+
+        body_params = ['name', 'description', 'rules', 'ipVersion', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getOrganizationAdaptivePolicyAcl(self, organizationId: str, id: str):
+        """
+        **Returns the adaptive policy ACL information**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-adaptive-policy-acl
+
+        - organizationId (string): (required)
+        - id (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'acls'],
+            'operation': 'getOrganizationAdaptivePolicyAcl'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/acls/{id}'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def updateOrganizationAdaptivePolicyAcl(self, organizationId: str, id: str, **kwargs):
+        """
+        **Updates an adaptive policy ACL**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-adaptive-policy-acl
+
+        - organizationId (string): (required)
+        - id (string): (required)
+        - name (string): Name of the adaptive policy ACL
+        - description (string): Description of the adaptive policy ACL
+        - rules (array): An ordered array of the adaptive policy ACL rules. An empty array will clear the rules.
+        - ipVersion (string): IP version of adpative policy ACL. One of: 'any', 'ipv4' or 'ipv6'
+        """
+
+        kwargs.update(locals())
+
+        if 'ipVersion' in kwargs:
+            options = ['any', 'ipv4', 'ipv6']
+            assert kwargs['ipVersion'] in options, f'''"ipVersion" cannot be "{kwargs['ipVersion']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'acls'],
+            'operation': 'updateOrganizationAdaptivePolicyAcl'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/acls/{id}'
+
+        body_params = ['name', 'description', 'rules', 'ipVersion', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def deleteOrganizationAdaptivePolicyAcl(self, organizationId: str, id: str):
+        """
+        **Deletes the specified adaptive policy ACL**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-adaptive-policy-acl
+
+        - organizationId (string): (required)
+        - id (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'acls'],
+            'operation': 'deleteOrganizationAdaptivePolicyAcl'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/acls/{id}'
+
+        return self._session.delete(metadata, resource)
+        
+
+
+    def getOrganizationAdaptivePolicyGroups(self, organizationId: str):
+        """
+        **List adaptive policy groups in a organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-adaptive-policy-groups
+
+        - organizationId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'groups'],
+            'operation': 'getOrganizationAdaptivePolicyGroups'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/groups'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def createOrganizationAdaptivePolicyGroup(self, organizationId: str, name: str, sgt: int, **kwargs):
+        """
+        **Creates a new adaptive policy group**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-adaptive-policy-group
+
+        - organizationId (string): (required)
+        - name (string): Name of the group
+        - sgt (integer): SGT value of the group
+        - description (string): Description of the group (default: "")
+        - policyObjects (array): The policy objects that belong to this group; traffic from addresses specified by these policy objects will be tagged with this group's SGT value if no other tagging scheme is being used (each requires one unique attribute) (default: [])
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'groups'],
+            'operation': 'createOrganizationAdaptivePolicyGroup'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/groups'
+
+        body_params = ['name', 'sgt', 'description', 'policyObjects', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getOrganizationAdaptivePolicyGroup(self, organizationId: str, groupId: str):
+        """
+        **Returns an adaptive policy group**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-adaptive-policy-group
+
+        - organizationId (string): (required)
+        - groupId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'groups'],
+            'operation': 'getOrganizationAdaptivePolicyGroup'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/groups/{groupId}'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def deleteOrganizationAdaptivePolicyGroup(self, organizationId: str, groupId: str):
+        """
+        **Deletes the specified adaptive policy group and any associated policies and references**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-adaptive-policy-group
+
+        - organizationId (string): (required)
+        - groupId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'groups'],
+            'operation': 'deleteOrganizationAdaptivePolicyGroup'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/groups/{groupId}'
+
+        return self._session.delete(metadata, resource)
+        
+
+
+    def updateOrganizationAdaptivePolicyGroup(self, organizationId: str, groupId: str, **kwargs):
+        """
+        **Updates an adaptive policy group**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-adaptive-policy-group
+
+        - organizationId (string): (required)
+        - groupId (string): (required)
+        - name (string): Name of the group
+        - sgt (integer): SGT value of the group
+        - description (string): Description of the group
+        - policyObjects (array): The policy objects that belong to this group; traffic from addresses specified by these policy objects will be tagged with this group's SGT value if no other tagging scheme is being used (each requires one unique attribute)
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'groups'],
+            'operation': 'updateOrganizationAdaptivePolicyGroup'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/groups/{groupId}'
+
+        body_params = ['name', 'sgt', 'description', 'policyObjects', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def getOrganizationAdaptivePolicyOverview(self, organizationId: str):
+        """
+        **Returns adaptive policy aggregate statistics for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-adaptive-policy-overview
+
+        - organizationId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'monitor', 'adaptivePolicy', 'overview'],
+            'operation': 'getOrganizationAdaptivePolicyOverview'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/overview'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def getOrganizationAdaptivePolicyPolicies(self, organizationId: str):
+        """
+        **List adaptive policies in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-adaptive-policy-policies
+
+        - organizationId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'policies'],
+            'operation': 'getOrganizationAdaptivePolicyPolicies'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/policies'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def createOrganizationAdaptivePolicyPolicy(self, organizationId: str, sourceGroup: dict, destinationGroup: dict, **kwargs):
+        """
+        **Add an Adaptive Policy**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-adaptive-policy-policy
+
+        - organizationId (string): (required)
+        - sourceGroup (object): The source adaptive policy group (requires one unique attribute)
+
+        - destinationGroup (object): The destination adaptive policy group (requires one unique attribute)
+
+        - acls (array): An ordered array of adaptive policy ACLs (each requires one unique attribute) that apply to this policy (default: [])
+
+        - lastEntryRule (string): The rule to apply if there is no matching ACL (default: "default")
+
+        """
+
+        kwargs.update(locals())
+
+        if 'lastEntryRule' in kwargs:
+            options = ['default', 'allow', 'deny']
+            assert kwargs['lastEntryRule'] in options, f'''"lastEntryRule" cannot be "{kwargs['lastEntryRule']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'policies'],
+            'operation': 'createOrganizationAdaptivePolicyPolicy'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/policies'
+
+        body_params = ['sourceGroup', 'destinationGroup', 'acls', 'lastEntryRule', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getOrganizationAdaptivePolicyPolicy(self, organizationId: str, adaptivePolicyId: str):
+        """
+        **Return an adaptive policy**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-adaptive-policy-policy
+
+        - organizationId (string): (required)
+        - adaptivePolicyId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'policies'],
+            'operation': 'getOrganizationAdaptivePolicyPolicy'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/policies/{adaptivePolicyId}'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def updateOrganizationAdaptivePolicyPolicy(self, organizationId: str, adaptivePolicyId: str, **kwargs):
+        """
+        **Update an Adaptive Policy**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-adaptive-policy-policy
+
+        - organizationId (string): (required)
+        - adaptivePolicyId (string): (required)
+        - sourceGroup (object): The source adaptive policy group (requires one unique attribute)
+
+        - destinationGroup (object): The destination adaptive policy group (requires one unique attribute)
+
+        - acls (array): An ordered array of adaptive policy ACLs (each requires one unique attribute) that apply to this policy
+
+        - lastEntryRule (string): The rule to apply if there is no matching ACL
+
+        """
+
+        kwargs.update(locals())
+
+        if 'lastEntryRule' in kwargs:
+            options = ['default', 'allow', 'deny']
+            assert kwargs['lastEntryRule'] in options, f'''"lastEntryRule" cannot be "{kwargs['lastEntryRule']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'policies'],
+            'operation': 'updateOrganizationAdaptivePolicyPolicy'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/policies/{adaptivePolicyId}'
+
+        body_params = ['sourceGroup', 'destinationGroup', 'acls', 'lastEntryRule', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def deleteOrganizationAdaptivePolicyPolicy(self, organizationId: str, adaptivePolicyId: str):
+        """
+        **Delete an Adaptive Policy**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-adaptive-policy-policy
+
+        - organizationId (string): (required)
+        - adaptivePolicyId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'policies'],
+            'operation': 'deleteOrganizationAdaptivePolicyPolicy'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/policies/{adaptivePolicyId}'
+
+        return self._session.delete(metadata, resource)
+        
+
+
+    def getOrganizationAdaptivePolicySettings(self, organizationId: str):
+        """
+        **Returns global adaptive policy settings in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-adaptive-policy-settings
+
+        - organizationId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'settings'],
+            'operation': 'getOrganizationAdaptivePolicySettings'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/settings'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def updateOrganizationAdaptivePolicySettings(self, organizationId: str, **kwargs):
+        """
+        **Update global adaptive policy settings**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-adaptive-policy-settings
+
+        - organizationId (string): (required)
+        - enabledNetworks (array): List of network IDs with adaptive policy enabled
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'settings'],
+            'operation': 'updateOrganizationAdaptivePolicySettings'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/settings'
+
+        body_params = ['enabledNetworks', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
     def getOrganizationAdmins(self, organizationId: str):
         """
         **List the dashboard administrators in this organization**
@@ -323,6 +741,109 @@ class AsyncOrganizations:
             'operation': 'deleteOrganizationAdmin'
         }
         resource = f'/organizations/{organizationId}/admins/{adminId}'
+
+        return self._session.delete(metadata, resource)
+        
+
+
+    def getOrganizationAlertsProfiles(self, organizationId: str):
+        """
+        **List all organization-wide alert configurations**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-alerts-profiles
+
+        - organizationId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'alerts', 'profiles'],
+            'operation': 'getOrganizationAlertsProfiles'
+        }
+        resource = f'/organizations/{organizationId}/alerts/profiles'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def createOrganizationAlertsProfile(self, organizationId: str, type: str, alertCondition: dict, recipients: dict, networkTags: list, **kwargs):
+        """
+        **Create an organization-wide alert configuration**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-alerts-profile
+
+        - organizationId (string): (required)
+        - type (string): The alert type
+        - alertCondition (object): The conditions that determine if the alert triggers
+        - recipients (object): List of recipients that will recieve the alert.
+        - networkTags (array): Networks with these tags will be monitored for the alert
+        - description (string): User supplied description of the alert
+        """
+
+        kwargs.update(locals())
+
+        if 'type' in kwargs:
+            options = ['voipJitter', 'voipPacketLoss', 'voipMos', 'wanLatency', 'wanPacketLoss', 'wanUtilization', 'wanStatus']
+            assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'alerts', 'profiles'],
+            'operation': 'createOrganizationAlertsProfile'
+        }
+        resource = f'/organizations/{organizationId}/alerts/profiles'
+
+        body_params = ['type', 'alertCondition', 'recipients', 'networkTags', 'description', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def updateOrganizationAlertsProfile(self, organizationId: str, alertConfigId: str, **kwargs):
+        """
+        **Update an organization-wide alert config**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-alerts-profile
+
+        - organizationId (string): (required)
+        - alertConfigId (string): (required)
+        - enabled (boolean): Is the alert config enabled
+        - type (string): The alert type
+        - alertCondition (object): The conditions that determine if the alert triggers
+        - recipients (object): List of recipients that will recieve the alert.
+        - networkTags (array): Networks with these tags will be monitored for the alert
+        - description (string): User supplied description of the alert
+        """
+
+        kwargs.update(locals())
+
+        if 'type' in kwargs:
+            options = ['voipJitter', 'voipPacketLoss', 'voipMos', 'wanLatency', 'wanPacketLoss', 'wanUtilization', 'wanStatus']
+            assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'alerts', 'profiles'],
+            'operation': 'updateOrganizationAlertsProfile'
+        }
+        resource = f'/organizations/{organizationId}/alerts/profiles/{alertConfigId}'
+
+        body_params = ['enabled', 'type', 'alertCondition', 'recipients', 'networkTags', 'description', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def deleteOrganizationAlertsProfile(self, organizationId: str, alertConfigId: str):
+        """
+        **Removes an organization-wide alert config**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-alerts-profile
+
+        - organizationId (string): (required)
+        - alertConfigId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'alerts', 'profiles'],
+            'operation': 'deleteOrganizationAlertsProfile'
+        }
+        resource = f'/organizations/{organizationId}/alerts/profiles/{alertConfigId}'
 
         return self._session.delete(metadata, resource)
         
@@ -577,6 +1098,87 @@ class AsyncOrganizations:
         
 
 
+    def getOrganizationClientsBandwidthUsageHistory(self, organizationId: str, **kwargs):
+        """
+        **Return data usage (in megabits per second) over time for all clients in the given organization within a given time range.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-clients-bandwidth-usage-history
+
+        - organizationId (string): (required)
+        - t0 (string): The beginning of the timespan for the data.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'monitor', 'clients', 'bandwidthUsageHistory'],
+            'operation': 'getOrganizationClientsBandwidthUsageHistory'
+        }
+        resource = f'/organizations/{organizationId}/clients/bandwidthUsageHistory'
+
+        query_params = ['t0', 't1', 'timespan', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get(metadata, resource, params)
+        
+
+
+    def getOrganizationClientsOverview(self, organizationId: str, **kwargs):
+        """
+        **Return summary information around client data usage (in mb) across the given organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-clients-overview
+
+        - organizationId (string): (required)
+        - t0 (string): The beginning of the timespan for the data.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'monitor', 'clients', 'overview'],
+            'operation': 'getOrganizationClientsOverview'
+        }
+        resource = f'/organizations/{organizationId}/clients/overview'
+
+        query_params = ['t0', 't1', 'timespan', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get(metadata, resource, params)
+        
+
+
+    def getOrganizationClientsSearch(self, organizationId: str, mac: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Return the client details in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-clients-search
+
+        - organizationId (string): (required)
+        - mac (string): The MAC address of the client. Required.
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 5. Default is 5.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'clients', 'search'],
+            'operation': 'getOrganizationClientsSearch'
+        }
+        resource = f'/organizations/{organizationId}/clients/search'
+
+        query_params = ['mac', 'perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
     def cloneOrganization(self, organizationId: str, name: str):
         """
         **Create a new organization by cloning the addressed organization**
@@ -754,9 +1356,26 @@ class AsyncOrganizations:
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - configurationUpdatedAfter (string): Filter results by whether or not the device's configuration has been updated after the given timestamp
+        - networkIds (array): Optional parameter to filter devices by network.
+        - productTypes (array): Optional parameter to filter devices by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, and sensor.
+        - tags (array): Optional parameter to filter devices by tags.
+        - tagsFilterType (string): Optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return networks which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
+        - name (string): Optional parameter to filter devices by name. All returned devices will have a name that contains the search term or is an exact match.
+        - mac (string): Optional parameter to filter devices by MAC address. All returned devices will have a MAC address that contains the search term or is an exact match.
+        - serial (string): Optional parameter to filter devices by serial number. All returned devices will have a serial number that contains the search term or is an exact match.
+        - model (string): Optional parameter to filter devices by model. All returned devices will have a model that contains the search term or is an exact match.
+        - macs (array): Optional parameter to filter devices by one or more MAC addresses. All returned devices will have a MAC address that is an exact match.
+        - serials (array): Optional parameter to filter devices by one or more serial numbers. All returned devices will have a serial number that is an exact match.
+        - sensorMetrics (array): Optional parameter to filter devices by the metrics that they provide. Only applies to sensor devices.
+        - sensorAlertProfileIds (array): Optional parameter to filter devices by the alert profiles that are bound to them. Only applies to sensor devices.
+        - models (array): Optional parameter to filter devices by one or more models. All returned devices will have a model that is an exact match.
         """
 
         kwargs.update(locals())
+
+        if 'tagsFilterType' in kwargs:
+            options = ['withAnyTags', 'withAllTags']
+            assert kwargs['tagsFilterType'] in options, f'''"tagsFilterType" cannot be "{kwargs['tagsFilterType']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['organizations', 'configure', 'devices'],
@@ -764,8 +1383,14 @@ class AsyncOrganizations:
         }
         resource = f'/organizations/{organizationId}/devices'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'configurationUpdatedAfter', ]
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'configurationUpdatedAfter', 'networkIds', 'productTypes', 'tags', 'tagsFilterType', 'name', 'mac', 'serial', 'model', 'macs', 'serials', 'sensorMetrics', 'sensorAlertProfileIds', 'models', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', 'productTypes', 'tags', 'macs', 'serials', 'sensorMetrics', 'sensorAlertProfileIds', 'models', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
         
@@ -782,9 +1407,20 @@ class AsyncOrganizations:
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter devices by network ids.
+        - serials (array): Optional parameter to filter devices by serials.
+        - statuses (array): Optional parameter to filter devices by statuses. Valid statuses are ["online", "alerting", "offline", "dormant"].
+        - productTypes (array): An optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, and sensor.
+        - models (array): Optional parameter to filter devices by models.
+        - tags (array): An optional parameter to filter devices by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below).
+        - tagsFilterType (string): An optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return devices which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
         """
 
         kwargs.update(locals())
+
+        if 'tagsFilterType' in kwargs:
+            options = ['withAnyTags', 'withAllTags']
+            assert kwargs['tagsFilterType'] in options, f'''"tagsFilterType" cannot be "{kwargs['tagsFilterType']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['organizations', 'monitor', 'devices', 'statuses'],
@@ -792,10 +1428,47 @@ class AsyncOrganizations:
         }
         resource = f'/organizations/{organizationId}/devices/statuses'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'serials', 'statuses', 'productTypes', 'models', 'tags', 'tagsFilterType', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        array_params = ['networkIds', 'serials', 'statuses', 'productTypes', 'models', 'tags', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def getOrganizationDevicesStatusesOverview(self, organizationId: str, **kwargs):
+        """
+        **Return an overview of current device statuses**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-statuses-overview
+
+        - organizationId (string): (required)
+        - productTypes (array): An optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, and sensor.
+        - networkIds (array): An optional parameter to filter device statuses by network.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'monitor', 'devices', 'statuses', 'overview'],
+            'operation': 'getOrganizationDevicesStatusesOverview'
+        }
+        resource = f'/organizations/{organizationId}/devices/statuses/overview'
+
+        query_params = ['productTypes', 'networkIds', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['productTypes', 'networkIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get(metadata, resource, params)
         
 
 
@@ -844,6 +1517,13 @@ class AsyncOrganizations:
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - usedState (string): Filter results by used or unused inventory. Accepted values are "used" or "unused".
         - search (string): Search for devices in inventory based on serial number, mac address, or model.
+        - macs (array): Search for devices in inventory based on mac addresses.
+        - networkIds (array): Search for devices in inventory based on network ids.
+        - serials (array): Search for devices in inventory based on serials.
+        - models (array): Search for devices in inventory based on model.
+        - tags (array): An optional parameter to filter devices by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below).
+        - tagsFilterType (string): An optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return devices which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
+        - productTypes (array): Optional parameter to filter devices by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, and sensor.
         """
 
         kwargs.update(locals())
@@ -851,6 +1531,9 @@ class AsyncOrganizations:
         if 'usedState' in kwargs:
             options = ['used', 'unused']
             assert kwargs['usedState'] in options, f'''"usedState" cannot be "{kwargs['usedState']}", & must be set to one of: {options}'''
+        if 'tagsFilterType' in kwargs:
+            options = ['withAnyTags', 'withAllTags']
+            assert kwargs['tagsFilterType'] in options, f'''"tagsFilterType" cannot be "{kwargs['tagsFilterType']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['organizations', 'configure', 'inventoryDevices'],
@@ -858,8 +1541,14 @@ class AsyncOrganizations:
         }
         resource = f'/organizations/{organizationId}/inventoryDevices'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'usedState', 'search', ]
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'usedState', 'search', 'macs', 'networkIds', 'serials', 'models', 'tags', 'tagsFilterType', 'productTypes', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['macs', 'networkIds', 'serials', 'models', 'tags', 'productTypes', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
         
@@ -1184,7 +1873,7 @@ class AsyncOrganizations:
 
         - organizationId (string): (required)
         - name (string): The name of the new network
-        - productTypes (array): The product type(s) of the new network. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, environmental. If more than one type is included, the network will be a combined network.
+        - productTypes (array): The product type(s) of the new network. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, environmental. If more than one type is included, the network will be a combined network.
         - tags (array): A list of tags to be applied to the network
         - timeZone (string): The timezone of the network. For a list of allowed timezones, please see the 'TZ' column in the table in <a target='_blank' href='https://en.wikipedia.org/wiki/List_of_tz_database_time_zones'>this article.</a>
         - copyFromNetworkId (string): The ID of the network to copy configuration from. Other provided parameters will override the copied configuration, except type which must match this network's type exactly.
@@ -1573,6 +2262,188 @@ class AsyncOrganizations:
         
 
 
+    def getOrganizationSummaryTopAppliancesByUtilization(self, organizationId: str, **kwargs):
+        """
+        **Return the top 10 appliances sorted by utilization over given time range.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-summary-top-appliances-by-utilization
+
+        - organizationId (string): (required)
+        - t0 (string): The beginning of the timespan for the data.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'monitor', 'summary', 'top', 'appliances', 'byUtilization'],
+            'operation': 'getOrganizationSummaryTopAppliancesByUtilization'
+        }
+        resource = f'/organizations/{organizationId}/summary/top/appliances/byUtilization'
+
+        query_params = ['t0', 't1', 'timespan', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get(metadata, resource, params)
+        
+
+
+    def getOrganizationSummaryTopClientsByUsage(self, organizationId: str, **kwargs):
+        """
+        **Return metrics for organization's top 10 clients by data usage (in mb) over given time range.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-summary-top-clients-by-usage
+
+        - organizationId (string): (required)
+        - t0 (string): The beginning of the timespan for the data.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'monitor', 'summary', 'top', 'clients', 'byUsage'],
+            'operation': 'getOrganizationSummaryTopClientsByUsage'
+        }
+        resource = f'/organizations/{organizationId}/summary/top/clients/byUsage'
+
+        query_params = ['t0', 't1', 'timespan', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get(metadata, resource, params)
+        
+
+
+    def getOrganizationSummaryTopClientsManufacturersByUsage(self, organizationId: str, **kwargs):
+        """
+        **Return metrics for organization's top clients by data usage (in mb) over given time range, grouped by manufacturer.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-summary-top-clients-manufacturers-by-usage
+
+        - organizationId (string): (required)
+        - t0 (string): The beginning of the timespan for the data.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'monitor', 'summary', 'top', 'clients', 'manufacturers', 'byUsage'],
+            'operation': 'getOrganizationSummaryTopClientsManufacturersByUsage'
+        }
+        resource = f'/organizations/{organizationId}/summary/top/clients/manufacturers/byUsage'
+
+        query_params = ['t0', 't1', 'timespan', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get(metadata, resource, params)
+        
+
+
+    def getOrganizationSummaryTopDevicesByUsage(self, organizationId: str, **kwargs):
+        """
+        **Return metrics for organization's top 10 devices sorted by data usage over given time range**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-summary-top-devices-by-usage
+
+        - organizationId (string): (required)
+        - t0 (string): The beginning of the timespan for the data.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'monitor', 'summary', 'top', 'devices', 'byUsage'],
+            'operation': 'getOrganizationSummaryTopDevicesByUsage'
+        }
+        resource = f'/organizations/{organizationId}/summary/top/devices/byUsage'
+
+        query_params = ['t0', 't1', 'timespan', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get(metadata, resource, params)
+        
+
+
+    def getOrganizationSummaryTopDevicesModelsByUsage(self, organizationId: str, **kwargs):
+        """
+        **Return metrics for organization's top 10 device models sorted by data usage over given time range**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-summary-top-devices-models-by-usage
+
+        - organizationId (string): (required)
+        - t0 (string): The beginning of the timespan for the data.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'monitor', 'summary', 'top', 'devices', 'models', 'byUsage'],
+            'operation': 'getOrganizationSummaryTopDevicesModelsByUsage'
+        }
+        resource = f'/organizations/{organizationId}/summary/top/devices/models/byUsage'
+
+        query_params = ['t0', 't1', 'timespan', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get(metadata, resource, params)
+        
+
+
+    def getOrganizationSummaryTopSsidsByUsage(self, organizationId: str, **kwargs):
+        """
+        **Return metrics for organization's top 10 ssids by data usage over given time range**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-summary-top-ssids-by-usage
+
+        - organizationId (string): (required)
+        - t0 (string): The beginning of the timespan for the data.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'monitor', 'summary', 'top', 'ssids', 'byUsage'],
+            'operation': 'getOrganizationSummaryTopSsidsByUsage'
+        }
+        resource = f'/organizations/{organizationId}/summary/top/ssids/byUsage'
+
+        query_params = ['t0', 't1', 'timespan', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get(metadata, resource, params)
+        
+
+
+    def getOrganizationSummaryTopSwitchesByEnergyUsage(self, organizationId: str, **kwargs):
+        """
+        **Return metrics for organization's top 10 switches by energy usage over given time range**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-summary-top-switches-by-energy-usage
+
+        - organizationId (string): (required)
+        - t0 (string): The beginning of the timespan for the data.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'monitor', 'summary', 'top', 'switches', 'byEnergyUsage'],
+            'operation': 'getOrganizationSummaryTopSwitchesByEnergyUsage'
+        }
+        resource = f'/organizations/{organizationId}/summary/top/switches/byEnergyUsage'
+
+        query_params = ['t0', 't1', 'timespan', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get(metadata, resource, params)
+        
+
+
     def getOrganizationUplinksStatuses(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the uplink status of every Meraki MX, MG and Z series devices in the organization**
@@ -1610,13 +2481,20 @@ class AsyncOrganizations:
         
 
 
-    def getOrganizationWebhooksAlertTypes(self, organizationId: str):
+    def getOrganizationWebhooksAlertTypes(self, organizationId: str, **kwargs):
         """
         **Return a list of alert types to be used with managing webhook alerts**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-webhooks-alert-types
 
         - organizationId (string): (required)
+        - productType (string): Filter sample alerts to a specific product type
         """
+
+        kwargs.update(locals())
+
+        if 'productType' in kwargs:
+            options = ['appliance', 'camera', 'cellularGateway', 'platform', 'sm', 'switch', 'wireless']
+            assert kwargs['productType'] in options, f'''"productType" cannot be "{kwargs['productType']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['organizations', 'monitor', 'webhooks', 'alertTypes'],
@@ -1624,7 +2502,10 @@ class AsyncOrganizations:
         }
         resource = f'/organizations/{organizationId}/webhooks/alertTypes'
 
-        return self._session.get(metadata, resource)
+        query_params = ['productType', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get(metadata, resource, params)
         
 
 

@@ -13,7 +13,7 @@ class ActionBatchCamera(object):
         - profileId (string): The ID of a quality and retention profile to assign to the camera. The profile's settings will override all of the per-camera quality and retention settings. If the value of this parameter is null, any existing profile will be unassigned from the camera.
         - motionBasedRetentionEnabled (boolean): Boolean indicating if motion-based retention is enabled(true) or disabled(false) on the camera.
         - audioRecordingEnabled (boolean): Boolean indicating if audio recording is enabled(true) or disabled(false) on the camera
-        - restrictedBandwidthModeEnabled (boolean): Boolean indicating if restricted bandwidth is enabled(true) or disabled(false) on the camera
+        - restrictedBandwidthModeEnabled (boolean): Boolean indicating if restricted bandwidth is enabled(true) or disabled(false) on the camera. This setting does not apply to MV2 cameras.
         - quality (string): Quality of the camera. Can be one of 'Standard', 'High' or 'Enhanced'. Not all qualities are supported by every camera model.
         - resolution (string): Resolution of the camera. Can be one of '1280x720', '1920x1080', '1080x1080' or '2058x2058'. Not all resolutions are supported by every camera model.
         - motionDetectorVersion (integer): The version of the motion detector that will be used by the camera. Only applies to Gen 2 cameras. Defaults to v2.
@@ -59,6 +59,7 @@ class ActionBatchCamera(object):
         - serial (string): (required)
         - senseEnabled (boolean): Boolean indicating if sense(license) is enabled(true) or disabled(false) on the camera
         - mqttBrokerId (string): The ID of the MQTT broker to be enabled on the camera. A value of null will disable MQTT on the camera
+        - audioDetection (object): The details of the audio detection config.
         - detectionModelId (string): The ID of the object detection model
         """
 
@@ -70,7 +71,7 @@ class ActionBatchCamera(object):
         }
         resource = f'/devices/{serial}/camera/sense'
 
-        body_params = ['senseEnabled', 'mqttBrokerId', 'detectionModelId', ]
+        body_params = ['senseEnabled', 'mqttBrokerId', 'audioDetection', 'detectionModelId', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -102,6 +103,37 @@ class ActionBatchCamera(object):
         resource = f'/devices/{serial}/camera/video/settings'
 
         body_params = ['externalRtspEnabled', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def updateDeviceCameraWirelessProfiles(self, serial: str, ids: dict):
+        """
+        **Assign wireless profiles to the given camera**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-camera-wireless-profiles
+
+        - serial (string): (required)
+        - ids (object): The ids of the wireless profile to assign to the given camera
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['camera', 'configure', 'wirelessProfiles'],
+            'operation': 'updateDeviceCameraWirelessProfiles'
+        }
+        resource = f'/devices/{serial}/camera/wirelessProfiles'
+
+        body_params = ['ids', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,

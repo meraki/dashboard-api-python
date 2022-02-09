@@ -43,7 +43,7 @@ class ActionBatchWireless(object):
         https://developer.cisco.com/meraki/api-v1/#!update-device-wireless-radio-settings
 
         - serial (string): (required)
-        - rfProfileId (integer): The ID of an RF profile to assign to the device. If the value of this parameter is null, the appropriate basic RF profile (indoor or outdoor) will be assigned to the device. Assigning an RF profile will clear ALL manually configured overrides on the device (channel width, channel, power).
+        - rfProfileId (string): The ID of an RF profile to assign to the device. If the value of this parameter is null, the appropriate basic RF profile (indoor or outdoor) will be assigned to the device. Assigning an RF profile will clear ALL manually configured overrides on the device (channel width, channel, power).
         - twoFourGhzSettings (object): Manual radio settings for 2.4 GHz.
         - fiveGhzSettings (object): Manual radio settings for 5 GHz.
         """
@@ -149,6 +149,7 @@ class ActionBatchWireless(object):
         - apBandSettings (object): Settings that will be enabled if selectionType is set to 'ap'.
         - twoFourGhzSettings (object): Settings related to 2.4Ghz band
         - fiveGhzSettings (object): Settings related to 5Ghz band
+        - perSsidSettings (object): Per-SSID radio settings by number.
         """
 
         kwargs.update(locals())
@@ -166,7 +167,7 @@ class ActionBatchWireless(object):
         }
         resource = f'/networks/{networkId}/wireless/rfProfiles'
 
-        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', ]
+        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', 'perSsidSettings', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -194,6 +195,7 @@ class ActionBatchWireless(object):
         - apBandSettings (object): Settings that will be enabled if selectionType is set to 'ap'.
         - twoFourGhzSettings (object): Settings related to 2.4Ghz band
         - fiveGhzSettings (object): Settings related to 5Ghz band
+        - perSsidSettings (object): Per-SSID radio settings by number.
         """
 
         kwargs.update(locals())
@@ -211,7 +213,7 @@ class ActionBatchWireless(object):
         }
         resource = f'/networks/{networkId}/wireless/rfProfiles/{rfProfileId}'
 
-        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', ]
+        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', 'perSsidSettings', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -300,7 +302,7 @@ class ActionBatchWireless(object):
         - number (string): (required)
         - name (string): The name of the SSID
         - enabled (boolean): Whether or not the SSID is enabled
-        - authMode (string): The association control method for the SSID ('open', 'psk', 'open-with-radius', '8021x-meraki', '8021x-radius', '8021x-google', '8021x-localradius', 'ipsk-with-radius' or 'ipsk-without-radius')
+        - authMode (string): The association control method for the SSID ('open', 'open-enhanced', 'psk', 'open-with-radius', '8021x-meraki', '8021x-radius', '8021x-google', '8021x-localradius', 'ipsk-with-radius' or 'ipsk-without-radius')
         - enterpriseAdminAccess (string): Whether or not an SSID is accessible by 'enterprise' administrators ('access disabled' or 'access enabled')
         - encryptionMode (string): The psk encryption mode for the SSID ('wep' or 'wpa'). This param is only valid if the authMode is 'psk'
         - psk (string): The passkey for the SSID. This param is only valid if the authMode is 'psk'
@@ -328,7 +330,7 @@ class ActionBatchWireless(object):
         - radiusAccountingServers (array): The RADIUS accounting 802.1X servers to be used for authentication. This param is only valid if the authMode is 'open-with-radius', '8021x-radius' or 'ipsk-with-radius' and radiusAccountingEnabled is 'true'
         - radiusAccountingInterimInterval (integer): The interval (in seconds) in which accounting information is updated and sent to the RADIUS accounting server.
         - radiusAttributeForGroupPolicies (string): Specify the RADIUS attribute used to look up group policies ('Filter-Id', 'Reply-Message', 'Airespace-ACL-Name' or 'Aruba-User-Role'). Access points must receive this attribute in the RADIUS Access-Accept message
-        - ipAssignmentMode (string): The client IP assignment mode ('NAT mode', 'Bridge mode', 'Layer 3 roaming', 'Layer 3 roaming with a concentrator' or 'VPN')
+        - ipAssignmentMode (string): The client IP assignment mode ('NAT mode', 'Bridge mode', 'Layer 3 roaming', 'Ethernet over GRE', 'Layer 3 roaming with a concentrator' or 'VPN')
         - useVlanTagging (boolean): Whether or not traffic should be directed to use specific VLANs. This param is only valid if the ipAssignmentMode is 'Bridge mode' or 'Layer 3 roaming'
         - concentratorNetworkId (string): The concentrator to use when the ipAssignmentMode is 'Layer 3 roaming with a concentrator' or 'VPN'.
         - vlanId (integer): The VLAN ID used for VLAN tagging. This param is only valid when the ipAssignmentMode is 'Layer 3 roaming with a concentrator' or 'VPN'
@@ -336,11 +338,12 @@ class ActionBatchWireless(object):
         - apTagsAndVlanIds (array): The list of tags and VLAN IDs used for VLAN tagging. This param is only valid when the ipAssignmentMode is 'Bridge mode' or 'Layer 3 roaming'
         - walledGardenEnabled (boolean): Allow access to a configurable list of IP ranges, which users may access prior to sign-on.
         - walledGardenRanges (array): Specify your walled garden by entering an array of addresses, ranges using CIDR notation, domain names, and domain wildcards (e.g. '192.168.1.1/24', '192.168.37.10/32', 'www.yahoo.com', '*.google.com']). Meraki's splash page is automatically included in your walled garden.
+        - gre (object): Ethernet over GRE settings
         - radiusOverride (boolean): If true, the RADIUS response can override VLAN tag. This is not valid when ipAssignmentMode is 'NAT mode'.
         - radiusGuestVlanEnabled (boolean): Whether or not RADIUS Guest VLAN is enabled. This param is only valid if the authMode is 'open-with-radius' and addressing mode is not set to 'isolated' or 'nat' mode
         - radiusGuestVlanId (integer): VLAN ID of the RADIUS Guest VLAN. This param is only valid if the authMode is 'open-with-radius' and addressing mode is not set to 'isolated' or 'nat' mode
-        - minBitrate (number): The minimum bitrate in Mbps. ('1', '2', '5.5', '6', '9', '11', '12', '18', '24', '36', '48' or '54')
-        - bandSelection (string): The client-serving radio frequencies. ('Dual band operation', '5 GHz band only' or 'Dual band operation with Band Steering')
+        - minBitrate (number): The minimum bitrate in Mbps of this SSID in the default indoor RF profile. ('1', '2', '5.5', '6', '9', '11', '12', '18', '24', '36', '48' or '54')
+        - bandSelection (string): The client-serving radio frequencies of this SSID in the default indoor RF profile. ('Dual band operation', '5 GHz band only' or 'Dual band operation with Band Steering')
         - perClientBandwidthLimitUp (integer): The upload bandwidth limit in Kbps. (0 represents no limit.)
         - perClientBandwidthLimitDown (integer): The download bandwidth limit in Kbps. (0 represents no limit.)
         - perSsidBandwidthLimitUp (integer): The total upload bandwidth limit in Kbps. (0 represents no limit.)
@@ -357,7 +360,7 @@ class ActionBatchWireless(object):
         kwargs.update(locals())
 
         if 'authMode' in kwargs:
-            options = ['open', 'psk', 'open-with-radius', '8021x-meraki', '8021x-radius', '8021x-google', '8021x-localradius', 'ipsk-with-radius', 'ipsk-without-radius']
+            options = ['open', 'open-enhanced', 'psk', 'open-with-radius', '8021x-meraki', '8021x-radius', '8021x-google', '8021x-localradius', 'ipsk-with-radius', 'ipsk-without-radius']
             assert kwargs['authMode'] in options, f'''"authMode" cannot be "{kwargs['authMode']}", & must be set to one of: {options}'''
         if 'enterpriseAdminAccess' in kwargs:
             options = ['access disabled', 'access enabled']
@@ -387,7 +390,7 @@ class ActionBatchWireless(object):
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}'
 
-        body_params = ['name', 'enabled', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk', 'wpaEncryptionMode', 'dot11w', 'dot11r', 'splashPage', 'splashGuestSponsorDomains', 'oauth', 'localRadius', 'ldap', 'activeDirectory', 'radiusServers', 'radiusProxyEnabled', 'radiusTestingEnabled', 'radiusCalledStationId', 'radiusAuthenticationNasId', 'radiusServerTimeout', 'radiusServerAttemptsLimit', 'radiusFallbackEnabled', 'radiusCoaEnabled', 'radiusFailoverPolicy', 'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusAccountingInterimInterval', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging', 'concentratorNetworkId', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 'walledGardenEnabled', 'walledGardenRanges', 'radiusOverride', 'radiusGuestVlanEnabled', 'radiusGuestVlanId', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'perSsidBandwidthLimitUp', 'perSsidBandwidthLimitDown', 'lanIsolationEnabled', 'visible', 'availableOnAllAps', 'availabilityTags', 'mandatoryDhcpEnabled', 'adultContentFilteringEnabled', 'dnsRewrite', ]
+        body_params = ['name', 'enabled', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk', 'wpaEncryptionMode', 'dot11w', 'dot11r', 'splashPage', 'splashGuestSponsorDomains', 'oauth', 'localRadius', 'ldap', 'activeDirectory', 'radiusServers', 'radiusProxyEnabled', 'radiusTestingEnabled', 'radiusCalledStationId', 'radiusAuthenticationNasId', 'radiusServerTimeout', 'radiusServerAttemptsLimit', 'radiusFallbackEnabled', 'radiusCoaEnabled', 'radiusFailoverPolicy', 'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusAccountingInterimInterval', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging', 'concentratorNetworkId', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 'walledGardenEnabled', 'walledGardenRanges', 'gre', 'radiusOverride', 'radiusGuestVlanEnabled', 'radiusGuestVlanId', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'perSsidBandwidthLimitUp', 'perSsidBandwidthLimitDown', 'lanIsolationEnabled', 'visible', 'availableOnAllAps', 'availabilityTags', 'mandatoryDhcpEnabled', 'adultContentFilteringEnabled', 'dnsRewrite', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -467,6 +470,74 @@ class ActionBatchWireless(object):
 
 
 
+    def updateNetworkWirelessSsidEapOverride(self, networkId: str, number: str, **kwargs):
+        """
+        **Update the EAP overridden parameters for an SSID.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-eap-override
+
+        - networkId (string): (required)
+        - number (string): (required)
+        - timeout (integer): General EAP timeout in seconds.
+        - identity (object): EAP settings for identity requests.
+        - maxRetries (integer): Maximum number of general EAP retries.
+        - eapolKey (object): EAPOL Key settings.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ssids', 'eapOverride'],
+            'operation': 'updateNetworkWirelessSsidEapOverride'
+        }
+        resource = f'/networks/{networkId}/wireless/ssids/{number}/eapOverride'
+
+        body_params = ['timeout', 'identity', 'maxRetries', 'eapolKey', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def updateNetworkWirelessSsidFirewallL3FirewallRules(self, networkId: str, number: str, **kwargs):
+        """
+        **Update the L3 firewall rules of an SSID on an MR network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-firewall-l-3-firewall-rules
+
+        - networkId (string): (required)
+        - number (string): (required)
+        - rules (array): An ordered array of the firewall rules for this SSID (not including the local LAN access rule or the default rule)
+        - allowLanAccess (boolean): Allow wireless client access to local LAN (boolean value - true allows access and false denies access) (optional)
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ssids', 'firewall', 'l3FirewallRules'],
+            'operation': 'updateNetworkWirelessSsidFirewallL3FirewallRules'
+        }
+        resource = f'/networks/{networkId}/wireless/ssids/{number}/firewall/l3FirewallRules'
+
+        body_params = ['rules', 'allowLanAccess', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
     def updateNetworkWirelessSsidFirewallL7FirewallRules(self, networkId: str, number: str, **kwargs):
         """
         **Update the L7 firewall rules of an SSID on an MR network**
@@ -499,7 +570,50 @@ class ActionBatchWireless(object):
 
 
 
-    def createNetworkWirelessSsidIdentityPsk(self, networkId: str, number: str, name: str, passphrase: str, groupPolicyId: str):
+    def updateNetworkWirelessSsidHotspot20(self, networkId: str, number: str, **kwargs):
+        """
+        **Update the Hotspot 2.0 settings of an SSID**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-hotspot-2-0
+
+        - networkId (string): (required)
+        - number (string): (required)
+        - enabled (boolean): Whether or not Hotspot 2.0 for this SSID is enabled
+        - operator (object): Operator settings for this SSID
+        - venue (object): Venue settings for this SSID
+        - networkAccessType (string): The network type of this SSID ('Private network', 'Private network with guest access', 'Chargeable public network', 'Free public network', 'Personal device network', 'Emergency services only network', 'Test or experimental', 'Wildcard')
+        - domains (array): An array of domain names
+        - roamConsortOis (array): An array of roaming consortium OIs (hexadecimal number 3-5 octets in length)
+        - mccMncs (array): An array of MCC/MNC pairs
+        - naiRealms (array): An array of NAI realms
+        """
+
+        kwargs.update(locals())
+
+        if 'networkAccessType' in kwargs:
+            options = ['Private network', 'Private network with guest access', 'Chargeable public network', 'Free public network', 'Personal device network', 'Emergency services only network', 'Test or experimental', 'Wildcard']
+            assert kwargs['networkAccessType'] in options, f'''"networkAccessType" cannot be "{kwargs['networkAccessType']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ssids', 'hotspot20'],
+            'operation': 'updateNetworkWirelessSsidHotspot20'
+        }
+        resource = f'/networks/{networkId}/wireless/ssids/{number}/hotspot20'
+
+        body_params = ['enabled', 'operator', 'venue', 'networkAccessType', 'domains', 'roamConsortOis', 'mccMncs', 'naiRealms', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def createNetworkWirelessSsidIdentityPsk(self, networkId: str, number: str, name: str, groupPolicyId: str, **kwargs):
         """
         **Create an Identity PSK**
         https://developer.cisco.com/meraki/api-v1/#!create-network-wireless-ssid-identity-psk
@@ -507,11 +621,11 @@ class ActionBatchWireless(object):
         - networkId (string): (required)
         - number (string): (required)
         - name (string): The name of the Identity PSK
-        - passphrase (string): The passphrase for client authentication
         - groupPolicyId (string): The group policy to be applied to clients
+        - passphrase (string): The passphrase for client authentication. If left blank, one will be auto-generated.
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         metadata = {
             'tags': ['wireless', 'configure', 'ssids', 'identityPsks'],
@@ -596,6 +710,40 @@ class ActionBatchWireless(object):
 
 
 
+    def updateNetworkWirelessSsidSchedules(self, networkId: str, number: str, **kwargs):
+        """
+        **Update the outage schedule for the SSID**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-schedules
+
+        - networkId (string): (required)
+        - number (string): (required)
+        - enabled (boolean): If true, the SSID outage schedule is enabled.
+        - ranges (array): List of outage ranges. Has a start date and time, and end date and time. If this parameter is passed in along with rangesInSeconds parameter, this will take precedence.
+        - rangesInSeconds (array): List of outage ranges in seconds since Sunday at Midnight. Has a start and end. If this parameter is passed in along with the ranges parameter, ranges will take precedence.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ssids', 'schedules'],
+            'operation': 'updateNetworkWirelessSsidSchedules'
+        }
+        resource = f'/networks/{networkId}/wireless/ssids/{number}/schedules'
+
+        body_params = ['enabled', 'ranges', 'rangesInSeconds', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
     def updateNetworkWirelessSsidSplashSettings(self, networkId: str, number: str, **kwargs):
         """
         **Modify the splash page settings for the given SSID**
@@ -617,6 +765,7 @@ class ActionBatchWireless(object):
         - allowSimultaneousLogins (boolean): Whether or not to allow simultaneous logins from different devices.
         - guestSponsorship (object): Details associated with guest sponsored splash.
         - billing (object): Details associated with billing splash.
+        - sentryEnrollment (object): Systems Manager sentry enrollment splash settings.
         """
 
         kwargs.update(locals())
@@ -631,7 +780,7 @@ class ActionBatchWireless(object):
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}/splash/settings'
 
-        body_params = ['splashUrl', 'useSplashUrl', 'splashTimeout', 'redirectUrl', 'useRedirectUrl', 'welcomeMessage', 'splashLogo', 'splashImage', 'splashPrepaidFront', 'blockAllTrafficBeforeSignOn', 'controllerDisconnectionBehavior', 'allowSimultaneousLogins', 'guestSponsorship', 'billing', ]
+        body_params = ['splashUrl', 'useSplashUrl', 'splashTimeout', 'redirectUrl', 'useRedirectUrl', 'welcomeMessage', 'splashLogo', 'splashImage', 'splashPrepaidFront', 'blockAllTrafficBeforeSignOn', 'controllerDisconnectionBehavior', 'allowSimultaneousLogins', 'guestSponsorship', 'billing', 'sentryEnrollment', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -690,6 +839,7 @@ class ActionBatchWireless(object):
         - networkId (string): (required)
         - number (string): (required)
         - splitTunnel (object): The VPN split tunnel settings for this SSID.
+        - failover (object): Secondary VPN concentrator settings. This is only used when two VPN concentrators are configured on the SSID.
         """
 
         kwargs.update(locals())
@@ -700,7 +850,7 @@ class ActionBatchWireless(object):
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}/vpn'
 
-        body_params = ['splitTunnel', ]
+        body_params = ['splitTunnel', 'failover', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,

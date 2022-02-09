@@ -1,8 +1,8 @@
 # Meraki Dashboard API Python Library
 
-The Meraki Dashboard API Python library provides all current Meraki [Dashboard API](https://developer.cisco.com/meraki/api-v1/) calls to interface with the Cisco Meraki cloud-managed platform. The library is open-source and community-supported, works on Python 3.7+, and you can install it via [PyPI](https://pypi.org/project/meraki/):
+The Meraki Dashboard API Python library provides all current Meraki [dashboard API](https://developer.cisco.com/meraki/api-v1/) calls to interface with the Cisco Meraki cloud-managed platform. Meraki generates the library based on dashboard API's OpenAPI spec to keep it up to date with the latest API releases, and provides the full source code for the library including the tools used to generate the library, if you are participating in the Early Access program or would like to contribute to the development of the library. Meraki welcomes constructive pull requests that maintain backwards compatibility with prior versions. The library requires Python 3.7+, receives support from the community, and you can install it via [PyPI](https://pypi.org/project/meraki/):
 
-    pip install meraki
+    pip install --upgrade meraki
 
 ## Features
 
@@ -28,7 +28,7 @@ While you can make direct HTTP requests to dashboard API in any programming lang
     * If you have both Python3 and Python2 installed, you may need to use `pip3` (so `pip3 install meraki`) along with `python3` on your system
     * If _meraki_ was previously installed, you can upgrade to the latest non-beta release with `pip install --upgrade meraki`
 
-5. Meraki dashboard API v1 is currently in beta, so if you clone this repository and want to use v1 locally, rename the folder _meraki_v1_ to _meraki_, replacing the v0 contents there. You can also specify the version of the library when installing with _pip_:
+5. Meraki dashboard API v1 is the current default. You can also specify the version of the library when installing with _pip_:
     * See the full [release history](https://pypi.org/project/meraki/#history) to pick the version you want, or use `pip install meraki==` without including a version number to display the list of available versions
     * v0 versions of the Python library begin with _0_ (0.**x**.**y**), and v1 versions begin with _1_ (1.0.0b**z** for beta)
     * Specify the version you want with the install command; for example: `pip install meraki==0.x.y` for v0 or `pip install meraki==1.0.0bz` for v1 beta
@@ -121,3 +121,17 @@ You can find fully working example scripts in the **examples** folder.
 |-------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **aio_org_wide_clients.py** | That code is a asyncio port from org_wide_clients.py and collects the clients of all networks, in all orgs to which the key has access. No changes are made, since only GET endpoints are called, and the data is written to local CSV output files.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | **aio_ips2firewall.py**     |  That code will collect the source IP of security events and creates L7 firewall rules to block them. `usage: aio_ips2firewall.py [-h] -o ORGANIZATIONS [ORGANIZATIONS ...] [-f FILTER] [-s] [-d DAYS]` |
+
+
+## Note for application developers and ecosystem partners
+
+We're so glad that you're leveraging our Python library. It's best practice to identify your application with every API request that you make. You can easily do this automatically just by following the format defined in [config.py](https://github.com/meraki/dashboard-api-python/blob/master/meraki/config.py) and passing the session kwarg:
+
+``` Python
+MERAKI_PYTHON_SDK_CALLER
+```
+
+Unless you are an ecosystem partner, this identifier is optional. 
+
+1. If you are an ecosystem partner and you have questions about this requirement, please reach out to your ecosystem rep.
+2. If you have any questions about the formatting, please ask your question by opening an issue in this repo.

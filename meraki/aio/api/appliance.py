@@ -849,7 +849,7 @@ class AsyncAppliance:
         
 
 
-    def createNetworkApplianceStaticRoute(self, networkId: str, name: str, subnet: str, gatewayIp: str):
+    def createNetworkApplianceStaticRoute(self, networkId: str, name: str, subnet: str, gatewayIp: str, **kwargs):
         """
         **Add a static route for an MX or teleworker network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-appliance-static-route
@@ -858,9 +858,10 @@ class AsyncAppliance:
         - name (string): The name of the new static route
         - subnet (string): The subnet of the static route
         - gatewayIp (string): The gateway IP (next hop) of the static route
+        - gatewayVlanId (string): The gateway IP (next hop) VLAN ID of the static route
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         metadata = {
             'tags': ['appliance', 'configure', 'staticRoutes'],
@@ -868,7 +869,7 @@ class AsyncAppliance:
         }
         resource = f'/networks/{networkId}/appliance/staticRoutes'
 
-        body_params = ['name', 'subnet', 'gatewayIp', ]
+        body_params = ['name', 'subnet', 'gatewayIp', 'gatewayVlanId', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -904,6 +905,7 @@ class AsyncAppliance:
         - name (string): The name of the static route
         - subnet (string): The subnet of the static route
         - gatewayIp (string): The gateway IP (next hop) of the static route
+        - gatewayVlanId (string): The gateway IP (next hop) VLAN ID of the static route
         - enabled (boolean): The enabled state of the static route
         - fixedIpAssignments (object): The DHCP fixed IP assignments on the static route. This should be an object that contains mappings from MAC addresses to objects that themselves each contain "ip" and "name" string fields. See the sample request/response for more details.
         - reservedIpRanges (array): The DHCP reserved IP ranges on the static route
@@ -917,7 +919,7 @@ class AsyncAppliance:
         }
         resource = f'/networks/{networkId}/appliance/staticRoutes/{staticRouteId}'
 
-        body_params = ['name', 'subnet', 'gatewayIp', 'enabled', 'fixedIpAssignments', 'reservedIpRanges', ]
+        body_params = ['name', 'subnet', 'gatewayIp', 'gatewayVlanId', 'enabled', 'fixedIpAssignments', 'reservedIpRanges', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1231,6 +1233,33 @@ class AsyncAppliance:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
+
+    def getNetworkApplianceUplinksUsageHistory(self, networkId: str, **kwargs):
+        """
+        **Get the sent and received bytes for each uplink of a network.**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-uplinks-usage-history
+
+        - networkId (string): (required)
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 10 minutes.
+        - resolution (integer): The time resolution in seconds for returned data. The valid resolutions are: 60, 300, 600, 1800, 3600, 86400. The default is 60.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['appliance', 'monitor', 'uplinks', 'usageHistory'],
+            'operation': 'getNetworkApplianceUplinksUsageHistory'
+        }
+        resource = f'/networks/{networkId}/appliance/uplinks/usageHistory'
+
+        query_params = ['t0', 't1', 'timespan', 'resolution', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get(metadata, resource, params)
         
 
 

@@ -58,7 +58,7 @@ class Wireless(object):
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
-        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
+        - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -67,7 +67,7 @@ class Wireless(object):
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -92,7 +92,7 @@ class Wireless(object):
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
-        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
+        - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -102,7 +102,7 @@ class Wireless(object):
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -142,7 +142,7 @@ class Wireless(object):
         https://developer.cisco.com/meraki/api-v1/#!update-device-wireless-radio-settings
 
         - serial (string): (required)
-        - rfProfileId (integer): The ID of an RF profile to assign to the device. If the value of this parameter is null, the appropriate basic RF profile (indoor or outdoor) will be assigned to the device. Assigning an RF profile will clear ALL manually configured overrides on the device (channel width, channel, power).
+        - rfProfileId (string): The ID of an RF profile to assign to the device. If the value of this parameter is null, the appropriate basic RF profile (indoor or outdoor) will be assigned to the device. Assigning an RF profile will clear ALL manually configured overrides on the device (channel width, channel, power).
         - twoFourGhzSettings (object): Manual radio settings for 2.4 GHz.
         - fiveGhzSettings (object): Manual radio settings for 5 GHz.
         """
@@ -358,13 +358,13 @@ class Wireless(object):
         - clientId (string): Filter results by network client to return per-device, per-band AP channel utilization metrics inner joined by the queried client's connection history.
         - deviceSerial (string): Filter results by device to return AP channel utilization metrics for the queried device; either :band or :clientId must be jointly specified.
         - apTag (string): Filter results by AP tag to return AP channel utilization metrics for devices labeled with the given tag; either :clientId or :deviceSerial must be jointly specified.
-        - band (string): Filter results by band (either '2.4' or '5').
+        - band (string): Filter results by band (either '2.4', '5' or '6').
         """
 
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -394,14 +394,14 @@ class Wireless(object):
         - clientId (string): Filter results by network client to return per-device client counts over time inner joined by the queried client's connection history.
         - deviceSerial (string): Filter results by device.
         - apTag (string): Filter results by AP tag.
-        - band (string): Filter results by band (either '2.4' or '5').
+        - band (string): Filter results by band (either '2.4', '5' or '6').
         - ssid (integer): Filter results by SSID number.
         """
 
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -426,7 +426,7 @@ class Wireless(object):
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
-        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
+        - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -435,7 +435,7 @@ class Wireless(object):
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -460,7 +460,7 @@ class Wireless(object):
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
-        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
+        - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -470,7 +470,7 @@ class Wireless(object):
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -496,7 +496,7 @@ class Wireless(object):
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
-        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
+        - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -505,7 +505,7 @@ class Wireless(object):
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -538,7 +538,7 @@ class Wireless(object):
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
         - types (array): A list of event types to include. If not specified, events of all types will be returned. Valid types are 'assoc', 'disassoc', 'auth', 'deauth', 'dns', 'dhcp', 'roam', 'connection' and/or 'sticky'.
         - includedSeverities (array): A list of severities to include. If not specified, events of all severities will be returned. Valid severities are 'good', 'info', 'warn' and/or 'bad'.
-        - band (string): Filter results by band (either '2.4' or '5').
+        - band (string): Filter results by band (either '2.4', '5', '6').
         - ssidNumber (integer): An SSID number to include. If not specified, events for all SSIDs will be returned.
         - deviceSerial (string): Filter results by an AP's serial number.
         """
@@ -546,7 +546,7 @@ class Wireless(object):
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
         if 'ssidNumber' in kwargs:
             options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
@@ -609,7 +609,7 @@ class Wireless(object):
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
-        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
+        - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -619,7 +619,7 @@ class Wireless(object):
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -644,7 +644,7 @@ class Wireless(object):
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
-        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
+        - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -653,7 +653,7 @@ class Wireless(object):
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -683,14 +683,14 @@ class Wireless(object):
         - clientId (string): Filter results by network client.
         - deviceSerial (string): Filter results by device.
         - apTag (string): Filter results by AP tag.
-        - band (string): Filter results by band (either '2.4' or '5').
+        - band (string): Filter results by band (either '2.4', '5' or '6').
         - ssid (integer): Filter results by SSID number.
         """
 
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -715,7 +715,7 @@ class Wireless(object):
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
-        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
+        - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -724,7 +724,7 @@ class Wireless(object):
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -749,7 +749,7 @@ class Wireless(object):
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
-        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
+        - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -759,7 +759,7 @@ class Wireless(object):
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -784,7 +784,7 @@ class Wireless(object):
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
-        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
+        - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -795,7 +795,7 @@ class Wireless(object):
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -825,7 +825,7 @@ class Wireless(object):
         - clientId (string): Filter results by network client.
         - deviceSerial (string): Filter results by device.
         - apTag (string): Filter results by AP tag.
-        - band (string): Filter results by band (either '2.4' or '5').
+        - band (string): Filter results by band (either '2.4', '5' or '6').
         - ssid (integer): Filter results by SSID number.
         - accessCategory (string): Filter by access category.
         """
@@ -833,7 +833,7 @@ class Wireless(object):
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
         if 'accessCategory' in kwargs:
             options = ['backgroundTraffic', 'bestEffortTraffic', 'videoTraffic', 'voiceTraffic']
@@ -861,7 +861,7 @@ class Wireless(object):
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 180 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
-        - band (string): Filter results by band (either '2.4' or '5'). Note that data prior to February 2020 will not have band information.
+        - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
         - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
@@ -871,7 +871,7 @@ class Wireless(object):
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -952,6 +952,7 @@ class Wireless(object):
         - apBandSettings (object): Settings that will be enabled if selectionType is set to 'ap'.
         - twoFourGhzSettings (object): Settings related to 2.4Ghz band
         - fiveGhzSettings (object): Settings related to 5Ghz band
+        - perSsidSettings (object): Per-SSID radio settings by number.
         """
 
         kwargs.update(locals())
@@ -969,7 +970,7 @@ class Wireless(object):
         }
         resource = f'/networks/{networkId}/wireless/rfProfiles'
 
-        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', ]
+        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', 'perSsidSettings', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -990,6 +991,7 @@ class Wireless(object):
         - apBandSettings (object): Settings that will be enabled if selectionType is set to 'ap'.
         - twoFourGhzSettings (object): Settings related to 2.4Ghz band
         - fiveGhzSettings (object): Settings related to 5Ghz band
+        - perSsidSettings (object): Per-SSID radio settings by number.
         """
 
         kwargs.update(locals())
@@ -1007,7 +1009,7 @@ class Wireless(object):
         }
         resource = f'/networks/{networkId}/wireless/rfProfiles/{rfProfileId}'
 
-        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', ]
+        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', 'perSsidSettings', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1116,14 +1118,14 @@ class Wireless(object):
         - clientId (string): Filter results by network client.
         - deviceSerial (string): Filter results by device.
         - apTag (string): Filter results by AP tag; either :clientId or :deviceSerial must be jointly specified.
-        - band (string): Filter results by band (either '2.4' or '5').
+        - band (string): Filter results by band (either '2.4', '5' or '6').
         - ssid (integer): Filter results by SSID number.
         """
 
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -1185,7 +1187,7 @@ class Wireless(object):
         - number (string): (required)
         - name (string): The name of the SSID
         - enabled (boolean): Whether or not the SSID is enabled
-        - authMode (string): The association control method for the SSID ('open', 'psk', 'open-with-radius', '8021x-meraki', '8021x-radius', '8021x-google', '8021x-localradius', 'ipsk-with-radius' or 'ipsk-without-radius')
+        - authMode (string): The association control method for the SSID ('open', 'open-enhanced', 'psk', 'open-with-radius', '8021x-meraki', '8021x-radius', '8021x-google', '8021x-localradius', 'ipsk-with-radius' or 'ipsk-without-radius')
         - enterpriseAdminAccess (string): Whether or not an SSID is accessible by 'enterprise' administrators ('access disabled' or 'access enabled')
         - encryptionMode (string): The psk encryption mode for the SSID ('wep' or 'wpa'). This param is only valid if the authMode is 'psk'
         - psk (string): The passkey for the SSID. This param is only valid if the authMode is 'psk'
@@ -1213,7 +1215,7 @@ class Wireless(object):
         - radiusAccountingServers (array): The RADIUS accounting 802.1X servers to be used for authentication. This param is only valid if the authMode is 'open-with-radius', '8021x-radius' or 'ipsk-with-radius' and radiusAccountingEnabled is 'true'
         - radiusAccountingInterimInterval (integer): The interval (in seconds) in which accounting information is updated and sent to the RADIUS accounting server.
         - radiusAttributeForGroupPolicies (string): Specify the RADIUS attribute used to look up group policies ('Filter-Id', 'Reply-Message', 'Airespace-ACL-Name' or 'Aruba-User-Role'). Access points must receive this attribute in the RADIUS Access-Accept message
-        - ipAssignmentMode (string): The client IP assignment mode ('NAT mode', 'Bridge mode', 'Layer 3 roaming', 'Layer 3 roaming with a concentrator' or 'VPN')
+        - ipAssignmentMode (string): The client IP assignment mode ('NAT mode', 'Bridge mode', 'Layer 3 roaming', 'Ethernet over GRE', 'Layer 3 roaming with a concentrator' or 'VPN')
         - useVlanTagging (boolean): Whether or not traffic should be directed to use specific VLANs. This param is only valid if the ipAssignmentMode is 'Bridge mode' or 'Layer 3 roaming'
         - concentratorNetworkId (string): The concentrator to use when the ipAssignmentMode is 'Layer 3 roaming with a concentrator' or 'VPN'.
         - vlanId (integer): The VLAN ID used for VLAN tagging. This param is only valid when the ipAssignmentMode is 'Layer 3 roaming with a concentrator' or 'VPN'
@@ -1221,11 +1223,12 @@ class Wireless(object):
         - apTagsAndVlanIds (array): The list of tags and VLAN IDs used for VLAN tagging. This param is only valid when the ipAssignmentMode is 'Bridge mode' or 'Layer 3 roaming'
         - walledGardenEnabled (boolean): Allow access to a configurable list of IP ranges, which users may access prior to sign-on.
         - walledGardenRanges (array): Specify your walled garden by entering an array of addresses, ranges using CIDR notation, domain names, and domain wildcards (e.g. '192.168.1.1/24', '192.168.37.10/32', 'www.yahoo.com', '*.google.com']). Meraki's splash page is automatically included in your walled garden.
+        - gre (object): Ethernet over GRE settings
         - radiusOverride (boolean): If true, the RADIUS response can override VLAN tag. This is not valid when ipAssignmentMode is 'NAT mode'.
         - radiusGuestVlanEnabled (boolean): Whether or not RADIUS Guest VLAN is enabled. This param is only valid if the authMode is 'open-with-radius' and addressing mode is not set to 'isolated' or 'nat' mode
         - radiusGuestVlanId (integer): VLAN ID of the RADIUS Guest VLAN. This param is only valid if the authMode is 'open-with-radius' and addressing mode is not set to 'isolated' or 'nat' mode
-        - minBitrate (number): The minimum bitrate in Mbps. ('1', '2', '5.5', '6', '9', '11', '12', '18', '24', '36', '48' or '54')
-        - bandSelection (string): The client-serving radio frequencies. ('Dual band operation', '5 GHz band only' or 'Dual band operation with Band Steering')
+        - minBitrate (number): The minimum bitrate in Mbps of this SSID in the default indoor RF profile. ('1', '2', '5.5', '6', '9', '11', '12', '18', '24', '36', '48' or '54')
+        - bandSelection (string): The client-serving radio frequencies of this SSID in the default indoor RF profile. ('Dual band operation', '5 GHz band only' or 'Dual band operation with Band Steering')
         - perClientBandwidthLimitUp (integer): The upload bandwidth limit in Kbps. (0 represents no limit.)
         - perClientBandwidthLimitDown (integer): The download bandwidth limit in Kbps. (0 represents no limit.)
         - perSsidBandwidthLimitUp (integer): The total upload bandwidth limit in Kbps. (0 represents no limit.)
@@ -1242,7 +1245,7 @@ class Wireless(object):
         kwargs.update(locals())
 
         if 'authMode' in kwargs:
-            options = ['open', 'psk', 'open-with-radius', '8021x-meraki', '8021x-radius', '8021x-google', '8021x-localradius', 'ipsk-with-radius', 'ipsk-without-radius']
+            options = ['open', 'open-enhanced', 'psk', 'open-with-radius', '8021x-meraki', '8021x-radius', '8021x-google', '8021x-localradius', 'ipsk-with-radius', 'ipsk-without-radius']
             assert kwargs['authMode'] in options, f'''"authMode" cannot be "{kwargs['authMode']}", & must be set to one of: {options}'''
         if 'enterpriseAdminAccess' in kwargs:
             options = ['access disabled', 'access enabled']
@@ -1272,7 +1275,7 @@ class Wireless(object):
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}'
 
-        body_params = ['name', 'enabled', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk', 'wpaEncryptionMode', 'dot11w', 'dot11r', 'splashPage', 'splashGuestSponsorDomains', 'oauth', 'localRadius', 'ldap', 'activeDirectory', 'radiusServers', 'radiusProxyEnabled', 'radiusTestingEnabled', 'radiusCalledStationId', 'radiusAuthenticationNasId', 'radiusServerTimeout', 'radiusServerAttemptsLimit', 'radiusFallbackEnabled', 'radiusCoaEnabled', 'radiusFailoverPolicy', 'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusAccountingInterimInterval', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging', 'concentratorNetworkId', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 'walledGardenEnabled', 'walledGardenRanges', 'radiusOverride', 'radiusGuestVlanEnabled', 'radiusGuestVlanId', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'perSsidBandwidthLimitUp', 'perSsidBandwidthLimitDown', 'lanIsolationEnabled', 'visible', 'availableOnAllAps', 'availabilityTags', 'mandatoryDhcpEnabled', 'adultContentFilteringEnabled', 'dnsRewrite', ]
+        body_params = ['name', 'enabled', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk', 'wpaEncryptionMode', 'dot11w', 'dot11r', 'splashPage', 'splashGuestSponsorDomains', 'oauth', 'localRadius', 'ldap', 'activeDirectory', 'radiusServers', 'radiusProxyEnabled', 'radiusTestingEnabled', 'radiusCalledStationId', 'radiusAuthenticationNasId', 'radiusServerTimeout', 'radiusServerAttemptsLimit', 'radiusFallbackEnabled', 'radiusCoaEnabled', 'radiusFailoverPolicy', 'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusAccountingInterimInterval', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging', 'concentratorNetworkId', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 'walledGardenEnabled', 'walledGardenRanges', 'gre', 'radiusOverride', 'radiusGuestVlanEnabled', 'radiusGuestVlanId', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'perSsidBandwidthLimitUp', 'perSsidBandwidthLimitDown', 'lanIsolationEnabled', 'visible', 'availableOnAllAps', 'availabilityTags', 'mandatoryDhcpEnabled', 'adultContentFilteringEnabled', 'dnsRewrite', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1369,6 +1372,53 @@ class Wireless(object):
         
 
 
+    def getNetworkWirelessSsidEapOverride(self, networkId: str, number: str):
+        """
+        **Return the EAP overridden parameters for an SSID**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssid-eap-override
+
+        - networkId (string): (required)
+        - number (string): (required)
+        """
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ssids', 'eapOverride'],
+            'operation': 'getNetworkWirelessSsidEapOverride'
+        }
+        resource = f'/networks/{networkId}/wireless/ssids/{number}/eapOverride'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def updateNetworkWirelessSsidEapOverride(self, networkId: str, number: str, **kwargs):
+        """
+        **Update the EAP overridden parameters for an SSID.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-eap-override
+
+        - networkId (string): (required)
+        - number (string): (required)
+        - timeout (integer): General EAP timeout in seconds.
+        - identity (object): EAP settings for identity requests.
+        - maxRetries (integer): Maximum number of general EAP retries.
+        - eapolKey (object): EAPOL Key settings.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ssids', 'eapOverride'],
+            'operation': 'updateNetworkWirelessSsidEapOverride'
+        }
+        resource = f'/networks/{networkId}/wireless/ssids/{number}/eapOverride'
+
+        body_params = ['timeout', 'identity', 'maxRetries', 'eapolKey', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
     def getNetworkWirelessSsidFirewallL3FirewallRules(self, networkId: str, number: str):
         """
         **Return the L3 firewall rules for an SSID on an MR network**
@@ -1458,6 +1508,61 @@ class Wireless(object):
         
 
 
+    def getNetworkWirelessSsidHotspot20(self, networkId: str, number: str):
+        """
+        **Return the Hotspot 2.0 settings for an SSID**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssid-hotspot-2-0
+
+        - networkId (string): (required)
+        - number (string): (required)
+        """
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ssids', 'hotspot20'],
+            'operation': 'getNetworkWirelessSsidHotspot20'
+        }
+        resource = f'/networks/{networkId}/wireless/ssids/{number}/hotspot20'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def updateNetworkWirelessSsidHotspot20(self, networkId: str, number: str, **kwargs):
+        """
+        **Update the Hotspot 2.0 settings of an SSID**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-hotspot-2-0
+
+        - networkId (string): (required)
+        - number (string): (required)
+        - enabled (boolean): Whether or not Hotspot 2.0 for this SSID is enabled
+        - operator (object): Operator settings for this SSID
+        - venue (object): Venue settings for this SSID
+        - networkAccessType (string): The network type of this SSID ('Private network', 'Private network with guest access', 'Chargeable public network', 'Free public network', 'Personal device network', 'Emergency services only network', 'Test or experimental', 'Wildcard')
+        - domains (array): An array of domain names
+        - roamConsortOis (array): An array of roaming consortium OIs (hexadecimal number 3-5 octets in length)
+        - mccMncs (array): An array of MCC/MNC pairs
+        - naiRealms (array): An array of NAI realms
+        """
+
+        kwargs.update(locals())
+
+        if 'networkAccessType' in kwargs:
+            options = ['Private network', 'Private network with guest access', 'Chargeable public network', 'Free public network', 'Personal device network', 'Emergency services only network', 'Test or experimental', 'Wildcard']
+            assert kwargs['networkAccessType'] in options, f'''"networkAccessType" cannot be "{kwargs['networkAccessType']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ssids', 'hotspot20'],
+            'operation': 'updateNetworkWirelessSsidHotspot20'
+        }
+        resource = f'/networks/{networkId}/wireless/ssids/{number}/hotspot20'
+
+        body_params = ['enabled', 'operator', 'venue', 'networkAccessType', 'domains', 'roamConsortOis', 'mccMncs', 'naiRealms', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
     def getNetworkWirelessSsidIdentityPsks(self, networkId: str, number: str):
         """
         **List all Identity PSKs in a wireless network**
@@ -1477,7 +1582,7 @@ class Wireless(object):
         
 
 
-    def createNetworkWirelessSsidIdentityPsk(self, networkId: str, number: str, name: str, passphrase: str, groupPolicyId: str):
+    def createNetworkWirelessSsidIdentityPsk(self, networkId: str, number: str, name: str, groupPolicyId: str, **kwargs):
         """
         **Create an Identity PSK**
         https://developer.cisco.com/meraki/api-v1/#!create-network-wireless-ssid-identity-psk
@@ -1485,11 +1590,11 @@ class Wireless(object):
         - networkId (string): (required)
         - number (string): (required)
         - name (string): The name of the Identity PSK
-        - passphrase (string): The passphrase for client authentication
         - groupPolicyId (string): The group policy to be applied to clients
+        - passphrase (string): The passphrase for client authentication. If left blank, one will be auto-generated.
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         metadata = {
             'tags': ['wireless', 'configure', 'ssids', 'identityPsks'],
@@ -1572,6 +1677,52 @@ class Wireless(object):
         
 
 
+    def getNetworkWirelessSsidSchedules(self, networkId: str, number: str):
+        """
+        **List the outage schedule for the SSID**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssid-schedules
+
+        - networkId (string): (required)
+        - number (string): (required)
+        """
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ssids', 'schedules'],
+            'operation': 'getNetworkWirelessSsidSchedules'
+        }
+        resource = f'/networks/{networkId}/wireless/ssids/{number}/schedules'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def updateNetworkWirelessSsidSchedules(self, networkId: str, number: str, **kwargs):
+        """
+        **Update the outage schedule for the SSID**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-schedules
+
+        - networkId (string): (required)
+        - number (string): (required)
+        - enabled (boolean): If true, the SSID outage schedule is enabled.
+        - ranges (array): List of outage ranges. Has a start date and time, and end date and time. If this parameter is passed in along with rangesInSeconds parameter, this will take precedence.
+        - rangesInSeconds (array): List of outage ranges in seconds since Sunday at Midnight. Has a start and end. If this parameter is passed in along with the ranges parameter, ranges will take precedence.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ssids', 'schedules'],
+            'operation': 'updateNetworkWirelessSsidSchedules'
+        }
+        resource = f'/networks/{networkId}/wireless/ssids/{number}/schedules'
+
+        body_params = ['enabled', 'ranges', 'rangesInSeconds', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
     def getNetworkWirelessSsidSplashSettings(self, networkId: str, number: str):
         """
         **Display the splash page settings for the given SSID**
@@ -1612,6 +1763,7 @@ class Wireless(object):
         - allowSimultaneousLogins (boolean): Whether or not to allow simultaneous logins from different devices.
         - guestSponsorship (object): Details associated with guest sponsored splash.
         - billing (object): Details associated with billing splash.
+        - sentryEnrollment (object): Systems Manager sentry enrollment splash settings.
         """
 
         kwargs.update(locals())
@@ -1626,7 +1778,7 @@ class Wireless(object):
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}/splash/settings'
 
-        body_params = ['splashUrl', 'useSplashUrl', 'splashTimeout', 'redirectUrl', 'useRedirectUrl', 'welcomeMessage', 'splashLogo', 'splashImage', 'splashPrepaidFront', 'blockAllTrafficBeforeSignOn', 'controllerDisconnectionBehavior', 'allowSimultaneousLogins', 'guestSponsorship', 'billing', ]
+        body_params = ['splashUrl', 'useSplashUrl', 'splashTimeout', 'redirectUrl', 'useRedirectUrl', 'welcomeMessage', 'splashLogo', 'splashImage', 'splashPrepaidFront', 'blockAllTrafficBeforeSignOn', 'controllerDisconnectionBehavior', 'allowSimultaneousLogins', 'guestSponsorship', 'billing', 'sentryEnrollment', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1709,6 +1861,7 @@ class Wireless(object):
         - networkId (string): (required)
         - number (string): (required)
         - splitTunnel (object): The VPN split tunnel settings for this SSID.
+        - failover (object): Secondary VPN concentrator settings. This is only used when two VPN concentrators are configured on the SSID.
         """
 
         kwargs.update(locals())
@@ -1719,7 +1872,7 @@ class Wireless(object):
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}/vpn'
 
-        body_params = ['splitTunnel', ]
+        body_params = ['splitTunnel', 'failover', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1740,14 +1893,14 @@ class Wireless(object):
         - clientId (string): Filter results by network client to return per-device AP usage over time inner joined by the queried client's connection history.
         - deviceSerial (string): Filter results by device. Requires :band.
         - apTag (string): Filter results by AP tag; either :clientId or :deviceSerial must be jointly specified.
-        - band (string): Filter results by band (either '2.4' or '5').
+        - band (string): Filter results by band (either '2.4', '5' or '6').
         - ssid (integer): Filter results by SSID number.
         """
 
         kwargs.update(locals())
 
         if 'band' in kwargs:
-            options = ['2.4', '5']
+            options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
 
         metadata = {

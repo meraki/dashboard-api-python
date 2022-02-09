@@ -167,6 +167,41 @@ class ActionBatchNetworks(object):
 
 
 
+    def vmxNetworkDevicesClaim(self, networkId: str, size: str):
+        """
+        **Claim a vMX into a network**
+        https://developer.cisco.com/meraki/api-v1/#!vmx-network-devices-claim
+
+        - networkId (string): (required)
+        - size (string): The size of the vMX you claim. It can be one of: small, medium, large, 100
+        """
+
+        kwargs = locals()
+
+        if 'size' in kwargs:
+            options = ['small', 'medium', 'large', '100']
+            assert kwargs['size'] in options, f'''"size" cannot be "{kwargs['size']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['networks', 'configure', 'devices', 'claim'],
+            'operation': 'vmxNetworkDevicesClaim'
+        }
+        resource = f'/networks/{networkId}/devices/claim/vmx'
+
+        body_params = ['size', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
     def removeNetworkDevices(self, networkId: str, serial: str):
         """
         **Remove a single device**
@@ -554,18 +589,20 @@ class ActionBatchNetworks(object):
 
 
 
-    def createNetworkMqttBroker(self, networkId: str, name: str, host: str, port: int):
+    def createNetworkMqttBroker(self, networkId: str, name: str, host: str, port: int, **kwargs):
         """
         **Add an MQTT broker**
         https://developer.cisco.com/meraki/api-v1/#!create-network-mqtt-broker
 
         - networkId (string): (required)
-        - name (string): Name of the MQTT broker
-        - host (string): Host name/IP address where MQTT broker runs
-        - port (integer): Host port though which MQTT broker can be reached
+        - name (string): Name of the MQTT broker.
+        - host (string): Host name/IP address where the MQTT broker runs.
+        - port (integer): Host port though which the MQTT broker can be reached.
+        - security (object): Security settings of the MQTT broker.
+        - authentication (object): Authentication settings of the MQTT broker
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         metadata = {
             'tags': ['networks', 'configure', 'mqttBrokers'],
@@ -573,7 +610,7 @@ class ActionBatchNetworks(object):
         }
         resource = f'/networks/{networkId}/mqttBrokers'
 
-        body_params = ['name', 'host', 'port', ]
+        body_params = ['name', 'host', 'port', 'security', 'authentication', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -594,9 +631,11 @@ class ActionBatchNetworks(object):
 
         - networkId (string): (required)
         - mqttBrokerId (string): (required)
-        - name (string): Name of the mqtt config
-        - host (string): Host name where mqtt broker runs
-        - port (integer): Host port though which mqtt broker can be reached
+        - name (string): Name of the MQTT broker.
+        - host (string): Host name/IP address where the MQTT broker runs.
+        - port (integer): Host port though which the MQTT broker can be reached.
+        - security (object): Security settings of the MQTT broker.
+        - authentication (object): Authentication settings of the MQTT broker
         """
 
         kwargs.update(locals())
@@ -607,7 +646,7 @@ class ActionBatchNetworks(object):
         }
         resource = f'/networks/{networkId}/mqttBrokers/{mqttBrokerId}'
 
-        body_params = ['name', 'host', 'port', ]
+        body_params = ['name', 'host', 'port', 'security', 'authentication', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -657,6 +696,7 @@ class ActionBatchNetworks(object):
         - localStatusPageEnabled (boolean): Enables / disables the local device status pages (<a target='_blank' href='http://my.meraki.com/'>my.meraki.com, </a><a target='_blank' href='http://ap.meraki.com/'>ap.meraki.com, </a><a target='_blank' href='http://switch.meraki.com/'>switch.meraki.com, </a><a target='_blank' href='http://wired.meraki.com/'>wired.meraki.com</a>). Optional (defaults to false)
         - remoteStatusPageEnabled (boolean): Enables / disables access to the device status page (<a target='_blank'>http://[device's LAN IP])</a>. Optional. Can only be set if localStatusPageEnabled is set to true
         - secureConnect (object): A hash of SecureConnect options applied to the Network.
+        - localStatusPage (object): A hash of Local Status page(s) options applied to the Network.
         """
 
         kwargs.update(locals())
@@ -667,7 +707,7 @@ class ActionBatchNetworks(object):
         }
         resource = f'/networks/{networkId}/settings'
 
-        body_params = ['localStatusPageEnabled', 'remoteStatusPageEnabled', 'secureConnect', ]
+        body_params = ['localStatusPageEnabled', 'remoteStatusPageEnabled', 'secureConnect', 'localStatusPage', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -698,6 +738,130 @@ class ActionBatchNetworks(object):
         action = {
             "resource": resource,
             "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def unbindNetwork(self, networkId: str):
+        """
+        **Unbind a network from a template.**
+        https://developer.cisco.com/meraki/api-v1/#!unbind-network
+
+        - networkId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure'],
+            'operation': 'unbindNetwork'
+        }
+        resource = f'/networks/{networkId}/unbind'
+
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def createNetworkWebhooksPayloadTemplate(self, networkId: str, name: str, **kwargs):
+        """
+        **Create a webhook payload template for a network**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-webhooks-payload-template
+
+        - networkId (string): (required)
+        - name (string): The name of the new template
+        - body (string): The liquid template used for the body of the webhook message. Either `body` or `bodyFile` must be specified.
+        - headers (string): The liquid template used with the webhook headers.
+        - bodyFile (string): A file containing liquid template used for the body of the webhook message. Either `body` or `bodyFile` must be specified.
+        - headersFile (string): A file containing the liquid template used with the webhook headers.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['networks', 'configure', 'webhooks', 'payloadTemplates'],
+            'operation': 'createNetworkWebhooksPayloadTemplate'
+        }
+        resource = f'/networks/{networkId}/webhooks/payloadTemplates'
+
+        body_params = ['name', 'body', 'headers', 'bodyFile', 'headersFile', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def deleteNetworkWebhooksPayloadTemplate(self, networkId: str, payloadTemplateId: str):
+        """
+        **Destroy a webhook payload template for a network**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-webhooks-payload-template
+
+        - networkId (string): (required)
+        - payloadTemplateId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'webhooks', 'payloadTemplates'],
+            'operation': 'deleteNetworkWebhooksPayloadTemplate'
+        }
+        resource = f'/networks/{networkId}/webhooks/payloadTemplates/{payloadTemplateId}'
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def updateNetworkWebhooksPayloadTemplate(self, networkId: str, payloadTemplateId: str, **kwargs):
+        """
+        **Update a webhook payload template for a network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-webhooks-payload-template
+
+        - networkId (string): (required)
+        - payloadTemplateId (string): (required)
+        - name (string): The name of the template
+        - body (string): The liquid template used for the body of the webhook message.
+        - headers (string): The liquid template used with the webhook headers.
+        - bodyFile (string): A file containing liquid template used for the body of the webhook message.
+        - headersFile (string): A file containing the liquid template used with the webhook headers.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['networks', 'configure', 'webhooks', 'payloadTemplates'],
+            'operation': 'updateNetworkWebhooksPayloadTemplate'
+        }
+        resource = f'/networks/{networkId}/webhooks/payloadTemplates/{payloadTemplateId}'
+
+        body_params = ['name', 'body', 'headers', 'bodyFile', 'headersFile', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
             "body": payload
         }
         return action

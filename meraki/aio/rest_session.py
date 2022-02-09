@@ -18,24 +18,24 @@ from ..rest_session import user_agent_extended
 # Main module interface
 class AsyncRestSession:
     def __init__(
-            self,
-            logger,
-            api_key,
-            base_url=DEFAULT_BASE_URL,
-            single_request_timeout=SINGLE_REQUEST_TIMEOUT,
-            certificate_path=CERTIFICATE_PATH,
-            requests_proxy=REQUESTS_PROXY,
-            wait_on_rate_limit=WAIT_ON_RATE_LIMIT,
-            nginx_429_retry_wait_time=NGINX_429_RETRY_WAIT_TIME,
-            action_batch_retry_wait_time=ACTION_BATCH_RETRY_WAIT_TIME,
-            retry_4xx_error=RETRY_4XX_ERROR,
-            retry_4xx_error_wait_time=RETRY_4XX_ERROR_WAIT_TIME,
-            maximum_retries=MAXIMUM_RETRIES,
-            simulate=SIMULATE_API_CALLS,
-            maximum_concurrent_requests=AIO_MAXIMUM_CONCURRENT_REQUESTS,
-            be_geo_id=BE_GEO_ID,
-            caller=MERAKI_PYTHON_SDK_CALLER,
-            use_iterator_for_get_pages=False,
+        self,
+        logger,
+        api_key,
+        base_url=DEFAULT_BASE_URL,
+        single_request_timeout=SINGLE_REQUEST_TIMEOUT,
+        certificate_path=CERTIFICATE_PATH,
+        requests_proxy=REQUESTS_PROXY,
+        wait_on_rate_limit=WAIT_ON_RATE_LIMIT,
+        nginx_429_retry_wait_time=NGINX_429_RETRY_WAIT_TIME,
+        action_batch_retry_wait_time=ACTION_BATCH_RETRY_WAIT_TIME,
+        retry_4xx_error=RETRY_4XX_ERROR,
+        retry_4xx_error_wait_time=RETRY_4XX_ERROR_WAIT_TIME,
+        maximum_retries=MAXIMUM_RETRIES,
+        simulate=SIMULATE_API_CALLS,
+        be_geo_id=BE_GEO_ID,
+        caller=MERAKI_PYTHON_SDK_CALLER,
+        use_iterator_for_get_pages=USE_ITERATOR_FOR_GET_PAGES,
+        maximum_concurrent_requests=AIO_MAXIMUM_CONCURRENT_REQUESTS,
     ):
         super().__init__()
 
@@ -58,7 +58,6 @@ class AsyncRestSession:
         )
         self._be_geo_id = be_geo_id
         self._caller = caller
-
         self.use_iterator_for_get_pages = use_iterator_for_get_pages
 
         # Check base URL

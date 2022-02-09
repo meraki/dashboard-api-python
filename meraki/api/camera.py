@@ -185,7 +185,7 @@ class Camera(object):
         - profileId (string): The ID of a quality and retention profile to assign to the camera. The profile's settings will override all of the per-camera quality and retention settings. If the value of this parameter is null, any existing profile will be unassigned from the camera.
         - motionBasedRetentionEnabled (boolean): Boolean indicating if motion-based retention is enabled(true) or disabled(false) on the camera.
         - audioRecordingEnabled (boolean): Boolean indicating if audio recording is enabled(true) or disabled(false) on the camera
-        - restrictedBandwidthModeEnabled (boolean): Boolean indicating if restricted bandwidth is enabled(true) or disabled(false) on the camera
+        - restrictedBandwidthModeEnabled (boolean): Boolean indicating if restricted bandwidth is enabled(true) or disabled(false) on the camera. This setting does not apply to MV2 cameras.
         - quality (string): Quality of the camera. Can be one of 'Standard', 'High' or 'Enhanced'. Not all qualities are supported by every camera model.
         - resolution (string): Resolution of the camera. Can be one of '1280x720', '1920x1080', '1080x1080' or '2058x2058'. Not all resolutions are supported by every camera model.
         - motionDetectorVersion (integer): The version of the motion detector that will be used by the camera. Only applies to Gen 2 cameras. Defaults to v2.
@@ -242,6 +242,7 @@ class Camera(object):
         - serial (string): (required)
         - senseEnabled (boolean): Boolean indicating if sense(license) is enabled(true) or disabled(false) on the camera
         - mqttBrokerId (string): The ID of the MQTT broker to be enabled on the camera. A value of null will disable MQTT on the camera
+        - audioDetection (object): The details of the audio detection config.
         - detectionModelId (string): The ID of the object detection model
         """
 
@@ -253,7 +254,7 @@ class Camera(object):
         }
         resource = f'/devices/{serial}/camera/sense'
 
-        body_params = ['senseEnabled', 'mqttBrokerId', 'detectionModelId', ]
+        body_params = ['senseEnabled', 'mqttBrokerId', 'audioDetection', 'detectionModelId', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -344,6 +345,48 @@ class Camera(object):
         
 
 
+    def getDeviceCameraWirelessProfiles(self, serial: str):
+        """
+        **Returns wireless profile assigned to the given camera**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-camera-wireless-profiles
+
+        - serial (string): (required)
+        """
+
+        metadata = {
+            'tags': ['camera', 'configure', 'wirelessProfiles'],
+            'operation': 'getDeviceCameraWirelessProfiles'
+        }
+        resource = f'/devices/{serial}/camera/wirelessProfiles'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def updateDeviceCameraWirelessProfiles(self, serial: str, ids: dict):
+        """
+        **Assign wireless profiles to the given camera**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-camera-wireless-profiles
+
+        - serial (string): (required)
+        - ids (object): The ids of the wireless profile to assign to the given camera
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['camera', 'configure', 'wirelessProfiles'],
+            'operation': 'updateDeviceCameraWirelessProfiles'
+        }
+        resource = f'/devices/{serial}/camera/wirelessProfiles'
+
+        body_params = ['ids', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
     def getNetworkCameraQualityRetentionProfiles(self, networkId: str):
         """
         **List the quality retention profiles for this network**
@@ -369,13 +412,13 @@ class Camera(object):
 
         - networkId (string): (required)
         - name (string): The name of the new profile. Must be unique. This parameter is required.
-        - motionBasedRetentionEnabled (boolean): Deletes footage older than 3 days in which no motion was detected. Can be either true or false. Defaults to false.
-        - restrictedBandwidthModeEnabled (boolean): Disable features that require additional bandwidth such as Motion Recap. Can be either true or false. Defaults to false.
+        - motionBasedRetentionEnabled (boolean): Deletes footage older than 3 days in which no motion was detected. Can be either true or false. Defaults to false. This setting does not apply to MV2 cameras.
+        - restrictedBandwidthModeEnabled (boolean): Disable features that require additional bandwidth such as Motion Recap. Can be either true or false. Defaults to false. This setting does not apply to MV2 cameras.
         - audioRecordingEnabled (boolean): Whether or not to record audio. Can be either true or false. Defaults to false.
         - cloudArchiveEnabled (boolean): Create redundant video backup using Cloud Archive. Can be either true or false. Defaults to false.
         - motionDetectorVersion (integer): The version of the motion detector that will be used by the camera. Only applies to Gen 2 cameras. Defaults to v2.
         - scheduleId (string): Schedule for which this camera will record video, or 'null' to always record.
-        - maxRetentionDays (integer): The maximum number of days for which the data will be stored, or 'null' to keep data until storage space runs out. If the former, it can be one of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 14, 30, 60, 90] days
+        - maxRetentionDays (integer): The maximum number of days for which the data will be stored, or 'null' to keep data until storage space runs out. If the former, it can be one of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 14, 30, 60, 90] days.
         - videoSettings (object): Video quality and resolution settings for all the camera models.
         """
 
@@ -421,13 +464,13 @@ class Camera(object):
         - networkId (string): (required)
         - qualityRetentionProfileId (string): (required)
         - name (string): The name of the new profile. Must be unique.
-        - motionBasedRetentionEnabled (boolean): Deletes footage older than 3 days in which no motion was detected. Can be either true or false. Defaults to false.
-        - restrictedBandwidthModeEnabled (boolean): Disable features that require additional bandwidth such as Motion Recap. Can be either true or false. Defaults to false.
+        - motionBasedRetentionEnabled (boolean): Deletes footage older than 3 days in which no motion was detected. Can be either true or false. Defaults to false. This setting does not apply to MV2 cameras.
+        - restrictedBandwidthModeEnabled (boolean): Disable features that require additional bandwidth such as Motion Recap. Can be either true or false. Defaults to false. This setting does not apply to MV2 cameras.
         - audioRecordingEnabled (boolean): Whether or not to record audio. Can be either true or false. Defaults to false.
         - cloudArchiveEnabled (boolean): Create redundant video backup using Cloud Archive. Can be either true or false. Defaults to false.
         - motionDetectorVersion (integer): The version of the motion detector that will be used by the camera. Only applies to Gen 2 cameras. Defaults to v2.
         - scheduleId (string): Schedule for which this camera will record video, or 'null' to always record.
-        - maxRetentionDays (integer): The maximum number of days for which the data will be stored, or 'null' to keep data until storage space runs out. If the former, it can be one of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 14, 30, 60, 90] days
+        - maxRetentionDays (integer): The maximum number of days for which the data will be stored, or 'null' to keep data until storage space runs out. If the former, it can be one of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 14, 30, 60, 90] days.
         - videoSettings (object): Video quality and resolution settings for all the camera models.
         """
 
@@ -480,4 +523,169 @@ class Camera(object):
         resource = f'/networks/{networkId}/camera/schedules'
 
         return self._session.get(metadata, resource)
+        
+
+
+    def createNetworkCameraWirelessProfile(self, networkId: str, name: str, ssid: dict, **kwargs):
+        """
+        **Creates a new camera wireless profile for this network.**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-camera-wireless-profile
+
+        - networkId (string): (required)
+        - name (string): The name of the camera wireless profile. This parameter is required.
+        - ssid (object): The details of the SSID config.
+        - identity (object): The identity of the wireless profile. Required for creating wireless profiles in 8021x-radius auth mode.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['camera', 'configure', 'wirelessProfiles'],
+            'operation': 'createNetworkCameraWirelessProfile'
+        }
+        resource = f'/networks/{networkId}/camera/wirelessProfiles'
+
+        body_params = ['name', 'ssid', 'identity', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getNetworkCameraWirelessProfiles(self, networkId: str):
+        """
+        **List the camera wireless profiles for this network.**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-camera-wireless-profiles
+
+        - networkId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['camera', 'configure', 'wirelessProfiles'],
+            'operation': 'getNetworkCameraWirelessProfiles'
+        }
+        resource = f'/networks/{networkId}/camera/wirelessProfiles'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def getNetworkCameraWirelessProfile(self, networkId: str, wirelessProfileId: str):
+        """
+        **Retrieve a single camera wireless profile.**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-camera-wireless-profile
+
+        - networkId (string): (required)
+        - wirelessProfileId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['camera', 'configure', 'wirelessProfiles'],
+            'operation': 'getNetworkCameraWirelessProfile'
+        }
+        resource = f'/networks/{networkId}/camera/wirelessProfiles/{wirelessProfileId}'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def updateNetworkCameraWirelessProfile(self, networkId: str, wirelessProfileId: str, **kwargs):
+        """
+        **Update an existing camera wireless profile in this network.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-camera-wireless-profile
+
+        - networkId (string): (required)
+        - wirelessProfileId (string): (required)
+        - name (string): The name of the camera wireless profile.
+        - ssid (object): The details of the SSID config.
+        - identity (object): The identity of the wireless profile. Required for creating wireless profiles in 8021x-radius auth mode.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['camera', 'configure', 'wirelessProfiles'],
+            'operation': 'updateNetworkCameraWirelessProfile'
+        }
+        resource = f'/networks/{networkId}/camera/wirelessProfiles/{wirelessProfileId}'
+
+        body_params = ['name', 'ssid', 'identity', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def deleteNetworkCameraWirelessProfile(self, networkId: str, wirelessProfileId: str):
+        """
+        **Delete an existing camera wireless profile for this network.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-camera-wireless-profile
+
+        - networkId (string): (required)
+        - wirelessProfileId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['camera', 'configure', 'wirelessProfiles'],
+            'operation': 'deleteNetworkCameraWirelessProfile'
+        }
+        resource = f'/networks/{networkId}/camera/wirelessProfiles/{wirelessProfileId}'
+
+        return self._session.delete(metadata, resource)
+        
+
+
+    def getOrganizationCameraOnboardingStatuses(self, organizationId: str, **kwargs):
+        """
+        **Fetch onboarding status of cameras**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-camera-onboarding-statuses
+
+        - organizationId (string): (required)
+        - serials (array): A list of serial numbers. The returned cameras will be filtered to only include these serials.
+        - networkIds (array): A list of network IDs. The returned cameras will be filtered to only include these networks.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['camera', 'configure', 'onboarding', 'statuses'],
+            'operation': 'getOrganizationCameraOnboardingStatuses'
+        }
+        resource = f'/organizations/{organizationId}/camera/onboarding/statuses'
+
+        query_params = ['serials', 'networkIds', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['serials', 'networkIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get(metadata, resource, params)
+        
+
+
+    def updateOrganizationCameraOnboardingStatuses(self, organizationId: str, **kwargs):
+        """
+        **Notify that credential handoff to camera has completed**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-camera-onboarding-statuses
+
+        - organizationId (string): (required)
+        - serial (string): Serial of camera
+        - wirelessCredentialsSent (boolean): Note whether credentials were sent successfully
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['camera', 'configure', 'onboarding', 'statuses'],
+            'operation': 'updateOrganizationCameraOnboardingStatuses'
+        }
+        resource = f'/organizations/{organizationId}/camera/onboarding/statuses'
+
+        body_params = ['serial', 'wirelessCredentialsSent', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
         
