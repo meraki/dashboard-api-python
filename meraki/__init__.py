@@ -13,14 +13,37 @@ from .api.insight import Insight
 from .api.sm import Sm
 from .api.switch import Switch
 from .api.wireless import Wireless
+
+# Batch class imports
+from .api.batch import Batch
+
+# Config import
 from .config import (
-    API_KEY_ENVIRONMENT_VARIABLE, DEFAULT_BASE_URL, SINGLE_REQUEST_TIMEOUT, CERTIFICATE_PATH, REQUESTS_PROXY,
-    WAIT_ON_RATE_LIMIT, NGINX_429_RETRY_WAIT_TIME, ACTION_BATCH_RETRY_WAIT_TIME, RETRY_4XX_ERROR,
-    RETRY_4XX_ERROR_WAIT_TIME, MAXIMUM_RETRIES, OUTPUT_LOG, LOG_PATH, LOG_FILE_PREFIX, PRINT_TO_CONSOLE,
-    SUPPRESS_LOGGING, SIMULATE_API_CALLS, BE_GEO_ID, MERAKI_PYTHON_SDK_CALLER
+    API_KEY_ENVIRONMENT_VARIABLE,
+    DEFAULT_BASE_URL,
+    SINGLE_REQUEST_TIMEOUT,
+    CERTIFICATE_PATH,
+    REQUESTS_PROXY,
+    WAIT_ON_RATE_LIMIT,
+    NGINX_429_RETRY_WAIT_TIME,
+    ACTION_BATCH_RETRY_WAIT_TIME,
+    RETRY_4XX_ERROR,
+    RETRY_4XX_ERROR_WAIT_TIME,
+    MAXIMUM_RETRIES,
+    OUTPUT_LOG,
+    LOG_PATH,
+    LOG_FILE_PREFIX,
+    PRINT_TO_CONSOLE,
+    SUPPRESS_LOGGING,
+    INHERIT_LOGGING_CONFIG,
+    SIMULATE_API_CALLS,
+    BE_GEO_ID,
+    MERAKI_PYTHON_SDK_CALLER,
+    USE_ITERATOR_FOR_GET_PAGES,
 )
 
-__version__ = '1.6.2'
+__version__ = '1.18.2'
+
 
 class DashboardAPI(object):
     """
@@ -42,20 +65,37 @@ class DashboardAPI(object):
     - log_file_prefix (string): log file name appended with date and timestamp
     - print_console (boolean): print logging output to console?
     - suppress_logging (boolean): disable all logging? you're on your own then!
+    - inherit_logging_config (boolean): Inherits your own logger instance
     - simulate (boolean): simulate POST/PUT/DELETE calls to prevent changes?
     - be_geo_id (string): optional partner identifier for API usage tracking; can also be set as an environment variable BE_GEO_ID
     - caller (string): optional identifier for API usage tracking; can also be set as an environment variable MERAKI_PYTHON_SDK_CALLER
     - use_iterator_for_get_pages (boolean): list* methods will return an iterator with each object instead of a complete list with all items
     """
 
-    def __init__(self, api_key=None, base_url=DEFAULT_BASE_URL, single_request_timeout=SINGLE_REQUEST_TIMEOUT,
-                 certificate_path=CERTIFICATE_PATH, requests_proxy=REQUESTS_PROXY,
-                 wait_on_rate_limit=WAIT_ON_RATE_LIMIT, nginx_429_retry_wait_time=NGINX_429_RETRY_WAIT_TIME,
-                 action_batch_retry_wait_time=ACTION_BATCH_RETRY_WAIT_TIME, retry_4xx_error=RETRY_4XX_ERROR,
-                 retry_4xx_error_wait_time=RETRY_4XX_ERROR_WAIT_TIME, maximum_retries=MAXIMUM_RETRIES,
-                 output_log=OUTPUT_LOG, log_path=LOG_PATH, log_file_prefix=LOG_FILE_PREFIX,
-                 print_console=PRINT_TO_CONSOLE, suppress_logging=SUPPRESS_LOGGING, simulate=SIMULATE_API_CALLS,
-                 be_geo_id=BE_GEO_ID, caller=MERAKI_PYTHON_SDK_CALLER, use_iterator_for_get_pages=False):
+    def __init__(self,
+                 api_key=None,
+                 base_url=DEFAULT_BASE_URL,
+                 single_request_timeout=SINGLE_REQUEST_TIMEOUT,
+                 certificate_path=CERTIFICATE_PATH,
+                 requests_proxy=REQUESTS_PROXY,
+                 wait_on_rate_limit=WAIT_ON_RATE_LIMIT,
+                 nginx_429_retry_wait_time=NGINX_429_RETRY_WAIT_TIME,
+                 action_batch_retry_wait_time=ACTION_BATCH_RETRY_WAIT_TIME,
+                 retry_4xx_error=RETRY_4XX_ERROR,
+                 retry_4xx_error_wait_time=RETRY_4XX_ERROR_WAIT_TIME,
+                 maximum_retries=MAXIMUM_RETRIES,
+                 output_log=OUTPUT_LOG,
+                 log_path=LOG_PATH,
+                 log_file_prefix=LOG_FILE_PREFIX,
+                 print_console=PRINT_TO_CONSOLE,
+                 suppress_logging=SUPPRESS_LOGGING,
+                 simulate=SIMULATE_API_CALLS,
+                 be_geo_id=BE_GEO_ID,
+                 caller=MERAKI_PYTHON_SDK_CALLER,
+                 use_iterator_for_get_pages=USE_ITERATOR_FOR_GET_PAGES,
+                 inherit_logging_config=INHERIT_LOGGING_CONFIG,
+                 ):
+
         # Check API key
         api_key = api_key or os.environ.get(API_KEY_ENVIRONMENT_VARIABLE)
         if not api_key:
@@ -67,34 +107,39 @@ class DashboardAPI(object):
         # Pull the caller from an environment variable if present
         caller = caller or os.environ.get('MERAKI_PYTHON_SDK_CALLER')
 
+        use_iterator_for_get_pages = use_iterator_for_get_pages
+        inherit_logging_config = inherit_logging_config
+
         # Configure logging
         if not suppress_logging:
             self._logger = logging.getLogger(__name__)
-            self._logger.setLevel(logging.DEBUG)
+        
+            if not inherit_logging_config:
+                self._logger.setLevel(logging.DEBUG)
 
-            formatter = logging.Formatter(
-                fmt='%(asctime)s %(name)12s: %(levelname)8s > %(message)s',
-                datefmt='%Y-%m-%d %H:%M:%S'
-            )
-            handler_console = logging.StreamHandler()
-            handler_console.setFormatter(formatter)
-
-            if output_log:
-                if log_path and log_path[-1] != '/':
-                    log_path += '/'
-                self._log_file = f'{log_path}{log_file_prefix}_log__{datetime.now():%Y-%m-%d_%H-%M-%S}.log'
-                handler_log = logging.FileHandler(
-                    filename=self._log_file
+                formatter = logging.Formatter(
+                    fmt='%(asctime)s %(name)12s: %(levelname)8s > %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S'
                 )
-                handler_log.setFormatter(formatter)
-            
-            if output_log and not self._logger.hasHandlers():
-                self._logger.addHandler(handler_log)
-                if print_console:
-                    handler_console.setLevel(logging.INFO)
+                handler_console = logging.StreamHandler()
+                handler_console.setFormatter(formatter)
+
+                if output_log:
+                    if log_path and log_path[-1] != '/':
+                        log_path += '/'
+                    self._log_file = f'{log_path}{log_file_prefix}_log__{datetime.now():%Y-%m-%d_%H-%M-%S}.log'
+                    handler_log = logging.FileHandler(
+                        filename=self._log_file
+                    )
+                    handler_log.setFormatter(formatter)
+
+                if output_log and not self._logger.hasHandlers():
+                    self._logger.addHandler(handler_log)
+                    if print_console:
+                        handler_console.setLevel(logging.INFO)
+                        self._logger.addHandler(handler_console)
+                elif print_console and not self._logger.hasHandlers():
                     self._logger.addHandler(handler_console)
-            elif print_console and not self._logger.hasHandlers():
-                self._logger.addHandler(handler_console)
         else:
             self._logger = None
 
@@ -129,3 +174,6 @@ class DashboardAPI(object):
         self.sm = Sm(self._session)
         self.switch = Switch(self._session)
         self.wireless = Wireless(self._session)
+
+        # Batch definitions
+        self.batch = Batch()

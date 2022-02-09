@@ -127,7 +127,7 @@ class RestSession(object):
 
     @property
     def use_iterator_for_get_pages(self):
-        return self._use_iterator_for_get_pages
+        return self.use_iterator_for_get_pages
 
     @use_iterator_for_get_pages.setter
     def use_iterator_for_get_pages(self, value):
@@ -136,7 +136,7 @@ class RestSession(object):
         else:
             self.get_pages = self._get_pages_legacy
 
-        self._use_iterator_for_get_pages = value
+        self.use_iterator_for_get_pages = value
 
     def request(self, metadata, method, url, **kwargs):
         # Metadata on endpoint

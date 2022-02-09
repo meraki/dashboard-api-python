@@ -42,7 +42,14 @@
         {% if body_params|length > 0 %}
         body_params = [{% for param in body_params %}'{{ param }}', {% endfor %}]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-
         {% endif %}
+        action = {
+            "resource": resource,
+            "operation": "{{ batch_operation }}",
+            "body": payload
+        }
         {{ call_line }}
         
+
+
+

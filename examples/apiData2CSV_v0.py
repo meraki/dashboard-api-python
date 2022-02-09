@@ -30,7 +30,7 @@ import platform
 def main(org_id, timespan):
     # Instantiate a Meraki dashboard API session
     dashboard = meraki.DashboardAPI(
-        base_url='https://api-mp.meraki.com/api/v0/',
+        base_url='https://api.meraki.com/api/v0/',
         print_console=False,
         output_log=False,
     )
