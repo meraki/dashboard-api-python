@@ -188,7 +188,7 @@ class AsyncRestSession:
                     # For non-empty response to GET, ensure valid JSON
                     try:
                         if method == "GET":
-                            await response.json()
+                            await response.json(content_type = None)
                         return response
                     except (
                             json.decoder.JSONDecodeError,
@@ -230,7 +230,7 @@ class AsyncRestSession:
                 # 4XX errors
                 else:
                     try:
-                        message = await response.json()
+                        message = await response.json(content_type = None)
                     except aiohttp.client_exceptions.ContentTypeError:
                         try:
                             message = (await response.text())[:100]
@@ -275,7 +275,7 @@ class AsyncRestSession:
         metadata["url"] = url
         metadata["params"] = params
         async with await self.request(metadata, "GET", url, params=params) as response:
-            return await response.json()
+            return await response.json(content_type = None)
 
     async def get_pages(
             self,
@@ -290,7 +290,7 @@ class AsyncRestSession:
 
     async def _download_page(self, request):
         response = await request
-        result = await response.json()
+        result = await response.json(content_type = None)
         return response, result
 
     async def _get_pages_iterator(
@@ -390,7 +390,7 @@ class AsyncRestSession:
         metadata["page"] = 1
 
         async with await self.request(metadata, "GET", url, params=params) as response:
-            results = await response.json()
+            results = await response.json(content_type = None)
 
             # For event log endpoint when using 'next' direction, so results/events are sorted chronologically
             if (
@@ -442,10 +442,10 @@ class AsyncRestSession:
                 links = response.links
                 # Append that page's results, depending on the endpoint
                 if type(results) == list:
-                    results.extend(await response.json())
+                    results.extend(await response.json(content_type = None))
                 # For event log endpoint
                 elif type(results) == dict:
-                    json_response = await response.json()
+                    json_response = await response.json(content_type = None)
                     start = json_response["pageStartAt"]
                     end = json_response["pageEndAt"]
                     events = json_response["events"]
@@ -466,14 +466,14 @@ class AsyncRestSession:
         metadata["url"] = url
         metadata["json"] = json
         async with await self.request(metadata, "POST", url, json=json) as response:
-            return await response.json()
+            return await response.json(content_type = None)
 
     async def put(self, metadata, url, json=None):
         metadata["method"] = "PUT"
         metadata["url"] = url
         metadata["json"] = json
         async with await self.request(metadata, "PUT", url, json=json) as response:
-            return await response.json()
+            return await response.json(content_type = None)
 
     async def delete(self, metadata, url):
         metadata["method"] = "DELETE"
