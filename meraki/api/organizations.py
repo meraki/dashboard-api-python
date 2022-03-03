@@ -780,7 +780,7 @@ class Organizations(object):
         kwargs.update(locals())
 
         if 'type' in kwargs:
-            options = ['voipJitter', 'voipPacketLoss', 'voipMos', 'wanLatency', 'wanPacketLoss', 'wanUtilization', 'wanStatus']
+            options = ['voipJitter', 'voipPacketLoss', 'voipMos', 'wanLatency', 'wanPacketLoss', 'wanUtilization', 'wanStatus', 'appOutage']
             assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -814,7 +814,7 @@ class Organizations(object):
         kwargs.update(locals())
 
         if 'type' in kwargs:
-            options = ['voipJitter', 'voipPacketLoss', 'voipMos', 'wanLatency', 'wanPacketLoss', 'wanUtilization', 'wanStatus']
+            options = ['voipJitter', 'voipPacketLoss', 'voipMos', 'wanLatency', 'wanPacketLoss', 'wanUtilization', 'wanStatus', 'appOutage']
             assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -1504,6 +1504,32 @@ class Organizations(object):
         
 
 
+    def claimIntoOrganizationInventory(self, organizationId: str, **kwargs):
+        """
+        **Claim a list of devices, licenses, and/or orders into an organization**
+        https://developer.cisco.com/meraki/api-v1/#!claim-into-organization-inventory
+
+        - organizationId (string): (required)
+        - orders (array): The numbers of the orders that should be claimed
+        - serials (array): The serials of the devices that should be claimed
+        - licenses (array): The licenses that should be claimed
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'inventory'],
+            'operation': 'claimIntoOrganizationInventory'
+        }
+        resource = f'/organizations/{organizationId}/inventory/claim'
+
+        body_params = ['orders', 'serials', 'licenses', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
     def getOrganizationInventoryDevices(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **Return the device inventory for an organization**
@@ -1515,7 +1541,7 @@ class Organizations(object):
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - usedState (string): Filter results by used or unused inventory. Accepted values are "used" or "unused".
+        - usedState (string): Filter results by used or unused inventory. Accepted values are 'used' or 'unused'.
         - search (string): Search for devices in inventory based on serial number, mac address, or model.
         - macs (array): Search for devices in inventory based on mac addresses.
         - networkIds (array): Search for devices in inventory based on network ids.
@@ -1536,10 +1562,10 @@ class Organizations(object):
             assert kwargs['tagsFilterType'] in options, f'''"tagsFilterType" cannot be "{kwargs['tagsFilterType']}", & must be set to one of: {options}'''
 
         metadata = {
-            'tags': ['organizations', 'configure', 'inventoryDevices'],
+            'tags': ['organizations', 'configure', 'inventory', 'devices'],
             'operation': 'getOrganizationInventoryDevices'
         }
-        resource = f'/organizations/{organizationId}/inventoryDevices'
+        resource = f'/organizations/{organizationId}/inventory/devices'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'usedState', 'search', 'macs', 'networkIds', 'serials', 'models', 'tags', 'tagsFilterType', 'productTypes', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
@@ -1564,12 +1590,36 @@ class Organizations(object):
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'inventoryDevices'],
+            'tags': ['organizations', 'configure', 'inventory', 'devices'],
             'operation': 'getOrganizationInventoryDevice'
         }
-        resource = f'/organizations/{organizationId}/inventoryDevices/{serial}'
+        resource = f'/organizations/{organizationId}/inventory/devices/{serial}'
 
         return self._session.get(metadata, resource)
+        
+
+
+    def releaseFromOrganizationInventory(self, organizationId: str, **kwargs):
+        """
+        **Release a list of claimed devices from an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!release-from-organization-inventory
+
+        - organizationId (string): (required)
+        - serials (array): Serials of the devices that should be released
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'inventory'],
+            'operation': 'releaseFromOrganizationInventory'
+        }
+        resource = f'/organizations/{organizationId}/inventory/release'
+
+        body_params = ['serials', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
         
 
 
@@ -1808,6 +1858,7 @@ class Organizations(object):
         - enforceTwoFactorAuth (boolean): Boolean indicating whether users in this organization will be required to use an extra verification code when logging in to Dashboard. This code will be sent to their mobile phone via SMS, or can be generated by the Google Authenticator application.
         - enforceLoginIpRanges (boolean): Boolean indicating whether organization will restrict access to Dashboard (including the API) from certain IP addresses.
         - loginIpRanges (array): List of acceptable IP ranges. Entries can be single IP addresses, IP address ranges, and CIDR subnets.
+        - apiAuthentication (object): Details for indicating whether organization will restrict access to API (but not Dashboard) to certain IP addresses.
         """
 
         kwargs.update(locals())
@@ -1818,7 +1869,7 @@ class Organizations(object):
         }
         resource = f'/organizations/{organizationId}/loginSecurity'
 
-        body_params = ['enforcePasswordExpiration', 'passwordExpirationDays', 'enforceDifferentPasswords', 'numDifferentPasswords', 'enforceStrongPasswords', 'enforceAccountLockout', 'accountLockoutAttempts', 'enforceIdleTimeout', 'idleTimeoutMinutes', 'enforceTwoFactorAuth', 'enforceLoginIpRanges', 'loginIpRanges', ]
+        body_params = ['enforcePasswordExpiration', 'passwordExpirationDays', 'enforceDifferentPasswords', 'numDifferentPasswords', 'enforceStrongPasswords', 'enforceAccountLockout', 'accountLockoutAttempts', 'enforceIdleTimeout', 'idleTimeoutMinutes', 'enforceTwoFactorAuth', 'enforceLoginIpRanges', 'loginIpRanges', 'apiAuthentication', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
