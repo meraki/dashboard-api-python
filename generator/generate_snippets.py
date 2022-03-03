@@ -155,12 +155,15 @@ def main():
     # Get latest OpenAPI specification
     spec = requests.get('https://api.meraki.com/api/v1/openapiSpec').json()
 
-    # Only care about the first 10 tags, which are the 10 scopes for organizations, networks, devices, & 7 products
-    # scopes = ['organizations', 'networks', 'devices',
+    # Supported scopes list will include organizations, networks, devices, and all product types.
+    supported_scopes = ['organizations', 'networks', 'devices', 'appliance', 'camera', 'cellularGateway', 'insight',
+                        'sm', 'switch', 'wireless', 'sensor']
+    # legacy scopes = ['organizations', 'networks', 'devices',
     #           'appliance', 'camera', 'cellularGateway', 'insight', 'sm', 'switch', 'wireless']
     tags = spec['tags']
     paths = spec['paths']
-    scopes = {tag['name']: {} for tag in tags[:10]}
+    # Scopes used when generating the library will depend on the provided version of the API spec.
+    scopes = {tag['name']: {} for tag in tags if tag['name'] in supported_scopes}
 
     # Organize data
     operations = []
