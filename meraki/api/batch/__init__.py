@@ -5,6 +5,7 @@ from .appliance import ActionBatchAppliance
 from .camera import ActionBatchCamera
 from .cellularGateway import ActionBatchCellularGateway
 from .insight import ActionBatchInsight
+from .sensor import ActionBatchSensor
 from .sm import ActionBatchSm
 from .switch import ActionBatchSwitch
 from .wireless import ActionBatchWireless
@@ -21,6 +22,7 @@ class Batch:
         self.camera = ActionBatchCamera()
         self.cellularGateway = ActionBatchCellularGateway()
         self.insight = ActionBatchInsight()
+        self.sensor = ActionBatchSensor()
         self.sm = ActionBatchSm()
         self.switch = ActionBatchSwitch()
         self.wireless = ActionBatchWireless()

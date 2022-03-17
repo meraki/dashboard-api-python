@@ -10,6 +10,7 @@ from .api.appliance import Appliance
 from .api.camera import Camera
 from .api.cellularGateway import CellularGateway
 from .api.insight import Insight
+from .api.sensor import Sensor
 from .api.sm import Sm
 from .api.switch import Switch
 from .api.wireless import Wireless
@@ -113,7 +114,7 @@ class DashboardAPI(object):
         # Configure logging
         if not suppress_logging:
             self._logger = logging.getLogger(__name__)
-        
+
             if not inherit_logging_config:
                 self._logger.setLevel(logging.DEBUG)
 
@@ -171,6 +172,7 @@ class DashboardAPI(object):
         self.camera = Camera(self._session)
         self.cellularGateway = CellularGateway(self._session)
         self.insight = Insight(self._session)
+        self.sensor = Sensor(self._session)
         self.sm = Sm(self._session)
         self.switch = Switch(self._session)
         self.wireless = Wireless(self._session)
