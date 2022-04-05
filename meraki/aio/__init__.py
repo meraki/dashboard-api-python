@@ -10,6 +10,7 @@ from .api.devices import AsyncDevices
 from .api.insight import AsyncInsight
 from .api.networks import AsyncNetworks
 from .api.organizations import AsyncOrganizations
+from .api.sensor import AsyncSensor
 from .api.sm import AsyncSm
 from .api.switch import AsyncSwitch
 from .api.wireless import AsyncWireless
@@ -171,6 +172,7 @@ class AsyncDashboardAPI:
         self.camera = AsyncCamera(self._session)
         self.cellularGateway = AsyncCellularGateway(self._session)
         self.insight = AsyncInsight(self._session)
+        self.sensor = AsyncSensor(self._session)
         self.switch = AsyncSwitch(self._session)
         self.sm = AsyncSm(self._session)
         self.wireless = AsyncWireless(self._session)
