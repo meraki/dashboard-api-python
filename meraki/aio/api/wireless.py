@@ -1863,6 +1863,7 @@ class AsyncWireless:
 
         - networkId (string): (required)
         - number (string): (required)
+        - concentrator (object): The VPN concentrator settings for this SSID.
         - splitTunnel (object): The VPN split tunnel settings for this SSID.
         - failover (object): Secondary VPN concentrator settings. This is only used when two VPN concentrators are configured on the SSID.
         """
@@ -1875,7 +1876,7 @@ class AsyncWireless:
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}/vpn'
 
-        body_params = ['splitTunnel', 'failover', ]
+        body_params = ['concentrator', 'splitTunnel', 'failover', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)

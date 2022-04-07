@@ -4,6 +4,32 @@ class ActionBatchAppliance(object):
         
 
 
+    def createDeviceApplianceVmxAuthenticationToken(self, serial: str):
+        """
+        **Generate a new vMX authentication token**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-appliance-vmx-authentication-token
+
+        - serial (string): (required)
+        """
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'vmx', 'authenticationToken'],
+            'operation': 'createDeviceApplianceVmxAuthenticationToken'
+        }
+        resource = f'/devices/{serial}/appliance/vmx/authenticationToken'
+
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
     def updateNetworkApplianceConnectivityMonitoringDestinations(self, networkId: str, **kwargs):
         """
         **Update the connectivity testing destinations for an MX network**

@@ -566,13 +566,13 @@ Cannot be applied to a port on a switch bound to profile.
 
     def updateNetworkSwitchDhcpServerPolicy(self, networkId: str, **kwargs):
         """
-        **Update the DHCP server policy**
+        **Update the DHCP server settings**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-dhcp-server-policy
 
         - networkId (string): (required)
         - defaultPolicy (string): 'allow' or 'block' new DHCP servers. Default value is 'allow'.
-        - allowedServers (array): List the MAC addresses of DHCP servers to permit on the network. Applicable only if defaultPolicy is set to block. An empty array will clear the entries.
-        - blockedServers (array): List the MAC addresses of DHCP servers to block on the network. Applicable only if defaultPolicy is set to allow. An empty array will clear the entries.
+        - allowedServers (array): List the MAC addresses of DHCP servers to permit on the network when defaultPolicy is set to block. An empty array will clear the entries.
+        - blockedServers (array): List the MAC addresses of DHCP servers to block on the network when defaultPolicy is set to allow. An empty array will clear the entries.
         """
 
         kwargs.update(locals())

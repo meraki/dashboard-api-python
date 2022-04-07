@@ -133,6 +133,50 @@ class AsyncCamera:
         
 
 
+    def getDeviceCameraCustomAnalytics(self, serial: str):
+        """
+        **Return custom analytics settings for a camera**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-camera-custom-analytics
+
+        - serial (string): (required)
+        """
+
+        metadata = {
+            'tags': ['camera', 'configure', 'customAnalytics'],
+            'operation': 'getDeviceCameraCustomAnalytics'
+        }
+        resource = f'/devices/{serial}/camera/customAnalytics'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def updateDeviceCameraCustomAnalytics(self, serial: str, **kwargs):
+        """
+        **Update custom analytics settings for a camera**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-camera-custom-analytics
+
+        - serial (string): (required)
+        - enabled (boolean): Enable custom analytics
+        - artifactId (string): The ID of the custom analytics artifact
+        - parameters (array): Parameters for the custom analytics workload
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['camera', 'configure', 'customAnalytics'],
+            'operation': 'updateDeviceCameraCustomAnalytics'
+        }
+        resource = f'/devices/{serial}/camera/customAnalytics'
+
+        body_params = ['enabled', 'artifactId', 'parameters', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
     def generateDeviceCameraSnapshot(self, serial: str, **kwargs):
         """
         **Generate a snapshot of what the camera sees at the specified time and return a link to that image.**
@@ -630,6 +674,86 @@ class AsyncCamera:
             'operation': 'deleteNetworkCameraWirelessProfile'
         }
         resource = f'/networks/{networkId}/camera/wirelessProfiles/{wirelessProfileId}'
+
+        return self._session.delete(metadata, resource)
+        
+
+
+    def getOrganizationCameraCustomAnalyticsArtifacts(self, organizationId: str):
+        """
+        **List Custom Analytics Artifacts**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-camera-custom-analytics-artifacts
+
+        - organizationId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['camera', 'configure', 'customAnalytics', 'artifacts'],
+            'operation': 'getOrganizationCameraCustomAnalyticsArtifacts'
+        }
+        resource = f'/organizations/{organizationId}/camera/customAnalytics/artifacts'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def createOrganizationCameraCustomAnalyticsArtifact(self, organizationId: str, **kwargs):
+        """
+        **Create custom analytics artifact**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-camera-custom-analytics-artifact
+
+        - organizationId (string): (required)
+        - name (string): Unique name of the artifact
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['camera', 'configure', 'customAnalytics', 'artifacts'],
+            'operation': 'createOrganizationCameraCustomAnalyticsArtifact'
+        }
+        resource = f'/organizations/{organizationId}/camera/customAnalytics/artifacts'
+
+        body_params = ['name', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getOrganizationCameraCustomAnalyticsArtifact(self, organizationId: str, artifactId: str):
+        """
+        **Get Custom Analytics Artifact**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-camera-custom-analytics-artifact
+
+        - organizationId (string): (required)
+        - artifactId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['camera', 'configure', 'customAnalytics', 'artifacts'],
+            'operation': 'getOrganizationCameraCustomAnalyticsArtifact'
+        }
+        resource = f'/organizations/{organizationId}/camera/customAnalytics/artifacts/{artifactId}'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def deleteOrganizationCameraCustomAnalyticsArtifact(self, organizationId: str, artifactId: str):
+        """
+        **Delete Custom Analytics Artifact**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-camera-custom-analytics-artifact
+
+        - organizationId (string): (required)
+        - artifactId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['camera', 'configure', 'customAnalytics', 'artifacts'],
+            'operation': 'deleteOrganizationCameraCustomAnalyticsArtifact'
+        }
+        resource = f'/organizations/{organizationId}/camera/customAnalytics/artifacts/{artifactId}'
 
         return self._session.delete(metadata, resource)
         

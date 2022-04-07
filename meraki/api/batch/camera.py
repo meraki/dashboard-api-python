@@ -4,6 +4,39 @@ class ActionBatchCamera(object):
         
 
 
+    def updateDeviceCameraCustomAnalytics(self, serial: str, **kwargs):
+        """
+        **Update custom analytics settings for a camera**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-camera-custom-analytics
+
+        - serial (string): (required)
+        - enabled (boolean): Enable custom analytics
+        - artifactId (string): The ID of the custom analytics artifact
+        - parameters (array): Parameters for the custom analytics workload
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['camera', 'configure', 'customAnalytics'],
+            'operation': 'updateDeviceCameraCustomAnalytics'
+        }
+        resource = f'/devices/{serial}/camera/customAnalytics'
+
+        body_params = ['enabled', 'artifactId', 'parameters', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
     def updateDeviceCameraQualityAndRetention(self, serial: str, **kwargs):
         """
         **Update quality and retention settings for the given camera**

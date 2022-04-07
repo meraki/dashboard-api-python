@@ -1344,7 +1344,6 @@ class AsyncOrganizations:
         
 
 
-
     def getOrganizationDevices(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the devices in an organization**

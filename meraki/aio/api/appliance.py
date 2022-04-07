@@ -41,6 +41,24 @@ class AsyncAppliance:
         
 
 
+    def createDeviceApplianceVmxAuthenticationToken(self, serial: str):
+        """
+        **Generate a new vMX authentication token**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-appliance-vmx-authentication-token
+
+        - serial (string): (required)
+        """
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'vmx', 'authenticationToken'],
+            'operation': 'createDeviceApplianceVmxAuthenticationToken'
+        }
+        resource = f'/devices/{serial}/appliance/vmx/authenticationToken'
+
+        return self._session.post(metadata, resource)
+        
+
+
     def getNetworkApplianceClientSecurityEvents(self, networkId: str, clientId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the security events for a client**
