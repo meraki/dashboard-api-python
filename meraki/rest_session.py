@@ -8,9 +8,9 @@ import urllib.parse
 
 import requests
 
-from .config import *
-from .exceptions import *
-from .__init__ import __version__
+from meraki.config import *
+from meraki.exceptions import *
+from meraki.__init__ import __version__
 
 
 def user_agent_extended(be_geo_id, caller):

@@ -5,7 +5,7 @@ import json
 import argparse
 import sys
 
-import meraki_v1
+import meraki
 
 import urllib.parse
 import platform
@@ -29,7 +29,7 @@ import platform
 
 def main(org_id, timespan):
     # Instantiate a Meraki dashboard API session
-    dashboard = meraki_v1.DashboardAPI(
+    dashboard = meraki.DashboardAPI(
         base_url='https://api.meraki.com/api/v1/',
         print_console=False,
         output_log=False,

@@ -2,24 +2,24 @@ from datetime import datetime
 import logging
 import os
 
-from .rest_session import *
-from .api.organizations import Organizations
-from .api.networks import Networks
-from .api.devices import Devices
-from .api.appliance import Appliance
-from .api.camera import Camera
-from .api.cellularGateway import CellularGateway
-from .api.insight import Insight
-from .api.sensor import Sensor
-from .api.sm import Sm
-from .api.switch import Switch
-from .api.wireless import Wireless
+from meraki.rest_session import *
+from meraki.api.organizations import Organizations
+from meraki.api.networks import Networks
+from meraki.api.devices import Devices
+from meraki.api.appliance import Appliance
+from meraki.api.camera import Camera
+from meraki.api.cellularGateway import CellularGateway
+from meraki.api.insight import Insight
+from meraki.api.sensor import Sensor
+from meraki.api.sm import Sm
+from meraki.api.switch import Switch
+from meraki.api.wireless import Wireless
 
 # Batch class imports
-from .api.batch import Batch
+from meraki.api.batch import Batch
 
 # Config import
-from .config import (
+from meraki.config import (
     API_KEY_ENVIRONMENT_VARIABLE,
     DEFAULT_BASE_URL,
     SINGLE_REQUEST_TIMEOUT,

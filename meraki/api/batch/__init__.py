@@ -1,14 +1,14 @@
-from .organizations import ActionBatchOrganizations
-from .networks import ActionBatchNetworks
-from .devices import ActionBatchDevices
-from .appliance import ActionBatchAppliance
-from .camera import ActionBatchCamera
-from .cellularGateway import ActionBatchCellularGateway
-from .insight import ActionBatchInsight
-from .sensor import ActionBatchSensor
-from .sm import ActionBatchSm
-from .switch import ActionBatchSwitch
-from .wireless import ActionBatchWireless
+from meraki.api.batch.organizations import ActionBatchOrganizations
+from meraki.api.batch.networks import ActionBatchNetworks
+from meraki.api.batch.devices import ActionBatchDevices
+from meraki.api.batch.appliance import ActionBatchAppliance
+from meraki.api.batch.camera import ActionBatchCamera
+from meraki.api.batch.cellularGateway import ActionBatchCellularGateway
+from meraki.api.batch.insight import ActionBatchInsight
+from meraki.api.batch.sensor import ActionBatchSensor
+from meraki.api.batch.sm import ActionBatchSm
+from meraki.api.batch.switch import ActionBatchSwitch
+from meraki.api.batch.wireless import ActionBatchWireless
 
 
 # Batch class

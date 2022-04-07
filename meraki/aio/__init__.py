@@ -2,24 +2,24 @@ import logging
 import os
 from datetime import datetime
 
-from .rest_session import *
-from .api.appliance import AsyncAppliance
-from .api.camera import AsyncCamera
-from .api.cellularGateway import AsyncCellularGateway
-from .api.devices import AsyncDevices
-from .api.insight import AsyncInsight
-from .api.networks import AsyncNetworks
-from .api.organizations import AsyncOrganizations
-from .api.sensor import AsyncSensor
-from .api.sm import AsyncSm
-from .api.switch import AsyncSwitch
-from .api.wireless import AsyncWireless
+from meraki.aio.rest_session import *
+from meraki.aio.api.appliance import AsyncAppliance
+from meraki.aio.api.camera import AsyncCamera
+from meraki.aio.api.cellularGateway import AsyncCellularGateway
+from meraki.aio.api.devices import AsyncDevices
+from meraki.aio.api.insight import AsyncInsight
+from meraki.aio.api.networks import AsyncNetworks
+from meraki.aio.api.organizations import AsyncOrganizations
+from meraki.aio.api.sensor import AsyncSensor
+from meraki.aio.api.sm import AsyncSm
+from meraki.aio.api.switch import AsyncSwitch
+from meraki.aio.api.wireless import AsyncWireless
 
 # Batch class imports
-from ..api.batch import Batch
+from meraki.api.batch import Batch
 
 # Config import
-from ..config import (
+from meraki.config import (
     API_KEY_ENVIRONMENT_VARIABLE,
     DEFAULT_BASE_URL,
     SINGLE_REQUEST_TIMEOUT,
