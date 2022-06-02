@@ -9,10 +9,10 @@ from datetime import datetime
 
 import aiohttp
 
-from ..__init__ import __version__
-from ..config import *
-from ..exceptions import *
-from ..rest_session import user_agent_extended
+from meraki.__init__ import __version__
+from meraki.config import *
+from meraki.exceptions import *
+from meraki.rest_session import user_agent_extended
 
 
 # Main module interface

@@ -8,10 +8,10 @@ import urllib.parse
 
 import aiohttp
 
-from ..config import *
-from ..exceptions import *
-from ..__init__ import __version__
-from ..rest_session import user_agent_extended
+from meraki_v0.config import *
+from meraki_v0.exceptions import *
+from meraki_v0.__init__ import __version__
+from meraki_v0.rest_session import user_agent_extended
 
 # Main module interface
 class AsyncRestSession:
