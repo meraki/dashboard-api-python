@@ -142,33 +142,6 @@ class ActionBatchOrganizations(object):
 
 
 
-    def deleteOrganizationAdaptivePolicyGroup(self, organizationId: str, groupId: str):
-        """
-        **Deletes the specified adaptive policy group and any associated policies and references**
-        https://developer.cisco.com/meraki/api-v1/#!delete-organization-adaptive-policy-group
-
-        - organizationId (string): (required)
-        - groupId (string): (required)
-        """
-
-        metadata = {
-            'tags': ['organizations', 'configure', 'adaptivePolicy', 'groups'],
-            'operation': 'deleteOrganizationAdaptivePolicyGroup'
-        }
-        resource = f'/organizations/{organizationId}/adaptivePolicy/groups/{groupId}'
-
-        action = {
-            "resource": resource,
-            "operation": "destroy",
-            "body": payload
-        }
-        return action
-        
-
-
-
-
-
     def updateOrganizationAdaptivePolicyGroup(self, organizationId: str, groupId: str, **kwargs):
         """
         **Updates an adaptive policy group**
@@ -195,6 +168,33 @@ class ActionBatchOrganizations(object):
         action = {
             "resource": resource,
             "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def deleteOrganizationAdaptivePolicyGroup(self, organizationId: str, groupId: str):
+        """
+        **Deletes the specified adaptive policy group and any associated policies and references**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-adaptive-policy-group
+
+        - organizationId (string): (required)
+        - groupId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'groups'],
+            'operation': 'deleteOrganizationAdaptivePolicyGroup'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/groups/{groupId}'
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
             "body": payload
         }
         return action

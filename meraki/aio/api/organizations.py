@@ -407,25 +407,6 @@ class AsyncOrganizations:
         
 
 
-    def deleteOrganizationAdaptivePolicyGroup(self, organizationId: str, groupId: str):
-        """
-        **Deletes the specified adaptive policy group and any associated policies and references**
-        https://developer.cisco.com/meraki/api-v1/#!delete-organization-adaptive-policy-group
-
-        - organizationId (string): (required)
-        - groupId (string): (required)
-        """
-
-        metadata = {
-            'tags': ['organizations', 'configure', 'adaptivePolicy', 'groups'],
-            'operation': 'deleteOrganizationAdaptivePolicyGroup'
-        }
-        resource = f'/organizations/{organizationId}/adaptivePolicy/groups/{groupId}'
-
-        return self._session.delete(metadata, resource)
-        
-
-
     def updateOrganizationAdaptivePolicyGroup(self, organizationId: str, groupId: str, **kwargs):
         """
         **Updates an adaptive policy group**
@@ -451,6 +432,25 @@ class AsyncOrganizations:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
+
+    def deleteOrganizationAdaptivePolicyGroup(self, organizationId: str, groupId: str):
+        """
+        **Deletes the specified adaptive policy group and any associated policies and references**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-adaptive-policy-group
+
+        - organizationId (string): (required)
+        - groupId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'adaptivePolicy', 'groups'],
+            'operation': 'deleteOrganizationAdaptivePolicyGroup'
+        }
+        resource = f'/organizations/{organizationId}/adaptivePolicy/groups/{groupId}'
+
+        return self._session.delete(metadata, resource)
         
 
 
@@ -868,9 +868,19 @@ class AsyncOrganizations:
         - method (string): Filter the results by the method of the API requests (must be 'GET', 'PUT', 'POST' or 'DELETE')
         - responseCode (integer): Filter the results by the response code of the API requests
         - sourceIp (string): Filter the results by the IP address of the originating API request
+        - userAgent (string): Filter the results by the user agent string of the API request
+        - version (integer): Filter the results by the API version of the API request
+        - operationIds (array): Filter the results by one or more operation IDs for the API request
         """
 
         kwargs.update(locals())
+
+        if 'method' in kwargs:
+            options = ['GET', 'PUT', 'POST', 'DELETE']
+            assert kwargs['method'] in options, f'''"method" cannot be "{kwargs['method']}", & must be set to one of: {options}'''
+        if 'version' in kwargs:
+            options = [0, 1]
+            assert kwargs['version'] in options, f'''"version" cannot be "{kwargs['version']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['organizations', 'monitor', 'apiRequests'],
@@ -878,8 +888,14 @@ class AsyncOrganizations:
         }
         resource = f'/organizations/{organizationId}/apiRequests'
 
-        query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'adminId', 'path', 'method', 'responseCode', 'sourceIp', ]
+        query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'adminId', 'path', 'method', 'responseCode', 'sourceIp', 'userAgent', 'version', 'operationIds', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['operationIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
         
@@ -943,6 +959,7 @@ class AsyncOrganizations:
     the section on Dashboard). Some properties in this object also accept custom HTML used to replace the section on
     Dashboard; see the documentation for each property to see the allowed values.
  Each property defaults to 'default or inherit' when not provided.
+        - customLogo (object): Properties describing the custom logo attached to the branding policy.
         """
 
         kwargs.update(locals())
@@ -953,7 +970,7 @@ class AsyncOrganizations:
         }
         resource = f'/organizations/{organizationId}/brandingPolicies'
 
-        body_params = ['name', 'enabled', 'adminSettings', 'helpSettings', ]
+        body_params = ['name', 'enabled', 'adminSettings', 'helpSettings', 'customLogo', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -1036,6 +1053,7 @@ class AsyncOrganizations:
     the section on Dashboard). Some properties in this object also accept custom HTML used to replace the section on
     Dashboard; see the documentation for each property to see the allowed values.
 
+        - customLogo (object): Properties describing the custom logo attached to the branding policy.
         """
 
         kwargs.update(locals())
@@ -1046,7 +1064,7 @@ class AsyncOrganizations:
         }
         resource = f'/organizations/{organizationId}/brandingPolicies/{brandingPolicyId}'
 
-        body_params = ['name', 'enabled', 'adminSettings', 'helpSettings', ]
+        body_params = ['name', 'enabled', 'adminSettings', 'helpSettings', 'customLogo', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1885,6 +1903,7 @@ class AsyncOrganizations:
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - configTemplateId (string): An optional parameter that is the ID of a config template. Will return all networks bound to that template.
+        - isBoundToConfigTemplate (boolean): An optional parameter to filter config template bound networks. If configTemplateId is set, this cannot be false.
         - tags (array): An optional parameter to filter networks by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below).
         - tagsFilterType (string): An optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return networks which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100000. Default is 1000.
@@ -1904,7 +1923,7 @@ class AsyncOrganizations:
         }
         resource = f'/organizations/{organizationId}/networks'
 
-        query_params = ['configTemplateId', 'tags', 'tagsFilterType', 'perPage', 'startingAfter', 'endingBefore', ]
+        query_params = ['configTemplateId', 'isBoundToConfigTemplate', 'tags', 'tagsFilterType', 'perPage', 'startingAfter', 'endingBefore', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['tags', ]

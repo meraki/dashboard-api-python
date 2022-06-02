@@ -952,6 +952,7 @@ class Wireless(object):
         - apBandSettings (object): Settings that will be enabled if selectionType is set to 'ap'.
         - twoFourGhzSettings (object): Settings related to 2.4Ghz band
         - fiveGhzSettings (object): Settings related to 5Ghz band
+        - transmission (object): Settings related to radio transmission.
         - perSsidSettings (object): Per-SSID radio settings by number.
         """
 
@@ -970,7 +971,7 @@ class Wireless(object):
         }
         resource = f'/networks/{networkId}/wireless/rfProfiles'
 
-        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', 'perSsidSettings', ]
+        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', 'transmission', 'perSsidSettings', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -991,6 +992,7 @@ class Wireless(object):
         - apBandSettings (object): Settings that will be enabled if selectionType is set to 'ap'.
         - twoFourGhzSettings (object): Settings related to 2.4Ghz band
         - fiveGhzSettings (object): Settings related to 5Ghz band
+        - transmission (object): Settings related to radio transmission.
         - perSsidSettings (object): Per-SSID radio settings by number.
         """
 
@@ -1009,7 +1011,7 @@ class Wireless(object):
         }
         resource = f'/networks/{networkId}/wireless/rfProfiles/{rfProfileId}'
 
-        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', 'perSsidSettings', ]
+        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', 'transmission', 'perSsidSettings', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)

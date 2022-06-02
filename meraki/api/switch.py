@@ -604,6 +604,7 @@ Cannot be applied to a port on a switch bound to profile.
         - accessPolicyType (string): Access Type of the policy. Automatically 'Hybrid authentication' when hostMode is 'Multi-Domain'.
         - increaseAccessSpeed (boolean): Enabling this option will make switches execute 802.1X and MAC-bypass authentication simultaneously so that clients authenticate faster. Only required when accessPolicyType is 'Hybrid Authentication.
         - guestVlanId (integer): ID for the guest VLAN allow unauthorized devices access to limited network resources
+        - dot1x (object): 802.1x Settings
         - voiceVlanClients (boolean): CDP/LLDP capable voice clients will be able to use this VLAN. Automatically true when hostMode is 'Multi-Domain'.
         - urlRedirectWalledGardenRanges (array): IP address ranges, in CIDR notation, to restrict access for clients to a specific set of IP addresses or hostnames prior to authentication
         """
@@ -623,7 +624,7 @@ Cannot be applied to a port on a switch bound to profile.
         }
         resource = f'/networks/{networkId}/switch/accessPolicies'
 
-        body_params = ['name', 'radiusServers', 'radius', 'radiusTestingEnabled', 'radiusCoaSupportEnabled', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusGroupAttribute', 'hostMode', 'accessPolicyType', 'increaseAccessSpeed', 'guestVlanId', 'voiceVlanClients', 'urlRedirectWalledGardenEnabled', 'urlRedirectWalledGardenRanges', ]
+        body_params = ['name', 'radiusServers', 'radius', 'radiusTestingEnabled', 'radiusCoaSupportEnabled', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusGroupAttribute', 'hostMode', 'accessPolicyType', 'increaseAccessSpeed', 'guestVlanId', 'dot1x', 'voiceVlanClients', 'urlRedirectWalledGardenEnabled', 'urlRedirectWalledGardenRanges', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -668,6 +669,7 @@ Cannot be applied to a port on a switch bound to profile.
         - accessPolicyType (string): Access Type of the policy. Automatically 'Hybrid authentication' when hostMode is 'Multi-Domain'.
         - increaseAccessSpeed (boolean): Enabling this option will make switches execute 802.1X and MAC-bypass authentication simultaneously so that clients authenticate faster. Only required when accessPolicyType is 'Hybrid Authentication.
         - guestVlanId (integer): ID for the guest VLAN allow unauthorized devices access to limited network resources
+        - dot1x (object): 802.1x Settings
         - voiceVlanClients (boolean): CDP/LLDP capable voice clients will be able to use this VLAN. Automatically true when hostMode is 'Multi-Domain'.
         - urlRedirectWalledGardenEnabled (boolean): Enable to restrict access for clients to a specific set of IP addresses or hostnames prior to authentication
         - urlRedirectWalledGardenRanges (array): IP address ranges, in CIDR notation, to restrict access for clients to a specific set of IP addresses or hostnames prior to authentication
@@ -688,7 +690,7 @@ Cannot be applied to a port on a switch bound to profile.
         }
         resource = f'/networks/{networkId}/switch/accessPolicies/{accessPolicyNumber}'
 
-        body_params = ['name', 'radiusServers', 'radius', 'radiusTestingEnabled', 'radiusCoaSupportEnabled', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusGroupAttribute', 'hostMode', 'accessPolicyType', 'increaseAccessSpeed', 'guestVlanId', 'voiceVlanClients', 'urlRedirectWalledGardenEnabled', 'urlRedirectWalledGardenRanges', ]
+        body_params = ['name', 'radiusServers', 'radius', 'radiusTestingEnabled', 'radiusCoaSupportEnabled', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusGroupAttribute', 'hostMode', 'accessPolicyType', 'increaseAccessSpeed', 'guestVlanId', 'dot1x', 'voiceVlanClients', 'urlRedirectWalledGardenEnabled', 'urlRedirectWalledGardenRanges', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -759,6 +761,36 @@ Cannot be applied to a port on a switch bound to profile.
         
 
 
+    def getNetworkSwitchDhcpV4ServersSeen(self, networkId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Return the network's DHCPv4 servers seen within the selected timeframe (default 1 day)**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-dhcp-v-4-servers-seen
+
+        - networkId (string): (required)
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['switch', 'configure', 'dhcp', 'v4', 'servers', 'seen'],
+            'operation': 'getNetworkSwitchDhcpV4ServersSeen'
+        }
+        resource = f'/networks/{networkId}/switch/dhcp/v4/servers/seen'
+
+        query_params = ['t0', 'timespan', 'perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
     def getNetworkSwitchDhcpServerPolicy(self, networkId: str):
         """
         **Return the DHCP server settings**
@@ -783,9 +815,11 @@ Cannot be applied to a port on a switch bound to profile.
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-dhcp-server-policy
 
         - networkId (string): (required)
+        - alerts (object): Alert settings for DHCP servers
         - defaultPolicy (string): 'allow' or 'block' new DHCP servers. Default value is 'allow'.
         - allowedServers (array): List the MAC addresses of DHCP servers to permit on the network when defaultPolicy is set to block. An empty array will clear the entries.
         - blockedServers (array): List the MAC addresses of DHCP servers to block on the network when defaultPolicy is set to allow. An empty array will clear the entries.
+        - arpInspection (object): Dynamic ARP Inspection settings
         """
 
         kwargs.update(locals())
@@ -800,10 +834,138 @@ Cannot be applied to a port on a switch bound to profile.
         }
         resource = f'/networks/{networkId}/switch/dhcpServerPolicy'
 
-        body_params = ['defaultPolicy', 'allowedServers', 'blockedServers', ]
+        body_params = ['alerts', 'defaultPolicy', 'allowedServers', 'blockedServers', 'arpInspection', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
+
+    def getNetworkSwitchDhcpServerPolicyArpInspectionTrustedServers(self, networkId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Return the list of servers trusted by Dynamic ARP Inspection on this network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-dhcp-server-policy-arp-inspection-trusted-servers
+
+        - networkId (string): (required)
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['switch', 'configure', 'dhcpServerPolicy', 'arpInspection', 'trustedServers'],
+            'operation': 'getNetworkSwitchDhcpServerPolicyArpInspectionTrustedServers'
+        }
+        resource = f'/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/trustedServers'
+
+        query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def createNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer(self, networkId: str, mac: str, vlan: int, ipv4: dict):
+        """
+        **Add a server to be trusted by Dynamic ARP Inspection on this network**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-switch-dhcp-server-policy-arp-inspection-trusted-server
+
+        - networkId (string): (required)
+        - mac (string): The mac address of the trusted server being added
+        - vlan (integer): The VLAN of the trusted server being added. It must be between 1 and 4094
+        - ipv4 (object): The IPv4 attributes of the trusted server being added
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['switch', 'configure', 'dhcpServerPolicy', 'arpInspection', 'trustedServers'],
+            'operation': 'createNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer'
+        }
+        resource = f'/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/trustedServers'
+
+        body_params = ['mac', 'vlan', 'ipv4', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def updateNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer(self, networkId: str, trustedServerId: str, **kwargs):
+        """
+        **Update a server that is trusted by Dynamic ARP Inspection on this network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-dhcp-server-policy-arp-inspection-trusted-server
+
+        - networkId (string): (required)
+        - trustedServerId (string): (required)
+        - mac (string): The updated mac address of the trusted server
+        - vlan (integer): The updated VLAN of the trusted server. It must be between 1 and 4094
+        - ipv4 (object): The updated IPv4 attributes of the trusted server
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['switch', 'configure', 'dhcpServerPolicy', 'arpInspection', 'trustedServers'],
+            'operation': 'updateNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer'
+        }
+        resource = f'/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/trustedServers/{trustedServerId}'
+
+        body_params = ['mac', 'vlan', 'ipv4', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def deleteNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer(self, networkId: str, trustedServerId: str):
+        """
+        **Remove a server from being trusted by Dynamic ARP Inspection on this network**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-dhcp-server-policy-arp-inspection-trusted-server
+
+        - networkId (string): (required)
+        - trustedServerId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['switch', 'configure', 'dhcpServerPolicy', 'arpInspection', 'trustedServers'],
+            'operation': 'deleteNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer'
+        }
+        resource = f'/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/trustedServers/{trustedServerId}'
+
+        return self._session.delete(metadata, resource)
+        
+
+
+    def getNetworkSwitchDhcpServerPolicyArpInspectionWarningsByDevice(self, networkId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Return the devices that have a Dynamic ARP Inspection warning and their warnings**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-dhcp-server-policy-arp-inspection-warnings-by-device
+
+        - networkId (string): (required)
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['switch', 'configure', 'dhcpServerPolicy', 'arpInspection', 'warnings', 'byDevice'],
+            'operation': 'getNetworkSwitchDhcpServerPolicyArpInspectionWarningsByDevice'
+        }
+        resource = f'/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/warnings/byDevice'
+
+        query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
         
 
 
@@ -2159,4 +2321,45 @@ Cannot be applied to a port on a switch bound to profile.
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
+
+    def getOrganizationSwitchPortsBySwitch(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **List the switchports in an organization by switch**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-ports-by-switch
+
+        - organizationId (string): (required)
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 50. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - configurationUpdatedAfter (string): Optional parameter to filter results by switches where the configuration has been updated after the given timestamp
+        - networkIds (array): Optional parameter to filter switchports by network.
+        - name (string): Optional parameter to filter switchports belonging to switches by name. All returned switches will have a name that contains the search term or is an exact match.
+        - mac (string): Optional parameter to filter switchports belonging to switches by MAC address. All returned switches will have a MAC address that contains the search term or is an exact match.
+        - serial (string): Optional parameter to filter switchports belonging to switches by serial number.  All returned switches will have a serial number that contains the search term or is an exact match.
+        - serials (array): Optional parameter to filter switchports belonging to switches with one or more serial numbers. All switchports returned belong to serial numbers of switches that are an exact match.
+        - macs (array): Optional parameter to filter switchports by one or more  MAC addresses belonging to devices. All switchports returned belong to MAC addresses of switches that are an exact match.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['switch', 'configure', 'ports', 'bySwitch'],
+            'operation': 'getOrganizationSwitchPortsBySwitch'
+        }
+        resource = f'/organizations/{organizationId}/switch/ports/bySwitch'
+
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'configurationUpdatedAfter', 'networkIds', 'name', 'mac', 'serial', 'serials', 'macs', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', 'serials', 'macs', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
         
