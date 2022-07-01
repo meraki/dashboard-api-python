@@ -15,15 +15,18 @@
         {% if assert_blocks|length > 0 %}
         {% for param, values in assert_blocks %}
         if '{{ param }}' in kwargs:
-        	options = {{ values }}
-        	assert kwargs['{{ param }}'] in options, f'''"{{ param }}" cannot be "{kwargs['{{ param }}']}", & must be set to one of: {options}'''
+            options = {{ values }}
+            assert kwargs['{{ param }}'] in options, f'''"{{ param }}" cannot be "{kwargs['{{ param }}']}", & must be set to one of: {options}'''
         {% endfor %}
 
         {% endif %}
         metadata = {
-        	'tags': {{ tags }},
-        	'operation': '{{ operation }}'
+            'tags': {{ tags }},
+            'operation': '{{ operation }}'
         }
+        {% for param in path_params %}
+        {{ param }} = urllib.parse.quote({{ param }}, safe='')
+        {% endfor %}
         resource = f'{{ resource }}'
 
         {% if query_params|length > 0 %}
@@ -34,9 +37,9 @@
         {% if array_params|length > 0 %}
         array_params = [{% for param in array_params %}'{{ param }}', {% endfor %}]
         for k, v in kwargs.items():
-        	if k.strip() in array_params:
-        		params[f'{k.strip()}[]'] = kwargs[f'{k}']
-        		params.pop(k.strip())
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
 
         {% endif %}
         {% if body_params|length > 0 %}

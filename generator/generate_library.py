@@ -126,7 +126,7 @@ def parse_params(operation, parameters, param_filters=[]):
 def generate_library(spec, version_number):
     # Supported scopes list will include organizations, networks, devices, and all product types.
     supported_scopes = ['organizations', 'networks', 'devices', 'appliance', 'camera', 'cellularGateway', 'insight',
-                        'sm', 'switch', 'wireless', 'sensor']
+                        'sm', 'switch', 'wireless', 'sensor', 'administered']
     # legacy scopes = ['organizations', 'networks', 'devices', 'appliance', 'camera', 'cellularGateway', 'insight',
     #                  'sm', 'switch', 'wireless']
     tags = spec['tags']
@@ -269,10 +269,11 @@ def generate_library(spec, version_number):
                             assert_blocks.append((p, values['enum']))
 
                     # Function body for GET endpoints
-                    query_params = array_params = body_params = {}
+                    query_params = array_params = body_params = path_params = {}
                     if method == 'get':
                         query_params = parse_params(operation, parameters, 'query')
                         array_params = parse_params(operation, parameters, 'array')
+                        path_params = parse_params(operation, parameters, 'path')
                         pagination_params = parse_params(operation, parameters, 'pagination')
                         if query_params or array_params:
                             if pagination_params:
@@ -288,6 +289,7 @@ def generate_library(spec, version_number):
                     # Function body for POST/PUT endpoints
                     elif method == 'post' or method == 'put':
                         body_params = parse_params(operation, parameters, 'body')
+                        path_params = parse_params(operation, parameters, 'path')
                         if body_params:
                             call_line = f'return self._session.{method}(metadata, resource, payload)'
                         else:
@@ -295,6 +297,7 @@ def generate_library(spec, version_number):
 
                     # Function body for DELETE endpoints
                     elif method == 'delete':
+                        path_params = parse_params(operation, parameters, 'path')
                         call_line = 'return self._session.delete(metadata, resource)'
 
                     # Add function to files
@@ -317,6 +320,7 @@ def generate_library(spec, version_number):
                                 query_params=query_params,
                                 array_params=array_params,
                                 body_params=body_params,
+                                path_params=path_params,
                                 call_line=call_line
                             )
                         )
@@ -336,6 +340,7 @@ def generate_library(spec, version_number):
                                 query_params=query_params,
                                 array_params=array_params,
                                 body_params=body_params,
+                                path_params=path_params,
                                 call_line=call_line
                             )
                         )
