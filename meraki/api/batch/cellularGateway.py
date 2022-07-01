@@ -1,3 +1,6 @@
+import urllib
+
+
 class ActionBatchCellularGateway(object):
     def __init__(self):
         super(ActionBatchCellularGateway, self).__init__()

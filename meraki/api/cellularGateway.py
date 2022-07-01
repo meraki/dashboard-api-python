@@ -1,3 +1,6 @@
+import urllib
+
+
 class CellularGateway(object):
     def __init__(self, session):
         super(CellularGateway, self).__init__()
@@ -17,6 +20,7 @@ class CellularGateway(object):
             'tags': ['cellularGateway', 'configure', 'lan'],
             'operation': 'getDeviceCellularGatewayLan'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/cellularGateway/lan'
 
         return self._session.get(metadata, resource)
@@ -39,6 +43,7 @@ class CellularGateway(object):
             'tags': ['cellularGateway', 'configure', 'lan'],
             'operation': 'updateDeviceCellularGatewayLan'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/cellularGateway/lan'
 
         body_params = ['reservedIpRanges', 'fixedIpAssignments', ]
@@ -60,6 +65,7 @@ class CellularGateway(object):
             'tags': ['cellularGateway', 'configure', 'portForwardingRules'],
             'operation': 'getDeviceCellularGatewayPortForwardingRules'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/cellularGateway/portForwardingRules'
 
         return self._session.get(metadata, resource)
@@ -81,6 +87,7 @@ class CellularGateway(object):
             'tags': ['cellularGateway', 'configure', 'portForwardingRules'],
             'operation': 'updateDeviceCellularGatewayPortForwardingRules'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/cellularGateway/portForwardingRules'
 
         body_params = ['rules', ]
@@ -102,6 +109,7 @@ class CellularGateway(object):
             'tags': ['cellularGateway', 'configure', 'connectivityMonitoringDestinations'],
             'operation': 'getNetworkCellularGatewayConnectivityMonitoringDestinations'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/cellularGateway/connectivityMonitoringDestinations'
 
         return self._session.get(metadata, resource)
@@ -123,6 +131,7 @@ class CellularGateway(object):
             'tags': ['cellularGateway', 'configure', 'connectivityMonitoringDestinations'],
             'operation': 'updateNetworkCellularGatewayConnectivityMonitoringDestinations'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/cellularGateway/connectivityMonitoringDestinations'
 
         body_params = ['destinations', ]
@@ -144,6 +153,7 @@ class CellularGateway(object):
             'tags': ['cellularGateway', 'configure', 'dhcp'],
             'operation': 'getNetworkCellularGatewayDhcp'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/cellularGateway/dhcp'
 
         return self._session.get(metadata, resource)
@@ -167,6 +177,7 @@ class CellularGateway(object):
             'tags': ['cellularGateway', 'configure', 'dhcp'],
             'operation': 'updateNetworkCellularGatewayDhcp'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/cellularGateway/dhcp'
 
         body_params = ['dhcpLeaseTime', 'dnsNameservers', 'dnsCustomNameservers', ]
@@ -188,6 +199,7 @@ class CellularGateway(object):
             'tags': ['cellularGateway', 'configure', 'subnetPool'],
             'operation': 'getNetworkCellularGatewaySubnetPool'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/cellularGateway/subnetPool'
 
         return self._session.get(metadata, resource)
@@ -210,6 +222,7 @@ class CellularGateway(object):
             'tags': ['cellularGateway', 'configure', 'subnetPool'],
             'operation': 'updateNetworkCellularGatewaySubnetPool'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/cellularGateway/subnetPool'
 
         body_params = ['mask', 'cidr', ]
@@ -231,6 +244,7 @@ class CellularGateway(object):
             'tags': ['cellularGateway', 'configure', 'uplink'],
             'operation': 'getNetworkCellularGatewayUplink'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/cellularGateway/uplink'
 
         return self._session.get(metadata, resource)
@@ -252,6 +266,7 @@ class CellularGateway(object):
             'tags': ['cellularGateway', 'configure', 'uplink'],
             'operation': 'updateNetworkCellularGatewayUplink'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/cellularGateway/uplink'
 
         body_params = ['bandwidthLimits', ]
@@ -283,6 +298,7 @@ class CellularGateway(object):
             'tags': ['cellularGateway', 'monitor', 'uplink', 'statuses'],
             'operation': 'getOrganizationCellularGatewayUplinkStatuses'
         }
+        organizationId = urllib.parse.quote(organizationId, safe='')
         resource = f'/organizations/{organizationId}/cellularGateway/uplink/statuses'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'serials', 'iccids', ]

@@ -1,3 +1,6 @@
+import urllib
+
+
 class Camera(object):
     def __init__(self, session):
         super(Camera, self).__init__()
@@ -17,6 +20,7 @@ class Camera(object):
             'tags': ['camera', 'monitor', 'analytics', 'live'],
             'operation': 'getDeviceCameraAnalyticsLive'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/camera/analytics/live'
 
         return self._session.get(metadata, resource)
@@ -45,6 +49,7 @@ class Camera(object):
             'tags': ['camera', 'monitor', 'analytics', 'overview'],
             'operation': 'getDeviceCameraAnalyticsOverview'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/camera/analytics/overview'
 
         query_params = ['t0', 't1', 'timespan', 'objectType', ]
@@ -73,6 +78,7 @@ class Camera(object):
             'tags': ['camera', 'monitor', 'analytics', 'recent'],
             'operation': 'getDeviceCameraAnalyticsRecent'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/camera/analytics/recent'
 
         query_params = ['objectType', ]
@@ -94,6 +100,7 @@ class Camera(object):
             'tags': ['camera', 'monitor', 'analytics', 'zones'],
             'operation': 'getDeviceCameraAnalyticsZones'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/camera/analytics/zones'
 
         return self._session.get(metadata, resource)
@@ -124,6 +131,8 @@ class Camera(object):
             'tags': ['camera', 'monitor', 'analytics', 'zones', 'history'],
             'operation': 'getDeviceCameraAnalyticsZoneHistory'
         }
+        serial = urllib.parse.quote(serial, safe='')
+        zoneId = urllib.parse.quote(zoneId, safe='')
         resource = f'/devices/{serial}/camera/analytics/zones/{zoneId}/history'
 
         query_params = ['t0', 't1', 'timespan', 'resolution', 'objectType', ]
@@ -145,6 +154,7 @@ class Camera(object):
             'tags': ['camera', 'configure', 'customAnalytics'],
             'operation': 'getDeviceCameraCustomAnalytics'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/camera/customAnalytics'
 
         return self._session.get(metadata, resource)
@@ -168,6 +178,7 @@ class Camera(object):
             'tags': ['camera', 'configure', 'customAnalytics'],
             'operation': 'updateDeviceCameraCustomAnalytics'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/camera/customAnalytics'
 
         body_params = ['enabled', 'artifactId', 'parameters', ]
@@ -193,6 +204,7 @@ class Camera(object):
             'tags': ['camera', 'monitor'],
             'operation': 'generateDeviceCameraSnapshot'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/camera/generateSnapshot'
 
         body_params = ['timestamp', 'fullframe', ]
@@ -214,6 +226,7 @@ class Camera(object):
             'tags': ['camera', 'configure', 'qualityAndRetention'],
             'operation': 'getDeviceCameraQualityAndRetention'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/camera/qualityAndRetention'
 
         return self._session.get(metadata, resource)
@@ -251,6 +264,7 @@ class Camera(object):
             'tags': ['camera', 'configure', 'qualityAndRetention'],
             'operation': 'updateDeviceCameraQualityAndRetention'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/camera/qualityAndRetention'
 
         body_params = ['profileId', 'motionBasedRetentionEnabled', 'audioRecordingEnabled', 'restrictedBandwidthModeEnabled', 'quality', 'resolution', 'motionDetectorVersion', ]
@@ -272,6 +286,7 @@ class Camera(object):
             'tags': ['camera', 'configure', 'sense'],
             'operation': 'getDeviceCameraSense'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/camera/sense'
 
         return self._session.get(metadata, resource)
@@ -296,6 +311,7 @@ class Camera(object):
             'tags': ['camera', 'configure', 'sense'],
             'operation': 'updateDeviceCameraSense'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/camera/sense'
 
         body_params = ['senseEnabled', 'mqttBrokerId', 'audioDetection', 'detectionModelId', ]
@@ -317,6 +333,7 @@ class Camera(object):
             'tags': ['camera', 'configure', 'sense', 'objectDetectionModels'],
             'operation': 'getDeviceCameraSenseObjectDetectionModels'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/camera/sense/objectDetectionModels'
 
         return self._session.get(metadata, resource)
@@ -335,6 +352,7 @@ class Camera(object):
             'tags': ['camera', 'configure', 'video', 'settings'],
             'operation': 'getDeviceCameraVideoSettings'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/camera/video/settings'
 
         return self._session.get(metadata, resource)
@@ -356,6 +374,7 @@ class Camera(object):
             'tags': ['camera', 'configure', 'video', 'settings'],
             'operation': 'updateDeviceCameraVideoSettings'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/camera/video/settings'
 
         body_params = ['externalRtspEnabled', ]
@@ -380,6 +399,7 @@ class Camera(object):
             'tags': ['camera', 'configure', 'videoLink'],
             'operation': 'getDeviceCameraVideoLink'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/camera/videoLink'
 
         query_params = ['timestamp', ]
@@ -401,6 +421,7 @@ class Camera(object):
             'tags': ['camera', 'configure', 'wirelessProfiles'],
             'operation': 'getDeviceCameraWirelessProfiles'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/camera/wirelessProfiles'
 
         return self._session.get(metadata, resource)
@@ -422,6 +443,7 @@ class Camera(object):
             'tags': ['camera', 'configure', 'wirelessProfiles'],
             'operation': 'updateDeviceCameraWirelessProfiles'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/camera/wirelessProfiles'
 
         body_params = ['ids', ]
@@ -443,6 +465,7 @@ class Camera(object):
             'tags': ['camera', 'configure', 'qualityRetentionProfiles'],
             'operation': 'getNetworkCameraQualityRetentionProfiles'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/camera/qualityRetentionProfiles'
 
         return self._session.get(metadata, resource)
@@ -472,6 +495,7 @@ class Camera(object):
             'tags': ['camera', 'configure', 'qualityRetentionProfiles'],
             'operation': 'createNetworkCameraQualityRetentionProfile'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/camera/qualityRetentionProfiles'
 
         body_params = ['name', 'motionBasedRetentionEnabled', 'restrictedBandwidthModeEnabled', 'audioRecordingEnabled', 'cloudArchiveEnabled', 'motionDetectorVersion', 'scheduleId', 'maxRetentionDays', 'videoSettings', ]
@@ -494,6 +518,8 @@ class Camera(object):
             'tags': ['camera', 'configure', 'qualityRetentionProfiles'],
             'operation': 'getNetworkCameraQualityRetentionProfile'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        qualityRetentionProfileId = urllib.parse.quote(qualityRetentionProfileId, safe='')
         resource = f'/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}'
 
         return self._session.get(metadata, resource)
@@ -524,6 +550,8 @@ class Camera(object):
             'tags': ['camera', 'configure', 'qualityRetentionProfiles'],
             'operation': 'updateNetworkCameraQualityRetentionProfile'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        qualityRetentionProfileId = urllib.parse.quote(qualityRetentionProfileId, safe='')
         resource = f'/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}'
 
         body_params = ['name', 'motionBasedRetentionEnabled', 'restrictedBandwidthModeEnabled', 'audioRecordingEnabled', 'cloudArchiveEnabled', 'motionDetectorVersion', 'scheduleId', 'maxRetentionDays', 'videoSettings', ]
@@ -546,6 +574,8 @@ class Camera(object):
             'tags': ['camera', 'configure', 'qualityRetentionProfiles'],
             'operation': 'deleteNetworkCameraQualityRetentionProfile'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        qualityRetentionProfileId = urllib.parse.quote(qualityRetentionProfileId, safe='')
         resource = f'/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}'
 
         return self._session.delete(metadata, resource)
@@ -564,6 +594,7 @@ class Camera(object):
             'tags': ['camera', 'configure', 'schedules'],
             'operation': 'getNetworkCameraSchedules'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/camera/schedules'
 
         return self._session.get(metadata, resource)
@@ -587,6 +618,7 @@ class Camera(object):
             'tags': ['camera', 'configure', 'wirelessProfiles'],
             'operation': 'createNetworkCameraWirelessProfile'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/camera/wirelessProfiles'
 
         body_params = ['name', 'ssid', 'identity', ]
@@ -608,6 +640,7 @@ class Camera(object):
             'tags': ['camera', 'configure', 'wirelessProfiles'],
             'operation': 'getNetworkCameraWirelessProfiles'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/camera/wirelessProfiles'
 
         return self._session.get(metadata, resource)
@@ -627,6 +660,8 @@ class Camera(object):
             'tags': ['camera', 'configure', 'wirelessProfiles'],
             'operation': 'getNetworkCameraWirelessProfile'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        wirelessProfileId = urllib.parse.quote(wirelessProfileId, safe='')
         resource = f'/networks/{networkId}/camera/wirelessProfiles/{wirelessProfileId}'
 
         return self._session.get(metadata, resource)
@@ -651,6 +686,8 @@ class Camera(object):
             'tags': ['camera', 'configure', 'wirelessProfiles'],
             'operation': 'updateNetworkCameraWirelessProfile'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        wirelessProfileId = urllib.parse.quote(wirelessProfileId, safe='')
         resource = f'/networks/{networkId}/camera/wirelessProfiles/{wirelessProfileId}'
 
         body_params = ['name', 'ssid', 'identity', ]
@@ -673,6 +710,8 @@ class Camera(object):
             'tags': ['camera', 'configure', 'wirelessProfiles'],
             'operation': 'deleteNetworkCameraWirelessProfile'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        wirelessProfileId = urllib.parse.quote(wirelessProfileId, safe='')
         resource = f'/networks/{networkId}/camera/wirelessProfiles/{wirelessProfileId}'
 
         return self._session.delete(metadata, resource)
@@ -691,6 +730,7 @@ class Camera(object):
             'tags': ['camera', 'configure', 'customAnalytics', 'artifacts'],
             'operation': 'getOrganizationCameraCustomAnalyticsArtifacts'
         }
+        organizationId = urllib.parse.quote(organizationId, safe='')
         resource = f'/organizations/{organizationId}/camera/customAnalytics/artifacts'
 
         return self._session.get(metadata, resource)
@@ -712,6 +752,7 @@ class Camera(object):
             'tags': ['camera', 'configure', 'customAnalytics', 'artifacts'],
             'operation': 'createOrganizationCameraCustomAnalyticsArtifact'
         }
+        organizationId = urllib.parse.quote(organizationId, safe='')
         resource = f'/organizations/{organizationId}/camera/customAnalytics/artifacts'
 
         body_params = ['name', ]
@@ -734,6 +775,8 @@ class Camera(object):
             'tags': ['camera', 'configure', 'customAnalytics', 'artifacts'],
             'operation': 'getOrganizationCameraCustomAnalyticsArtifact'
         }
+        organizationId = urllib.parse.quote(organizationId, safe='')
+        artifactId = urllib.parse.quote(artifactId, safe='')
         resource = f'/organizations/{organizationId}/camera/customAnalytics/artifacts/{artifactId}'
 
         return self._session.get(metadata, resource)
@@ -753,6 +796,8 @@ class Camera(object):
             'tags': ['camera', 'configure', 'customAnalytics', 'artifacts'],
             'operation': 'deleteOrganizationCameraCustomAnalyticsArtifact'
         }
+        organizationId = urllib.parse.quote(organizationId, safe='')
+        artifactId = urllib.parse.quote(artifactId, safe='')
         resource = f'/organizations/{organizationId}/camera/customAnalytics/artifacts/{artifactId}'
 
         return self._session.delete(metadata, resource)
@@ -775,6 +820,7 @@ class Camera(object):
             'tags': ['camera', 'configure', 'onboarding', 'statuses'],
             'operation': 'getOrganizationCameraOnboardingStatuses'
         }
+        organizationId = urllib.parse.quote(organizationId, safe='')
         resource = f'/organizations/{organizationId}/camera/onboarding/statuses'
 
         query_params = ['serials', 'networkIds', ]
@@ -806,6 +852,7 @@ class Camera(object):
             'tags': ['camera', 'configure', 'onboarding', 'statuses'],
             'operation': 'updateOrganizationCameraOnboardingStatuses'
         }
+        organizationId = urllib.parse.quote(organizationId, safe='')
         resource = f'/organizations/{organizationId}/camera/onboarding/statuses'
 
         body_params = ['serial', 'wirelessCredentialsSent', ]

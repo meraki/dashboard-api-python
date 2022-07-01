@@ -1,3 +1,6 @@
+import urllib
+
+
 class ActionBatchNetworks(object):
     def __init__(self):
         super(ActionBatchNetworks, self).__init__()
@@ -487,18 +490,19 @@ class ActionBatchNetworks(object):
 
 
 
-    def createNetworkMerakiAuthUser(self, networkId: str, email: str, name: str, password: str, authorizations: list, **kwargs):
+    def createNetworkMerakiAuthUser(self, networkId: str, email: str, authorizations: list, **kwargs):
         """
         **Authorize a user configured with Meraki Authentication for a network (currently supports 802.1X, splash guest, and client VPN users, and currently, organizations have a 50,000 user cap)**
         https://developer.cisco.com/meraki/api-v1/#!create-network-meraki-auth-user
 
         - networkId (string): (required)
         - email (string): Email address of the user
-        - name (string): Name of the user
-        - password (string): The password for this user account
         - authorizations (array): Authorization zones and expiration dates for the user.
+        - name (string): Name of the user. Only required If the user is not a Dashboard administrator.
+        - password (string): The password for this user account. Only required If the user is not a Dashboard administrator.
         - accountType (string): Authorization type for user. Can be 'Guest' or '802.1X' for wireless networks, or 'Client VPN' for wired networks. Defaults to '802.1X'.
         - emailPasswordToUser (boolean): Whether or not Meraki should email the password to user. Default is false.
+        - isAdmin (boolean): Whether or not the user is a Dashboard administrator.
         """
 
         kwargs.update(locals())
@@ -513,7 +517,7 @@ class ActionBatchNetworks(object):
         }
         resource = f'/networks/{networkId}/merakiAuthUsers'
 
-        body_params = ['email', 'name', 'password', 'accountType', 'emailPasswordToUser', 'authorizations', ]
+        body_params = ['email', 'name', 'password', 'accountType', 'emailPasswordToUser', 'isAdmin', 'authorizations', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -561,8 +565,8 @@ class ActionBatchNetworks(object):
 
         - networkId (string): (required)
         - merakiAuthUserId (string): (required)
-        - name (string): Name of the user
-        - password (string): The password for this user account
+        - name (string): Name of the user. Only allowed If the user is not Dashboard administrator.
+        - password (string): The password for this user account. Only allowed If the user is not Dashboard administrator.
         - emailPasswordToUser (boolean): Whether or not Meraki should email the password to user. Default is false.
         - authorizations (array): Authorization zones and expiration dates for the user.
         """

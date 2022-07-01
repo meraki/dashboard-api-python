@@ -1,3 +1,6 @@
+import urllib
+
+
 class Switch(object):
     def __init__(self, session):
         super(Switch, self).__init__()
@@ -17,6 +20,7 @@ class Switch(object):
             'tags': ['switch', 'configure', 'ports'],
             'operation': 'getDeviceSwitchPorts'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/switch/ports'
 
         return self._session.get(metadata, resource)
@@ -38,6 +42,7 @@ class Switch(object):
             'tags': ['switch', 'liveTools', 'ports'],
             'operation': 'cycleDeviceSwitchPorts'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/switch/ports/cycle'
 
         body_params = ['ports', ]
@@ -63,6 +68,7 @@ class Switch(object):
             'tags': ['switch', 'monitor', 'ports', 'statuses'],
             'operation': 'getDeviceSwitchPortsStatuses'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/switch/ports/statuses'
 
         query_params = ['t0', 'timespan', ]
@@ -88,6 +94,7 @@ class Switch(object):
             'tags': ['switch', 'monitor', 'ports', 'statuses', 'packets'],
             'operation': 'getDeviceSwitchPortsStatusesPackets'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/switch/ports/statuses/packets'
 
         query_params = ['t0', 'timespan', ]
@@ -110,6 +117,8 @@ class Switch(object):
             'tags': ['switch', 'configure', 'ports'],
             'operation': 'getDeviceSwitchPort'
         }
+        serial = urllib.parse.quote(serial, safe='')
+        portId = urllib.parse.quote(portId, safe='')
         resource = f'/devices/{serial}/switch/ports/{portId}'
 
         return self._session.get(metadata, resource)
@@ -169,6 +178,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'ports'],
             'operation': 'updateDeviceSwitchPort'
         }
+        serial = urllib.parse.quote(serial, safe='')
+        portId = urllib.parse.quote(portId, safe='')
         resource = f'/devices/{serial}/switch/ports/{portId}'
 
         body_params = ['name', 'tags', 'enabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'poeEnabled', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', 'adaptivePolicyGroupId', 'peerSgtCapable', 'flexibleStackingEnabled', ]
@@ -190,24 +201,25 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'routing', 'interfaces'],
             'operation': 'getDeviceSwitchRoutingInterfaces'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/switch/routing/interfaces'
 
         return self._session.get(metadata, resource)
         
 
 
-    def createDeviceSwitchRoutingInterface(self, serial: str, name: str, vlanId: int, **kwargs):
+    def createDeviceSwitchRoutingInterface(self, serial: str, **kwargs):
         """
         **Create a layer 3 interface for a switch**
         https://developer.cisco.com/meraki/api-v1/#!create-device-switch-routing-interface
 
         - serial (string): (required)
         - name (string): A friendly name or description for the interface or VLAN.
-        - vlanId (integer): The VLAN this routed interface is on. VLAN must be between 1 and 4094.
         - subnet (string): The network that this routed interface is on, in CIDR notation (ex. 10.1.1.0/24).
-        - interfaceIp (string): The IP address this switch will use for layer 3 routing on this VLAN or subnet. This cannot be the same as the switch's management IP.
-        - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are, 'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
-        - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route. This IP address must exist in a subnet with a routed interface.
+        - interfaceIp (string): The IP address this switch will use for layer 3 routing on this VLAN or subnet. This cannot be the same         as the switch's management IP.
+        - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
+        - vlanId (integer): The VLAN this routed interface is on. VLAN must be between 1 and 4094.
+        - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a routed interface. Required if this is the first IPv4 interface.
         - ospfSettings (object): The OSPF routing settings of the interface.
         - ipv6 (object): The IPv6 settings of the interface.
         """
@@ -222,6 +234,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'routing', 'interfaces'],
             'operation': 'createDeviceSwitchRoutingInterface'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/switch/routing/interfaces'
 
         body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ipv6', ]
@@ -244,6 +257,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'routing', 'interfaces'],
             'operation': 'getDeviceSwitchRoutingInterface'
         }
+        serial = urllib.parse.quote(serial, safe='')
+        interfaceId = urllib.parse.quote(interfaceId, safe='')
         resource = f'/devices/{serial}/switch/routing/interfaces/{interfaceId}'
 
         return self._session.get(metadata, resource)
@@ -259,10 +274,10 @@ Cannot be applied to a port on a switch bound to profile.
         - interfaceId (string): (required)
         - name (string): A friendly name or description for the interface or VLAN.
         - subnet (string): The network that this routed interface is on, in CIDR notation (ex. 10.1.1.0/24).
-        - interfaceIp (string): The IP address this switch will use for layer 3 routing on this VLAN or subnet. This cannot be the same as the switch's management IP.
-        - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are, 'disabled', 'enabled' or 'IGMP snooping querier'.
+        - interfaceIp (string): The IP address this switch will use for layer 3 routing on this VLAN or subnet. This cannot be the same         as the switch's management IP.
+        - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
         - vlanId (integer): The VLAN this routed interface is on. VLAN must be between 1 and 4094.
-        - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route. This IP address must exist in a subnet with a routed interface.
+        - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a routed interface. Required if this is the first IPv4 interface.
         - ospfSettings (object): The OSPF routing settings of the interface.
         - ipv6 (object): The IPv6 settings of the interface.
         """
@@ -277,6 +292,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'routing', 'interfaces'],
             'operation': 'updateDeviceSwitchRoutingInterface'
         }
+        serial = urllib.parse.quote(serial, safe='')
+        interfaceId = urllib.parse.quote(interfaceId, safe='')
         resource = f'/devices/{serial}/switch/routing/interfaces/{interfaceId}'
 
         body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ipv6', ]
@@ -299,6 +316,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'routing', 'interfaces'],
             'operation': 'deleteDeviceSwitchRoutingInterface'
         }
+        serial = urllib.parse.quote(serial, safe='')
+        interfaceId = urllib.parse.quote(interfaceId, safe='')
         resource = f'/devices/{serial}/switch/routing/interfaces/{interfaceId}'
 
         return self._session.delete(metadata, resource)
@@ -318,6 +337,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'routing', 'interfaces', 'dhcp'],
             'operation': 'getDeviceSwitchRoutingInterfaceDhcp'
         }
+        serial = urllib.parse.quote(serial, safe='')
+        interfaceId = urllib.parse.quote(interfaceId, safe='')
         resource = f'/devices/{serial}/switch/routing/interfaces/{interfaceId}/dhcp'
 
         return self._session.get(metadata, resource)
@@ -360,6 +381,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'routing', 'interfaces', 'dhcp'],
             'operation': 'updateDeviceSwitchRoutingInterfaceDhcp'
         }
+        serial = urllib.parse.quote(serial, safe='')
+        interfaceId = urllib.parse.quote(interfaceId, safe='')
         resource = f'/devices/{serial}/switch/routing/interfaces/{interfaceId}/dhcp'
 
         body_params = ['dhcpMode', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dnsNameserversOption', 'dnsCustomNameservers', 'bootOptionsEnabled', 'bootNextServer', 'bootFileName', 'dhcpOptions', 'reservedIpRanges', 'fixedIpAssignments', ]
@@ -381,6 +404,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'routing', 'staticRoutes'],
             'operation': 'getDeviceSwitchRoutingStaticRoutes'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/switch/routing/staticRoutes'
 
         return self._session.get(metadata, resource)
@@ -406,6 +430,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'routing', 'staticRoutes'],
             'operation': 'createDeviceSwitchRoutingStaticRoute'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/switch/routing/staticRoutes'
 
         body_params = ['name', 'subnet', 'nextHopIp', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', ]
@@ -428,6 +453,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'routing', 'staticRoutes'],
             'operation': 'getDeviceSwitchRoutingStaticRoute'
         }
+        serial = urllib.parse.quote(serial, safe='')
+        staticRouteId = urllib.parse.quote(staticRouteId, safe='')
         resource = f'/devices/{serial}/switch/routing/staticRoutes/{staticRouteId}'
 
         return self._session.get(metadata, resource)
@@ -454,6 +481,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'routing', 'staticRoutes'],
             'operation': 'updateDeviceSwitchRoutingStaticRoute'
         }
+        serial = urllib.parse.quote(serial, safe='')
+        staticRouteId = urllib.parse.quote(staticRouteId, safe='')
         resource = f'/devices/{serial}/switch/routing/staticRoutes/{staticRouteId}'
 
         body_params = ['name', 'subnet', 'nextHopIp', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', ]
@@ -476,6 +505,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'routing', 'staticRoutes'],
             'operation': 'deleteDeviceSwitchRoutingStaticRoute'
         }
+        serial = urllib.parse.quote(serial, safe='')
+        staticRouteId = urllib.parse.quote(staticRouteId, safe='')
         resource = f'/devices/{serial}/switch/routing/staticRoutes/{staticRouteId}'
 
         return self._session.delete(metadata, resource)
@@ -494,6 +525,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'warmSpare'],
             'operation': 'getDeviceSwitchWarmSpare'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/switch/warmSpare'
 
         return self._session.get(metadata, resource)
@@ -516,6 +548,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'warmSpare'],
             'operation': 'updateDeviceSwitchWarmSpare'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/switch/warmSpare'
 
         body_params = ['enabled', 'spareSerial', ]
@@ -537,6 +570,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'accessControlLists'],
             'operation': 'getNetworkSwitchAccessControlLists'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/accessControlLists'
 
         return self._session.get(metadata, resource)
@@ -558,6 +592,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'accessControlLists'],
             'operation': 'updateNetworkSwitchAccessControlLists'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/accessControlLists'
 
         body_params = ['rules', ]
@@ -579,6 +614,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'accessPolicies'],
             'operation': 'getNetworkSwitchAccessPolicies'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/accessPolicies'
 
         return self._session.get(metadata, resource)
@@ -622,6 +658,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'accessPolicies'],
             'operation': 'createNetworkSwitchAccessPolicy'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/accessPolicies'
 
         body_params = ['name', 'radiusServers', 'radius', 'radiusTestingEnabled', 'radiusCoaSupportEnabled', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusGroupAttribute', 'hostMode', 'accessPolicyType', 'increaseAccessSpeed', 'guestVlanId', 'dot1x', 'voiceVlanClients', 'urlRedirectWalledGardenEnabled', 'urlRedirectWalledGardenRanges', ]
@@ -644,6 +681,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'accessPolicies'],
             'operation': 'getNetworkSwitchAccessPolicy'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        accessPolicyNumber = urllib.parse.quote(accessPolicyNumber, safe='')
         resource = f'/networks/{networkId}/switch/accessPolicies/{accessPolicyNumber}'
 
         return self._session.get(metadata, resource)
@@ -664,7 +703,7 @@ Cannot be applied to a port on a switch bound to profile.
         - radiusCoaSupportEnabled (boolean): Change of authentication for RADIUS re-authentication and disconnection
         - radiusAccountingEnabled (boolean): Enable to send start, interim-update and stop messages to a configured RADIUS accounting server for tracking connected clients
         - radiusAccountingServers (array): List of RADIUS accounting servers to require connecting devices to authenticate against before granting network access
-        - radiusGroupAttribute (string): Can be either `""`, which means `None` on Dashboard, or `"11"`, which means `Filter-Id` on Dashboard and will use Group Policy ACLs when supported (firmware 14+)
+        - radiusGroupAttribute (string): Acceptable values are `""` for None, or `"11"` for Group Policies ACL
         - hostMode (string): Choose the Host Mode for the access policy.
         - accessPolicyType (string): Access Type of the policy. Automatically 'Hybrid authentication' when hostMode is 'Multi-Domain'.
         - increaseAccessSpeed (boolean): Enabling this option will make switches execute 802.1X and MAC-bypass authentication simultaneously so that clients authenticate faster. Only required when accessPolicyType is 'Hybrid Authentication.
@@ -688,6 +727,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'accessPolicies'],
             'operation': 'updateNetworkSwitchAccessPolicy'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        accessPolicyNumber = urllib.parse.quote(accessPolicyNumber, safe='')
         resource = f'/networks/{networkId}/switch/accessPolicies/{accessPolicyNumber}'
 
         body_params = ['name', 'radiusServers', 'radius', 'radiusTestingEnabled', 'radiusCoaSupportEnabled', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusGroupAttribute', 'hostMode', 'accessPolicyType', 'increaseAccessSpeed', 'guestVlanId', 'dot1x', 'voiceVlanClients', 'urlRedirectWalledGardenEnabled', 'urlRedirectWalledGardenRanges', ]
@@ -710,6 +751,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'accessPolicies'],
             'operation': 'deleteNetworkSwitchAccessPolicy'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        accessPolicyNumber = urllib.parse.quote(accessPolicyNumber, safe='')
         resource = f'/networks/{networkId}/switch/accessPolicies/{accessPolicyNumber}'
 
         return self._session.delete(metadata, resource)
@@ -728,6 +771,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'alternateManagementInterface'],
             'operation': 'getNetworkSwitchAlternateManagementInterface'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/alternateManagementInterface'
 
         return self._session.get(metadata, resource)
@@ -752,6 +796,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'alternateManagementInterface'],
             'operation': 'updateNetworkSwitchAlternateManagementInterface'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/alternateManagementInterface'
 
         body_params = ['enabled', 'vlanId', 'protocols', 'switches', ]
@@ -782,6 +827,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'dhcp', 'v4', 'servers', 'seen'],
             'operation': 'getNetworkSwitchDhcpV4ServersSeen'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/dhcp/v4/servers/seen'
 
         query_params = ['t0', 'timespan', 'perPage', 'startingAfter', 'endingBefore', ]
@@ -803,6 +849,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'dhcpServerPolicy'],
             'operation': 'getNetworkSwitchDhcpServerPolicy'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/dhcpServerPolicy'
 
         return self._session.get(metadata, resource)
@@ -832,6 +879,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'dhcpServerPolicy'],
             'operation': 'updateNetworkSwitchDhcpServerPolicy'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/dhcpServerPolicy'
 
         body_params = ['alerts', 'defaultPolicy', 'allowedServers', 'blockedServers', 'arpInspection', ]
@@ -860,6 +908,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'dhcpServerPolicy', 'arpInspection', 'trustedServers'],
             'operation': 'getNetworkSwitchDhcpServerPolicyArpInspectionTrustedServers'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/trustedServers'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', ]
@@ -886,6 +935,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'dhcpServerPolicy', 'arpInspection', 'trustedServers'],
             'operation': 'createNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/trustedServers'
 
         body_params = ['mac', 'vlan', 'ipv4', ]
@@ -913,6 +963,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'dhcpServerPolicy', 'arpInspection', 'trustedServers'],
             'operation': 'updateNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        trustedServerId = urllib.parse.quote(trustedServerId, safe='')
         resource = f'/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/trustedServers/{trustedServerId}'
 
         body_params = ['mac', 'vlan', 'ipv4', ]
@@ -935,6 +987,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'dhcpServerPolicy', 'arpInspection', 'trustedServers'],
             'operation': 'deleteNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        trustedServerId = urllib.parse.quote(trustedServerId, safe='')
         resource = f'/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/trustedServers/{trustedServerId}'
 
         return self._session.delete(metadata, resource)
@@ -960,6 +1014,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'dhcpServerPolicy', 'arpInspection', 'warnings', 'byDevice'],
             'operation': 'getNetworkSwitchDhcpServerPolicyArpInspectionWarningsByDevice'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/warnings/byDevice'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', ]
@@ -981,6 +1036,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'dscpToCosMappings'],
             'operation': 'getNetworkSwitchDscpToCosMappings'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/dscpToCosMappings'
 
         return self._session.get(metadata, resource)
@@ -1002,6 +1058,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'dscpToCosMappings'],
             'operation': 'updateNetworkSwitchDscpToCosMappings'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/dscpToCosMappings'
 
         body_params = ['mappings', ]
@@ -1023,6 +1080,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'linkAggregations'],
             'operation': 'getNetworkSwitchLinkAggregations'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/linkAggregations'
 
         return self._session.get(metadata, resource)
@@ -1045,6 +1103,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'linkAggregations'],
             'operation': 'createNetworkSwitchLinkAggregation'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/linkAggregations'
 
         body_params = ['switchPorts', 'switchProfilePorts', ]
@@ -1071,6 +1130,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'linkAggregations'],
             'operation': 'updateNetworkSwitchLinkAggregation'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        linkAggregationId = urllib.parse.quote(linkAggregationId, safe='')
         resource = f'/networks/{networkId}/switch/linkAggregations/{linkAggregationId}'
 
         body_params = ['switchPorts', 'switchProfilePorts', ]
@@ -1093,6 +1154,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'linkAggregations'],
             'operation': 'deleteNetworkSwitchLinkAggregation'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        linkAggregationId = urllib.parse.quote(linkAggregationId, safe='')
         resource = f'/networks/{networkId}/switch/linkAggregations/{linkAggregationId}'
 
         return self._session.delete(metadata, resource)
@@ -1111,6 +1174,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'mtu'],
             'operation': 'getNetworkSwitchMtu'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/mtu'
 
         return self._session.get(metadata, resource)
@@ -1133,6 +1197,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'mtu'],
             'operation': 'updateNetworkSwitchMtu'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/mtu'
 
         body_params = ['defaultMtuSize', 'overrides', ]
@@ -1154,6 +1219,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'portSchedules'],
             'operation': 'getNetworkSwitchPortSchedules'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/portSchedules'
 
         return self._session.get(metadata, resource)
@@ -1179,6 +1245,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'portSchedules'],
             'operation': 'createNetworkSwitchPortSchedule'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/portSchedules'
 
         body_params = ['name', 'portSchedule', ]
@@ -1201,6 +1268,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'portSchedules'],
             'operation': 'deleteNetworkSwitchPortSchedule'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        portScheduleId = urllib.parse.quote(portScheduleId, safe='')
         resource = f'/networks/{networkId}/switch/portSchedules/{portScheduleId}'
 
         return self._session.delete(metadata, resource)
@@ -1227,6 +1296,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'portSchedules'],
             'operation': 'updateNetworkSwitchPortSchedule'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        portScheduleId = urllib.parse.quote(portScheduleId, safe='')
         resource = f'/networks/{networkId}/switch/portSchedules/{portScheduleId}'
 
         body_params = ['name', 'portSchedule', ]
@@ -1248,6 +1319,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'qosRules'],
             'operation': 'getNetworkSwitchQosRules'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/qosRules'
 
         return self._session.get(metadata, resource)
@@ -1279,6 +1351,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'qosRules'],
             'operation': 'createNetworkSwitchQosRule'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/qosRules'
 
         body_params = ['vlan', 'protocol', 'srcPort', 'srcPortRange', 'dstPort', 'dstPortRange', 'dscp', ]
@@ -1300,6 +1373,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'qosRules', 'order'],
             'operation': 'getNetworkSwitchQosRulesOrder'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/qosRules/order'
 
         return self._session.get(metadata, resource)
@@ -1321,6 +1395,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'qosRules', 'order'],
             'operation': 'updateNetworkSwitchQosRulesOrder'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/qosRules/order'
 
         body_params = ['ruleIds', ]
@@ -1343,6 +1418,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'qosRules'],
             'operation': 'getNetworkSwitchQosRule'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        qosRuleId = urllib.parse.quote(qosRuleId, safe='')
         resource = f'/networks/{networkId}/switch/qosRules/{qosRuleId}'
 
         return self._session.get(metadata, resource)
@@ -1362,6 +1439,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'qosRules'],
             'operation': 'deleteNetworkSwitchQosRule'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        qosRuleId = urllib.parse.quote(qosRuleId, safe='')
         resource = f'/networks/{networkId}/switch/qosRules/{qosRuleId}'
 
         return self._session.delete(metadata, resource)
@@ -1394,6 +1473,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'qosRules'],
             'operation': 'updateNetworkSwitchQosRule'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        qosRuleId = urllib.parse.quote(qosRuleId, safe='')
         resource = f'/networks/{networkId}/switch/qosRules/{qosRuleId}'
 
         body_params = ['vlan', 'protocol', 'srcPort', 'srcPortRange', 'dstPort', 'dstPortRange', 'dscp', ]
@@ -1415,6 +1496,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'routing', 'multicast'],
             'operation': 'getNetworkSwitchRoutingMulticast'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/routing/multicast'
 
         return self._session.get(metadata, resource)
@@ -1437,6 +1519,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'routing', 'multicast'],
             'operation': 'updateNetworkSwitchRoutingMulticast'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/routing/multicast'
 
         body_params = ['defaultSettings', 'overrides', ]
@@ -1458,6 +1541,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'routing', 'multicast', 'rendezvousPoints'],
             'operation': 'getNetworkSwitchRoutingMulticastRendezvousPoints'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/routing/multicast/rendezvousPoints'
 
         return self._session.get(metadata, resource)
@@ -1480,6 +1564,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'routing', 'multicast', 'rendezvousPoints'],
             'operation': 'createNetworkSwitchRoutingMulticastRendezvousPoint'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/routing/multicast/rendezvousPoints'
 
         body_params = ['interfaceIp', 'multicastGroup', ]
@@ -1502,6 +1587,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'routing', 'multicast', 'rendezvousPoints'],
             'operation': 'getNetworkSwitchRoutingMulticastRendezvousPoint'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        rendezvousPointId = urllib.parse.quote(rendezvousPointId, safe='')
         resource = f'/networks/{networkId}/switch/routing/multicast/rendezvousPoints/{rendezvousPointId}'
 
         return self._session.get(metadata, resource)
@@ -1521,6 +1608,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'routing', 'multicast', 'rendezvousPoints'],
             'operation': 'deleteNetworkSwitchRoutingMulticastRendezvousPoint'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        rendezvousPointId = urllib.parse.quote(rendezvousPointId, safe='')
         resource = f'/networks/{networkId}/switch/routing/multicast/rendezvousPoints/{rendezvousPointId}'
 
         return self._session.delete(metadata, resource)
@@ -1544,6 +1633,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'routing', 'multicast', 'rendezvousPoints'],
             'operation': 'updateNetworkSwitchRoutingMulticastRendezvousPoint'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        rendezvousPointId = urllib.parse.quote(rendezvousPointId, safe='')
         resource = f'/networks/{networkId}/switch/routing/multicast/rendezvousPoints/{rendezvousPointId}'
 
         body_params = ['interfaceIp', 'multicastGroup', ]
@@ -1565,6 +1656,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'routing', 'ospf'],
             'operation': 'getNetworkSwitchRoutingOspf'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/routing/ospf'
 
         return self._session.get(metadata, resource)
@@ -1592,6 +1684,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'routing', 'ospf'],
             'operation': 'updateNetworkSwitchRoutingOspf'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/routing/ospf'
 
         body_params = ['enabled', 'helloTimerInSeconds', 'deadTimerInSeconds', 'areas', 'v3', 'md5AuthenticationEnabled', 'md5AuthenticationKey', ]
@@ -1613,6 +1706,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'settings'],
             'operation': 'getNetworkSwitchSettings'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/settings'
 
         return self._session.get(metadata, resource)
@@ -1636,6 +1730,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'settings'],
             'operation': 'updateNetworkSwitchSettings'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/settings'
 
         body_params = ['vlan', 'useCombinedPower', 'powerExceptions', ]
@@ -1657,6 +1752,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'stacks'],
             'operation': 'getNetworkSwitchStacks'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/stacks'
 
         return self._session.get(metadata, resource)
@@ -1679,6 +1775,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'stacks'],
             'operation': 'createNetworkSwitchStack'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/stacks'
 
         body_params = ['name', 'serials', ]
@@ -1701,6 +1798,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'stacks'],
             'operation': 'getNetworkSwitchStack'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        switchStackId = urllib.parse.quote(switchStackId, safe='')
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}'
 
         return self._session.get(metadata, resource)
@@ -1720,6 +1819,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'stacks'],
             'operation': 'deleteNetworkSwitchStack'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        switchStackId = urllib.parse.quote(switchStackId, safe='')
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}'
 
         return self._session.delete(metadata, resource)
@@ -1742,6 +1843,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'stacks'],
             'operation': 'addNetworkSwitchStack'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        switchStackId = urllib.parse.quote(switchStackId, safe='')
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/add'
 
         body_params = ['serial', ]
@@ -1767,6 +1870,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'stacks'],
             'operation': 'removeNetworkSwitchStack'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        switchStackId = urllib.parse.quote(switchStackId, safe='')
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/remove'
 
         body_params = ['serial', ]
@@ -1789,6 +1894,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'stacks', 'routing', 'interfaces'],
             'operation': 'getNetworkSwitchStackRoutingInterfaces'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        switchStackId = urllib.parse.quote(switchStackId, safe='')
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces'
 
         return self._session.get(metadata, resource)
@@ -1822,6 +1929,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'stacks', 'routing', 'interfaces'],
             'operation': 'createNetworkSwitchStackRoutingInterface'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        switchStackId = urllib.parse.quote(switchStackId, safe='')
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces'
 
         body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ipv6', ]
@@ -1845,6 +1954,9 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'stacks', 'routing', 'interfaces'],
             'operation': 'getNetworkSwitchStackRoutingInterface'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        switchStackId = urllib.parse.quote(switchStackId, safe='')
+        interfaceId = urllib.parse.quote(interfaceId, safe='')
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}'
 
         return self._session.get(metadata, resource)
@@ -1879,6 +1991,9 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'stacks', 'routing', 'interfaces'],
             'operation': 'updateNetworkSwitchStackRoutingInterface'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        switchStackId = urllib.parse.quote(switchStackId, safe='')
+        interfaceId = urllib.parse.quote(interfaceId, safe='')
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}'
 
         body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ipv6', ]
@@ -1902,6 +2017,9 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'stacks', 'routing', 'interfaces'],
             'operation': 'deleteNetworkSwitchStackRoutingInterface'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        switchStackId = urllib.parse.quote(switchStackId, safe='')
+        interfaceId = urllib.parse.quote(interfaceId, safe='')
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}'
 
         return self._session.delete(metadata, resource)
@@ -1922,6 +2040,9 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'stacks', 'routing', 'interfaces', 'dhcp'],
             'operation': 'getNetworkSwitchStackRoutingInterfaceDhcp'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        switchStackId = urllib.parse.quote(switchStackId, safe='')
+        interfaceId = urllib.parse.quote(interfaceId, safe='')
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}/dhcp'
 
         return self._session.get(metadata, resource)
@@ -1965,6 +2086,9 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'stacks', 'routing', 'interfaces', 'dhcp'],
             'operation': 'updateNetworkSwitchStackRoutingInterfaceDhcp'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        switchStackId = urllib.parse.quote(switchStackId, safe='')
+        interfaceId = urllib.parse.quote(interfaceId, safe='')
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}/dhcp'
 
         body_params = ['dhcpMode', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dnsNameserversOption', 'dnsCustomNameservers', 'bootOptionsEnabled', 'bootNextServer', 'bootFileName', 'dhcpOptions', 'reservedIpRanges', 'fixedIpAssignments', ]
@@ -1987,6 +2111,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'stacks', 'routing', 'staticRoutes'],
             'operation': 'getNetworkSwitchStackRoutingStaticRoutes'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        switchStackId = urllib.parse.quote(switchStackId, safe='')
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes'
 
         return self._session.get(metadata, resource)
@@ -2013,6 +2139,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'stacks', 'routing', 'staticRoutes'],
             'operation': 'createNetworkSwitchStackRoutingStaticRoute'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        switchStackId = urllib.parse.quote(switchStackId, safe='')
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes'
 
         body_params = ['name', 'subnet', 'nextHopIp', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', ]
@@ -2036,6 +2164,9 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'stacks', 'routing', 'staticRoutes'],
             'operation': 'getNetworkSwitchStackRoutingStaticRoute'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        switchStackId = urllib.parse.quote(switchStackId, safe='')
+        staticRouteId = urllib.parse.quote(staticRouteId, safe='')
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes/{staticRouteId}'
 
         return self._session.get(metadata, resource)
@@ -2063,6 +2194,9 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'stacks', 'routing', 'staticRoutes'],
             'operation': 'updateNetworkSwitchStackRoutingStaticRoute'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        switchStackId = urllib.parse.quote(switchStackId, safe='')
+        staticRouteId = urllib.parse.quote(staticRouteId, safe='')
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes/{staticRouteId}'
 
         body_params = ['name', 'subnet', 'nextHopIp', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', ]
@@ -2086,6 +2220,9 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'stacks', 'routing', 'staticRoutes'],
             'operation': 'deleteNetworkSwitchStackRoutingStaticRoute'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
+        switchStackId = urllib.parse.quote(switchStackId, safe='')
+        staticRouteId = urllib.parse.quote(staticRouteId, safe='')
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes/{staticRouteId}'
 
         return self._session.delete(metadata, resource)
@@ -2104,6 +2241,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'stormControl'],
             'operation': 'getNetworkSwitchStormControl'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/stormControl'
 
         return self._session.get(metadata, resource)
@@ -2127,6 +2265,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'stormControl'],
             'operation': 'updateNetworkSwitchStormControl'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/stormControl'
 
         body_params = ['broadcastThreshold', 'multicastThreshold', 'unknownUnicastThreshold', ]
@@ -2148,6 +2287,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'stp'],
             'operation': 'getNetworkSwitchStp'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/stp'
 
         return self._session.get(metadata, resource)
@@ -2170,6 +2310,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'stp'],
             'operation': 'updateNetworkSwitchStp'
         }
+        networkId = urllib.parse.quote(networkId, safe='')
         resource = f'/networks/{networkId}/switch/stp'
 
         body_params = ['rstpEnabled', 'stpBridgePriority', ]
@@ -2192,6 +2333,8 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'configTemplates', 'profiles'],
             'operation': 'getOrganizationConfigTemplateSwitchProfiles'
         }
+        organizationId = urllib.parse.quote(organizationId, safe='')
+        configTemplateId = urllib.parse.quote(configTemplateId, safe='')
         resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles'
 
         return self._session.get(metadata, resource)
@@ -2212,6 +2355,9 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'configTemplates', 'profiles', 'ports'],
             'operation': 'getOrganizationConfigTemplateSwitchProfilePorts'
         }
+        organizationId = urllib.parse.quote(organizationId, safe='')
+        configTemplateId = urllib.parse.quote(configTemplateId, safe='')
+        profileId = urllib.parse.quote(profileId, safe='')
         resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles/{profileId}/ports'
 
         return self._session.get(metadata, resource)
@@ -2233,6 +2379,10 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'configTemplates', 'profiles', 'ports'],
             'operation': 'getOrganizationConfigTemplateSwitchProfilePort'
         }
+        organizationId = urllib.parse.quote(organizationId, safe='')
+        configTemplateId = urllib.parse.quote(configTemplateId, safe='')
+        profileId = urllib.parse.quote(profileId, safe='')
+        portId = urllib.parse.quote(portId, safe='')
         resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles/{profileId}/ports/{portId}'
 
         return self._session.get(metadata, resource)
@@ -2290,6 +2440,10 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'configTemplates', 'profiles', 'ports'],
             'operation': 'updateOrganizationConfigTemplateSwitchProfilePort'
         }
+        organizationId = urllib.parse.quote(organizationId, safe='')
+        configTemplateId = urllib.parse.quote(configTemplateId, safe='')
+        profileId = urllib.parse.quote(profileId, safe='')
+        portId = urllib.parse.quote(portId, safe='')
         resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles/{profileId}/ports/{portId}'
 
         body_params = ['name', 'tags', 'enabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'poeEnabled', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', 'flexibleStackingEnabled', ]
@@ -2315,6 +2469,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'devices'],
             'operation': 'cloneOrganizationSwitchDevices'
         }
+        organizationId = urllib.parse.quote(organizationId, safe='')
         resource = f'/organizations/{organizationId}/switch/devices/clone'
 
         body_params = ['sourceSerial', 'targetSerials', ]
@@ -2350,6 +2505,7 @@ Cannot be applied to a port on a switch bound to profile.
             'tags': ['switch', 'configure', 'ports', 'bySwitch'],
             'operation': 'getOrganizationSwitchPortsBySwitch'
         }
+        organizationId = urllib.parse.quote(organizationId, safe='')
         resource = f'/organizations/{organizationId}/switch/ports/bySwitch'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'configurationUpdatedAfter', 'networkIds', 'name', 'mac', 'serial', 'serials', 'macs', ]

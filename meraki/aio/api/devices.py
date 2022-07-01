@@ -1,3 +1,6 @@
+import urllib
+
+
 class AsyncDevices:
     def __init__(self, session):
         super().__init__()
@@ -17,6 +20,7 @@ class AsyncDevices:
             'tags': ['devices', 'configure'],
             'operation': 'getDevice'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}'
 
         return self._session.get(metadata, resource)
@@ -46,6 +50,7 @@ class AsyncDevices:
             'tags': ['devices', 'configure'],
             'operation': 'updateDevice'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}'
 
         body_params = ['name', 'tags', 'lat', 'lng', 'address', 'notes', 'moveMapMarker', 'switchProfileId', 'floorPlanId', ]
@@ -72,6 +77,7 @@ class AsyncDevices:
             'tags': ['devices', 'liveTools'],
             'operation': 'blinkDeviceLeds'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/blinkLeds'
 
         body_params = ['duration', 'period', 'duty', ]
@@ -97,6 +103,7 @@ class AsyncDevices:
             'tags': ['devices', 'monitor', 'clients'],
             'operation': 'getDeviceClients'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/clients'
 
         query_params = ['t0', 'timespan', ]
@@ -122,6 +129,7 @@ class AsyncDevices:
             'tags': ['devices', 'liveTools', 'ping'],
             'operation': 'createDeviceLiveToolsPing'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/liveTools/ping'
 
         body_params = ['target', 'count', ]
@@ -144,6 +152,8 @@ class AsyncDevices:
             'tags': ['devices', 'liveTools', 'ping'],
             'operation': 'getDeviceLiveToolsPing'
         }
+        serial = urllib.parse.quote(serial, safe='')
+        id = urllib.parse.quote(id, safe='')
         resource = f'/devices/{serial}/liveTools/ping/{id}'
 
         return self._session.get(metadata, resource)
@@ -165,6 +175,7 @@ class AsyncDevices:
             'tags': ['devices', 'liveTools', 'pingDevice'],
             'operation': 'createDeviceLiveToolsPingDevice'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/liveTools/pingDevice'
 
         body_params = ['count', ]
@@ -187,6 +198,8 @@ class AsyncDevices:
             'tags': ['devices', 'liveTools', 'pingDevice'],
             'operation': 'getDeviceLiveToolsPingDevice'
         }
+        serial = urllib.parse.quote(serial, safe='')
+        id = urllib.parse.quote(id, safe='')
         resource = f'/devices/{serial}/liveTools/pingDevice/{id}'
 
         return self._session.get(metadata, resource)
@@ -205,6 +218,7 @@ class AsyncDevices:
             'tags': ['devices', 'monitor', 'lldpCdp'],
             'operation': 'getDeviceLldpCdp'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/lldpCdp'
 
         return self._session.get(metadata, resource)
@@ -235,6 +249,7 @@ class AsyncDevices:
             'tags': ['devices', 'monitor', 'lossAndLatencyHistory'],
             'operation': 'getDeviceLossAndLatencyHistory'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/lossAndLatencyHistory'
 
         query_params = ['t0', 't1', 'timespan', 'resolution', 'uplink', 'ip', ]
@@ -256,6 +271,7 @@ class AsyncDevices:
             'tags': ['devices', 'configure', 'managementInterface'],
             'operation': 'getDeviceManagementInterface'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/managementInterface'
 
         return self._session.get(metadata, resource)
@@ -278,6 +294,7 @@ class AsyncDevices:
             'tags': ['devices', 'configure', 'managementInterface'],
             'operation': 'updateDeviceManagementInterface'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/managementInterface'
 
         body_params = ['wan1', 'wan2', ]
@@ -299,6 +316,7 @@ class AsyncDevices:
             'tags': ['devices', 'liveTools'],
             'operation': 'rebootDevice'
         }
+        serial = urllib.parse.quote(serial, safe='')
         resource = f'/devices/{serial}/reboot'
 
         return self._session.post(metadata, resource)

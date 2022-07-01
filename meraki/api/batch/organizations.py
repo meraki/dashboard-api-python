@@ -1,3 +1,6 @@
+import urllib
+
+
 class ActionBatchOrganizations(object):
     def __init__(self):
         super(ActionBatchOrganizations, self).__init__()
@@ -142,13 +145,13 @@ class ActionBatchOrganizations(object):
 
 
 
-    def updateOrganizationAdaptivePolicyGroup(self, organizationId: str, groupId: str, **kwargs):
+    def updateOrganizationAdaptivePolicyGroup(self, organizationId: str, id: str, **kwargs):
         """
         **Updates an adaptive policy group**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-adaptive-policy-group
 
         - organizationId (string): (required)
-        - groupId (string): (required)
+        - id (string): (required)
         - name (string): Name of the group
         - sgt (integer): SGT value of the group
         - description (string): Description of the group
@@ -161,7 +164,7 @@ class ActionBatchOrganizations(object):
             'tags': ['organizations', 'configure', 'adaptivePolicy', 'groups'],
             'operation': 'updateOrganizationAdaptivePolicyGroup'
         }
-        resource = f'/organizations/{organizationId}/adaptivePolicy/groups/{groupId}'
+        resource = f'/organizations/{organizationId}/adaptivePolicy/groups/{id}'
 
         body_params = ['name', 'sgt', 'description', 'policyObjects', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
@@ -177,20 +180,20 @@ class ActionBatchOrganizations(object):
 
 
 
-    def deleteOrganizationAdaptivePolicyGroup(self, organizationId: str, groupId: str):
+    def deleteOrganizationAdaptivePolicyGroup(self, organizationId: str, id: str):
         """
         **Deletes the specified adaptive policy group and any associated policies and references**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-adaptive-policy-group
 
         - organizationId (string): (required)
-        - groupId (string): (required)
+        - id (string): (required)
         """
 
         metadata = {
             'tags': ['organizations', 'configure', 'adaptivePolicy', 'groups'],
             'operation': 'deleteOrganizationAdaptivePolicyGroup'
         }
-        resource = f'/organizations/{organizationId}/adaptivePolicy/groups/{groupId}'
+        resource = f'/organizations/{organizationId}/adaptivePolicy/groups/{id}'
 
         action = {
             "resource": resource,
@@ -520,6 +523,38 @@ class ActionBatchOrganizations(object):
 
 
 
+    def updateOrganizationEarlyAccessFeaturesOptIn(self, organizationId: str, optInId: str, **kwargs):
+        """
+        **Update an early access feature opt-in for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-early-access-features-opt-in
+
+        - organizationId (string): (required)
+        - optInId (string): (required)
+        - limitScopeToNetworks (array): A list of network IDs to apply the opt-in to
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'earlyAccess', 'features', 'optIns'],
+            'operation': 'updateOrganizationEarlyAccessFeaturesOptIn'
+        }
+        resource = f'/organizations/{organizationId}/earlyAccess/features/optIns/{optInId}'
+
+        body_params = ['limitScopeToNetworks', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
     def assignOrganizationLicensesSeats(self, organizationId: str, licenseId: str, networkId: str, seatCount: int):
         """
         **Assign SM seats to a network**
@@ -657,7 +692,7 @@ class ActionBatchOrganizations(object):
 
         - organizationId (string): (required)
         - licenseId (string): (required)
-        - deviceSerial (string): The serial number of the device to assign this license to. Set this to null to unassign the license. If a different license is already active on the device, this parameter will control queueing/dequeuing this license.
+        - deviceSerial (string): The serial number of the device to assign this license to. Set this to  null to unassign the license. If a different license is already active on the device, this parameter will control queueing/dequeuing this license.
         """
 
         kwargs.update(locals())

@@ -3,6 +3,7 @@ import logging
 import os
 
 from meraki.rest_session import *
+from meraki.api.administered import Administered
 from meraki.api.organizations import Organizations
 from meraki.api.networks import Networks
 from meraki.api.devices import Devices
@@ -43,7 +44,7 @@ from meraki.config import (
     USE_ITERATOR_FOR_GET_PAGES,
 )
 
-__version__ = '1.22.0'
+__version__ = '1.22.1'
 
 
 class DashboardAPI(object):
@@ -165,6 +166,7 @@ class DashboardAPI(object):
         )
 
         # API endpoints by section
+        self.administered = Administered(self._session)
         self.organizations = Organizations(self._session)
         self.networks = Networks(self._session)
         self.devices = Devices(self._session)

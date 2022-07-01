@@ -1,3 +1,6 @@
+import urllib
+
+
 class ActionBatchWireless(object):
     def __init__(self):
         super(ActionBatchWireless, self).__init__()

@@ -1,3 +1,6 @@
+import urllib
+
+
 class ActionBatchDevices(object):
     def __init__(self):
         super(ActionBatchDevices, self).__init__()

@@ -3,6 +3,7 @@ import os
 from datetime import datetime
 
 from meraki.aio.rest_session import *
+from meraki.aio.api.administered import AsyncAdministered
 from meraki.aio.api.appliance import AsyncAppliance
 from meraki.aio.api.camera import AsyncCamera
 from meraki.aio.api.cellularGateway import AsyncCellularGateway
@@ -165,6 +166,7 @@ class AsyncDashboardAPI:
         )
 
         # API endpoints by section
+        self.administered = AsyncAdministered(self._session)
         self.organizations = AsyncOrganizations(self._session)
         self.networks = AsyncNetworks(self._session)
         self.devices = AsyncDevices(self._session)

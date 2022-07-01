@@ -1,3 +1,6 @@
+import urllib
+
+
 class ActionBatchSwitch(object):
     def __init__(self):
         super(ActionBatchSwitch, self).__init__()
@@ -104,18 +107,18 @@ Cannot be applied to a port on a switch bound to profile.
 
 
 
-    def createDeviceSwitchRoutingInterface(self, serial: str, name: str, vlanId: int, **kwargs):
+    def createDeviceSwitchRoutingInterface(self, serial: str, **kwargs):
         """
         **Create a layer 3 interface for a switch**
         https://developer.cisco.com/meraki/api-v1/#!create-device-switch-routing-interface
 
         - serial (string): (required)
         - name (string): A friendly name or description for the interface or VLAN.
-        - vlanId (integer): The VLAN this routed interface is on. VLAN must be between 1 and 4094.
         - subnet (string): The network that this routed interface is on, in CIDR notation (ex. 10.1.1.0/24).
-        - interfaceIp (string): The IP address this switch will use for layer 3 routing on this VLAN or subnet. This cannot be the same as the switch's management IP.
-        - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are, 'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
-        - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route. This IP address must exist in a subnet with a routed interface.
+        - interfaceIp (string): The IP address this switch will use for layer 3 routing on this VLAN or subnet. This cannot be the same         as the switch's management IP.
+        - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
+        - vlanId (integer): The VLAN this routed interface is on. VLAN must be between 1 and 4094.
+        - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a routed interface. Required if this is the first IPv4 interface.
         - ospfSettings (object): The OSPF routing settings of the interface.
         - ipv6 (object): The IPv6 settings of the interface.
         """
@@ -155,10 +158,10 @@ Cannot be applied to a port on a switch bound to profile.
         - interfaceId (string): (required)
         - name (string): A friendly name or description for the interface or VLAN.
         - subnet (string): The network that this routed interface is on, in CIDR notation (ex. 10.1.1.0/24).
-        - interfaceIp (string): The IP address this switch will use for layer 3 routing on this VLAN or subnet. This cannot be the same as the switch's management IP.
-        - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are, 'disabled', 'enabled' or 'IGMP snooping querier'.
+        - interfaceIp (string): The IP address this switch will use for layer 3 routing on this VLAN or subnet. This cannot be the same         as the switch's management IP.
+        - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
         - vlanId (integer): The VLAN this routed interface is on. VLAN must be between 1 and 4094.
-        - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route. This IP address must exist in a subnet with a routed interface.
+        - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a routed interface. Required if this is the first IPv4 interface.
         - ospfSettings (object): The OSPF routing settings of the interface.
         - ipv6 (object): The IPv6 settings of the interface.
         """
@@ -465,7 +468,7 @@ Cannot be applied to a port on a switch bound to profile.
         - radiusCoaSupportEnabled (boolean): Change of authentication for RADIUS re-authentication and disconnection
         - radiusAccountingEnabled (boolean): Enable to send start, interim-update and stop messages to a configured RADIUS accounting server for tracking connected clients
         - radiusAccountingServers (array): List of RADIUS accounting servers to require connecting devices to authenticate against before granting network access
-        - radiusGroupAttribute (string): Can be either `""`, which means `None` on Dashboard, or `"11"`, which means `Filter-Id` on Dashboard and will use Group Policy ACLs when supported (firmware 14+)
+        - radiusGroupAttribute (string): Acceptable values are `""` for None, or `"11"` for Group Policies ACL
         - hostMode (string): Choose the Host Mode for the access policy.
         - accessPolicyType (string): Access Type of the policy. Automatically 'Hybrid authentication' when hostMode is 'Multi-Domain'.
         - increaseAccessSpeed (boolean): Enabling this option will make switches execute 802.1X and MAC-bypass authentication simultaneously so that clients authenticate faster. Only required when accessPolicyType is 'Hybrid Authentication.
