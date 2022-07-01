@@ -24,6 +24,9 @@
             'tags': {{ tags }},
             'operation': '{{ operation }}'
         }
+        {% for param in path_params %}
+        {{ param }} = urllib.parse.quote({{ param }}, safe='')
+        {% endfor %}
         resource = f'{{ resource }}'
 
         {% if query_params|length > 0 %}
