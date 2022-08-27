@@ -140,6 +140,7 @@ class ActionBatchAppliance(object):
         - networkId (string): (required)
         - clientTrackingMethod (string): Client tracking method of a network
         - deploymentMode (string): Deployment mode of a network
+        - dynamicDns (object): Dynamic DNS settings for a network
         """
 
         kwargs.update(locals())
@@ -157,7 +158,7 @@ class ActionBatchAppliance(object):
         }
         resource = f'/networks/{networkId}/appliance/settings'
 
-        body_params = ['clientTrackingMethod', 'deploymentMode', ]
+        body_params = ['clientTrackingMethod', 'deploymentMode', 'dynamicDns', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -190,6 +191,56 @@ class ActionBatchAppliance(object):
         resource = f'/networks/{networkId}/appliance/singleLan'
 
         body_params = ['subnet', 'applianceIp', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def updateNetworkApplianceSsid(self, networkId: str, number: str, **kwargs):
+        """
+        **Update the attributes of an MX SSID**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-ssid
+
+        - networkId (string): (required)
+        - number (string): (required)
+        - name (string): The name of the SSID.
+        - enabled (boolean): Whether or not the SSID is enabled.
+        - defaultVlanId (integer): The VLAN ID of the VLAN associated to this SSID. This parameter is only valid if the network is in routed mode.
+        - authMode (string): The association control method for the SSID ('open', 'psk', '8021x-meraki' or '8021x-radius').
+        - psk (string): The passkey for the SSID. This param is only valid if the authMode is 'psk'.
+        - radiusServers (array): The RADIUS 802.1x servers to be used for authentication. This param is only valid if the authMode is '8021x-radius'.
+        - encryptionMode (string): The psk encryption mode for the SSID ('wep' or 'wpa'). This param is only valid if the authMode is 'psk'.
+        - wpaEncryptionMode (string): The types of WPA encryption. ('WPA1 and WPA2', 'WPA2 only', 'WPA3 Transition Mode' or 'WPA3 only'). This param is only valid if (1) the authMode is 'psk' & the encryptionMode is 'wpa' OR (2) the authMode is '8021x-meraki' OR (3) the authMode is '8021x-radius'
+        - visible (boolean): Boolean indicating whether the MX should advertise or hide this SSID.
+        """
+
+        kwargs.update(locals())
+
+        if 'authMode' in kwargs:
+            options = ['open', 'psk', '8021x-meraki', '8021x-radius']
+            assert kwargs['authMode'] in options, f'''"authMode" cannot be "{kwargs['authMode']}", & must be set to one of: {options}'''
+        if 'encryptionMode' in kwargs:
+            options = ['wep', 'wpa']
+            assert kwargs['encryptionMode'] in options, f'''"encryptionMode" cannot be "{kwargs['encryptionMode']}", & must be set to one of: {options}'''
+        if 'wpaEncryptionMode' in kwargs:
+            options = ['WPA1 and WPA2', 'WPA2 only', 'WPA3 Transition Mode', 'WPA3 only']
+            assert kwargs['wpaEncryptionMode'] in options, f'''"wpaEncryptionMode" cannot be "{kwargs['wpaEncryptionMode']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'ssids'],
+            'operation': 'updateNetworkApplianceSsid'
+        }
+        resource = f'/networks/{networkId}/appliance/ssids/{number}'
+
+        body_params = ['name', 'enabled', 'defaultVlanId', 'authMode', 'psk', 'radiusServers', 'encryptionMode', 'wpaEncryptionMode', 'visible', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -290,7 +341,6 @@ class ActionBatchAppliance(object):
         action = {
             "resource": resource,
             "operation": "destroy",
-            "body": payload
         }
         return action
         
@@ -554,7 +604,6 @@ class ActionBatchAppliance(object):
         action = {
             "resource": resource,
             "operation": "destroy",
-            "body": payload
         }
         return action
         

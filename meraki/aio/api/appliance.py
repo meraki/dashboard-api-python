@@ -20,7 +20,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'monitor', 'dhcp', 'subnets'],
             'operation': 'getDeviceApplianceDhcpSubnets'
         }
-        serial = urllib.parse.quote(serial, safe='')
+        serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/appliance/dhcp/subnets'
 
         return self._session.get(metadata, resource)
@@ -39,7 +39,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'monitor', 'performance'],
             'operation': 'getDeviceAppliancePerformance'
         }
-        serial = urllib.parse.quote(serial, safe='')
+        serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/appliance/performance'
 
         return self._session.get(metadata, resource)
@@ -58,7 +58,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'vmx', 'authenticationToken'],
             'operation': 'createDeviceApplianceVmxAuthenticationToken'
         }
-        serial = urllib.parse.quote(serial, safe='')
+        serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/appliance/vmx/authenticationToken'
 
         return self._session.post(metadata, resource)
@@ -93,8 +93,8 @@ class AsyncAppliance:
             'tags': ['appliance', 'monitor', 'clients', 'security', 'events'],
             'operation': 'getNetworkApplianceClientSecurityEvents'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        clientId = urllib.parse.quote(clientId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        clientId = urllib.parse.quote(str(clientId), safe='')
         resource = f'/networks/{networkId}/appliance/clients/{clientId}/security/events'
 
         query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'sortOrder', ]
@@ -116,7 +116,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'connectivityMonitoringDestinations'],
             'operation': 'getNetworkApplianceConnectivityMonitoringDestinations'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/connectivityMonitoringDestinations'
 
         return self._session.get(metadata, resource)
@@ -138,7 +138,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'connectivityMonitoringDestinations'],
             'operation': 'updateNetworkApplianceConnectivityMonitoringDestinations'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/connectivityMonitoringDestinations'
 
         body_params = ['destinations', ]
@@ -160,7 +160,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'contentFiltering'],
             'operation': 'getNetworkApplianceContentFiltering'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/contentFiltering'
 
         return self._session.get(metadata, resource)
@@ -189,7 +189,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'contentFiltering'],
             'operation': 'updateNetworkApplianceContentFiltering'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/contentFiltering'
 
         body_params = ['allowedUrlPatterns', 'blockedUrlPatterns', 'blockedUrlCategories', 'urlCategoryListSize', ]
@@ -211,7 +211,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'contentFiltering', 'categories'],
             'operation': 'getNetworkApplianceContentFilteringCategories'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/contentFiltering/categories'
 
         return self._session.get(metadata, resource)
@@ -230,7 +230,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'firewall', 'cellularFirewallRules'],
             'operation': 'getNetworkApplianceFirewallCellularFirewallRules'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/firewall/cellularFirewallRules'
 
         return self._session.get(metadata, resource)
@@ -252,7 +252,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'firewall', 'cellularFirewallRules'],
             'operation': 'updateNetworkApplianceFirewallCellularFirewallRules'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/firewall/cellularFirewallRules'
 
         body_params = ['rules', ]
@@ -274,7 +274,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'firewall', 'firewalledServices'],
             'operation': 'getNetworkApplianceFirewallFirewalledServices'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/firewall/firewalledServices'
 
         return self._session.get(metadata, resource)
@@ -294,8 +294,8 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'firewall', 'firewalledServices'],
             'operation': 'getNetworkApplianceFirewallFirewalledService'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        service = urllib.parse.quote(service, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        service = urllib.parse.quote(str(service), safe='')
         resource = f'/networks/{networkId}/appliance/firewall/firewalledServices/{service}'
 
         return self._session.get(metadata, resource)
@@ -323,8 +323,8 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'firewall', 'firewalledServices'],
             'operation': 'updateNetworkApplianceFirewallFirewalledService'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        service = urllib.parse.quote(service, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        service = urllib.parse.quote(str(service), safe='')
         resource = f'/networks/{networkId}/appliance/firewall/firewalledServices/{service}'
 
         body_params = ['access', 'allowedIps', ]
@@ -346,7 +346,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'firewall', 'inboundFirewallRules'],
             'operation': 'getNetworkApplianceFirewallInboundFirewallRules'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/firewall/inboundFirewallRules'
 
         return self._session.get(metadata, resource)
@@ -369,7 +369,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'firewall', 'inboundFirewallRules'],
             'operation': 'updateNetworkApplianceFirewallInboundFirewallRules'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/firewall/inboundFirewallRules'
 
         body_params = ['rules', 'syslogDefaultRule', ]
@@ -391,7 +391,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'firewall', 'l3FirewallRules'],
             'operation': 'getNetworkApplianceFirewallL3FirewallRules'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/firewall/l3FirewallRules'
 
         return self._session.get(metadata, resource)
@@ -414,7 +414,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'firewall', 'l3FirewallRules'],
             'operation': 'updateNetworkApplianceFirewallL3FirewallRules'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/firewall/l3FirewallRules'
 
         body_params = ['rules', 'syslogDefaultRule', ]
@@ -436,7 +436,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'firewall', 'l7FirewallRules'],
             'operation': 'getNetworkApplianceFirewallL7FirewallRules'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/firewall/l7FirewallRules'
 
         return self._session.get(metadata, resource)
@@ -458,7 +458,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'firewall', 'l7FirewallRules'],
             'operation': 'updateNetworkApplianceFirewallL7FirewallRules'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/firewall/l7FirewallRules'
 
         body_params = ['rules', ]
@@ -480,7 +480,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'firewall', 'l7FirewallRules', 'applicationCategories'],
             'operation': 'getNetworkApplianceFirewallL7FirewallRulesApplicationCategories'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/firewall/l7FirewallRules/applicationCategories'
 
         return self._session.get(metadata, resource)
@@ -499,7 +499,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'firewall', 'oneToManyNatRules'],
             'operation': 'getNetworkApplianceFirewallOneToManyNatRules'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/firewall/oneToManyNatRules'
 
         return self._session.get(metadata, resource)
@@ -521,7 +521,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'firewall', 'oneToManyNatRules'],
             'operation': 'updateNetworkApplianceFirewallOneToManyNatRules'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/firewall/oneToManyNatRules'
 
         body_params = ['rules', ]
@@ -543,7 +543,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'firewall', 'oneToOneNatRules'],
             'operation': 'getNetworkApplianceFirewallOneToOneNatRules'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/firewall/oneToOneNatRules'
 
         return self._session.get(metadata, resource)
@@ -565,7 +565,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'firewall', 'oneToOneNatRules'],
             'operation': 'updateNetworkApplianceFirewallOneToOneNatRules'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/firewall/oneToOneNatRules'
 
         body_params = ['rules', ]
@@ -587,7 +587,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'firewall', 'portForwardingRules'],
             'operation': 'getNetworkApplianceFirewallPortForwardingRules'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/firewall/portForwardingRules'
 
         return self._session.get(metadata, resource)
@@ -609,10 +609,54 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'firewall', 'portForwardingRules'],
             'operation': 'updateNetworkApplianceFirewallPortForwardingRules'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/firewall/portForwardingRules'
 
         body_params = ['rules', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def getNetworkApplianceFirewallSettings(self, networkId: str):
+        """
+        **Return the firewall settings for this network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-firewall-settings
+
+        - networkId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'firewall', 'settings'],
+            'operation': 'getNetworkApplianceFirewallSettings'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/appliance/firewall/settings'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def updateNetworkApplianceFirewallSettings(self, networkId: str, **kwargs):
+        """
+        **Update the firewall settings for this network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-firewall-settings
+
+        - networkId (string): (required)
+        - spoofingProtection (object): Spoofing protection settings
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'firewall', 'settings'],
+            'operation': 'updateNetworkApplianceFirewallSettings'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/appliance/firewall/settings'
+
+        body_params = ['spoofingProtection', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -631,7 +675,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'ports'],
             'operation': 'getNetworkAppliancePorts'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/ports'
 
         return self._session.get(metadata, resource)
@@ -651,8 +695,8 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'ports'],
             'operation': 'getNetworkAppliancePort'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        portId = urllib.parse.quote(portId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        portId = urllib.parse.quote(str(portId), safe='')
         resource = f'/networks/{networkId}/appliance/ports/{portId}'
 
         return self._session.get(metadata, resource)
@@ -680,8 +724,8 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'ports'],
             'operation': 'updateNetworkAppliancePort'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        portId = urllib.parse.quote(portId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        portId = urllib.parse.quote(str(portId), safe='')
         resource = f'/networks/{networkId}/appliance/ports/{portId}'
 
         body_params = ['enabled', 'dropUntaggedTraffic', 'type', 'vlan', 'allowedVlans', 'accessPolicy', ]
@@ -718,7 +762,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'monitor', 'security', 'events'],
             'operation': 'getNetworkApplianceSecurityEvents'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/security/events'
 
         query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'sortOrder', ]
@@ -740,7 +784,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'security', 'intrusion'],
             'operation': 'getNetworkApplianceSecurityIntrusion'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/security/intrusion'
 
         return self._session.get(metadata, resource)
@@ -771,7 +815,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'security', 'intrusion'],
             'operation': 'updateNetworkApplianceSecurityIntrusion'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/security/intrusion'
 
         body_params = ['mode', 'idsRulesets', 'protectedNetworks', ]
@@ -793,7 +837,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'security', 'malware'],
             'operation': 'getNetworkApplianceSecurityMalware'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/security/malware'
 
         return self._session.get(metadata, resource)
@@ -821,7 +865,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'security', 'malware'],
             'operation': 'updateNetworkApplianceSecurityMalware'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/security/malware'
 
         body_params = ['mode', 'allowedUrls', 'allowedFiles', ]
@@ -843,7 +887,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'settings'],
             'operation': 'getNetworkApplianceSettings'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/settings'
 
         return self._session.get(metadata, resource)
@@ -858,6 +902,7 @@ class AsyncAppliance:
         - networkId (string): (required)
         - clientTrackingMethod (string): Client tracking method of a network
         - deploymentMode (string): Deployment mode of a network
+        - dynamicDns (object): Dynamic DNS settings for a network
         """
 
         kwargs.update(locals())
@@ -873,10 +918,10 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'settings'],
             'operation': 'updateNetworkApplianceSettings'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/settings'
 
-        body_params = ['clientTrackingMethod', 'deploymentMode', ]
+        body_params = ['clientTrackingMethod', 'deploymentMode', 'dynamicDns', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -895,7 +940,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'singleLan'],
             'operation': 'getNetworkApplianceSingleLan'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/singleLan'
 
         return self._session.get(metadata, resource)
@@ -918,10 +963,95 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'singleLan'],
             'operation': 'updateNetworkApplianceSingleLan'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/singleLan'
 
         body_params = ['subnet', 'applianceIp', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def getNetworkApplianceSsids(self, networkId: str):
+        """
+        **List the MX SSIDs in a network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-ssids
+
+        - networkId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'ssids'],
+            'operation': 'getNetworkApplianceSsids'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/appliance/ssids'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def getNetworkApplianceSsid(self, networkId: str, number: str):
+        """
+        **Return a single MX SSID**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-ssid
+
+        - networkId (string): (required)
+        - number (string): (required)
+        """
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'ssids'],
+            'operation': 'getNetworkApplianceSsid'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        number = urllib.parse.quote(str(number), safe='')
+        resource = f'/networks/{networkId}/appliance/ssids/{number}'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def updateNetworkApplianceSsid(self, networkId: str, number: str, **kwargs):
+        """
+        **Update the attributes of an MX SSID**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-ssid
+
+        - networkId (string): (required)
+        - number (string): (required)
+        - name (string): The name of the SSID.
+        - enabled (boolean): Whether or not the SSID is enabled.
+        - defaultVlanId (integer): The VLAN ID of the VLAN associated to this SSID. This parameter is only valid if the network is in routed mode.
+        - authMode (string): The association control method for the SSID ('open', 'psk', '8021x-meraki' or '8021x-radius').
+        - psk (string): The passkey for the SSID. This param is only valid if the authMode is 'psk'.
+        - radiusServers (array): The RADIUS 802.1x servers to be used for authentication. This param is only valid if the authMode is '8021x-radius'.
+        - encryptionMode (string): The psk encryption mode for the SSID ('wep' or 'wpa'). This param is only valid if the authMode is 'psk'.
+        - wpaEncryptionMode (string): The types of WPA encryption. ('WPA1 and WPA2', 'WPA2 only', 'WPA3 Transition Mode' or 'WPA3 only'). This param is only valid if (1) the authMode is 'psk' & the encryptionMode is 'wpa' OR (2) the authMode is '8021x-meraki' OR (3) the authMode is '8021x-radius'
+        - visible (boolean): Boolean indicating whether the MX should advertise or hide this SSID.
+        """
+
+        kwargs.update(locals())
+
+        if 'authMode' in kwargs:
+            options = ['open', 'psk', '8021x-meraki', '8021x-radius']
+            assert kwargs['authMode'] in options, f'''"authMode" cannot be "{kwargs['authMode']}", & must be set to one of: {options}'''
+        if 'encryptionMode' in kwargs:
+            options = ['wep', 'wpa']
+            assert kwargs['encryptionMode'] in options, f'''"encryptionMode" cannot be "{kwargs['encryptionMode']}", & must be set to one of: {options}'''
+        if 'wpaEncryptionMode' in kwargs:
+            options = ['WPA1 and WPA2', 'WPA2 only', 'WPA3 Transition Mode', 'WPA3 only']
+            assert kwargs['wpaEncryptionMode'] in options, f'''"wpaEncryptionMode" cannot be "{kwargs['wpaEncryptionMode']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'ssids'],
+            'operation': 'updateNetworkApplianceSsid'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        number = urllib.parse.quote(str(number), safe='')
+        resource = f'/networks/{networkId}/appliance/ssids/{number}'
+
+        body_params = ['name', 'enabled', 'defaultVlanId', 'authMode', 'psk', 'radiusServers', 'encryptionMode', 'wpaEncryptionMode', 'visible', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -940,7 +1070,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'staticRoutes'],
             'operation': 'getNetworkApplianceStaticRoutes'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/staticRoutes'
 
         return self._session.get(metadata, resource)
@@ -965,7 +1095,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'staticRoutes'],
             'operation': 'createNetworkApplianceStaticRoute'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/staticRoutes'
 
         body_params = ['name', 'subnet', 'gatewayIp', 'gatewayVlanId', ]
@@ -988,8 +1118,8 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'staticRoutes'],
             'operation': 'getNetworkApplianceStaticRoute'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        staticRouteId = urllib.parse.quote(staticRouteId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        staticRouteId = urllib.parse.quote(str(staticRouteId), safe='')
         resource = f'/networks/{networkId}/appliance/staticRoutes/{staticRouteId}'
 
         return self._session.get(metadata, resource)
@@ -1018,8 +1148,8 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'staticRoutes'],
             'operation': 'updateNetworkApplianceStaticRoute'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        staticRouteId = urllib.parse.quote(staticRouteId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        staticRouteId = urllib.parse.quote(str(staticRouteId), safe='')
         resource = f'/networks/{networkId}/appliance/staticRoutes/{staticRouteId}'
 
         body_params = ['name', 'subnet', 'gatewayIp', 'gatewayVlanId', 'enabled', 'fixedIpAssignments', 'reservedIpRanges', ]
@@ -1042,8 +1172,8 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'staticRoutes'],
             'operation': 'deleteNetworkApplianceStaticRoute'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        staticRouteId = urllib.parse.quote(staticRouteId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        staticRouteId = urllib.parse.quote(str(staticRouteId), safe='')
         resource = f'/networks/{networkId}/appliance/staticRoutes/{staticRouteId}'
 
         return self._session.delete(metadata, resource)
@@ -1062,7 +1192,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'trafficShaping'],
             'operation': 'getNetworkApplianceTrafficShaping'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/trafficShaping'
 
         return self._session.get(metadata, resource)
@@ -1084,7 +1214,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'trafficShaping'],
             'operation': 'updateNetworkApplianceTrafficShaping'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/trafficShaping'
 
         body_params = ['globalBandwidthLimits', ]
@@ -1106,7 +1236,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'trafficShaping', 'customPerformanceClasses'],
             'operation': 'getNetworkApplianceTrafficShapingCustomPerformanceClasses'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/trafficShaping/customPerformanceClasses'
 
         return self._session.get(metadata, resource)
@@ -1131,7 +1261,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'trafficShaping', 'customPerformanceClasses'],
             'operation': 'createNetworkApplianceTrafficShapingCustomPerformanceClass'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/trafficShaping/customPerformanceClasses'
 
         body_params = ['name', 'maxLatency', 'maxJitter', 'maxLossPercentage', ]
@@ -1154,8 +1284,8 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'trafficShaping', 'customPerformanceClasses'],
             'operation': 'getNetworkApplianceTrafficShapingCustomPerformanceClass'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        customPerformanceClassId = urllib.parse.quote(customPerformanceClassId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        customPerformanceClassId = urllib.parse.quote(str(customPerformanceClassId), safe='')
         resource = f'/networks/{networkId}/appliance/trafficShaping/customPerformanceClasses/{customPerformanceClassId}'
 
         return self._session.get(metadata, resource)
@@ -1181,8 +1311,8 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'trafficShaping', 'customPerformanceClasses'],
             'operation': 'updateNetworkApplianceTrafficShapingCustomPerformanceClass'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        customPerformanceClassId = urllib.parse.quote(customPerformanceClassId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        customPerformanceClassId = urllib.parse.quote(str(customPerformanceClassId), safe='')
         resource = f'/networks/{networkId}/appliance/trafficShaping/customPerformanceClasses/{customPerformanceClassId}'
 
         body_params = ['name', 'maxLatency', 'maxJitter', 'maxLossPercentage', ]
@@ -1205,8 +1335,8 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'trafficShaping', 'customPerformanceClasses'],
             'operation': 'deleteNetworkApplianceTrafficShapingCustomPerformanceClass'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        customPerformanceClassId = urllib.parse.quote(customPerformanceClassId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        customPerformanceClassId = urllib.parse.quote(str(customPerformanceClassId), safe='')
         resource = f'/networks/{networkId}/appliance/trafficShaping/customPerformanceClasses/{customPerformanceClassId}'
 
         return self._session.delete(metadata, resource)
@@ -1232,7 +1362,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'trafficShaping', 'rules'],
             'operation': 'updateNetworkApplianceTrafficShapingRules'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/trafficShaping/rules'
 
         body_params = ['defaultRulesEnabled', 'rules', ]
@@ -1254,7 +1384,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'trafficShaping', 'rules'],
             'operation': 'getNetworkApplianceTrafficShapingRules'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/trafficShaping/rules'
 
         return self._session.get(metadata, resource)
@@ -1273,7 +1403,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'trafficShaping', 'uplinkBandwidth'],
             'operation': 'getNetworkApplianceTrafficShapingUplinkBandwidth'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/trafficShaping/uplinkBandwidth'
 
         return self._session.get(metadata, resource)
@@ -1295,7 +1425,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'trafficShaping', 'uplinkBandwidth'],
             'operation': 'updateNetworkApplianceTrafficShapingUplinkBandwidth'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/trafficShaping/uplinkBandwidth'
 
         body_params = ['bandwidthLimits', ]
@@ -1317,7 +1447,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'trafficShaping', 'uplinkSelection'],
             'operation': 'getNetworkApplianceTrafficShapingUplinkSelection'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/trafficShaping/uplinkSelection'
 
         return self._session.get(metadata, resource)
@@ -1347,7 +1477,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'trafficShaping', 'uplinkSelection'],
             'operation': 'updateNetworkApplianceTrafficShapingUplinkSelection'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/trafficShaping/uplinkSelection'
 
         body_params = ['activeActiveAutoVpnEnabled', 'defaultUplink', 'loadBalancingEnabled', 'wanTrafficUplinkPreferences', 'vpnTrafficUplinkPreferences', ]
@@ -1375,7 +1505,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'monitor', 'uplinks', 'usageHistory'],
             'operation': 'getNetworkApplianceUplinksUsageHistory'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/uplinks/usageHistory'
 
         query_params = ['t0', 't1', 'timespan', 'resolution', ]
@@ -1397,7 +1527,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'vlans'],
             'operation': 'getNetworkApplianceVlans'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/vlans'
 
         return self._session.get(metadata, resource)
@@ -1430,7 +1560,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'vlans'],
             'operation': 'createNetworkApplianceVlan'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/vlans'
 
         body_params = ['id', 'name', 'subnet', 'applianceIp', 'groupPolicyId', 'templateVlanType', 'cidr', 'mask', ]
@@ -1452,7 +1582,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'vlans', 'settings'],
             'operation': 'getNetworkApplianceVlansSettings'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/vlans/settings'
 
         return self._session.get(metadata, resource)
@@ -1474,7 +1604,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'vlans', 'settings'],
             'operation': 'updateNetworkApplianceVlansSettings'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/vlans/settings'
 
         body_params = ['vlansEnabled', ]
@@ -1497,8 +1627,8 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'vlans'],
             'operation': 'getNetworkApplianceVlan'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        vlanId = urllib.parse.quote(vlanId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        vlanId = urllib.parse.quote(str(vlanId), safe='')
         resource = f'/networks/{networkId}/appliance/vlans/{vlanId}'
 
         return self._session.get(metadata, resource)
@@ -1548,8 +1678,8 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'vlans'],
             'operation': 'updateNetworkApplianceVlan'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        vlanId = urllib.parse.quote(vlanId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        vlanId = urllib.parse.quote(str(vlanId), safe='')
         resource = f'/networks/{networkId}/appliance/vlans/{vlanId}'
 
         body_params = ['name', 'subnet', 'applianceIp', 'groupPolicyId', 'vpnNatSubnet', 'dhcpHandling', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dhcpBootOptionsEnabled', 'dhcpBootNextServer', 'dhcpBootFilename', 'fixedIpAssignments', 'reservedIpRanges', 'dnsNameservers', 'dhcpOptions', 'templateVlanType', 'cidr', 'mask', ]
@@ -1572,8 +1702,8 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'vlans'],
             'operation': 'deleteNetworkApplianceVlan'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        vlanId = urllib.parse.quote(vlanId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        vlanId = urllib.parse.quote(str(vlanId), safe='')
         resource = f'/networks/{networkId}/appliance/vlans/{vlanId}'
 
         return self._session.delete(metadata, resource)
@@ -1592,7 +1722,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'vpn', 'bgp'],
             'operation': 'getNetworkApplianceVpnBgp'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/vpn/bgp'
 
         return self._session.get(metadata, resource)
@@ -1617,7 +1747,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'vpn', 'bgp'],
             'operation': 'updateNetworkApplianceVpnBgp'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/vpn/bgp'
 
         body_params = ['enabled', 'asNumber', 'ibgpHoldTimer', 'neighbors', ]
@@ -1639,7 +1769,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'vpn', 'siteToSiteVpn'],
             'operation': 'getNetworkApplianceVpnSiteToSiteVpn'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/vpn/siteToSiteVpn'
 
         return self._session.get(metadata, resource)
@@ -1667,7 +1797,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'vpn', 'siteToSiteVpn'],
             'operation': 'updateNetworkApplianceVpnSiteToSiteVpn'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/vpn/siteToSiteVpn'
 
         body_params = ['mode', 'hubs', 'subnets', ]
@@ -1689,7 +1819,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'warmSpare'],
             'operation': 'getNetworkApplianceWarmSpare'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/warmSpare'
 
         return self._session.get(metadata, resource)
@@ -1715,7 +1845,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'warmSpare'],
             'operation': 'updateNetworkApplianceWarmSpare'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/warmSpare'
 
         body_params = ['enabled', 'spareSerial', 'uplinkMode', 'virtualIp1', 'virtualIp2', ]
@@ -1737,7 +1867,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'warmSpare'],
             'operation': 'swapNetworkApplianceWarmSpare'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/warmSpare/swap'
 
         return self._session.post(metadata, resource)
@@ -1771,7 +1901,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'monitor', 'security', 'events'],
             'operation': 'getOrganizationApplianceSecurityEvents'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/appliance/security/events'
 
         query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'sortOrder', ]
@@ -1793,7 +1923,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'security', 'intrusion'],
             'operation': 'getOrganizationApplianceSecurityIntrusion'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/appliance/security/intrusion'
 
         return self._session.get(metadata, resource)
@@ -1815,7 +1945,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'security', 'intrusion'],
             'operation': 'updateOrganizationApplianceSecurityIntrusion'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/appliance/security/intrusion'
 
         body_params = ['allowedRules', ]
@@ -1844,10 +1974,10 @@ class AsyncAppliance:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['appliance', 'monitor', 'uplink', 'statuses'],
+            'tags': ['appliance', 'monitor', 'uplinks', 'statuses'],
             'operation': 'getOrganizationApplianceUplinkStatuses'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/appliance/uplink/statuses'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'serials', 'iccids', ]
@@ -1886,7 +2016,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'monitor', 'vpn', 'stats'],
             'operation': 'getOrganizationApplianceVpnStats'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/appliance/vpn/stats'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 't0', 't1', 'timespan', ]
@@ -1922,7 +2052,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'monitor', 'vpn', 'statuses'],
             'operation': 'getOrganizationApplianceVpnStatuses'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/appliance/vpn/statuses'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', ]
@@ -1950,7 +2080,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'vpn', 'thirdPartyVPNPeers'],
             'operation': 'getOrganizationApplianceVpnThirdPartyVPNPeers'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/appliance/vpn/thirdPartyVPNPeers'
 
         return self._session.get(metadata, resource)
@@ -1972,7 +2102,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'vpn', 'thirdPartyVPNPeers'],
             'operation': 'updateOrganizationApplianceVpnThirdPartyVPNPeers'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/appliance/vpn/thirdPartyVPNPeers'
 
         body_params = ['peers', ]
@@ -1994,7 +2124,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'vpn', 'vpnFirewallRules'],
             'operation': 'getOrganizationApplianceVpnVpnFirewallRules'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/appliance/vpn/vpnFirewallRules'
 
         return self._session.get(metadata, resource)
@@ -2017,7 +2147,7 @@ class AsyncAppliance:
             'tags': ['appliance', 'configure', 'vpn', 'vpnFirewallRules'],
             'operation': 'updateOrganizationApplianceVpnVpnFirewallRules'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/appliance/vpn/vpnFirewallRules'
 
         body_params = ['rules', 'syslogDefaultRule', ]

@@ -45,30 +45,28 @@ class ActionBatchSwitch(object):
 
         - serial (string): (required)
         - portId (string): (required)
-        - name (string): The name of the switch port
-        - tags (array): The list of tags of the switch port
-        - enabled (boolean): The status of the switch port
-        - type (string): The type of the switch port ('trunk' or 'access')
+        - name (string): The name of the switch port.
+        - tags (array): The list of tags of the switch port.
+        - enabled (boolean): The status of the switch port.
+        - poeEnabled (boolean): The PoE status of the switch port.
+        - type (string): The type of the switch port ('trunk' or 'access').
         - vlan (integer): The VLAN of the switch port. A null value will clear the value set for trunk ports.
         - voiceVlan (integer): The voice VLAN of the switch port. Only applicable to access ports.
         - allowedVlans (string): The VLANs allowed on the switch port. Only applicable to trunk ports.
-        - poeEnabled (boolean): The PoE status of the switch port
-        - isolationEnabled (boolean): The isolation status of the switch port
-        - rstpEnabled (boolean): The rapid spanning tree protocol status
-        - stpGuard (string): The state of the STP guard ('disabled', 'root guard', 'bpdu guard' or 'loop guard')
-        - linkNegotiation (string): The link speed for the switch port
+        - isolationEnabled (boolean): The isolation status of the switch port.
+        - rstpEnabled (boolean): The rapid spanning tree protocol status.
+        - stpGuard (string): The state of the STP guard ('disabled', 'root guard', 'bpdu guard' or 'loop guard').
+        - linkNegotiation (string): The link speed for the switch port.
         - portScheduleId (string): The ID of the port schedule. A value of null will clear the port schedule.
         - udld (string): The action to take when Unidirectional Link is detected (Alert only, Enforce). Default configuration is Alert only.
-        - accessPolicyType (string): The type of the access policy of the switch port. Only applicable to access ports. Can be one of 'Open', 'Custom access policy', 'MAC allow list' or 'Sticky MAC allow list'
-        - accessPolicyNumber (integer): The number of a custom access policy to configure on the switch port. Only applicable when 'accessPolicyType' is 'Custom access policy'
-        - macAllowList (array): Only devices with MAC addresses specified in this list will have access to this port. Up to 20 MAC addresses can be defined. Only applicable when 'accessPolicyType' is 'MAC allow list'
-        - stickyMacAllowList (array): The initial list of MAC addresses for sticky Mac allow list. Only applicable when 'accessPolicyType' is 'Sticky MAC allow list'
-        - stickyMacAllowListLimit (integer): The maximum number of MAC addresses for sticky MAC allow list. Only applicable when 'accessPolicyType' is 'Sticky MAC allow list'
-        - stormControlEnabled (boolean): The storm control status of the switch port
+        - accessPolicyType (string): The type of the access policy of the switch port. Only applicable to access ports. Can be one of 'Open', 'Custom access policy', 'MAC allow list' or 'Sticky MAC allow list'.
+        - accessPolicyNumber (integer): The number of a custom access policy to configure on the switch port. Only applicable when 'accessPolicyType' is 'Custom access policy'.
+        - macAllowList (array): Only devices with MAC addresses specified in this list will have access to this port. Up to 20 MAC addresses can be defined. Only applicable when 'accessPolicyType' is 'MAC allow list'.
+        - stickyMacAllowList (array): The initial list of MAC addresses for sticky Mac allow list. Only applicable when 'accessPolicyType' is 'Sticky MAC allow list'.
+        - stickyMacAllowListLimit (integer): The maximum number of MAC addresses for sticky MAC allow list. Only applicable when 'accessPolicyType' is 'Sticky MAC allow list'.
+        - stormControlEnabled (boolean): The storm control status of the switch port.
         - adaptivePolicyGroupId (string): The adaptive policy group ID that will be used to tag traffic through this switch port. This ID must pre-exist during the configuration, else needs to be created using adaptivePolicy/groups API. Cannot be applied to a port on a switch bound to profile.
-        - peerSgtCapable (boolean): If true, Peer SGT is enabled for traffic through this switch port. Applicable to trunk port only, not access port.
-Cannot be applied to a port on a switch bound to profile.
-
+        - peerSgtCapable (boolean): If true, Peer SGT is enabled for traffic through this switch port. Applicable to trunk port only, not access port. Cannot be applied to a port on a switch bound to profile.
         - flexibleStackingEnabled (boolean): For supported switches (e.g. MS420/MS425), whether or not the port has flexible stacking enabled.
         """
 
@@ -93,7 +91,7 @@ Cannot be applied to a port on a switch bound to profile.
         }
         resource = f'/devices/{serial}/switch/ports/{portId}'
 
-        body_params = ['name', 'tags', 'enabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'poeEnabled', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', 'adaptivePolicyGroupId', 'peerSgtCapable', 'flexibleStackingEnabled', ]
+        body_params = ['name', 'tags', 'enabled', 'poeEnabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', 'adaptivePolicyGroupId', 'peerSgtCapable', 'flexibleStackingEnabled', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -210,7 +208,6 @@ Cannot be applied to a port on a switch bound to profile.
         action = {
             "resource": resource,
             "operation": "destroy",
-            "body": payload
         }
         return action
         
@@ -360,7 +357,6 @@ Cannot be applied to a port on a switch bound to profile.
         action = {
             "resource": resource,
             "operation": "destroy",
-            "body": payload
         }
         return action
         
@@ -526,7 +522,6 @@ Cannot be applied to a port on a switch bound to profile.
         action = {
             "resource": resource,
             "operation": "destroy",
-            "body": payload
         }
         return action
         
@@ -693,7 +688,6 @@ Cannot be applied to a port on a switch bound to profile.
         action = {
             "resource": resource,
             "operation": "destroy",
-            "body": payload
         }
         return action
         
@@ -816,7 +810,6 @@ Cannot be applied to a port on a switch bound to profile.
         action = {
             "resource": resource,
             "operation": "destroy",
-            "body": payload
         }
         return action
         
@@ -983,7 +976,6 @@ Cannot be applied to a port on a switch bound to profile.
         action = {
             "resource": resource,
             "operation": "destroy",
-            "body": payload
         }
         return action
         
@@ -1116,7 +1108,6 @@ Cannot be applied to a port on a switch bound to profile.
         action = {
             "resource": resource,
             "operation": "destroy",
-            "body": payload
         }
         return action
         
@@ -1301,7 +1292,6 @@ Cannot be applied to a port on a switch bound to profile.
         action = {
             "resource": resource,
             "operation": "destroy",
-            "body": payload
         }
         return action
         
@@ -1455,7 +1445,6 @@ Cannot be applied to a port on a switch bound to profile.
         action = {
             "resource": resource,
             "operation": "destroy",
-            "body": payload
         }
         return action
         
@@ -1538,26 +1527,26 @@ Cannot be applied to a port on a switch bound to profile.
         - configTemplateId (string): (required)
         - profileId (string): (required)
         - portId (string): (required)
-        - name (string): The name of the switch profile port
-        - tags (array): The list of tags of the switch profile port
-        - enabled (boolean): The status of the switch profile port
-        - type (string): The type of the switch profile port ('trunk' or 'access')
+        - name (string): The name of the switch profile port.
+        - tags (array): The list of tags of the switch profile port.
+        - enabled (boolean): The status of the switch profile port.
+        - poeEnabled (boolean): The PoE status of the switch profile port.
+        - type (string): The type of the switch profile port ('trunk' or 'access').
         - vlan (integer): The VLAN of the switch profile port. A null value will clear the value set for trunk ports.
-        - voiceVlan (integer): The voice VLAN of the switch profile port. Only applicable to access ports
-        - allowedVlans (string): The VLANs allowed on the switch profile port. Only applicable to trunk ports
-        - poeEnabled (boolean): The PoE status of the switch profile port
-        - isolationEnabled (boolean): The isolation status of the switch profile port
-        - rstpEnabled (boolean): The rapid spanning tree protocol status
-        - stpGuard (string): The state of the STP guard ('disabled', 'root guard', 'bpdu guard' or 'loop guard')
-        - linkNegotiation (string): The link speed for the switch profile port
+        - voiceVlan (integer): The voice VLAN of the switch profile port. Only applicable to access ports.
+        - allowedVlans (string): The VLANs allowed on the switch profile port. Only applicable to trunk ports.
+        - isolationEnabled (boolean): The isolation status of the switch profile port.
+        - rstpEnabled (boolean): The rapid spanning tree protocol status.
+        - stpGuard (string): The state of the STP guard ('disabled', 'root guard', 'bpdu guard' or 'loop guard').
+        - linkNegotiation (string): The link speed for the switch profile port.
         - portScheduleId (string): The ID of the port schedule. A value of null will clear the port schedule.
         - udld (string): The action to take when Unidirectional Link is detected (Alert only, Enforce). Default configuration is Alert only.
-        - accessPolicyType (string): The type of the access policy of the switch profile port. Only applicable to access ports. Can be one of 'Open', 'Custom access policy', 'MAC allow list' or 'Sticky MAC allow list'
-        - accessPolicyNumber (integer): The number of a custom access policy to configure on the switch profile port. Only applicable when 'accessPolicyType' is 'Custom access policy'
-        - macAllowList (array): Only devices with MAC addresses specified in this list will have access to this port. Up to 20 MAC addresses can be defined. Only applicable when 'accessPolicyType' is 'MAC allow list'
-        - stickyMacAllowList (array): The initial list of MAC addresses for sticky Mac allow list. Only applicable when 'accessPolicyType' is 'Sticky MAC allow list'
-        - stickyMacAllowListLimit (integer): The maximum number of MAC addresses for sticky MAC allow list. Only applicable when 'accessPolicyType' is 'Sticky MAC allow list'
-        - stormControlEnabled (boolean): The storm control status of the switch profile port
+        - accessPolicyType (string): The type of the access policy of the switch profile port. Only applicable to access ports. Can be one of 'Open', 'Custom access policy', 'MAC allow list' or 'Sticky MAC allow list'.
+        - accessPolicyNumber (integer): The number of a custom access policy to configure on the switch profile port. Only applicable when 'accessPolicyType' is 'Custom access policy'.
+        - macAllowList (array): Only devices with MAC addresses specified in this list will have access to this port. Up to 20 MAC addresses can be defined. Only applicable when 'accessPolicyType' is 'MAC allow list'.
+        - stickyMacAllowList (array): The initial list of MAC addresses for sticky Mac allow list. Only applicable when 'accessPolicyType' is 'Sticky MAC allow list'.
+        - stickyMacAllowListLimit (integer): The maximum number of MAC addresses for sticky MAC allow list. Only applicable when 'accessPolicyType' is 'Sticky MAC allow list'.
+        - stormControlEnabled (boolean): The storm control status of the switch profile port.
         - flexibleStackingEnabled (boolean): For supported switches (e.g. MS420/MS425), whether or not the port has flexible stacking enabled.
         """
 
@@ -1582,7 +1571,7 @@ Cannot be applied to a port on a switch bound to profile.
         }
         resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles/{profileId}/ports/{portId}'
 
-        body_params = ['name', 'tags', 'enabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'poeEnabled', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', 'flexibleStackingEnabled', ]
+        body_params = ['name', 'tags', 'enabled', 'poeEnabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', 'flexibleStackingEnabled', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,

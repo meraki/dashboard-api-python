@@ -60,7 +60,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure'],
             'operation': 'getOrganization'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}'
 
         return self._session.get(metadata, resource)
@@ -83,7 +83,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure'],
             'operation': 'updateOrganization'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}'
 
         body_params = ['name', 'api', ]
@@ -105,7 +105,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure'],
             'operation': 'deleteOrganization'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}'
 
         return self._session.delete(metadata, resource)
@@ -129,7 +129,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'actionBatches'],
             'operation': 'createOrganizationActionBatch'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/actionBatches'
 
         body_params = ['confirmed', 'synchronous', 'actions', ]
@@ -158,7 +158,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'actionBatches'],
             'operation': 'getOrganizationActionBatches'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/actionBatches'
 
         query_params = ['status', ]
@@ -181,8 +181,8 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'actionBatches'],
             'operation': 'getOrganizationActionBatch'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        actionBatchId = urllib.parse.quote(actionBatchId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        actionBatchId = urllib.parse.quote(str(actionBatchId), safe='')
         resource = f'/organizations/{organizationId}/actionBatches/{actionBatchId}'
 
         return self._session.get(metadata, resource)
@@ -202,8 +202,8 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'actionBatches'],
             'operation': 'deleteOrganizationActionBatch'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        actionBatchId = urllib.parse.quote(actionBatchId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        actionBatchId = urllib.parse.quote(str(actionBatchId), safe='')
         resource = f'/organizations/{organizationId}/actionBatches/{actionBatchId}'
 
         return self._session.delete(metadata, resource)
@@ -227,8 +227,8 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'actionBatches'],
             'operation': 'updateOrganizationActionBatch'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        actionBatchId = urllib.parse.quote(actionBatchId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        actionBatchId = urllib.parse.quote(str(actionBatchId), safe='')
         resource = f'/organizations/{organizationId}/actionBatches/{actionBatchId}'
 
         body_params = ['confirmed', 'synchronous', ]
@@ -250,7 +250,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'adaptivePolicy', 'acls'],
             'operation': 'getOrganizationAdaptivePolicyAcls'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/adaptivePolicy/acls'
 
         return self._session.get(metadata, resource)
@@ -279,7 +279,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'adaptivePolicy', 'acls'],
             'operation': 'createOrganizationAdaptivePolicyAcl'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/adaptivePolicy/acls'
 
         body_params = ['name', 'description', 'rules', 'ipVersion', ]
@@ -289,34 +289,34 @@ class Organizations(object):
         
 
 
-    def getOrganizationAdaptivePolicyAcl(self, organizationId: str, id: str):
+    def getOrganizationAdaptivePolicyAcl(self, organizationId: str, aclId: str):
         """
         **Returns the adaptive policy ACL information**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-adaptive-policy-acl
 
         - organizationId (string): (required)
-        - id (string): (required)
+        - aclId (string): (required)
         """
 
         metadata = {
             'tags': ['organizations', 'configure', 'adaptivePolicy', 'acls'],
             'operation': 'getOrganizationAdaptivePolicyAcl'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        id = urllib.parse.quote(id, safe='')
-        resource = f'/organizations/{organizationId}/adaptivePolicy/acls/{id}'
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        aclId = urllib.parse.quote(str(aclId), safe='')
+        resource = f'/organizations/{organizationId}/adaptivePolicy/acls/{aclId}'
 
         return self._session.get(metadata, resource)
         
 
 
-    def updateOrganizationAdaptivePolicyAcl(self, organizationId: str, id: str, **kwargs):
+    def updateOrganizationAdaptivePolicyAcl(self, organizationId: str, aclId: str, **kwargs):
         """
         **Updates an adaptive policy ACL**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-adaptive-policy-acl
 
         - organizationId (string): (required)
-        - id (string): (required)
+        - aclId (string): (required)
         - name (string): Name of the adaptive policy ACL
         - description (string): Description of the adaptive policy ACL
         - rules (array): An ordered array of the adaptive policy ACL rules. An empty array will clear the rules.
@@ -333,9 +333,9 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'adaptivePolicy', 'acls'],
             'operation': 'updateOrganizationAdaptivePolicyAcl'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        id = urllib.parse.quote(id, safe='')
-        resource = f'/organizations/{organizationId}/adaptivePolicy/acls/{id}'
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        aclId = urllib.parse.quote(str(aclId), safe='')
+        resource = f'/organizations/{organizationId}/adaptivePolicy/acls/{aclId}'
 
         body_params = ['name', 'description', 'rules', 'ipVersion', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
@@ -344,22 +344,22 @@ class Organizations(object):
         
 
 
-    def deleteOrganizationAdaptivePolicyAcl(self, organizationId: str, id: str):
+    def deleteOrganizationAdaptivePolicyAcl(self, organizationId: str, aclId: str):
         """
         **Deletes the specified adaptive policy ACL**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-adaptive-policy-acl
 
         - organizationId (string): (required)
-        - id (string): (required)
+        - aclId (string): (required)
         """
 
         metadata = {
             'tags': ['organizations', 'configure', 'adaptivePolicy', 'acls'],
             'operation': 'deleteOrganizationAdaptivePolicyAcl'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        id = urllib.parse.quote(id, safe='')
-        resource = f'/organizations/{organizationId}/adaptivePolicy/acls/{id}'
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        aclId = urllib.parse.quote(str(aclId), safe='')
+        resource = f'/organizations/{organizationId}/adaptivePolicy/acls/{aclId}'
 
         return self._session.delete(metadata, resource)
         
@@ -377,7 +377,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'adaptivePolicy', 'groups'],
             'operation': 'getOrganizationAdaptivePolicyGroups'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/adaptivePolicy/groups'
 
         return self._session.get(metadata, resource)
@@ -402,7 +402,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'adaptivePolicy', 'groups'],
             'operation': 'createOrganizationAdaptivePolicyGroup'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/adaptivePolicy/groups'
 
         body_params = ['name', 'sgt', 'description', 'policyObjects', ]
@@ -425,8 +425,8 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'adaptivePolicy', 'groups'],
             'operation': 'getOrganizationAdaptivePolicyGroup'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        id = urllib.parse.quote(id, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        id = urllib.parse.quote(str(id), safe='')
         resource = f'/organizations/{organizationId}/adaptivePolicy/groups/{id}'
 
         return self._session.get(metadata, resource)
@@ -452,8 +452,8 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'adaptivePolicy', 'groups'],
             'operation': 'updateOrganizationAdaptivePolicyGroup'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        id = urllib.parse.quote(id, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        id = urllib.parse.quote(str(id), safe='')
         resource = f'/organizations/{organizationId}/adaptivePolicy/groups/{id}'
 
         body_params = ['name', 'sgt', 'description', 'policyObjects', ]
@@ -476,8 +476,8 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'adaptivePolicy', 'groups'],
             'operation': 'deleteOrganizationAdaptivePolicyGroup'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        id = urllib.parse.quote(id, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        id = urllib.parse.quote(str(id), safe='')
         resource = f'/organizations/{organizationId}/adaptivePolicy/groups/{id}'
 
         return self._session.delete(metadata, resource)
@@ -496,7 +496,7 @@ class Organizations(object):
             'tags': ['organizations', 'monitor', 'adaptivePolicy', 'overview'],
             'operation': 'getOrganizationAdaptivePolicyOverview'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/adaptivePolicy/overview'
 
         return self._session.get(metadata, resource)
@@ -515,7 +515,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'adaptivePolicy', 'policies'],
             'operation': 'getOrganizationAdaptivePolicyPolicies'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/adaptivePolicy/policies'
 
         return self._session.get(metadata, resource)
@@ -548,7 +548,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'adaptivePolicy', 'policies'],
             'operation': 'createOrganizationAdaptivePolicyPolicy'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/adaptivePolicy/policies'
 
         body_params = ['sourceGroup', 'destinationGroup', 'acls', 'lastEntryRule', ]
@@ -558,34 +558,34 @@ class Organizations(object):
         
 
 
-    def getOrganizationAdaptivePolicyPolicy(self, organizationId: str, adaptivePolicyId: str):
+    def getOrganizationAdaptivePolicyPolicy(self, organizationId: str, id: str):
         """
         **Return an adaptive policy**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-adaptive-policy-policy
 
         - organizationId (string): (required)
-        - adaptivePolicyId (string): (required)
+        - id (string): (required)
         """
 
         metadata = {
             'tags': ['organizations', 'configure', 'adaptivePolicy', 'policies'],
             'operation': 'getOrganizationAdaptivePolicyPolicy'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        adaptivePolicyId = urllib.parse.quote(adaptivePolicyId, safe='')
-        resource = f'/organizations/{organizationId}/adaptivePolicy/policies/{adaptivePolicyId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        id = urllib.parse.quote(str(id), safe='')
+        resource = f'/organizations/{organizationId}/adaptivePolicy/policies/{id}'
 
         return self._session.get(metadata, resource)
         
 
 
-    def updateOrganizationAdaptivePolicyPolicy(self, organizationId: str, adaptivePolicyId: str, **kwargs):
+    def updateOrganizationAdaptivePolicyPolicy(self, organizationId: str, id: str, **kwargs):
         """
         **Update an Adaptive Policy**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-adaptive-policy-policy
 
         - organizationId (string): (required)
-        - adaptivePolicyId (string): (required)
+        - id (string): (required)
         - sourceGroup (object): The source adaptive policy group (requires one unique attribute)
 
         - destinationGroup (object): The destination adaptive policy group (requires one unique attribute)
@@ -606,9 +606,9 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'adaptivePolicy', 'policies'],
             'operation': 'updateOrganizationAdaptivePolicyPolicy'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        adaptivePolicyId = urllib.parse.quote(adaptivePolicyId, safe='')
-        resource = f'/organizations/{organizationId}/adaptivePolicy/policies/{adaptivePolicyId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        id = urllib.parse.quote(str(id), safe='')
+        resource = f'/organizations/{organizationId}/adaptivePolicy/policies/{id}'
 
         body_params = ['sourceGroup', 'destinationGroup', 'acls', 'lastEntryRule', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
@@ -617,22 +617,22 @@ class Organizations(object):
         
 
 
-    def deleteOrganizationAdaptivePolicyPolicy(self, organizationId: str, adaptivePolicyId: str):
+    def deleteOrganizationAdaptivePolicyPolicy(self, organizationId: str, id: str):
         """
         **Delete an Adaptive Policy**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-adaptive-policy-policy
 
         - organizationId (string): (required)
-        - adaptivePolicyId (string): (required)
+        - id (string): (required)
         """
 
         metadata = {
             'tags': ['organizations', 'configure', 'adaptivePolicy', 'policies'],
             'operation': 'deleteOrganizationAdaptivePolicyPolicy'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        adaptivePolicyId = urllib.parse.quote(adaptivePolicyId, safe='')
-        resource = f'/organizations/{organizationId}/adaptivePolicy/policies/{adaptivePolicyId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        id = urllib.parse.quote(str(id), safe='')
+        resource = f'/organizations/{organizationId}/adaptivePolicy/policies/{id}'
 
         return self._session.delete(metadata, resource)
         
@@ -650,7 +650,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'adaptivePolicy', 'settings'],
             'operation': 'getOrganizationAdaptivePolicySettings'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/adaptivePolicy/settings'
 
         return self._session.get(metadata, resource)
@@ -672,7 +672,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'adaptivePolicy', 'settings'],
             'operation': 'updateOrganizationAdaptivePolicySettings'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/adaptivePolicy/settings'
 
         body_params = ['enabledNetworks', ]
@@ -694,7 +694,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'admins'],
             'operation': 'getOrganizationAdmins'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/admins'
 
         return self._session.get(metadata, resource)
@@ -728,7 +728,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'admins'],
             'operation': 'createOrganizationAdmin'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/admins'
 
         body_params = ['email', 'name', 'orgAccess', 'tags', 'networks', 'authenticationMethod', ]
@@ -761,8 +761,8 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'admins'],
             'operation': 'updateOrganizationAdmin'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        adminId = urllib.parse.quote(adminId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        adminId = urllib.parse.quote(str(adminId), safe='')
         resource = f'/organizations/{organizationId}/admins/{adminId}'
 
         body_params = ['name', 'orgAccess', 'tags', 'networks', ]
@@ -785,8 +785,8 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'admins'],
             'operation': 'deleteOrganizationAdmin'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        adminId = urllib.parse.quote(adminId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        adminId = urllib.parse.quote(str(adminId), safe='')
         resource = f'/organizations/{organizationId}/admins/{adminId}'
 
         return self._session.delete(metadata, resource)
@@ -805,7 +805,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'alerts', 'profiles'],
             'operation': 'getOrganizationAlertsProfiles'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/alerts/profiles'
 
         return self._session.get(metadata, resource)
@@ -835,7 +835,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'alerts', 'profiles'],
             'operation': 'createOrganizationAlertsProfile'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/alerts/profiles'
 
         body_params = ['type', 'alertCondition', 'recipients', 'networkTags', 'description', ]
@@ -870,8 +870,8 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'alerts', 'profiles'],
             'operation': 'updateOrganizationAlertsProfile'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        alertConfigId = urllib.parse.quote(alertConfigId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        alertConfigId = urllib.parse.quote(str(alertConfigId), safe='')
         resource = f'/organizations/{organizationId}/alerts/profiles/{alertConfigId}'
 
         body_params = ['enabled', 'type', 'alertCondition', 'recipients', 'networkTags', 'description', ]
@@ -894,8 +894,8 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'alerts', 'profiles'],
             'operation': 'deleteOrganizationAlertsProfile'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        alertConfigId = urllib.parse.quote(alertConfigId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        alertConfigId = urllib.parse.quote(str(alertConfigId), safe='')
         resource = f'/organizations/{organizationId}/alerts/profiles/{alertConfigId}'
 
         return self._session.delete(metadata, resource)
@@ -939,7 +939,7 @@ class Organizations(object):
             'tags': ['organizations', 'monitor', 'apiRequests'],
             'operation': 'getOrganizationApiRequests'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/apiRequests'
 
         query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'adminId', 'path', 'method', 'responseCode', 'sourceIp', 'userAgent', 'version', 'operationIds', ]
@@ -972,7 +972,7 @@ class Organizations(object):
             'tags': ['organizations', 'monitor', 'apiRequests', 'overview'],
             'operation': 'getOrganizationApiRequestsOverview'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/apiRequests/overview'
 
         query_params = ['t0', 't1', 'timespan', ]
@@ -994,7 +994,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'brandingPolicies'],
             'operation': 'getOrganizationBrandingPolicies'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/brandingPolicies'
 
         return self._session.get(metadata, resource)
@@ -1024,7 +1024,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'brandingPolicies'],
             'operation': 'createOrganizationBrandingPolicy'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/brandingPolicies'
 
         body_params = ['name', 'enabled', 'adminSettings', 'helpSettings', 'customLogo', ]
@@ -1046,7 +1046,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'brandingPolicies', 'priorities'],
             'operation': 'getOrganizationBrandingPoliciesPriorities'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/brandingPolicies/priorities'
 
         return self._session.get(metadata, resource)
@@ -1068,7 +1068,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'brandingPolicies', 'priorities'],
             'operation': 'updateOrganizationBrandingPoliciesPriorities'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/brandingPolicies/priorities'
 
         body_params = ['brandingPolicyIds', ]
@@ -1091,8 +1091,8 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'brandingPolicies'],
             'operation': 'getOrganizationBrandingPolicy'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        brandingPolicyId = urllib.parse.quote(brandingPolicyId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        brandingPolicyId = urllib.parse.quote(str(brandingPolicyId), safe='')
         resource = f'/organizations/{organizationId}/brandingPolicies/{brandingPolicyId}'
 
         return self._session.get(metadata, resource)
@@ -1123,8 +1123,8 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'brandingPolicies'],
             'operation': 'updateOrganizationBrandingPolicy'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        brandingPolicyId = urllib.parse.quote(brandingPolicyId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        brandingPolicyId = urllib.parse.quote(str(brandingPolicyId), safe='')
         resource = f'/organizations/{organizationId}/brandingPolicies/{brandingPolicyId}'
 
         body_params = ['name', 'enabled', 'adminSettings', 'helpSettings', 'customLogo', ]
@@ -1147,8 +1147,8 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'brandingPolicies'],
             'operation': 'deleteOrganizationBrandingPolicy'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        brandingPolicyId = urllib.parse.quote(brandingPolicyId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        brandingPolicyId = urllib.parse.quote(str(brandingPolicyId), safe='')
         resource = f'/organizations/{organizationId}/brandingPolicies/{brandingPolicyId}'
 
         return self._session.delete(metadata, resource)
@@ -1172,7 +1172,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure'],
             'operation': 'claimIntoOrganization'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/claim'
 
         body_params = ['orders', 'serials', 'licenses', ]
@@ -1199,7 +1199,7 @@ class Organizations(object):
             'tags': ['organizations', 'monitor', 'clients', 'bandwidthUsageHistory'],
             'operation': 'getOrganizationClientsBandwidthUsageHistory'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/clients/bandwidthUsageHistory'
 
         query_params = ['t0', 't1', 'timespan', ]
@@ -1226,7 +1226,7 @@ class Organizations(object):
             'tags': ['organizations', 'monitor', 'clients', 'overview'],
             'operation': 'getOrganizationClientsOverview'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/clients/overview'
 
         query_params = ['t0', 't1', 'timespan', ]
@@ -1256,7 +1256,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'clients', 'search'],
             'operation': 'getOrganizationClientsSearch'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/clients/search'
 
         query_params = ['mac', 'perPage', 'startingAfter', 'endingBefore', ]
@@ -1281,7 +1281,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure'],
             'operation': 'cloneOrganization'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/clone'
 
         body_params = ['name', ]
@@ -1303,7 +1303,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'configTemplates'],
             'operation': 'getOrganizationConfigTemplates'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/configTemplates'
 
         return self._session.get(metadata, resource)
@@ -1327,7 +1327,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'configTemplates'],
             'operation': 'createOrganizationConfigTemplate'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/configTemplates'
 
         body_params = ['name', 'timeZone', 'copyFromNetworkId', ]
@@ -1354,8 +1354,8 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'configTemplates'],
             'operation': 'updateOrganizationConfigTemplate'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        configTemplateId = urllib.parse.quote(configTemplateId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        configTemplateId = urllib.parse.quote(str(configTemplateId), safe='')
         resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}'
 
         body_params = ['name', 'timeZone', ]
@@ -1378,8 +1378,8 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'configTemplates'],
             'operation': 'deleteOrganizationConfigTemplate'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        configTemplateId = urllib.parse.quote(configTemplateId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        configTemplateId = urllib.parse.quote(str(configTemplateId), safe='')
         resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}'
 
         return self._session.delete(metadata, resource)
@@ -1399,8 +1399,8 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'configTemplates'],
             'operation': 'getOrganizationConfigTemplate'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        configTemplateId = urllib.parse.quote(configTemplateId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        configTemplateId = urllib.parse.quote(str(configTemplateId), safe='')
         resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}'
 
         return self._session.get(metadata, resource)
@@ -1431,7 +1431,7 @@ class Organizations(object):
             'tags': ['organizations', 'monitor', 'configurationChanges'],
             'operation': 'getOrganizationConfigurationChanges'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/configurationChanges'
 
         query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'networkId', 'adminId', ]
@@ -1478,7 +1478,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'devices'],
             'operation': 'getOrganizationDevices'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/devices'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'configurationUpdatedAfter', 'networkIds', 'productTypes', 'tags', 'tagsFilterType', 'name', 'mac', 'serial', 'model', 'macs', 'serials', 'sensorMetrics', 'sensorAlertProfileIds', 'models', ]
@@ -1522,8 +1522,52 @@ class Organizations(object):
             'tags': ['organizations', 'monitor', 'devices', 'availabilities'],
             'operation': 'getOrganizationDevicesAvailabilities'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/devices/availabilities'
+
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'productTypes', 'serials', 'tags', 'tagsFilterType', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', 'productTypes', 'serials', 'tags', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def getOrganizationDevicesPowerModulesStatusesByDevice(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **List the power status information for devices in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-power-modules-statuses-by-device
+
+        - organizationId (string): (required)
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter device availabilities by network ID. This filter uses multiple exact matches.
+        - productTypes (array): Optional parameter to filter device availabilities by device product types. This filter uses multiple exact matches.
+        - serials (array): Optional parameter to filter device availabilities by device serial numbers. This filter uses multiple exact matches.
+        - tags (array): An optional parameter to filter devices by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below). This filter uses multiple exact matches.
+        - tagsFilterType (string): An optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return devices which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
+        """
+
+        kwargs.update(locals())
+
+        if 'tagsFilterType' in kwargs:
+            options = ['withAnyTags', 'withAllTags']
+            assert kwargs['tagsFilterType'] in options, f'''"tagsFilterType" cannot be "{kwargs['tagsFilterType']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['organizations', 'monitor', 'devices', 'powerModules', 'statuses', 'byDevice'],
+            'operation': 'getOrganizationDevicesPowerModulesStatusesByDevice'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/devices/powerModules/statuses/byDevice'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'productTypes', 'serials', 'tags', 'tagsFilterType', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
@@ -1568,7 +1612,7 @@ class Organizations(object):
             'tags': ['organizations', 'monitor', 'devices', 'statuses'],
             'operation': 'getOrganizationDevicesStatuses'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/devices/statuses'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'serials', 'statuses', 'productTypes', 'models', 'tags', 'tagsFilterType', ]
@@ -1600,7 +1644,7 @@ class Organizations(object):
             'tags': ['organizations', 'monitor', 'devices', 'statuses', 'overview'],
             'operation': 'getOrganizationDevicesStatusesOverview'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/devices/statuses/overview'
 
         query_params = ['productTypes', 'networkIds', ]
@@ -1616,13 +1660,57 @@ class Organizations(object):
         
 
 
+    def getOrganizationDevicesUplinksAddressesByDevice(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **List the current uplink addresses for devices in an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-uplinks-addresses-by-device
+
+        - organizationId (string): (required)
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter device uplinks by network ID. This filter uses multiple exact matches.
+        - productTypes (array): Optional parameter to filter device uplinks by device product types. This filter uses multiple exact matches.
+        - serials (array): Optional parameter to filter device availabilities by device serial numbers. This filter uses multiple exact matches.
+        - tags (array): An optional parameter to filter devices by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below). This filter uses multiple exact matches.
+        - tagsFilterType (string): An optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return devices which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
+        """
+
+        kwargs.update(locals())
+
+        if 'tagsFilterType' in kwargs:
+            options = ['withAnyTags', 'withAllTags']
+            assert kwargs['tagsFilterType'] in options, f'''"tagsFilterType" cannot be "{kwargs['tagsFilterType']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['organizations', 'monitor', 'devices', 'uplinks', 'addresses', 'byDevice'],
+            'operation': 'getOrganizationDevicesUplinksAddressesByDevice'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/devices/uplinks/addresses/byDevice'
+
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'productTypes', 'serials', 'tags', 'tagsFilterType', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', 'productTypes', 'serials', 'tags', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
     def getOrganizationDevicesUplinksLossAndLatency(self, organizationId: str, **kwargs):
         """
         **Return the uplink loss and latency for every MX in the organization from at latest 2 minutes ago**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-uplinks-loss-and-latency
 
         - organizationId (string): (required)
-        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 60 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 5 minutes after t0. The latest possible time that t1 can be is 2 minutes into the past.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 5 minutes. The default is 5 minutes.
         - uplink (string): Optional filter for a specific WAN uplink. Valid uplinks are wan1, wan2, cellular. Default will return all uplinks.
@@ -1636,10 +1724,10 @@ class Organizations(object):
             assert kwargs['uplink'] in options, f'''"uplink" cannot be "{kwargs['uplink']}", & must be set to one of: {options}'''
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'devices', 'uplinksLossAndLatency'],
+            'tags': ['organizations', 'monitor', 'devices', 'uplinks', 'uplinksLossAndLatency'],
             'operation': 'getOrganizationDevicesUplinksLossAndLatency'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/devices/uplinksLossAndLatency'
 
         query_params = ['t0', 't1', 'timespan', 'uplink', 'ip', ]
@@ -1661,7 +1749,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'earlyAccess', 'features'],
             'operation': 'getOrganizationEarlyAccessFeatures'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/earlyAccess/features'
 
         return self._session.get(metadata, resource)
@@ -1680,7 +1768,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'earlyAccess', 'features', 'optIns'],
             'operation': 'getOrganizationEarlyAccessFeaturesOptIns'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/earlyAccess/features/optIns'
 
         return self._session.get(metadata, resource)
@@ -1703,7 +1791,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'earlyAccess', 'features', 'optIns'],
             'operation': 'createOrganizationEarlyAccessFeaturesOptIn'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/earlyAccess/features/optIns'
 
         body_params = ['shortName', 'limitScopeToNetworks', ]
@@ -1726,8 +1814,8 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'earlyAccess', 'features', 'optIns'],
             'operation': 'getOrganizationEarlyAccessFeaturesOptIn'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        optInId = urllib.parse.quote(optInId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        optInId = urllib.parse.quote(str(optInId), safe='')
         resource = f'/organizations/{organizationId}/earlyAccess/features/optIns/{optInId}'
 
         return self._session.get(metadata, resource)
@@ -1750,8 +1838,8 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'earlyAccess', 'features', 'optIns'],
             'operation': 'updateOrganizationEarlyAccessFeaturesOptIn'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        optInId = urllib.parse.quote(optInId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        optInId = urllib.parse.quote(str(optInId), safe='')
         resource = f'/organizations/{organizationId}/earlyAccess/features/optIns/{optInId}'
 
         body_params = ['limitScopeToNetworks', ]
@@ -1774,17 +1862,49 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'earlyAccess', 'features', 'optIns'],
             'operation': 'deleteOrganizationEarlyAccessFeaturesOptIn'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        optInId = urllib.parse.quote(optInId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        optInId = urllib.parse.quote(str(optInId), safe='')
         resource = f'/organizations/{organizationId}/earlyAccess/features/optIns/{optInId}'
 
         return self._session.delete(metadata, resource)
         
 
 
+    def getOrganizationFirmwareUpgrades(self, organizationId: str, **kwargs):
+        """
+        **Get firmware upgrade information for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-firmware-upgrades
+
+        - organizationId (string): (required)
+        - status (array): The status of an upgrade 
+        - productType (array): The product type in a given upgrade ID
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'firmware', 'upgrades'],
+            'operation': 'getOrganizationFirmwareUpgrades'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/firmware/upgrades'
+
+        query_params = ['status', 'productType', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['status', 'productType', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get(metadata, resource, params)
+        
+
+
     def claimIntoOrganizationInventory(self, organizationId: str, **kwargs):
         """
-        **Claim a list of devices, licenses, and/or orders into an organization**
+        **Claim a list of devices, licenses, and/or orders into an organization inventory**
         https://developer.cisco.com/meraki/api-v1/#!claim-into-organization-inventory
 
         - organizationId (string): (required)
@@ -1799,7 +1919,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'inventory'],
             'operation': 'claimIntoOrganizationInventory'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/inventory/claim'
 
         body_params = ['orders', 'serials', 'licenses', ]
@@ -1826,9 +1946,9 @@ class Organizations(object):
         - networkIds (array): Search for devices in inventory based on network ids.
         - serials (array): Search for devices in inventory based on serials.
         - models (array): Search for devices in inventory based on model.
-        - tags (array): An optional parameter to filter devices by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below).
-        - tagsFilterType (string): An optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return devices which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
-        - productTypes (array): Optional parameter to filter devices by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, and sensor.
+        - tags (array): Filter devices by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below).
+        - tagsFilterType (string): To use with 'tags' parameter, to filter devices which contain ANY or ALL given tags. Accepted values are 'withAnyTags' or 'withAllTags', default is 'withAnyTags'.
+        - productTypes (array): Filter devices by product type. Accepted values are appliance, camera, cellularGateway, sensor, switch, systemsManager, and wireless.
         """
 
         kwargs.update(locals())
@@ -1844,7 +1964,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'inventory', 'devices'],
             'operation': 'getOrganizationInventoryDevices'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/inventory/devices'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'usedState', 'search', 'macs', 'networkIds', 'serials', 'models', 'tags', 'tagsFilterType', 'productTypes', ]
@@ -1873,8 +1993,8 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'inventory', 'devices'],
             'operation': 'getOrganizationInventoryDevice'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        serial = urllib.parse.quote(serial, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/organizations/{organizationId}/inventory/devices/{serial}'
 
         return self._session.get(metadata, resource)
@@ -1896,7 +2016,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'inventory'],
             'operation': 'releaseFromOrganizationInventory'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/inventory/release'
 
         body_params = ['serials', ]
@@ -1932,7 +2052,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'licenses'],
             'operation': 'getOrganizationLicenses'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/licenses'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'deviceSerial', 'networkId', 'state', ]
@@ -1959,7 +2079,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'licenses'],
             'operation': 'assignOrganizationLicensesSeats'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/licenses/assignSeats'
 
         body_params = ['licenseId', 'networkId', 'seatCount', ]
@@ -1985,7 +2105,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'licenses'],
             'operation': 'moveOrganizationLicenses'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/licenses/move'
 
         body_params = ['destOrganizationId', 'licenseIds', ]
@@ -2012,7 +2132,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'licenses'],
             'operation': 'moveOrganizationLicensesSeats'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/licenses/moveSeats'
 
         body_params = ['destOrganizationId', 'licenseId', 'seatCount', ]
@@ -2034,7 +2154,7 @@ class Organizations(object):
             'tags': ['organizations', 'monitor', 'licenses', 'overview'],
             'operation': 'getOrganizationLicensesOverview'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/licenses/overview'
 
         return self._session.get(metadata, resource)
@@ -2057,7 +2177,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'licenses'],
             'operation': 'renewOrganizationLicensesSeats'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/licenses/renewSeats'
 
         body_params = ['licenseIdToRenew', 'unusedLicenseId', ]
@@ -2080,8 +2200,8 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'licenses'],
             'operation': 'getOrganizationLicense'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        licenseId = urllib.parse.quote(licenseId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        licenseId = urllib.parse.quote(str(licenseId), safe='')
         resource = f'/organizations/{organizationId}/licenses/{licenseId}'
 
         return self._session.get(metadata, resource)
@@ -2104,8 +2224,8 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'licenses'],
             'operation': 'updateOrganizationLicense'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        licenseId = urllib.parse.quote(licenseId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        licenseId = urllib.parse.quote(str(licenseId), safe='')
         resource = f'/organizations/{organizationId}/licenses/{licenseId}'
 
         body_params = ['deviceSerial', ]
@@ -2127,7 +2247,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'loginSecurity'],
             'operation': 'getOrganizationLoginSecurity'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/loginSecurity'
 
         return self._session.get(metadata, resource)
@@ -2161,7 +2281,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'loginSecurity'],
             'operation': 'updateOrganizationLoginSecurity'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/loginSecurity'
 
         body_params = ['enforcePasswordExpiration', 'passwordExpirationDays', 'enforceDifferentPasswords', 'numDifferentPasswords', 'enforceStrongPasswords', 'enforceAccountLockout', 'accountLockoutAttempts', 'enforceIdleTimeout', 'idleTimeoutMinutes', 'enforceTwoFactorAuth', 'enforceLoginIpRanges', 'loginIpRanges', 'apiAuthentication', ]
@@ -2198,7 +2318,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'networks'],
             'operation': 'getOrganizationNetworks'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/networks'
 
         query_params = ['configTemplateId', 'isBoundToConfigTemplate', 'tags', 'tagsFilterType', 'perPage', 'startingAfter', 'endingBefore', ]
@@ -2221,7 +2341,7 @@ class Organizations(object):
 
         - organizationId (string): (required)
         - name (string): The name of the new network
-        - productTypes (array): The product type(s) of the new network. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, environmental. If more than one type is included, the network will be a combined network.
+        - productTypes (array): The product type(s) of the new network. If more than one type is included, the network will be a combined network.
         - tags (array): A list of tags to be applied to the network
         - timeZone (string): The timezone of the network. For a list of allowed timezones, please see the 'TZ' column in the table in <a target='_blank' href='https://en.wikipedia.org/wiki/List_of_tz_database_time_zones'>this article.</a>
         - copyFromNetworkId (string): The ID of the network to copy configuration from. Other provided parameters will override the copied configuration, except type which must match this network's type exactly.
@@ -2234,7 +2354,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'networks'],
             'operation': 'createOrganizationNetwork'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/networks'
 
         body_params = ['name', 'productTypes', 'tags', 'timeZone', 'copyFromNetworkId', 'notes', ]
@@ -2261,7 +2381,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'networks'],
             'operation': 'combineOrganizationNetworks'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/networks/combine'
 
         body_params = ['name', 'networkIds', 'enrollmentString', ]
@@ -2283,7 +2403,7 @@ class Organizations(object):
             'tags': ['organizations', 'monitor', 'openapiSpec'],
             'operation': 'getOrganizationOpenapiSpec'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/openapiSpec'
 
         return self._session.get(metadata, resource)
@@ -2302,7 +2422,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'saml'],
             'operation': 'getOrganizationSaml'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/saml'
 
         return self._session.get(metadata, resource)
@@ -2324,7 +2444,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'saml'],
             'operation': 'updateOrganizationSaml'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/saml'
 
         body_params = ['enabled', ]
@@ -2346,7 +2466,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'saml', 'idps'],
             'operation': 'getOrganizationSamlIdps'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/saml/idps'
 
         return self._session.get(metadata, resource)
@@ -2369,7 +2489,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'saml', 'idps'],
             'operation': 'createOrganizationSamlIdp'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/saml/idps'
 
         body_params = ['x509certSha1Fingerprint', 'sloLogoutUrl', ]
@@ -2396,8 +2516,8 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'saml', 'idps'],
             'operation': 'updateOrganizationSamlIdp'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        idpId = urllib.parse.quote(idpId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        idpId = urllib.parse.quote(str(idpId), safe='')
         resource = f'/organizations/{organizationId}/saml/idps/{idpId}'
 
         body_params = ['x509certSha1Fingerprint', 'sloLogoutUrl', ]
@@ -2420,8 +2540,8 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'saml', 'idps'],
             'operation': 'getOrganizationSamlIdp'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        idpId = urllib.parse.quote(idpId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        idpId = urllib.parse.quote(str(idpId), safe='')
         resource = f'/organizations/{organizationId}/saml/idps/{idpId}'
 
         return self._session.get(metadata, resource)
@@ -2441,8 +2561,8 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'saml', 'idps'],
             'operation': 'deleteOrganizationSamlIdp'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        idpId = urllib.parse.quote(idpId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        idpId = urllib.parse.quote(str(idpId), safe='')
         resource = f'/organizations/{organizationId}/saml/idps/{idpId}'
 
         return self._session.delete(metadata, resource)
@@ -2461,7 +2581,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'samlRoles'],
             'operation': 'getOrganizationSamlRoles'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/samlRoles'
 
         return self._session.get(metadata, resource)
@@ -2475,7 +2595,7 @@ class Organizations(object):
 
         - organizationId (string): (required)
         - role (string): The role of the SAML administrator
-        - orgAccess (string): The privilege of the SAML administrator on the organization. Can be one of 'none', 'read-only' or 'full'
+        - orgAccess (string): The privilege of the SAML administrator on the organization. Can be one of 'none', 'read-only', 'full' or 'enterprise'
         - tags (array): The list of tags that the SAML administrator has privleges on
         - networks (array): The list of networks that the SAML administrator has privileges on
         """
@@ -2483,14 +2603,14 @@ class Organizations(object):
         kwargs.update(locals())
 
         if 'orgAccess' in kwargs:
-            options = ['none', 'read-only', 'full']
+            options = ['none', 'read-only', 'full', 'enterprise']
             assert kwargs['orgAccess'] in options, f'''"orgAccess" cannot be "{kwargs['orgAccess']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['organizations', 'configure', 'samlRoles'],
             'operation': 'createOrganizationSamlRole'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/samlRoles'
 
         body_params = ['role', 'orgAccess', 'tags', 'networks', ]
@@ -2513,8 +2633,8 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'samlRoles'],
             'operation': 'getOrganizationSamlRole'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        samlRoleId = urllib.parse.quote(samlRoleId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        samlRoleId = urllib.parse.quote(str(samlRoleId), safe='')
         resource = f'/organizations/{organizationId}/samlRoles/{samlRoleId}'
 
         return self._session.get(metadata, resource)
@@ -2529,7 +2649,7 @@ class Organizations(object):
         - organizationId (string): (required)
         - samlRoleId (string): (required)
         - role (string): The role of the SAML administrator
-        - orgAccess (string): The privilege of the SAML administrator on the organization. Can be one of 'none', 'read-only' or 'full'
+        - orgAccess (string): The privilege of the SAML administrator on the organization. Can be one of 'none', 'read-only', 'full' or 'enterprise'
         - tags (array): The list of tags that the SAML administrator has privleges on
         - networks (array): The list of networks that the SAML administrator has privileges on
         """
@@ -2537,15 +2657,15 @@ class Organizations(object):
         kwargs.update(locals())
 
         if 'orgAccess' in kwargs:
-            options = ['none', 'read-only', 'full']
+            options = ['none', 'read-only', 'full', 'enterprise']
             assert kwargs['orgAccess'] in options, f'''"orgAccess" cannot be "{kwargs['orgAccess']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['organizations', 'configure', 'samlRoles'],
             'operation': 'updateOrganizationSamlRole'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        samlRoleId = urllib.parse.quote(samlRoleId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        samlRoleId = urllib.parse.quote(str(samlRoleId), safe='')
         resource = f'/organizations/{organizationId}/samlRoles/{samlRoleId}'
 
         body_params = ['role', 'orgAccess', 'tags', 'networks', ]
@@ -2568,8 +2688,8 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'samlRoles'],
             'operation': 'deleteOrganizationSamlRole'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        samlRoleId = urllib.parse.quote(samlRoleId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        samlRoleId = urllib.parse.quote(str(samlRoleId), safe='')
         resource = f'/organizations/{organizationId}/samlRoles/{samlRoleId}'
 
         return self._session.delete(metadata, resource)
@@ -2588,7 +2708,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'snmp'],
             'operation': 'getOrganizationSnmp'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/snmp'
 
         return self._session.get(metadata, resource)
@@ -2623,7 +2743,7 @@ class Organizations(object):
             'tags': ['organizations', 'configure', 'snmp'],
             'operation': 'updateOrganizationSnmp'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/snmp'
 
         body_params = ['v2cEnabled', 'v3Enabled', 'v3AuthMode', 'v3AuthPass', 'v3PrivMode', 'v3PrivPass', 'peerIps', ]
@@ -2650,7 +2770,7 @@ class Organizations(object):
             'tags': ['organizations', 'monitor', 'summary', 'top', 'appliances', 'byUtilization'],
             'operation': 'getOrganizationSummaryTopAppliancesByUtilization'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/summary/top/appliances/byUtilization'
 
         query_params = ['t0', 't1', 'timespan', ]
@@ -2677,7 +2797,7 @@ class Organizations(object):
             'tags': ['organizations', 'monitor', 'summary', 'top', 'clients', 'byUsage'],
             'operation': 'getOrganizationSummaryTopClientsByUsage'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/summary/top/clients/byUsage'
 
         query_params = ['t0', 't1', 'timespan', ]
@@ -2704,7 +2824,7 @@ class Organizations(object):
             'tags': ['organizations', 'monitor', 'summary', 'top', 'clients', 'manufacturers', 'byUsage'],
             'operation': 'getOrganizationSummaryTopClientsManufacturersByUsage'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/summary/top/clients/manufacturers/byUsage'
 
         query_params = ['t0', 't1', 'timespan', ]
@@ -2731,7 +2851,7 @@ class Organizations(object):
             'tags': ['organizations', 'monitor', 'summary', 'top', 'devices', 'byUsage'],
             'operation': 'getOrganizationSummaryTopDevicesByUsage'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/summary/top/devices/byUsage'
 
         query_params = ['t0', 't1', 'timespan', ]
@@ -2758,7 +2878,7 @@ class Organizations(object):
             'tags': ['organizations', 'monitor', 'summary', 'top', 'devices', 'models', 'byUsage'],
             'operation': 'getOrganizationSummaryTopDevicesModelsByUsage'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/summary/top/devices/models/byUsage'
 
         query_params = ['t0', 't1', 'timespan', ]
@@ -2785,7 +2905,7 @@ class Organizations(object):
             'tags': ['organizations', 'monitor', 'summary', 'top', 'ssids', 'byUsage'],
             'operation': 'getOrganizationSummaryTopSsidsByUsage'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/summary/top/ssids/byUsage'
 
         query_params = ['t0', 't1', 'timespan', ]
@@ -2812,7 +2932,7 @@ class Organizations(object):
             'tags': ['organizations', 'monitor', 'summary', 'top', 'switches', 'byEnergyUsage'],
             'operation': 'getOrganizationSummaryTopSwitchesByEnergyUsage'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/summary/top/switches/byEnergyUsage'
 
         query_params = ['t0', 't1', 'timespan', ]
@@ -2844,7 +2964,7 @@ class Organizations(object):
             'tags': ['organizations', 'monitor', 'uplinks', 'statuses'],
             'operation': 'getOrganizationUplinksStatuses'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/uplinks/statuses'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'serials', 'iccids', ]
@@ -2872,14 +2992,14 @@ class Organizations(object):
         kwargs.update(locals())
 
         if 'productType' in kwargs:
-            options = ['appliance', 'camera', 'cellularGateway', 'platform', 'sm', 'switch', 'wireless']
+            options = ['appliance', 'camera', 'cellularGateway', 'platform', 'sensor', 'sm', 'switch', 'wireless']
             assert kwargs['productType'] in options, f'''"productType" cannot be "{kwargs['productType']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['organizations', 'monitor', 'webhooks', 'alertTypes'],
             'operation': 'getOrganizationWebhooksAlertTypes'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/webhooks/alertTypes'
 
         query_params = ['productType', ]
@@ -2912,7 +3032,7 @@ class Organizations(object):
             'tags': ['organizations', 'monitor', 'webhooks', 'logs'],
             'operation': 'getOrganizationWebhooksLogs'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/webhooks/logs'
 
         query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'url', ]

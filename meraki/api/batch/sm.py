@@ -25,7 +25,6 @@ class ActionBatchSm(object):
         action = {
             "resource": resource,
             "operation": "destroy",
-            "body": payload
         }
         return action
         

@@ -27,8 +27,8 @@ class AsyncInsight:
             'tags': ['insight', 'monitor', 'applications', 'healthByTime'],
             'operation': 'getNetworkInsightApplicationHealthByTime'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        applicationId = urllib.parse.quote(applicationId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        applicationId = urllib.parse.quote(str(applicationId), safe='')
         resource = f'/networks/{networkId}/insight/applications/{applicationId}/healthByTime'
 
         query_params = ['t0', 't1', 'timespan', 'resolution', ]
@@ -50,7 +50,7 @@ class AsyncInsight:
             'tags': ['insight', 'configure', 'applications'],
             'operation': 'getOrganizationInsightApplications'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/insight/applications'
 
         return self._session.get(metadata, resource)
@@ -69,7 +69,7 @@ class AsyncInsight:
             'tags': ['insight', 'configure', 'monitoredMediaServers'],
             'operation': 'getOrganizationInsightMonitoredMediaServers'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/insight/monitoredMediaServers'
 
         return self._session.get(metadata, resource)
@@ -93,7 +93,7 @@ class AsyncInsight:
             'tags': ['insight', 'configure', 'monitoredMediaServers'],
             'operation': 'createOrganizationInsightMonitoredMediaServer'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/insight/monitoredMediaServers'
 
         body_params = ['name', 'address', 'bestEffortMonitoringEnabled', ]
@@ -116,8 +116,8 @@ class AsyncInsight:
             'tags': ['insight', 'configure', 'monitoredMediaServers'],
             'operation': 'getOrganizationInsightMonitoredMediaServer'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        monitoredMediaServerId = urllib.parse.quote(monitoredMediaServerId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        monitoredMediaServerId = urllib.parse.quote(str(monitoredMediaServerId), safe='')
         resource = f'/organizations/{organizationId}/insight/monitoredMediaServers/{monitoredMediaServerId}'
 
         return self._session.get(metadata, resource)
@@ -142,8 +142,8 @@ class AsyncInsight:
             'tags': ['insight', 'configure', 'monitoredMediaServers'],
             'operation': 'updateOrganizationInsightMonitoredMediaServer'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        monitoredMediaServerId = urllib.parse.quote(monitoredMediaServerId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        monitoredMediaServerId = urllib.parse.quote(str(monitoredMediaServerId), safe='')
         resource = f'/organizations/{organizationId}/insight/monitoredMediaServers/{monitoredMediaServerId}'
 
         body_params = ['name', 'address', 'bestEffortMonitoringEnabled', ]
@@ -166,8 +166,8 @@ class AsyncInsight:
             'tags': ['insight', 'configure', 'monitoredMediaServers'],
             'operation': 'deleteOrganizationInsightMonitoredMediaServer'
         }
-        organizationId = urllib.parse.quote(organizationId, safe='')
-        monitoredMediaServerId = urllib.parse.quote(monitoredMediaServerId, safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        monitoredMediaServerId = urllib.parse.quote(str(monitoredMediaServerId), safe='')
         resource = f'/organizations/{organizationId}/insight/monitoredMediaServers/{monitoredMediaServerId}'
 
         return self._session.delete(metadata, resource)

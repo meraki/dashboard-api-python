@@ -20,7 +20,7 @@ class Devices(object):
             'tags': ['devices', 'configure'],
             'operation': 'getDevice'
         }
-        serial = urllib.parse.quote(serial, safe='')
+        serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}'
 
         return self._session.get(metadata, resource)
@@ -50,7 +50,7 @@ class Devices(object):
             'tags': ['devices', 'configure'],
             'operation': 'updateDevice'
         }
-        serial = urllib.parse.quote(serial, safe='')
+        serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}'
 
         body_params = ['name', 'tags', 'lat', 'lng', 'address', 'notes', 'moveMapMarker', 'switchProfileId', 'floorPlanId', ]
@@ -77,7 +77,7 @@ class Devices(object):
             'tags': ['devices', 'liveTools'],
             'operation': 'blinkDeviceLeds'
         }
-        serial = urllib.parse.quote(serial, safe='')
+        serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/blinkLeds'
 
         body_params = ['duration', 'period', 'duty', ]
@@ -103,7 +103,7 @@ class Devices(object):
             'tags': ['devices', 'monitor', 'clients'],
             'operation': 'getDeviceClients'
         }
-        serial = urllib.parse.quote(serial, safe='')
+        serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/clients'
 
         query_params = ['t0', 'timespan', ]
@@ -129,7 +129,7 @@ class Devices(object):
             'tags': ['devices', 'liveTools', 'ping'],
             'operation': 'createDeviceLiveToolsPing'
         }
-        serial = urllib.parse.quote(serial, safe='')
+        serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/liveTools/ping'
 
         body_params = ['target', 'count', ]
@@ -152,8 +152,8 @@ class Devices(object):
             'tags': ['devices', 'liveTools', 'ping'],
             'operation': 'getDeviceLiveToolsPing'
         }
-        serial = urllib.parse.quote(serial, safe='')
-        id = urllib.parse.quote(id, safe='')
+        serial = urllib.parse.quote(str(serial), safe='')
+        id = urllib.parse.quote(str(id), safe='')
         resource = f'/devices/{serial}/liveTools/ping/{id}'
 
         return self._session.get(metadata, resource)
@@ -175,7 +175,7 @@ class Devices(object):
             'tags': ['devices', 'liveTools', 'pingDevice'],
             'operation': 'createDeviceLiveToolsPingDevice'
         }
-        serial = urllib.parse.quote(serial, safe='')
+        serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/liveTools/pingDevice'
 
         body_params = ['count', ]
@@ -187,7 +187,7 @@ class Devices(object):
 
     def getDeviceLiveToolsPingDevice(self, serial: str, id: str):
         """
-        **Return a ping job**
+        **Return a ping device job**
         https://developer.cisco.com/meraki/api-v1/#!get-device-live-tools-ping-device
 
         - serial (string): (required)
@@ -198,8 +198,8 @@ class Devices(object):
             'tags': ['devices', 'liveTools', 'pingDevice'],
             'operation': 'getDeviceLiveToolsPingDevice'
         }
-        serial = urllib.parse.quote(serial, safe='')
-        id = urllib.parse.quote(id, safe='')
+        serial = urllib.parse.quote(str(serial), safe='')
+        id = urllib.parse.quote(str(id), safe='')
         resource = f'/devices/{serial}/liveTools/pingDevice/{id}'
 
         return self._session.get(metadata, resource)
@@ -218,7 +218,7 @@ class Devices(object):
             'tags': ['devices', 'monitor', 'lldpCdp'],
             'operation': 'getDeviceLldpCdp'
         }
-        serial = urllib.parse.quote(serial, safe='')
+        serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/lldpCdp'
 
         return self._session.get(metadata, resource)
@@ -232,7 +232,7 @@ class Devices(object):
 
         - serial (string): (required)
         - ip (string): The destination IP used to obtain the requested stats. This is required.
-        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 60 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
         - resolution (integer): The time resolution in seconds for returned data. The valid resolutions are: 60, 600, 3600, 86400. The default is 60.
@@ -246,10 +246,10 @@ class Devices(object):
             assert kwargs['uplink'] in options, f'''"uplink" cannot be "{kwargs['uplink']}", & must be set to one of: {options}'''
 
         metadata = {
-            'tags': ['devices', 'monitor', 'lossAndLatencyHistory'],
+            'tags': ['devices', 'monitor', 'uplinks', 'lossAndLatencyHistory'],
             'operation': 'getDeviceLossAndLatencyHistory'
         }
-        serial = urllib.parse.quote(serial, safe='')
+        serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/lossAndLatencyHistory'
 
         query_params = ['t0', 't1', 'timespan', 'resolution', 'uplink', 'ip', ]
@@ -271,7 +271,7 @@ class Devices(object):
             'tags': ['devices', 'configure', 'managementInterface'],
             'operation': 'getDeviceManagementInterface'
         }
-        serial = urllib.parse.quote(serial, safe='')
+        serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/managementInterface'
 
         return self._session.get(metadata, resource)
@@ -294,7 +294,7 @@ class Devices(object):
             'tags': ['devices', 'configure', 'managementInterface'],
             'operation': 'updateDeviceManagementInterface'
         }
-        serial = urllib.parse.quote(serial, safe='')
+        serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/managementInterface'
 
         body_params = ['wan1', 'wan2', ]
@@ -316,7 +316,7 @@ class Devices(object):
             'tags': ['devices', 'liveTools'],
             'operation': 'rebootDevice'
         }
-        serial = urllib.parse.quote(serial, safe='')
+        serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/reboot'
 
         return self._session.post(metadata, resource)

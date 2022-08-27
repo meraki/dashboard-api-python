@@ -45,13 +45,13 @@ class ActionBatchOrganizations(object):
 
 
 
-    def updateOrganizationAdaptivePolicyAcl(self, organizationId: str, id: str, **kwargs):
+    def updateOrganizationAdaptivePolicyAcl(self, organizationId: str, aclId: str, **kwargs):
         """
         **Updates an adaptive policy ACL**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-adaptive-policy-acl
 
         - organizationId (string): (required)
-        - id (string): (required)
+        - aclId (string): (required)
         - name (string): Name of the adaptive policy ACL
         - description (string): Description of the adaptive policy ACL
         - rules (array): An ordered array of the adaptive policy ACL rules. An empty array will clear the rules.
@@ -68,7 +68,7 @@ class ActionBatchOrganizations(object):
             'tags': ['organizations', 'configure', 'adaptivePolicy', 'acls'],
             'operation': 'updateOrganizationAdaptivePolicyAcl'
         }
-        resource = f'/organizations/{organizationId}/adaptivePolicy/acls/{id}'
+        resource = f'/organizations/{organizationId}/adaptivePolicy/acls/{aclId}'
 
         body_params = ['name', 'description', 'rules', 'ipVersion', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
@@ -84,25 +84,24 @@ class ActionBatchOrganizations(object):
 
 
 
-    def deleteOrganizationAdaptivePolicyAcl(self, organizationId: str, id: str):
+    def deleteOrganizationAdaptivePolicyAcl(self, organizationId: str, aclId: str):
         """
         **Deletes the specified adaptive policy ACL**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-adaptive-policy-acl
 
         - organizationId (string): (required)
-        - id (string): (required)
+        - aclId (string): (required)
         """
 
         metadata = {
             'tags': ['organizations', 'configure', 'adaptivePolicy', 'acls'],
             'operation': 'deleteOrganizationAdaptivePolicyAcl'
         }
-        resource = f'/organizations/{organizationId}/adaptivePolicy/acls/{id}'
+        resource = f'/organizations/{organizationId}/adaptivePolicy/acls/{aclId}'
 
         action = {
             "resource": resource,
             "operation": "destroy",
-            "body": payload
         }
         return action
         
@@ -198,7 +197,6 @@ class ActionBatchOrganizations(object):
         action = {
             "resource": resource,
             "operation": "destroy",
-            "body": payload
         }
         return action
         
@@ -249,13 +247,13 @@ class ActionBatchOrganizations(object):
 
 
 
-    def updateOrganizationAdaptivePolicyPolicy(self, organizationId: str, adaptivePolicyId: str, **kwargs):
+    def updateOrganizationAdaptivePolicyPolicy(self, organizationId: str, id: str, **kwargs):
         """
         **Update an Adaptive Policy**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-adaptive-policy-policy
 
         - organizationId (string): (required)
-        - adaptivePolicyId (string): (required)
+        - id (string): (required)
         - sourceGroup (object): The source adaptive policy group (requires one unique attribute)
 
         - destinationGroup (object): The destination adaptive policy group (requires one unique attribute)
@@ -276,7 +274,7 @@ class ActionBatchOrganizations(object):
             'tags': ['organizations', 'configure', 'adaptivePolicy', 'policies'],
             'operation': 'updateOrganizationAdaptivePolicyPolicy'
         }
-        resource = f'/organizations/{organizationId}/adaptivePolicy/policies/{adaptivePolicyId}'
+        resource = f'/organizations/{organizationId}/adaptivePolicy/policies/{id}'
 
         body_params = ['sourceGroup', 'destinationGroup', 'acls', 'lastEntryRule', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
@@ -292,25 +290,24 @@ class ActionBatchOrganizations(object):
 
 
 
-    def deleteOrganizationAdaptivePolicyPolicy(self, organizationId: str, adaptivePolicyId: str):
+    def deleteOrganizationAdaptivePolicyPolicy(self, organizationId: str, id: str):
         """
         **Delete an Adaptive Policy**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-adaptive-policy-policy
 
         - organizationId (string): (required)
-        - adaptivePolicyId (string): (required)
+        - id (string): (required)
         """
 
         metadata = {
             'tags': ['organizations', 'configure', 'adaptivePolicy', 'policies'],
             'operation': 'deleteOrganizationAdaptivePolicyPolicy'
         }
-        resource = f'/organizations/{organizationId}/adaptivePolicy/policies/{adaptivePolicyId}'
+        resource = f'/organizations/{organizationId}/adaptivePolicy/policies/{id}'
 
         action = {
             "resource": resource,
             "operation": "destroy",
-            "body": payload
         }
         return action
         
@@ -448,7 +445,6 @@ class ActionBatchOrganizations(object):
         action = {
             "resource": resource,
             "operation": "destroy",
-            "body": payload
         }
         return action
         
@@ -767,7 +763,7 @@ class ActionBatchOrganizations(object):
 
         - organizationId (string): (required)
         - name (string): The name of the new network
-        - productTypes (array): The product type(s) of the new network. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, environmental. If more than one type is included, the network will be a combined network.
+        - productTypes (array): The product type(s) of the new network. If more than one type is included, the network will be a combined network.
         - tags (array): A list of tags to be applied to the network
         - timeZone (string): The timezone of the network. For a list of allowed timezones, please see the 'TZ' column in the table in <a target='_blank' href='https://en.wikipedia.org/wiki/List_of_tz_database_time_zones'>this article.</a>
         - copyFromNetworkId (string): The ID of the network to copy configuration from. Other provided parameters will override the copied configuration, except type which must match this network's type exactly.
@@ -912,7 +908,6 @@ class ActionBatchOrganizations(object):
         action = {
             "resource": resource,
             "operation": "destroy",
-            "body": payload
         }
         return action
         

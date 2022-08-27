@@ -59,7 +59,6 @@ class ActionBatchNetworks(object):
         action = {
             "resource": resource,
             "operation": "destroy",
-            "body": payload
         }
         return action
         
@@ -284,7 +283,7 @@ class ActionBatchNetworks(object):
         kwargs.update(locals())
 
         if 'product' in kwargs:
-            options = ['wireless', 'switch', 'appliance', 'camera', 'vmxHost', 'cellularGateway']
+            options = ['wireless', 'appliance', 'switch', 'camera', 'cellularGateway']
             assert kwargs['product'] in options, f'''"product" cannot be "{kwargs['product']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -363,7 +362,6 @@ class ActionBatchNetworks(object):
         action = {
             "resource": resource,
             "operation": "destroy",
-            "body": payload
         }
         return action
         
@@ -481,7 +479,6 @@ class ActionBatchNetworks(object):
         action = {
             "resource": resource,
             "operation": "destroy",
-            "body": payload
         }
         return action
         
@@ -549,7 +546,6 @@ class ActionBatchNetworks(object):
         action = {
             "resource": resource,
             "operation": "destroy",
-            "body": payload
         }
         return action
         
@@ -682,7 +678,6 @@ class ActionBatchNetworks(object):
         action = {
             "resource": resource,
             "operation": "destroy",
-            "body": payload
         }
         return action
         
@@ -830,7 +825,6 @@ class ActionBatchNetworks(object):
         action = {
             "resource": resource,
             "operation": "destroy",
-            "body": payload
         }
         return action
         

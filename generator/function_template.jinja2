@@ -25,7 +25,7 @@
             'operation': '{{ operation }}'
         }
         {% for param in path_params %}
-        {{ param }} = urllib.parse.quote({{ param }}, safe='')
+        {{ param }} = urllib.parse.quote(str({{ param }}), safe='')
         {% endfor %}
         resource = f'{{ resource }}'
 

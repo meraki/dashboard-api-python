@@ -250,7 +250,6 @@ class ActionBatchWireless(object):
         action = {
             "resource": resource,
             "operation": "destroy",
-            "body": payload
         }
         return action
         
@@ -709,7 +708,6 @@ class ActionBatchWireless(object):
         action = {
             "resource": resource,
             "operation": "destroy",
-            "body": payload
         }
         return action
         

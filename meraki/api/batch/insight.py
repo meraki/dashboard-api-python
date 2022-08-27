@@ -92,7 +92,6 @@ class ActionBatchInsight(object):
         action = {
             "resource": resource,
             "operation": "destroy",
-            "body": payload
         }
         return action
         

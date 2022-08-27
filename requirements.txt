@@ -1,5 +1,5 @@
 aiohttp~=3.7.4.post0
-requests~=2.25.1
+requests~=2.28.1
 meraki~=1.7.1
 setuptools~=54.1.2
 Jinja2~=2.11.3

@@ -20,7 +20,7 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'bluetooth', 'settings'],
             'operation': 'getDeviceWirelessBluetoothSettings'
         }
-        serial = urllib.parse.quote(serial, safe='')
+        serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/wireless/bluetooth/settings'
 
         return self._session.get(metadata, resource)
@@ -44,7 +44,7 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'bluetooth', 'settings'],
             'operation': 'updateDeviceWirelessBluetoothSettings'
         }
-        serial = urllib.parse.quote(serial, safe='')
+        serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/wireless/bluetooth/settings'
 
         body_params = ['uuid', 'major', 'minor', ]
@@ -79,7 +79,7 @@ class AsyncWireless:
             'tags': ['wireless', 'monitor', 'connectionStats'],
             'operation': 'getDeviceWirelessConnectionStats'
         }
-        serial = urllib.parse.quote(serial, safe='')
+        serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/wireless/connectionStats'
 
         query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', ]
@@ -115,7 +115,7 @@ class AsyncWireless:
             'tags': ['wireless', 'monitor', 'latencyStats'],
             'operation': 'getDeviceWirelessLatencyStats'
         }
-        serial = urllib.parse.quote(serial, safe='')
+        serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/wireless/latencyStats'
 
         query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', 'fields', ]
@@ -137,7 +137,7 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'radio', 'settings'],
             'operation': 'getDeviceWirelessRadioSettings'
         }
-        serial = urllib.parse.quote(serial, safe='')
+        serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/wireless/radio/settings'
 
         return self._session.get(metadata, resource)
@@ -161,7 +161,7 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'radio', 'settings'],
             'operation': 'updateDeviceWirelessRadioSettings'
         }
-        serial = urllib.parse.quote(serial, safe='')
+        serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/wireless/radio/settings'
 
         body_params = ['rfProfileId', 'twoFourGhzSettings', 'fiveGhzSettings', ]
@@ -183,7 +183,7 @@ class AsyncWireless:
             'tags': ['wireless', 'monitor', 'status'],
             'operation': 'getDeviceWirelessStatus'
         }
-        serial = urllib.parse.quote(serial, safe='')
+        serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/wireless/status'
 
         return self._session.get(metadata, resource)
@@ -206,7 +206,7 @@ class AsyncWireless:
             'tags': ['wireless', 'monitor', 'airMarshal'],
             'operation': 'getNetworkWirelessAirMarshal'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/airMarshal'
 
         query_params = ['t0', 'timespan', ]
@@ -228,7 +228,7 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'alternateManagementInterface'],
             'operation': 'getNetworkWirelessAlternateManagementInterface'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/alternateManagementInterface'
 
         return self._session.get(metadata, resource)
@@ -253,7 +253,7 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'alternateManagementInterface'],
             'operation': 'updateNetworkWirelessAlternateManagementInterface'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/alternateManagementInterface'
 
         body_params = ['enabled', 'vlanId', 'protocols', 'accessPoints', ]
@@ -275,7 +275,7 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'billing'],
             'operation': 'getNetworkWirelessBilling'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/billing'
 
         return self._session.get(metadata, resource)
@@ -298,7 +298,7 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'billing'],
             'operation': 'updateNetworkWirelessBilling'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/billing'
 
         body_params = ['currency', 'plans', ]
@@ -320,7 +320,7 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'bluetooth', 'settings'],
             'operation': 'getNetworkWirelessBluetoothSettings'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/bluetooth/settings'
 
         return self._session.get(metadata, resource)
@@ -351,7 +351,7 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'bluetooth', 'settings'],
             'operation': 'updateNetworkWirelessBluetoothSettings'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/bluetooth/settings'
 
         body_params = ['scanningEnabled', 'advertisingEnabled', 'uuid', 'majorMinorAssignmentMode', 'major', 'minor', ]
@@ -388,7 +388,7 @@ class AsyncWireless:
             'tags': ['wireless', 'monitor', 'channelUtilizationHistory'],
             'operation': 'getNetworkWirelessChannelUtilizationHistory'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/channelUtilizationHistory'
 
         query_params = ['t0', 't1', 'timespan', 'resolution', 'autoResolution', 'clientId', 'deviceSerial', 'apTag', 'band', ]
@@ -426,7 +426,7 @@ class AsyncWireless:
             'tags': ['wireless', 'monitor', 'clientCountHistory'],
             'operation': 'getNetworkWirelessClientCountHistory'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/clientCountHistory'
 
         query_params = ['t0', 't1', 'timespan', 'resolution', 'autoResolution', 'clientId', 'deviceSerial', 'apTag', 'band', 'ssid', ]
@@ -461,7 +461,7 @@ class AsyncWireless:
             'tags': ['wireless', 'monitor', 'clients', 'connectionStats'],
             'operation': 'getNetworkWirelessClientsConnectionStats'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/clients/connectionStats'
 
         query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', ]
@@ -497,7 +497,7 @@ class AsyncWireless:
             'tags': ['wireless', 'monitor', 'clients', 'latencyStats'],
             'operation': 'getNetworkWirelessClientsLatencyStats'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/clients/latencyStats'
 
         query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', 'fields', ]
@@ -533,8 +533,8 @@ class AsyncWireless:
             'tags': ['wireless', 'monitor', 'clients', 'connectionStats'],
             'operation': 'getNetworkWirelessClientConnectionStats'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        clientId = urllib.parse.quote(clientId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        clientId = urllib.parse.quote(str(clientId), safe='')
         resource = f'/networks/{networkId}/wireless/clients/{clientId}/connectionStats'
 
         query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', ]
@@ -579,8 +579,8 @@ class AsyncWireless:
             'tags': ['wireless', 'monitor', 'clients', 'connectivityEvents'],
             'operation': 'getNetworkWirelessClientConnectivityEvents'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        clientId = urllib.parse.quote(clientId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        clientId = urllib.parse.quote(str(clientId), safe='')
         resource = f'/networks/{networkId}/wireless/clients/{clientId}/connectivityEvents'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', 'types', 'includedSeverities', 'band', 'ssidNumber', 'deviceSerial', ]
@@ -615,8 +615,8 @@ class AsyncWireless:
             'tags': ['wireless', 'monitor', 'clients', 'latencyHistory'],
             'operation': 'getNetworkWirelessClientLatencyHistory'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        clientId = urllib.parse.quote(clientId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        clientId = urllib.parse.quote(str(clientId), safe='')
         resource = f'/networks/{networkId}/wireless/clients/{clientId}/latencyHistory'
 
         query_params = ['t0', 't1', 'timespan', 'resolution', ]
@@ -653,8 +653,8 @@ class AsyncWireless:
             'tags': ['wireless', 'monitor', 'clients', 'latencyStats'],
             'operation': 'getNetworkWirelessClientLatencyStats'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        clientId = urllib.parse.quote(clientId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        clientId = urllib.parse.quote(str(clientId), safe='')
         resource = f'/networks/{networkId}/wireless/clients/{clientId}/latencyStats'
 
         query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', 'fields', ]
@@ -689,7 +689,7 @@ class AsyncWireless:
             'tags': ['wireless', 'monitor', 'connectionStats'],
             'operation': 'getNetworkWirelessConnectionStats'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/connectionStats'
 
         query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', ]
@@ -727,7 +727,7 @@ class AsyncWireless:
             'tags': ['wireless', 'monitor', 'dataRateHistory'],
             'operation': 'getNetworkWirelessDataRateHistory'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/dataRateHistory'
 
         query_params = ['t0', 't1', 'timespan', 'resolution', 'autoResolution', 'clientId', 'deviceSerial', 'apTag', 'band', 'ssid', ]
@@ -762,7 +762,7 @@ class AsyncWireless:
             'tags': ['wireless', 'monitor', 'devices', 'connectionStats'],
             'operation': 'getNetworkWirelessDevicesConnectionStats'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/devices/connectionStats'
 
         query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', ]
@@ -798,7 +798,7 @@ class AsyncWireless:
             'tags': ['wireless', 'monitor', 'devices', 'latencyStats'],
             'operation': 'getNetworkWirelessDevicesLatencyStats'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/devices/latencyStats'
 
         query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', 'fields', ]
@@ -835,7 +835,7 @@ class AsyncWireless:
             'tags': ['wireless', 'monitor', 'failedConnections'],
             'operation': 'getNetworkWirelessFailedConnections'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/failedConnections'
 
         query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', 'serial', 'clientId', ]
@@ -877,7 +877,7 @@ class AsyncWireless:
             'tags': ['wireless', 'monitor', 'latencyHistory'],
             'operation': 'getNetworkWirelessLatencyHistory'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/latencyHistory'
 
         query_params = ['t0', 't1', 'timespan', 'resolution', 'autoResolution', 'clientId', 'deviceSerial', 'apTag', 'band', 'ssid', 'accessCategory', ]
@@ -913,7 +913,7 @@ class AsyncWireless:
             'tags': ['wireless', 'monitor', 'latencyStats'],
             'operation': 'getNetworkWirelessLatencyStats'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/latencyStats'
 
         query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', 'fields', ]
@@ -942,7 +942,7 @@ class AsyncWireless:
             'tags': ['wireless', 'monitor', 'meshStatuses'],
             'operation': 'getNetworkWirelessMeshStatuses'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/meshStatuses'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', ]
@@ -967,7 +967,7 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'rfProfiles'],
             'operation': 'getNetworkWirelessRfProfiles'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/rfProfiles'
 
         query_params = ['includeTemplateProfiles', ]
@@ -1007,7 +1007,7 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'rfProfiles'],
             'operation': 'createNetworkWirelessRfProfile'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/rfProfiles'
 
         body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', 'transmission', 'perSsidSettings', ]
@@ -1048,8 +1048,8 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'rfProfiles'],
             'operation': 'updateNetworkWirelessRfProfile'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        rfProfileId = urllib.parse.quote(rfProfileId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        rfProfileId = urllib.parse.quote(str(rfProfileId), safe='')
         resource = f'/networks/{networkId}/wireless/rfProfiles/{rfProfileId}'
 
         body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', 'transmission', 'perSsidSettings', ]
@@ -1072,8 +1072,8 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'rfProfiles'],
             'operation': 'deleteNetworkWirelessRfProfile'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        rfProfileId = urllib.parse.quote(rfProfileId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        rfProfileId = urllib.parse.quote(str(rfProfileId), safe='')
         resource = f'/networks/{networkId}/wireless/rfProfiles/{rfProfileId}'
 
         return self._session.delete(metadata, resource)
@@ -1093,8 +1093,8 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'rfProfiles'],
             'operation': 'getNetworkWirelessRfProfile'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        rfProfileId = urllib.parse.quote(rfProfileId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        rfProfileId = urllib.parse.quote(str(rfProfileId), safe='')
         resource = f'/networks/{networkId}/wireless/rfProfiles/{rfProfileId}'
 
         return self._session.get(metadata, resource)
@@ -1113,7 +1113,7 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'settings'],
             'operation': 'getNetworkWirelessSettings'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/settings'
 
         return self._session.get(metadata, resource)
@@ -1143,7 +1143,7 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'settings'],
             'operation': 'updateNetworkWirelessSettings'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/settings'
 
         body_params = ['meshingEnabled', 'ipv6BridgeEnabled', 'locationAnalyticsEnabled', 'upgradeStrategy', 'ledLightsOn', ]
@@ -1181,7 +1181,7 @@ class AsyncWireless:
             'tags': ['wireless', 'monitor', 'signalQualityHistory'],
             'operation': 'getNetworkWirelessSignalQualityHistory'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/signalQualityHistory'
 
         query_params = ['t0', 't1', 'timespan', 'resolution', 'autoResolution', 'clientId', 'deviceSerial', 'apTag', 'band', 'ssid', ]
@@ -1203,7 +1203,7 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'ssids'],
             'operation': 'getNetworkWirelessSsids'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/ssids'
 
         return self._session.get(metadata, resource)
@@ -1223,8 +1223,8 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'ssids'],
             'operation': 'getNetworkWirelessSsid'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        number = urllib.parse.quote(number, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        number = urllib.parse.quote(str(number), safe='')
         resource = f'/networks/{networkId}/wireless/ssids/{number}'
 
         return self._session.get(metadata, resource)
@@ -1329,8 +1329,8 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'ssids'],
             'operation': 'updateNetworkWirelessSsid'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        number = urllib.parse.quote(number, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        number = urllib.parse.quote(str(number), safe='')
         resource = f'/networks/{networkId}/wireless/ssids/{number}'
 
         body_params = ['name', 'enabled', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk', 'wpaEncryptionMode', 'dot11w', 'dot11r', 'splashPage', 'splashGuestSponsorDomains', 'oauth', 'localRadius', 'ldap', 'activeDirectory', 'radiusServers', 'radiusProxyEnabled', 'radiusTestingEnabled', 'radiusCalledStationId', 'radiusAuthenticationNasId', 'radiusServerTimeout', 'radiusServerAttemptsLimit', 'radiusFallbackEnabled', 'radiusCoaEnabled', 'radiusFailoverPolicy', 'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusAccountingInterimInterval', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging', 'concentratorNetworkId', 'secondaryConcentratorNetworkId', 'disassociateClientsOnVpnFailover', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 'walledGardenEnabled', 'walledGardenRanges', 'gre', 'radiusOverride', 'radiusGuestVlanEnabled', 'radiusGuestVlanId', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'perSsidBandwidthLimitUp', 'perSsidBandwidthLimitDown', 'lanIsolationEnabled', 'visible', 'availableOnAllAps', 'availabilityTags', 'mandatoryDhcpEnabled', 'adultContentFilteringEnabled', 'dnsRewrite', 'speedBurst', ]
@@ -1353,8 +1353,8 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'ssids', 'bonjourForwarding'],
             'operation': 'getNetworkWirelessSsidBonjourForwarding'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        number = urllib.parse.quote(number, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        number = urllib.parse.quote(str(number), safe='')
         resource = f'/networks/{networkId}/wireless/ssids/{number}/bonjourForwarding'
 
         return self._session.get(metadata, resource)
@@ -1378,8 +1378,8 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'ssids', 'bonjourForwarding'],
             'operation': 'updateNetworkWirelessSsidBonjourForwarding'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        number = urllib.parse.quote(number, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        number = urllib.parse.quote(str(number), safe='')
         resource = f'/networks/{networkId}/wireless/ssids/{number}/bonjourForwarding'
 
         body_params = ['enabled', 'rules', ]
@@ -1402,8 +1402,8 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'ssids', 'deviceTypeGroupPolicies'],
             'operation': 'getNetworkWirelessSsidDeviceTypeGroupPolicies'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        number = urllib.parse.quote(number, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        number = urllib.parse.quote(str(number), safe='')
         resource = f'/networks/{networkId}/wireless/ssids/{number}/deviceTypeGroupPolicies'
 
         return self._session.get(metadata, resource)
@@ -1427,8 +1427,8 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'ssids', 'deviceTypeGroupPolicies'],
             'operation': 'updateNetworkWirelessSsidDeviceTypeGroupPolicies'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        number = urllib.parse.quote(number, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        number = urllib.parse.quote(str(number), safe='')
         resource = f'/networks/{networkId}/wireless/ssids/{number}/deviceTypeGroupPolicies'
 
         body_params = ['enabled', 'deviceTypePolicies', ]
@@ -1451,8 +1451,8 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'ssids', 'eapOverride'],
             'operation': 'getNetworkWirelessSsidEapOverride'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        number = urllib.parse.quote(number, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        number = urllib.parse.quote(str(number), safe='')
         resource = f'/networks/{networkId}/wireless/ssids/{number}/eapOverride'
 
         return self._session.get(metadata, resource)
@@ -1478,8 +1478,8 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'ssids', 'eapOverride'],
             'operation': 'updateNetworkWirelessSsidEapOverride'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        number = urllib.parse.quote(number, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        number = urllib.parse.quote(str(number), safe='')
         resource = f'/networks/{networkId}/wireless/ssids/{number}/eapOverride'
 
         body_params = ['timeout', 'identity', 'maxRetries', 'eapolKey', ]
@@ -1502,8 +1502,8 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'ssids', 'firewall', 'l3FirewallRules'],
             'operation': 'getNetworkWirelessSsidFirewallL3FirewallRules'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        number = urllib.parse.quote(number, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        number = urllib.parse.quote(str(number), safe='')
         resource = f'/networks/{networkId}/wireless/ssids/{number}/firewall/l3FirewallRules'
 
         return self._session.get(metadata, resource)
@@ -1527,8 +1527,8 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'ssids', 'firewall', 'l3FirewallRules'],
             'operation': 'updateNetworkWirelessSsidFirewallL3FirewallRules'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        number = urllib.parse.quote(number, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        number = urllib.parse.quote(str(number), safe='')
         resource = f'/networks/{networkId}/wireless/ssids/{number}/firewall/l3FirewallRules'
 
         body_params = ['rules', 'allowLanAccess', ]
@@ -1551,8 +1551,8 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'ssids', 'firewall', 'l7FirewallRules'],
             'operation': 'getNetworkWirelessSsidFirewallL7FirewallRules'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        number = urllib.parse.quote(number, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        number = urllib.parse.quote(str(number), safe='')
         resource = f'/networks/{networkId}/wireless/ssids/{number}/firewall/l7FirewallRules'
 
         return self._session.get(metadata, resource)
@@ -1575,8 +1575,8 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'ssids', 'firewall', 'l7FirewallRules'],
             'operation': 'updateNetworkWirelessSsidFirewallL7FirewallRules'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        number = urllib.parse.quote(number, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        number = urllib.parse.quote(str(number), safe='')
         resource = f'/networks/{networkId}/wireless/ssids/{number}/firewall/l7FirewallRules'
 
         body_params = ['rules', ]
@@ -1599,8 +1599,8 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'ssids', 'hotspot20'],
             'operation': 'getNetworkWirelessSsidHotspot20'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        number = urllib.parse.quote(number, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        number = urllib.parse.quote(str(number), safe='')
         resource = f'/networks/{networkId}/wireless/ssids/{number}/hotspot20'
 
         return self._session.get(metadata, resource)
@@ -1634,8 +1634,8 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'ssids', 'hotspot20'],
             'operation': 'updateNetworkWirelessSsidHotspot20'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        number = urllib.parse.quote(number, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        number = urllib.parse.quote(str(number), safe='')
         resource = f'/networks/{networkId}/wireless/ssids/{number}/hotspot20'
 
         body_params = ['enabled', 'operator', 'venue', 'networkAccessType', 'domains', 'roamConsortOis', 'mccMncs', 'naiRealms', ]
@@ -1658,8 +1658,8 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'ssids', 'identityPsks'],
             'operation': 'getNetworkWirelessSsidIdentityPsks'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        number = urllib.parse.quote(number, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        number = urllib.parse.quote(str(number), safe='')
         resource = f'/networks/{networkId}/wireless/ssids/{number}/identityPsks'
 
         return self._session.get(metadata, resource)
@@ -1684,8 +1684,8 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'ssids', 'identityPsks'],
             'operation': 'createNetworkWirelessSsidIdentityPsk'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        number = urllib.parse.quote(number, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        number = urllib.parse.quote(str(number), safe='')
         resource = f'/networks/{networkId}/wireless/ssids/{number}/identityPsks'
 
         body_params = ['name', 'passphrase', 'groupPolicyId', ]
@@ -1709,9 +1709,9 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'ssids', 'identityPsks'],
             'operation': 'getNetworkWirelessSsidIdentityPsk'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        number = urllib.parse.quote(number, safe='')
-        identityPskId = urllib.parse.quote(identityPskId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        number = urllib.parse.quote(str(number), safe='')
+        identityPskId = urllib.parse.quote(str(identityPskId), safe='')
         resource = f'/networks/{networkId}/wireless/ssids/{number}/identityPsks/{identityPskId}'
 
         return self._session.get(metadata, resource)
@@ -1737,9 +1737,9 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'ssids', 'identityPsks'],
             'operation': 'updateNetworkWirelessSsidIdentityPsk'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        number = urllib.parse.quote(number, safe='')
-        identityPskId = urllib.parse.quote(identityPskId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        number = urllib.parse.quote(str(number), safe='')
+        identityPskId = urllib.parse.quote(str(identityPskId), safe='')
         resource = f'/networks/{networkId}/wireless/ssids/{number}/identityPsks/{identityPskId}'
 
         body_params = ['name', 'passphrase', 'groupPolicyId', ]
@@ -1763,9 +1763,9 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'ssids', 'identityPsks'],
             'operation': 'deleteNetworkWirelessSsidIdentityPsk'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        number = urllib.parse.quote(number, safe='')
-        identityPskId = urllib.parse.quote(identityPskId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        number = urllib.parse.quote(str(number), safe='')
+        identityPskId = urllib.parse.quote(str(identityPskId), safe='')
         resource = f'/networks/{networkId}/wireless/ssids/{number}/identityPsks/{identityPskId}'
 
         return self._session.delete(metadata, resource)
@@ -1785,8 +1785,8 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'ssids', 'schedules'],
             'operation': 'getNetworkWirelessSsidSchedules'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        number = urllib.parse.quote(number, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        number = urllib.parse.quote(str(number), safe='')
         resource = f'/networks/{networkId}/wireless/ssids/{number}/schedules'
 
         return self._session.get(metadata, resource)
@@ -1811,8 +1811,8 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'ssids', 'schedules'],
             'operation': 'updateNetworkWirelessSsidSchedules'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        number = urllib.parse.quote(number, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        number = urllib.parse.quote(str(number), safe='')
         resource = f'/networks/{networkId}/wireless/ssids/{number}/schedules'
 
         body_params = ['enabled', 'ranges', 'rangesInSeconds', ]
@@ -1835,8 +1835,8 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'ssids', 'splash', 'settings'],
             'operation': 'getNetworkWirelessSsidSplashSettings'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        number = urllib.parse.quote(number, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        number = urllib.parse.quote(str(number), safe='')
         resource = f'/networks/{networkId}/wireless/ssids/{number}/splash/settings'
 
         return self._session.get(metadata, resource)
@@ -1877,8 +1877,8 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'ssids', 'splash', 'settings'],
             'operation': 'updateNetworkWirelessSsidSplashSettings'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        number = urllib.parse.quote(number, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        number = urllib.parse.quote(str(number), safe='')
         resource = f'/networks/{networkId}/wireless/ssids/{number}/splash/settings'
 
         body_params = ['splashUrl', 'useSplashUrl', 'splashTimeout', 'redirectUrl', 'useRedirectUrl', 'welcomeMessage', 'splashLogo', 'splashImage', 'splashPrepaidFront', 'blockAllTrafficBeforeSignOn', 'controllerDisconnectionBehavior', 'allowSimultaneousLogins', 'guestSponsorship', 'billing', 'sentryEnrollment', ]
@@ -1909,8 +1909,8 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'ssids', 'trafficShaping', 'rules'],
             'operation': 'updateNetworkWirelessSsidTrafficShapingRules'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        number = urllib.parse.quote(number, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        number = urllib.parse.quote(str(number), safe='')
         resource = f'/networks/{networkId}/wireless/ssids/{number}/trafficShaping/rules'
 
         body_params = ['trafficShapingEnabled', 'defaultRulesEnabled', 'rules', ]
@@ -1933,8 +1933,8 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'ssids', 'trafficShaping', 'rules'],
             'operation': 'getNetworkWirelessSsidTrafficShapingRules'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        number = urllib.parse.quote(number, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        number = urllib.parse.quote(str(number), safe='')
         resource = f'/networks/{networkId}/wireless/ssids/{number}/trafficShaping/rules'
 
         return self._session.get(metadata, resource)
@@ -1954,8 +1954,8 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'ssids', 'vpn'],
             'operation': 'getNetworkWirelessSsidVpn'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        number = urllib.parse.quote(number, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        number = urllib.parse.quote(str(number), safe='')
         resource = f'/networks/{networkId}/wireless/ssids/{number}/vpn'
 
         return self._session.get(metadata, resource)
@@ -1980,8 +1980,8 @@ class AsyncWireless:
             'tags': ['wireless', 'configure', 'ssids', 'vpn'],
             'operation': 'updateNetworkWirelessSsidVpn'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
-        number = urllib.parse.quote(number, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        number = urllib.parse.quote(str(number), safe='')
         resource = f'/networks/{networkId}/wireless/ssids/{number}/vpn'
 
         body_params = ['concentrator', 'splitTunnel', 'failover', ]
@@ -2019,7 +2019,7 @@ class AsyncWireless:
             'tags': ['wireless', 'monitor', 'usageHistory'],
             'operation': 'getNetworkWirelessUsageHistory'
         }
-        networkId = urllib.parse.quote(networkId, safe='')
+        networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/usageHistory'
 
         query_params = ['t0', 't1', 'timespan', 'resolution', 'autoResolution', 'clientId', 'deviceSerial', 'apTag', 'band', 'ssid', ]
