@@ -780,7 +780,7 @@ class ActionBatchNetworks(object):
         - networkId (string): (required)
         - name (string): The name of the new template
         - body (string): The liquid template used for the body of the webhook message. Either `body` or `bodyFile` must be specified.
-        - headers (string): The liquid template used with the webhook headers.
+        - headers (array): The liquid template used with the webhook headers.
         - bodyFile (string): A file containing liquid template used for the body of the webhook message. Either `body` or `bodyFile` must be specified.
         - headersFile (string): A file containing the liquid template used with the webhook headers.
         """
@@ -842,7 +842,7 @@ class ActionBatchNetworks(object):
         - payloadTemplateId (string): (required)
         - name (string): The name of the template
         - body (string): The liquid template used for the body of the webhook message.
-        - headers (string): The liquid template used with the webhook headers.
+        - headers (array): The liquid template used with the webhook headers.
         - bodyFile (string): A file containing liquid template used for the body of the webhook message.
         - headersFile (string): A file containing the liquid template used with the webhook headers.
         """

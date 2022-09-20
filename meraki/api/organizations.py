@@ -2037,7 +2037,7 @@ class Organizations(object):
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - deviceSerial (string): Filter the licenses to those assigned to a particular device
+        - deviceSerial (string): Filter the licenses to those assigned to a particular device. Returned in the same order that they are queued to the device.
         - networkId (string): Filter the licenses to those assigned in a particular network
         - state (string): Filter the licenses to those in a particular state. Can be one of 'active', 'expired', 'expiring', 'unused', 'unusedActive' or 'recentlyQueued'
         """

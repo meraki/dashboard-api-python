@@ -46,6 +46,88 @@ class AsyncAppliance:
         
 
 
+    def getDeviceAppliancePrefixesDelegated(self, serial: str):
+        """
+        **Return current delegated IPv6 prefixes on an appliance.**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-appliance-prefixes-delegated
+
+        - serial (string): (required)
+        """
+
+        metadata = {
+            'tags': ['appliance', 'monitor', 'prefixes', 'delegated'],
+            'operation': 'getDeviceAppliancePrefixesDelegated'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        resource = f'/devices/{serial}/appliance/prefixes/delegated'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def getDeviceAppliancePrefixesDelegatedVlanAssignments(self, serial: str):
+        """
+        **Return prefixes assigned to all IPv6 enabled VLANs on an appliance.**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-appliance-prefixes-delegated-vlan-assignments
+
+        - serial (string): (required)
+        """
+
+        metadata = {
+            'tags': ['appliance', 'monitor', 'prefixes', 'delegated', 'vlanAssignments'],
+            'operation': 'getDeviceAppliancePrefixesDelegatedVlanAssignments'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        resource = f'/devices/{serial}/appliance/prefixes/delegated/vlanAssignments'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def getDeviceApplianceUplinksSettings(self, serial: str):
+        """
+        **Return the uplink settings for an MX appliance**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-appliance-uplinks-settings
+
+        - serial (string): (required)
+        """
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'uplinks', 'settings'],
+            'operation': 'getDeviceApplianceUplinksSettings'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        resource = f'/devices/{serial}/appliance/uplinks/settings'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def updateDeviceApplianceUplinksSettings(self, serial: str, interfaces: dict):
+        """
+        **Update the uplink settings for an MX appliance**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-appliance-uplinks-settings
+
+        - serial (string): (required)
+        - interfaces (object): Interface settings
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'uplinks', 'settings'],
+            'operation': 'updateDeviceApplianceUplinksSettings'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        resource = f'/devices/{serial}/appliance/uplinks/settings'
+
+        body_params = ['interfaces', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
     def createDeviceApplianceVmxAuthenticationToken(self, serial: str):
         """
         **Generate a new vMX authentication token**
@@ -328,6 +410,50 @@ class AsyncAppliance:
         resource = f'/networks/{networkId}/appliance/firewall/firewalledServices/{service}'
 
         body_params = ['access', 'allowedIps', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def getNetworkApplianceFirewallInboundCellularFirewallRules(self, networkId: str):
+        """
+        **Return the inbound cellular firewall rules for an MX network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-firewall-inbound-cellular-firewall-rules
+
+        - networkId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'firewall', 'inboundCellularFirewallRules'],
+            'operation': 'getNetworkApplianceFirewallInboundCellularFirewallRules'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/appliance/firewall/inboundCellularFirewallRules'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def updateNetworkApplianceFirewallInboundCellularFirewallRules(self, networkId: str, **kwargs):
+        """
+        **Update the inbound cellular firewall rules of an MX network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-firewall-inbound-cellular-firewall-rules
+
+        - networkId (string): (required)
+        - rules (array): An ordered array of the firewall rules (not including the default rule)
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'firewall', 'inboundCellularFirewallRules'],
+            'operation': 'updateNetworkApplianceFirewallInboundCellularFirewallRules'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/appliance/firewall/inboundCellularFirewallRules'
+
+        body_params = ['rules', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -735,6 +861,123 @@ class AsyncAppliance:
         
 
 
+    def getNetworkAppliancePrefixesDelegatedStatics(self, networkId: str):
+        """
+        **List static delegated prefixes for a network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-prefixes-delegated-statics
+
+        - networkId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'prefixes', 'delegated', 'statics'],
+            'operation': 'getNetworkAppliancePrefixesDelegatedStatics'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/appliance/prefixes/delegated/statics'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def createNetworkAppliancePrefixesDelegatedStatic(self, networkId: str, prefix: str, origin: dict, **kwargs):
+        """
+        **Add a static delegated prefix from a network**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-appliance-prefixes-delegated-static
+
+        - networkId (string): (required)
+        - prefix (string): A static IPv6 prefix
+        - origin (object): The origin of the prefix
+        - description (string): A name or description for the prefix
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'prefixes', 'delegated', 'statics'],
+            'operation': 'createNetworkAppliancePrefixesDelegatedStatic'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/appliance/prefixes/delegated/statics'
+
+        body_params = ['prefix', 'origin', 'description', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getNetworkAppliancePrefixesDelegatedStatic(self, networkId: str, staticDelegatedPrefixId: str):
+        """
+        **Return a static delegated prefix from a network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-prefixes-delegated-static
+
+        - networkId (string): (required)
+        - staticDelegatedPrefixId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'prefixes', 'delegated', 'statics'],
+            'operation': 'getNetworkAppliancePrefixesDelegatedStatic'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        staticDelegatedPrefixId = urllib.parse.quote(str(staticDelegatedPrefixId), safe='')
+        resource = f'/networks/{networkId}/appliance/prefixes/delegated/statics/{staticDelegatedPrefixId}'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def updateNetworkAppliancePrefixesDelegatedStatic(self, networkId: str, staticDelegatedPrefixId: str, **kwargs):
+        """
+        **Update a static delegated prefix from a network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-prefixes-delegated-static
+
+        - networkId (string): (required)
+        - staticDelegatedPrefixId (string): (required)
+        - prefix (string): A static IPv6 prefix
+        - origin (object): The origin of the prefix
+        - description (string): A name or description for the prefix
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'prefixes', 'delegated', 'statics'],
+            'operation': 'updateNetworkAppliancePrefixesDelegatedStatic'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        staticDelegatedPrefixId = urllib.parse.quote(str(staticDelegatedPrefixId), safe='')
+        resource = f'/networks/{networkId}/appliance/prefixes/delegated/statics/{staticDelegatedPrefixId}'
+
+        body_params = ['prefix', 'origin', 'description', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def deleteNetworkAppliancePrefixesDelegatedStatic(self, networkId: str, staticDelegatedPrefixId: str):
+        """
+        **Delete a static delegated prefix from a network**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-appliance-prefixes-delegated-static
+
+        - networkId (string): (required)
+        - staticDelegatedPrefixId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'prefixes', 'delegated', 'statics'],
+            'operation': 'deleteNetworkAppliancePrefixesDelegatedStatic'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        staticDelegatedPrefixId = urllib.parse.quote(str(staticDelegatedPrefixId), safe='')
+        resource = f'/networks/{networkId}/appliance/prefixes/delegated/statics/{staticDelegatedPrefixId}'
+
+        return self._session.delete(metadata, resource)
+        
+
+
     def getNetworkApplianceSecurityEvents(self, networkId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the security events for a network**
@@ -955,6 +1198,7 @@ class AsyncAppliance:
         - networkId (string): (required)
         - subnet (string): The subnet of the single LAN configuration
         - applianceIp (string): The appliance IP address of the single LAN
+        - ipv6 (object): IPv6 configuration on the VLAN
         """
 
         kwargs.update(locals())
@@ -966,7 +1210,7 @@ class AsyncAppliance:
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/singleLan'
 
-        body_params = ['subnet', 'applianceIp', ]
+        body_params = ['subnet', 'applianceIp', 'ipv6', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1548,6 +1792,7 @@ class AsyncAppliance:
         - templateVlanType (string): Type of subnetting of the VLAN. Applicable only for template network.
         - cidr (string): CIDR of the pool of subnets. Applicable only for template network. Each network bound to the template will automatically pick a subnet from this pool to build its own VLAN.
         - mask (integer): Mask used for the subnet of all bound to the template networks. Applicable only for template network.
+        - ipv6 (object): IPv6 configuration on the VLAN
         """
 
         kwargs.update(locals())
@@ -1563,7 +1808,7 @@ class AsyncAppliance:
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/vlans'
 
-        body_params = ['id', 'name', 'subnet', 'applianceIp', 'groupPolicyId', 'templateVlanType', 'cidr', 'mask', ]
+        body_params = ['id', 'name', 'subnet', 'applianceIp', 'groupPolicyId', 'templateVlanType', 'cidr', 'mask', 'ipv6', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -1660,6 +1905,7 @@ class AsyncAppliance:
         - templateVlanType (string): Type of subnetting of the VLAN. Applicable only for template network.
         - cidr (string): CIDR of the pool of subnets. Applicable only for template network. Each network bound to the template will automatically pick a subnet from this pool to build its own VLAN.
         - mask (integer): Mask used for the subnet of all bound to the template networks. Applicable only for template network.
+        - ipv6 (object): IPv6 configuration on the VLAN
         """
 
         kwargs.update(locals())
@@ -1682,7 +1928,7 @@ class AsyncAppliance:
         vlanId = urllib.parse.quote(str(vlanId), safe='')
         resource = f'/networks/{networkId}/appliance/vlans/{vlanId}'
 
-        body_params = ['name', 'subnet', 'applianceIp', 'groupPolicyId', 'vpnNatSubnet', 'dhcpHandling', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dhcpBootOptionsEnabled', 'dhcpBootNextServer', 'dhcpBootFilename', 'fixedIpAssignments', 'reservedIpRanges', 'dnsNameservers', 'dhcpOptions', 'templateVlanType', 'cidr', 'mask', ]
+        body_params = ['name', 'subnet', 'applianceIp', 'groupPolicyId', 'vpnNatSubnet', 'dhcpHandling', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dhcpBootOptionsEnabled', 'dhcpBootNextServer', 'dhcpBootFilename', 'fixedIpAssignments', 'reservedIpRanges', 'dnsNameservers', 'dhcpOptions', 'templateVlanType', 'cidr', 'mask', 'ipv6', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)

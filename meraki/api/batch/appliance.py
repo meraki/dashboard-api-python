@@ -7,6 +7,37 @@ class ActionBatchAppliance(object):
         
 
 
+    def updateDeviceApplianceUplinksSettings(self, serial: str, interfaces: dict):
+        """
+        **Update the uplink settings for an MX appliance**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-appliance-uplinks-settings
+
+        - serial (string): (required)
+        - interfaces (object): Interface settings
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'uplinks', 'settings'],
+            'operation': 'updateDeviceApplianceUplinksSettings'
+        }
+        resource = f'/devices/{serial}/appliance/uplinks/settings'
+
+        body_params = ['interfaces', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
     def createDeviceApplianceVmxAuthenticationToken(self, serial: str):
         """
         **Generate a new vMX authentication token**
@@ -132,6 +163,99 @@ class ActionBatchAppliance(object):
 
 
 
+    def createNetworkAppliancePrefixesDelegatedStatic(self, networkId: str, prefix: str, origin: dict, **kwargs):
+        """
+        **Add a static delegated prefix from a network**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-appliance-prefixes-delegated-static
+
+        - networkId (string): (required)
+        - prefix (string): A static IPv6 prefix
+        - origin (object): The origin of the prefix
+        - description (string): A name or description for the prefix
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'prefixes', 'delegated', 'statics'],
+            'operation': 'createNetworkAppliancePrefixesDelegatedStatic'
+        }
+        resource = f'/networks/{networkId}/appliance/prefixes/delegated/statics'
+
+        body_params = ['prefix', 'origin', 'description', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def updateNetworkAppliancePrefixesDelegatedStatic(self, networkId: str, staticDelegatedPrefixId: str, **kwargs):
+        """
+        **Update a static delegated prefix from a network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-prefixes-delegated-static
+
+        - networkId (string): (required)
+        - staticDelegatedPrefixId (string): (required)
+        - prefix (string): A static IPv6 prefix
+        - origin (object): The origin of the prefix
+        - description (string): A name or description for the prefix
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'prefixes', 'delegated', 'statics'],
+            'operation': 'updateNetworkAppliancePrefixesDelegatedStatic'
+        }
+        resource = f'/networks/{networkId}/appliance/prefixes/delegated/statics/{staticDelegatedPrefixId}'
+
+        body_params = ['prefix', 'origin', 'description', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def deleteNetworkAppliancePrefixesDelegatedStatic(self, networkId: str, staticDelegatedPrefixId: str):
+        """
+        **Delete a static delegated prefix from a network**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-appliance-prefixes-delegated-static
+
+        - networkId (string): (required)
+        - staticDelegatedPrefixId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'prefixes', 'delegated', 'statics'],
+            'operation': 'deleteNetworkAppliancePrefixesDelegatedStatic'
+        }
+        resource = f'/networks/{networkId}/appliance/prefixes/delegated/statics/{staticDelegatedPrefixId}'
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+        
+
+
+
+
+
     def updateNetworkApplianceSettings(self, networkId: str, **kwargs):
         """
         **Update the appliance settings for a network**
@@ -180,6 +304,7 @@ class ActionBatchAppliance(object):
         - networkId (string): (required)
         - subnet (string): The subnet of the single LAN configuration
         - applianceIp (string): The appliance IP address of the single LAN
+        - ipv6 (object): IPv6 configuration on the VLAN
         """
 
         kwargs.update(locals())
@@ -190,7 +315,7 @@ class ActionBatchAppliance(object):
         }
         resource = f'/networks/{networkId}/appliance/singleLan'
 
-        body_params = ['subnet', 'applianceIp', ]
+        body_params = ['subnet', 'applianceIp', 'ipv6', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -468,6 +593,7 @@ class ActionBatchAppliance(object):
         - templateVlanType (string): Type of subnetting of the VLAN. Applicable only for template network.
         - cidr (string): CIDR of the pool of subnets. Applicable only for template network. Each network bound to the template will automatically pick a subnet from this pool to build its own VLAN.
         - mask (integer): Mask used for the subnet of all bound to the template networks. Applicable only for template network.
+        - ipv6 (object): IPv6 configuration on the VLAN
         """
 
         kwargs.update(locals())
@@ -482,7 +608,7 @@ class ActionBatchAppliance(object):
         }
         resource = f'/networks/{networkId}/appliance/vlans'
 
-        body_params = ['id', 'name', 'subnet', 'applianceIp', 'groupPolicyId', 'templateVlanType', 'cidr', 'mask', ]
+        body_params = ['id', 'name', 'subnet', 'applianceIp', 'groupPolicyId', 'templateVlanType', 'cidr', 'mask', 'ipv6', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -552,6 +678,7 @@ class ActionBatchAppliance(object):
         - templateVlanType (string): Type of subnetting of the VLAN. Applicable only for template network.
         - cidr (string): CIDR of the pool of subnets. Applicable only for template network. Each network bound to the template will automatically pick a subnet from this pool to build its own VLAN.
         - mask (integer): Mask used for the subnet of all bound to the template networks. Applicable only for template network.
+        - ipv6 (object): IPv6 configuration on the VLAN
         """
 
         kwargs.update(locals())
@@ -572,7 +699,7 @@ class ActionBatchAppliance(object):
         }
         resource = f'/networks/{networkId}/appliance/vlans/{vlanId}'
 
-        body_params = ['name', 'subnet', 'applianceIp', 'groupPolicyId', 'vpnNatSubnet', 'dhcpHandling', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dhcpBootOptionsEnabled', 'dhcpBootNextServer', 'dhcpBootFilename', 'fixedIpAssignments', 'reservedIpRanges', 'dnsNameservers', 'dhcpOptions', 'templateVlanType', 'cidr', 'mask', ]
+        body_params = ['name', 'subnet', 'applianceIp', 'groupPolicyId', 'vpnNatSubnet', 'dhcpHandling', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dhcpBootOptionsEnabled', 'dhcpBootNextServer', 'dhcpBootFilename', 'fixedIpAssignments', 'reservedIpRanges', 'dnsNameservers', 'dhcpOptions', 'templateVlanType', 'cidr', 'mask', 'ipv6', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
