@@ -825,6 +825,199 @@ class ActionBatchOrganizations(object):
 
 
 
+    def createOrganizationPolicyObject(self, organizationId: str, name: str, category: str, type: str, **kwargs):
+        """
+        **Creates a new Policy Object.**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-policy-object
+
+        - organizationId (string): (required)
+        - name (string): Name of a policy object, unique within the organization (alphanumeric, space, dash, or underscore characters only)
+        - category (string): Category of a policy object (one of: adaptivePolicy, network)
+        - type (string): Type of a policy object (one of: adaptivePolicyIpv4Cidr, fqdn, ipAndMask, cidr)
+        - cidr (string): CIDR Value of a policy object (e.g. 10.11.12.1/24")
+        - fqdn (string): Fully qualified domain name of policy object (e.g. "example.com")
+        - mask (string): Mask of a policy object (e.g. "255.255.0.0")
+        - ip (string): IP Address of a policy object (e.g. "1.2.3.4")
+        - groupIds (array): The IDs of policy object groups the policy object belongs to
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'policyObjects'],
+            'operation': 'createOrganizationPolicyObject'
+        }
+        resource = f'/organizations/{organizationId}/policyObjects'
+
+        body_params = ['name', 'category', 'type', 'cidr', 'fqdn', 'mask', 'ip', 'groupIds', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def createOrganizationPolicyObjectsGroup(self, organizationId: str, name: str, **kwargs):
+        """
+        **Creates a new Policy Object Group.**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-policy-objects-group
+
+        - organizationId (string): (required)
+        - name (string): A name for the group of network addresses, unique within the organization (alphanumeric, space, dash, or underscore characters only)
+        - category (string): Category of a policy object group (one of: NetworkObjectGroup, GeoLocationGroup, PortObjectGroup, ApplicationGroup)
+        - objectIds (array): A list of Policy Object ID's that this NetworkObjectGroup should be associated to (note: these ID's will replace the existing associated Policy Objects)
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'policyObjects', 'groups'],
+            'operation': 'createOrganizationPolicyObjectsGroup'
+        }
+        resource = f'/organizations/{organizationId}/policyObjects/groups'
+
+        body_params = ['name', 'category', 'objectIds', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def updateOrganizationPolicyObjectsGroup(self, organizationId: str, policyObjectGroupId: str, **kwargs):
+        """
+        **Updates a Policy Object Group.**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-policy-objects-group
+
+        - organizationId (string): (required)
+        - policyObjectGroupId (string): (required)
+        - name (string): A name for the group of network addresses, unique within the organization (alphanumeric, space, dash, or underscore characters only)
+        - objectIds (array): A list of Policy Object ID's that this NetworkObjectGroup should be associated to (note: these ID's will replace the existing associated Policy Objects)
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'policyObjects', 'groups'],
+            'operation': 'updateOrganizationPolicyObjectsGroup'
+        }
+        resource = f'/organizations/{organizationId}/policyObjects/groups/{policyObjectGroupId}'
+
+        body_params = ['name', 'objectIds', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def deleteOrganizationPolicyObjectsGroup(self, organizationId: str, policyObjectGroupId: str):
+        """
+        **Deletes a Policy Object Group.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-policy-objects-group
+
+        - organizationId (string): (required)
+        - policyObjectGroupId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'policyObjects', 'groups'],
+            'operation': 'deleteOrganizationPolicyObjectsGroup'
+        }
+        resource = f'/organizations/{organizationId}/policyObjects/groups/{policyObjectGroupId}'
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+        
+
+
+
+
+
+    def updateOrganizationPolicyObject(self, organizationId: str, policyObjectId: str, **kwargs):
+        """
+        **Updates a Policy Object.**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-policy-object
+
+        - organizationId (string): (required)
+        - policyObjectId (string): (required)
+        - name (string): Name of a policy object, unique within the organization (alphanumeric, space, dash, or underscore characters only)
+        - cidr (string): CIDR Value of a policy object (e.g. 10.11.12.1/24")
+        - fqdn (string): Fully qualified domain name of policy object (e.g. "example.com")
+        - mask (string): Mask of a policy object (e.g. "255.255.0.0")
+        - ip (string): IP Address of a policy object (e.g. "1.2.3.4")
+        - groupIds (array): The IDs of policy object groups the policy object belongs to
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'policyObjects'],
+            'operation': 'updateOrganizationPolicyObject'
+        }
+        resource = f'/organizations/{organizationId}/policyObjects/{policyObjectId}'
+
+        body_params = ['name', 'cidr', 'fqdn', 'mask', 'ip', 'groupIds', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def deleteOrganizationPolicyObject(self, organizationId: str, policyObjectId: str):
+        """
+        **Deletes a Policy Object.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-policy-object
+
+        - organizationId (string): (required)
+        - policyObjectId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'policyObjects'],
+            'operation': 'deleteOrganizationPolicyObject'
+        }
+        resource = f'/organizations/{organizationId}/policyObjects/{policyObjectId}'
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+        
+
+
+
+
+
     def createOrganizationSamlIdp(self, organizationId: str, x509certSha1Fingerprint: str, **kwargs):
         """
         **Create a SAML IdP for your organization.**

@@ -87,6 +87,51 @@ class Devices(object):
         
 
 
+    def getDeviceCellularSims(self, serial: str):
+        """
+        **Return the SIM and APN configurations for a cellular device.**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-cellular-sims
+
+        - serial (string): (required)
+        """
+
+        metadata = {
+            'tags': ['devices', 'configure', 'cellular', 'sims'],
+            'operation': 'getDeviceCellularSims'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        resource = f'/devices/{serial}/cellular/sims'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def updateDeviceCellularSims(self, serial: str, **kwargs):
+        """
+        **Updates the SIM and APN configurations for a cellular device.**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-cellular-sims
+
+        - serial (string): (required)
+        - sims (array): List of SIMs. If a SIM was previously configured and not specified in this request, it will remain unchanged.
+        - simFailover (object): SIM Failover settings.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['devices', 'configure', 'cellular', 'sims'],
+            'operation': 'updateDeviceCellularSims'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        resource = f'/devices/{serial}/cellular/sims'
+
+        body_params = ['sims', 'simFailover', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
     def getDeviceClients(self, serial: str, **kwargs):
         """
         **List the clients of a device, up to a maximum of a month ago**

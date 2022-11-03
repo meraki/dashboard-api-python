@@ -306,6 +306,66 @@ class ActionBatchNetworks(object):
 
 
 
+    def createNetworkFirmwareUpgradesStagedGroup(self, networkId: str, name: str, isDefault: bool, **kwargs):
+        """
+        **Create a Staged Upgrade Group for a network**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-firmware-upgrades-staged-group
+
+        - networkId (string): (required)
+        - name (string): Name of the Staged Upgrade Group. Length must be 1 to 255 characters
+        - isDefault (boolean): Boolean indicating the default Group. Any device that does not have a group explicitly assigned will upgrade with this group
+        - description (string): Description of the Staged Upgrade Group. Length must be 1 to 255 characters
+        - assignedDevices (object): The devices and Switch Stacks assigned to the Group
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['networks', 'configure', 'firmwareUpgrades', 'staged', 'groups'],
+            'operation': 'createNetworkFirmwareUpgradesStagedGroup'
+        }
+        resource = f'/networks/{networkId}/firmwareUpgrades/staged/groups'
+
+        body_params = ['name', 'description', 'isDefault', 'assignedDevices', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def deleteNetworkFirmwareUpgradesStagedGroup(self, networkId: str, groupId: str):
+        """
+        **Delete a Staged Upgrade Group**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-firmware-upgrades-staged-group
+
+        - networkId (string): (required)
+        - groupId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'firmwareUpgrades', 'staged', 'groups'],
+            'operation': 'deleteNetworkFirmwareUpgradesStagedGroup'
+        }
+        resource = f'/networks/{networkId}/firmwareUpgrades/staged/groups/{groupId}'
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+        
+
+
+
+
+
     def updateNetworkFloorPlan(self, networkId: str, floorPlanId: str, **kwargs):
         """
         **Update a floor plan's geolocation and other meta data**
@@ -694,8 +754,8 @@ class ActionBatchNetworks(object):
         - networkId (string): (required)
         - localStatusPageEnabled (boolean): Enables / disables the local device status pages (<a target='_blank' href='http://my.meraki.com/'>my.meraki.com, </a><a target='_blank' href='http://ap.meraki.com/'>ap.meraki.com, </a><a target='_blank' href='http://switch.meraki.com/'>switch.meraki.com, </a><a target='_blank' href='http://wired.meraki.com/'>wired.meraki.com</a>). Optional (defaults to false)
         - remoteStatusPageEnabled (boolean): Enables / disables access to the device status page (<a target='_blank'>http://[device's LAN IP])</a>. Optional. Can only be set if localStatusPageEnabled is set to true
-        - secureConnect (object): A hash of SecureConnect options applied to the Network.
-        - localStatusPage (object): A hash of Local Status page(s) options applied to the Network.
+        - localStatusPage (object): A hash of Local Status page(s)' authentication options applied to the Network.
+        - securePort (object): A hash of SecureConnect options applied to the Network.
         """
 
         kwargs.update(locals())
@@ -706,7 +766,7 @@ class ActionBatchNetworks(object):
         }
         resource = f'/networks/{networkId}/settings'
 
-        body_params = ['localStatusPageEnabled', 'remoteStatusPageEnabled', 'secureConnect', 'localStatusPage', ]
+        body_params = ['localStatusPageEnabled', 'remoteStatusPageEnabled', 'localStatusPage', 'securePort', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -746,13 +806,16 @@ class ActionBatchNetworks(object):
 
 
 
-    def unbindNetwork(self, networkId: str):
+    def unbindNetwork(self, networkId: str, **kwargs):
         """
         **Unbind a network from a template.**
         https://developer.cisco.com/meraki/api-v1/#!unbind-network
 
         - networkId (string): (required)
+        - retainConfigs (boolean): Optional boolean to retain all the current configs given by the template.
         """
+
+        kwargs.update(locals())
 
         metadata = {
             'tags': ['networks', 'configure'],
@@ -760,6 +823,8 @@ class ActionBatchNetworks(object):
         }
         resource = f'/networks/{networkId}/unbind'
 
+        body_params = ['retainConfigs', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "create",

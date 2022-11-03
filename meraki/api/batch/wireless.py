@@ -306,7 +306,7 @@ class ActionBatchWireless(object):
         - number (string): (required)
         - name (string): The name of the SSID
         - enabled (boolean): Whether or not the SSID is enabled
-        - authMode (string): The association control method for the SSID ('open', 'open-enhanced', 'psk', 'open-with-radius', '8021x-meraki', '8021x-radius', '8021x-google', '8021x-localradius', 'ipsk-with-radius' or 'ipsk-without-radius')
+        - authMode (string): The association control method for the SSID ('open', 'open-enhanced', 'psk', 'open-with-radius', '8021x-meraki', '8021x-nac', '8021x-radius', '8021x-google', '8021x-localradius', 'ipsk-with-radius' or 'ipsk-without-radius')
         - enterpriseAdminAccess (string): Whether or not an SSID is accessible by 'enterprise' administrators ('access disabled' or 'access enabled')
         - encryptionMode (string): The psk encryption mode for the SSID ('wep' or 'wpa'). This param is only valid if the authMode is 'psk'
         - psk (string): The passkey for the SSID. This param is only valid if the authMode is 'psk'
@@ -367,7 +367,7 @@ class ActionBatchWireless(object):
         kwargs.update(locals())
 
         if 'authMode' in kwargs:
-            options = ['open', 'open-enhanced', 'psk', 'open-with-radius', '8021x-meraki', '8021x-radius', '8021x-google', '8021x-localradius', 'ipsk-with-radius', 'ipsk-without-radius']
+            options = ['open', 'open-enhanced', 'psk', 'open-with-radius', '8021x-meraki', '8021x-nac', '8021x-radius', '8021x-google', '8021x-localradius', 'ipsk-with-radius', 'ipsk-without-radius']
             assert kwargs['authMode'] in options, f'''"authMode" cannot be "{kwargs['authMode']}", & must be set to one of: {options}'''
         if 'enterpriseAdminAccess' in kwargs:
             options = ['access disabled', 'access enabled']

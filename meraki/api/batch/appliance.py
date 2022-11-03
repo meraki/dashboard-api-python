@@ -13,7 +13,7 @@ class ActionBatchAppliance(object):
         https://developer.cisco.com/meraki/api-v1/#!update-device-appliance-uplinks-settings
 
         - serial (string): (required)
-        - interfaces (object): Interface settings
+        - interfaces (object): Interface settings.
         """
 
         kwargs = locals()
@@ -862,6 +862,37 @@ class ActionBatchAppliance(object):
         action = {
             "resource": resource,
             "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def updateOrganizationApplianceVpnThirdPartyVPNPeers(self, organizationId: str, peers: list):
+        """
+        **Update the third party VPN peers for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-appliance-vpn-third-party-v-p-n-peers
+
+        - organizationId (string): (required)
+        - peers (array): The list of VPN peers
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'vpn', 'thirdPartyVPNPeers'],
+            'operation': 'updateOrganizationApplianceVpnThirdPartyVPNPeers'
+        }
+        resource = f'/organizations/{organizationId}/appliance/vpn/thirdPartyVPNPeers'
+
+        body_params = ['peers', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
             "body": payload
         }
         return action

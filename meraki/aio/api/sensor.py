@@ -8,6 +8,53 @@ class AsyncSensor:
         
 
 
+    def getNetworkSensorAlertsCurrentOverviewByMetric(self, networkId: str):
+        """
+        **Return an overview of currently alerting sensors by metric**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-sensor-alerts-current-overview-by-metric
+
+        - networkId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['sensor', 'monitor', 'alerts', 'current', 'overview', 'byMetric'],
+            'operation': 'getNetworkSensorAlertsCurrentOverviewByMetric'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/sensor/alerts/current/overview/byMetric'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def getNetworkSensorAlertsOverviewByMetric(self, networkId: str, **kwargs):
+        """
+        **Return an overview of alert occurrences over a timespan, by metric**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-sensor-alerts-overview-by-metric
+
+        - networkId (string): (required)
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 7 days.
+        - interval (integer): The time interval in seconds for returned data. The valid intervals are: 86400, 604800. The default is 604800.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['sensor', 'monitor', 'alerts', 'overview', 'byMetric'],
+            'operation': 'getNetworkSensorAlertsOverviewByMetric'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/sensor/alerts/overview/byMetric'
+
+        query_params = ['t0', 't1', 'timespan', 'interval', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get(metadata, resource, params)
+        
+
+
     def getNetworkSensorAlertsProfiles(self, networkId: str):
         """
         **Lists all sensor alert profiles for a network.**
@@ -145,7 +192,7 @@ class AsyncSensor:
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days. The default is 2 hours.
         - networkIds (array): Optional parameter to filter readings by network.
         - serials (array): Optional parameter to filter readings by sensor.
-        - metrics (array): Types of sensor readings to retrieve. If no metrics are supplied, all available types of readings will be retrieved. Allowed values are temperature, humidity, water, door, tvoc, pm25, noise, indoorAirQuality, button, and battery.
+        - metrics (array): Types of sensor readings to retrieve. If no metrics are supplied, all available types of readings will be retrieved. Allowed values are battery, button, door, humidity, indoorAirQuality, noise, pm25, temperature, tvoc, and water.
         """
 
         kwargs.update(locals())
@@ -183,7 +230,7 @@ class AsyncSensor:
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - networkIds (array): Optional parameter to filter readings by network.
         - serials (array): Optional parameter to filter readings by sensor.
-        - metrics (array): Types of sensor readings to retrieve. If no metrics are supplied, all available types of readings will be retrieved. Allowed values are temperature, humidity, water, door, tvoc, pm25, noise, indoorAirQuality, button, and battery.
+        - metrics (array): Types of sensor readings to retrieve. If no metrics are supplied, all available types of readings will be retrieved. Allowed values are battery, button, door, humidity, indoorAirQuality, noise, pm25, temperature, tvoc, and water.
         """
 
         kwargs.update(locals())

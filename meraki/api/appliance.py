@@ -109,7 +109,7 @@ class Appliance(object):
         https://developer.cisco.com/meraki/api-v1/#!update-device-appliance-uplinks-settings
 
         - serial (string): (required)
-        - interfaces (object): Interface settings
+        - interfaces (object): Interface settings.
         """
 
         kwargs = locals()

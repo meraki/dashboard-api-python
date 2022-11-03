@@ -25,15 +25,16 @@ class Organizations(object):
         
 
 
-    def createOrganization(self, name: str):
+    def createOrganization(self, name: str, **kwargs):
         """
         **Create a new organization**
         https://developer.cisco.com/meraki/api-v1/#!create-organization
 
         - name (string): The name of the organization
+        - management (object): Information about the organization's management system
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         metadata = {
             'tags': ['organizations', 'configure'],
@@ -41,7 +42,7 @@ class Organizations(object):
         }
         resource = f'/organizations'
 
-        body_params = ['name', ]
+        body_params = ['name', 'management', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -74,6 +75,7 @@ class Organizations(object):
 
         - organizationId (string): (required)
         - name (string): The name of the organization
+        - management (object): Information about the organization's management system
         - api (object): API-specific settings
         """
 
@@ -86,7 +88,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}'
 
-        body_params = ['name', 'api', ]
+        body_params = ['name', 'management', 'api', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -168,27 +170,6 @@ class Organizations(object):
         
 
 
-    def getOrganizationActionBatch(self, organizationId: str, actionBatchId: str):
-        """
-        **Return an action batch**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-action-batch
-
-        - organizationId (string): (required)
-        - actionBatchId (string): (required)
-        """
-
-        metadata = {
-            'tags': ['organizations', 'configure', 'actionBatches'],
-            'operation': 'getOrganizationActionBatch'
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        actionBatchId = urllib.parse.quote(str(actionBatchId), safe='')
-        resource = f'/organizations/{organizationId}/actionBatches/{actionBatchId}'
-
-        return self._session.get(metadata, resource)
-        
-
-
     def deleteOrganizationActionBatch(self, organizationId: str, actionBatchId: str):
         """
         **Delete an action batch**
@@ -235,6 +216,27 @@ class Organizations(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
+
+    def getOrganizationActionBatch(self, organizationId: str, actionBatchId: str):
+        """
+        **Return an action batch**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-action-batch
+
+        - organizationId (string): (required)
+        - actionBatchId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'actionBatches'],
+            'operation': 'getOrganizationActionBatch'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        actionBatchId = urllib.parse.quote(str(actionBatchId), safe='')
+        resource = f'/organizations/{organizationId}/actionBatches/{actionBatchId}'
+
+        return self._session.get(metadata, resource)
         
 
 
@@ -1902,6 +1904,46 @@ class Organizations(object):
         
 
 
+    def getOrganizationFirmwareUpgradesByDevice(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Get firmware upgrade status for the filtered devices**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-firmware-upgrades-by-device
+
+        - organizationId (string): (required)
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 50. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter by network
+        - serials (array): Optional parameter to filter by serial number.  All returned devices will have a serial number that is an exact match.
+        - macs (array): Optional parameter to filter by one or more MAC addresses belonging to devices. All devices returned belong to MAC addresses that are an exact match.
+        - firmwareUpgradeIds (array): Optional parameter to filter by firmware upgrade ids.
+        - firmwareUpgradeBatchIds (array): Optional parameter to filter by firmware upgrade batch ids.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'firmware', 'upgrades', 'byDevice'],
+            'operation': 'getOrganizationFirmwareUpgradesByDevice'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/firmware/upgrades/byDevice'
+
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'serials', 'macs', 'firmwareUpgradeIds', 'firmwareUpgradeBatchIds', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', 'serials', 'macs', 'firmwareUpgradeIds', 'firmwareUpgradeBatchIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
     def claimIntoOrganizationInventory(self, organizationId: str, **kwargs):
         """
         **Claim a list of devices, licenses, and/or orders into an organization inventory**
@@ -1998,6 +2040,87 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/inventory/devices/{serial}'
 
         return self._session.get(metadata, resource)
+        
+
+
+    def createOrganizationInventoryOnboardingCloudMonitoringImport(self, organizationId: str, devices: list):
+        """
+        **Commits the import operation to complete the onboarding of a device into Dashboard for monitoring.**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-inventory-onboarding-cloud-monitoring-import
+
+        - organizationId (string): (required)
+        - devices (array): A set of device imports to commit
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'inventory', 'onboarding', 'cloudMonitoring', 'imports'],
+            'operation': 'createOrganizationInventoryOnboardingCloudMonitoringImport'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/inventory/onboarding/cloudMonitoring/imports'
+
+        body_params = ['devices', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getOrganizationInventoryOnboardingCloudMonitoringImports(self, organizationId: str, importIds: list):
+        """
+        **Check the status of a committed Import operation**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-inventory-onboarding-cloud-monitoring-imports
+
+        - organizationId (string): (required)
+        - importIds (array): import ids from an imports
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'inventory', 'onboarding', 'cloudMonitoring', 'imports'],
+            'operation': 'getOrganizationInventoryOnboardingCloudMonitoringImports'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/inventory/onboarding/cloudMonitoring/imports'
+
+        query_params = ['importIds', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['importIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get(metadata, resource, params)
+        
+
+
+    def createOrganizationInventoryOnboardingCloudMonitoringPrepare(self, organizationId: str, devices: list):
+        """
+        **Initiates or updates an import session**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-inventory-onboarding-cloud-monitoring-prepare
+
+        - organizationId (string): (required)
+        - devices (array): A set of devices to import (or update)
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'inventory', 'onboarding', 'cloudMonitoring', 'prepare'],
+            'operation': 'createOrganizationInventoryOnboardingCloudMonitoringPrepare'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/inventory/onboarding/cloudMonitoring/prepare'
+
+        body_params = ['devices', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
         
 
 
@@ -2407,6 +2530,267 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/openapiSpec'
 
         return self._session.get(metadata, resource)
+        
+
+
+    def getOrganizationPolicyObjects(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Lists Policy Objects belonging to the organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-policy-objects
+
+        - organizationId (string): (required)
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 10 - 5000. Default is 5000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'policyObjects'],
+            'operation': 'getOrganizationPolicyObjects'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/policyObjects'
+
+        query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def createOrganizationPolicyObject(self, organizationId: str, name: str, category: str, type: str, **kwargs):
+        """
+        **Creates a new Policy Object.**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-policy-object
+
+        - organizationId (string): (required)
+        - name (string): Name of a policy object, unique within the organization (alphanumeric, space, dash, or underscore characters only)
+        - category (string): Category of a policy object (one of: adaptivePolicy, network)
+        - type (string): Type of a policy object (one of: adaptivePolicyIpv4Cidr, fqdn, ipAndMask, cidr)
+        - cidr (string): CIDR Value of a policy object (e.g. 10.11.12.1/24")
+        - fqdn (string): Fully qualified domain name of policy object (e.g. "example.com")
+        - mask (string): Mask of a policy object (e.g. "255.255.0.0")
+        - ip (string): IP Address of a policy object (e.g. "1.2.3.4")
+        - groupIds (array): The IDs of policy object groups the policy object belongs to
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'policyObjects'],
+            'operation': 'createOrganizationPolicyObject'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/policyObjects'
+
+        body_params = ['name', 'category', 'type', 'cidr', 'fqdn', 'mask', 'ip', 'groupIds', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getOrganizationPolicyObjectsGroups(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Lists Policy Object Groups belonging to the organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-policy-objects-groups
+
+        - organizationId (string): (required)
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 10 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'policyObjects', 'groups'],
+            'operation': 'getOrganizationPolicyObjectsGroups'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/policyObjects/groups'
+
+        query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def createOrganizationPolicyObjectsGroup(self, organizationId: str, name: str, **kwargs):
+        """
+        **Creates a new Policy Object Group.**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-policy-objects-group
+
+        - organizationId (string): (required)
+        - name (string): A name for the group of network addresses, unique within the organization (alphanumeric, space, dash, or underscore characters only)
+        - category (string): Category of a policy object group (one of: NetworkObjectGroup, GeoLocationGroup, PortObjectGroup, ApplicationGroup)
+        - objectIds (array): A list of Policy Object ID's that this NetworkObjectGroup should be associated to (note: these ID's will replace the existing associated Policy Objects)
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'policyObjects', 'groups'],
+            'operation': 'createOrganizationPolicyObjectsGroup'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/policyObjects/groups'
+
+        body_params = ['name', 'category', 'objectIds', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getOrganizationPolicyObjectsGroup(self, organizationId: str, policyObjectGroupId: str):
+        """
+        **Shows details of a Policy Object Group.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-policy-objects-group
+
+        - organizationId (string): (required)
+        - policyObjectGroupId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'policyObjects', 'groups'],
+            'operation': 'getOrganizationPolicyObjectsGroup'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        policyObjectGroupId = urllib.parse.quote(str(policyObjectGroupId), safe='')
+        resource = f'/organizations/{organizationId}/policyObjects/groups/{policyObjectGroupId}'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def updateOrganizationPolicyObjectsGroup(self, organizationId: str, policyObjectGroupId: str, **kwargs):
+        """
+        **Updates a Policy Object Group.**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-policy-objects-group
+
+        - organizationId (string): (required)
+        - policyObjectGroupId (string): (required)
+        - name (string): A name for the group of network addresses, unique within the organization (alphanumeric, space, dash, or underscore characters only)
+        - objectIds (array): A list of Policy Object ID's that this NetworkObjectGroup should be associated to (note: these ID's will replace the existing associated Policy Objects)
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'policyObjects', 'groups'],
+            'operation': 'updateOrganizationPolicyObjectsGroup'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        policyObjectGroupId = urllib.parse.quote(str(policyObjectGroupId), safe='')
+        resource = f'/organizations/{organizationId}/policyObjects/groups/{policyObjectGroupId}'
+
+        body_params = ['name', 'objectIds', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def deleteOrganizationPolicyObjectsGroup(self, organizationId: str, policyObjectGroupId: str):
+        """
+        **Deletes a Policy Object Group.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-policy-objects-group
+
+        - organizationId (string): (required)
+        - policyObjectGroupId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'policyObjects', 'groups'],
+            'operation': 'deleteOrganizationPolicyObjectsGroup'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        policyObjectGroupId = urllib.parse.quote(str(policyObjectGroupId), safe='')
+        resource = f'/organizations/{organizationId}/policyObjects/groups/{policyObjectGroupId}'
+
+        return self._session.delete(metadata, resource)
+        
+
+
+    def getOrganizationPolicyObject(self, organizationId: str, policyObjectId: str):
+        """
+        **Shows details of a Policy Object.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-policy-object
+
+        - organizationId (string): (required)
+        - policyObjectId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'policyObjects'],
+            'operation': 'getOrganizationPolicyObject'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        policyObjectId = urllib.parse.quote(str(policyObjectId), safe='')
+        resource = f'/organizations/{organizationId}/policyObjects/{policyObjectId}'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def updateOrganizationPolicyObject(self, organizationId: str, policyObjectId: str, **kwargs):
+        """
+        **Updates a Policy Object.**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-policy-object
+
+        - organizationId (string): (required)
+        - policyObjectId (string): (required)
+        - name (string): Name of a policy object, unique within the organization (alphanumeric, space, dash, or underscore characters only)
+        - cidr (string): CIDR Value of a policy object (e.g. 10.11.12.1/24")
+        - fqdn (string): Fully qualified domain name of policy object (e.g. "example.com")
+        - mask (string): Mask of a policy object (e.g. "255.255.0.0")
+        - ip (string): IP Address of a policy object (e.g. "1.2.3.4")
+        - groupIds (array): The IDs of policy object groups the policy object belongs to
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'policyObjects'],
+            'operation': 'updateOrganizationPolicyObject'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        policyObjectId = urllib.parse.quote(str(policyObjectId), safe='')
+        resource = f'/organizations/{organizationId}/policyObjects/{policyObjectId}'
+
+        body_params = ['name', 'cidr', 'fqdn', 'mask', 'ip', 'groupIds', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def deleteOrganizationPolicyObject(self, organizationId: str, policyObjectId: str):
+        """
+        **Deletes a Policy Object.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-policy-object
+
+        - organizationId (string): (required)
+        - policyObjectId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'policyObjects'],
+            'operation': 'deleteOrganizationPolicyObject'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        policyObjectId = urllib.parse.quote(str(policyObjectId), safe='')
+        resource = f'/organizations/{organizationId}/policyObjects/{policyObjectId}'
+
+        return self._session.delete(metadata, resource)
         
 
 
@@ -2980,6 +3364,39 @@ class Organizations(object):
         
 
 
+    def getOrganizationWebhookLogs(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Return the log of webhook POSTs sent**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-webhook-logs
+
+        - organizationId (string): (required)
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 90 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - url (string): The URL the webhook was sent to
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'monitor', 'webhookLogs'],
+            'operation': 'getOrganizationWebhookLogs'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/webhookLogs'
+
+        query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'url', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
     def getOrganizationWebhooksAlertTypes(self, organizationId: str, **kwargs):
         """
         **Return a list of alert types to be used with managing webhook alerts**
@@ -2992,7 +3409,7 @@ class Organizations(object):
         kwargs.update(locals())
 
         if 'productType' in kwargs:
-            options = ['appliance', 'camera', 'cellularGateway', 'platform', 'sensor', 'sm', 'switch', 'wireless']
+            options = ['appliance', 'camera', 'cellularGateway', 'health', 'platform', 'sensor', 'sm', 'switch', 'wireless']
             assert kwargs['productType'] in options, f'''"productType" cannot be "{kwargs['productType']}", & must be set to one of: {options}'''
 
         metadata = {

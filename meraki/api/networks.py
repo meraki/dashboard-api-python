@@ -866,6 +866,284 @@ class Networks(object):
         
 
 
+    def getNetworkFirmwareUpgradesStagedEvents(self, networkId: str):
+        """
+        **Get the Staged Upgrade Event from a network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-firmware-upgrades-staged-events
+
+        - networkId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'firmwareUpgrades', 'staged', 'events'],
+            'operation': 'getNetworkFirmwareUpgradesStagedEvents'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/firmwareUpgrades/staged/events'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def createNetworkFirmwareUpgradesStagedEvent(self, networkId: str, stages: list, **kwargs):
+        """
+        **Create a Staged Upgrade Event for a network**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-firmware-upgrades-staged-event
+
+        - networkId (string): (required)
+        - stages (array): All firmware upgrade stages in the network with their start time.
+        - products (object): Contains information about the network to update
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['networks', 'configure', 'firmwareUpgrades', 'staged', 'events'],
+            'operation': 'createNetworkFirmwareUpgradesStagedEvent'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/firmwareUpgrades/staged/events'
+
+        body_params = ['products', 'stages', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def updateNetworkFirmwareUpgradesStagedEvents(self, networkId: str, stages: list):
+        """
+        **Update the Staged Upgrade Event for a network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-firmware-upgrades-staged-events
+
+        - networkId (string): (required)
+        - stages (array): All firmware upgrade stages in the network with their start time.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['networks', 'configure', 'firmwareUpgrades', 'staged', 'events'],
+            'operation': 'updateNetworkFirmwareUpgradesStagedEvents'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/firmwareUpgrades/staged/events'
+
+        body_params = ['stages', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def deferNetworkFirmwareUpgradesStagedEvents(self, networkId: str):
+        """
+        **Postpone by 1 week all pending staged upgrade stages for a network**
+        https://developer.cisco.com/meraki/api-v1/#!defer-network-firmware-upgrades-staged-events
+
+        - networkId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'firmwareUpgrades', 'staged', 'events'],
+            'operation': 'deferNetworkFirmwareUpgradesStagedEvents'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/firmwareUpgrades/staged/events/defer'
+
+        return self._session.post(metadata, resource)
+        
+
+
+    def rollbacksNetworkFirmwareUpgradesStagedEvents(self, networkId: str, stages: list, **kwargs):
+        """
+        **Rollback a Staged Upgrade Event for a network**
+        https://developer.cisco.com/meraki/api-v1/#!rollbacks-network-firmware-upgrades-staged-events
+
+        - networkId (string): (required)
+        - stages (array): All completed or in-progress stages in the network with their new start times. All pending stages will be canceled
+        - reasons (array): The reason for rolling back the staged upgrade
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['networks', 'configure', 'firmwareUpgrades', 'staged', 'events'],
+            'operation': 'rollbacksNetworkFirmwareUpgradesStagedEvents'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/firmwareUpgrades/staged/events/rollbacks'
+
+        body_params = ['stages', 'reasons', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getNetworkFirmwareUpgradesStagedGroups(self, networkId: str):
+        """
+        **List of Staged Upgrade Groups in a network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-firmware-upgrades-staged-groups
+
+        - networkId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'firmwareUpgrades', 'staged', 'groups'],
+            'operation': 'getNetworkFirmwareUpgradesStagedGroups'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/firmwareUpgrades/staged/groups'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def createNetworkFirmwareUpgradesStagedGroup(self, networkId: str, name: str, isDefault: bool, **kwargs):
+        """
+        **Create a Staged Upgrade Group for a network**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-firmware-upgrades-staged-group
+
+        - networkId (string): (required)
+        - name (string): Name of the Staged Upgrade Group. Length must be 1 to 255 characters
+        - isDefault (boolean): Boolean indicating the default Group. Any device that does not have a group explicitly assigned will upgrade with this group
+        - description (string): Description of the Staged Upgrade Group. Length must be 1 to 255 characters
+        - assignedDevices (object): The devices and Switch Stacks assigned to the Group
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['networks', 'configure', 'firmwareUpgrades', 'staged', 'groups'],
+            'operation': 'createNetworkFirmwareUpgradesStagedGroup'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/firmwareUpgrades/staged/groups'
+
+        body_params = ['name', 'description', 'isDefault', 'assignedDevices', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getNetworkFirmwareUpgradesStagedGroup(self, networkId: str, groupId: str):
+        """
+        **Get a Staged Upgrade Group from a network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-firmware-upgrades-staged-group
+
+        - networkId (string): (required)
+        - groupId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'firmwareUpgrades', 'staged', 'groups'],
+            'operation': 'getNetworkFirmwareUpgradesStagedGroup'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        groupId = urllib.parse.quote(str(groupId), safe='')
+        resource = f'/networks/{networkId}/firmwareUpgrades/staged/groups/{groupId}'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def updateNetworkFirmwareUpgradesStagedGroup(self, networkId: str, groupId: str, name: str, isDefault: bool, **kwargs):
+        """
+        **Update a Staged Upgrade Group for a network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-firmware-upgrades-staged-group
+
+        - networkId (string): (required)
+        - groupId (string): (required)
+        - name (string): Name of the Staged Upgrade Group. Length must be 1 to 255 characters
+        - isDefault (boolean): Boolean indicating the default Group. Any device that does not have a group explicitly assigned will upgrade with this group
+        - description (string): Description of the Staged Upgrade Group. Length must be 1 to 255 characters
+        - assignedDevices (object): The devices and Switch Stacks assigned to the Group
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['networks', 'configure', 'firmwareUpgrades', 'staged', 'groups'],
+            'operation': 'updateNetworkFirmwareUpgradesStagedGroup'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        groupId = urllib.parse.quote(str(groupId), safe='')
+        resource = f'/networks/{networkId}/firmwareUpgrades/staged/groups/{groupId}'
+
+        body_params = ['name', 'description', 'isDefault', 'assignedDevices', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def deleteNetworkFirmwareUpgradesStagedGroup(self, networkId: str, groupId: str):
+        """
+        **Delete a Staged Upgrade Group**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-firmware-upgrades-staged-group
+
+        - networkId (string): (required)
+        - groupId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'firmwareUpgrades', 'staged', 'groups'],
+            'operation': 'deleteNetworkFirmwareUpgradesStagedGroup'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        groupId = urllib.parse.quote(str(groupId), safe='')
+        resource = f'/networks/{networkId}/firmwareUpgrades/staged/groups/{groupId}'
+
+        return self._session.delete(metadata, resource)
+        
+
+
+    def getNetworkFirmwareUpgradesStagedStages(self, networkId: str):
+        """
+        **Order of Staged Upgrade Groups in a network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-firmware-upgrades-staged-stages
+
+        - networkId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'firmwareUpgrades', 'staged', 'stages'],
+            'operation': 'getNetworkFirmwareUpgradesStagedStages'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/firmwareUpgrades/staged/stages'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def updateNetworkFirmwareUpgradesStagedStages(self, networkId: str, **kwargs):
+        """
+        **Assign Staged Upgrade Group order in the sequence.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-firmware-upgrades-staged-stages
+
+        - networkId (string): (required)
+        - _json (array): Array of Staged Upgrade Groups
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['networks', 'configure', 'firmwareUpgrades', 'staged', 'stages'],
+            'operation': 'updateNetworkFirmwareUpgradesStagedStages'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/firmwareUpgrades/staged/stages'
+
+        body_params = ['_json', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
     def getNetworkFloorPlans(self, networkId: str):
         """
         **List the floor plans that belong to your network**
@@ -1723,8 +2001,8 @@ class Networks(object):
         - networkId (string): (required)
         - localStatusPageEnabled (boolean): Enables / disables the local device status pages (<a target='_blank' href='http://my.meraki.com/'>my.meraki.com, </a><a target='_blank' href='http://ap.meraki.com/'>ap.meraki.com, </a><a target='_blank' href='http://switch.meraki.com/'>switch.meraki.com, </a><a target='_blank' href='http://wired.meraki.com/'>wired.meraki.com</a>). Optional (defaults to false)
         - remoteStatusPageEnabled (boolean): Enables / disables access to the device status page (<a target='_blank'>http://[device's LAN IP])</a>. Optional. Can only be set if localStatusPageEnabled is set to true
-        - secureConnect (object): A hash of SecureConnect options applied to the Network.
-        - localStatusPage (object): A hash of Local Status page(s) options applied to the Network.
+        - localStatusPage (object): A hash of Local Status page(s)' authentication options applied to the Network.
+        - securePort (object): A hash of SecureConnect options applied to the Network.
         """
 
         kwargs.update(locals())
@@ -1736,7 +2014,7 @@ class Networks(object):
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/settings'
 
-        body_params = ['localStatusPageEnabled', 'remoteStatusPageEnabled', 'secureConnect', 'localStatusPage', ]
+        body_params = ['localStatusPageEnabled', 'remoteStatusPageEnabled', 'localStatusPage', 'securePort', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -2026,13 +2304,16 @@ class Networks(object):
         
 
 
-    def unbindNetwork(self, networkId: str):
+    def unbindNetwork(self, networkId: str, **kwargs):
         """
         **Unbind a network from a template.**
         https://developer.cisco.com/meraki/api-v1/#!unbind-network
 
         - networkId (string): (required)
+        - retainConfigs (boolean): Optional boolean to retain all the current configs given by the template.
         """
+
+        kwargs.update(locals())
 
         metadata = {
             'tags': ['networks', 'configure'],
@@ -2041,7 +2322,10 @@ class Networks(object):
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/unbind'
 
-        return self._session.post(metadata, resource)
+        body_params = ['retainConfigs', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
         
 
 
