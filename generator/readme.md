@@ -8,3 +8,4 @@
 * Replace `YOUR_API_KEY` with an API key that has org admin privileges on that beta org.\
 * NB: Your local system may require minor syntax tweaks (e.g. Windows may require you prepend `generate_library.py` with `.\`)
 5. You will now have a `meraki` module folder inside `generator`, which you can locally reference in your scripts. Simply copy the `meraki` folder to those projects which require it.
+6. In some cases, if you've already installed the official library, your scripts may prefer that one over the local folder. If that happens, then calls to early access endpoints will fail. So, if necessary, uninstall any instances of the meraki package that may have been installed in your venv or system, or replace the version installed in your venv with that which you generated here.
