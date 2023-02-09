@@ -180,11 +180,14 @@ class RestSession(object):
                     status = response.status_code
                 except requests.exceptions.RequestException as e:
                     if self._logger:
-                        self._logger.warning(f'{tag}, {operation} - {e}, retrying in 1 second')
+                        self._logger.error(f'{tag}, {operation} - {e}, retrying in 1 second')
                     time.sleep(1)
                     retries -= 1
                     if retries == 0:
-                        raise APIError(metadata, response)
+                        if e.response and e.response.status_code:
+                            raise APIError(metadata, APIResponseError(e, e.response.status_code, str(e)))
+                        else:
+                            raise APIError(metadata, APIResponseError(e, 503, str(e)))
                     else:
                         continue
 
