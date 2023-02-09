@@ -180,7 +180,7 @@ class RestSession(object):
                     status = response.status_code
                 except requests.exceptions.RequestException as e:
                     if self._logger:
-                        self._logger.error(f'{tag}, {operation} - {e}, retrying in 1 second')
+                        self._logger.warning(f'{tag}, {operation} - {e}, retrying in 1 second')
                     time.sleep(1)
                     retries -= 1
                     if retries == 0:
