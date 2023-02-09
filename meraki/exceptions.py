@@ -11,7 +11,7 @@ class APIKeyError(Exception):
 class APIResponseError(Exception):
     """
     Exception class raised from HTTP class methods. Used as a single catch-all error for any possible
-    error that might happen during communication with Meraki API to simplify caller coding.
+    requests exception error that might happen during communication with Meraki API to simplify caller coding.
     """
     def __init__(self, obj_name, status_code, error_msg):
         self.obj_name = obj_name
@@ -22,7 +22,7 @@ class APIResponseError(Exception):
         return f'HTTP call within object "{self.obj_name}" failed. Status code is "{self.status_code}". Error message is: "{self.reason}".'
 
     def json(self):
-        return dict(error=self.exc_message(), status_code=self.status_code)
+        return dict(error=self.reason, status_code=self.status_code)
 
     def __str__(self):
         return self.exc_message()
