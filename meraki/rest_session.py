@@ -184,7 +184,10 @@ class RestSession(object):
                     time.sleep(1)
                     retries -= 1
                     if retries == 0:
-                        raise APIError(metadata, response)
+                        if e.response and e.response.status_code:
+                            raise APIError(metadata, APIResponseError(e.__class__.__name__, e.response.status_code, str(e)))
+                        else:
+                            raise APIError(metadata, APIResponseError(e.__class__.__name__, 503, str(e)))
                     else:
                         continue
 
