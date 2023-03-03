@@ -126,7 +126,7 @@ def parse_params(operation, parameters, param_filters=[]):
 def generate_library(spec, version_number):
     # Supported scopes list will include organizations, networks, devices, and all product types.
     supported_scopes = ['organizations', 'networks', 'devices', 'appliance', 'camera', 'cellularGateway', 'insight',
-                        'sm', 'switch', 'wireless', 'sensor', 'administered']
+                        'sm', 'switch', 'wireless', 'sensor', 'administered', 'licensing', 'secureConnect']
     # legacy scopes = ['organizations', 'networks', 'devices', 'appliance', 'camera', 'cellularGateway', 'insight',
     #                  'sm', 'switch', 'wireless']
     tags = spec['tags']
