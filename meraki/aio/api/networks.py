@@ -83,7 +83,7 @@ class AsyncNetworks:
         - networkId (string): (required)
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 30.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
@@ -395,7 +395,7 @@ class AsyncNetworks:
         kwargs.update(locals())
 
         if 'devicePolicy' in kwargs:
-            options = ['Group policy', 'Allowed', 'Blocked', 'Per connection', 'Normal']
+            options = ['Allowed', 'Blocked', 'Group policy', 'Normal', 'Per connection']
             assert kwargs['devicePolicy'] in options, f'''"devicePolicy" cannot be "{kwargs['devicePolicy']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -676,7 +676,7 @@ class AsyncNetworks:
         kwargs = locals()
 
         if 'size' in kwargs:
-            options = ['small', 'medium', 'large', '100']
+            options = ['100', 'large', 'medium', 'small']
             assert kwargs['size'] in options, f'''"size" cannot be "{kwargs['size']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -746,7 +746,7 @@ class AsyncNetworks:
         kwargs.update(locals())
 
         if 'productType' in kwargs:
-            options = ['wireless', 'appliance', 'switch', 'systemsManager', 'camera', 'cellularGateway']
+            options = ['appliance', 'camera', 'cellularGateway', 'switch', 'systemsManager', 'wireless']
             assert kwargs['productType'] in options, f'''"productType" cannot be "{kwargs['productType']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -849,7 +849,7 @@ class AsyncNetworks:
         kwargs.update(locals())
 
         if 'product' in kwargs:
-            options = ['wireless', 'appliance', 'switch', 'camera', 'cellularGateway']
+            options = ['appliance', 'camera', 'cellularGateway', 'switch', 'wireless']
             assert kwargs['product'] in options, f'''"product" cannot be "{kwargs['product']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -1310,7 +1310,7 @@ class AsyncNetworks:
         kwargs.update(locals())
 
         if 'splashAuthSettings' in kwargs:
-            options = ['network default', 'bypass']
+            options = ['bypass', 'network default']
             assert kwargs['splashAuthSettings'] in options, f'''"splashAuthSettings" cannot be "{kwargs['splashAuthSettings']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -1371,7 +1371,7 @@ class AsyncNetworks:
         kwargs.update(locals())
 
         if 'splashAuthSettings' in kwargs:
-            options = ['network default', 'bypass']
+            options = ['bypass', 'network default']
             assert kwargs['splashAuthSettings'] in options, f'''"splashAuthSettings" cannot be "{kwargs['splashAuthSettings']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -1466,7 +1466,7 @@ class AsyncNetworks:
         kwargs.update(locals())
 
         if 'accountType' in kwargs:
-            options = ['Guest', '802.1X', 'Client VPN']
+            options = ['802.1X', 'Client VPN', 'Guest']
             assert kwargs['accountType'] in options, f'''"accountType" cannot be "{kwargs['accountType']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -2054,7 +2054,7 @@ class AsyncNetworks:
         kwargs.update(locals())
 
         if 'access' in kwargs:
-            options = ['none', 'community', 'users']
+            options = ['community', 'none', 'users']
             assert kwargs['access'] in options, f'''"access" cannot be "{kwargs['access']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -2167,7 +2167,7 @@ class AsyncNetworks:
 
     def getNetworkTopologyLinkLayer(self, networkId: str):
         """
-        **List of devices and connections among them within the network.**
+        **List the LLDP and CDP information for all discovered devices and connections in a network.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-topology-link-layer
 
         - networkId (string): (required)
@@ -2198,7 +2198,7 @@ class AsyncNetworks:
         kwargs.update(locals())
 
         if 'deviceType' in kwargs:
-            options = ['combined', 'wireless', 'switch', 'appliance']
+            options = ['appliance', 'combined', 'switch', 'wireless']
             assert kwargs['deviceType'] in options, f'''"deviceType" cannot be "{kwargs['deviceType']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -2249,7 +2249,7 @@ class AsyncNetworks:
         kwargs.update(locals())
 
         if 'mode' in kwargs:
-            options = ['disabled', 'basic', 'detailed']
+            options = ['basic', 'detailed', 'disabled']
             assert kwargs['mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
 
         metadata = {

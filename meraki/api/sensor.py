@@ -8,6 +8,50 @@ class Sensor(object):
         
 
 
+    def getDeviceSensorRelationships(self, serial: str):
+        """
+        **List the sensor roles for a given sensor or camera device.**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-sensor-relationships
+
+        - serial (string): (required)
+        """
+
+        metadata = {
+            'tags': ['sensor', 'configure', 'relationships'],
+            'operation': 'getDeviceSensorRelationships'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        resource = f'/devices/{serial}/sensor/relationships'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def updateDeviceSensorRelationships(self, serial: str, **kwargs):
+        """
+        **Assign one or more sensor roles to a given sensor or camera device.**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-sensor-relationships
+
+        - serial (string): (required)
+        - livestream (object): A role defined between an MT sensor and an MV camera that adds the camera's livestream to the sensor's details page. Snapshots from the camera will also appear in alert notifications that the sensor triggers.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['sensor', 'configure', 'relationships'],
+            'operation': 'updateDeviceSensorRelationships'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        resource = f'/devices/{serial}/sensor/relationships'
+
+        body_params = ['livestream', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
     def getNetworkSensorAlertsCurrentOverviewByMetric(self, networkId: str):
         """
         **Return an overview of currently alerting sensors by metric**
@@ -173,6 +217,25 @@ class Sensor(object):
         resource = f'/networks/{networkId}/sensor/alerts/profiles/{id}'
 
         return self._session.delete(metadata, resource)
+        
+
+
+    def getNetworkSensorRelationships(self, networkId: str):
+        """
+        **List the sensor roles for devices in a given network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-sensor-relationships
+
+        - networkId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['sensor', 'configure', 'relationships'],
+            'operation': 'getNetworkSensorRelationships'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/sensor/relationships'
+
+        return self._session.get(metadata, resource)
         
 
 

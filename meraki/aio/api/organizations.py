@@ -153,7 +153,7 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         if 'status' in kwargs:
-            options = ['pending', 'completed', 'failed']
+            options = ['completed', 'failed', 'pending']
             assert kwargs['status'] in options, f'''"status" cannot be "{kwargs['status']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -543,7 +543,7 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         if 'lastEntryRule' in kwargs:
-            options = ['default', 'allow', 'deny']
+            options = ['allow', 'default', 'deny']
             assert kwargs['lastEntryRule'] in options, f'''"lastEntryRule" cannot be "{kwargs['lastEntryRule']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -601,7 +601,7 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         if 'lastEntryRule' in kwargs:
-            options = ['default', 'allow', 'deny']
+            options = ['allow', 'default', 'deny']
             assert kwargs['lastEntryRule'] in options, f'''"lastEntryRule" cannot be "{kwargs['lastEntryRule']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -720,10 +720,10 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         if 'orgAccess' in kwargs:
-            options = ['full', 'read-only', 'enterprise', 'none']
+            options = ['enterprise', 'full', 'none', 'read-only']
             assert kwargs['orgAccess'] in options, f'''"orgAccess" cannot be "{kwargs['orgAccess']}", & must be set to one of: {options}'''
         if 'authenticationMethod' in kwargs:
-            options = ['Email', 'Cisco SecureX Sign-On']
+            options = ['Cisco SecureX Sign-On', 'Email']
             assert kwargs['authenticationMethod'] in options, f'''"authenticationMethod" cannot be "{kwargs['authenticationMethod']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -756,7 +756,7 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         if 'orgAccess' in kwargs:
-            options = ['full', 'read-only', 'enterprise', 'none']
+            options = ['enterprise', 'full', 'none', 'read-only']
             assert kwargs['orgAccess'] in options, f'''"orgAccess" cannot be "{kwargs['orgAccess']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -830,7 +830,7 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         if 'type' in kwargs:
-            options = ['voipJitter', 'voipPacketLoss', 'voipMos', 'wanLatency', 'wanPacketLoss', 'wanUtilization', 'wanStatus', 'appOutage']
+            options = ['appOutage', 'voipJitter', 'voipMos', 'voipPacketLoss', 'wanLatency', 'wanPacketLoss', 'wanStatus', 'wanUtilization']
             assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -865,7 +865,7 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         if 'type' in kwargs:
-            options = ['voipJitter', 'voipPacketLoss', 'voipMos', 'wanLatency', 'wanPacketLoss', 'wanUtilization', 'wanStatus', 'appOutage']
+            options = ['appOutage', 'voipJitter', 'voipMos', 'voipPacketLoss', 'wanLatency', 'wanPacketLoss', 'wanStatus', 'wanUtilization']
             assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -931,7 +931,7 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         if 'method' in kwargs:
-            options = ['GET', 'PUT', 'POST', 'DELETE']
+            options = ['DELETE', 'GET', 'POST', 'PUT']
             assert kwargs['method'] in options, f'''"method" cannot be "{kwargs['method']}", & must be set to one of: {options}'''
         if 'version' in kwargs:
             options = [0, 1]
@@ -984,6 +984,49 @@ class AsyncOrganizations:
         
 
 
+    def getOrganizationApiRequestsOverviewResponseCodesByInterval(self, organizationId: str, **kwargs):
+        """
+        **Tracks organizations' API requests by response code across a given time period**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-api-requests-overview-response-codes-by-interval
+
+        - organizationId (string): (required)
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 31 days. If interval is provided, the timespan will be autocalculated.
+        - interval (integer): The time interval in seconds for returned data. The valid intervals are: 120, 3600, 14400, 21600. The default is 21600. Interval is calculated if time params are provided.
+        - version (integer): Filter by API version of the endpoint. Allowable values are: [0, 1]
+        - operationIds (array): Filter by operation ID of the endpoint
+        - sourceIps (array): Filter by source IP that made the API request
+        - adminIds (array): Filter by admin ID of user that made the API request
+        - userAgent (string): Filter by user agent string for API request. This will filter by a complete or partial match.
+        """
+
+        kwargs.update(locals())
+
+        if 'version' in kwargs:
+            options = [0, 1]
+            assert kwargs['version'] in options, f'''"version" cannot be "{kwargs['version']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['organizations', 'monitor', 'apiRequests', 'overview', 'responseCodes', 'byInterval'],
+            'operation': 'getOrganizationApiRequestsOverviewResponseCodesByInterval'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/apiRequests/overview/responseCodes/byInterval'
+
+        query_params = ['t0', 't1', 'timespan', 'interval', 'version', 'operationIds', 'sourceIps', 'adminIds', 'userAgent', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['operationIds', 'sourceIps', 'adminIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get(metadata, resource, params)
+        
+
+
     def getOrganizationBrandingPolicies(self, organizationId: str):
         """
         **List the branding policies of an organization**
@@ -1003,7 +1046,7 @@ class AsyncOrganizations:
         
 
 
-    def createOrganizationBrandingPolicy(self, organizationId: str, name: str, enabled: bool, adminSettings: dict, **kwargs):
+    def createOrganizationBrandingPolicy(self, organizationId: str, **kwargs):
         """
         **Add a new branding policy to an organization**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-branding-policy
@@ -1012,10 +1055,10 @@ class AsyncOrganizations:
         - name (string): Name of the Dashboard branding policy.
         - enabled (boolean): Boolean indicating whether this policy is enabled.
         - adminSettings (object): Settings for describing which kinds of admins this policy applies to.
-        - helpSettings (object):     Settings for describing the modifications to various Help page features. Each property in this object accepts one of
-    'default or inherit' (do not modify functionality), 'hide' (remove the section from Dashboard), or 'show' (always show
-    the section on Dashboard). Some properties in this object also accept custom HTML used to replace the section on
-    Dashboard; see the documentation for each property to see the allowed values.
+        - helpSettings (object):       Settings for describing the modifications to various Help page features. Each property in this object accepts one of
+      'default or inherit' (do not modify functionality), 'hide' (remove the section from Dashboard), or 'show' (always show
+      the section on Dashboard). Some properties in this object also accept custom HTML used to replace the section on
+      Dashboard; see the documentation for each property to see the allowed values.
  Each property defaults to 'default or inherit' when not provided.
         - customLogo (object): Properties describing the custom logo attached to the branding policy.
         """
@@ -1055,16 +1098,17 @@ class AsyncOrganizations:
         
 
 
-    def updateOrganizationBrandingPoliciesPriorities(self, organizationId: str, brandingPolicyIds: list):
+    def updateOrganizationBrandingPoliciesPriorities(self, organizationId: str, **kwargs):
         """
         **Update the priority ordering of an organization's branding policies.**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-branding-policies-priorities
 
         - organizationId (string): (required)
-        - brandingPolicyIds (array): A list of branding policy IDs arranged in ascending priority order (IDs later in the array have higher priority).
+        - brandingPolicyIds (array):       An ordered list of branding policy IDs that determines the priority order of how to apply the policies
+
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         metadata = {
             'tags': ['organizations', 'configure', 'brandingPolicies', 'priorities'],
@@ -1111,10 +1155,10 @@ class AsyncOrganizations:
         - name (string): Name of the Dashboard branding policy.
         - enabled (boolean): Boolean indicating whether this policy is enabled.
         - adminSettings (object): Settings for describing which kinds of admins this policy applies to.
-        - helpSettings (object):     Settings for describing the modifications to various Help page features. Each property in this object accepts one of
-    'default or inherit' (do not modify functionality), 'hide' (remove the section from Dashboard), or 'show' (always show
-    the section on Dashboard). Some properties in this object also accept custom HTML used to replace the section on
-    Dashboard; see the documentation for each property to see the allowed values.
+        - helpSettings (object):       Settings for describing the modifications to various Help page features. Each property in this object accepts one of
+      'default or inherit' (do not modify functionality), 'hide' (remove the section from Dashboard), or 'show' (always show
+      the section on Dashboard). Some properties in this object also accept custom HTML used to replace the section on
+      Dashboard; see the documentation for each property to see the allowed values.
 
         - customLogo (object): Properties describing the custom logo attached to the branding policy.
         """
@@ -1473,7 +1517,7 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         if 'tagsFilterType' in kwargs:
-            options = ['withAnyTags', 'withAllTags']
+            options = ['withAllTags', 'withAnyTags']
             assert kwargs['tagsFilterType'] in options, f'''"tagsFilterType" cannot be "{kwargs['tagsFilterType']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -1517,7 +1561,7 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         if 'tagsFilterType' in kwargs:
-            options = ['withAnyTags', 'withAllTags']
+            options = ['withAllTags', 'withAnyTags']
             assert kwargs['tagsFilterType'] in options, f'''"tagsFilterType" cannot be "{kwargs['tagsFilterType']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -1561,7 +1605,7 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         if 'tagsFilterType' in kwargs:
-            options = ['withAnyTags', 'withAllTags']
+            options = ['withAllTags', 'withAnyTags']
             assert kwargs['tagsFilterType'] in options, f'''"tagsFilterType" cannot be "{kwargs['tagsFilterType']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -1607,7 +1651,7 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         if 'tagsFilterType' in kwargs:
-            options = ['withAnyTags', 'withAllTags']
+            options = ['withAllTags', 'withAnyTags']
             assert kwargs['tagsFilterType'] in options, f'''"tagsFilterType" cannot be "{kwargs['tagsFilterType']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -1683,7 +1727,7 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         if 'tagsFilterType' in kwargs:
-            options = ['withAnyTags', 'withAllTags']
+            options = ['withAllTags', 'withAnyTags']
             assert kwargs['tagsFilterType'] in options, f'''"tagsFilterType" cannot be "{kwargs['tagsFilterType']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -1722,7 +1766,7 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         if 'uplink' in kwargs:
-            options = ['wan1', 'wan2', 'cellular']
+            options = ['cellular', 'wan1', 'wan2']
             assert kwargs['uplink'] in options, f'''"uplink" cannot be "{kwargs['uplink']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -1988,6 +2032,7 @@ class AsyncOrganizations:
         - networkIds (array): Search for devices in inventory based on network ids.
         - serials (array): Search for devices in inventory based on serials.
         - models (array): Search for devices in inventory based on model.
+        - orderNumbers (array): Search for devices in inventory based on order numbers.
         - tags (array): Filter devices by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below).
         - tagsFilterType (string): To use with 'tags' parameter, to filter devices which contain ANY or ALL given tags. Accepted values are 'withAnyTags' or 'withAllTags', default is 'withAnyTags'.
         - productTypes (array): Filter devices by product type. Accepted values are appliance, camera, cellularGateway, sensor, switch, systemsManager, and wireless.
@@ -1996,10 +2041,10 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         if 'usedState' in kwargs:
-            options = ['used', 'unused']
+            options = ['unused', 'used']
             assert kwargs['usedState'] in options, f'''"usedState" cannot be "{kwargs['usedState']}", & must be set to one of: {options}'''
         if 'tagsFilterType' in kwargs:
-            options = ['withAnyTags', 'withAllTags']
+            options = ['withAllTags', 'withAnyTags']
             assert kwargs['tagsFilterType'] in options, f'''"tagsFilterType" cannot be "{kwargs['tagsFilterType']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -2009,10 +2054,10 @@ class AsyncOrganizations:
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/inventory/devices'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'usedState', 'search', 'macs', 'networkIds', 'serials', 'models', 'tags', 'tagsFilterType', 'productTypes', ]
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'usedState', 'search', 'macs', 'networkIds', 'serials', 'models', 'orderNumbers', 'tags', 'tagsFilterType', 'productTypes', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['macs', 'networkIds', 'serials', 'models', 'tags', 'productTypes', ]
+        array_params = ['macs', 'networkIds', 'serials', 'models', 'orderNumbers', 'tags', 'productTypes', ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
                 params[f'{k.strip()}[]'] = kwargs[f'{k}']
@@ -2040,6 +2085,34 @@ class AsyncOrganizations:
         resource = f'/organizations/{organizationId}/inventory/devices/{serial}'
 
         return self._session.get(metadata, resource)
+        
+
+
+    def createOrganizationInventoryOnboardingCloudMonitoringExportEvent(self, organizationId: str, logEvent: str, timestamp: int, **kwargs):
+        """
+        **Imports event logs related to the onboarding app into elastisearch**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-inventory-onboarding-cloud-monitoring-export-event
+
+        - organizationId (string): (required)
+        - logEvent (string): The type of log event this is recording, e.g. download or opening a banner
+        - timestamp (integer): A JavaScript UTC datetime stamp for when the even occurred
+        - targetOS (string): The name of the onboarding distro being downloaded
+        - request (string): Used to describe if this event was the result of a redirect. E.g. a query param if an info banner is being used
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'inventory', 'onboarding', 'cloudMonitoring', 'exportEvents'],
+            'operation': 'createOrganizationInventoryOnboardingCloudMonitoringExportEvent'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/inventory/onboarding/cloudMonitoring/exportEvents'
+
+        body_params = ['logEvent', 'timestamp', 'targetOS', 'request', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
         
 
 
@@ -2096,6 +2169,40 @@ class AsyncOrganizations:
                 params.pop(k.strip())
 
         return self._session.get(metadata, resource, params)
+        
+
+
+    def getOrganizationInventoryOnboardingCloudMonitoringNetworks(self, organizationId: str, deviceType: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Returns list of networks eligible for adding cloud monitored device**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-inventory-onboarding-cloud-monitoring-networks
+
+        - organizationId (string): (required)
+        - deviceType (string): Device Type switch or wireless controller
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        if 'deviceType' in kwargs:
+            options = ['switch', 'wireless_controller']
+            assert kwargs['deviceType'] in options, f'''"deviceType" cannot be "{kwargs['deviceType']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'inventory', 'onboarding', 'cloudMonitoring', 'networks'],
+            'operation': 'getOrganizationInventoryOnboardingCloudMonitoringNetworks'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/inventory/onboarding/cloudMonitoring/networks'
+
+        query_params = ['deviceType', 'perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
         
 
 
@@ -2162,13 +2269,13 @@ class AsyncOrganizations:
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - deviceSerial (string): Filter the licenses to those assigned to a particular device. Returned in the same order that they are queued to the device.
         - networkId (string): Filter the licenses to those assigned in a particular network
-        - state (string): Filter the licenses to those in a particular state. Can be one of 'active', 'expired', 'expiring', 'unused', 'unusedActive' or 'recentlyQueued'
+        - state (string): Filter the licenses to those in a particular state. Can be one of 'active', 'expired', 'expiring', 'recentlyQueued', 'unused' or 'unusedActive'
         """
 
         kwargs.update(locals())
 
         if 'state' in kwargs:
-            options = ['active', 'expired', 'expiring', 'unused', 'unusedActive', 'recentlyQueued']
+            options = ['active', 'expired', 'expiring', 'recentlyQueued', 'unused', 'unusedActive']
             assert kwargs['state'] in options, f'''"state" cannot be "{kwargs['state']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -2392,7 +2499,7 @@ class AsyncOrganizations:
         - accountLockoutAttempts (integer): Number of consecutive failed login attempts after which users' accounts will be locked.
         - enforceIdleTimeout (boolean): Boolean indicating whether users will be logged out after being idle for the specified number of minutes.
         - idleTimeoutMinutes (integer): Number of minutes users can remain idle before being logged out of their accounts.
-        - enforceTwoFactorAuth (boolean): Boolean indicating whether users in this organization will be required to use an extra verification code when logging in to Dashboard. This code will be sent to their mobile phone via SMS, or can be generated by the Google Authenticator application.
+        - enforceTwoFactorAuth (boolean): Boolean indicating whether users in this organization will be required to use an extra verification code when logging in to Dashboard. This code will be sent to their mobile phone via SMS, or can be generated by the authenticator application.
         - enforceLoginIpRanges (boolean): Boolean indicating whether organization will restrict access to Dashboard (including the API) from certain IP addresses.
         - loginIpRanges (array): List of acceptable IP ranges. Entries can be single IP addresses, IP address ranges, and CIDR subnets.
         - apiAuthentication (object): Details for indicating whether organization will restrict access to API (but not Dashboard) to certain IP addresses.
@@ -2434,7 +2541,7 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         if 'tagsFilterType' in kwargs:
-            options = ['withAnyTags', 'withAllTags']
+            options = ['withAllTags', 'withAnyTags']
             assert kwargs['tagsFilterType'] in options, f'''"tagsFilterType" cannot be "{kwargs['tagsFilterType']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -2570,7 +2677,7 @@ class AsyncOrganizations:
         - organizationId (string): (required)
         - name (string): Name of a policy object, unique within the organization (alphanumeric, space, dash, or underscore characters only)
         - category (string): Category of a policy object (one of: adaptivePolicy, network)
-        - type (string): Type of a policy object (one of: adaptivePolicyIpv4Cidr, fqdn, ipAndMask, cidr)
+        - type (string): Type of a policy object (one of: adaptivePolicyIpv4Cidr, cidr, fqdn, ipAndMask)
         - cidr (string): CIDR Value of a policy object (e.g. 10.11.12.1/24")
         - fqdn (string): Fully qualified domain name of policy object (e.g. "example.com")
         - mask (string): Mask of a policy object (e.g. "255.255.0.0")
@@ -2987,7 +3094,7 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         if 'orgAccess' in kwargs:
-            options = ['none', 'read-only', 'full', 'enterprise']
+            options = ['enterprise', 'full', 'none', 'read-only']
             assert kwargs['orgAccess'] in options, f'''"orgAccess" cannot be "{kwargs['orgAccess']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -3041,7 +3148,7 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         if 'orgAccess' in kwargs:
-            options = ['none', 'read-only', 'full', 'enterprise']
+            options = ['enterprise', 'full', 'none', 'read-only']
             assert kwargs['orgAccess'] in options, f'''"orgAccess" cannot be "{kwargs['orgAccess']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -3120,7 +3227,7 @@ class AsyncOrganizations:
             options = ['MD5', 'SHA']
             assert kwargs['v3AuthMode'] in options, f'''"v3AuthMode" cannot be "{kwargs['v3AuthMode']}", & must be set to one of: {options}'''
         if 'v3PrivMode' in kwargs:
-            options = ['DES', 'AES128']
+            options = ['AES128', 'DES']
             assert kwargs['v3PrivMode'] in options, f'''"v3PrivMode" cannot be "{kwargs['v3PrivMode']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -3364,36 +3471,24 @@ class AsyncOrganizations:
         
 
 
-    def getOrganizationWebhookLogs(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def deleteOrganizationUser(self, organizationId: str, userId: str):
         """
-        **Return the log of webhook POSTs sent**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-webhook-logs
+        **Delete a user and all of its authentication methods.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-user
 
         - organizationId (string): (required)
-        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
-        - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 90 days from today.
-        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
-        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
-        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 50.
-        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - url (string): The URL the webhook was sent to
+        - userId (string): (required)
         """
 
-        kwargs.update(locals())
-
         metadata = {
-            'tags': ['organizations', 'monitor', 'webhookLogs'],
-            'operation': 'getOrganizationWebhookLogs'
+            'tags': ['organizations', 'configure', 'users'],
+            'operation': 'deleteOrganizationUser'
         }
         organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/webhookLogs'
+        userId = urllib.parse.quote(str(userId), safe='')
+        resource = f'/organizations/{organizationId}/users/{userId}'
 
-        query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'url', ]
-        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
-
-        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        return self._session.delete(metadata, resource)
         
 
 

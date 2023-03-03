@@ -287,7 +287,7 @@ class Devices(object):
         kwargs.update(locals())
 
         if 'uplink' in kwargs:
-            options = ['wan1', 'wan2', 'cellular']
+            options = ['cellular', 'wan1', 'wan2']
             assert kwargs['uplink'] in options, f'''"uplink" cannot be "{kwargs['uplink']}", & must be set to one of: {options}'''
 
         metadata = {

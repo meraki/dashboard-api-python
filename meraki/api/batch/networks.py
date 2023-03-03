@@ -115,7 +115,7 @@ class ActionBatchNetworks(object):
         kwargs.update(locals())
 
         if 'devicePolicy' in kwargs:
-            options = ['Group policy', 'Allowed', 'Blocked', 'Per connection', 'Normal']
+            options = ['Allowed', 'Blocked', 'Group policy', 'Normal', 'Per connection']
             assert kwargs['devicePolicy'] in options, f'''"devicePolicy" cannot be "{kwargs['devicePolicy']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -181,7 +181,7 @@ class ActionBatchNetworks(object):
         kwargs = locals()
 
         if 'size' in kwargs:
-            options = ['small', 'medium', 'large', '100']
+            options = ['100', 'large', 'medium', 'small']
             assert kwargs['size'] in options, f'''"size" cannot be "{kwargs['size']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -283,7 +283,7 @@ class ActionBatchNetworks(object):
         kwargs.update(locals())
 
         if 'product' in kwargs:
-            options = ['wireless', 'appliance', 'switch', 'camera', 'cellularGateway']
+            options = ['appliance', 'camera', 'cellularGateway', 'switch', 'wireless']
             assert kwargs['product'] in options, f'''"product" cannot be "{kwargs['product']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -452,7 +452,7 @@ class ActionBatchNetworks(object):
         kwargs.update(locals())
 
         if 'splashAuthSettings' in kwargs:
-            options = ['network default', 'bypass']
+            options = ['bypass', 'network default']
             assert kwargs['splashAuthSettings'] in options, f'''"splashAuthSettings" cannot be "{kwargs['splashAuthSettings']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -498,7 +498,7 @@ class ActionBatchNetworks(object):
         kwargs.update(locals())
 
         if 'splashAuthSettings' in kwargs:
-            options = ['network default', 'bypass']
+            options = ['bypass', 'network default']
             assert kwargs['splashAuthSettings'] in options, f'''"splashAuthSettings" cannot be "{kwargs['splashAuthSettings']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -565,7 +565,7 @@ class ActionBatchNetworks(object):
         kwargs.update(locals())
 
         if 'accountType' in kwargs:
-            options = ['Guest', '802.1X', 'Client VPN']
+            options = ['802.1X', 'Client VPN', 'Guest']
             assert kwargs['accountType'] in options, f'''"accountType" cannot be "{kwargs['accountType']}", & must be set to one of: {options}'''
 
         metadata = {

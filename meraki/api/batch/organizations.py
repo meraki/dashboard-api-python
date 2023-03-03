@@ -224,7 +224,7 @@ class ActionBatchOrganizations(object):
         kwargs.update(locals())
 
         if 'lastEntryRule' in kwargs:
-            options = ['default', 'allow', 'deny']
+            options = ['allow', 'default', 'deny']
             assert kwargs['lastEntryRule'] in options, f'''"lastEntryRule" cannot be "{kwargs['lastEntryRule']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -267,7 +267,7 @@ class ActionBatchOrganizations(object):
         kwargs.update(locals())
 
         if 'lastEntryRule' in kwargs:
-            options = ['default', 'allow', 'deny']
+            options = ['allow', 'default', 'deny']
             assert kwargs['lastEntryRule'] in options, f'''"lastEntryRule" cannot be "{kwargs['lastEntryRule']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -363,7 +363,7 @@ class ActionBatchOrganizations(object):
         kwargs.update(locals())
 
         if 'type' in kwargs:
-            options = ['voipJitter', 'voipPacketLoss', 'voipMos', 'wanLatency', 'wanPacketLoss', 'wanUtilization', 'wanStatus', 'appOutage']
+            options = ['appOutage', 'voipJitter', 'voipMos', 'voipPacketLoss', 'wanLatency', 'wanPacketLoss', 'wanStatus', 'wanUtilization']
             assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -404,7 +404,7 @@ class ActionBatchOrganizations(object):
         kwargs.update(locals())
 
         if 'type' in kwargs:
-            options = ['voipJitter', 'voipPacketLoss', 'voipMos', 'wanLatency', 'wanPacketLoss', 'wanUtilization', 'wanStatus', 'appOutage']
+            options = ['appOutage', 'voipJitter', 'voipMos', 'voipPacketLoss', 'wanLatency', 'wanPacketLoss', 'wanStatus', 'wanUtilization']
             assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -441,6 +441,143 @@ class ActionBatchOrganizations(object):
             'operation': 'deleteOrganizationAlertsProfile'
         }
         resource = f'/organizations/{organizationId}/alerts/profiles/{alertConfigId}'
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+        
+
+
+
+
+
+    def createOrganizationBrandingPolicy(self, organizationId: str, **kwargs):
+        """
+        **Add a new branding policy to an organization**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-branding-policy
+
+        - organizationId (string): (required)
+        - name (string): Name of the Dashboard branding policy.
+        - enabled (boolean): Boolean indicating whether this policy is enabled.
+        - adminSettings (object): Settings for describing which kinds of admins this policy applies to.
+        - helpSettings (object):       Settings for describing the modifications to various Help page features. Each property in this object accepts one of
+      'default or inherit' (do not modify functionality), 'hide' (remove the section from Dashboard), or 'show' (always show
+      the section on Dashboard). Some properties in this object also accept custom HTML used to replace the section on
+      Dashboard; see the documentation for each property to see the allowed values.
+ Each property defaults to 'default or inherit' when not provided.
+        - customLogo (object): Properties describing the custom logo attached to the branding policy.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'brandingPolicies'],
+            'operation': 'createOrganizationBrandingPolicy'
+        }
+        resource = f'/organizations/{organizationId}/brandingPolicies'
+
+        body_params = ['name', 'enabled', 'adminSettings', 'helpSettings', 'customLogo', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def updateOrganizationBrandingPoliciesPriorities(self, organizationId: str, **kwargs):
+        """
+        **Update the priority ordering of an organization's branding policies.**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-branding-policies-priorities
+
+        - organizationId (string): (required)
+        - brandingPolicyIds (array):       An ordered list of branding policy IDs that determines the priority order of how to apply the policies
+
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'brandingPolicies', 'priorities'],
+            'operation': 'updateOrganizationBrandingPoliciesPriorities'
+        }
+        resource = f'/organizations/{organizationId}/brandingPolicies/priorities'
+
+        body_params = ['brandingPolicyIds', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def updateOrganizationBrandingPolicy(self, organizationId: str, brandingPolicyId: str, **kwargs):
+        """
+        **Update a branding policy**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-branding-policy
+
+        - organizationId (string): (required)
+        - brandingPolicyId (string): (required)
+        - name (string): Name of the Dashboard branding policy.
+        - enabled (boolean): Boolean indicating whether this policy is enabled.
+        - adminSettings (object): Settings for describing which kinds of admins this policy applies to.
+        - helpSettings (object):       Settings for describing the modifications to various Help page features. Each property in this object accepts one of
+      'default or inherit' (do not modify functionality), 'hide' (remove the section from Dashboard), or 'show' (always show
+      the section on Dashboard). Some properties in this object also accept custom HTML used to replace the section on
+      Dashboard; see the documentation for each property to see the allowed values.
+
+        - customLogo (object): Properties describing the custom logo attached to the branding policy.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'brandingPolicies'],
+            'operation': 'updateOrganizationBrandingPolicy'
+        }
+        resource = f'/organizations/{organizationId}/brandingPolicies/{brandingPolicyId}'
+
+        body_params = ['name', 'enabled', 'adminSettings', 'helpSettings', 'customLogo', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def deleteOrganizationBrandingPolicy(self, organizationId: str, brandingPolicyId: str):
+        """
+        **Delete a branding policy**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-branding-policy
+
+        - organizationId (string): (required)
+        - brandingPolicyId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'brandingPolicies'],
+            'operation': 'deleteOrganizationBrandingPolicy'
+        }
+        resource = f'/organizations/{organizationId}/brandingPolicies/{brandingPolicyId}'
 
         action = {
             "resource": resource,
@@ -728,7 +865,7 @@ class ActionBatchOrganizations(object):
         - accountLockoutAttempts (integer): Number of consecutive failed login attempts after which users' accounts will be locked.
         - enforceIdleTimeout (boolean): Boolean indicating whether users will be logged out after being idle for the specified number of minutes.
         - idleTimeoutMinutes (integer): Number of minutes users can remain idle before being logged out of their accounts.
-        - enforceTwoFactorAuth (boolean): Boolean indicating whether users in this organization will be required to use an extra verification code when logging in to Dashboard. This code will be sent to their mobile phone via SMS, or can be generated by the Google Authenticator application.
+        - enforceTwoFactorAuth (boolean): Boolean indicating whether users in this organization will be required to use an extra verification code when logging in to Dashboard. This code will be sent to their mobile phone via SMS, or can be generated by the authenticator application.
         - enforceLoginIpRanges (boolean): Boolean indicating whether organization will restrict access to Dashboard (including the API) from certain IP addresses.
         - loginIpRanges (array): List of acceptable IP ranges. Entries can be single IP addresses, IP address ranges, and CIDR subnets.
         - apiAuthentication (object): Details for indicating whether organization will restrict access to API (but not Dashboard) to certain IP addresses.
@@ -833,7 +970,7 @@ class ActionBatchOrganizations(object):
         - organizationId (string): (required)
         - name (string): Name of a policy object, unique within the organization (alphanumeric, space, dash, or underscore characters only)
         - category (string): Category of a policy object (one of: adaptivePolicy, network)
-        - type (string): Type of a policy object (one of: adaptivePolicyIpv4Cidr, fqdn, ipAndMask, cidr)
+        - type (string): Type of a policy object (one of: adaptivePolicyIpv4Cidr, cidr, fqdn, ipAndMask)
         - cidr (string): CIDR Value of a policy object (e.g. 10.11.12.1/24")
         - fqdn (string): Fully qualified domain name of policy object (e.g. "example.com")
         - mask (string): Mask of a policy object (e.g. "255.255.0.0")
@@ -1097,6 +1234,32 @@ class ActionBatchOrganizations(object):
             'operation': 'deleteOrganizationSamlIdp'
         }
         resource = f'/organizations/{organizationId}/saml/idps/{idpId}'
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+        
+
+
+
+
+
+    def deleteOrganizationUser(self, organizationId: str, userId: str):
+        """
+        **Delete a user and all of its authentication methods.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-user
+
+        - organizationId (string): (required)
+        - userId (string): (required)
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'users'],
+            'operation': 'deleteOrganizationUser'
+        }
+        resource = f'/organizations/{organizationId}/users/{userId}'
 
         action = {
             "resource": resource,

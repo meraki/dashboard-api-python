@@ -273,7 +273,7 @@ class ActionBatchAppliance(object):
             options = ['IP address', 'MAC address', 'Unique client identifier']
             assert kwargs['clientTrackingMethod'] in options, f'''"clientTrackingMethod" cannot be "{kwargs['clientTrackingMethod']}", & must be set to one of: {options}'''
         if 'deploymentMode' in kwargs:
-            options = ['routed', 'passthrough']
+            options = ['passthrough', 'routed']
             assert kwargs['deploymentMode'] in options, f'''"deploymentMode" cannot be "{kwargs['deploymentMode']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -305,6 +305,7 @@ class ActionBatchAppliance(object):
         - subnet (string): The subnet of the single LAN configuration
         - applianceIp (string): The appliance IP address of the single LAN
         - ipv6 (object): IPv6 configuration on the VLAN
+        - mandatoryDhcp (object): Mandatory DHCP will enforce that clients connecting to this LAN must use the IP address assigned by the DHCP server. Clients who use a static IP address won't be able to associate. Only available on firmware versions 17.0 and above
         """
 
         kwargs.update(locals())
@@ -315,7 +316,7 @@ class ActionBatchAppliance(object):
         }
         resource = f'/networks/{networkId}/appliance/singleLan'
 
-        body_params = ['subnet', 'applianceIp', 'ipv6', ]
+        body_params = ['subnet', 'applianceIp', 'ipv6', 'mandatoryDhcp', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -345,12 +346,13 @@ class ActionBatchAppliance(object):
         - encryptionMode (string): The psk encryption mode for the SSID ('wep' or 'wpa'). This param is only valid if the authMode is 'psk'.
         - wpaEncryptionMode (string): The types of WPA encryption. ('WPA1 and WPA2', 'WPA2 only', 'WPA3 Transition Mode' or 'WPA3 only'). This param is only valid if (1) the authMode is 'psk' & the encryptionMode is 'wpa' OR (2) the authMode is '8021x-meraki' OR (3) the authMode is '8021x-radius'
         - visible (boolean): Boolean indicating whether the MX should advertise or hide this SSID.
+        - dhcpEnforcedDeauthentication (object): DHCP Enforced Deauthentication enables the disassociation of wireless clients in addition to Mandatory DHCP. This param is only valid on firmware versions >= MX 17.0 where the associated LAN has Mandatory DHCP Enabled 
         """
 
         kwargs.update(locals())
 
         if 'authMode' in kwargs:
-            options = ['open', 'psk', '8021x-meraki', '8021x-radius']
+            options = ['8021x-meraki', '8021x-radius', 'open', 'psk']
             assert kwargs['authMode'] in options, f'''"authMode" cannot be "{kwargs['authMode']}", & must be set to one of: {options}'''
         if 'encryptionMode' in kwargs:
             options = ['wep', 'wpa']
@@ -365,7 +367,7 @@ class ActionBatchAppliance(object):
         }
         resource = f'/networks/{networkId}/appliance/ssids/{number}'
 
-        body_params = ['name', 'enabled', 'defaultVlanId', 'authMode', 'psk', 'radiusServers', 'encryptionMode', 'wpaEncryptionMode', 'visible', ]
+        body_params = ['name', 'enabled', 'defaultVlanId', 'authMode', 'psk', 'radiusServers', 'encryptionMode', 'wpaEncryptionMode', 'visible', 'dhcpEnforcedDeauthentication', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -549,6 +551,7 @@ class ActionBatchAppliance(object):
         - activeActiveAutoVpnEnabled (boolean): Toggle for enabling or disabling active-active AutoVPN
         - defaultUplink (string): The default uplink. Must be one of: 'wan1' or 'wan2'
         - loadBalancingEnabled (boolean): Toggle for enabling or disabling load balancing
+        - failoverAndFailback (object): WAN failover and failback behavior
         - wanTrafficUplinkPreferences (array): Array of uplink preference rules for WAN traffic
         - vpnTrafficUplinkPreferences (array): Array of uplink preference rules for VPN traffic
         """
@@ -565,7 +568,7 @@ class ActionBatchAppliance(object):
         }
         resource = f'/networks/{networkId}/appliance/trafficShaping/uplinkSelection'
 
-        body_params = ['activeActiveAutoVpnEnabled', 'defaultUplink', 'loadBalancingEnabled', 'wanTrafficUplinkPreferences', 'vpnTrafficUplinkPreferences', ]
+        body_params = ['activeActiveAutoVpnEnabled', 'defaultUplink', 'loadBalancingEnabled', 'failoverAndFailback', 'wanTrafficUplinkPreferences', 'vpnTrafficUplinkPreferences', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -594,6 +597,7 @@ class ActionBatchAppliance(object):
         - cidr (string): CIDR of the pool of subnets. Applicable only for template network. Each network bound to the template will automatically pick a subnet from this pool to build its own VLAN.
         - mask (integer): Mask used for the subnet of all bound to the template networks. Applicable only for template network.
         - ipv6 (object): IPv6 configuration on the VLAN
+        - mandatoryDhcp (object): Mandatory DHCP will enforce that clients connecting to this VLAN must use the IP address assigned by the DHCP server. Clients who use a static IP address won't be able to associate. Only available on firmware versions 17.0 and above
         """
 
         kwargs.update(locals())
@@ -608,7 +612,7 @@ class ActionBatchAppliance(object):
         }
         resource = f'/networks/{networkId}/appliance/vlans'
 
-        body_params = ['id', 'name', 'subnet', 'applianceIp', 'groupPolicyId', 'templateVlanType', 'cidr', 'mask', 'ipv6', ]
+        body_params = ['id', 'name', 'subnet', 'applianceIp', 'groupPolicyId', 'templateVlanType', 'cidr', 'mask', 'ipv6', 'mandatoryDhcp', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -679,15 +683,16 @@ class ActionBatchAppliance(object):
         - cidr (string): CIDR of the pool of subnets. Applicable only for template network. Each network bound to the template will automatically pick a subnet from this pool to build its own VLAN.
         - mask (integer): Mask used for the subnet of all bound to the template networks. Applicable only for template network.
         - ipv6 (object): IPv6 configuration on the VLAN
+        - mandatoryDhcp (object): Mandatory DHCP will enforce that clients connecting to this VLAN must use the IP address assigned by the DHCP server. Clients who use a static IP address won't be able to associate. Only available on firmware versions 17.0 and above
         """
 
         kwargs.update(locals())
 
         if 'dhcpHandling' in kwargs:
-            options = ['Run a DHCP server', 'Relay DHCP to another server', 'Do not respond to DHCP requests']
+            options = ['Do not respond to DHCP requests', 'Relay DHCP to another server', 'Run a DHCP server']
             assert kwargs['dhcpHandling'] in options, f'''"dhcpHandling" cannot be "{kwargs['dhcpHandling']}", & must be set to one of: {options}'''
         if 'dhcpLeaseTime' in kwargs:
-            options = ['30 minutes', '1 hour', '4 hours', '12 hours', '1 day', '1 week']
+            options = ['1 day', '1 hour', '1 week', '12 hours', '30 minutes', '4 hours']
             assert kwargs['dhcpLeaseTime'] in options, f'''"dhcpLeaseTime" cannot be "{kwargs['dhcpLeaseTime']}", & must be set to one of: {options}'''
         if 'templateVlanType' in kwargs:
             options = ['same', 'unique']
@@ -699,7 +704,7 @@ class ActionBatchAppliance(object):
         }
         resource = f'/networks/{networkId}/appliance/vlans/{vlanId}'
 
-        body_params = ['name', 'subnet', 'applianceIp', 'groupPolicyId', 'vpnNatSubnet', 'dhcpHandling', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dhcpBootOptionsEnabled', 'dhcpBootNextServer', 'dhcpBootFilename', 'fixedIpAssignments', 'reservedIpRanges', 'dnsNameservers', 'dhcpOptions', 'templateVlanType', 'cidr', 'mask', 'ipv6', ]
+        body_params = ['name', 'subnet', 'applianceIp', 'groupPolicyId', 'vpnNatSubnet', 'dhcpHandling', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dhcpBootOptionsEnabled', 'dhcpBootNextServer', 'dhcpBootFilename', 'fixedIpAssignments', 'reservedIpRanges', 'dnsNameservers', 'dhcpOptions', 'templateVlanType', 'cidr', 'mask', 'ipv6', 'mandatoryDhcp', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -787,7 +792,7 @@ class ActionBatchAppliance(object):
         kwargs.update(locals())
 
         if 'mode' in kwargs:
-            options = ['none', 'spoke', 'hub']
+            options = ['hub', 'none', 'spoke']
             assert kwargs['mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
 
         metadata = {

@@ -7,6 +7,37 @@ class ActionBatchSensor(object):
         
 
 
+    def updateDeviceSensorRelationships(self, serial: str, **kwargs):
+        """
+        **Assign one or more sensor roles to a given sensor or camera device.**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-sensor-relationships
+
+        - serial (string): (required)
+        - livestream (object): A role defined between an MT sensor and an MV camera that adds the camera's livestream to the sensor's details page. Snapshots from the camera will also appear in alert notifications that the sensor triggers.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['sensor', 'configure', 'relationships'],
+            'operation': 'updateDeviceSensorRelationships'
+        }
+        resource = f'/devices/{serial}/sensor/relationships'
+
+        body_params = ['livestream', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
     def createNetworkSensorAlertsProfile(self, networkId: str, name: str, conditions: list, **kwargs):
         """
         **Creates a sensor alert profile for a network.**

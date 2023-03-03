@@ -162,7 +162,7 @@ class ActionBatchWireless(object):
             options = ['band', 'ssid']
             assert kwargs['minBitrateType'] in options, f'''"minBitrateType" cannot be "{kwargs['minBitrateType']}", & must be set to one of: {options}'''
         if 'bandSelectionType' in kwargs:
-            options = ['ssid', 'ap']
+            options = ['ap', 'ssid']
             assert kwargs['bandSelectionType'] in options, f'''"bandSelectionType" cannot be "{kwargs['bandSelectionType']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -209,7 +209,7 @@ class ActionBatchWireless(object):
             options = ['band', 'ssid']
             assert kwargs['minBitrateType'] in options, f'''"minBitrateType" cannot be "{kwargs['minBitrateType']}", & must be set to one of: {options}'''
         if 'bandSelectionType' in kwargs:
-            options = ['ssid', 'ap']
+            options = ['ap', 'ssid']
             assert kwargs['bandSelectionType'] in options, f'''"bandSelectionType" cannot be "{kwargs['bandSelectionType']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -274,7 +274,7 @@ class ActionBatchWireless(object):
         kwargs.update(locals())
 
         if 'upgradeStrategy' in kwargs:
-            options = ['minimizeUpgradeTime', 'minimizeClientDowntime']
+            options = ['minimizeClientDowntime', 'minimizeUpgradeTime']
             assert kwargs['upgradeStrategy'] in options, f'''"upgradeStrategy" cannot be "{kwargs['upgradeStrategy']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -306,7 +306,7 @@ class ActionBatchWireless(object):
         - number (string): (required)
         - name (string): The name of the SSID
         - enabled (boolean): Whether or not the SSID is enabled
-        - authMode (string): The association control method for the SSID ('open', 'open-enhanced', 'psk', 'open-with-radius', '8021x-meraki', '8021x-nac', '8021x-radius', '8021x-google', '8021x-localradius', 'ipsk-with-radius' or 'ipsk-without-radius')
+        - authMode (string): The association control method for the SSID ('open', 'open-enhanced', 'psk', 'open-with-radius', 'open-with-nac', '8021x-meraki', '8021x-nac', '8021x-radius', '8021x-google', '8021x-localradius', 'ipsk-with-radius' or 'ipsk-without-radius')
         - enterpriseAdminAccess (string): Whether or not an SSID is accessible by 'enterprise' administrators ('access disabled' or 'access enabled')
         - encryptionMode (string): The psk encryption mode for the SSID ('wep' or 'wpa'). This param is only valid if the authMode is 'psk'
         - psk (string): The passkey for the SSID. This param is only valid if the authMode is 'psk'
@@ -367,7 +367,7 @@ class ActionBatchWireless(object):
         kwargs.update(locals())
 
         if 'authMode' in kwargs:
-            options = ['open', 'open-enhanced', 'psk', 'open-with-radius', '8021x-meraki', '8021x-nac', '8021x-radius', '8021x-google', '8021x-localradius', 'ipsk-with-radius', 'ipsk-without-radius']
+            options = ['8021x-google', '8021x-localradius', '8021x-meraki', '8021x-nac', '8021x-radius', 'ipsk-with-radius', 'ipsk-without-radius', 'open', 'open-enhanced', 'open-with-nac', 'open-with-radius', 'psk']
             assert kwargs['authMode'] in options, f'''"authMode" cannot be "{kwargs['authMode']}", & must be set to one of: {options}'''
         if 'enterpriseAdminAccess' in kwargs:
             options = ['access disabled', 'access enabled']
@@ -376,19 +376,19 @@ class ActionBatchWireless(object):
             options = ['wep', 'wpa']
             assert kwargs['encryptionMode'] in options, f'''"encryptionMode" cannot be "{kwargs['encryptionMode']}", & must be set to one of: {options}'''
         if 'wpaEncryptionMode' in kwargs:
-            options = ['WPA1 only', 'WPA1 and WPA2', 'WPA2 only', 'WPA3 Transition Mode', 'WPA3 only']
+            options = ['WPA1 and WPA2', 'WPA1 only', 'WPA2 only', 'WPA3 Transition Mode', 'WPA3 only']
             assert kwargs['wpaEncryptionMode'] in options, f'''"wpaEncryptionMode" cannot be "{kwargs['wpaEncryptionMode']}", & must be set to one of: {options}'''
         if 'splashPage' in kwargs:
-            options = ['None', 'Click-through splash page', 'Billing', 'Password-protected with Meraki RADIUS', 'Password-protected with custom RADIUS', 'Password-protected with Active Directory', 'Password-protected with LDAP', 'SMS authentication', 'Systems Manager Sentry', 'Facebook Wi-Fi', 'Google OAuth', 'Sponsored guest', 'Cisco ISE', 'Google Apps domain']
+            options = ['Billing', 'Cisco ISE', 'Click-through splash page', 'Facebook Wi-Fi', 'Google Apps domain', 'Google OAuth', 'None', 'Password-protected with Active Directory', 'Password-protected with LDAP', 'Password-protected with Meraki RADIUS', 'Password-protected with custom RADIUS', 'SMS authentication', 'Sponsored guest', 'Systems Manager Sentry']
             assert kwargs['splashPage'] in options, f'''"splashPage" cannot be "{kwargs['splashPage']}", & must be set to one of: {options}'''
         if 'radiusFailoverPolicy' in kwargs:
-            options = ['Deny access', 'Allow access']
+            options = ['Allow access', 'Deny access']
             assert kwargs['radiusFailoverPolicy'] in options, f'''"radiusFailoverPolicy" cannot be "{kwargs['radiusFailoverPolicy']}", & must be set to one of: {options}'''
         if 'radiusLoadBalancingPolicy' in kwargs:
-            options = ['Strict priority order', 'Round robin']
+            options = ['Round robin', 'Strict priority order']
             assert kwargs['radiusLoadBalancingPolicy'] in options, f'''"radiusLoadBalancingPolicy" cannot be "{kwargs['radiusLoadBalancingPolicy']}", & must be set to one of: {options}'''
         if 'radiusAttributeForGroupPolicies' in kwargs:
-            options = ['Filter-Id', 'Reply-Message', 'Airespace-ACL-Name', 'Aruba-User-Role']
+            options = ['Airespace-ACL-Name', 'Aruba-User-Role', 'Filter-Id', 'Reply-Message']
             assert kwargs['radiusAttributeForGroupPolicies'] in options, f'''"radiusAttributeForGroupPolicies" cannot be "{kwargs['radiusAttributeForGroupPolicies']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -597,7 +597,7 @@ class ActionBatchWireless(object):
         kwargs.update(locals())
 
         if 'networkAccessType' in kwargs:
-            options = ['Private network', 'Private network with guest access', 'Chargeable public network', 'Free public network', 'Personal device network', 'Emergency services only network', 'Test or experimental', 'Wildcard']
+            options = ['Chargeable public network', 'Emergency services only network', 'Free public network', 'Personal device network', 'Private network', 'Private network with guest access', 'Test or experimental', 'Wildcard']
             assert kwargs['networkAccessType'] in options, f'''"networkAccessType" cannot be "{kwargs['networkAccessType']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -777,7 +777,7 @@ class ActionBatchWireless(object):
         kwargs.update(locals())
 
         if 'controllerDisconnectionBehavior' in kwargs:
-            options = ['open', 'restricted', 'default']
+            options = ['default', 'open', 'restricted']
             assert kwargs['controllerDisconnectionBehavior'] in options, f'''"controllerDisconnectionBehavior" cannot be "{kwargs['controllerDisconnectionBehavior']}", & must be set to one of: {options}'''
 
         metadata = {

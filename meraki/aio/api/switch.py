@@ -155,21 +155,23 @@ class AsyncSwitch:
         - adaptivePolicyGroupId (string): The adaptive policy group ID that will be used to tag traffic through this switch port. This ID must pre-exist during the configuration, else needs to be created using adaptivePolicy/groups API. Cannot be applied to a port on a switch bound to profile.
         - peerSgtCapable (boolean): If true, Peer SGT is enabled for traffic through this switch port. Applicable to trunk port only, not access port. Cannot be applied to a port on a switch bound to profile.
         - flexibleStackingEnabled (boolean): For supported switches (e.g. MS420/MS425), whether or not the port has flexible stacking enabled.
+        - daiTrusted (boolean): If true, ARP packets for this port will be considered trusted, and Dynamic ARP Inspection will allow the traffic.
+        - profile (object): Profile attributes
         """
 
         kwargs.update(locals())
 
         if 'type' in kwargs:
-            options = ['trunk', 'access']
+            options = ['access', 'trunk']
             assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
         if 'stpGuard' in kwargs:
-            options = ['disabled', 'root guard', 'bpdu guard', 'loop guard']
+            options = ['bpdu guard', 'disabled', 'loop guard', 'root guard']
             assert kwargs['stpGuard'] in options, f'''"stpGuard" cannot be "{kwargs['stpGuard']}", & must be set to one of: {options}'''
         if 'udld' in kwargs:
             options = ['Alert only', 'Enforce']
             assert kwargs['udld'] in options, f'''"udld" cannot be "{kwargs['udld']}", & must be set to one of: {options}'''
         if 'accessPolicyType' in kwargs:
-            options = ['Open', 'Custom access policy', 'MAC allow list', 'Sticky MAC allow list']
+            options = ['Custom access policy', 'MAC allow list', 'Open', 'Sticky MAC allow list']
             assert kwargs['accessPolicyType'] in options, f'''"accessPolicyType" cannot be "{kwargs['accessPolicyType']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -180,7 +182,7 @@ class AsyncSwitch:
         portId = urllib.parse.quote(str(portId), safe='')
         resource = f'/devices/{serial}/switch/ports/{portId}'
 
-        body_params = ['name', 'tags', 'enabled', 'poeEnabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', 'adaptivePolicyGroupId', 'peerSgtCapable', 'flexibleStackingEnabled', ]
+        body_params = ['name', 'tags', 'enabled', 'poeEnabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', 'adaptivePolicyGroupId', 'peerSgtCapable', 'flexibleStackingEnabled', 'daiTrusted', 'profile', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -226,7 +228,7 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         if 'multicastRouting' in kwargs:
-            options = ['disabled', 'enabled', 'IGMP snooping querier']
+            options = ['IGMP snooping querier', 'disabled', 'enabled']
             assert kwargs['multicastRouting'] in options, f'''"multicastRouting" cannot be "{kwargs['multicastRouting']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -285,7 +287,7 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         if 'multicastRouting' in kwargs:
-            options = ['disabled', 'enabled', 'IGMP snooping querier']
+            options = ['IGMP snooping querier', 'disabled', 'enabled']
             assert kwargs['multicastRouting'] in options, f'''"multicastRouting" cannot be "{kwargs['multicastRouting']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -371,10 +373,10 @@ class AsyncSwitch:
             options = ['dhcpDisabled', 'dhcpRelay', 'dhcpServer']
             assert kwargs['dhcpMode'] in options, f'''"dhcpMode" cannot be "{kwargs['dhcpMode']}", & must be set to one of: {options}'''
         if 'dhcpLeaseTime' in kwargs:
-            options = ['30 minutes', '1 hour', '4 hours', '12 hours', '1 day', '1 week']
+            options = ['1 day', '1 hour', '1 week', '12 hours', '30 minutes', '4 hours']
             assert kwargs['dhcpLeaseTime'] in options, f'''"dhcpLeaseTime" cannot be "{kwargs['dhcpLeaseTime']}", & must be set to one of: {options}'''
         if 'dnsNameserversOption' in kwargs:
-            options = ['googlePublicDns', 'openDns', 'custom']
+            options = ['custom', 'googlePublicDns', 'openDns']
             assert kwargs['dnsNameserversOption'] in options, f'''"dnsNameserversOption" cannot be "{kwargs['dnsNameserversOption']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -648,10 +650,10 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         if 'hostMode' in kwargs:
-            options = ['Single-Host', 'Multi-Domain', 'Multi-Host', 'Multi-Auth']
+            options = ['Multi-Auth', 'Multi-Domain', 'Multi-Host', 'Single-Host']
             assert kwargs['hostMode'] in options, f'''"hostMode" cannot be "{kwargs['hostMode']}", & must be set to one of: {options}'''
         if 'accessPolicyType' in kwargs:
-            options = ['802.1x', 'MAC authentication bypass', 'Hybrid authentication']
+            options = ['802.1x', 'Hybrid authentication', 'MAC authentication bypass']
             assert kwargs['accessPolicyType'] in options, f'''"accessPolicyType" cannot be "{kwargs['accessPolicyType']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -717,10 +719,10 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         if 'hostMode' in kwargs:
-            options = ['Single-Host', 'Multi-Domain', 'Multi-Host', 'Multi-Auth']
+            options = ['Multi-Auth', 'Multi-Domain', 'Multi-Host', 'Single-Host']
             assert kwargs['hostMode'] in options, f'''"hostMode" cannot be "{kwargs['hostMode']}", & must be set to one of: {options}'''
         if 'accessPolicyType' in kwargs:
-            options = ['802.1x', 'MAC authentication bypass', 'Hybrid authentication']
+            options = ['802.1x', 'Hybrid authentication', 'MAC authentication bypass']
             assert kwargs['accessPolicyType'] in options, f'''"accessPolicyType" cannot be "{kwargs['accessPolicyType']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -1922,7 +1924,7 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         if 'multicastRouting' in kwargs:
-            options = ['disabled', 'enabled', 'IGMP snooping querier']
+            options = ['IGMP snooping querier', 'disabled', 'enabled']
             assert kwargs['multicastRouting'] in options, f'''"multicastRouting" cannot be "{kwargs['multicastRouting']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -1984,7 +1986,7 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         if 'multicastRouting' in kwargs:
-            options = ['disabled', 'enabled', 'IGMP snooping querier']
+            options = ['IGMP snooping querier', 'disabled', 'enabled']
             assert kwargs['multicastRouting'] in options, f'''"multicastRouting" cannot be "{kwargs['multicastRouting']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -2076,10 +2078,10 @@ class AsyncSwitch:
             options = ['dhcpDisabled', 'dhcpRelay', 'dhcpServer']
             assert kwargs['dhcpMode'] in options, f'''"dhcpMode" cannot be "{kwargs['dhcpMode']}", & must be set to one of: {options}'''
         if 'dhcpLeaseTime' in kwargs:
-            options = ['30 minutes', '1 hour', '4 hours', '12 hours', '1 day', '1 week']
+            options = ['1 day', '1 hour', '1 week', '12 hours', '30 minutes', '4 hours']
             assert kwargs['dhcpLeaseTime'] in options, f'''"dhcpLeaseTime" cannot be "{kwargs['dhcpLeaseTime']}", & must be set to one of: {options}'''
         if 'dnsNameserversOption' in kwargs:
-            options = ['googlePublicDns', 'openDns', 'custom']
+            options = ['custom', 'googlePublicDns', 'openDns']
             assert kwargs['dnsNameserversOption'] in options, f'''"dnsNameserversOption" cannot be "{kwargs['dnsNameserversOption']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -2419,21 +2421,23 @@ class AsyncSwitch:
         - stickyMacAllowListLimit (integer): The maximum number of MAC addresses for sticky MAC allow list. Only applicable when 'accessPolicyType' is 'Sticky MAC allow list'.
         - stormControlEnabled (boolean): The storm control status of the switch profile port.
         - flexibleStackingEnabled (boolean): For supported switches (e.g. MS420/MS425), whether or not the port has flexible stacking enabled.
+        - daiTrusted (boolean): If true, ARP packets for this port will be considered trusted, and Dynamic ARP Inspection will allow the traffic.
+        - profile (object): Profile attributes
         """
 
         kwargs.update(locals())
 
         if 'type' in kwargs:
-            options = ['trunk', 'access']
+            options = ['access', 'trunk']
             assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
         if 'stpGuard' in kwargs:
-            options = ['disabled', 'root guard', 'bpdu guard', 'loop guard']
+            options = ['bpdu guard', 'disabled', 'loop guard', 'root guard']
             assert kwargs['stpGuard'] in options, f'''"stpGuard" cannot be "{kwargs['stpGuard']}", & must be set to one of: {options}'''
         if 'udld' in kwargs:
             options = ['Alert only', 'Enforce']
             assert kwargs['udld'] in options, f'''"udld" cannot be "{kwargs['udld']}", & must be set to one of: {options}'''
         if 'accessPolicyType' in kwargs:
-            options = ['Open', 'Custom access policy', 'MAC allow list', 'Sticky MAC allow list']
+            options = ['Custom access policy', 'MAC allow list', 'Open', 'Sticky MAC allow list']
             assert kwargs['accessPolicyType'] in options, f'''"accessPolicyType" cannot be "{kwargs['accessPolicyType']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -2446,7 +2450,7 @@ class AsyncSwitch:
         portId = urllib.parse.quote(str(portId), safe='')
         resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles/{profileId}/ports/{portId}'
 
-        body_params = ['name', 'tags', 'enabled', 'poeEnabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', 'flexibleStackingEnabled', ]
+        body_params = ['name', 'tags', 'enabled', 'poeEnabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', 'flexibleStackingEnabled', 'daiTrusted', 'profile', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -2490,13 +2494,14 @@ class AsyncSwitch:
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 50. Default is 50.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - name (string): Optional parameter to filter switchports belonging to switches by name. All returned switches will have a name that contains the search term or is an exact match.
-        - configurationUpdatedAfter (string): Optional parameter to filter results by switches where the configuration has been updated after the given timestamp
         - networkIds (array): Optional parameter to filter switchports by network.
-        - mac (string): Optional parameter to filter switchports belonging to switches by name. All returned switches will have a name that contains the search term or is an exact match.
+        - portProfileIds (array): Optional parameter to filter switchports belonging to the specified switchport profiles.
+        - name (string): Optional parameter to filter switchports belonging to switches by name. All returned switches will have a name that contains the search term or is an exact match.
+        - mac (string): Optional parameter to filter switchports belonging to switches by MAC address. All returned switches will have a MAC address that contains the search term or is an exact match.
         - macs (array): Optional parameter to filter switchports by one or more MAC addresses belonging to devices. All switchports returned belong to MAC addresses of switches that are an exact match.
-        - serial (string): Optional parameter to filter switchports belonging to switches by serial number.  All returned switches will have a serial number that contains the search term or is an exact match.
+        - serial (string): Optional parameter to filter switchports belonging to switches by serial number. All returned switches will have a serial number that contains the search term or is an exact match.
         - serials (array): Optional parameter to filter switchports belonging to switches with one or more serial numbers. All switchports returned belong to serial numbers of switches that are an exact match.
+        - configurationUpdatedAfter (string): Optional parameter to filter results by switches where the configuration has been updated after the given timestamp.
         """
 
         kwargs.update(locals())
@@ -2508,10 +2513,10 @@ class AsyncSwitch:
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/switch/ports/bySwitch'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'name', 'configurationUpdatedAfter', 'networkIds', 'mac', 'macs', 'serial', 'serials', ]
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'portProfileIds', 'name', 'mac', 'macs', 'serial', 'serials', 'configurationUpdatedAfter', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', 'macs', 'serials', ]
+        array_params = ['networkIds', 'portProfileIds', 'macs', 'serials', ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
                 params[f'{k.strip()}[]'] = kwargs[f'{k}']
