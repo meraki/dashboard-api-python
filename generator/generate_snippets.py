@@ -13,7 +13,7 @@ API_KEY = '6bec40cf957de430a6f1f2baa056b99a4fac9ea0'
 
 dashboard = meraki.DashboardAPI(API_KEY)
 {{ parameter_assignments }}
-response = dashboard.{{ section }}.{{ operation}}({{ parameters }})
+response = dashboard.{{ section }}.{{ operation }}({{ parameters }})
 
 print(response)
 ''')
@@ -156,8 +156,8 @@ def main():
     spec = requests.get('https://api.meraki.com/api/v1/openapiSpec').json()
 
     # Supported scopes list will include organizations, networks, devices, and all product types.
-    supported_scopes = ['organizations', 'networks', 'devices', 'appliance', 'camera', 'cellularGateway', 'insight',
-                        'sm', 'switch', 'wireless', 'sensor']
+    supported_scopes = ['administered', 'organizations', 'networks', 'devices', 'appliance', 'camera', 'cellularGateway', 'insight',
+                        'sm', 'switch', 'wireless', 'sensor', 'licensing', 'secureConnect']
     # legacy scopes = ['organizations', 'networks', 'devices',
     #           'appliance', 'camera', 'cellularGateway', 'insight', 'sm', 'switch', 'wireless']
     tags = spec['tags']
