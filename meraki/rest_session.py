@@ -184,10 +184,7 @@ class RestSession(object):
                     time.sleep(1)
                     retries -= 1
                     if retries == 0:
-                        if e.response and e.response.status_code:
-                            raise APIError(metadata, APIResponseError(e.__class__.__name__, e.response.status_code, str(e)))
-                        else:
-                            raise APIError(metadata, APIResponseError(e.__class__.__name__, 503, str(e)))
+                        raise APIError(metadata, response)
                     else:
                         continue
 
@@ -320,8 +317,8 @@ class RestSession(object):
             if direction == "next" and "next" in links:
                 # Prevent getNetworkEvents from infinite loop as time goes forward
                 if metadata["operation"] == "getNetworkEvents":
-                    starting_after = urllib.parse.unquote(
-                        str(links["next"]["url"]).split("startingAfter=")[1]
+                    starting_after = self._get_url_parameter(
+                        str(links["next"]["url"]), "startingAfter"
                     )
                     delta = datetime.utcnow() - datetime.fromisoformat(
                         starting_after[:-1]
@@ -338,8 +335,8 @@ class RestSession(object):
             elif direction == "prev" and "prev" in links:
                 # Prevent getNetworkEvents from infinite loop as time goes backward (to epoch 0)
                 if metadata["operation"] == "getNetworkEvents":
-                    ending_before = urllib.parse.unquote(
-                        str(links["prev"]["url"]).split("endingBefore=")[1]
+                    ending_before = self._get_url_parameter(
+                        str(links["prev"]["url"]), "endingBefore="
                     )
                     # Break out of loop if endingBefore returned from prev link is before 2014
                     if ending_before < "2014-01-01":
@@ -395,7 +392,9 @@ class RestSession(object):
             if direction == 'next' and 'next' in links:
                 # Prevent getNetworkEvents from infinite loop as time goes forward
                 if metadata['operation'] == 'getNetworkEvents':
-                    starting_after = urllib.parse.unquote(links['next']['url'].split('startingAfter=')[1])
+                    starting_after = self._get_url_parameter(
+                        str(links['next']['url']), "startingAfter"
+                    )
                     delta = datetime.utcnow() - datetime.fromisoformat(starting_after[:-1])
                     # Break out of loop if startingAfter returned from next link is within 5 minutes of current time
                     if delta.total_seconds() < 300:
@@ -409,7 +408,9 @@ class RestSession(object):
             elif direction == 'prev' and 'prev' in links:
                 # Prevent getNetworkEvents from infinite loop as time goes backward (to epoch 0)
                 if metadata['operation'] == 'getNetworkEvents':
-                    ending_before = urllib.parse.unquote(links['prev']['url'].split('endingBefore=')[1])
+                    ending_before = self._get_url_parameter(
+                        str(links['prev']['url']), "endingBefore="
+                    )
                     # Break out of loop if endingBefore returned from prev link is before 2014
                     if ending_before < '2014-01-01':
                         break
@@ -441,6 +442,16 @@ class RestSession(object):
             response.close()
 
         return results
+
+    def _get_url_parameter(self, url, param_name, *args, **kwargs):
+        param_value = None
+        qs = urllib.parse.urlsplit(url).query
+        if qs:
+            params = urllib.parse.parse_qs(qs)
+            if params:
+                param_value = urllib.parse.unquote(params.get(param_name)[0])
+
+        return param_value
 
     def post(self, metadata, url, json=None):
         metadata['method'] = 'POST'
