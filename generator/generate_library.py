@@ -15,7 +15,7 @@ This script generates the Meraki Python library using either the public OpenAPI 
 ID as inputs, a specific dashboard org's OpenAPI spec.
 
 === USAGE ===
-python[3] generate_library.py [-o <org_id>] [-k <api_key>] [-v <version_number>]
+python[3] generate_library.py [-o <org_id>] [-k <api_key>] [-v <version_number>] [-g <is_called_from_github_action>]
 API key can, and is recommended to, be set as an environment variable named MERAKI_DASHBOARD_API_KEY. 
 """
 
@@ -123,7 +123,7 @@ def parse_params(operation, parameters, param_filters=[]):
         return ret
 
 
-def generate_library(spec, version_number):
+def generate_library(spec, version_number, is_github_action):
     # Supported scopes list will include organizations, networks, devices, and all product types.
     supported_scopes = ['organizations', 'networks', 'devices', 'appliance', 'camera', 'cellularGateway', 'insight',
                         'sm', 'switch', 'wireless', 'sensor', 'administered', 'licensing', 'secureConnect']
@@ -135,6 +135,12 @@ def generate_library(spec, version_number):
     scopes = {tag['name']: {} for tag in tags if tag['name'] in supported_scopes}
 
     batchable_action_summaries = [action['summary'] for action in spec['x-batchable-actions']]
+
+    # Set template_dir if a GitHub action is invoking it
+    if is_github_action:
+        template_dir = 'generator/'
+    else:
+        template_dir = ''
 
     # Check paths and create sub-directories if needed
     subdirs = ['meraki', 'meraki/api', 'meraki/api/batch', 'meraki/aio', 'meraki/aio/api', 'meraki/api/batch']
@@ -178,7 +184,7 @@ def generate_library(spec, version_number):
         section = scopes[scope]
 
         with open(f'meraki/api/{scope}.py', 'w', encoding='utf-8', newline='') as output:
-            with open('class_template.jinja2', encoding='utf-8', newline='') as fp:
+            with open(f'{template_dir}class_template.jinja2', encoding='utf-8', newline='') as fp:
                 class_template = fp.read()
                 template = jinja_env.from_string(class_template)
                 output.write(
@@ -189,7 +195,7 @@ def generate_library(spec, version_number):
 
             # Generate Asyncio API libraries
             async_output = open(f'meraki/aio/api/{scope}.py', 'w', encoding='utf-8', newline='')
-            with open('async_class_template.jinja2', encoding='utf-8', newline='') as fp:
+            with open(f'{template_dir}async_class_template.jinja2', encoding='utf-8', newline='') as fp:
                 class_template = fp.read()
                 template = jinja_env.from_string(class_template)
                 async_output.write(
@@ -200,7 +206,7 @@ def generate_library(spec, version_number):
 
             # Generate Action Batch API libraries
             batch_output = open(f'meraki/api/batch/{scope}.py', 'w', encoding='utf-8', newline='')
-            with open('batch_class_template.jinja2', encoding='utf-8', newline='') as fp:
+            with open(f'{template_dir}batch_class_template.jinja2', encoding='utf-8', newline='') as fp:
                 class_template = fp.read()
                 template = jinja_env.from_string(class_template)
                 batch_output.write(
@@ -301,7 +307,7 @@ def generate_library(spec, version_number):
                         call_line = 'return self._session.delete(metadata, resource)'
 
                     # Add function to files
-                    with open('function_template.jinja2', encoding='utf-8', newline='') as fp:
+                    with open(f'{template_dir}function_template.jinja2', encoding='utf-8', newline='') as fp:
                         function_template = fp.read()
                         template = jinja_env.from_string(function_template)
                         output.write(
@@ -424,7 +430,7 @@ def generate_library(spec, version_number):
                         call_line = 'return action'
 
                         # Add function to files
-                        with open('batch_function_template.jinja2', encoding='utf-8', newline='') as fp:
+                        with open(f'{template_dir}batch_function_template.jinja2', encoding='utf-8', newline='') as fp:
                             function_template = fp.read()
                             template = jinja_env.from_string(function_template)
                             batch_output.write(
@@ -461,9 +467,10 @@ def main(inputs):
     api_key = os.environ.get('MERAKI_DASHBOARD_API_KEY')
     org_id = None
     version_number = 'custom'
+    is_github_action = False
 
     try:
-        opts, args = getopt.getopt(inputs, 'ho:k:v:')
+        opts, args = getopt.getopt(inputs, 'ho:k:v:g:')
     except getopt.GetoptError:
         print_help()
         sys.exit(2)
@@ -477,6 +484,9 @@ def main(inputs):
             api_key = arg
         elif opt == '-v':
             version_number = arg
+        elif opt == '-g':
+            if arg.lower() == 'true':
+                is_github_action = True
 
     # Retrieve latest OpenAPI specification
     if org_id:
@@ -494,7 +504,7 @@ def main(inputs):
     else:
         spec = requests.get('https://api.meraki.com/api/v1/openapiSpec').json()
 
-    generate_library(spec, version_number)
+    generate_library(spec, version_number, is_github_action)
 
 
 if __name__ == '__main__':
