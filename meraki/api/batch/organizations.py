@@ -212,13 +212,9 @@ class ActionBatchOrganizations(object):
 
         - organizationId (string): (required)
         - sourceGroup (object): The source adaptive policy group (requires one unique attribute)
-
         - destinationGroup (object): The destination adaptive policy group (requires one unique attribute)
-
         - acls (array): An ordered array of adaptive policy ACLs (each requires one unique attribute) that apply to this policy (default: [])
-
         - lastEntryRule (string): The rule to apply if there is no matching ACL (default: "default")
-
         """
 
         kwargs.update(locals())
@@ -255,13 +251,9 @@ class ActionBatchOrganizations(object):
         - organizationId (string): (required)
         - id (string): (required)
         - sourceGroup (object): The source adaptive policy group (requires one unique attribute)
-
         - destinationGroup (object): The destination adaptive policy group (requires one unique attribute)
-
         - acls (array): An ordered array of adaptive policy ACLs (each requires one unique attribute) that apply to this policy
-
         - lastEntryRule (string): The rule to apply if there is no matching ACL
-
         """
 
         kwargs.update(locals())

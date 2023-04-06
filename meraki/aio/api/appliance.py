@@ -1639,7 +1639,7 @@ class AsyncAppliance:
 
     def getNetworkApplianceTrafficShapingUplinkBandwidth(self, networkId: str):
         """
-        **Returns the uplink bandwidth settings for your MX network.**
+        **Returns the uplink bandwidth limits for your MX network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-traffic-shaping-uplink-bandwidth
 
         - networkId (string): (required)

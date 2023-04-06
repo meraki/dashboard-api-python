@@ -892,7 +892,7 @@ class Networks(object):
 
         - networkId (string): (required)
         - stages (array): All firmware upgrade stages in the network with their start time.
-        - products (object): Contains information about the network to update
+        - products (object): Contains firmware upgrade version information
         """
 
         kwargs.update(locals())
