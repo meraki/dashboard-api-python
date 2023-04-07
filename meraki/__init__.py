@@ -11,6 +11,7 @@ from meraki.api.appliance import Appliance
 from meraki.api.camera import Camera
 from meraki.api.cellularGateway import CellularGateway
 from meraki.api.insight import Insight
+from meraki.api.licensing import Licensing
 from meraki.api.sensor import Sensor
 from meraki.api.sm import Sm
 from meraki.api.switch import Switch
@@ -174,6 +175,7 @@ class DashboardAPI(object):
         self.camera = Camera(self._session)
         self.cellularGateway = CellularGateway(self._session)
         self.insight = Insight(self._session)
+        self.licensing = Licensing(self._session)
         self.sensor = Sensor(self._session)
         self.sm = Sm(self._session)
         self.switch = Switch(self._session)

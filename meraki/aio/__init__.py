@@ -9,6 +9,7 @@ from meraki.aio.api.camera import AsyncCamera
 from meraki.aio.api.cellularGateway import AsyncCellularGateway
 from meraki.aio.api.devices import AsyncDevices
 from meraki.aio.api.insight import AsyncInsight
+from meraki.aio.api.licensing import AsyncLicensing
 from meraki.aio.api.networks import AsyncNetworks
 from meraki.aio.api.organizations import AsyncOrganizations
 from meraki.aio.api.sensor import AsyncSensor
@@ -174,6 +175,7 @@ class AsyncDashboardAPI:
         self.camera = AsyncCamera(self._session)
         self.cellularGateway = AsyncCellularGateway(self._session)
         self.insight = AsyncInsight(self._session)
+        self.licensing = AsyncLicensing(self._session)
         self.sensor = AsyncSensor(self._session)
         self.switch = AsyncSwitch(self._session)
         self.sm = AsyncSm(self._session)
