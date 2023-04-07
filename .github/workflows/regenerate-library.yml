@@ -26,6 +26,7 @@ jobs:
       - name: Commit changes
         run: |
           git config --global user.name "GitHub Action on behalf of TKIPisalegacycipher"
+          git config --global user.email "support@meraki.com"
           git add .
           git commit -m "Auto-update library to release version $RELEASE_NAME."
       - name: Push changes
