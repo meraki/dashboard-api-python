@@ -3544,3 +3544,29 @@ class AsyncOrganizations:
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
         
+
+
+    def getOrganizationApplianceUplinksUsageByNetwork(self, organizationId: str, **kwargs):
+        """
+        **Get the sent and received bytes for each uplink of all wired networks within an organization**
+        https://developer.cisco.com/meraki/api-latest/#!get-organization-appliance-uplinks-usage-by-network
+
+        - organizationId (string): (required)
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 10 minutes.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['appliance', 'monitor', 'uplinks', 'usage', 'byNetwork'],
+            'operation': 'getOrganizationApplianceUplinksUsageByNetwork'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/appliance/uplinks/usage/byNetwork'
+
+        query_params = ['t0', 't1', 'timespan', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get(metadata, resource, params)
