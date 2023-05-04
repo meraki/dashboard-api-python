@@ -13,7 +13,7 @@ class Licensing(object):
         **List the licenses in a coterm organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-licensing-coterm-licenses
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
@@ -44,7 +44,7 @@ class Licensing(object):
         **Moves a license to a different organization (coterm only)**
         https://developer.cisco.com/meraki/api-v1/#!move-organization-licensing-coterm-licenses
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - destination (object): Destination data for the license move
         - licenses (array): The list of licenses to move
         """

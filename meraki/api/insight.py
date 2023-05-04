@@ -13,8 +13,8 @@ class Insight(object):
         **Get application health by time**
         https://developer.cisco.com/meraki/api-v1/#!get-network-insight-application-health-by-time
 
-        - networkId (string): (required)
-        - applicationId (string): (required)
+        - networkId (string): Network ID
+        - applicationId (string): Application ID
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 7 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days. The default is 2 hours.
@@ -43,7 +43,7 @@ class Insight(object):
         **List all Insight tracked applications**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-insight-applications
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         """
 
         metadata = {
@@ -62,7 +62,7 @@ class Insight(object):
         **List the monitored media servers for this organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-insight-monitored-media-servers
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         """
 
         metadata = {
@@ -81,7 +81,7 @@ class Insight(object):
         **Add a media server to be monitored for this organization**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-insight-monitored-media-server
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - name (string): The name of the VoIP provider
         - address (string): The IP address (IPv4 only) or hostname of the media server to monitor
         - bestEffortMonitoringEnabled (boolean): Indicates that if the media server doesn't respond to ICMP pings, the nearest hop will be used in its stead.
@@ -108,8 +108,8 @@ class Insight(object):
         **Return a monitored media server for this organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-insight-monitored-media-server
 
-        - organizationId (string): (required)
-        - monitoredMediaServerId (string): (required)
+        - organizationId (string): Organization ID
+        - monitoredMediaServerId (string): Monitored media server ID
         """
 
         metadata = {
@@ -129,8 +129,8 @@ class Insight(object):
         **Update a monitored media server for this organization**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-insight-monitored-media-server
 
-        - organizationId (string): (required)
-        - monitoredMediaServerId (string): (required)
+        - organizationId (string): Organization ID
+        - monitoredMediaServerId (string): Monitored media server ID
         - name (string): The name of the VoIP provider
         - address (string): The IP address (IPv4 only) or hostname of the media server to monitor
         - bestEffortMonitoringEnabled (boolean): Indicates that if the media server doesn't respond to ICMP pings, the nearest hop will be used in its stead.
@@ -158,8 +158,8 @@ class Insight(object):
         **Delete a monitored media server from this organization**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-insight-monitored-media-server
 
-        - organizationId (string): (required)
-        - monitoredMediaServerId (string): (required)
+        - organizationId (string): Organization ID
+        - monitoredMediaServerId (string): Monitored media server ID
         """
 
         metadata = {

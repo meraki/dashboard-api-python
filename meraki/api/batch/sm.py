@@ -12,8 +12,8 @@ class ActionBatchSm(object):
         **Delete a User Access Device**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-sm-user-access-device
 
-        - networkId (string): (required)
-        - userAccessDeviceId (string): (required)
+        - networkId (string): Network ID
+        - userAccessDeviceId (string): User access device ID
         """
 
         metadata = {

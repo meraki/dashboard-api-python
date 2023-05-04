@@ -12,7 +12,7 @@ class ActionBatchDevices(object):
         **Update the attributes of a device**
         https://developer.cisco.com/meraki/api-v1/#!update-device
 
-        - serial (string): (required)
+        - serial (string): Serial
         - name (string): The name of a device
         - tags (array): The list of tags of a device
         - lat (number): The latitude of a device
@@ -51,7 +51,7 @@ class ActionBatchDevices(object):
         **Update the management interface settings for a device**
         https://developer.cisco.com/meraki/api-v1/#!update-device-management-interface
 
-        - serial (string): (required)
+        - serial (string): Serial
         - wan1 (object): WAN 1 settings
         - wan2 (object): WAN 2 settings (only for MX devices)
         """

@@ -54,7 +54,7 @@ class Organizations(object):
         **Return an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         """
 
         metadata = {
@@ -73,7 +73,7 @@ class Organizations(object):
         **Update an organization**
         https://developer.cisco.com/meraki/api-v1/#!update-organization
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - name (string): The name of the organization
         - management (object): Information about the organization's management system
         - api (object): API-specific settings
@@ -100,7 +100,7 @@ class Organizations(object):
         **Delete an organization**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         """
 
         metadata = {
@@ -119,7 +119,7 @@ class Organizations(object):
         **Create an action batch**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-action-batch
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - actions (array): A set of changes to make as part of this action (<a href='https://developer.cisco.com/meraki/api/#/rest/guides/action-batches/'>more details</a>)
         - confirmed (boolean): Set to true for immediate execution. Set to false if the action should be previewed before executing. This property cannot be unset once it is true. Defaults to false.
         - synchronous (boolean): Set to true to force the batch to run synchronous. There can be at most 20 actions in synchronous batch. Defaults to false.
@@ -146,7 +146,7 @@ class Organizations(object):
         **Return the list of action batches in the organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-action-batches
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - status (string): Filter batches by status. Valid types are pending, completed, and failed.
         """
 
@@ -175,8 +175,8 @@ class Organizations(object):
         **Delete an action batch**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-action-batch
 
-        - organizationId (string): (required)
-        - actionBatchId (string): (required)
+        - organizationId (string): Organization ID
+        - actionBatchId (string): Action batch ID
         """
 
         metadata = {
@@ -196,8 +196,8 @@ class Organizations(object):
         **Update an action batch**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-action-batch
 
-        - organizationId (string): (required)
-        - actionBatchId (string): (required)
+        - organizationId (string): Organization ID
+        - actionBatchId (string): Action batch ID
         - confirmed (boolean): A boolean representing whether or not the batch has been confirmed. This property cannot be unset once it is true.
         - synchronous (boolean): Set to true to force the batch to run synchronous. There can be at most 20 actions in synchronous batch.
         """
@@ -224,8 +224,8 @@ class Organizations(object):
         **Return an action batch**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-action-batch
 
-        - organizationId (string): (required)
-        - actionBatchId (string): (required)
+        - organizationId (string): Organization ID
+        - actionBatchId (string): Action batch ID
         """
 
         metadata = {
@@ -245,7 +245,7 @@ class Organizations(object):
         **List adaptive policy ACLs in a organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-adaptive-policy-acls
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         """
 
         metadata = {
@@ -264,7 +264,7 @@ class Organizations(object):
         **Creates new adaptive policy ACL**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-adaptive-policy-acl
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - name (string): Name of the adaptive policy ACL
         - rules (array): An ordered array of the adaptive policy ACL rules.
         - ipVersion (string): IP version of adpative policy ACL. One of: 'any', 'ipv4' or 'ipv6'
@@ -296,8 +296,8 @@ class Organizations(object):
         **Returns the adaptive policy ACL information**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-adaptive-policy-acl
 
-        - organizationId (string): (required)
-        - aclId (string): (required)
+        - organizationId (string): Organization ID
+        - aclId (string): Acl ID
         """
 
         metadata = {
@@ -317,8 +317,8 @@ class Organizations(object):
         **Updates an adaptive policy ACL**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-adaptive-policy-acl
 
-        - organizationId (string): (required)
-        - aclId (string): (required)
+        - organizationId (string): Organization ID
+        - aclId (string): Acl ID
         - name (string): Name of the adaptive policy ACL
         - description (string): Description of the adaptive policy ACL
         - rules (array): An ordered array of the adaptive policy ACL rules. An empty array will clear the rules.
@@ -351,8 +351,8 @@ class Organizations(object):
         **Deletes the specified adaptive policy ACL**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-adaptive-policy-acl
 
-        - organizationId (string): (required)
-        - aclId (string): (required)
+        - organizationId (string): Organization ID
+        - aclId (string): Acl ID
         """
 
         metadata = {
@@ -372,7 +372,7 @@ class Organizations(object):
         **List adaptive policy groups in a organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-adaptive-policy-groups
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         """
 
         metadata = {
@@ -391,7 +391,7 @@ class Organizations(object):
         **Creates a new adaptive policy group**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-adaptive-policy-group
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - name (string): Name of the group
         - sgt (integer): SGT value of the group
         - description (string): Description of the group (default: "")
@@ -419,8 +419,8 @@ class Organizations(object):
         **Returns an adaptive policy group**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-adaptive-policy-group
 
-        - organizationId (string): (required)
-        - id (string): (required)
+        - organizationId (string): Organization ID
+        - id (string): Id
         """
 
         metadata = {
@@ -440,8 +440,8 @@ class Organizations(object):
         **Updates an adaptive policy group**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-adaptive-policy-group
 
-        - organizationId (string): (required)
-        - id (string): (required)
+        - organizationId (string): Organization ID
+        - id (string): Id
         - name (string): Name of the group
         - sgt (integer): SGT value of the group
         - description (string): Description of the group
@@ -470,8 +470,8 @@ class Organizations(object):
         **Deletes the specified adaptive policy group and any associated policies and references**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-adaptive-policy-group
 
-        - organizationId (string): (required)
-        - id (string): (required)
+        - organizationId (string): Organization ID
+        - id (string): Id
         """
 
         metadata = {
@@ -491,7 +491,7 @@ class Organizations(object):
         **Returns adaptive policy aggregate statistics for an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-adaptive-policy-overview
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         """
 
         metadata = {
@@ -510,7 +510,7 @@ class Organizations(object):
         **List adaptive policies in an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-adaptive-policy-policies
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         """
 
         metadata = {
@@ -529,7 +529,7 @@ class Organizations(object):
         **Add an Adaptive Policy**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-adaptive-policy-policy
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - sourceGroup (object): The source adaptive policy group (requires one unique attribute)
         - destinationGroup (object): The destination adaptive policy group (requires one unique attribute)
         - acls (array): An ordered array of adaptive policy ACLs (each requires one unique attribute) that apply to this policy (default: [])
@@ -561,8 +561,8 @@ class Organizations(object):
         **Return an adaptive policy**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-adaptive-policy-policy
 
-        - organizationId (string): (required)
-        - id (string): (required)
+        - organizationId (string): Organization ID
+        - id (string): Id
         """
 
         metadata = {
@@ -582,8 +582,8 @@ class Organizations(object):
         **Update an Adaptive Policy**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-adaptive-policy-policy
 
-        - organizationId (string): (required)
-        - id (string): (required)
+        - organizationId (string): Organization ID
+        - id (string): Id
         - sourceGroup (object): The source adaptive policy group (requires one unique attribute)
         - destinationGroup (object): The destination adaptive policy group (requires one unique attribute)
         - acls (array): An ordered array of adaptive policy ACLs (each requires one unique attribute) that apply to this policy
@@ -616,8 +616,8 @@ class Organizations(object):
         **Delete an Adaptive Policy**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-adaptive-policy-policy
 
-        - organizationId (string): (required)
-        - id (string): (required)
+        - organizationId (string): Organization ID
+        - id (string): Id
         """
 
         metadata = {
@@ -637,7 +637,7 @@ class Organizations(object):
         **Returns global adaptive policy settings in an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-adaptive-policy-settings
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         """
 
         metadata = {
@@ -656,7 +656,7 @@ class Organizations(object):
         **Update global adaptive policy settings**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-adaptive-policy-settings
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - enabledNetworks (array): List of network IDs with adaptive policy enabled
         """
 
@@ -681,7 +681,7 @@ class Organizations(object):
         **List the dashboard administrators in this organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-admins
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         """
 
         metadata = {
@@ -700,7 +700,7 @@ class Organizations(object):
         **Create a new dashboard administrator**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-admin
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - email (string): The email of the dashboard administrator. This attribute can not be updated.
         - name (string): The name of the dashboard administrator
         - orgAccess (string): The privilege of the dashboard administrator on the organization. Can be one of 'full', 'read-only', 'enterprise' or 'none'
@@ -737,8 +737,8 @@ class Organizations(object):
         **Update an administrator**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-admin
 
-        - organizationId (string): (required)
-        - adminId (string): (required)
+        - organizationId (string): Organization ID
+        - adminId (string): Admin ID
         - name (string): The name of the dashboard administrator
         - orgAccess (string): The privilege of the dashboard administrator on the organization. Can be one of 'full', 'read-only', 'enterprise' or 'none'
         - tags (array): The list of tags that the dashboard administrator has privileges on
@@ -771,8 +771,8 @@ class Organizations(object):
         **Revoke all access for a dashboard administrator within this organization**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-admin
 
-        - organizationId (string): (required)
-        - adminId (string): (required)
+        - organizationId (string): Organization ID
+        - adminId (string): Admin ID
         """
 
         metadata = {
@@ -792,7 +792,7 @@ class Organizations(object):
         **List all organization-wide alert configurations**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-alerts-profiles
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         """
 
         metadata = {
@@ -811,7 +811,7 @@ class Organizations(object):
         **Create an organization-wide alert configuration**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-alerts-profile
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - type (string): The alert type
         - alertCondition (object): The conditions that determine if the alert triggers
         - recipients (object): List of recipients that will recieve the alert.
@@ -844,8 +844,8 @@ class Organizations(object):
         **Update an organization-wide alert config**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-alerts-profile
 
-        - organizationId (string): (required)
-        - alertConfigId (string): (required)
+        - organizationId (string): Organization ID
+        - alertConfigId (string): Alert config ID
         - enabled (boolean): Is the alert config enabled
         - type (string): The alert type
         - alertCondition (object): The conditions that determine if the alert triggers
@@ -880,8 +880,8 @@ class Organizations(object):
         **Removes an organization-wide alert config**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-alerts-profile
 
-        - organizationId (string): (required)
-        - alertConfigId (string): (required)
+        - organizationId (string): Organization ID
+        - alertConfigId (string): Alert config ID
         """
 
         metadata = {
@@ -901,7 +901,7 @@ class Organizations(object):
         **List the API requests made by an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-api-requests
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
@@ -954,7 +954,7 @@ class Organizations(object):
         **Return an aggregated overview of API requests data**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-api-requests-overview
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 31 days.
@@ -981,7 +981,7 @@ class Organizations(object):
         **Tracks organizations' API requests by response code across a given time period**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-api-requests-overview-response-codes-by-interval
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 31 days. If interval is provided, the timespan will be autocalculated.
@@ -1024,7 +1024,7 @@ class Organizations(object):
         **List the branding policies of an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-branding-policies
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         """
 
         metadata = {
@@ -1043,7 +1043,7 @@ class Organizations(object):
         **Add a new branding policy to an organization**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-branding-policy
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - name (string): Name of the Dashboard branding policy.
         - enabled (boolean): Boolean indicating whether this policy is enabled.
         - adminSettings (object): Settings for describing which kinds of admins this policy applies to.
@@ -1076,7 +1076,7 @@ class Organizations(object):
         **Return the branding policy IDs of an organization in priority order**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-branding-policies-priorities
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         """
 
         metadata = {
@@ -1095,7 +1095,7 @@ class Organizations(object):
         **Update the priority ordering of an organization's branding policies.**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-branding-policies-priorities
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - brandingPolicyIds (array):       An ordered list of branding policy IDs that determines the priority order of how to apply the policies
 
         """
@@ -1121,8 +1121,8 @@ class Organizations(object):
         **Return a branding policy**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-branding-policy
 
-        - organizationId (string): (required)
-        - brandingPolicyId (string): (required)
+        - organizationId (string): Organization ID
+        - brandingPolicyId (string): Branding policy ID
         """
 
         metadata = {
@@ -1142,8 +1142,8 @@ class Organizations(object):
         **Update a branding policy**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-branding-policy
 
-        - organizationId (string): (required)
-        - brandingPolicyId (string): (required)
+        - organizationId (string): Organization ID
+        - brandingPolicyId (string): Branding policy ID
         - name (string): Name of the Dashboard branding policy.
         - enabled (boolean): Boolean indicating whether this policy is enabled.
         - adminSettings (object): Settings for describing which kinds of admins this policy applies to.
@@ -1177,8 +1177,8 @@ class Organizations(object):
         **Delete a branding policy**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-branding-policy
 
-        - organizationId (string): (required)
-        - brandingPolicyId (string): (required)
+        - organizationId (string): Organization ID
+        - brandingPolicyId (string): Branding policy ID
         """
 
         metadata = {
@@ -1198,7 +1198,7 @@ class Organizations(object):
         **Claim a list of devices, licenses, and/or orders into an organization**
         https://developer.cisco.com/meraki/api-v1/#!claim-into-organization
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - orders (array): The numbers of the orders that should be claimed
         - serials (array): The serials of the devices that should be claimed
         - licenses (array): The licenses that should be claimed
@@ -1225,7 +1225,7 @@ class Organizations(object):
         **Return data usage (in megabits per second) over time for all clients in the given organization within a given time range.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-clients-bandwidth-usage-history
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - t0 (string): The beginning of the timespan for the data.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
@@ -1252,7 +1252,7 @@ class Organizations(object):
         **Return summary information around client data usage (in mb) across the given organization.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-clients-overview
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - t0 (string): The beginning of the timespan for the data.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
@@ -1279,7 +1279,7 @@ class Organizations(object):
         **Return the client details in an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-clients-search
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - mac (string): The MAC address of the client. Required.
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
@@ -1309,7 +1309,7 @@ class Organizations(object):
         **Create a new organization by cloning the addressed organization**
         https://developer.cisco.com/meraki/api-v1/#!clone-organization
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - name (string): The name of the new organization
         """
 
@@ -1334,7 +1334,7 @@ class Organizations(object):
         **List the configuration templates for this organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-config-templates
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         """
 
         metadata = {
@@ -1353,7 +1353,7 @@ class Organizations(object):
         **Create a new configuration template**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-config-template
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - name (string): The name of the configuration template
         - timeZone (string): The timezone of the configuration template. For a list of allowed timezones, please see the 'TZ' column in the table in <a target='_blank' href='https://en.wikipedia.org/wiki/List_of_tz_database_time_zones'>this article</a>. Not applicable if copying from existing network or template
         - copyFromNetworkId (string): The ID of the network or config template to copy configuration from
@@ -1380,8 +1380,8 @@ class Organizations(object):
         **Update a configuration template**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-config-template
 
-        - organizationId (string): (required)
-        - configTemplateId (string): (required)
+        - organizationId (string): Organization ID
+        - configTemplateId (string): Config template ID
         - name (string): The name of the configuration template
         - timeZone (string): The timezone of the configuration template. For a list of allowed timezones, please see the 'TZ' column in the table in <a target='_blank' href='https://en.wikipedia.org/wiki/List_of_tz_database_time_zones'>this article.</a>
         """
@@ -1408,8 +1408,8 @@ class Organizations(object):
         **Remove a configuration template**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-config-template
 
-        - organizationId (string): (required)
-        - configTemplateId (string): (required)
+        - organizationId (string): Organization ID
+        - configTemplateId (string): Config template ID
         """
 
         metadata = {
@@ -1429,8 +1429,8 @@ class Organizations(object):
         **Return a single configuration template**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-config-template
 
-        - organizationId (string): (required)
-        - configTemplateId (string): (required)
+        - organizationId (string): Organization ID
+        - configTemplateId (string): Config template ID
         """
 
         metadata = {
@@ -1450,7 +1450,7 @@ class Organizations(object):
         **View the Change Log for your organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-configuration-changes
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" or "prev" (default) page
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
@@ -1484,7 +1484,7 @@ class Organizations(object):
         **List the devices in an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-devices
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
@@ -1537,7 +1537,7 @@ class Organizations(object):
         **List the availability information for devices in an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-availabilities
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
@@ -1581,7 +1581,7 @@ class Organizations(object):
         **List the power status information for devices in an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-power-modules-statuses-by-device
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
@@ -1620,12 +1620,60 @@ class Organizations(object):
         
 
 
+    def getOrganizationDevicesProvisioningStatuses(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **List the provisioning statuses information for devices in an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-provisioning-statuses
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter device by network ID. This filter uses multiple exact matches.
+        - productTypes (array): Optional parameter to filter device by device product types. This filter uses multiple exact matches.
+        - serials (array): Optional parameter to filter device by device serial numbers. This filter uses multiple exact matches.
+        - status (string): An optional parameter to filter devices by the provisioning status. Accepted statuses: unprovisioned, incomplete, complete.
+        - tags (array): An optional parameter to filter devices by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below). This filter uses multiple exact matches.
+        - tagsFilterType (string): An optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return devices which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
+        """
+
+        kwargs.update(locals())
+
+        if 'status' in kwargs:
+            options = ['complete', 'incomplete', 'unprovisioned']
+            assert kwargs['status'] in options, f'''"status" cannot be "{kwargs['status']}", & must be set to one of: {options}'''
+        if 'tagsFilterType' in kwargs:
+            options = ['withAllTags', 'withAnyTags']
+            assert kwargs['tagsFilterType'] in options, f'''"tagsFilterType" cannot be "{kwargs['tagsFilterType']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['organizations', 'monitor', 'devices', 'provisioning', 'statuses'],
+            'operation': 'getOrganizationDevicesProvisioningStatuses'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/devices/provisioning/statuses'
+
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'productTypes', 'serials', 'status', 'tags', 'tagsFilterType', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', 'productTypes', 'serials', 'tags', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
     def getOrganizationDevicesStatuses(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the status of every Meraki device in the organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-statuses
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
@@ -1671,7 +1719,7 @@ class Organizations(object):
         **Return an overview of current device statuses**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-statuses-overview
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - productTypes (array): An optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, and sensor.
         - networkIds (array): An optional parameter to filter device statuses by network.
         """
@@ -1703,7 +1751,7 @@ class Organizations(object):
         **List the current uplink addresses for devices in an organization.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-uplinks-addresses-by-device
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
@@ -1747,7 +1795,7 @@ class Organizations(object):
         **Return the uplink loss and latency for every MX in the organization from at latest 2 minutes ago**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-uplinks-loss-and-latency
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 60 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 5 minutes after t0. The latest possible time that t1 can be is 2 minutes into the past.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 5 minutes. The default is 5 minutes.
@@ -1780,7 +1828,7 @@ class Organizations(object):
         **List the available early access features for organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-early-access-features
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         """
 
         metadata = {
@@ -1799,7 +1847,7 @@ class Organizations(object):
         **List the early access feature opt-ins for an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-early-access-features-opt-ins
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         """
 
         metadata = {
@@ -1818,7 +1866,7 @@ class Organizations(object):
         **Create a new early access feature opt-in for an organization**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-early-access-features-opt-in
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - shortName (string): Short name of the early access feature
         - limitScopeToNetworks (array): A list of network IDs to apply the opt-in to
         """
@@ -1844,8 +1892,8 @@ class Organizations(object):
         **Show an early access feature opt-in for an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-early-access-features-opt-in
 
-        - organizationId (string): (required)
-        - optInId (string): (required)
+        - organizationId (string): Organization ID
+        - optInId (string): Opt in ID
         """
 
         metadata = {
@@ -1865,8 +1913,8 @@ class Organizations(object):
         **Update an early access feature opt-in for an organization**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-early-access-features-opt-in
 
-        - organizationId (string): (required)
-        - optInId (string): (required)
+        - organizationId (string): Organization ID
+        - optInId (string): Opt in ID
         - limitScopeToNetworks (array): A list of network IDs to apply the opt-in to
         """
 
@@ -1892,8 +1940,8 @@ class Organizations(object):
         **Delete an early access feature opt-in**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-early-access-features-opt-in
 
-        - organizationId (string): (required)
-        - optInId (string): (required)
+        - organizationId (string): Organization ID
+        - optInId (string): Opt in ID
         """
 
         metadata = {
@@ -1913,7 +1961,7 @@ class Organizations(object):
         **Get firmware upgrade information for an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-firmware-upgrades
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - status (array): The status of an upgrade 
         - productType (array): The product type in a given upgrade ID
         """
@@ -1945,7 +1993,7 @@ class Organizations(object):
         **Get firmware upgrade status for the filtered devices**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-firmware-upgrades-by-device
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 50. Default is 50.
@@ -1985,7 +2033,7 @@ class Organizations(object):
         **Claim a list of devices, licenses, and/or orders into an organization inventory**
         https://developer.cisco.com/meraki/api-v1/#!claim-into-organization-inventory
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - orders (array): The numbers of the orders that should be claimed
         - serials (array): The serials of the devices that should be claimed
         - licenses (array): The licenses that should be claimed
@@ -2012,7 +2060,7 @@ class Organizations(object):
         **Return the device inventory for an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-inventory-devices
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
@@ -2064,8 +2112,8 @@ class Organizations(object):
         **Return a single device from the inventory of an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-inventory-device
 
-        - organizationId (string): (required)
-        - serial (string): (required)
+        - organizationId (string): Organization ID
+        - serial (string): Serial
         """
 
         metadata = {
@@ -2085,7 +2133,7 @@ class Organizations(object):
         **Imports event logs related to the onboarding app into elastisearch**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-inventory-onboarding-cloud-monitoring-export-event
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - logEvent (string): The type of log event this is recording, e.g. download or opening a banner
         - timestamp (integer): A JavaScript UTC datetime stamp for when the even occurred
         - targetOS (string): The name of the onboarding distro being downloaded
@@ -2113,7 +2161,7 @@ class Organizations(object):
         **Commits the import operation to complete the onboarding of a device into Dashboard for monitoring.**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-inventory-onboarding-cloud-monitoring-import
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - devices (array): A set of device imports to commit
         """
 
@@ -2138,7 +2186,7 @@ class Organizations(object):
         **Check the status of a committed Import operation**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-inventory-onboarding-cloud-monitoring-imports
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - importIds (array): import ids from an imports
         """
 
@@ -2169,7 +2217,7 @@ class Organizations(object):
         **Returns list of networks eligible for adding cloud monitored device**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-inventory-onboarding-cloud-monitoring-networks
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - deviceType (string): Device Type switch or wireless controller
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
@@ -2203,7 +2251,7 @@ class Organizations(object):
         **Initiates or updates an import session**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-inventory-onboarding-cloud-monitoring-prepare
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - devices (array): A set of devices to import (or update)
         """
 
@@ -2228,7 +2276,7 @@ class Organizations(object):
         **Release a list of claimed devices from an organization.**
         https://developer.cisco.com/meraki/api-v1/#!release-from-organization-inventory
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - serials (array): Serials of the devices that should be released
         """
 
@@ -2253,7 +2301,7 @@ class Organizations(object):
         **List the licenses for an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-licenses
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
@@ -2289,7 +2337,7 @@ class Organizations(object):
         **Assign SM seats to a network**
         https://developer.cisco.com/meraki/api-v1/#!assign-organization-licenses-seats
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - licenseId (string): The ID of the SM license to assign seats from
         - networkId (string): The ID of the SM network to assign the seats to
         - seatCount (integer): The number of seats to assign to the SM network. Must be less than or equal to the total number of seats of the license
@@ -2316,7 +2364,7 @@ class Organizations(object):
         **Move licenses to another organization**
         https://developer.cisco.com/meraki/api-v1/#!move-organization-licenses
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - destOrganizationId (string): The ID of the organization to move the licenses to
         - licenseIds (array): A list of IDs of licenses to move to the new organization
         """
@@ -2342,7 +2390,7 @@ class Organizations(object):
         **Move SM seats to another organization**
         https://developer.cisco.com/meraki/api-v1/#!move-organization-licenses-seats
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - destOrganizationId (string): The ID of the organization to move the SM seats to
         - licenseId (string): The ID of the SM license to move the seats from
         - seatCount (integer): The number of seats to move to the new organization. Must be less than or equal to the total number of seats of the license
@@ -2369,7 +2417,7 @@ class Organizations(object):
         **Return an overview of the license state for an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-licenses-overview
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         """
 
         metadata = {
@@ -2388,7 +2436,7 @@ class Organizations(object):
         **Renew SM seats of a license**
         https://developer.cisco.com/meraki/api-v1/#!renew-organization-licenses-seats
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - licenseIdToRenew (string): The ID of the SM license to renew. This license must already be assigned to an SM network
         - unusedLicenseId (string): The SM license to use to renew the seats on 'licenseIdToRenew'. This license must have at least as many seats available as there are seats on 'licenseIdToRenew'
         """
@@ -2414,8 +2462,8 @@ class Organizations(object):
         **Display a license**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-license
 
-        - organizationId (string): (required)
-        - licenseId (string): (required)
+        - organizationId (string): Organization ID
+        - licenseId (string): License ID
         """
 
         metadata = {
@@ -2435,8 +2483,8 @@ class Organizations(object):
         **Update a license**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-license
 
-        - organizationId (string): (required)
-        - licenseId (string): (required)
+        - organizationId (string): Organization ID
+        - licenseId (string): License ID
         - deviceSerial (string): The serial number of the device to assign this license to. Set this to  null to unassign the license. If a different license is already active on the device, this parameter will control queueing/dequeuing this license.
         """
 
@@ -2462,7 +2510,7 @@ class Organizations(object):
         **Returns the login security settings for an organization.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-login-security
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         """
 
         metadata = {
@@ -2481,7 +2529,7 @@ class Organizations(object):
         **Update the login security settings for an organization**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-login-security
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - enforcePasswordExpiration (boolean): Boolean indicating whether users are forced to change their password every X number of days.
         - passwordExpirationDays (integer): Number of days after which users will be forced to change their password.
         - enforceDifferentPasswords (boolean): Boolean indicating whether users, when setting a new password, are forced to choose a new password that is different from any past passwords.
@@ -2518,7 +2566,7 @@ class Organizations(object):
         **List the networks that the user has privileges on in an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-networks
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - configTemplateId (string): An optional parameter that is the ID of a config template. Will return all networks bound to that template.
@@ -2561,7 +2609,7 @@ class Organizations(object):
         **Create a network**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-network
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - name (string): The name of the new network
         - productTypes (array): The product type(s) of the new network. If more than one type is included, the network will be a combined network.
         - tags (array): A list of tags to be applied to the network
@@ -2591,7 +2639,7 @@ class Organizations(object):
         **Combine multiple networks into a single network**
         https://developer.cisco.com/meraki/api-v1/#!combine-organization-networks
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - name (string): The name of the combined network
         - networkIds (array): A list of the network IDs that will be combined. If an ID of a combined network is included in this list, the other networks in the list will be grouped into that network
         - enrollmentString (string): A unique identifier which can be used for device enrollment or easy access through the Meraki SM Registration page or the Self Service Portal. Please note that changing this field may cause existing bookmarks to break. All networks that are part of this combined network will have their enrollment string appended by '-network_type'. If left empty, all exisitng enrollment strings will be deleted.
@@ -2618,7 +2666,7 @@ class Organizations(object):
         **Return the OpenAPI 2.0 Specification of the organization's API documentation in JSON**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-openapi-spec
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         """
 
         metadata = {
@@ -2637,7 +2685,7 @@ class Organizations(object):
         **Lists Policy Objects belonging to the organization.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-policy-objects
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - perPage (integer): The number of entries per page returned. Acceptable range is 10 - 5000. Default is 5000.
@@ -2666,7 +2714,7 @@ class Organizations(object):
         **Creates a new Policy Object.**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-policy-object
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - name (string): Name of a policy object, unique within the organization (alphanumeric, space, dash, or underscore characters only)
         - category (string): Category of a policy object (one of: adaptivePolicy, network)
         - type (string): Type of a policy object (one of: adaptivePolicyIpv4Cidr, cidr, fqdn, ipAndMask)
@@ -2698,7 +2746,7 @@ class Organizations(object):
         **Lists Policy Object Groups belonging to the organization.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-policy-objects-groups
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - perPage (integer): The number of entries per page returned. Acceptable range is 10 - 1000. Default is 1000.
@@ -2727,7 +2775,7 @@ class Organizations(object):
         **Creates a new Policy Object Group.**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-policy-objects-group
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - name (string): A name for the group of network addresses, unique within the organization (alphanumeric, space, dash, or underscore characters only)
         - category (string): Category of a policy object group (one of: NetworkObjectGroup, GeoLocationGroup, PortObjectGroup, ApplicationGroup)
         - objectIds (array): A list of Policy Object ID's that this NetworkObjectGroup should be associated to (note: these ID's will replace the existing associated Policy Objects)
@@ -2754,8 +2802,8 @@ class Organizations(object):
         **Shows details of a Policy Object Group.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-policy-objects-group
 
-        - organizationId (string): (required)
-        - policyObjectGroupId (string): (required)
+        - organizationId (string): Organization ID
+        - policyObjectGroupId (string): Policy object group ID
         """
 
         metadata = {
@@ -2775,8 +2823,8 @@ class Organizations(object):
         **Updates a Policy Object Group.**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-policy-objects-group
 
-        - organizationId (string): (required)
-        - policyObjectGroupId (string): (required)
+        - organizationId (string): Organization ID
+        - policyObjectGroupId (string): Policy object group ID
         - name (string): A name for the group of network addresses, unique within the organization (alphanumeric, space, dash, or underscore characters only)
         - objectIds (array): A list of Policy Object ID's that this NetworkObjectGroup should be associated to (note: these ID's will replace the existing associated Policy Objects)
         """
@@ -2803,8 +2851,8 @@ class Organizations(object):
         **Deletes a Policy Object Group.**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-policy-objects-group
 
-        - organizationId (string): (required)
-        - policyObjectGroupId (string): (required)
+        - organizationId (string): Organization ID
+        - policyObjectGroupId (string): Policy object group ID
         """
 
         metadata = {
@@ -2824,8 +2872,8 @@ class Organizations(object):
         **Shows details of a Policy Object.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-policy-object
 
-        - organizationId (string): (required)
-        - policyObjectId (string): (required)
+        - organizationId (string): Organization ID
+        - policyObjectId (string): Policy object ID
         """
 
         metadata = {
@@ -2845,8 +2893,8 @@ class Organizations(object):
         **Updates a Policy Object.**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-policy-object
 
-        - organizationId (string): (required)
-        - policyObjectId (string): (required)
+        - organizationId (string): Organization ID
+        - policyObjectId (string): Policy object ID
         - name (string): Name of a policy object, unique within the organization (alphanumeric, space, dash, or underscore characters only)
         - cidr (string): CIDR Value of a policy object (e.g. 10.11.12.1/24")
         - fqdn (string): Fully qualified domain name of policy object (e.g. "example.com")
@@ -2877,8 +2925,8 @@ class Organizations(object):
         **Deletes a Policy Object.**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-policy-object
 
-        - organizationId (string): (required)
-        - policyObjectId (string): (required)
+        - organizationId (string): Organization ID
+        - policyObjectId (string): Policy object ID
         """
 
         metadata = {
@@ -2898,7 +2946,7 @@ class Organizations(object):
         **Returns the SAML SSO enabled settings for an organization.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-saml
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         """
 
         metadata = {
@@ -2917,7 +2965,7 @@ class Organizations(object):
         **Updates the SAML SSO enabled settings for an organization.**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-saml
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - enabled (boolean): Boolean for updating SAML SSO enabled settings.
         """
 
@@ -2942,7 +2990,7 @@ class Organizations(object):
         **List the SAML IdPs in your organization.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-saml-idps
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         """
 
         metadata = {
@@ -2961,7 +3009,7 @@ class Organizations(object):
         **Create a SAML IdP for your organization.**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-saml-idp
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - x509certSha1Fingerprint (string): Fingerprint (SHA1) of the SAML certificate provided by your Identity Provider (IdP). This will be used for encryption / validation.
         - sloLogoutUrl (string): Dashboard will redirect users to this URL when they sign out.
         """
@@ -2987,8 +3035,8 @@ class Organizations(object):
         **Update a SAML IdP in your organization**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-saml-idp
 
-        - organizationId (string): (required)
-        - idpId (string): (required)
+        - organizationId (string): Organization ID
+        - idpId (string): Idp ID
         - x509certSha1Fingerprint (string): Fingerprint (SHA1) of the SAML certificate provided by your Identity Provider (IdP). This will be used for encryption / validation.
         - sloLogoutUrl (string): Dashboard will redirect users to this URL when they sign out.
         """
@@ -3015,8 +3063,8 @@ class Organizations(object):
         **Get a SAML IdP from your organization.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-saml-idp
 
-        - organizationId (string): (required)
-        - idpId (string): (required)
+        - organizationId (string): Organization ID
+        - idpId (string): Idp ID
         """
 
         metadata = {
@@ -3036,8 +3084,8 @@ class Organizations(object):
         **Remove a SAML IdP in your organization.**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-saml-idp
 
-        - organizationId (string): (required)
-        - idpId (string): (required)
+        - organizationId (string): Organization ID
+        - idpId (string): Idp ID
         """
 
         metadata = {
@@ -3057,7 +3105,7 @@ class Organizations(object):
         **List the SAML roles for this organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-saml-roles
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         """
 
         metadata = {
@@ -3076,7 +3124,7 @@ class Organizations(object):
         **Create a SAML role**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-saml-role
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - role (string): The role of the SAML administrator
         - orgAccess (string): The privilege of the SAML administrator on the organization. Can be one of 'none', 'read-only', 'full' or 'enterprise'
         - tags (array): The list of tags that the SAML administrator has privleges on
@@ -3108,8 +3156,8 @@ class Organizations(object):
         **Return a SAML role**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-saml-role
 
-        - organizationId (string): (required)
-        - samlRoleId (string): (required)
+        - organizationId (string): Organization ID
+        - samlRoleId (string): Saml role ID
         """
 
         metadata = {
@@ -3129,8 +3177,8 @@ class Organizations(object):
         **Update a SAML role**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-saml-role
 
-        - organizationId (string): (required)
-        - samlRoleId (string): (required)
+        - organizationId (string): Organization ID
+        - samlRoleId (string): Saml role ID
         - role (string): The role of the SAML administrator
         - orgAccess (string): The privilege of the SAML administrator on the organization. Can be one of 'none', 'read-only', 'full' or 'enterprise'
         - tags (array): The list of tags that the SAML administrator has privleges on
@@ -3163,8 +3211,8 @@ class Organizations(object):
         **Remove a SAML role**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-saml-role
 
-        - organizationId (string): (required)
-        - samlRoleId (string): (required)
+        - organizationId (string): Organization ID
+        - samlRoleId (string): Saml role ID
         """
 
         metadata = {
@@ -3184,7 +3232,7 @@ class Organizations(object):
         **Return the SNMP settings for an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-snmp
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         """
 
         metadata = {
@@ -3203,7 +3251,7 @@ class Organizations(object):
         **Update the SNMP settings for an organization**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-snmp
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - v2cEnabled (boolean): Boolean indicating whether SNMP version 2c is enabled for the organization.
         - v3Enabled (boolean): Boolean indicating whether SNMP version 3 is enabled for the organization.
         - v3AuthMode (string): The SNMP version 3 authentication mode. Can be either 'MD5' or 'SHA'.
@@ -3241,7 +3289,7 @@ class Organizations(object):
         **Return the top 10 appliances sorted by utilization over given time range.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-summary-top-appliances-by-utilization
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - t0 (string): The beginning of the timespan for the data.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
@@ -3268,7 +3316,7 @@ class Organizations(object):
         **Return metrics for organization's top 10 clients by data usage (in mb) over given time range.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-summary-top-clients-by-usage
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - t0 (string): The beginning of the timespan for the data.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
@@ -3295,7 +3343,7 @@ class Organizations(object):
         **Return metrics for organization's top clients by data usage (in mb) over given time range, grouped by manufacturer.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-summary-top-clients-manufacturers-by-usage
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - t0 (string): The beginning of the timespan for the data.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
@@ -3322,7 +3370,7 @@ class Organizations(object):
         **Return metrics for organization's top 10 devices sorted by data usage over given time range**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-summary-top-devices-by-usage
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - t0 (string): The beginning of the timespan for the data.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
@@ -3349,7 +3397,7 @@ class Organizations(object):
         **Return metrics for organization's top 10 device models sorted by data usage over given time range**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-summary-top-devices-models-by-usage
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - t0 (string): The beginning of the timespan for the data.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
@@ -3376,7 +3424,7 @@ class Organizations(object):
         **Return metrics for organization's top 10 ssids by data usage over given time range**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-summary-top-ssids-by-usage
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - t0 (string): The beginning of the timespan for the data.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
@@ -3403,7 +3451,7 @@ class Organizations(object):
         **Return metrics for organization's top 10 switches by energy usage over given time range**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-summary-top-switches-by-energy-usage
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - t0 (string): The beginning of the timespan for the data.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
@@ -3430,7 +3478,7 @@ class Organizations(object):
         **List the uplink status of every Meraki MX, MG and Z series devices in the organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-uplinks-statuses
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
@@ -3468,8 +3516,8 @@ class Organizations(object):
         **Delete a user and all of its authentication methods.**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-user
 
-        - organizationId (string): (required)
-        - userId (string): (required)
+        - organizationId (string): Organization ID
+        - userId (string): User ID
         """
 
         metadata = {
@@ -3489,7 +3537,7 @@ class Organizations(object):
         **Return a list of alert types to be used with managing webhook alerts**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-webhooks-alert-types
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - productType (string): Filter sample alerts to a specific product type
         """
 
@@ -3518,7 +3566,7 @@ class Organizations(object):
         **Return the log of webhook POSTs sent**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-webhooks-logs
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 90 days from today.

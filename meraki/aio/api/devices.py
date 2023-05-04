@@ -13,7 +13,7 @@ class AsyncDevices:
         **Return a single device**
         https://developer.cisco.com/meraki/api-v1/#!get-device
 
-        - serial (string): (required)
+        - serial (string): Serial
         """
 
         metadata = {
@@ -32,7 +32,7 @@ class AsyncDevices:
         **Update the attributes of a device**
         https://developer.cisco.com/meraki/api-v1/#!update-device
 
-        - serial (string): (required)
+        - serial (string): Serial
         - name (string): The name of a device
         - tags (array): The list of tags of a device
         - lat (number): The latitude of a device
@@ -65,7 +65,7 @@ class AsyncDevices:
         **Blink the LEDs on a device**
         https://developer.cisco.com/meraki/api-v1/#!blink-device-leds
 
-        - serial (string): (required)
+        - serial (string): Serial
         - duration (integer): The duration in seconds. Must be between 5 and 120. Default is 20 seconds
         - period (integer): The period in milliseconds. Must be between 100 and 1000. Default is 160 milliseconds
         - duty (integer): The duty cycle as the percent active. Must be between 10 and 90. Default is 50.
@@ -92,7 +92,7 @@ class AsyncDevices:
         **Return the SIM and APN configurations for a cellular device.**
         https://developer.cisco.com/meraki/api-v1/#!get-device-cellular-sims
 
-        - serial (string): (required)
+        - serial (string): Serial
         """
 
         metadata = {
@@ -111,7 +111,7 @@ class AsyncDevices:
         **Updates the SIM and APN configurations for a cellular device.**
         https://developer.cisco.com/meraki/api-v1/#!update-device-cellular-sims
 
-        - serial (string): (required)
+        - serial (string): Serial
         - sims (array): List of SIMs. If a SIM was previously configured and not specified in this request, it will remain unchanged.
         - simFailover (object): SIM Failover settings.
         """
@@ -137,7 +137,7 @@ class AsyncDevices:
         **List the clients of a device, up to a maximum of a month ago**
         https://developer.cisco.com/meraki/api-v1/#!get-device-clients
 
-        - serial (string): (required)
+        - serial (string): Serial
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
         """
@@ -163,7 +163,7 @@ class AsyncDevices:
         **Enqueue a job to ping a target host from the device**
         https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-ping
 
-        - serial (string): (required)
+        - serial (string): Serial
         - target (string): FQDN, IPv4 or IPv6 address
         - count (integer): Count parameter to pass to ping. [1..5], default 5
         """
@@ -189,8 +189,8 @@ class AsyncDevices:
         **Return a ping job**
         https://developer.cisco.com/meraki/api-v1/#!get-device-live-tools-ping
 
-        - serial (string): (required)
-        - id (string): (required)
+        - serial (string): Serial
+        - id (string): Id
         """
 
         metadata = {
@@ -210,7 +210,7 @@ class AsyncDevices:
         **Enqueue a job to check connectivity status to the device**
         https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-ping-device
 
-        - serial (string): (required)
+        - serial (string): Serial
         - count (integer): Count parameter to pass to ping. [1..5], default 5
         """
 
@@ -235,8 +235,8 @@ class AsyncDevices:
         **Return a ping device job**
         https://developer.cisco.com/meraki/api-v1/#!get-device-live-tools-ping-device
 
-        - serial (string): (required)
-        - id (string): (required)
+        - serial (string): Serial
+        - id (string): Id
         """
 
         metadata = {
@@ -256,7 +256,7 @@ class AsyncDevices:
         **List LLDP and CDP information for a device**
         https://developer.cisco.com/meraki/api-v1/#!get-device-lldp-cdp
 
-        - serial (string): (required)
+        - serial (string): Serial
         """
 
         metadata = {
@@ -275,7 +275,7 @@ class AsyncDevices:
         **Get the uplink loss percentage and latency in milliseconds, and goodput in kilobits per second for a wired network device.**
         https://developer.cisco.com/meraki/api-v1/#!get-device-loss-and-latency-history
 
-        - serial (string): (required)
+        - serial (string): Serial
         - ip (string): The destination IP used to obtain the requested stats. This is required.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 60 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
@@ -309,7 +309,7 @@ class AsyncDevices:
         **Return the management interface settings for a device**
         https://developer.cisco.com/meraki/api-v1/#!get-device-management-interface
 
-        - serial (string): (required)
+        - serial (string): Serial
         """
 
         metadata = {
@@ -328,7 +328,7 @@ class AsyncDevices:
         **Update the management interface settings for a device**
         https://developer.cisco.com/meraki/api-v1/#!update-device-management-interface
 
-        - serial (string): (required)
+        - serial (string): Serial
         - wan1 (object): WAN 1 settings
         - wan2 (object): WAN 2 settings (only for MX devices)
         """
@@ -354,7 +354,7 @@ class AsyncDevices:
         **Reboot a device**
         https://developer.cisco.com/meraki/api-v1/#!reboot-device
 
-        - serial (string): (required)
+        - serial (string): Serial
         """
 
         metadata = {

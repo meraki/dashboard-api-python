@@ -12,7 +12,7 @@ class ActionBatchNetworks(object):
         **Update a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - name (string): The name of the network
         - timeZone (string): The timezone of the network. For a list of allowed timezones, please see the 'TZ' column in the table in <a target='_blank' href='https://en.wikipedia.org/wiki/List_of_tz_database_time_zones'>this article.</a>
         - tags (array): A list of tags to be applied to the network
@@ -47,7 +47,7 @@ class ActionBatchNetworks(object):
         **Delete a network**
         https://developer.cisco.com/meraki/api-v1/#!delete-network
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -72,7 +72,7 @@ class ActionBatchNetworks(object):
         **Bind a network to a template.**
         https://developer.cisco.com/meraki/api-v1/#!bind-network
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - configTemplateId (string): The ID of the template to which the network should be bound.
         - autoBind (boolean): Optional boolean indicating whether the network's switches should automatically bind to profiles of the same model. Defaults to false if left unspecified. This option only affects switch networks and switch templates. Auto-bind is not valid unless the switch template has at least one profile and has at most one profile per switch model.
         """
@@ -104,7 +104,7 @@ class ActionBatchNetworks(object):
         **Provisions a client with a name and policy**
         https://developer.cisco.com/meraki/api-v1/#!provision-network-clients
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - clients (array): The array of clients to provision
         - devicePolicy (string): The policy to apply to the specified client. Can be 'Group policy', 'Allowed', 'Blocked', 'Per connection' or 'Normal'. Required.
         - groupPolicyId (string): The ID of the desired group policy to apply to the client. Required if 'devicePolicy' is set to "Group policy". Otherwise this is ignored.
@@ -143,7 +143,7 @@ class ActionBatchNetworks(object):
         **Claim devices into a network. (Note: for recently claimed devices, it may take a few minutes for API requsts against that device to succeed)**
         https://developer.cisco.com/meraki/api-v1/#!claim-network-devices
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - serials (array): A list of serials of devices to claim
         """
 
@@ -174,7 +174,7 @@ class ActionBatchNetworks(object):
         **Claim a vMX into a network**
         https://developer.cisco.com/meraki/api-v1/#!vmx-network-devices-claim
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - size (string): The size of the vMX you claim. It can be one of: small, medium, large, 100
         """
 
@@ -209,7 +209,7 @@ class ActionBatchNetworks(object):
         **Remove a single device**
         https://developer.cisco.com/meraki/api-v1/#!remove-network-devices
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - serial (string): The serial of a device
         """
 
@@ -240,7 +240,7 @@ class ActionBatchNetworks(object):
         **Update firmware upgrade information for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-firmware-upgrades
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - upgradeWindow (object): Upgrade window for devices in network
         - timezone (string): The timezone for the network
         - products (object): Contains information about the network to update
@@ -273,7 +273,7 @@ class ActionBatchNetworks(object):
         **Rollback a Firmware Upgrade For A Network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-firmware-upgrades-rollback
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - reasons (array): Reasons for the rollback
         - product (string): Product type to rollback (if the network is a combined network)
         - time (string): Scheduled time for the rollback
@@ -311,7 +311,7 @@ class ActionBatchNetworks(object):
         **Create a Staged Upgrade Group for a network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-firmware-upgrades-staged-group
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - name (string): Name of the Staged Upgrade Group. Length must be 1 to 255 characters
         - isDefault (boolean): Boolean indicating the default Group. Any device that does not have a group explicitly assigned will upgrade with this group
         - description (string): Description of the Staged Upgrade Group. Length must be 1 to 255 characters
@@ -345,8 +345,8 @@ class ActionBatchNetworks(object):
         **Delete a Staged Upgrade Group**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-firmware-upgrades-staged-group
 
-        - networkId (string): (required)
-        - groupId (string): (required)
+        - networkId (string): Network ID
+        - groupId (string): Group ID
         """
 
         metadata = {
@@ -371,8 +371,8 @@ class ActionBatchNetworks(object):
         **Update a floor plan's geolocation and other meta data**
         https://developer.cisco.com/meraki/api-v1/#!update-network-floor-plan
 
-        - networkId (string): (required)
-        - floorPlanId (string): (required)
+        - networkId (string): Network ID
+        - floorPlanId (string): Floor plan ID
         - name (string): The name of your floor plan.
         - center (object): The longitude and latitude of the center of your floor plan. If you want to change the geolocation data of your floor plan, either the 'center' or two adjacent corners (e.g. 'topLeftCorner' and 'bottomLeftCorner') must be specified. If 'center' is specified, the floor plan is placed over that point with no rotation. If two adjacent corners are specified, the floor plan is rotated to line up with the two specified points. The aspect ratio of the floor plan's image is preserved regardless of which corners/center are specified. (This means if that more than two corners are specified, only two corners may be used to preserve the floor plan's aspect ratio.). No two points can have the same latitude, longitude pair.
         - bottomLeftCorner (object): The longitude and latitude of the bottom left corner of your floor plan.
@@ -409,8 +409,8 @@ class ActionBatchNetworks(object):
         **Destroy a floor plan**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-floor-plan
 
-        - networkId (string): (required)
-        - floorPlanId (string): (required)
+        - networkId (string): Network ID
+        - floorPlanId (string): Floor plan ID
         """
 
         metadata = {
@@ -435,7 +435,7 @@ class ActionBatchNetworks(object):
         **Create a group policy**
         https://developer.cisco.com/meraki/api-v1/#!create-network-group-policy
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - name (string): The name for your group policy. Required.
         - scheduling (object):     The schedule for the group policy. Schedules are applied to days of the week.
 
@@ -480,8 +480,8 @@ class ActionBatchNetworks(object):
         **Update a group policy**
         https://developer.cisco.com/meraki/api-v1/#!update-network-group-policy
 
-        - networkId (string): (required)
-        - groupPolicyId (string): (required)
+        - networkId (string): Network ID
+        - groupPolicyId (string): Group policy ID
         - name (string): The name for your group policy.
         - scheduling (object):     The schedule for the group policy. Schedules are applied to days of the week.
 
@@ -526,8 +526,8 @@ class ActionBatchNetworks(object):
         **Delete a group policy**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-group-policy
 
-        - networkId (string): (required)
-        - groupPolicyId (string): (required)
+        - networkId (string): Network ID
+        - groupPolicyId (string): Group policy ID
         """
 
         metadata = {
@@ -552,7 +552,7 @@ class ActionBatchNetworks(object):
         **Authorize a user configured with Meraki Authentication for a network (currently supports 802.1X, splash guest, and client VPN users, and currently, organizations have a 50,000 user cap)**
         https://developer.cisco.com/meraki/api-v1/#!create-network-meraki-auth-user
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - email (string): Email address of the user
         - authorizations (array): Authorization zones and expiration dates for the user.
         - name (string): Name of the user. Only required If the user is not a Dashboard administrator.
@@ -593,8 +593,8 @@ class ActionBatchNetworks(object):
         **Deauthorize a user**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-meraki-auth-user
 
-        - networkId (string): (required)
-        - merakiAuthUserId (string): (required)
+        - networkId (string): Network ID
+        - merakiAuthUserId (string): Meraki auth user ID
         """
 
         metadata = {
@@ -619,8 +619,8 @@ class ActionBatchNetworks(object):
         **Update a user configured with Meraki Authentication (currently, 802.1X RADIUS, splash guest, and client VPN users can be updated)**
         https://developer.cisco.com/meraki/api-v1/#!update-network-meraki-auth-user
 
-        - networkId (string): (required)
-        - merakiAuthUserId (string): (required)
+        - networkId (string): Network ID
+        - merakiAuthUserId (string): Meraki auth user ID
         - name (string): Name of the user. Only allowed If the user is not Dashboard administrator.
         - password (string): The password for this user account. Only allowed If the user is not Dashboard administrator.
         - emailPasswordToUser (boolean): Whether or not Meraki should email the password to user. Default is false.
@@ -654,7 +654,7 @@ class ActionBatchNetworks(object):
         **Add an MQTT broker**
         https://developer.cisco.com/meraki/api-v1/#!create-network-mqtt-broker
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - name (string): Name of the MQTT broker.
         - host (string): Host name/IP address where the MQTT broker runs.
         - port (integer): Host port though which the MQTT broker can be reached.
@@ -689,8 +689,8 @@ class ActionBatchNetworks(object):
         **Update an MQTT broker**
         https://developer.cisco.com/meraki/api-v1/#!update-network-mqtt-broker
 
-        - networkId (string): (required)
-        - mqttBrokerId (string): (required)
+        - networkId (string): Network ID
+        - mqttBrokerId (string): Mqtt broker ID
         - name (string): Name of the MQTT broker.
         - host (string): Host name/IP address where the MQTT broker runs.
         - port (integer): Host port though which the MQTT broker can be reached.
@@ -725,8 +725,8 @@ class ActionBatchNetworks(object):
         **Delete an MQTT broker**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-mqtt-broker
 
-        - networkId (string): (required)
-        - mqttBrokerId (string): (required)
+        - networkId (string): Network ID
+        - mqttBrokerId (string): Mqtt broker ID
         """
 
         metadata = {
@@ -751,7 +751,7 @@ class ActionBatchNetworks(object):
         **Update the settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-settings
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - localStatusPageEnabled (boolean): Enables / disables the local device status pages (<a target='_blank' href='http://my.meraki.com/'>my.meraki.com, </a><a target='_blank' href='http://ap.meraki.com/'>ap.meraki.com, </a><a target='_blank' href='http://switch.meraki.com/'>switch.meraki.com, </a><a target='_blank' href='http://wired.meraki.com/'>wired.meraki.com</a>). Optional (defaults to false)
         - remoteStatusPageEnabled (boolean): Enables / disables access to the device status page (<a target='_blank'>http://[device's LAN IP])</a>. Optional. Can only be set if localStatusPageEnabled is set to true
         - localStatusPage (object): A hash of Local Status page(s)' authentication options applied to the Network.
@@ -785,7 +785,7 @@ class ActionBatchNetworks(object):
         **Split a combined network into individual networks for each type of device**
         https://developer.cisco.com/meraki/api-v1/#!split-network
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -811,7 +811,7 @@ class ActionBatchNetworks(object):
         **Unbind a network from a template.**
         https://developer.cisco.com/meraki/api-v1/#!unbind-network
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - retainConfigs (boolean): Optional boolean to retain all the current configs given by the template.
         """
 
@@ -842,7 +842,7 @@ class ActionBatchNetworks(object):
         **Create a webhook payload template for a network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-webhooks-payload-template
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - name (string): The name of the new template
         - body (string): The liquid template used for the body of the webhook message. Either `body` or `bodyFile` must be specified.
         - headers (array): The liquid template used with the webhook headers.
@@ -877,8 +877,8 @@ class ActionBatchNetworks(object):
         **Destroy a webhook payload template for a network**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-webhooks-payload-template
 
-        - networkId (string): (required)
-        - payloadTemplateId (string): (required)
+        - networkId (string): Network ID
+        - payloadTemplateId (string): Payload template ID
         """
 
         metadata = {
@@ -903,8 +903,8 @@ class ActionBatchNetworks(object):
         **Update a webhook payload template for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-webhooks-payload-template
 
-        - networkId (string): (required)
-        - payloadTemplateId (string): (required)
+        - networkId (string): Network ID
+        - payloadTemplateId (string): Payload template ID
         - name (string): The name of the template
         - body (string): The liquid template used for the body of the webhook message.
         - headers (array): The liquid template used with the webhook headers.

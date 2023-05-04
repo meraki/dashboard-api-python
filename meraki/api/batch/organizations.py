@@ -12,7 +12,7 @@ class ActionBatchOrganizations(object):
         **Creates new adaptive policy ACL**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-adaptive-policy-acl
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - name (string): Name of the adaptive policy ACL
         - rules (array): An ordered array of the adaptive policy ACL rules.
         - ipVersion (string): IP version of adpative policy ACL. One of: 'any', 'ipv4' or 'ipv6'
@@ -50,8 +50,8 @@ class ActionBatchOrganizations(object):
         **Updates an adaptive policy ACL**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-adaptive-policy-acl
 
-        - organizationId (string): (required)
-        - aclId (string): (required)
+        - organizationId (string): Organization ID
+        - aclId (string): Acl ID
         - name (string): Name of the adaptive policy ACL
         - description (string): Description of the adaptive policy ACL
         - rules (array): An ordered array of the adaptive policy ACL rules. An empty array will clear the rules.
@@ -89,8 +89,8 @@ class ActionBatchOrganizations(object):
         **Deletes the specified adaptive policy ACL**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-adaptive-policy-acl
 
-        - organizationId (string): (required)
-        - aclId (string): (required)
+        - organizationId (string): Organization ID
+        - aclId (string): Acl ID
         """
 
         metadata = {
@@ -115,7 +115,7 @@ class ActionBatchOrganizations(object):
         **Creates a new adaptive policy group**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-adaptive-policy-group
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - name (string): Name of the group
         - sgt (integer): SGT value of the group
         - description (string): Description of the group (default: "")
@@ -149,8 +149,8 @@ class ActionBatchOrganizations(object):
         **Updates an adaptive policy group**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-adaptive-policy-group
 
-        - organizationId (string): (required)
-        - id (string): (required)
+        - organizationId (string): Organization ID
+        - id (string): Id
         - name (string): Name of the group
         - sgt (integer): SGT value of the group
         - description (string): Description of the group
@@ -184,8 +184,8 @@ class ActionBatchOrganizations(object):
         **Deletes the specified adaptive policy group and any associated policies and references**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-adaptive-policy-group
 
-        - organizationId (string): (required)
-        - id (string): (required)
+        - organizationId (string): Organization ID
+        - id (string): Id
         """
 
         metadata = {
@@ -210,7 +210,7 @@ class ActionBatchOrganizations(object):
         **Add an Adaptive Policy**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-adaptive-policy-policy
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - sourceGroup (object): The source adaptive policy group (requires one unique attribute)
         - destinationGroup (object): The destination adaptive policy group (requires one unique attribute)
         - acls (array): An ordered array of adaptive policy ACLs (each requires one unique attribute) that apply to this policy (default: [])
@@ -248,8 +248,8 @@ class ActionBatchOrganizations(object):
         **Update an Adaptive Policy**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-adaptive-policy-policy
 
-        - organizationId (string): (required)
-        - id (string): (required)
+        - organizationId (string): Organization ID
+        - id (string): Id
         - sourceGroup (object): The source adaptive policy group (requires one unique attribute)
         - destinationGroup (object): The destination adaptive policy group (requires one unique attribute)
         - acls (array): An ordered array of adaptive policy ACLs (each requires one unique attribute) that apply to this policy
@@ -287,8 +287,8 @@ class ActionBatchOrganizations(object):
         **Delete an Adaptive Policy**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-adaptive-policy-policy
 
-        - organizationId (string): (required)
-        - id (string): (required)
+        - organizationId (string): Organization ID
+        - id (string): Id
         """
 
         metadata = {
@@ -313,7 +313,7 @@ class ActionBatchOrganizations(object):
         **Update global adaptive policy settings**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-adaptive-policy-settings
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - enabledNetworks (array): List of network IDs with adaptive policy enabled
         """
 
@@ -344,7 +344,7 @@ class ActionBatchOrganizations(object):
         **Create an organization-wide alert configuration**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-alerts-profile
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - type (string): The alert type
         - alertCondition (object): The conditions that determine if the alert triggers
         - recipients (object): List of recipients that will recieve the alert.
@@ -383,8 +383,8 @@ class ActionBatchOrganizations(object):
         **Update an organization-wide alert config**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-alerts-profile
 
-        - organizationId (string): (required)
-        - alertConfigId (string): (required)
+        - organizationId (string): Organization ID
+        - alertConfigId (string): Alert config ID
         - enabled (boolean): Is the alert config enabled
         - type (string): The alert type
         - alertCondition (object): The conditions that determine if the alert triggers
@@ -424,8 +424,8 @@ class ActionBatchOrganizations(object):
         **Removes an organization-wide alert config**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-alerts-profile
 
-        - organizationId (string): (required)
-        - alertConfigId (string): (required)
+        - organizationId (string): Organization ID
+        - alertConfigId (string): Alert config ID
         """
 
         metadata = {
@@ -450,7 +450,7 @@ class ActionBatchOrganizations(object):
         **Add a new branding policy to an organization**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-branding-policy
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - name (string): Name of the Dashboard branding policy.
         - enabled (boolean): Boolean indicating whether this policy is enabled.
         - adminSettings (object): Settings for describing which kinds of admins this policy applies to.
@@ -489,7 +489,7 @@ class ActionBatchOrganizations(object):
         **Update the priority ordering of an organization's branding policies.**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-branding-policies-priorities
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - brandingPolicyIds (array):       An ordered list of branding policy IDs that determines the priority order of how to apply the policies
 
         """
@@ -521,8 +521,8 @@ class ActionBatchOrganizations(object):
         **Update a branding policy**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-branding-policy
 
-        - organizationId (string): (required)
-        - brandingPolicyId (string): (required)
+        - organizationId (string): Organization ID
+        - brandingPolicyId (string): Branding policy ID
         - name (string): Name of the Dashboard branding policy.
         - enabled (boolean): Boolean indicating whether this policy is enabled.
         - adminSettings (object): Settings for describing which kinds of admins this policy applies to.
@@ -561,8 +561,8 @@ class ActionBatchOrganizations(object):
         **Delete a branding policy**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-branding-policy
 
-        - organizationId (string): (required)
-        - brandingPolicyId (string): (required)
+        - organizationId (string): Organization ID
+        - brandingPolicyId (string): Branding policy ID
         """
 
         metadata = {
@@ -587,7 +587,7 @@ class ActionBatchOrganizations(object):
         **Create a new configuration template**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-config-template
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - name (string): The name of the configuration template
         - timeZone (string): The timezone of the configuration template. For a list of allowed timezones, please see the 'TZ' column in the table in <a target='_blank' href='https://en.wikipedia.org/wiki/List_of_tz_database_time_zones'>this article</a>. Not applicable if copying from existing network or template
         - copyFromNetworkId (string): The ID of the network or config template to copy configuration from
@@ -620,8 +620,8 @@ class ActionBatchOrganizations(object):
         **Update a configuration template**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-config-template
 
-        - organizationId (string): (required)
-        - configTemplateId (string): (required)
+        - organizationId (string): Organization ID
+        - configTemplateId (string): Config template ID
         - name (string): The name of the configuration template
         - timeZone (string): The timezone of the configuration template. For a list of allowed timezones, please see the 'TZ' column in the table in <a target='_blank' href='https://en.wikipedia.org/wiki/List_of_tz_database_time_zones'>this article.</a>
         """
@@ -653,8 +653,8 @@ class ActionBatchOrganizations(object):
         **Update an early access feature opt-in for an organization**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-early-access-features-opt-in
 
-        - organizationId (string): (required)
-        - optInId (string): (required)
+        - organizationId (string): Organization ID
+        - optInId (string): Opt in ID
         - limitScopeToNetworks (array): A list of network IDs to apply the opt-in to
         """
 
@@ -685,7 +685,7 @@ class ActionBatchOrganizations(object):
         **Assign SM seats to a network**
         https://developer.cisco.com/meraki/api-v1/#!assign-organization-licenses-seats
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - licenseId (string): The ID of the SM license to assign seats from
         - networkId (string): The ID of the SM network to assign the seats to
         - seatCount (integer): The number of seats to assign to the SM network. Must be less than or equal to the total number of seats of the license
@@ -718,7 +718,7 @@ class ActionBatchOrganizations(object):
         **Move licenses to another organization**
         https://developer.cisco.com/meraki/api-v1/#!move-organization-licenses
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - destOrganizationId (string): The ID of the organization to move the licenses to
         - licenseIds (array): A list of IDs of licenses to move to the new organization
         """
@@ -750,7 +750,7 @@ class ActionBatchOrganizations(object):
         **Move SM seats to another organization**
         https://developer.cisco.com/meraki/api-v1/#!move-organization-licenses-seats
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - destOrganizationId (string): The ID of the organization to move the SM seats to
         - licenseId (string): The ID of the SM license to move the seats from
         - seatCount (integer): The number of seats to move to the new organization. Must be less than or equal to the total number of seats of the license
@@ -783,7 +783,7 @@ class ActionBatchOrganizations(object):
         **Renew SM seats of a license**
         https://developer.cisco.com/meraki/api-v1/#!renew-organization-licenses-seats
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - licenseIdToRenew (string): The ID of the SM license to renew. This license must already be assigned to an SM network
         - unusedLicenseId (string): The SM license to use to renew the seats on 'licenseIdToRenew'. This license must have at least as many seats available as there are seats on 'licenseIdToRenew'
         """
@@ -815,8 +815,8 @@ class ActionBatchOrganizations(object):
         **Update a license**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-license
 
-        - organizationId (string): (required)
-        - licenseId (string): (required)
+        - organizationId (string): Organization ID
+        - licenseId (string): License ID
         - deviceSerial (string): The serial number of the device to assign this license to. Set this to  null to unassign the license. If a different license is already active on the device, this parameter will control queueing/dequeuing this license.
         """
 
@@ -847,7 +847,7 @@ class ActionBatchOrganizations(object):
         **Update the login security settings for an organization**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-login-security
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - enforcePasswordExpiration (boolean): Boolean indicating whether users are forced to change their password every X number of days.
         - passwordExpirationDays (integer): Number of days after which users will be forced to change their password.
         - enforceDifferentPasswords (boolean): Boolean indicating whether users, when setting a new password, are forced to choose a new password that is different from any past passwords.
@@ -890,7 +890,7 @@ class ActionBatchOrganizations(object):
         **Create a network**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-network
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - name (string): The name of the new network
         - productTypes (array): The product type(s) of the new network. If more than one type is included, the network will be a combined network.
         - tags (array): A list of tags to be applied to the network
@@ -926,7 +926,7 @@ class ActionBatchOrganizations(object):
         **Combine multiple networks into a single network**
         https://developer.cisco.com/meraki/api-v1/#!combine-organization-networks
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - name (string): The name of the combined network
         - networkIds (array): A list of the network IDs that will be combined. If an ID of a combined network is included in this list, the other networks in the list will be grouped into that network
         - enrollmentString (string): A unique identifier which can be used for device enrollment or easy access through the Meraki SM Registration page or the Self Service Portal. Please note that changing this field may cause existing bookmarks to break. All networks that are part of this combined network will have their enrollment string appended by '-network_type'. If left empty, all exisitng enrollment strings will be deleted.
@@ -959,7 +959,7 @@ class ActionBatchOrganizations(object):
         **Creates a new Policy Object.**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-policy-object
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - name (string): Name of a policy object, unique within the organization (alphanumeric, space, dash, or underscore characters only)
         - category (string): Category of a policy object (one of: adaptivePolicy, network)
         - type (string): Type of a policy object (one of: adaptivePolicyIpv4Cidr, cidr, fqdn, ipAndMask)
@@ -997,7 +997,7 @@ class ActionBatchOrganizations(object):
         **Creates a new Policy Object Group.**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-policy-objects-group
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - name (string): A name for the group of network addresses, unique within the organization (alphanumeric, space, dash, or underscore characters only)
         - category (string): Category of a policy object group (one of: NetworkObjectGroup, GeoLocationGroup, PortObjectGroup, ApplicationGroup)
         - objectIds (array): A list of Policy Object ID's that this NetworkObjectGroup should be associated to (note: these ID's will replace the existing associated Policy Objects)
@@ -1030,8 +1030,8 @@ class ActionBatchOrganizations(object):
         **Updates a Policy Object Group.**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-policy-objects-group
 
-        - organizationId (string): (required)
-        - policyObjectGroupId (string): (required)
+        - organizationId (string): Organization ID
+        - policyObjectGroupId (string): Policy object group ID
         - name (string): A name for the group of network addresses, unique within the organization (alphanumeric, space, dash, or underscore characters only)
         - objectIds (array): A list of Policy Object ID's that this NetworkObjectGroup should be associated to (note: these ID's will replace the existing associated Policy Objects)
         """
@@ -1063,8 +1063,8 @@ class ActionBatchOrganizations(object):
         **Deletes a Policy Object Group.**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-policy-objects-group
 
-        - organizationId (string): (required)
-        - policyObjectGroupId (string): (required)
+        - organizationId (string): Organization ID
+        - policyObjectGroupId (string): Policy object group ID
         """
 
         metadata = {
@@ -1089,8 +1089,8 @@ class ActionBatchOrganizations(object):
         **Updates a Policy Object.**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-policy-object
 
-        - organizationId (string): (required)
-        - policyObjectId (string): (required)
+        - organizationId (string): Organization ID
+        - policyObjectId (string): Policy object ID
         - name (string): Name of a policy object, unique within the organization (alphanumeric, space, dash, or underscore characters only)
         - cidr (string): CIDR Value of a policy object (e.g. 10.11.12.1/24")
         - fqdn (string): Fully qualified domain name of policy object (e.g. "example.com")
@@ -1126,8 +1126,8 @@ class ActionBatchOrganizations(object):
         **Deletes a Policy Object.**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-policy-object
 
-        - organizationId (string): (required)
-        - policyObjectId (string): (required)
+        - organizationId (string): Organization ID
+        - policyObjectId (string): Policy object ID
         """
 
         metadata = {
@@ -1152,7 +1152,7 @@ class ActionBatchOrganizations(object):
         **Create a SAML IdP for your organization.**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-saml-idp
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - x509certSha1Fingerprint (string): Fingerprint (SHA1) of the SAML certificate provided by your Identity Provider (IdP). This will be used for encryption / validation.
         - sloLogoutUrl (string): Dashboard will redirect users to this URL when they sign out.
         """
@@ -1184,8 +1184,8 @@ class ActionBatchOrganizations(object):
         **Update a SAML IdP in your organization**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-saml-idp
 
-        - organizationId (string): (required)
-        - idpId (string): (required)
+        - organizationId (string): Organization ID
+        - idpId (string): Idp ID
         - x509certSha1Fingerprint (string): Fingerprint (SHA1) of the SAML certificate provided by your Identity Provider (IdP). This will be used for encryption / validation.
         - sloLogoutUrl (string): Dashboard will redirect users to this URL when they sign out.
         """
@@ -1217,8 +1217,8 @@ class ActionBatchOrganizations(object):
         **Remove a SAML IdP in your organization.**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-saml-idp
 
-        - organizationId (string): (required)
-        - idpId (string): (required)
+        - organizationId (string): Organization ID
+        - idpId (string): Idp ID
         """
 
         metadata = {
@@ -1243,8 +1243,8 @@ class ActionBatchOrganizations(object):
         **Delete a user and all of its authentication methods.**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-user
 
-        - organizationId (string): (required)
-        - userId (string): (required)
+        - organizationId (string): Organization ID
+        - userId (string): User ID
         """
 
         metadata = {

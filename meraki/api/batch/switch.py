@@ -12,8 +12,8 @@ class ActionBatchSwitch(object):
         **Cycle a set of switch ports**
         https://developer.cisco.com/meraki/api-v1/#!cycle-device-switch-ports
 
-        - serial (string): (required)
-        - ports (array): List of switch ports. Example: [1, 2-5, 1_MA-MOD-8X10G_1, 1_MA-MOD-8X10G_2-1_MA-MOD-8X10G_8]
+        - serial (string): Serial
+        - ports (array): List of switch ports
         """
 
         kwargs = locals()
@@ -43,8 +43,8 @@ class ActionBatchSwitch(object):
         **Update a switch port**
         https://developer.cisco.com/meraki/api-v1/#!update-device-switch-port
 
-        - serial (string): (required)
-        - portId (string): (required)
+        - serial (string): Serial
+        - portId (string): Port ID
         - name (string): The name of the switch port.
         - tags (array): The list of tags of the switch port.
         - enabled (boolean): The status of the switch port.
@@ -112,7 +112,7 @@ class ActionBatchSwitch(object):
         **Create a layer 3 interface for a switch**
         https://developer.cisco.com/meraki/api-v1/#!create-device-switch-routing-interface
 
-        - serial (string): (required)
+        - serial (string): Serial
         - name (string): A friendly name or description for the interface or VLAN.
         - subnet (string): The network that this routed interface is on, in CIDR notation (ex. 10.1.1.0/24).
         - interfaceIp (string): The IP address this switch will use for layer 3 routing on this VLAN or subnet. This cannot be the same         as the switch's management IP.
@@ -155,8 +155,8 @@ class ActionBatchSwitch(object):
         **Update a layer 3 interface for a switch**
         https://developer.cisco.com/meraki/api-v1/#!update-device-switch-routing-interface
 
-        - serial (string): (required)
-        - interfaceId (string): (required)
+        - serial (string): Serial
+        - interfaceId (string): Interface ID
         - name (string): A friendly name or description for the interface or VLAN.
         - subnet (string): The network that this routed interface is on, in CIDR notation (ex. 10.1.1.0/24).
         - interfaceIp (string): The IP address this switch will use for layer 3 routing on this VLAN or subnet. This cannot be the same         as the switch's management IP.
@@ -199,8 +199,8 @@ class ActionBatchSwitch(object):
         **Delete a layer 3 interface from the switch**
         https://developer.cisco.com/meraki/api-v1/#!delete-device-switch-routing-interface
 
-        - serial (string): (required)
-        - interfaceId (string): (required)
+        - serial (string): Serial
+        - interfaceId (string): Interface ID
         """
 
         metadata = {
@@ -225,8 +225,8 @@ class ActionBatchSwitch(object):
         **Update a layer 3 interface DHCP configuration for a switch**
         https://developer.cisco.com/meraki/api-v1/#!update-device-switch-routing-interface-dhcp
 
-        - serial (string): (required)
-        - interfaceId (string): (required)
+        - serial (string): Serial
+        - interfaceId (string): Interface ID
         - dhcpMode (string): The DHCP mode options for the switch interface ('dhcpDisabled', 'dhcpRelay' or 'dhcpServer')
         - dhcpRelayServerIps (array): The DHCP relay server IPs to which DHCP packets would get relayed for the switch interface
         - dhcpLeaseTime (string): The DHCP lease time config for the dhcp server running on switch interface ('30 minutes', '1 hour', '4 hours', '12 hours', '1 day' or '1 week')
@@ -277,7 +277,7 @@ class ActionBatchSwitch(object):
         **Create a layer 3 static route for a switch**
         https://developer.cisco.com/meraki/api-v1/#!create-device-switch-routing-static-route
 
-        - serial (string): (required)
+        - serial (string): Serial
         - subnet (string): The subnet which is routed via this static route and should be specified in CIDR notation (ex. 1.2.3.0/24)
         - nextHopIp (string): IP address of the next hop device to which the device sends its traffic for the subnet
         - name (string): Name or description for layer 3 static route
@@ -312,8 +312,8 @@ class ActionBatchSwitch(object):
         **Update a layer 3 static route for a switch**
         https://developer.cisco.com/meraki/api-v1/#!update-device-switch-routing-static-route
 
-        - serial (string): (required)
-        - staticRouteId (string): (required)
+        - serial (string): Serial
+        - staticRouteId (string): Static route ID
         - name (string): Name or description for layer 3 static route
         - subnet (string): The subnet which is routed via this static route and should be specified in CIDR notation (ex. 1.2.3.0/24)
         - nextHopIp (string): IP address of the next hop device to which the device sends its traffic for the subnet
@@ -348,8 +348,8 @@ class ActionBatchSwitch(object):
         **Delete a layer 3 static route for a switch**
         https://developer.cisco.com/meraki/api-v1/#!delete-device-switch-routing-static-route
 
-        - serial (string): (required)
-        - staticRouteId (string): (required)
+        - serial (string): Serial
+        - staticRouteId (string): Static route ID
         """
 
         metadata = {
@@ -374,7 +374,7 @@ class ActionBatchSwitch(object):
         **Update warm spare configuration for a switch**
         https://developer.cisco.com/meraki/api-v1/#!update-device-switch-warm-spare
 
-        - serial (string): (required)
+        - serial (string): Serial
         - enabled (boolean): Enable or disable warm spare for a switch
         - spareSerial (string): Serial number of the warm spare switch
         """
@@ -406,7 +406,7 @@ class ActionBatchSwitch(object):
         **Create an access policy for a switch network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-access-policy
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - name (string): Name of the access policy
         - radiusServers (array): List of RADIUS servers to require connecting devices to authenticate against before granting network access
         - radiusTestingEnabled (boolean): If enabled, Meraki devices will periodically send access-request messages to these RADIUS servers
@@ -460,8 +460,8 @@ class ActionBatchSwitch(object):
         **Update an access policy for a switch network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-access-policy
 
-        - networkId (string): (required)
-        - accessPolicyNumber (string): (required)
+        - networkId (string): Network ID
+        - accessPolicyNumber (string): Access policy number
         - name (string): Name of the access policy
         - radiusServers (array): List of RADIUS servers to require connecting devices to authenticate against before granting network access
         - radius (object): Object for RADIUS Settings
@@ -515,8 +515,8 @@ class ActionBatchSwitch(object):
         **Delete an access policy for a switch network**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-access-policy
 
-        - networkId (string): (required)
-        - accessPolicyNumber (string): (required)
+        - networkId (string): Network ID
+        - accessPolicyNumber (string): Access policy number
         """
 
         metadata = {
@@ -541,7 +541,7 @@ class ActionBatchSwitch(object):
         **Update the switch alternate management interface for the network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-alternate-management-interface
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - enabled (boolean): Boolean value to enable or disable AMI configuration. If enabled, VLAN and protocols must be set
         - vlanId (integer): Alternate management VLAN, must be between 1 and 4094
         - protocols (array): Can be one or more of the following values: 'radius', 'snmp' or 'syslog'
@@ -575,7 +575,7 @@ class ActionBatchSwitch(object):
         **Update the DHCP server settings**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-dhcp-server-policy
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - alerts (object): Alert settings for DHCP servers
         - defaultPolicy (string): 'allow' or 'block' new DHCP servers. Default value is 'allow'.
         - allowedServers (array): List the MAC addresses of DHCP servers to permit on the network when defaultPolicy is set to block. An empty array will clear the entries.
@@ -614,7 +614,7 @@ class ActionBatchSwitch(object):
         **Add a server to be trusted by Dynamic ARP Inspection on this network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-dhcp-server-policy-arp-inspection-trusted-server
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - mac (string): The mac address of the trusted server being added
         - vlan (integer): The VLAN of the trusted server being added. It must be between 1 and 4094
         - ipv4 (object): The IPv4 attributes of the trusted server being added
@@ -647,8 +647,8 @@ class ActionBatchSwitch(object):
         **Update a server that is trusted by Dynamic ARP Inspection on this network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-dhcp-server-policy-arp-inspection-trusted-server
 
-        - networkId (string): (required)
-        - trustedServerId (string): (required)
+        - networkId (string): Network ID
+        - trustedServerId (string): Trusted server ID
         - mac (string): The updated mac address of the trusted server
         - vlan (integer): The updated VLAN of the trusted server. It must be between 1 and 4094
         - ipv4 (object): The updated IPv4 attributes of the trusted server
@@ -681,8 +681,8 @@ class ActionBatchSwitch(object):
         **Remove a server from being trusted by Dynamic ARP Inspection on this network**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-dhcp-server-policy-arp-inspection-trusted-server
 
-        - networkId (string): (required)
-        - trustedServerId (string): (required)
+        - networkId (string): Network ID
+        - trustedServerId (string): Trusted server ID
         """
 
         metadata = {
@@ -707,7 +707,7 @@ class ActionBatchSwitch(object):
         **Update the DSCP to CoS mappings**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-dscp-to-cos-mappings
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - mappings (array): An array of DSCP to CoS mappings. An empty array will reset the mappings to default.
         """
 
@@ -738,7 +738,7 @@ class ActionBatchSwitch(object):
         **Create a link aggregation group**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-link-aggregation
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - switchPorts (array): Array of switch or stack ports for creating aggregation group. Minimum 2 and maximum 8 ports are supported.
         - switchProfilePorts (array): Array of switch profile ports for creating aggregation group. Minimum 2 and maximum 8 ports are supported.
         """
@@ -770,8 +770,8 @@ class ActionBatchSwitch(object):
         **Update a link aggregation group**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-link-aggregation
 
-        - networkId (string): (required)
-        - linkAggregationId (string): (required)
+        - networkId (string): Network ID
+        - linkAggregationId (string): Link aggregation ID
         - switchPorts (array): Array of switch or stack ports for updating aggregation group. Minimum 2 and maximum 8 ports are supported.
         - switchProfilePorts (array): Array of switch profile ports for updating aggregation group. Minimum 2 and maximum 8 ports are supported.
         """
@@ -803,8 +803,8 @@ class ActionBatchSwitch(object):
         **Split a link aggregation group into separate ports**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-link-aggregation
 
-        - networkId (string): (required)
-        - linkAggregationId (string): (required)
+        - networkId (string): Network ID
+        - linkAggregationId (string): Link aggregation ID
         """
 
         metadata = {
@@ -829,7 +829,7 @@ class ActionBatchSwitch(object):
         **Update the MTU configuration**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-mtu
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - defaultMtuSize (integer): MTU size for the entire network. Default value is 9578.
         - overrides (array): Override MTU size for individual switches or switch profiles. An empty array will clear overrides.
         """
@@ -861,8 +861,8 @@ class ActionBatchSwitch(object):
         **Update a switch port schedule**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-port-schedule
 
-        - networkId (string): (required)
-        - portScheduleId (string): (required)
+        - networkId (string): Network ID
+        - portScheduleId (string): Port schedule ID
         - name (string): The name for your port schedule.
         - portSchedule (object):     The schedule for switch port scheduling. Schedules are applied to days of the week.
     When it's empty, default schedule with all days of a week are configured.
@@ -897,7 +897,7 @@ class ActionBatchSwitch(object):
         **Add a quality of service rule**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-qos-rule
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - vlan (integer): The VLAN of the incoming packet. A null value will match any VLAN.
         - protocol (string): The protocol of the incoming packet. Can be one of "ANY", "TCP" or "UDP". Default value is "ANY"
         - srcPort (integer): The source port of the incoming packet. Applicable only if protocol is TCP or UDP.
@@ -938,7 +938,7 @@ class ActionBatchSwitch(object):
         **Update the order in which the rules should be processed by the switch**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-qos-rules-order
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - ruleIds (array): A list of quality of service rule IDs arranged in order in which they should be processed by the switch.
         """
 
@@ -969,8 +969,8 @@ class ActionBatchSwitch(object):
         **Delete a quality of service rule**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-qos-rule
 
-        - networkId (string): (required)
-        - qosRuleId (string): (required)
+        - networkId (string): Network ID
+        - qosRuleId (string): Qos rule ID
         """
 
         metadata = {
@@ -995,8 +995,8 @@ class ActionBatchSwitch(object):
         **Update a quality of service rule**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-qos-rule
 
-        - networkId (string): (required)
-        - qosRuleId (string): (required)
+        - networkId (string): Network ID
+        - qosRuleId (string): Qos rule ID
         - vlan (integer): The VLAN of the incoming packet. A null value will match any VLAN.
         - protocol (string): The protocol of the incoming packet. Can be one of "ANY", "TCP" or "UDP". Default value is "ANY".
         - srcPort (integer): The source port of the incoming packet. Applicable only if protocol is TCP or UDP.
@@ -1037,7 +1037,7 @@ class ActionBatchSwitch(object):
         **Update multicast settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-routing-multicast
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - defaultSettings (object): Default multicast setting for entire network. IGMP snooping and Flood unknown multicast traffic settings are enabled by default.
         - overrides (array): Array of paired switches/stacks/profiles and corresponding multicast settings. An empty array will clear the multicast settings.
         """
@@ -1069,7 +1069,7 @@ class ActionBatchSwitch(object):
         **Create a multicast rendezvous point**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-routing-multicast-rendezvous-point
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - interfaceIp (string): The IP address of the interface where the RP needs to be created.
         - multicastGroup (string): 'Any', or the IP address of a multicast group
         """
@@ -1101,8 +1101,8 @@ class ActionBatchSwitch(object):
         **Delete a multicast rendezvous point**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-routing-multicast-rendezvous-point
 
-        - networkId (string): (required)
-        - rendezvousPointId (string): (required)
+        - networkId (string): Network ID
+        - rendezvousPointId (string): Rendezvous point ID
         """
 
         metadata = {
@@ -1127,8 +1127,8 @@ class ActionBatchSwitch(object):
         **Update a multicast rendezvous point**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-routing-multicast-rendezvous-point
 
-        - networkId (string): (required)
-        - rendezvousPointId (string): (required)
+        - networkId (string): Network ID
+        - rendezvousPointId (string): Rendezvous point ID
         - interfaceIp (string): The IP address of the interface to use
         - multicastGroup (string): 'Any', or the IP address of a multicast group
         """
@@ -1160,7 +1160,7 @@ class ActionBatchSwitch(object):
         **Update layer 3 OSPF routing configuration**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-routing-ospf
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - enabled (boolean): Boolean value to enable or disable OSPF routing. OSPF routing is disabled by default.
         - helloTimerInSeconds (integer): Time interval in seconds at which hello packet will be sent to OSPF neighbors to maintain connectivity. Value must be between 1 and 255. Default is 10 seconds.
         - deadTimerInSeconds (integer): Time interval to determine when the peer will be declared inactive/dead. Value must be between 1 and 65535
@@ -1197,7 +1197,7 @@ class ActionBatchSwitch(object):
         **Update switch network settings**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-settings
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - vlan (integer): Management VLAN
         - useCombinedPower (boolean): The use Combined Power as the default behavior of secondary power supplies on supported devices.
         - powerExceptions (array): Exceptions on a per switch basis to "useCombinedPower"
@@ -1230,8 +1230,8 @@ class ActionBatchSwitch(object):
         **Create a layer 3 interface for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-stack-routing-interface
 
-        - networkId (string): (required)
-        - switchStackId (string): (required)
+        - networkId (string): Network ID
+        - switchStackId (string): Switch stack ID
         - name (string): A friendly name or description for the interface or VLAN.
         - vlanId (integer): The VLAN this routed interface is on. VLAN must be between 1 and 4094.
         - subnet (string): The network that this routed interface is on, in CIDR notation (ex. 10.1.1.0/24).
@@ -1273,9 +1273,9 @@ class ActionBatchSwitch(object):
         **Update a layer 3 interface for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-stack-routing-interface
 
-        - networkId (string): (required)
-        - switchStackId (string): (required)
-        - interfaceId (string): (required)
+        - networkId (string): Network ID
+        - switchStackId (string): Switch stack ID
+        - interfaceId (string): Interface ID
         - name (string): A friendly name or description for the interface or VLAN.
         - subnet (string): The network that this routed interface is on, in CIDR notation (ex. 10.1.1.0/24).
         - interfaceIp (string): The IP address this switch stack will use for layer 3 routing on this VLAN or subnet. This cannot be the same as the switch's management IP.
@@ -1317,9 +1317,9 @@ class ActionBatchSwitch(object):
         **Delete a layer 3 interface from a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-stack-routing-interface
 
-        - networkId (string): (required)
-        - switchStackId (string): (required)
-        - interfaceId (string): (required)
+        - networkId (string): Network ID
+        - switchStackId (string): Switch stack ID
+        - interfaceId (string): Interface ID
         """
 
         metadata = {
@@ -1344,9 +1344,9 @@ class ActionBatchSwitch(object):
         **Update a layer 3 interface DHCP configuration for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-stack-routing-interface-dhcp
 
-        - networkId (string): (required)
-        - switchStackId (string): (required)
-        - interfaceId (string): (required)
+        - networkId (string): Network ID
+        - switchStackId (string): Switch stack ID
+        - interfaceId (string): Interface ID
         - dhcpMode (string): The DHCP mode options for the switch stack interface ('dhcpDisabled', 'dhcpRelay' or 'dhcpServer')
         - dhcpRelayServerIps (array): The DHCP relay server IPs to which DHCP packets would get relayed for the switch stack interface
         - dhcpLeaseTime (string): The DHCP lease time config for the dhcp server running on switch stack interface ('30 minutes', '1 hour', '4 hours', '12 hours', '1 day' or '1 week')
@@ -1397,8 +1397,8 @@ class ActionBatchSwitch(object):
         **Create a layer 3 static route for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-stack-routing-static-route
 
-        - networkId (string): (required)
-        - switchStackId (string): (required)
+        - networkId (string): Network ID
+        - switchStackId (string): Switch stack ID
         - subnet (string): The subnet which is routed via this static route and should be specified in CIDR notation (ex. 1.2.3.0/24)
         - nextHopIp (string): IP address of the next hop device to which the device sends its traffic for the subnet
         - name (string): Name or description for layer 3 static route
@@ -1433,9 +1433,9 @@ class ActionBatchSwitch(object):
         **Update a layer 3 static route for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-stack-routing-static-route
 
-        - networkId (string): (required)
-        - switchStackId (string): (required)
-        - staticRouteId (string): (required)
+        - networkId (string): Network ID
+        - switchStackId (string): Switch stack ID
+        - staticRouteId (string): Static route ID
         - name (string): Name or description for layer 3 static route
         - subnet (string): The subnet which is routed via this static route and should be specified in CIDR notation (ex. 1.2.3.0/24)
         - nextHopIp (string): IP address of the next hop device to which the device sends its traffic for the subnet
@@ -1470,9 +1470,9 @@ class ActionBatchSwitch(object):
         **Delete a layer 3 static route for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-stack-routing-static-route
 
-        - networkId (string): (required)
-        - switchStackId (string): (required)
-        - staticRouteId (string): (required)
+        - networkId (string): Network ID
+        - switchStackId (string): Switch stack ID
+        - staticRouteId (string): Static route ID
         """
 
         metadata = {
@@ -1497,7 +1497,7 @@ class ActionBatchSwitch(object):
         **Update the storm control configuration for a switch network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-storm-control
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - broadcastThreshold (integer): Percentage (1 to 99) of total available port bandwidth for broadcast traffic type. Default value 100 percent rate is to clear the configuration.
         - multicastThreshold (integer): Percentage (1 to 99) of total available port bandwidth for multicast traffic type. Default value 100 percent rate is to clear the configuration.
         - unknownUnicastThreshold (integer): Percentage (1 to 99) of total available port bandwidth for unknown unicast (dlf-destination lookup failure) traffic type. Default value 100 percent rate is to clear the configuration.
@@ -1530,7 +1530,7 @@ class ActionBatchSwitch(object):
         **Updates STP settings**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-stp
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - rstpEnabled (boolean): The spanning tree protocol status in network
         - stpBridgePriority (array): STP bridge priority for switches/stacks or switch profiles. An empty array will clear the STP bridge priority settings.
         """
@@ -1562,10 +1562,10 @@ class ActionBatchSwitch(object):
         **Update a switch profile port**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-config-template-switch-profile-port
 
-        - organizationId (string): (required)
-        - configTemplateId (string): (required)
-        - profileId (string): (required)
-        - portId (string): (required)
+        - organizationId (string): Organization ID
+        - configTemplateId (string): Config template ID
+        - profileId (string): Profile ID
+        - portId (string): Port ID
         - name (string): The name of the switch profile port.
         - tags (array): The list of tags of the switch profile port.
         - enabled (boolean): The status of the switch profile port.
@@ -1631,7 +1631,7 @@ class ActionBatchSwitch(object):
         **Clone port-level and some switch-level configuration settings from a source switch to one or more target switches**
         https://developer.cisco.com/meraki/api-v1/#!clone-organization-switch-devices
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - sourceSerial (string): Serial number of the source switch (must be on a network not bound to a template)
         - targetSerials (array): Array of serial numbers of one or more target switches (must be on a network not bound to a template)
         """

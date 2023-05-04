@@ -12,7 +12,7 @@ class ActionBatchSensor(object):
         **Assign one or more sensor roles to a given sensor or camera device.**
         https://developer.cisco.com/meraki/api-v1/#!update-device-sensor-relationships
 
-        - serial (string): (required)
+        - serial (string): Serial
         - livestream (object): A role defined between an MT sensor and an MV camera that adds the camera's livestream to the sensor's details page. Snapshots from the camera will also appear in alert notifications that the sensor triggers.
         """
 
@@ -43,7 +43,7 @@ class ActionBatchSensor(object):
         **Creates a sensor alert profile for a network.**
         https://developer.cisco.com/meraki/api-v1/#!create-network-sensor-alerts-profile
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - name (string): Name of the sensor alert profile.
         - conditions (array): List of conditions that will cause the profile to send an alert.
         - schedule (object): The sensor schedule to use with the alert profile.
@@ -78,8 +78,8 @@ class ActionBatchSensor(object):
         **Updates a sensor alert profile for a network.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-sensor-alerts-profile
 
-        - networkId (string): (required)
-        - id (string): (required)
+        - networkId (string): Network ID
+        - id (string): Id
         - name (string): Name of the sensor alert profile.
         - schedule (object): The sensor schedule to use with the alert profile.
         - conditions (array): List of conditions that will cause the profile to send an alert.
@@ -114,8 +114,8 @@ class ActionBatchSensor(object):
         **Deletes a sensor alert profile from a network.**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-sensor-alerts-profile
 
-        - networkId (string): (required)
-        - id (string): (required)
+        - networkId (string): Network ID
+        - id (string): Id
         """
 
         metadata = {
@@ -127,6 +127,38 @@ class ActionBatchSensor(object):
         action = {
             "resource": resource,
             "operation": "destroy",
+        }
+        return action
+        
+
+
+
+
+
+    def updateNetworkSensorMqttBroker(self, networkId: str, mqttBrokerId: str, enabled: bool):
+        """
+        **Update the sensor settings of an MQTT broker**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-sensor-mqtt-broker
+
+        - networkId (string): Network ID
+        - mqttBrokerId (string): Mqtt broker ID
+        - enabled (boolean): Set to true to enable MQTT broker for sensor network
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['sensor', 'configure', 'mqttBrokers'],
+            'operation': 'updateNetworkSensorMqttBroker'
+        }
+        resource = f'/networks/{networkId}/sensor/mqttBrokers/{mqttBrokerId}'
+
+        body_params = ['enabled', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
         }
         return action
         

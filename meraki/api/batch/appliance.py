@@ -12,7 +12,7 @@ class ActionBatchAppliance(object):
         **Update the uplink settings for an MX appliance**
         https://developer.cisco.com/meraki/api-v1/#!update-device-appliance-uplinks-settings
 
-        - serial (string): (required)
+        - serial (string): Serial
         - interfaces (object): Interface settings.
         """
 
@@ -43,7 +43,7 @@ class ActionBatchAppliance(object):
         **Generate a new vMX authentication token**
         https://developer.cisco.com/meraki/api-v1/#!create-device-appliance-vmx-authentication-token
 
-        - serial (string): (required)
+        - serial (string): Serial
         """
 
         metadata = {
@@ -69,7 +69,7 @@ class ActionBatchAppliance(object):
         **Update the connectivity testing destinations for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-connectivity-monitoring-destinations
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - destinations (array): The list of connectivity monitoring destinations
         """
 
@@ -100,7 +100,7 @@ class ActionBatchAppliance(object):
         **Update the MX L7 firewall rules for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-firewall-l-7-firewall-rules
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - rules (array): An ordered array of the MX L7 firewall rules
         """
 
@@ -131,8 +131,8 @@ class ActionBatchAppliance(object):
         **Update the per-port VLAN settings for a single MX port.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-port
 
-        - networkId (string): (required)
-        - portId (string): (required)
+        - networkId (string): Network ID
+        - portId (string): Port ID
         - enabled (boolean): The status of the port
         - dropUntaggedTraffic (boolean): Trunk port can Drop all Untagged traffic. When true, no VLAN is required. Access ports cannot have dropUntaggedTraffic set to true.
         - type (string): The type of the port: 'access' or 'trunk'.
@@ -168,7 +168,7 @@ class ActionBatchAppliance(object):
         **Add a static delegated prefix from a network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-appliance-prefixes-delegated-static
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - prefix (string): A static IPv6 prefix
         - origin (object): The origin of the prefix
         - description (string): A name or description for the prefix
@@ -201,8 +201,8 @@ class ActionBatchAppliance(object):
         **Update a static delegated prefix from a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-prefixes-delegated-static
 
-        - networkId (string): (required)
-        - staticDelegatedPrefixId (string): (required)
+        - networkId (string): Network ID
+        - staticDelegatedPrefixId (string): Static delegated prefix ID
         - prefix (string): A static IPv6 prefix
         - origin (object): The origin of the prefix
         - description (string): A name or description for the prefix
@@ -235,8 +235,8 @@ class ActionBatchAppliance(object):
         **Delete a static delegated prefix from a network**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-appliance-prefixes-delegated-static
 
-        - networkId (string): (required)
-        - staticDelegatedPrefixId (string): (required)
+        - networkId (string): Network ID
+        - staticDelegatedPrefixId (string): Static delegated prefix ID
         """
 
         metadata = {
@@ -261,7 +261,7 @@ class ActionBatchAppliance(object):
         **Update the appliance settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-settings
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - clientTrackingMethod (string): Client tracking method of a network
         - deploymentMode (string): Deployment mode of a network
         - dynamicDns (object): Dynamic DNS settings for a network
@@ -301,7 +301,7 @@ class ActionBatchAppliance(object):
         **Update single LAN configuration**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-single-lan
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - subnet (string): The subnet of the single LAN configuration
         - applianceIp (string): The appliance IP address of the single LAN
         - ipv6 (object): IPv6 configuration on the VLAN
@@ -335,8 +335,8 @@ class ActionBatchAppliance(object):
         **Update the attributes of an MX SSID**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-ssid
 
-        - networkId (string): (required)
-        - number (string): (required)
+        - networkId (string): Network ID
+        - number (string): Number
         - name (string): The name of the SSID.
         - enabled (boolean): Whether or not the SSID is enabled.
         - defaultVlanId (integer): The VLAN ID of the VLAN associated to this SSID. This parameter is only valid if the network is in routed mode.
@@ -386,7 +386,7 @@ class ActionBatchAppliance(object):
         **Add a custom performance class for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-appliance-traffic-shaping-custom-performance-class
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - name (string): Name of the custom performance class
         - maxLatency (integer): Maximum latency in milliseconds
         - maxJitter (integer): Maximum jitter in milliseconds
@@ -420,8 +420,8 @@ class ActionBatchAppliance(object):
         **Update a custom performance class for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-traffic-shaping-custom-performance-class
 
-        - networkId (string): (required)
-        - customPerformanceClassId (string): (required)
+        - networkId (string): Network ID
+        - customPerformanceClassId (string): Custom performance class ID
         - name (string): Name of the custom performance class
         - maxLatency (integer): Maximum latency in milliseconds
         - maxJitter (integer): Maximum jitter in milliseconds
@@ -455,8 +455,8 @@ class ActionBatchAppliance(object):
         **Delete a custom performance class from an MX network**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-appliance-traffic-shaping-custom-performance-class
 
-        - networkId (string): (required)
-        - customPerformanceClassId (string): (required)
+        - networkId (string): Network ID
+        - customPerformanceClassId (string): Custom performance class ID
         """
 
         metadata = {
@@ -481,7 +481,7 @@ class ActionBatchAppliance(object):
         **Update the traffic shaping settings rules for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-traffic-shaping-rules
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - defaultRulesEnabled (boolean): Whether default traffic shaping rules are enabled (true) or disabled (false). There are 4 default rules, which can be seen on your network's traffic shaping page. Note that default rules count against the rule limit of 8.
         - rules (array):     An array of traffic shaping rules. Rules are applied in the order that
     they are specified in. An empty list (or null) means no rules. Note that
@@ -516,7 +516,7 @@ class ActionBatchAppliance(object):
         **Updates the uplink bandwidth settings for your MX network.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-traffic-shaping-uplink-bandwidth
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - bandwidthLimits (object): A mapping of uplinks to their bandwidth settings (be sure to check which uplinks are supported for your network)
         """
 
@@ -547,7 +547,7 @@ class ActionBatchAppliance(object):
         **Update uplink selection settings for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-traffic-shaping-uplink-selection
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - activeActiveAutoVpnEnabled (boolean): Toggle for enabling or disabling active-active AutoVPN
         - defaultUplink (string): The default uplink. Must be one of: 'wan1' or 'wan2'
         - loadBalancingEnabled (boolean): Toggle for enabling or disabling load balancing
@@ -587,7 +587,7 @@ class ActionBatchAppliance(object):
         **Add a VLAN**
         https://developer.cisco.com/meraki/api-v1/#!create-network-appliance-vlan
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - id (string): The VLAN ID of the new VLAN (must be between 1 and 4094)
         - name (string): The name of the new VLAN
         - subnet (string): The subnet of the VLAN
@@ -631,7 +631,7 @@ class ActionBatchAppliance(object):
         **Enable/Disable VLANs for the given network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-vlans-settings
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - vlansEnabled (boolean): Boolean indicating whether to enable (true) or disable (false) VLANs for the network
         """
 
@@ -662,8 +662,8 @@ class ActionBatchAppliance(object):
         **Update a VLAN**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-vlan
 
-        - networkId (string): (required)
-        - vlanId (string): (required)
+        - networkId (string): Network ID
+        - vlanId (string): Vlan ID
         - name (string): The name of the VLAN
         - subnet (string): The subnet of the VLAN
         - applianceIp (string): The local IP of the appliance on the VLAN
@@ -723,8 +723,8 @@ class ActionBatchAppliance(object):
         **Delete a VLAN from a network**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-appliance-vlan
 
-        - networkId (string): (required)
-        - vlanId (string): (required)
+        - networkId (string): Network ID
+        - vlanId (string): Vlan ID
         """
 
         metadata = {
@@ -749,7 +749,7 @@ class ActionBatchAppliance(object):
         **Update a Hub BGP Configuration**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-vpn-bgp
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - enabled (boolean): Boolean value to enable or disable the BGP configuration. When BGP is enabled, the asNumber (ASN) will be autopopulated with the preconfigured ASN at other Hubs or a default value if there is no ASN configured.
         - asNumber (integer): An Autonomous System Number (ASN) is required if you are to run BGP and peer with another BGP Speaker outside of the Auto VPN domain. This ASN will be applied to the entire Auto VPN domain. The entire 4-byte ASN range is supported. So, the ASN must be an integer between 1 and 4294967295. When absent, this field is not updated. If no value exists then it defaults to 64512.
         - ibgpHoldTimer (integer): The IBGP holdtimer in seconds. The IBGP holdtimer must be an integer between 12 and 240. When absent, this field is not updated. If no value exists then it defaults to 240.
@@ -783,7 +783,7 @@ class ActionBatchAppliance(object):
         **Update the site-to-site VPN settings of a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-vpn-site-to-site-vpn
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - mode (string): The site-to-site VPN mode. Can be one of 'none', 'spoke' or 'hub'
         - hubs (array): The list of VPN hubs, in order of preference. In spoke mode, at least 1 hub is required.
         - subnets (array): The list of subnets and their VPN presence.
@@ -820,7 +820,7 @@ class ActionBatchAppliance(object):
         **Update MX warm spare settings**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-warm-spare
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - enabled (boolean): Enable warm spare
         - spareSerial (string): Serial number of the warm spare appliance
         - uplinkMode (string): Uplink mode, either virtual or public
@@ -855,7 +855,7 @@ class ActionBatchAppliance(object):
         **Swap MX primary and warm spare appliances**
         https://developer.cisco.com/meraki/api-v1/#!swap-network-appliance-warm-spare
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -881,7 +881,7 @@ class ActionBatchAppliance(object):
         **Update the third party VPN peers for an organization**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-appliance-vpn-third-party-v-p-n-peers
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - peers (array): The list of VPN peers
         """
 

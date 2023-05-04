@@ -12,7 +12,7 @@ class ActionBatchWireless(object):
         **Update the bluetooth settings for a wireless device**
         https://developer.cisco.com/meraki/api-v1/#!update-device-wireless-bluetooth-settings
 
-        - serial (string): (required)
+        - serial (string): Serial
         - uuid (string): Desired UUID of the beacon. If the value is set to null it will reset to Dashboard's automatically generated value.
         - major (integer): Desired major value of the beacon. If the value is set to null it will reset to Dashboard's automatically generated value.
         - minor (integer): Desired minor value of the beacon. If the value is set to null it will reset to Dashboard's automatically generated value.
@@ -45,7 +45,7 @@ class ActionBatchWireless(object):
         **Update the radio settings of a device**
         https://developer.cisco.com/meraki/api-v1/#!update-device-wireless-radio-settings
 
-        - serial (string): (required)
+        - serial (string): Serial
         - rfProfileId (string): The ID of an RF profile to assign to the device. If the value of this parameter is null, the appropriate basic RF profile (indoor or outdoor) will be assigned to the device. Assigning an RF profile will clear ALL manually configured overrides on the device (channel width, channel, power).
         - twoFourGhzSettings (object): Manual radio settings for 2.4 GHz.
         - fiveGhzSettings (object): Manual radio settings for 5 GHz.
@@ -78,7 +78,7 @@ class ActionBatchWireless(object):
         **Update alternate management interface and device static IP**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-alternate-management-interface
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - enabled (boolean): Boolean value to enable or disable alternate management interface
         - vlanId (integer): Alternate management interface VLAN, must be between 1 and 4094
         - protocols (array): Can be one or more of the following values: 'radius', 'snmp', 'syslog' or 'ldap'
@@ -112,7 +112,7 @@ class ActionBatchWireless(object):
         **Update the billing settings**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-billing
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - currency (string): The currency code of this node group's billing plans
         - plans (array): Array of billing plans in the node group. (Can configure a maximum of 5)
         """
@@ -144,7 +144,7 @@ class ActionBatchWireless(object):
         **Creates new RF profile for this network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-wireless-rf-profile
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - name (string): The name of the new profile. Must be unique. This param is required on creation.
         - bandSelectionType (string): Band selection can be set to either 'ssid' or 'ap'. This param is required on creation.
         - clientBalancingEnabled (boolean): Steers client to best available access point. Can be either true or false. Defaults to true.
@@ -190,8 +190,8 @@ class ActionBatchWireless(object):
         **Updates specified RF profile for this network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-rf-profile
 
-        - networkId (string): (required)
-        - rfProfileId (string): (required)
+        - networkId (string): Network ID
+        - rfProfileId (string): Rf profile ID
         - name (string): The name of the new profile. Must be unique.
         - clientBalancingEnabled (boolean): Steers client to best available access point. Can be either true or false.
         - minBitrateType (string): Minimum bitrate can be set to either 'band' or 'ssid'.
@@ -237,8 +237,8 @@ class ActionBatchWireless(object):
         **Delete a RF Profile**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-wireless-rf-profile
 
-        - networkId (string): (required)
-        - rfProfileId (string): (required)
+        - networkId (string): Network ID
+        - rfProfileId (string): Rf profile ID
         """
 
         metadata = {
@@ -263,7 +263,7 @@ class ActionBatchWireless(object):
         **Update the wireless settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-settings
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - meshingEnabled (boolean): Toggle for enabling or disabling meshing in a network
         - ipv6BridgeEnabled (boolean): Toggle for enabling or disabling IPv6 bridging in a network (Note: if enabled, SSIDs must also be configured to use bridge mode)
         - locationAnalyticsEnabled (boolean): Toggle for enabling or disabling location analytics for your network
@@ -302,8 +302,8 @@ class ActionBatchWireless(object):
         **Update the attributes of an MR SSID**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid
 
-        - networkId (string): (required)
-        - number (string): (required)
+        - networkId (string): Network ID
+        - number (string): Number
         - name (string): The name of the SSID
         - enabled (boolean): Whether or not the SSID is enabled
         - authMode (string): The association control method for the SSID ('open', 'open-enhanced', 'psk', 'open-with-radius', 'open-with-nac', '8021x-meraki', '8021x-nac', '8021x-radius', '8021x-google', '8021x-localradius', 'ipsk-with-radius' or 'ipsk-without-radius')
@@ -416,8 +416,8 @@ class ActionBatchWireless(object):
         **Update the bonjour forwarding setting and rules for the SSID**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-bonjour-forwarding
 
-        - networkId (string): (required)
-        - number (string): (required)
+        - networkId (string): Network ID
+        - number (string): Number
         - enabled (boolean): If true, Bonjour forwarding is enabled on this SSID.
         - rules (array): List of bonjour forwarding rules.
         """
@@ -449,8 +449,8 @@ class ActionBatchWireless(object):
         **Update the device type group policies for the SSID**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-device-type-group-policies
 
-        - networkId (string): (required)
-        - number (string): (required)
+        - networkId (string): Network ID
+        - number (string): Number
         - enabled (boolean): If true, the SSID device type group policies are enabled.
         - deviceTypePolicies (array): List of device type policies.
         """
@@ -482,8 +482,8 @@ class ActionBatchWireless(object):
         **Update the EAP overridden parameters for an SSID.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-eap-override
 
-        - networkId (string): (required)
-        - number (string): (required)
+        - networkId (string): Network ID
+        - number (string): Number
         - timeout (integer): General EAP timeout in seconds.
         - identity (object): EAP settings for identity requests.
         - maxRetries (integer): Maximum number of general EAP retries.
@@ -517,8 +517,8 @@ class ActionBatchWireless(object):
         **Update the L3 firewall rules of an SSID on an MR network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-firewall-l-3-firewall-rules
 
-        - networkId (string): (required)
-        - number (string): (required)
+        - networkId (string): Network ID
+        - number (string): Number
         - rules (array): An ordered array of the firewall rules for this SSID (not including the local LAN access rule or the default rule)
         - allowLanAccess (boolean): Allow wireless client access to local LAN (boolean value - true allows access and false denies access) (optional)
         """
@@ -550,8 +550,8 @@ class ActionBatchWireless(object):
         **Update the L7 firewall rules of an SSID on an MR network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-firewall-l-7-firewall-rules
 
-        - networkId (string): (required)
-        - number (string): (required)
+        - networkId (string): Network ID
+        - number (string): Number
         - rules (array): An array of L7 firewall rules for this SSID. Rules will get applied in the same order user has specified in request. Empty array will clear the L7 firewall rule configuration.
         """
 
@@ -582,8 +582,8 @@ class ActionBatchWireless(object):
         **Update the Hotspot 2.0 settings of an SSID**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-hotspot-2-0
 
-        - networkId (string): (required)
-        - number (string): (required)
+        - networkId (string): Network ID
+        - number (string): Number
         - enabled (boolean): Whether or not Hotspot 2.0 for this SSID is enabled
         - operator (object): Operator settings for this SSID
         - venue (object): Venue settings for this SSID
@@ -625,11 +625,12 @@ class ActionBatchWireless(object):
         **Create an Identity PSK**
         https://developer.cisco.com/meraki/api-v1/#!create-network-wireless-ssid-identity-psk
 
-        - networkId (string): (required)
-        - number (string): (required)
+        - networkId (string): Network ID
+        - number (string): Number
         - name (string): The name of the Identity PSK
         - groupPolicyId (string): The group policy to be applied to clients
         - passphrase (string): The passphrase for client authentication. If left blank, one will be auto-generated.
+        - expiresAt (string): Timestamp for when the Identity PSK expires. Will not expire if left blank.
         """
 
         kwargs.update(locals())
@@ -640,7 +641,7 @@ class ActionBatchWireless(object):
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}/identityPsks'
 
-        body_params = ['name', 'passphrase', 'groupPolicyId', ]
+        body_params = ['name', 'passphrase', 'groupPolicyId', 'expiresAt', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -659,12 +660,13 @@ class ActionBatchWireless(object):
         **Update an Identity PSK**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-identity-psk
 
-        - networkId (string): (required)
-        - number (string): (required)
-        - identityPskId (string): (required)
+        - networkId (string): Network ID
+        - number (string): Number
+        - identityPskId (string): Identity psk ID
         - name (string): The name of the Identity PSK
         - passphrase (string): The passphrase for client authentication
         - groupPolicyId (string): The group policy to be applied to clients
+        - expiresAt (string): Timestamp for when the Identity PSK expires, or 'null' to never expire
         """
 
         kwargs.update(locals())
@@ -675,7 +677,7 @@ class ActionBatchWireless(object):
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}/identityPsks/{identityPskId}'
 
-        body_params = ['name', 'passphrase', 'groupPolicyId', ]
+        body_params = ['name', 'passphrase', 'groupPolicyId', 'expiresAt', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -694,9 +696,9 @@ class ActionBatchWireless(object):
         **Delete an Identity PSK**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-wireless-ssid-identity-psk
 
-        - networkId (string): (required)
-        - number (string): (required)
-        - identityPskId (string): (required)
+        - networkId (string): Network ID
+        - number (string): Number
+        - identityPskId (string): Identity psk ID
         """
 
         metadata = {
@@ -721,8 +723,8 @@ class ActionBatchWireless(object):
         **Update the outage schedule for the SSID**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-schedules
 
-        - networkId (string): (required)
-        - number (string): (required)
+        - networkId (string): Network ID
+        - number (string): Number
         - enabled (boolean): If true, the SSID outage schedule is enabled.
         - ranges (array): List of outage ranges. Has a start date and time, and end date and time. If this parameter is passed in along with rangesInSeconds parameter, this will take precedence.
         - rangesInSeconds (array): List of outage ranges in seconds since Sunday at Midnight. Has a start and end. If this parameter is passed in along with the ranges parameter, ranges will take precedence.
@@ -755,8 +757,8 @@ class ActionBatchWireless(object):
         **Modify the splash page settings for the given SSID**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-splash-settings
 
-        - networkId (string): (required)
-        - number (string): (required)
+        - networkId (string): Network ID
+        - number (string): Number
         - splashUrl (string): [optional] The custom splash URL of the click-through splash page. Note that the URL can be configured without necessarily being used. In order to enable the custom URL, see 'useSplashUrl'
         - useSplashUrl (boolean): [optional] Boolean indicating whether the users will be redirected to the custom splash url. A custom splash URL must be set if this is true. Note that depending on your SSID's access control settings, it may not be possible to use the custom splash URL.
         - splashTimeout (integer): Splash timeout in minutes. This will determine how often users will see the splash page.
@@ -805,8 +807,8 @@ class ActionBatchWireless(object):
         **Update the traffic shaping settings for an SSID on an MR network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-traffic-shaping-rules
 
-        - networkId (string): (required)
-        - number (string): (required)
+        - networkId (string): Network ID
+        - number (string): Number
         - trafficShapingEnabled (boolean): Whether traffic shaping rules are applied to clients on your SSID.
         - defaultRulesEnabled (boolean): Whether default traffic shaping rules are enabled (true) or disabled (false). There are 4 default rules, which can be seen on your network's traffic shaping page. Note that default rules count against the rule limit of 8.
         - rules (array):     An array of traffic shaping rules. Rules are applied in the order that
@@ -842,8 +844,8 @@ class ActionBatchWireless(object):
         **Update the VPN settings for the SSID**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-vpn
 
-        - networkId (string): (required)
-        - number (string): (required)
+        - networkId (string): Network ID
+        - number (string): Number
         - concentrator (object): The VPN concentrator settings for this SSID.
         - splitTunnel (object): The VPN split tunnel settings for this SSID.
         - failover (object): Secondary VPN concentrator settings. This is only used when two VPN concentrators are configured on the SSID.

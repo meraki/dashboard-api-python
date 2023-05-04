@@ -12,7 +12,7 @@ class ActionBatchCamera(object):
         **Update custom analytics settings for a camera**
         https://developer.cisco.com/meraki/api-v1/#!update-device-camera-custom-analytics
 
-        - serial (string): (required)
+        - serial (string): Serial
         - enabled (boolean): Enable custom analytics
         - artifactId (string): The ID of the custom analytics artifact
         - parameters (array): Parameters for the custom analytics workload
@@ -45,7 +45,7 @@ class ActionBatchCamera(object):
         **Update quality and retention settings for the given camera**
         https://developer.cisco.com/meraki/api-v1/#!update-device-camera-quality-and-retention
 
-        - serial (string): (required)
+        - serial (string): Serial
         - profileId (string): The ID of a quality and retention profile to assign to the camera. The profile's settings will override all of the per-camera quality and retention settings. If the value of this parameter is null, any existing profile will be unassigned from the camera.
         - motionBasedRetentionEnabled (boolean): Boolean indicating if motion-based retention is enabled(true) or disabled(false) on the camera.
         - audioRecordingEnabled (boolean): Boolean indicating if audio recording is enabled(true) or disabled(false) on the camera
@@ -92,7 +92,7 @@ class ActionBatchCamera(object):
         **Update sense settings for the given camera**
         https://developer.cisco.com/meraki/api-v1/#!update-device-camera-sense
 
-        - serial (string): (required)
+        - serial (string): Serial
         - senseEnabled (boolean): Boolean indicating if sense(license) is enabled(true) or disabled(false) on the camera
         - mqttBrokerId (string): The ID of the MQTT broker to be enabled on the camera. A value of null will disable MQTT on the camera
         - audioDetection (object): The details of the audio detection config.
@@ -126,7 +126,7 @@ class ActionBatchCamera(object):
         **Update video settings for the given camera**
         https://developer.cisco.com/meraki/api-v1/#!update-device-camera-video-settings
 
-        - serial (string): (required)
+        - serial (string): Serial
         - externalRtspEnabled (boolean): Boolean indicating if external rtsp stream is exposed
         """
 
@@ -157,7 +157,7 @@ class ActionBatchCamera(object):
         **Assign wireless profiles to the given camera**
         https://developer.cisco.com/meraki/api-v1/#!update-device-camera-wireless-profiles
 
-        - serial (string): (required)
+        - serial (string): Serial
         - ids (object): The ids of the wireless profile to assign to the given camera
         """
 

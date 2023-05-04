@@ -13,7 +13,7 @@ class AsyncSensor:
         **List the sensor roles for a given sensor or camera device.**
         https://developer.cisco.com/meraki/api-v1/#!get-device-sensor-relationships
 
-        - serial (string): (required)
+        - serial (string): Serial
         """
 
         metadata = {
@@ -32,7 +32,7 @@ class AsyncSensor:
         **Assign one or more sensor roles to a given sensor or camera device.**
         https://developer.cisco.com/meraki/api-v1/#!update-device-sensor-relationships
 
-        - serial (string): (required)
+        - serial (string): Serial
         - livestream (object): A role defined between an MT sensor and an MV camera that adds the camera's livestream to the sensor's details page. Snapshots from the camera will also appear in alert notifications that the sensor triggers.
         """
 
@@ -57,7 +57,7 @@ class AsyncSensor:
         **Return an overview of currently alerting sensors by metric**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sensor-alerts-current-overview-by-metric
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -76,7 +76,7 @@ class AsyncSensor:
         **Return an overview of alert occurrences over a timespan, by metric**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sensor-alerts-overview-by-metric
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 7 days.
@@ -104,7 +104,7 @@ class AsyncSensor:
         **Lists all sensor alert profiles for a network.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sensor-alerts-profiles
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -123,7 +123,7 @@ class AsyncSensor:
         **Creates a sensor alert profile for a network.**
         https://developer.cisco.com/meraki/api-v1/#!create-network-sensor-alerts-profile
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - name (string): Name of the sensor alert profile.
         - conditions (array): List of conditions that will cause the profile to send an alert.
         - schedule (object): The sensor schedule to use with the alert profile.
@@ -152,8 +152,8 @@ class AsyncSensor:
         **Show details of a sensor alert profile for a network.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sensor-alerts-profile
 
-        - networkId (string): (required)
-        - id (string): (required)
+        - networkId (string): Network ID
+        - id (string): Id
         """
 
         metadata = {
@@ -173,8 +173,8 @@ class AsyncSensor:
         **Updates a sensor alert profile for a network.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-sensor-alerts-profile
 
-        - networkId (string): (required)
-        - id (string): (required)
+        - networkId (string): Network ID
+        - id (string): Id
         - name (string): Name of the sensor alert profile.
         - schedule (object): The sensor schedule to use with the alert profile.
         - conditions (array): List of conditions that will cause the profile to send an alert.
@@ -204,8 +204,8 @@ class AsyncSensor:
         **Deletes a sensor alert profile from a network.**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-sensor-alerts-profile
 
-        - networkId (string): (required)
-        - id (string): (required)
+        - networkId (string): Network ID
+        - id (string): Id
         """
 
         metadata = {
@@ -220,12 +220,79 @@ class AsyncSensor:
         
 
 
+    def getNetworkSensorMqttBrokers(self, networkId: str):
+        """
+        **List the sensor settings of all MQTT brokers for this network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-sensor-mqtt-brokers
+
+        - networkId (string): Network ID
+        """
+
+        metadata = {
+            'tags': ['sensor', 'configure', 'mqttBrokers'],
+            'operation': 'getNetworkSensorMqttBrokers'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/sensor/mqttBrokers'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def getNetworkSensorMqttBroker(self, networkId: str, mqttBrokerId: str):
+        """
+        **Return the sensor settings of an MQTT broker**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-sensor-mqtt-broker
+
+        - networkId (string): Network ID
+        - mqttBrokerId (string): Mqtt broker ID
+        """
+
+        metadata = {
+            'tags': ['sensor', 'configure', 'mqttBrokers'],
+            'operation': 'getNetworkSensorMqttBroker'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        mqttBrokerId = urllib.parse.quote(str(mqttBrokerId), safe='')
+        resource = f'/networks/{networkId}/sensor/mqttBrokers/{mqttBrokerId}'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def updateNetworkSensorMqttBroker(self, networkId: str, mqttBrokerId: str, enabled: bool):
+        """
+        **Update the sensor settings of an MQTT broker**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-sensor-mqtt-broker
+
+        - networkId (string): Network ID
+        - mqttBrokerId (string): Mqtt broker ID
+        - enabled (boolean): Set to true to enable MQTT broker for sensor network
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['sensor', 'configure', 'mqttBrokers'],
+            'operation': 'updateNetworkSensorMqttBroker'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        mqttBrokerId = urllib.parse.quote(str(mqttBrokerId), safe='')
+        resource = f'/networks/{networkId}/sensor/mqttBrokers/{mqttBrokerId}'
+
+        body_params = ['enabled', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
     def getNetworkSensorRelationships(self, networkId: str):
         """
         **List the sensor roles for devices in a given network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sensor-relationships
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -244,7 +311,7 @@ class AsyncSensor:
         **Return all reported readings from sensors in a given timespan, sorted by timestamp**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-sensor-readings-history
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
@@ -285,7 +352,7 @@ class AsyncSensor:
         **Return the latest available reading for each metric from each sensor, sorted by sensor serial**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-sensor-readings-latest
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 100.

@@ -12,7 +12,7 @@ class ActionBatchInsight(object):
         **Add a media server to be monitored for this organization**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-insight-monitored-media-server
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - name (string): The name of the VoIP provider
         - address (string): The IP address (IPv4 only) or hostname of the media server to monitor
         - bestEffortMonitoringEnabled (boolean): Indicates that if the media server doesn't respond to ICMP pings, the nearest hop will be used in its stead.
@@ -45,8 +45,8 @@ class ActionBatchInsight(object):
         **Update a monitored media server for this organization**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-insight-monitored-media-server
 
-        - organizationId (string): (required)
-        - monitoredMediaServerId (string): (required)
+        - organizationId (string): Organization ID
+        - monitoredMediaServerId (string): Monitored media server ID
         - name (string): The name of the VoIP provider
         - address (string): The IP address (IPv4 only) or hostname of the media server to monitor
         - bestEffortMonitoringEnabled (boolean): Indicates that if the media server doesn't respond to ICMP pings, the nearest hop will be used in its stead.
@@ -79,8 +79,8 @@ class ActionBatchInsight(object):
         **Delete a monitored media server from this organization**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-insight-monitored-media-server
 
-        - organizationId (string): (required)
-        - monitoredMediaServerId (string): (required)
+        - organizationId (string): Organization ID
+        - monitoredMediaServerId (string): Monitored media server ID
         """
 
         metadata = {

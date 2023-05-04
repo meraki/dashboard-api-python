@@ -12,7 +12,7 @@ class ActionBatchCellularGateway(object):
         **Update the LAN Settings for a single MG.**
         https://developer.cisco.com/meraki/api-v1/#!update-device-cellular-gateway-lan
 
-        - serial (string): (required)
+        - serial (string): Serial
         - reservedIpRanges (array): list of all reserved IP ranges for a single MG
         - fixedIpAssignments (array): list of all fixed IP assignments for a single MG
         """
@@ -44,7 +44,7 @@ class ActionBatchCellularGateway(object):
         **Updates the port forwarding rules for a single MG.**
         https://developer.cisco.com/meraki/api-v1/#!update-device-cellular-gateway-port-forwarding-rules
 
-        - serial (string): (required)
+        - serial (string): Serial
         - rules (array): An array of port forwarding params
         """
 
@@ -75,7 +75,7 @@ class ActionBatchCellularGateway(object):
         **Update the connectivity testing destinations for an MG network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-cellular-gateway-connectivity-monitoring-destinations
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - destinations (array): The list of connectivity monitoring destinations
         """
 
@@ -106,7 +106,7 @@ class ActionBatchCellularGateway(object):
         **Update common DHCP settings of MGs**
         https://developer.cisco.com/meraki/api-v1/#!update-network-cellular-gateway-dhcp
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - dhcpLeaseTime (string): DHCP Lease time for all MG of the network. Possible values are '30 minutes', '1 hour', '4 hours', '12 hours', '1 day' or '1 week'.
         - dnsNameservers (string): DNS name servers mode for all MG of the network. Possible values are: 'upstream_dns', 'google_dns', 'opendns', 'custom'.
         - dnsCustomNameservers (array): list of fixed IPs representing the the DNS Name servers when the mode is 'custom'
@@ -139,7 +139,7 @@ class ActionBatchCellularGateway(object):
         **Update the subnet pool and mask configuration for MGs in the network.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-cellular-gateway-subnet-pool
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - mask (integer): Mask used for the subnet of all MGs in  this network.
         - cidr (string): CIDR of the pool of subnets. Each MG in this network will automatically pick a subnet from this pool.
         """
@@ -171,7 +171,7 @@ class ActionBatchCellularGateway(object):
         **Updates the uplink settings for your MG network.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-cellular-gateway-uplink
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - bandwidthLimits (object): The bandwidth settings for the 'cellular' uplink
         """
 

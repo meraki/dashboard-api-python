@@ -13,7 +13,7 @@ class Camera(object):
         **Returns live state from camera of analytics zones**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-analytics-live
 
-        - serial (string): (required)
+        - serial (string): Serial
         """
 
         metadata = {
@@ -32,7 +32,7 @@ class Camera(object):
         **Returns an overview of aggregate analytics data for a timespan**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-analytics-overview
 
-        - serial (string): (required)
+        - serial (string): Serial
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days. The default is 1 hour.
@@ -64,7 +64,7 @@ class Camera(object):
         **Returns most recent record for analytics zones**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-analytics-recent
 
-        - serial (string): (required)
+        - serial (string): Serial
         - objectType (string): [optional] The object type for which analytics will be retrieved. The default object type is person. The available types are [person, vehicle].
         """
 
@@ -93,7 +93,7 @@ class Camera(object):
         **Returns all configured analytic zones for this camera**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-analytics-zones
 
-        - serial (string): (required)
+        - serial (string): Serial
         """
 
         metadata = {
@@ -112,8 +112,8 @@ class Camera(object):
         **Return historical records for analytic zones**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-analytics-zone-history
 
-        - serial (string): (required)
-        - zoneId (string): (required)
+        - serial (string): Serial
+        - zoneId (string): Zone ID
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 hours after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 14 hours. The default is 1 hour.
@@ -147,7 +147,7 @@ class Camera(object):
         **Return custom analytics settings for a camera**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-custom-analytics
 
-        - serial (string): (required)
+        - serial (string): Serial
         """
 
         metadata = {
@@ -166,7 +166,7 @@ class Camera(object):
         **Update custom analytics settings for a camera**
         https://developer.cisco.com/meraki/api-v1/#!update-device-camera-custom-analytics
 
-        - serial (string): (required)
+        - serial (string): Serial
         - enabled (boolean): Enable custom analytics
         - artifactId (string): The ID of the custom analytics artifact
         - parameters (array): Parameters for the custom analytics workload
@@ -193,7 +193,7 @@ class Camera(object):
         **Generate a snapshot of what the camera sees at the specified time and return a link to that image.**
         https://developer.cisco.com/meraki/api-v1/#!generate-device-camera-snapshot
 
-        - serial (string): (required)
+        - serial (string): Serial
         - timestamp (string): [optional] The snapshot will be taken from this time on the camera. The timestamp is expected to be in ISO 8601 format. If no timestamp is specified, we will assume current time.
         - fullframe (boolean): [optional] If set to "true" the snapshot will be taken at full sensor resolution. This will error if used with timestamp.
         """
@@ -219,7 +219,7 @@ class Camera(object):
         **Returns quality and retention settings for the given camera**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-quality-and-retention
 
-        - serial (string): (required)
+        - serial (string): Serial
         """
 
         metadata = {
@@ -238,7 +238,7 @@ class Camera(object):
         **Update quality and retention settings for the given camera**
         https://developer.cisco.com/meraki/api-v1/#!update-device-camera-quality-and-retention
 
-        - serial (string): (required)
+        - serial (string): Serial
         - profileId (string): The ID of a quality and retention profile to assign to the camera. The profile's settings will override all of the per-camera quality and retention settings. If the value of this parameter is null, any existing profile will be unassigned from the camera.
         - motionBasedRetentionEnabled (boolean): Boolean indicating if motion-based retention is enabled(true) or disabled(false) on the camera.
         - audioRecordingEnabled (boolean): Boolean indicating if audio recording is enabled(true) or disabled(false) on the camera
@@ -279,7 +279,7 @@ class Camera(object):
         **Returns sense settings for a given camera**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-sense
 
-        - serial (string): (required)
+        - serial (string): Serial
         """
 
         metadata = {
@@ -298,7 +298,7 @@ class Camera(object):
         **Update sense settings for the given camera**
         https://developer.cisco.com/meraki/api-v1/#!update-device-camera-sense
 
-        - serial (string): (required)
+        - serial (string): Serial
         - senseEnabled (boolean): Boolean indicating if sense(license) is enabled(true) or disabled(false) on the camera
         - mqttBrokerId (string): The ID of the MQTT broker to be enabled on the camera. A value of null will disable MQTT on the camera
         - audioDetection (object): The details of the audio detection config.
@@ -326,7 +326,7 @@ class Camera(object):
         **Returns the MV Sense object detection model list for the given camera**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-sense-object-detection-models
 
-        - serial (string): (required)
+        - serial (string): Serial
         """
 
         metadata = {
@@ -345,7 +345,7 @@ class Camera(object):
         **Returns video settings for the given camera**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-video-settings
 
-        - serial (string): (required)
+        - serial (string): Serial
         """
 
         metadata = {
@@ -364,7 +364,7 @@ class Camera(object):
         **Update video settings for the given camera**
         https://developer.cisco.com/meraki/api-v1/#!update-device-camera-video-settings
 
-        - serial (string): (required)
+        - serial (string): Serial
         - externalRtspEnabled (boolean): Boolean indicating if external rtsp stream is exposed
         """
 
@@ -389,7 +389,7 @@ class Camera(object):
         **Returns video link to the specified camera**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-video-link
 
-        - serial (string): (required)
+        - serial (string): Serial
         - timestamp (string): [optional] The video link will start at this time. The timestamp should be a string in ISO8601 format. If no timestamp is specified, we will assume current time.
         """
 
@@ -414,7 +414,7 @@ class Camera(object):
         **Returns wireless profile assigned to the given camera**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-wireless-profiles
 
-        - serial (string): (required)
+        - serial (string): Serial
         """
 
         metadata = {
@@ -433,7 +433,7 @@ class Camera(object):
         **Assign wireless profiles to the given camera**
         https://developer.cisco.com/meraki/api-v1/#!update-device-camera-wireless-profiles
 
-        - serial (string): (required)
+        - serial (string): Serial
         - ids (object): The ids of the wireless profile to assign to the given camera
         """
 
@@ -458,7 +458,7 @@ class Camera(object):
         **List the quality retention profiles for this network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-camera-quality-retention-profiles
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -477,7 +477,7 @@ class Camera(object):
         **Creates new quality retention profile for this network.**
         https://developer.cisco.com/meraki/api-v1/#!create-network-camera-quality-retention-profile
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - name (string): The name of the new profile. Must be unique. This parameter is required.
         - motionBasedRetentionEnabled (boolean): Deletes footage older than 3 days in which no motion was detected. Can be either true or false. Defaults to false. This setting does not apply to MV2 cameras.
         - restrictedBandwidthModeEnabled (boolean): Disable features that require additional bandwidth such as Motion Recap. Can be either true or false. Defaults to false. This setting does not apply to MV2 cameras.
@@ -510,8 +510,8 @@ class Camera(object):
         **Retrieve a single quality retention profile**
         https://developer.cisco.com/meraki/api-v1/#!get-network-camera-quality-retention-profile
 
-        - networkId (string): (required)
-        - qualityRetentionProfileId (string): (required)
+        - networkId (string): Network ID
+        - qualityRetentionProfileId (string): Quality retention profile ID
         """
 
         metadata = {
@@ -531,8 +531,8 @@ class Camera(object):
         **Update an existing quality retention profile for this network.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-camera-quality-retention-profile
 
-        - networkId (string): (required)
-        - qualityRetentionProfileId (string): (required)
+        - networkId (string): Network ID
+        - qualityRetentionProfileId (string): Quality retention profile ID
         - name (string): The name of the new profile. Must be unique.
         - motionBasedRetentionEnabled (boolean): Deletes footage older than 3 days in which no motion was detected. Can be either true or false. Defaults to false. This setting does not apply to MV2 cameras.
         - restrictedBandwidthModeEnabled (boolean): Disable features that require additional bandwidth such as Motion Recap. Can be either true or false. Defaults to false. This setting does not apply to MV2 cameras.
@@ -566,8 +566,8 @@ class Camera(object):
         **Delete an existing quality retention profile for this network.**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-camera-quality-retention-profile
 
-        - networkId (string): (required)
-        - qualityRetentionProfileId (string): (required)
+        - networkId (string): Network ID
+        - qualityRetentionProfileId (string): Quality retention profile ID
         """
 
         metadata = {
@@ -587,7 +587,7 @@ class Camera(object):
         **Returns a list of all camera recording schedules.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-camera-schedules
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -606,7 +606,7 @@ class Camera(object):
         **Creates a new camera wireless profile for this network.**
         https://developer.cisco.com/meraki/api-v1/#!create-network-camera-wireless-profile
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - name (string): The name of the camera wireless profile. This parameter is required.
         - ssid (object): The details of the SSID config.
         - identity (object): The identity of the wireless profile. Required for creating wireless profiles in 8021x-radius auth mode.
@@ -633,7 +633,7 @@ class Camera(object):
         **List the camera wireless profiles for this network.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-camera-wireless-profiles
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -652,8 +652,8 @@ class Camera(object):
         **Retrieve a single camera wireless profile.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-camera-wireless-profile
 
-        - networkId (string): (required)
-        - wirelessProfileId (string): (required)
+        - networkId (string): Network ID
+        - wirelessProfileId (string): Wireless profile ID
         """
 
         metadata = {
@@ -673,8 +673,8 @@ class Camera(object):
         **Update an existing camera wireless profile in this network.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-camera-wireless-profile
 
-        - networkId (string): (required)
-        - wirelessProfileId (string): (required)
+        - networkId (string): Network ID
+        - wirelessProfileId (string): Wireless profile ID
         - name (string): The name of the camera wireless profile.
         - ssid (object): The details of the SSID config.
         - identity (object): The identity of the wireless profile. Required for creating wireless profiles in 8021x-radius auth mode.
@@ -702,8 +702,8 @@ class Camera(object):
         **Delete an existing camera wireless profile for this network.**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-camera-wireless-profile
 
-        - networkId (string): (required)
-        - wirelessProfileId (string): (required)
+        - networkId (string): Network ID
+        - wirelessProfileId (string): Wireless profile ID
         """
 
         metadata = {
@@ -723,7 +723,7 @@ class Camera(object):
         **List Custom Analytics Artifacts**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-camera-custom-analytics-artifacts
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         """
 
         metadata = {
@@ -742,7 +742,7 @@ class Camera(object):
         **Create custom analytics artifact**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-camera-custom-analytics-artifact
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - name (string): Unique name of the artifact
         """
 
@@ -767,8 +767,8 @@ class Camera(object):
         **Get Custom Analytics Artifact**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-camera-custom-analytics-artifact
 
-        - organizationId (string): (required)
-        - artifactId (string): (required)
+        - organizationId (string): Organization ID
+        - artifactId (string): Artifact ID
         """
 
         metadata = {
@@ -788,8 +788,8 @@ class Camera(object):
         **Delete Custom Analytics Artifact**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-camera-custom-analytics-artifact
 
-        - organizationId (string): (required)
-        - artifactId (string): (required)
+        - organizationId (string): Organization ID
+        - artifactId (string): Artifact ID
         """
 
         metadata = {
@@ -809,7 +809,7 @@ class Camera(object):
         **Fetch onboarding status of cameras**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-camera-onboarding-statuses
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - serials (array): A list of serial numbers. The returned cameras will be filtered to only include these serials.
         - networkIds (array): A list of network IDs. The returned cameras will be filtered to only include these networks.
         """
@@ -841,7 +841,7 @@ class Camera(object):
         **Notify that credential handoff to camera has completed**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-camera-onboarding-statuses
 
-        - organizationId (string): (required)
+        - organizationId (string): Organization ID
         - serial (string): Serial of camera
         - wirelessCredentialsSent (boolean): Note whether credentials were sent successfully
         """

@@ -13,7 +13,7 @@ class Networks(object):
         **Return a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -32,7 +32,7 @@ class Networks(object):
         **Update a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - name (string): The name of the network
         - timeZone (string): The timezone of the network. For a list of allowed timezones, please see the 'TZ' column in the table in <a target='_blank' href='https://en.wikipedia.org/wiki/List_of_tz_database_time_zones'>this article.</a>
         - tags (array): A list of tags to be applied to the network
@@ -61,7 +61,7 @@ class Networks(object):
         **Delete a network**
         https://developer.cisco.com/meraki/api-v1/#!delete-network
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -80,7 +80,7 @@ class Networks(object):
         **Return the alert history for this network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-alerts-history
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
@@ -109,7 +109,7 @@ class Networks(object):
         **Return the alert configuration for this network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-alerts-settings
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -128,7 +128,7 @@ class Networks(object):
         **Update the alert configuration for this network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-alerts-settings
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - defaultDestinations (object): The network-wide destinations for all alerts on the network.
         - alerts (array): Alert-specific configuration for each type. Only alerts that pertain to the network can be updated.
         """
@@ -154,7 +154,7 @@ class Networks(object):
         **Bind a network to a template.**
         https://developer.cisco.com/meraki/api-v1/#!bind-network
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - configTemplateId (string): The ID of the template to which the network should be bound.
         - autoBind (boolean): Optional boolean indicating whether the network's switches should automatically bind to profiles of the same model. Defaults to false if left unspecified. This option only affects switch networks and switch templates. Auto-bind is not valid unless the switch template has at least one profile and has at most one profile per switch model.
         """
@@ -180,7 +180,7 @@ class Networks(object):
         **List the Bluetooth clients seen by APs in this network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-bluetooth-clients
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 7 days from today.
@@ -212,8 +212,8 @@ class Networks(object):
         **Return a Bluetooth client**
         https://developer.cisco.com/meraki/api-v1/#!get-network-bluetooth-client
 
-        - networkId (string): (required)
-        - bluetoothClientId (string): (required)
+        - networkId (string): Network ID
+        - bluetoothClientId (string): Bluetooth client ID
         - includeConnectivityHistory (boolean): Include the connectivity history for this client
         - connectivityHistoryTimespan (integer): The timespan, in seconds, for the connectivityHistory data. By default 1 day, 86400, will be used.
         """
@@ -240,7 +240,7 @@ class Networks(object):
         **List the clients that have used this network in the timespan**
         https://developer.cisco.com/meraki/api-v1/#!get-network-clients
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
@@ -286,7 +286,7 @@ class Networks(object):
         **Return the application usage data for clients**
         https://developer.cisco.com/meraki/api-v1/#!get-network-clients-application-usage
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - clients (string): A list of client keys, MACs or IPs separated by comma.
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
@@ -324,7 +324,7 @@ class Networks(object):
         **Returns a timeseries of total traffic consumption rates for all clients on a network within a given timespan, in megabits per second.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-clients-bandwidth-usage-history
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 30 days from today.
@@ -356,7 +356,7 @@ class Networks(object):
         **Return overview statistics for network clients**
         https://developer.cisco.com/meraki/api-v1/#!get-network-clients-overview
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
@@ -384,7 +384,7 @@ class Networks(object):
         **Provisions a client with a name and policy**
         https://developer.cisco.com/meraki/api-v1/#!provision-network-clients
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - clients (array): The array of clients to provision
         - devicePolicy (string): The policy to apply to the specified client. Can be 'Group policy', 'Allowed', 'Blocked', 'Per connection' or 'Normal'. Required.
         - groupPolicyId (string): The ID of the desired group policy to apply to the client. Required if 'devicePolicy' is set to "Group policy". Otherwise this is ignored.
@@ -417,7 +417,7 @@ class Networks(object):
         **Return the usage histories for clients**
         https://developer.cisco.com/meraki/api-v1/#!get-network-clients-usage-histories
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - clients (string): A list of client keys, MACs or IPs separated by comma.
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
@@ -455,8 +455,8 @@ class Networks(object):
         **Return the client associated with the given identifier**
         https://developer.cisco.com/meraki/api-v1/#!get-network-client
 
-        - networkId (string): (required)
-        - clientId (string): (required)
+        - networkId (string): Network ID
+        - clientId (string): Client ID
         """
 
         metadata = {
@@ -476,8 +476,8 @@ class Networks(object):
         **Return the policy assigned to a client on the network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-client-policy
 
-        - networkId (string): (required)
-        - clientId (string): (required)
+        - networkId (string): Network ID
+        - clientId (string): Client ID
         """
 
         metadata = {
@@ -497,8 +497,8 @@ class Networks(object):
         **Update the policy assigned to a client on the network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-client-policy
 
-        - networkId (string): (required)
-        - clientId (string): (required)
+        - networkId (string): Network ID
+        - clientId (string): Client ID
         - devicePolicy (string): The policy to assign. Can be 'Whitelisted', 'Blocked', 'Normal' or 'Group policy'. Required.
         - groupPolicyId (string): [optional] If 'devicePolicy' is set to 'Group policy' this param is used to specify the group policy ID.
         """
@@ -525,8 +525,8 @@ class Networks(object):
         **Return the splash authorization for a client, for each SSID they've associated with through splash**
         https://developer.cisco.com/meraki/api-v1/#!get-network-client-splash-authorization-status
 
-        - networkId (string): (required)
-        - clientId (string): (required)
+        - networkId (string): Network ID
+        - clientId (string): Client ID
         """
 
         metadata = {
@@ -546,8 +546,8 @@ class Networks(object):
         **Update a client's splash authorization**
         https://developer.cisco.com/meraki/api-v1/#!update-network-client-splash-authorization-status
 
-        - networkId (string): (required)
-        - clientId (string): (required)
+        - networkId (string): Network ID
+        - clientId (string): Client ID
         - ssids (object): The target SSIDs. Each SSID must be enabled and must have Click-through splash enabled. For each SSID where isAuthorized is true, the expiration time will automatically be set according to the SSID's splash frequency. Not all networks support configuring all SSIDs
         """
 
@@ -573,8 +573,8 @@ class Networks(object):
         **Return the client's network traffic data over time**
         https://developer.cisco.com/meraki/api-v1/#!get-network-client-traffic-history
 
-        - networkId (string): (required)
-        - clientId (string): (required)
+        - networkId (string): Network ID
+        - clientId (string): Client ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000.
@@ -604,8 +604,8 @@ class Networks(object):
         **Return the client's daily usage history**
         https://developer.cisco.com/meraki/api-v1/#!get-network-client-usage-history
 
-        - networkId (string): (required)
-        - clientId (string): (required)
+        - networkId (string): Network ID
+        - clientId (string): Client ID
         """
 
         metadata = {
@@ -625,7 +625,7 @@ class Networks(object):
         **List the devices in a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-devices
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -644,7 +644,7 @@ class Networks(object):
         **Claim devices into a network. (Note: for recently claimed devices, it may take a few minutes for API requsts against that device to succeed)**
         https://developer.cisco.com/meraki/api-v1/#!claim-network-devices
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - serials (array): A list of serials of devices to claim
         """
 
@@ -669,7 +669,7 @@ class Networks(object):
         **Claim a vMX into a network**
         https://developer.cisco.com/meraki/api-v1/#!vmx-network-devices-claim
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - size (string): The size of the vMX you claim. It can be one of: small, medium, large, 100
         """
 
@@ -698,7 +698,7 @@ class Networks(object):
         **Remove a single device**
         https://developer.cisco.com/meraki/api-v1/#!remove-network-devices
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - serial (string): The serial of a device
         """
 
@@ -723,7 +723,7 @@ class Networks(object):
         **List the events for the network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-events
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" or "prev" (default) page
         - event_log_end_time (string): ISO8601 Zulu/UTC time, to use in conjunction with startingAfter, to retrieve events within a time window
@@ -774,7 +774,7 @@ class Networks(object):
         **List the event type to human-readable description**
         https://developer.cisco.com/meraki/api-v1/#!get-network-events-event-types
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -793,7 +793,7 @@ class Networks(object):
         **Get firmware upgrade information for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-firmware-upgrades
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -812,7 +812,7 @@ class Networks(object):
         **Update firmware upgrade information for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-firmware-upgrades
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - upgradeWindow (object): Upgrade window for devices in network
         - timezone (string): The timezone for the network
         - products (object): Contains information about the network to update
@@ -839,7 +839,7 @@ class Networks(object):
         **Rollback a Firmware Upgrade For A Network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-firmware-upgrades-rollback
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - reasons (array): Reasons for the rollback
         - product (string): Product type to rollback (if the network is a combined network)
         - time (string): Scheduled time for the rollback
@@ -871,7 +871,7 @@ class Networks(object):
         **Get the Staged Upgrade Event from a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-firmware-upgrades-staged-events
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -890,7 +890,7 @@ class Networks(object):
         **Create a Staged Upgrade Event for a network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-firmware-upgrades-staged-event
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - stages (array): All firmware upgrade stages in the network with their start time.
         - products (object): Contains firmware upgrade version information
         """
@@ -916,7 +916,7 @@ class Networks(object):
         **Update the Staged Upgrade Event for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-firmware-upgrades-staged-events
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - stages (array): All firmware upgrade stages in the network with their start time.
         """
 
@@ -941,7 +941,7 @@ class Networks(object):
         **Postpone by 1 week all pending staged upgrade stages for a network**
         https://developer.cisco.com/meraki/api-v1/#!defer-network-firmware-upgrades-staged-events
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -960,7 +960,7 @@ class Networks(object):
         **Rollback a Staged Upgrade Event for a network**
         https://developer.cisco.com/meraki/api-v1/#!rollbacks-network-firmware-upgrades-staged-events
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - stages (array): All completed or in-progress stages in the network with their new start times. All pending stages will be canceled
         - reasons (array): The reason for rolling back the staged upgrade
         """
@@ -986,7 +986,7 @@ class Networks(object):
         **List of Staged Upgrade Groups in a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-firmware-upgrades-staged-groups
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -1005,7 +1005,7 @@ class Networks(object):
         **Create a Staged Upgrade Group for a network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-firmware-upgrades-staged-group
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - name (string): Name of the Staged Upgrade Group. Length must be 1 to 255 characters
         - isDefault (boolean): Boolean indicating the default Group. Any device that does not have a group explicitly assigned will upgrade with this group
         - description (string): Description of the Staged Upgrade Group. Length must be 1 to 255 characters
@@ -1033,8 +1033,8 @@ class Networks(object):
         **Get a Staged Upgrade Group from a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-firmware-upgrades-staged-group
 
-        - networkId (string): (required)
-        - groupId (string): (required)
+        - networkId (string): Network ID
+        - groupId (string): Group ID
         """
 
         metadata = {
@@ -1054,8 +1054,8 @@ class Networks(object):
         **Update a Staged Upgrade Group for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-firmware-upgrades-staged-group
 
-        - networkId (string): (required)
-        - groupId (string): (required)
+        - networkId (string): Network ID
+        - groupId (string): Group ID
         - name (string): Name of the Staged Upgrade Group. Length must be 1 to 255 characters
         - isDefault (boolean): Boolean indicating the default Group. Any device that does not have a group explicitly assigned will upgrade with this group
         - description (string): Description of the Staged Upgrade Group. Length must be 1 to 255 characters
@@ -1084,8 +1084,8 @@ class Networks(object):
         **Delete a Staged Upgrade Group**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-firmware-upgrades-staged-group
 
-        - networkId (string): (required)
-        - groupId (string): (required)
+        - networkId (string): Network ID
+        - groupId (string): Group ID
         """
 
         metadata = {
@@ -1105,7 +1105,7 @@ class Networks(object):
         **Order of Staged Upgrade Groups in a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-firmware-upgrades-staged-stages
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -1124,7 +1124,7 @@ class Networks(object):
         **Assign Staged Upgrade Group order in the sequence.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-firmware-upgrades-staged-stages
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - _json (array): Array of Staged Upgrade Groups
         """
 
@@ -1149,7 +1149,7 @@ class Networks(object):
         **List the floor plans that belong to your network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-floor-plans
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -1168,7 +1168,7 @@ class Networks(object):
         **Upload a floor plan**
         https://developer.cisco.com/meraki/api-v1/#!create-network-floor-plan
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - name (string): The name of your floor plan.
         - imageContents (string): The file contents (a base 64 encoded string) of your image. Supported formats are PNG, GIF, and JPG. Note that all images are saved as PNG files, regardless of the format they are uploaded in.
         - center (object): The longitude and latitude of the center of your floor plan. The 'center' or two adjacent corners (e.g. 'topLeftCorner' and 'bottomLeftCorner') must be specified. If 'center' is specified, the floor plan is placed over that point with no rotation. If two adjacent corners are specified, the floor plan is rotated to line up with the two specified points. The aspect ratio of the floor plan's image is preserved regardless of which corners/center are specified. (This means if that more than two corners are specified, only two corners may be used to preserve the floor plan's aspect ratio.). No two points can have the same latitude, longitude pair.
@@ -1199,8 +1199,8 @@ class Networks(object):
         **Find a floor plan by ID**
         https://developer.cisco.com/meraki/api-v1/#!get-network-floor-plan
 
-        - networkId (string): (required)
-        - floorPlanId (string): (required)
+        - networkId (string): Network ID
+        - floorPlanId (string): Floor plan ID
         """
 
         metadata = {
@@ -1220,8 +1220,8 @@ class Networks(object):
         **Update a floor plan's geolocation and other meta data**
         https://developer.cisco.com/meraki/api-v1/#!update-network-floor-plan
 
-        - networkId (string): (required)
-        - floorPlanId (string): (required)
+        - networkId (string): Network ID
+        - floorPlanId (string): Floor plan ID
         - name (string): The name of your floor plan.
         - center (object): The longitude and latitude of the center of your floor plan. If you want to change the geolocation data of your floor plan, either the 'center' or two adjacent corners (e.g. 'topLeftCorner' and 'bottomLeftCorner') must be specified. If 'center' is specified, the floor plan is placed over that point with no rotation. If two adjacent corners are specified, the floor plan is rotated to line up with the two specified points. The aspect ratio of the floor plan's image is preserved regardless of which corners/center are specified. (This means if that more than two corners are specified, only two corners may be used to preserve the floor plan's aspect ratio.). No two points can have the same latitude, longitude pair.
         - bottomLeftCorner (object): The longitude and latitude of the bottom left corner of your floor plan.
@@ -1253,8 +1253,8 @@ class Networks(object):
         **Destroy a floor plan**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-floor-plan
 
-        - networkId (string): (required)
-        - floorPlanId (string): (required)
+        - networkId (string): Network ID
+        - floorPlanId (string): Floor plan ID
         """
 
         metadata = {
@@ -1274,7 +1274,7 @@ class Networks(object):
         **List the group policies in a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-group-policies
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -1293,7 +1293,7 @@ class Networks(object):
         **Create a group policy**
         https://developer.cisco.com/meraki/api-v1/#!create-network-group-policy
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - name (string): The name for your group policy. Required.
         - scheduling (object):     The schedule for the group policy. Schedules are applied to days of the week.
 
@@ -1332,8 +1332,8 @@ class Networks(object):
         **Display a group policy**
         https://developer.cisco.com/meraki/api-v1/#!get-network-group-policy
 
-        - networkId (string): (required)
-        - groupPolicyId (string): (required)
+        - networkId (string): Network ID
+        - groupPolicyId (string): Group policy ID
         """
 
         metadata = {
@@ -1353,8 +1353,8 @@ class Networks(object):
         **Update a group policy**
         https://developer.cisco.com/meraki/api-v1/#!update-network-group-policy
 
-        - networkId (string): (required)
-        - groupPolicyId (string): (required)
+        - networkId (string): Network ID
+        - groupPolicyId (string): Group policy ID
         - name (string): The name for your group policy.
         - scheduling (object):     The schedule for the group policy. Schedules are applied to days of the week.
 
@@ -1394,8 +1394,8 @@ class Networks(object):
         **Delete a group policy**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-group-policy
 
-        - networkId (string): (required)
-        - groupPolicyId (string): (required)
+        - networkId (string): Network ID
+        - groupPolicyId (string): Group policy ID
         """
 
         metadata = {
@@ -1415,7 +1415,7 @@ class Networks(object):
         **Return all global alerts on this network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-health-alerts
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -1434,7 +1434,7 @@ class Networks(object):
         **List the users configured under Meraki Authentication for a network (splash guest or RADIUS users for a wireless network, or client VPN users for a wired network)**
         https://developer.cisco.com/meraki/api-v1/#!get-network-meraki-auth-users
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -1453,7 +1453,7 @@ class Networks(object):
         **Authorize a user configured with Meraki Authentication for a network (currently supports 802.1X, splash guest, and client VPN users, and currently, organizations have a 50,000 user cap)**
         https://developer.cisco.com/meraki/api-v1/#!create-network-meraki-auth-user
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - email (string): Email address of the user
         - authorizations (array): Authorization zones and expiration dates for the user.
         - name (string): Name of the user. Only required If the user is not a Dashboard administrator.
@@ -1488,8 +1488,8 @@ class Networks(object):
         **Return the Meraki Auth splash guest, RADIUS, or client VPN user**
         https://developer.cisco.com/meraki/api-v1/#!get-network-meraki-auth-user
 
-        - networkId (string): (required)
-        - merakiAuthUserId (string): (required)
+        - networkId (string): Network ID
+        - merakiAuthUserId (string): Meraki auth user ID
         """
 
         metadata = {
@@ -1509,8 +1509,8 @@ class Networks(object):
         **Deauthorize a user**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-meraki-auth-user
 
-        - networkId (string): (required)
-        - merakiAuthUserId (string): (required)
+        - networkId (string): Network ID
+        - merakiAuthUserId (string): Meraki auth user ID
         """
 
         metadata = {
@@ -1530,8 +1530,8 @@ class Networks(object):
         **Update a user configured with Meraki Authentication (currently, 802.1X RADIUS, splash guest, and client VPN users can be updated)**
         https://developer.cisco.com/meraki/api-v1/#!update-network-meraki-auth-user
 
-        - networkId (string): (required)
-        - merakiAuthUserId (string): (required)
+        - networkId (string): Network ID
+        - merakiAuthUserId (string): Meraki auth user ID
         - name (string): Name of the user. Only allowed If the user is not Dashboard administrator.
         - password (string): The password for this user account. Only allowed If the user is not Dashboard administrator.
         - emailPasswordToUser (boolean): Whether or not Meraki should email the password to user. Default is false.
@@ -1560,7 +1560,7 @@ class Networks(object):
         **List the MQTT brokers for this network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-mqtt-brokers
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -1579,7 +1579,7 @@ class Networks(object):
         **Add an MQTT broker**
         https://developer.cisco.com/meraki/api-v1/#!create-network-mqtt-broker
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - name (string): Name of the MQTT broker.
         - host (string): Host name/IP address where the MQTT broker runs.
         - port (integer): Host port though which the MQTT broker can be reached.
@@ -1608,8 +1608,8 @@ class Networks(object):
         **Return an MQTT broker**
         https://developer.cisco.com/meraki/api-v1/#!get-network-mqtt-broker
 
-        - networkId (string): (required)
-        - mqttBrokerId (string): (required)
+        - networkId (string): Network ID
+        - mqttBrokerId (string): Mqtt broker ID
         """
 
         metadata = {
@@ -1629,8 +1629,8 @@ class Networks(object):
         **Update an MQTT broker**
         https://developer.cisco.com/meraki/api-v1/#!update-network-mqtt-broker
 
-        - networkId (string): (required)
-        - mqttBrokerId (string): (required)
+        - networkId (string): Network ID
+        - mqttBrokerId (string): Mqtt broker ID
         - name (string): Name of the MQTT broker.
         - host (string): Host name/IP address where the MQTT broker runs.
         - port (integer): Host port though which the MQTT broker can be reached.
@@ -1660,8 +1660,8 @@ class Networks(object):
         **Delete an MQTT broker**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-mqtt-broker
 
-        - networkId (string): (required)
-        - mqttBrokerId (string): (required)
+        - networkId (string): Network ID
+        - mqttBrokerId (string): Mqtt broker ID
         """
 
         metadata = {
@@ -1681,7 +1681,7 @@ class Networks(object):
         **Return the NetFlow traffic reporting settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-netflow
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -1700,7 +1700,7 @@ class Networks(object):
         **Update the NetFlow traffic reporting settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-netflow
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - reportingEnabled (boolean): Boolean indicating whether NetFlow traffic reporting is enabled (true) or disabled (false).
         - collectorIp (string): The IPv4 address of the NetFlow collector.
         - collectorPort (integer): The port that the NetFlow collector will be listening on.
@@ -1729,7 +1729,7 @@ class Networks(object):
         **Get the channel utilization over each radio for all APs in a network.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-network-health-channel-utilization
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
@@ -1762,7 +1762,7 @@ class Networks(object):
         **List the keys required to access Personally Identifiable Information (PII) for a given identifier**
         https://developer.cisco.com/meraki/api-v1/#!get-network-pii-pii-keys
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - username (string): The username of a Systems Manager user
         - email (string): The email of a network user account or a Systems Manager device
         - mac (string): The MAC of a network client device or a Systems Manager device
@@ -1792,7 +1792,7 @@ class Networks(object):
         **List the PII requests for this network or organization**
         https://developer.cisco.com/meraki/api-v1/#!get-network-pii-requests
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -1811,7 +1811,7 @@ class Networks(object):
         **Submit a new delete or restrict processing PII request**
         https://developer.cisco.com/meraki/api-v1/#!create-network-pii-request
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - type (string): One of "delete" or "restrict processing"
         - datasets (array): The datasets related to the provided key that should be deleted. Only applies to "delete" requests. The value "all" will be expanded to all datasets applicable to this type. The datasets by applicable to each type are: mac (usage, events, traffic), email (users, loginAttempts), username (users, loginAttempts), bluetoothMac (client, connectivity), smDeviceId (device), smUserId (user)
         - username (string): The username of a network log in. Only applies to "delete" requests.
@@ -1846,8 +1846,8 @@ class Networks(object):
         **Return a PII request**
         https://developer.cisco.com/meraki/api-v1/#!get-network-pii-request
 
-        - networkId (string): (required)
-        - requestId (string): (required)
+        - networkId (string): Network ID
+        - requestId (string): Request ID
         """
 
         metadata = {
@@ -1867,8 +1867,8 @@ class Networks(object):
         **Delete a restrict processing PII request**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-pii-request
 
-        - networkId (string): (required)
-        - requestId (string): (required)
+        - networkId (string): Network ID
+        - requestId (string): Request ID
         """
 
         metadata = {
@@ -1888,7 +1888,7 @@ class Networks(object):
         **Given a piece of Personally Identifiable Information (PII), return the Systems Manager device ID(s) associated with that identifier**
         https://developer.cisco.com/meraki/api-v1/#!get-network-pii-sm-devices-for-key
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - username (string): The username of a Systems Manager user
         - email (string): The email of a network user account or a Systems Manager device
         - mac (string): The MAC of a network client device or a Systems Manager device
@@ -1918,7 +1918,7 @@ class Networks(object):
         **Given a piece of Personally Identifiable Information (PII), return the Systems Manager owner ID(s) associated with that identifier**
         https://developer.cisco.com/meraki/api-v1/#!get-network-pii-sm-owners-for-key
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - username (string): The username of a Systems Manager user
         - email (string): The email of a network user account or a Systems Manager device
         - mac (string): The MAC of a network client device or a Systems Manager device
@@ -1948,7 +1948,7 @@ class Networks(object):
         **Get policies for all clients with policies**
         https://developer.cisco.com/meraki/api-v1/#!get-network-policies-by-client
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 50.
@@ -1979,7 +1979,7 @@ class Networks(object):
         **Return the settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-settings
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -1998,7 +1998,7 @@ class Networks(object):
         **Update the settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-settings
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - localStatusPageEnabled (boolean): Enables / disables the local device status pages (<a target='_blank' href='http://my.meraki.com/'>my.meraki.com, </a><a target='_blank' href='http://ap.meraki.com/'>ap.meraki.com, </a><a target='_blank' href='http://switch.meraki.com/'>switch.meraki.com, </a><a target='_blank' href='http://wired.meraki.com/'>wired.meraki.com</a>). Optional (defaults to false)
         - remoteStatusPageEnabled (boolean): Enables / disables access to the device status page (<a target='_blank'>http://[device's LAN IP])</a>. Optional. Can only be set if localStatusPageEnabled is set to true
         - localStatusPage (object): A hash of Local Status page(s)' authentication options applied to the Network.
@@ -2026,7 +2026,7 @@ class Networks(object):
         **Return the SNMP settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-snmp
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -2045,7 +2045,7 @@ class Networks(object):
         **Update the SNMP settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-snmp
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - access (string): The type of SNMP access. Can be one of 'none' (disabled), 'community' (V1/V2c), or 'users' (V3).
         - communityString (string): The SNMP community string. Only relevant if 'access' is set to 'community'.
         - users (array): The list of SNMP users. Only relevant if 'access' is set to 'users'.
@@ -2076,7 +2076,7 @@ class Networks(object):
         **List the splash login attempts for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-splash-login-attempts
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - ssidNumber (integer): Only return the login attempts for the specified SSID
         - loginIdentifier (string): The username, email, or phone number used during login
         - timespan (integer): The timespan, in seconds, for the login attempts. The period will be from [timespan] seconds ago until now. The maximum timespan is 3 months
@@ -2107,7 +2107,7 @@ class Networks(object):
         **Split a combined network into individual networks for each type of device**
         https://developer.cisco.com/meraki/api-v1/#!split-network
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -2126,7 +2126,7 @@ class Networks(object):
         **List the syslog servers for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-syslog-servers
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -2145,7 +2145,7 @@ class Networks(object):
         **Update the syslog servers for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-syslog-servers
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - servers (array): A list of the syslog servers for this network
         """
 
@@ -2170,7 +2170,7 @@ class Networks(object):
         **List the LLDP and CDP information for all discovered devices and connections in a network.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-topology-link-layer
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -2189,7 +2189,7 @@ class Networks(object):
         **Return the traffic analysis data for this network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-traffic
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 30 days from today.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 30 days.
         - deviceType (string): Filter the data by device type: 'combined', 'wireless', 'switch' or 'appliance'. Defaults to 'combined'. When using 'combined', for each rule the data will come from the device type with the most usage.
@@ -2220,7 +2220,7 @@ class Networks(object):
         **Return the traffic analysis settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-traffic-analysis
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -2239,7 +2239,7 @@ class Networks(object):
         **Update the traffic analysis settings for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-traffic-analysis
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - mode (string):     The traffic analysis mode for the network. Can be one of 'disabled' (do not collect traffic types),
     'basic' (collect generic traffic categories), or 'detailed' (collect destination hostnames).
 
@@ -2271,7 +2271,7 @@ class Networks(object):
         **Returns the application categories for traffic shaping rules.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-traffic-shaping-application-categories
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -2290,7 +2290,7 @@ class Networks(object):
         **Returns the available DSCP tagging options for your traffic shaping rules.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-traffic-shaping-dscp-tagging-options
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -2309,7 +2309,7 @@ class Networks(object):
         **Unbind a network from a template.**
         https://developer.cisco.com/meraki/api-v1/#!unbind-network
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - retainConfigs (boolean): Optional boolean to retain all the current configs given by the template.
         """
 
@@ -2334,7 +2334,7 @@ class Networks(object):
         **List the HTTP servers for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-webhooks-http-servers
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -2353,7 +2353,7 @@ class Networks(object):
         **Add an HTTP server to a network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-webhooks-http-server
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - name (string): A name for easy reference to the HTTP server
         - url (string): The URL of the HTTP server. Once set, cannot be updated.
         - sharedSecret (string): A shared secret that will be included in POSTs sent to the HTTP server. This secret can be used to verify that the request was sent by Meraki.
@@ -2381,8 +2381,8 @@ class Networks(object):
         **Return an HTTP server for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-webhooks-http-server
 
-        - networkId (string): (required)
-        - httpServerId (string): (required)
+        - networkId (string): Network ID
+        - httpServerId (string): Http server ID
         """
 
         metadata = {
@@ -2402,8 +2402,8 @@ class Networks(object):
         **Update an HTTP server**
         https://developer.cisco.com/meraki/api-v1/#!update-network-webhooks-http-server
 
-        - networkId (string): (required)
-        - httpServerId (string): (required)
+        - networkId (string): Network ID
+        - httpServerId (string): Http server ID
         - name (string): A name for easy reference to the HTTP server
         - sharedSecret (string): A shared secret that will be included in POSTs sent to the HTTP server. This secret can be used to verify that the request was sent by Meraki.
         - payloadTemplate (object): The payload template to use when posting data to the HTTP server.
@@ -2431,8 +2431,8 @@ class Networks(object):
         **Delete an HTTP server from a network**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-webhooks-http-server
 
-        - networkId (string): (required)
-        - httpServerId (string): (required)
+        - networkId (string): Network ID
+        - httpServerId (string): Http server ID
         """
 
         metadata = {
@@ -2452,7 +2452,7 @@ class Networks(object):
         **List the webhook payload templates for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-webhooks-payload-templates
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         """
 
         metadata = {
@@ -2471,7 +2471,7 @@ class Networks(object):
         **Create a webhook payload template for a network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-webhooks-payload-template
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - name (string): The name of the new template
         - body (string): The liquid template used for the body of the webhook message. Either `body` or `bodyFile` must be specified.
         - headers (array): The liquid template used with the webhook headers.
@@ -2500,8 +2500,8 @@ class Networks(object):
         **Get the webhook payload template for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-webhooks-payload-template
 
-        - networkId (string): (required)
-        - payloadTemplateId (string): (required)
+        - networkId (string): Network ID
+        - payloadTemplateId (string): Payload template ID
         """
 
         metadata = {
@@ -2521,8 +2521,8 @@ class Networks(object):
         **Destroy a webhook payload template for a network**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-webhooks-payload-template
 
-        - networkId (string): (required)
-        - payloadTemplateId (string): (required)
+        - networkId (string): Network ID
+        - payloadTemplateId (string): Payload template ID
         """
 
         metadata = {
@@ -2542,8 +2542,8 @@ class Networks(object):
         **Update a webhook payload template for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-webhooks-payload-template
 
-        - networkId (string): (required)
-        - payloadTemplateId (string): (required)
+        - networkId (string): Network ID
+        - payloadTemplateId (string): Payload template ID
         - name (string): The name of the template
         - body (string): The liquid template used for the body of the webhook message.
         - headers (array): The liquid template used with the webhook headers.
@@ -2573,7 +2573,7 @@ class Networks(object):
         **Send a test webhook for a network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-webhooks-webhook-test
 
-        - networkId (string): (required)
+        - networkId (string): Network ID
         - url (string): The URL where the test webhook will be sent
         - sharedSecret (string): The shared secret the test webhook will send. Optional. Defaults to an empty string.
         - payloadTemplateId (string): The ID of the payload template of the test webhook. Defaults to the HTTP server's template ID if one exists for the given URL, or Generic template ID otherwise
@@ -2602,8 +2602,8 @@ class Networks(object):
         **Return the status of a webhook test for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-webhooks-webhook-test
 
-        - networkId (string): (required)
-        - webhookTestId (string): (required)
+        - networkId (string): Network ID
+        - webhookTestId (string): Webhook test ID
         """
 
         metadata = {
