@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Meraki Interactive API documentation
+    url: https://developer.cisco.com/meraki/api-v1/#!api-reference-overview
+    about: Please consult the docs if you have any questions about how specific API endpoints are expected to work.
+  - name: Meraki Support
+    url: https://meraki.cisco.com/meraki-support/overview/
+    about: If you have any issues with the underlying APIs or documentation site, please contact Meraki Support.
