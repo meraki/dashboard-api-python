@@ -2,7 +2,15 @@ blank_issues_enabled: false
 contact_links:
   - name: Meraki Interactive API documentation
     url: https://developer.cisco.com/meraki/api-v1/#!api-reference-overview
-    about: Please consult the docs if you have any questions about how specific API endpoints are expected to work.
+    about: >
+      The docs are a great first step if you have questions about how specific API endpoints are expected to work.
+      Find response schemas and even test out API calls in a demo environment, or with your own API token.
+  - name: Meraki Community Developers & APIs forum
+    url: https://community.meraki.com/t5/Developers-APIs/bd-p/api
+    about: >
+      The best place to ask questions about the Python library or Meraki APIs in general. How do I?-type questions
+      go here.
   - name: Meraki Support
     url: https://meraki.cisco.com/meraki-support/overview/
-    about: If you have any issues with the underlying APIs or documentation site, please contact Meraki Support.
+    about: >
+      For any critical issues with dashboard APIs or documentation site, please contact Meraki Support.
