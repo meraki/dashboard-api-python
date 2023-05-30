@@ -1,5 +1,5 @@
 ---
-name: Report a bug with the Meraki Python library
+name: Report a bug specific to the Meraki Python library
 about: >
   If you've hit a snag and you're confident the issue is with the library itself,
   e.g. not with the API or Meraki's servers, then report it here. Otherwise see the links below.
