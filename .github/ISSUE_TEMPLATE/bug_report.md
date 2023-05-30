@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 **Describe how you confirmed the issue is with the library, and not with the API itself, or a server-side issue of some other kind.**
-You can usually confirm it's an issue with the library itself (or with Python) if you've executed the same operations using other tools (e.g. Postman, or Python `requests` library) and if you only have the issue when using this library. For example, if you can't reproduce it with Postman, then it might be a library issue. *On the other hand*, if you can reproduce it across platforms, then it's probably *not* an issue with the library. In that case, please report the issue to Meraki support. 
+You can usually confirm it's an issue with the library itself (or with Python) if you've executed the same operations using other tools (e.g. Postman, or Python `requests` library) and if you only have the issue when using _this_ library. For example, if you can't reproduce it with Postman, then it might be a library issue. _On the other hand_, if you can reproduce it across platforms, then it's probably _not_ an issue with the library. In that case, please report the issue to Meraki support. 
 
 **Python version installed**
 Which specific Python version are you using?
@@ -16,7 +16,7 @@ Which specific Python version are you using?
 **Meraki library version installed**
 Which specific version of the library are you using?
 
-**Have you reproduced the issue with the latest version of this library? Or with the latest version of Python?**
+**Have you reproduced the issue with the latest version of this library? And with the latest version of Python?**
 
 **OS Platform**
 Which OS has the problem? E.g. Linux, Windows 10, macOS 14, etc.
