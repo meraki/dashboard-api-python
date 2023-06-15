@@ -100,6 +100,16 @@ class RestSession(object):
         self._req_session = requests.session()
         self._req_session.encoding = 'utf-8'
 
+        # Check minimum Python version
+        python_version_warning_string = f'This library requires Python 3.7 at minimum. Python versions 3.6 and below ' \
+                                        f'are end of life and end of support per the Python maintainers, and your ' \
+                                        f'interpreter version is {sys.version}. Please consult the readme at your ' \
+                                        f'convenience: https://github.com/meraki/dashboard-api-python'
+        if sys.version_info[0] != 3:
+            sys.exit(python_version_warning_string)
+        elif sys.version_info[1] < 7:
+            sys.exit(python_version_warning_string)
+
         # Check base URL
         if 'v0' in self._base_url:
             sys.exit(f'If you want to use the Python library with v0 paths ({self._base_url} was configured as the base'
