@@ -389,7 +389,12 @@ class RestSession(object):
         metadata['page'] = 1
 
         response = self.request(metadata, 'GET', url, params=params)
-        results = response.json()
+
+        # Handle GETs that produce 204 No Content responses, e.g. getOrganizationClientSearch
+        if response.status_code == 204:
+            results = None
+        else:
+            results = response.json()
 
         # For event log endpoint when using 'next' direction, so results/events are sorted chronologically
         if type(results) == dict and metadata['operation'] == 'getNetworkEvents' and direction == 'next':
