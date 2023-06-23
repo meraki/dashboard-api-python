@@ -40,7 +40,7 @@ class Devices(object):
         - address (string): The address of a device
         - notes (string): The notes for the device. String. Limited to 255 characters.
         - moveMapMarker (boolean): Whether or not to set the latitude and longitude of a device based on the new address. Only applies when lat and lng are not specified.
-        - switchProfileId (string): The ID of a switch profile to bind to the device (for available switch profiles, see the 'Switch Profiles' endpoint). Use null to unbind the switch device from the current profile. For a device to be bindable to a switch profile, it must (1) be a switch, and (2) belong to a network that is bound to a configuration template.
+        - switchProfileId (string): The ID of a switch template to bind to the device (for available switch templates, see the 'Switch Templates' endpoint). Use null to unbind the switch device from the current profile. For a device to be bindable to a switch template, it must (1) be a switch, and (2) belong to a network that is bound to a configuration template.
         - floorPlanId (string): The floor plan to associate to this device. null disassociates the device from the floorplan.
         """
 
@@ -190,7 +190,7 @@ class Devices(object):
         https://developer.cisco.com/meraki/api-v1/#!get-device-live-tools-ping
 
         - serial (string): Serial
-        - id (string): Id
+        - id (string): ID
         """
 
         metadata = {
@@ -236,7 +236,7 @@ class Devices(object):
         https://developer.cisco.com/meraki/api-v1/#!get-device-live-tools-ping-device
 
         - serial (string): Serial
-        - id (string): Id
+        - id (string): ID
         """
 
         metadata = {
@@ -281,13 +281,13 @@ class Devices(object):
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
         - resolution (integer): The time resolution in seconds for returned data. The valid resolutions are: 60, 600, 3600, 86400. The default is 60.
-        - uplink (string): The WAN uplink used to obtain the requested stats. Valid uplinks are wan1, wan2, cellular. The default is wan1.
+        - uplink (string): The WAN uplink used to obtain the requested stats. Valid uplinks are wan1, wan2, wan3, cellular. The default is wan1.
         """
 
         kwargs.update(locals())
 
         if 'uplink' in kwargs:
-            options = ['cellular', 'wan1', 'wan2']
+            options = ['cellular', 'wan1', 'wan2', 'wan3']
             assert kwargs['uplink'] in options, f'''"uplink" cannot be "{kwargs['uplink']}", & must be set to one of: {options}'''
 
         metadata = {

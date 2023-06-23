@@ -131,6 +131,7 @@ class AsyncNetworks:
         - networkId (string): Network ID
         - defaultDestinations (object): The network-wide destinations for all alerts on the network.
         - alerts (array): Alert-specific configuration for each type. Only alerts that pertain to the network can be updated.
+        - muting (object): Mute alerts under certain conditions
         """
 
         kwargs.update(locals())
@@ -142,7 +143,7 @@ class AsyncNetworks:
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/alerts/settings'
 
-        body_params = ['defaultDestinations', 'alerts', ]
+        body_params = ['defaultDestinations', 'alerts', 'muting', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -254,6 +255,7 @@ class AsyncNetworks:
         - ip6Local (string): Filters clients based on a partial or full match for the ip6Local address field.
         - mac (string): Filters clients based on a partial or full match for the mac address field.
         - os (string): Filters clients based on a partial or full match for the os (operating system) field.
+        - pskGroup (string): Filters clients based on partial or full match for the iPSK name field.
         - description (string): Filters clients based on a partial or full match for the description field.
         - vlan (string): Filters clients based on the full match for the VLAN field.
         - recentDeviceConnections (array): Filters clients based on recent connection type. Can be one of 'Wired' or 'Wireless'.
@@ -268,7 +270,7 @@ class AsyncNetworks:
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/clients'
 
-        query_params = ['t0', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'statuses', 'ip', 'ip6', 'ip6Local', 'mac', 'os', 'description', 'vlan', 'recentDeviceConnections', ]
+        query_params = ['t0', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'statuses', 'ip', 'ip6', 'ip6Local', 'mac', 'os', 'pskGroup', 'description', 'vlan', 'recentDeviceConnections', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['statuses', 'recentDeviceConnections', ]
@@ -727,7 +729,7 @@ class AsyncNetworks:
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" or "prev" (default) page
         - event_log_end_time (string): ISO8601 Zulu/UTC time, to use in conjunction with startingAfter, to retrieve events within a time window
-        - productType (string): The product type to fetch events for. This parameter is required for networks with multiple device types. Valid types are wireless, appliance, switch, systemsManager, camera, and cellularGateway
+        - productType (string): The product type to fetch events for. This parameter is required for networks with multiple device types. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, and cloudGateway
         - includedEventTypes (array): A list of event types. The returned events will be filtered to only include events with these types.
         - excludedEventTypes (array): A list of event types. The returned events will be filtered to exclude events with these types.
         - deviceMac (string): The MAC address of the Meraki device which the list of events will be filtered with
@@ -746,7 +748,7 @@ class AsyncNetworks:
         kwargs.update(locals())
 
         if 'productType' in kwargs:
-            options = ['appliance', 'camera', 'cellularGateway', 'switch', 'systemsManager', 'wireless']
+            options = ['appliance', 'camera', 'cellularGateway', 'cloudGateway', 'switch', 'systemsManager', 'wireless']
             assert kwargs['productType'] in options, f'''"productType" cannot be "{kwargs['productType']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -849,7 +851,7 @@ class AsyncNetworks:
         kwargs.update(locals())
 
         if 'product' in kwargs:
-            options = ['appliance', 'camera', 'cellularGateway', 'switch', 'wireless']
+            options = ['appliance', 'camera', 'cellularGateway', 'cloudGateway', 'switch', 'switchCatalyst', 'wireless']
             assert kwargs['product'] in options, f'''"product" cannot be "{kwargs['product']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -1431,7 +1433,7 @@ class AsyncNetworks:
 
     def getNetworkMerakiAuthUsers(self, networkId: str):
         """
-        **List the users configured under Meraki Authentication for a network (splash guest or RADIUS users for a wireless network, or client VPN users for a wired network)**
+        **List the users configured under Meraki Authentication for a network (splash guest or RADIUS users for a wireless network, or client VPN users for a MX network)**
         https://developer.cisco.com/meraki/api-v1/#!get-network-meraki-auth-users
 
         - networkId (string): Network ID
@@ -1458,7 +1460,7 @@ class AsyncNetworks:
         - authorizations (array): Authorization zones and expiration dates for the user.
         - name (string): Name of the user. Only required If the user is not a Dashboard administrator.
         - password (string): The password for this user account. Only required If the user is not a Dashboard administrator.
-        - accountType (string): Authorization type for user. Can be 'Guest' or '802.1X' for wireless networks, or 'Client VPN' for wired networks. Defaults to '802.1X'.
+        - accountType (string): Authorization type for user. Can be 'Guest' or '802.1X' for wireless networks, or 'Client VPN' for MX networks. Defaults to '802.1X'.
         - emailPasswordToUser (boolean): Whether or not Meraki should email the password to user. Default is false.
         - isAdmin (boolean): Whether or not the user is a Dashboard administrator.
         """
@@ -2167,7 +2169,7 @@ class AsyncNetworks:
 
     def getNetworkTopologyLinkLayer(self, networkId: str):
         """
-        **List the LLDP and CDP information for all discovered devices and connections in a network.**
+        **List the LLDP and CDP information for all discovered devices and connections in a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-topology-link-layer
 
         - networkId (string): Network ID

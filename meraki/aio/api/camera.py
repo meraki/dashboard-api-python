@@ -505,27 +505,6 @@ class AsyncCamera:
         
 
 
-    def getNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str):
-        """
-        **Retrieve a single quality retention profile**
-        https://developer.cisco.com/meraki/api-v1/#!get-network-camera-quality-retention-profile
-
-        - networkId (string): Network ID
-        - qualityRetentionProfileId (string): Quality retention profile ID
-        """
-
-        metadata = {
-            'tags': ['camera', 'configure', 'qualityRetentionProfiles'],
-            'operation': 'getNetworkCameraQualityRetentionProfile'
-        }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        qualityRetentionProfileId = urllib.parse.quote(str(qualityRetentionProfileId), safe='')
-        resource = f'/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}'
-
-        return self._session.get(metadata, resource)
-        
-
-
     def updateNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str, **kwargs):
         """
         **Update an existing quality retention profile for this network.**
@@ -579,6 +558,27 @@ class AsyncCamera:
         resource = f'/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}'
 
         return self._session.delete(metadata, resource)
+        
+
+
+    def getNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str):
+        """
+        **Retrieve a single quality retention profile**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-camera-quality-retention-profile
+
+        - networkId (string): Network ID
+        - qualityRetentionProfileId (string): Quality retention profile ID
+        """
+
+        metadata = {
+            'tags': ['camera', 'configure', 'qualityRetentionProfiles'],
+            'operation': 'getNetworkCameraQualityRetentionProfile'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        qualityRetentionProfileId = urllib.parse.quote(str(qualityRetentionProfileId), safe='')
+        resource = f'/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}'
+
+        return self._session.get(metadata, resource)
         
 
 

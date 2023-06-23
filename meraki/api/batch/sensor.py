@@ -47,7 +47,7 @@ class ActionBatchSensor(object):
         - name (string): Name of the sensor alert profile.
         - conditions (array): List of conditions that will cause the profile to send an alert.
         - schedule (object): The sensor schedule to use with the alert profile.
-        - recipients (object): List of recipients that will recieve the alert.
+        - recipients (object): List of recipients that will receive the alert.
         - serials (array): List of device serials assigned to this sensor alert profile.
         """
 
@@ -79,11 +79,11 @@ class ActionBatchSensor(object):
         https://developer.cisco.com/meraki/api-v1/#!update-network-sensor-alerts-profile
 
         - networkId (string): Network ID
-        - id (string): Id
+        - id (string): ID
         - name (string): Name of the sensor alert profile.
         - schedule (object): The sensor schedule to use with the alert profile.
         - conditions (array): List of conditions that will cause the profile to send an alert.
-        - recipients (object): List of recipients that will recieve the alert.
+        - recipients (object): List of recipients that will receive the alert.
         - serials (array): List of device serials assigned to this sensor alert profile.
         """
 
@@ -115,7 +115,7 @@ class ActionBatchSensor(object):
         https://developer.cisco.com/meraki/api-v1/#!delete-network-sensor-alerts-profile
 
         - networkId (string): Network ID
-        - id (string): Id
+        - id (string): ID
         """
 
         metadata = {

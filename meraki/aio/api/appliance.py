@@ -84,6 +84,52 @@ class AsyncAppliance:
         
 
 
+    def getDeviceApplianceRadioSettings(self, serial: str):
+        """
+        **Return the radio settings of an appliance**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-appliance-radio-settings
+
+        - serial (string): Serial
+        """
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'radio', 'settings'],
+            'operation': 'getDeviceApplianceRadioSettings'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        resource = f'/devices/{serial}/appliance/radio/settings'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def updateDeviceApplianceRadioSettings(self, serial: str, **kwargs):
+        """
+        **Update the radio settings of an appliance**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-appliance-radio-settings
+
+        - serial (string): Serial
+        - rfProfileId (string): The ID of an RF profile to assign to the device. If the value of this parameter is null, the appropriate basic RF profile (indoor or outdoor) will be assigned to the device. Assigning an RF profile will clear ALL manually configured overrides on the device (channel width, channel, power).
+        - twoFourGhzSettings (object): Manual radio settings for 2.4 GHz.
+        - fiveGhzSettings (object): Manual radio settings for 5 GHz.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'radio', 'settings'],
+            'operation': 'updateDeviceApplianceRadioSettings'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        resource = f'/devices/{serial}/appliance/radio/settings'
+
+        body_params = ['rfProfileId', 'twoFourGhzSettings', 'fiveGhzSettings', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
     def getDeviceApplianceUplinksSettings(self, serial: str):
         """
         **Return the uplink settings for an MX appliance**
@@ -978,6 +1024,125 @@ class AsyncAppliance:
         
 
 
+    def getNetworkApplianceRfProfiles(self, networkId: str):
+        """
+        **List the RF profiles for this network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-rf-profiles
+
+        - networkId (string): Network ID
+        """
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'rfProfiles'],
+            'operation': 'getNetworkApplianceRfProfiles'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/appliance/rfProfiles'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def createNetworkApplianceRfProfile(self, networkId: str, name: str, **kwargs):
+        """
+        **Creates new RF profile for this network**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-appliance-rf-profile
+
+        - networkId (string): Network ID
+        - name (string): The name of the new profile. Must be unique. This param is required on creation.
+        - twoFourGhzSettings (object): Settings related to 2.4Ghz band
+        - fiveGhzSettings (object): Settings related to 5Ghz band
+        - perSsidSettings (object): Per-SSID radio settings by number.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'rfProfiles'],
+            'operation': 'createNetworkApplianceRfProfile'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/appliance/rfProfiles'
+
+        body_params = ['name', 'twoFourGhzSettings', 'fiveGhzSettings', 'perSsidSettings', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def updateNetworkApplianceRfProfile(self, networkId: str, rfProfileId: str, **kwargs):
+        """
+        **Updates specified RF profile for this network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-rf-profile
+
+        - networkId (string): Network ID
+        - rfProfileId (string): Rf profile ID
+        - name (string): The name of the new profile. Must be unique.
+        - twoFourGhzSettings (object): Settings related to 2.4Ghz band
+        - fiveGhzSettings (object): Settings related to 5Ghz band
+        - perSsidSettings (object): Per-SSID radio settings by number.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'rfProfiles'],
+            'operation': 'updateNetworkApplianceRfProfile'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        rfProfileId = urllib.parse.quote(str(rfProfileId), safe='')
+        resource = f'/networks/{networkId}/appliance/rfProfiles/{rfProfileId}'
+
+        body_params = ['name', 'twoFourGhzSettings', 'fiveGhzSettings', 'perSsidSettings', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def deleteNetworkApplianceRfProfile(self, networkId: str, rfProfileId: str):
+        """
+        **Delete a RF Profile**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-appliance-rf-profile
+
+        - networkId (string): Network ID
+        - rfProfileId (string): Rf profile ID
+        """
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'rfProfiles'],
+            'operation': 'deleteNetworkApplianceRfProfile'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        rfProfileId = urllib.parse.quote(str(rfProfileId), safe='')
+        resource = f'/networks/{networkId}/appliance/rfProfiles/{rfProfileId}'
+
+        return self._session.delete(metadata, resource)
+        
+
+
+    def getNetworkApplianceRfProfile(self, networkId: str, rfProfileId: str):
+        """
+        **Return a RF profile**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-rf-profile
+
+        - networkId (string): Network ID
+        - rfProfileId (string): Rf profile ID
+        """
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'rfProfiles'],
+            'operation': 'getNetworkApplianceRfProfile'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        rfProfileId = urllib.parse.quote(str(rfProfileId), safe='')
+        resource = f'/networks/{networkId}/appliance/rfProfiles/{rfProfileId}'
+
+        return self._session.get(metadata, resource)
+        
+
+
     def getNetworkApplianceSecurityEvents(self, networkId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the security events for a network**
@@ -1275,6 +1440,7 @@ class AsyncAppliance:
         - wpaEncryptionMode (string): The types of WPA encryption. ('WPA1 and WPA2', 'WPA2 only', 'WPA3 Transition Mode' or 'WPA3 only'). This param is only valid if (1) the authMode is 'psk' & the encryptionMode is 'wpa' OR (2) the authMode is '8021x-meraki' OR (3) the authMode is '8021x-radius'
         - visible (boolean): Boolean indicating whether the MX should advertise or hide this SSID.
         - dhcpEnforcedDeauthentication (object): DHCP Enforced Deauthentication enables the disassociation of wireless clients in addition to Mandatory DHCP. This param is only valid on firmware versions >= MX 17.0 where the associated LAN has Mandatory DHCP Enabled 
+        - dot11w (object): The current setting for Protected Management Frames (802.11w).
         """
 
         kwargs.update(locals())
@@ -1297,7 +1463,7 @@ class AsyncAppliance:
         number = urllib.parse.quote(str(number), safe='')
         resource = f'/networks/{networkId}/appliance/ssids/{number}'
 
-        body_params = ['name', 'enabled', 'defaultVlanId', 'authMode', 'psk', 'radiusServers', 'encryptionMode', 'wpaEncryptionMode', 'visible', 'dhcpEnforcedDeauthentication', ]
+        body_params = ['name', 'enabled', 'defaultVlanId', 'authMode', 'psk', 'radiusServers', 'encryptionMode', 'wpaEncryptionMode', 'visible', 'dhcpEnforcedDeauthentication', 'dot11w', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -2241,6 +2407,33 @@ class AsyncAppliance:
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def getOrganizationApplianceUplinksUsageByNetwork(self, organizationId: str, **kwargs):
+        """
+        **Get the sent and received bytes for each uplink of all wired networks within an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-uplinks-usage-by-network
+
+        - organizationId (string): Organization ID
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 14 days. The default is 1 day.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['appliance', 'monitor', 'uplinks', 'usage', 'byNetwork'],
+            'operation': 'getOrganizationApplianceUplinksUsageByNetwork'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/appliance/uplinks/usage/byNetwork'
+
+        query_params = ['t0', 't1', 'timespan', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get(metadata, resource, params)
         
 
 

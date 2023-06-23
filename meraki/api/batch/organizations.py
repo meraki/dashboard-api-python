@@ -150,7 +150,7 @@ class ActionBatchOrganizations(object):
         https://developer.cisco.com/meraki/api-v1/#!update-organization-adaptive-policy-group
 
         - organizationId (string): Organization ID
-        - id (string): Id
+        - id (string): ID
         - name (string): Name of the group
         - sgt (integer): SGT value of the group
         - description (string): Description of the group
@@ -185,7 +185,7 @@ class ActionBatchOrganizations(object):
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-adaptive-policy-group
 
         - organizationId (string): Organization ID
-        - id (string): Id
+        - id (string): ID
         """
 
         metadata = {
@@ -249,7 +249,7 @@ class ActionBatchOrganizations(object):
         https://developer.cisco.com/meraki/api-v1/#!update-organization-adaptive-policy-policy
 
         - organizationId (string): Organization ID
-        - id (string): Id
+        - id (string): ID
         - sourceGroup (object): The source adaptive policy group (requires one unique attribute)
         - destinationGroup (object): The destination adaptive policy group (requires one unique attribute)
         - acls (array): An ordered array of adaptive policy ACLs (each requires one unique attribute) that apply to this policy
@@ -288,7 +288,7 @@ class ActionBatchOrganizations(object):
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-adaptive-policy-policy
 
         - organizationId (string): Organization ID
-        - id (string): Id
+        - id (string): ID
         """
 
         metadata = {

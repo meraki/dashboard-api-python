@@ -354,12 +354,17 @@ class Switch(object):
 
         - serial (string): Serial
         - interfaceId (string): Interface ID
-        - dhcpMode (string): The DHCP mode options for the switch interface ('dhcpDisabled', 'dhcpRelay' or 'dhcpServer')
+        - dhcpMode (string): The DHCP mode options for the switch interface
+       ('dhcpDisabled', 'dhcpRelay' or 'dhcpServer')
         - dhcpRelayServerIps (array): The DHCP relay server IPs to which DHCP packets would get relayed for the switch interface
-        - dhcpLeaseTime (string): The DHCP lease time config for the dhcp server running on switch interface ('30 minutes', '1 hour', '4 hours', '12 hours', '1 day' or '1 week')
-        - dnsNameserversOption (string): The DHCP name server option for the dhcp server running on the switch interface ('googlePublicDns', 'openDns' or 'custom')
-        - dnsCustomNameservers (array): The DHCP name server IPs when DHCP name server option is 'custom'
-        - bootOptionsEnabled (boolean): Enable DHCP boot options to provide PXE boot options configs for the dhcp server running on the switch interface
+        - dhcpLeaseTime (string): The DHCP lease time config for the dhcp server running on switch interface
+        ('30 minutes', '1 hour', '4 hours', '12 hours', '1 day' or '1 week')
+        - dnsNameserversOption (string): The DHCP name server option for the dhcp server running on the switch interface
+        ('googlePublicDns', 'openDns' or 'custom')
+        - dnsCustomNameservers (array): The DHCP name server IPs when DHCP name server option is
+        'custom'
+        - bootOptionsEnabled (boolean): Enable DHCP boot options to provide PXE boot options configs for the dhcp server running on the switch
+        interface
         - bootNextServer (string): The PXE boot server IP for the DHCP server running on the switch interface
         - bootFileName (string): The PXE boot server filename for the DHCP server running on the switch interface
         - dhcpOptions (array): Array of DHCP options consisting of code, type and value for the DHCP server running on the switch interface
@@ -1192,7 +1197,7 @@ class Switch(object):
 
         - networkId (string): Network ID
         - defaultMtuSize (integer): MTU size for the entire network. Default value is 9578.
-        - overrides (array): Override MTU size for individual switches or switch profiles. An empty array will clear overrides.
+        - overrides (array): Override MTU size for individual switches or switch templates. An empty array will clear overrides.
         """
 
         kwargs.update(locals())
@@ -1726,6 +1731,7 @@ class Switch(object):
         - vlan (integer): Management VLAN
         - useCombinedPower (boolean): The use Combined Power as the default behavior of secondary power supplies on supported devices.
         - powerExceptions (array): Exceptions on a per switch basis to "useCombinedPower"
+        - uplinkClientSampling (object): Uplink client sampling
         """
 
         kwargs.update(locals())
@@ -1737,7 +1743,7 @@ class Switch(object):
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/switch/settings'
 
-        body_params = ['vlan', 'useCombinedPower', 'powerExceptions', ]
+        body_params = ['vlan', 'useCombinedPower', 'powerExceptions', 'uplinkClientSampling', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -2061,15 +2067,21 @@ class Switch(object):
         - networkId (string): Network ID
         - switchStackId (string): Switch stack ID
         - interfaceId (string): Interface ID
-        - dhcpMode (string): The DHCP mode options for the switch stack interface ('dhcpDisabled', 'dhcpRelay' or 'dhcpServer')
+        - dhcpMode (string): The DHCP mode options for the switch stack interface
+        ('dhcpDisabled', 'dhcpRelay' or 'dhcpServer')
         - dhcpRelayServerIps (array): The DHCP relay server IPs to which DHCP packets would get relayed for the switch stack interface
-        - dhcpLeaseTime (string): The DHCP lease time config for the dhcp server running on switch stack interface ('30 minutes', '1 hour', '4 hours', '12 hours', '1 day' or '1 week')
-        - dnsNameserversOption (string): The DHCP name server option for the dhcp server running on the switch stack interface ('googlePublicDns', 'openDns' or 'custom')
-        - dnsCustomNameservers (array): The DHCP name server IPs when DHCP name server option is 'custom'
-        - bootOptionsEnabled (boolean): Enable DHCP boot options to provide PXE boot options configs for the dhcp server running on the switch stack interface
+        - dhcpLeaseTime (string): The DHCP lease time config for the dhcp server running on switch stack interface
+        ('30 minutes', '1 hour', '4 hours', '12 hours', '1 day' or '1 week')
+        - dnsNameserversOption (string): The DHCP name server option for the dhcp server running on the switch stack interface
+        ('googlePublicDns', 'openDns' or 'custom')
+        - dnsCustomNameservers (array): The DHCP name server IPs when DHCP name server option is '
+        custom'
+        - bootOptionsEnabled (boolean): Enable DHCP boot options to provide PXE boot options configs for the dhcp server running on the switch
+        stack interface
         - bootNextServer (string): The PXE boot server IP for the DHCP server running on the switch stack interface
         - bootFileName (string): The PXE boot server file name for the DHCP server running on the switch stack interface
-        - dhcpOptions (array): Array of DHCP options consisting of code, type and value for the DHCP server running on the switch stack interface
+        - dhcpOptions (array): Array of DHCP options consisting of code, type and value for the DHCP server running on the
+        switch stack interface
         - reservedIpRanges (array): Array of DHCP reserved IP assignments for the DHCP server running on the switch stack interface
         - fixedIpAssignments (array): Array of DHCP fixed IP assignments for the DHCP server running on the switch stack interface
         """
@@ -2305,7 +2317,7 @@ class Switch(object):
 
         - networkId (string): Network ID
         - rstpEnabled (boolean): The spanning tree protocol status in network
-        - stpBridgePriority (array): STP bridge priority for switches/stacks or switch profiles. An empty array will clear the STP bridge priority settings.
+        - stpBridgePriority (array): STP bridge priority for switches/stacks or switch templates. An empty array will clear the STP bridge priority settings.
         """
 
         kwargs.update(locals())
@@ -2326,7 +2338,7 @@ class Switch(object):
 
     def getOrganizationConfigTemplateSwitchProfiles(self, organizationId: str, configTemplateId: str):
         """
-        **List the switch profiles for your switch template configuration**
+        **List the switch templates for your switch template configuration**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-config-template-switch-profiles
 
         - organizationId (string): Organization ID
@@ -2347,7 +2359,7 @@ class Switch(object):
 
     def getOrganizationConfigTemplateSwitchProfilePorts(self, organizationId: str, configTemplateId: str, profileId: str):
         """
-        **Return all the ports of a switch profile**
+        **Return all the ports of a switch template**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-config-template-switch-profile-ports
 
         - organizationId (string): Organization ID
@@ -2370,7 +2382,7 @@ class Switch(object):
 
     def getOrganizationConfigTemplateSwitchProfilePort(self, organizationId: str, configTemplateId: str, profileId: str, portId: str):
         """
-        **Return a switch profile port**
+        **Return a switch template port**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-config-template-switch-profile-port
 
         - organizationId (string): Organization ID
@@ -2395,33 +2407,33 @@ class Switch(object):
 
     def updateOrganizationConfigTemplateSwitchProfilePort(self, organizationId: str, configTemplateId: str, profileId: str, portId: str, **kwargs):
         """
-        **Update a switch profile port**
+        **Update a switch template port**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-config-template-switch-profile-port
 
         - organizationId (string): Organization ID
         - configTemplateId (string): Config template ID
         - profileId (string): Profile ID
         - portId (string): Port ID
-        - name (string): The name of the switch profile port.
-        - tags (array): The list of tags of the switch profile port.
-        - enabled (boolean): The status of the switch profile port.
-        - poeEnabled (boolean): The PoE status of the switch profile port.
-        - type (string): The type of the switch profile port ('trunk' or 'access').
-        - vlan (integer): The VLAN of the switch profile port. A null value will clear the value set for trunk ports.
-        - voiceVlan (integer): The voice VLAN of the switch profile port. Only applicable to access ports.
-        - allowedVlans (string): The VLANs allowed on the switch profile port. Only applicable to trunk ports.
-        - isolationEnabled (boolean): The isolation status of the switch profile port.
+        - name (string): The name of the switch template port.
+        - tags (array): The list of tags of the switch template port.
+        - enabled (boolean): The status of the switch template port.
+        - poeEnabled (boolean): The PoE status of the switch template port.
+        - type (string): The type of the switch template port ('trunk' or 'access').
+        - vlan (integer): The VLAN of the switch template port. A null value will clear the value set for trunk ports.
+        - voiceVlan (integer): The voice VLAN of the switch template port. Only applicable to access ports.
+        - allowedVlans (string): The VLANs allowed on the switch template port. Only applicable to trunk ports.
+        - isolationEnabled (boolean): The isolation status of the switch template port.
         - rstpEnabled (boolean): The rapid spanning tree protocol status.
         - stpGuard (string): The state of the STP guard ('disabled', 'root guard', 'bpdu guard' or 'loop guard').
-        - linkNegotiation (string): The link speed for the switch profile port.
+        - linkNegotiation (string): The link speed for the switch template port.
         - portScheduleId (string): The ID of the port schedule. A value of null will clear the port schedule.
         - udld (string): The action to take when Unidirectional Link is detected (Alert only, Enforce). Default configuration is Alert only.
-        - accessPolicyType (string): The type of the access policy of the switch profile port. Only applicable to access ports. Can be one of 'Open', 'Custom access policy', 'MAC allow list' or 'Sticky MAC allow list'.
-        - accessPolicyNumber (integer): The number of a custom access policy to configure on the switch profile port. Only applicable when 'accessPolicyType' is 'Custom access policy'.
+        - accessPolicyType (string): The type of the access policy of the switch template port. Only applicable to access ports. Can be one of 'Open', 'Custom access policy', 'MAC allow list' or 'Sticky MAC allow list'.
+        - accessPolicyNumber (integer): The number of a custom access policy to configure on the switch template port. Only applicable when 'accessPolicyType' is 'Custom access policy'.
         - macAllowList (array): Only devices with MAC addresses specified in this list will have access to this port. Up to 20 MAC addresses can be defined. Only applicable when 'accessPolicyType' is 'MAC allow list'.
         - stickyMacAllowList (array): The initial list of MAC addresses for sticky Mac allow list. Only applicable when 'accessPolicyType' is 'Sticky MAC allow list'.
         - stickyMacAllowListLimit (integer): The maximum number of MAC addresses for sticky MAC allow list. Only applicable when 'accessPolicyType' is 'Sticky MAC allow list'.
-        - stormControlEnabled (boolean): The storm control status of the switch profile port.
+        - stormControlEnabled (boolean): The storm control status of the switch template port.
         - flexibleStackingEnabled (boolean): For supported switches (e.g. MS420/MS425), whether or not the port has flexible stacking enabled.
         - daiTrusted (boolean): If true, ARP packets for this port will be considered trusted, and Dynamic ARP Inspection will allow the traffic.
         - profile (object): Profile attributes

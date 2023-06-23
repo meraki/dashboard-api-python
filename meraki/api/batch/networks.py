@@ -283,7 +283,7 @@ class ActionBatchNetworks(object):
         kwargs.update(locals())
 
         if 'product' in kwargs:
-            options = ['appliance', 'camera', 'cellularGateway', 'switch', 'wireless']
+            options = ['appliance', 'camera', 'cellularGateway', 'cloudGateway', 'switch', 'switchCatalyst', 'wireless']
             assert kwargs['product'] in options, f'''"product" cannot be "{kwargs['product']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -557,7 +557,7 @@ class ActionBatchNetworks(object):
         - authorizations (array): Authorization zones and expiration dates for the user.
         - name (string): Name of the user. Only required If the user is not a Dashboard administrator.
         - password (string): The password for this user account. Only required If the user is not a Dashboard administrator.
-        - accountType (string): Authorization type for user. Can be 'Guest' or '802.1X' for wireless networks, or 'Client VPN' for wired networks. Defaults to '802.1X'.
+        - accountType (string): Authorization type for user. Can be 'Guest' or '802.1X' for wireless networks, or 'Client VPN' for MX networks. Defaults to '802.1X'.
         - emailPasswordToUser (boolean): Whether or not Meraki should email the password to user. Default is false.
         - isAdmin (boolean): Whether or not the user is a Dashboard administrator.
         """

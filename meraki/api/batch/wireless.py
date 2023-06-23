@@ -152,8 +152,10 @@ class ActionBatchWireless(object):
         - apBandSettings (object): Settings that will be enabled if selectionType is set to 'ap'.
         - twoFourGhzSettings (object): Settings related to 2.4Ghz band
         - fiveGhzSettings (object): Settings related to 5Ghz band
+        - sixGhzSettings (object): Settings related to 6Ghz band. Only applicable to networks with 6Ghz capable APs
         - transmission (object): Settings related to radio transmission.
         - perSsidSettings (object): Per-SSID radio settings by number.
+        - flexRadios (object): Flex radio settings.
         """
 
         kwargs.update(locals())
@@ -171,7 +173,7 @@ class ActionBatchWireless(object):
         }
         resource = f'/networks/{networkId}/wireless/rfProfiles'
 
-        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', 'transmission', 'perSsidSettings', ]
+        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', 'sixGhzSettings', 'transmission', 'perSsidSettings', 'flexRadios', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -199,8 +201,10 @@ class ActionBatchWireless(object):
         - apBandSettings (object): Settings that will be enabled if selectionType is set to 'ap'.
         - twoFourGhzSettings (object): Settings related to 2.4Ghz band
         - fiveGhzSettings (object): Settings related to 5Ghz band
+        - sixGhzSettings (object): Settings related to 6Ghz band. Only applicable to networks with 6Ghz capable APs
         - transmission (object): Settings related to radio transmission.
         - perSsidSettings (object): Per-SSID radio settings by number.
+        - flexRadios (object): Flex radio settings.
         """
 
         kwargs.update(locals())
@@ -218,7 +222,7 @@ class ActionBatchWireless(object):
         }
         resource = f'/networks/{networkId}/wireless/rfProfiles/{rfProfileId}'
 
-        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', 'transmission', 'perSsidSettings', ]
+        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', 'sixGhzSettings', 'transmission', 'perSsidSettings', 'flexRadios', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -306,7 +310,7 @@ class ActionBatchWireless(object):
         - number (string): Number
         - name (string): The name of the SSID
         - enabled (boolean): Whether or not the SSID is enabled
-        - authMode (string): The association control method for the SSID ('open', 'open-enhanced', 'psk', 'open-with-radius', 'open-with-nac', '8021x-meraki', '8021x-nac', '8021x-radius', '8021x-google', '8021x-localradius', 'ipsk-with-radius' or 'ipsk-without-radius')
+        - authMode (string): The association control method for the SSID ('open', 'open-enhanced', 'psk', 'open-with-radius', 'open-with-nac', '8021x-meraki', '8021x-nac', '8021x-radius', '8021x-google', '8021x-localradius', 'ipsk-with-radius', 'ipsk-without-radius' or 'ipsk-with-nac')
         - enterpriseAdminAccess (string): Whether or not an SSID is accessible by 'enterprise' administrators ('access disabled' or 'access enabled')
         - encryptionMode (string): The psk encryption mode for the SSID ('wep' or 'wpa'). This param is only valid if the authMode is 'psk'
         - psk (string): The passkey for the SSID. This param is only valid if the authMode is 'psk'
@@ -367,7 +371,7 @@ class ActionBatchWireless(object):
         kwargs.update(locals())
 
         if 'authMode' in kwargs:
-            options = ['8021x-google', '8021x-localradius', '8021x-meraki', '8021x-nac', '8021x-radius', 'ipsk-with-radius', 'ipsk-without-radius', 'open', 'open-enhanced', 'open-with-nac', 'open-with-radius', 'psk']
+            options = ['8021x-google', '8021x-localradius', '8021x-meraki', '8021x-nac', '8021x-radius', 'ipsk-with-nac', 'ipsk-with-radius', 'ipsk-without-radius', 'open', 'open-enhanced', 'open-with-nac', 'open-with-radius', 'psk']
             assert kwargs['authMode'] in options, f'''"authMode" cannot be "{kwargs['authMode']}", & must be set to one of: {options}'''
         if 'enterpriseAdminAccess' in kwargs:
             options = ['access disabled', 'access enabled']
@@ -420,6 +424,7 @@ class ActionBatchWireless(object):
         - number (string): Number
         - enabled (boolean): If true, Bonjour forwarding is enabled on this SSID.
         - rules (array): List of bonjour forwarding rules.
+        - exception (object): Bonjour forwarding exception
         """
 
         kwargs.update(locals())
@@ -430,7 +435,7 @@ class ActionBatchWireless(object):
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}/bonjourForwarding'
 
-        body_params = ['enabled', 'rules', ]
+        body_params = ['enabled', 'rules', 'exception', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,

@@ -170,6 +170,27 @@ class Organizations(object):
         
 
 
+    def getOrganizationActionBatch(self, organizationId: str, actionBatchId: str):
+        """
+        **Return an action batch**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-action-batch
+
+        - organizationId (string): Organization ID
+        - actionBatchId (string): Action batch ID
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'actionBatches'],
+            'operation': 'getOrganizationActionBatch'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        actionBatchId = urllib.parse.quote(str(actionBatchId), safe='')
+        resource = f'/organizations/{organizationId}/actionBatches/{actionBatchId}'
+
+        return self._session.get(metadata, resource)
+        
+
+
     def deleteOrganizationActionBatch(self, organizationId: str, actionBatchId: str):
         """
         **Delete an action batch**
@@ -216,27 +237,6 @@ class Organizations(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
-
-    def getOrganizationActionBatch(self, organizationId: str, actionBatchId: str):
-        """
-        **Return an action batch**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-action-batch
-
-        - organizationId (string): Organization ID
-        - actionBatchId (string): Action batch ID
-        """
-
-        metadata = {
-            'tags': ['organizations', 'configure', 'actionBatches'],
-            'operation': 'getOrganizationActionBatch'
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        actionBatchId = urllib.parse.quote(str(actionBatchId), safe='')
-        resource = f'/organizations/{organizationId}/actionBatches/{actionBatchId}'
-
-        return self._session.get(metadata, resource)
         
 
 
@@ -420,7 +420,7 @@ class Organizations(object):
         https://developer.cisco.com/meraki/api-v1/#!get-organization-adaptive-policy-group
 
         - organizationId (string): Organization ID
-        - id (string): Id
+        - id (string): ID
         """
 
         metadata = {
@@ -441,7 +441,7 @@ class Organizations(object):
         https://developer.cisco.com/meraki/api-v1/#!update-organization-adaptive-policy-group
 
         - organizationId (string): Organization ID
-        - id (string): Id
+        - id (string): ID
         - name (string): Name of the group
         - sgt (integer): SGT value of the group
         - description (string): Description of the group
@@ -471,7 +471,7 @@ class Organizations(object):
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-adaptive-policy-group
 
         - organizationId (string): Organization ID
-        - id (string): Id
+        - id (string): ID
         """
 
         metadata = {
@@ -562,7 +562,7 @@ class Organizations(object):
         https://developer.cisco.com/meraki/api-v1/#!get-organization-adaptive-policy-policy
 
         - organizationId (string): Organization ID
-        - id (string): Id
+        - id (string): ID
         """
 
         metadata = {
@@ -583,7 +583,7 @@ class Organizations(object):
         https://developer.cisco.com/meraki/api-v1/#!update-organization-adaptive-policy-policy
 
         - organizationId (string): Organization ID
-        - id (string): Id
+        - id (string): ID
         - sourceGroup (object): The source adaptive policy group (requires one unique attribute)
         - destinationGroup (object): The destination adaptive policy group (requires one unique attribute)
         - acls (array): An ordered array of adaptive policy ACLs (each requires one unique attribute) that apply to this policy
@@ -617,7 +617,7 @@ class Organizations(object):
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-adaptive-policy-policy
 
         - organizationId (string): Organization ID
-        - id (string): Id
+        - id (string): ID
         """
 
         metadata = {
@@ -1492,7 +1492,7 @@ class Organizations(object):
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - configurationUpdatedAfter (string): Filter results by whether or not the device's configuration has been updated after the given timestamp
         - networkIds (array): Optional parameter to filter devices by network.
-        - productTypes (array): Optional parameter to filter devices by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, and sensor.
+        - productTypes (array): Optional parameter to filter devices by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, and cloudGateway.
         - tags (array): Optional parameter to filter devices by tags.
         - tagsFilterType (string): Optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return networks which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
         - name (string): Optional parameter to filter devices by name. All returned devices will have a name that contains the search term or is an exact match.
@@ -1682,7 +1682,7 @@ class Organizations(object):
         - networkIds (array): Optional parameter to filter devices by network ids.
         - serials (array): Optional parameter to filter devices by serials.
         - statuses (array): Optional parameter to filter devices by statuses. Valid statuses are ["online", "alerting", "offline", "dormant"].
-        - productTypes (array): An optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, and sensor.
+        - productTypes (array): An optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, and cloudGateway.
         - models (array): Optional parameter to filter devices by models.
         - tags (array): An optional parameter to filter devices by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below).
         - tagsFilterType (string): An optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return devices which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
@@ -1720,7 +1720,7 @@ class Organizations(object):
         https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-statuses-overview
 
         - organizationId (string): Organization ID
-        - productTypes (array): An optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, and sensor.
+        - productTypes (array): An optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, and cloudGateway.
         - networkIds (array): An optional parameter to filter device statuses by network.
         """
 
@@ -1799,14 +1799,14 @@ class Organizations(object):
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 60 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 5 minutes after t0. The latest possible time that t1 can be is 2 minutes into the past.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 5 minutes. The default is 5 minutes.
-        - uplink (string): Optional filter for a specific WAN uplink. Valid uplinks are wan1, wan2, cellular. Default will return all uplinks.
+        - uplink (string): Optional filter for a specific WAN uplink. Valid uplinks are wan1, wan2, wan3, cellular. Default will return all uplinks.
         - ip (string): Optional filter for a specific destination IP. Default will return all destination IPs.
         """
 
         kwargs.update(locals())
 
         if 'uplink' in kwargs:
-            options = ['cellular', 'wan1', 'wan2']
+            options = ['cellular', 'wan1', 'wan2', 'wan3']
             assert kwargs['uplink'] in options, f'''"uplink" cannot be "{kwargs['uplink']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -2075,7 +2075,7 @@ class Organizations(object):
         - orderNumbers (array): Search for devices in inventory based on order numbers.
         - tags (array): Filter devices by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below).
         - tagsFilterType (string): To use with 'tags' parameter, to filter devices which contain ANY or ALL given tags. Accepted values are 'withAnyTags' or 'withAllTags', default is 'withAnyTags'.
-        - productTypes (array): Filter devices by product type. Accepted values are appliance, camera, cellularGateway, sensor, switch, systemsManager, and wireless.
+        - productTypes (array): Filter devices by product type. Accepted values are appliance, camera, cellularGateway, cloudGateway, sensor, switch, systemsManager, and wireless.
         """
 
         kwargs.update(locals())
@@ -2661,13 +2661,20 @@ class Organizations(object):
         
 
 
-    def getOrganizationOpenapiSpec(self, organizationId: str):
+    def getOrganizationOpenapiSpec(self, organizationId: str, **kwargs):
         """
-        **Return the OpenAPI 2.0 Specification of the organization's API documentation in JSON**
+        **Return the OpenAPI Specification of the organization's API documentation in JSON**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-openapi-spec
 
         - organizationId (string): Organization ID
+        - version (integer): OpenAPI Specification version to return. Default is 2
         """
+
+        kwargs.update(locals())
+
+        if 'version' in kwargs:
+            options = [2, 3]
+            assert kwargs['version'] in options, f'''"version" cannot be "{kwargs['version']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['organizations', 'monitor', 'openapiSpec'],
@@ -2676,7 +2683,10 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/openapiSpec'
 
-        return self._session.get(metadata, resource)
+        query_params = ['version', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get(metadata, resource, params)
         
 
 
@@ -3127,7 +3137,7 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - role (string): The role of the SAML administrator
         - orgAccess (string): The privilege of the SAML administrator on the organization. Can be one of 'none', 'read-only', 'full' or 'enterprise'
-        - tags (array): The list of tags that the SAML administrator has privleges on
+        - tags (array): The list of tags that the SAML administrator has privileges on
         - networks (array): The list of networks that the SAML administrator has privileges on
         """
 
@@ -3181,7 +3191,7 @@ class Organizations(object):
         - samlRoleId (string): Saml role ID
         - role (string): The role of the SAML administrator
         - orgAccess (string): The privilege of the SAML administrator on the organization. Can be one of 'none', 'read-only', 'full' or 'enterprise'
-        - tags (array): The list of tags that the SAML administrator has privleges on
+        - tags (array): The list of tags that the SAML administrator has privileges on
         - networks (array): The list of networks that the SAML administrator has privileges on
         """
 
