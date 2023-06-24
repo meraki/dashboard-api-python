@@ -1236,29 +1236,3 @@ class ActionBatchOrganizations(object):
 
 
 
-
-
-    def deleteOrganizationUser(self, organizationId: str, userId: str):
-        """
-        **Delete a user and all of its authentication methods.**
-        https://developer.cisco.com/meraki/api-v1/#!delete-organization-user
-
-        - organizationId (string): Organization ID
-        - userId (string): User ID
-        """
-
-        metadata = {
-            'tags': ['organizations', 'configure', 'users'],
-            'operation': 'deleteOrganizationUser'
-        }
-        resource = f'/organizations/{organizationId}/users/{userId}'
-
-        action = {
-            "resource": resource,
-            "operation": "destroy",
-        }
-        return action
-        
-
-
-

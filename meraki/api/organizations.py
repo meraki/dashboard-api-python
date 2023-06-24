@@ -3521,27 +3521,6 @@ class Organizations(object):
         
 
 
-    def deleteOrganizationUser(self, organizationId: str, userId: str):
-        """
-        **Delete a user and all of its authentication methods.**
-        https://developer.cisco.com/meraki/api-v1/#!delete-organization-user
-
-        - organizationId (string): Organization ID
-        - userId (string): User ID
-        """
-
-        metadata = {
-            'tags': ['organizations', 'configure', 'users'],
-            'operation': 'deleteOrganizationUser'
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        userId = urllib.parse.quote(str(userId), safe='')
-        resource = f'/organizations/{organizationId}/users/{userId}'
-
-        return self._session.delete(metadata, resource)
-        
-
-
     def getOrganizationWebhooksAlertTypes(self, organizationId: str, **kwargs):
         """
         **Return a list of alert types to be used with managing webhook alerts**

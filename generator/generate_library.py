@@ -154,7 +154,7 @@ def generate_library(spec, version_number, is_github_action):
     base_url = 'https://raw.githubusercontent.com/meraki/dashboard-api-python/master/meraki/'
     for file in non_generated:
         response = requests.get(f'{base_url}{file}')
-        with open(f'meraki/{file}', 'w+', encoding='utf-8', newline='') as fp:
+        with open(f'meraki/{file}', 'w+', encoding='utf-8', newline=None) as fp:
             contents = response.text
             if file == '__init__.py':
                 start = contents.find('__version__ = ')
@@ -183,8 +183,8 @@ def generate_library(spec, version_number, is_github_action):
         print(f'...generating {scope}')
         section = scopes[scope]
 
-        with open(f'meraki/api/{scope}.py', 'w', encoding='utf-8', newline='') as output:
-            with open(f'{template_dir}class_template.jinja2', encoding='utf-8', newline='') as fp:
+        with open(f'meraki/api/{scope}.py', 'w', encoding='utf-8', newline=None) as output:
+            with open(f'{template_dir}class_template.jinja2', encoding='utf-8', newline=None) as fp:
                 class_template = fp.read()
                 template = jinja_env.from_string(class_template)
                 output.write(
@@ -194,8 +194,8 @@ def generate_library(spec, version_number, is_github_action):
                 )
 
             # Generate Asyncio API libraries
-            async_output = open(f'meraki/aio/api/{scope}.py', 'w', encoding='utf-8', newline='')
-            with open(f'{template_dir}async_class_template.jinja2', encoding='utf-8', newline='') as fp:
+            async_output = open(f'meraki/aio/api/{scope}.py', 'w', encoding='utf-8', newline=None)
+            with open(f'{template_dir}async_class_template.jinja2', encoding='utf-8', newline=None) as fp:
                 class_template = fp.read()
                 template = jinja_env.from_string(class_template)
                 async_output.write(
@@ -205,8 +205,8 @@ def generate_library(spec, version_number, is_github_action):
                 )
 
             # Generate Action Batch API libraries
-            batch_output = open(f'meraki/api/batch/{scope}.py', 'w', encoding='utf-8', newline='')
-            with open(f'{template_dir}batch_class_template.jinja2', encoding='utf-8', newline='') as fp:
+            batch_output = open(f'meraki/api/batch/{scope}.py', 'w', encoding='utf-8', newline=None)
+            with open(f'{template_dir}batch_class_template.jinja2', encoding='utf-8', newline=None) as fp:
                 class_template = fp.read()
                 template = jinja_env.from_string(class_template)
                 batch_output.write(
@@ -307,7 +307,7 @@ def generate_library(spec, version_number, is_github_action):
                         call_line = 'return self._session.delete(metadata, resource)'
 
                     # Add function to files
-                    with open(f'{template_dir}function_template.jinja2', encoding='utf-8', newline='') as fp:
+                    with open(f'{template_dir}function_template.jinja2', encoding='utf-8', newline=None) as fp:
                         function_template = fp.read()
                         template = jinja_env.from_string(function_template)
                         output.write(
@@ -430,7 +430,7 @@ def generate_library(spec, version_number, is_github_action):
                         call_line = 'return action'
 
                         # Add function to files
-                        with open(f'{template_dir}batch_function_template.jinja2', encoding='utf-8', newline='') as fp:
+                        with open(f'{template_dir}batch_function_template.jinja2', encoding='utf-8', newline=None) as fp:
                             function_template = fp.read()
                             template = jinja_env.from_string(function_template)
                             batch_output.write(
