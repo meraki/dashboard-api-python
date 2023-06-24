@@ -38,7 +38,8 @@ def generate_pagination_parameters(operation):
     }
     if operation == 'getNetworkEvents':
         ret['event_log_end_time'] = {'type': 'string',
-                                     'description': 'ISO8601 Zulu/UTC time, to use in conjunction with startingAfter, to retrieve events within a time window'}
+                                     'description': 'ISO8601 Zulu/UTC time, to use in conjunction with startingAfter, '
+                                                    'to retrieve events within a time window'}
     return ret
 
 
@@ -91,30 +92,62 @@ def parse_params(operation, parameters, param_filters=None):
     params = {}
     for p in parameters:
         name = p['name']
+
+        # consult the schema if there is one
         if 'schema' in p:
+            # the parameter will have a top-level object 'schema' and within that, 'properties' in OASv2
+            # in OASv3, the parameter will only have this for query and path parameters, and requestBody params
+            # will be in a separate key
             keys = p['schema']['properties']
+
+            # parse the properties and assign types and descriptions
             for k in keys:
+                # if required, set required true
                 if 'required' in p['schema'] and k in p['schema']['required']:
                     params[k] = {'required': True}
                 else:
                     params[k] = {'required': False}
+
+                # identify whether the parameter is in the path or query, or for OASv2, in the body
                 params[k]['in'] = p['in']
+
+                # assign the right data type to the parameter per the schema
                 params[k]['type'] = keys[k]['type']
+
+                # assign the description to the parameter per the schema
                 params[k]['description'] = keys[k]['description']
+
+                # capture schema enum if available
                 if 'enum' in keys[k]:
                     params[k]['enum'] = keys[k]['enum']
+
+                # capture schema example if available
                 if 'example' in p['schema'] and k in p['schema']['example']:
                     params[k]['example'] = p['schema']['example'][k]
+
+        # if there is no schema, then consult the required attribute
         elif 'required' in p and p['required']:
             params[name] = {'required': True}
+
+            # identify whether the parameter is in the path or query, or for OASv2, in the body
             params[name]['in'] = p['in']
+
+            # assign the right data type to the parameter
             params[name]['type'] = p['type']
+
+            # assign the description to the parameter if it's available
             if 'description' in p:
                 params[name]['description'] = p['description']
+
+            # fall back to required if there is no description
             else:
                 params[name]['description'] = '(required)'
+
+            # capture the enum if available
             if 'enum' in p:
                 params[name]['enum'] = p['enum']
+
+        # if there is no schema and no required attribute, then the parameter is not required
         else:
             params[name] = {'required': False}
             params[name]['in'] = p['in']
@@ -171,26 +204,47 @@ def generate_library(spec, version_number, is_github_action):
             fp.write(contents)
 
     # Organize data from OpenAPI specification
-    operations = []  # list of operation IDs
+    operations = list()  # list of operation IDs
     for path, methods in paths.items():
+        # method is the HTTP action, e.g. get, put, etc.
         for method in methods:
+
+            # endpoint is the method for that specific path
             endpoint = paths[path][method]
+
+            # the endpoint has tags
             tags = endpoint['tags']
+
+            # the endpoint has an operationId
             operation = endpoint['operationId']
+
+            # add the operation ID to the list
             operations.append(operation)
+
+            # the endpoint has a scope defined by the first tag
             scope = tags[0]
+
+            # Needs documentation
             if path not in scopes[scope]:
                 scopes[scope][path] = {method: endpoint}
+            # Needs documentation
             else:
                 scopes[scope][path][method] = endpoint
+
+    # Inform the user of the number of operations found
     print(f'Total of {len(operations)} endpoints found from OpenAPI spec...')
 
     # Generate API libraries
+    # We will use newline=None to ensure that line breaks are handled correctly, especially when generating
+    # on Windows and using git autocrlf true
     jinja_env = jinja2.Environment(trim_blocks=True, lstrip_blocks=True, keep_trailing_newline=True)
+
+    # Iterate through the scopes creating standard, asyncio and batch modules for each
     for scope in scopes:
         print(f'...generating {scope}')
         section = scopes[scope]
 
+        # Generate the standard module
         with open(f'meraki/api/{scope}.py', 'w', encoding='utf-8', newline=None) as output:
             with open(f'{template_dir}class_template.jinja2', encoding='utf-8', newline=None) as fp:
                 class_template = fp.read()
@@ -230,8 +284,9 @@ def generate_library(spec, version_number, is_github_action):
                     tags = endpoint['tags']
                     operation = endpoint['operationId']
                     description = endpoint['summary']
+
+                    # will need updating for OASv3
                     parameters = endpoint['parameters'] if 'parameters' in endpoint else None
-                    responses = endpoint['responses']  # not actually used here for library generation
 
                     # Function definition
                     definition = ''
@@ -292,9 +347,11 @@ def generate_library(spec, version_number, is_github_action):
                         if query_params or array_params:
                             if pagination_params:
                                 if operation == 'getNetworkEvents':
-                                    call_line = 'return self._session.get_pages(metadata, resource, params, total_pages, direction, event_log_end_time)'
+                                    call_line = 'return self._session.get_pages(metadata, resource, params, ' \
+                                                'total_pages, direction, event_log_end_time)'
                                 else:
-                                    call_line = 'return self._session.get_pages(metadata, resource, params, total_pages, direction)'
+                                    call_line = 'return self._session.get_pages(metadata, resource, params, ' \
+                                                'total_pages, direction)'
                             else:
                                 call_line = 'return self._session.get(metadata, resource, params)'
                         else:
@@ -367,8 +424,9 @@ def generate_library(spec, version_number, is_github_action):
                         tags = endpoint['tags']
                         operation = endpoint['operationId']
                         description = endpoint['summary']
+
+                        # May need update for OASv3
                         parameters = endpoint['parameters'] if 'parameters' in endpoint else None
-                        responses = endpoint['responses']  # not actually used here for library generation
 
                         # Function definition
                         definition = ''
@@ -409,12 +467,14 @@ def generate_library(spec, version_number, is_github_action):
                         kwarg_line = ''
                         if parse_params(operation, parameters, ['optional']):
                             kwarg_line = 'kwargs.update(locals())'
+
+                        # will need update for OASv3
                         elif parse_params(operation, parameters, ['query', 'array', 'body']):
                             kwarg_line = 'kwargs = locals()'
 
                         # Assert valid values for enum
                         enum_params = parse_params(operation, parameters, ['enum'])
-                        assert_blocks = []
+                        assert_blocks = list()
                         if enum_params:
                             for p, values in enum_params.items():
                                 assert_blocks.append((p, values['enum']))
@@ -424,6 +484,8 @@ def generate_library(spec, version_number, is_github_action):
 
                         # Function body for POST/PUT endpoints
                         if method == 'post' or method == 'put':
+
+                            # will need update for OASv3
                             body_params = parse_params(operation, parameters, 'body')
                             if method == 'post':
                                 batch_operation = 'create'
@@ -438,7 +500,8 @@ def generate_library(spec, version_number, is_github_action):
                         call_line = 'return action'
 
                         # Add function to files
-                        with open(f'{template_dir}batch_function_template.jinja2', encoding='utf-8', newline=None) as fp:
+                        with open(f'{template_dir}batch_function_template.jinja2', encoding='utf-8', newline=None) \
+                                as fp:
                             function_template = fp.read()
                             template = jinja_env.from_string(function_template)
                             batch_output.write(
@@ -503,7 +566,7 @@ def main(inputs):
             sys.exit(2)
         else:
             response = requests.get(f'https://api.meraki.com/api/v1/organizations/{org_id}/openapiSpec',
-                                    headers={'X-Cisco-Meraki-API-Key': f'{api_key}'})
+                                    headers={f'Bearer: {api_key}'})
             if response.ok:
                 spec = response.json()
             else:
