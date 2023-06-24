@@ -54,8 +54,36 @@ def docs_url(operation):
     return base_url + ret
 
 
+# Helper function to return the right params; used in parse_params
+def return_params(operation, params, param_filters):
+    # Return parameters based on matching input filters
+    if not param_filters:
+        return params
+    else:
+        ret = {}
+        if 'required' in param_filters:
+            ret.update({k: v for k, v in params.items() if 'required' in v and v['required']})
+        if 'pagination' in param_filters:
+            ret.update(generate_pagination_parameters(operation) if 'perPage' in params else {})
+        if 'optional' in param_filters:
+            ret.update({k: v for k, v in params.items() if 'required' in v and not v['required']})
+        if 'path' in param_filters:
+            ret.update({k: v for k, v in params.items() if 'in' in v and v['in'] == 'path'})
+        if 'query' in param_filters:
+            ret.update({k: v for k, v in params.items() if 'in' in v and v['in'] == 'query'})
+        if 'body' in param_filters:
+            ret.update({k: v for k, v in params.items() if 'in' in v and v['in'] == 'body'})
+        if 'array' in param_filters:
+            ret.update({k: v for k, v in params.items() if 'in' in v and v['type'] == 'array'})
+        if 'enum' in param_filters:
+            ret.update({k: v for k, v in params.items() if 'enum' in v})
+        return ret
+
+
 # Helper function to return parameters within OAS spec, optionally based on list of input filters
-def parse_params(operation, parameters, param_filters=[]):
+def parse_params(operation, parameters, param_filters=None):
+    if param_filters is None:
+        param_filters = []
     if parameters is None:
         return {}
 
@@ -100,27 +128,7 @@ def parse_params(operation, parameters, param_filters=[]):
         params.update(generate_pagination_parameters(operation))
 
     # Return parameters based on matching input filters
-    if not param_filters:
-        return params
-    else:
-        ret = {}
-        if 'required' in param_filters:
-            ret.update({k: v for k, v in params.items() if 'required' in v and v['required']})
-        if 'pagination' in param_filters:
-            ret.update(generate_pagination_parameters(operation) if 'perPage' in params else {})
-        if 'optional' in param_filters:
-            ret.update({k: v for k, v in params.items() if 'required' in v and not v['required']})
-        if 'path' in param_filters:
-            ret.update({k: v for k, v in params.items() if 'in' in v and v['in'] == 'path'})
-        if 'query' in param_filters:
-            ret.update({k: v for k, v in params.items() if 'in' in v and v['in'] == 'query'})
-        if 'body' in param_filters:
-            ret.update({k: v for k, v in params.items() if 'in' in v and v['in'] == 'body'})
-        if 'array' in param_filters:
-            ret.update({k: v for k, v in params.items() if 'in' in v and v['type'] == 'array'})
-        if 'enum' in param_filters:
-            ret.update({k: v for k, v in params.items() if 'enum' in v})
-        return ret
+    return return_params(operation, params, param_filters)
 
 
 def generate_library(spec, version_number, is_github_action):
