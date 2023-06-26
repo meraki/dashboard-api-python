@@ -2412,7 +2412,7 @@ class AsyncAppliance:
 
     def getOrganizationApplianceUplinksUsageByNetwork(self, organizationId: str, **kwargs):
         """
-        **Get the sent and received bytes for each uplink of all wired networks within an organization**
+        **Get the sent and received bytes for each uplink of all MX and Z networks within an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-uplinks-usage-by-network
 
         - organizationId (string): Organization ID

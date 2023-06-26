@@ -15,7 +15,7 @@ This script generates the Meraki Python library using either the public OpenAPI 
 ID as inputs, a specific dashboard org's OpenAPI spec.
 
 === USAGE ===
-python[3] generate_library.py [-o <org_id>] [-k <api_key>] [-v <version_number>] [-g <is_called_from_github_action>]
+python[3] generate_library_oasv2.py [-o <org_id>] [-k <api_key>] [-v <version_number>] [-g <is_called_from_github_action>]
 API key can, and is recommended to, be set as an environment variable named MERAKI_DASHBOARD_API_KEY. 
 """
 
@@ -81,103 +81,87 @@ def return_params(operation, params, param_filters):
         return ret
 
 
-def unpack_param_without_schema(all_params, this_param, name, is_required):
-
-    # Set required attribute
-    all_params[name] = {'required': is_required}
-
-    # Assign relevant attributes
-    for attribute in ('in', 'type'):
-        all_params[name][attribute] = this_param[attribute]
-
-    # Capture the enum if available
-    if 'enum' in this_param:
-        all_params[name]['enum'] = this_param['enum']
-
-    # Assign the description to the parameter if it's available
-    if 'description' in this_param:
-        all_params[name]['description'] = this_param['description']
-
-    # Fall back to required if there is no description
-    elif is_required:
-        all_params[name]['description'] = '(required)'
-
-    # Fall back to whatever the description is otherwise
-    else:
-        all_params[name]['description'] = this_param['description']
-
-    return all_params
-
-
-def unpack_param_with_schema(all_params, this_param):
-    # the parameter will have a top-level object 'schema' and within that, 'properties' in OASv2
-    # in OASv3, the parameter will only have this for query and path parameters, and requestBody params
-    # will be in a separate key
-    keys = this_param['schema']['properties']
-
-    # parse the properties and assign types and descriptions
-    for k in keys:
-        # if required, set required true
-        if 'required' in this_param['schema'] and k in this_param['schema']['required']:
-            all_params[k] = {'required': True}
-        else:
-            all_params[k] = {'required': False}
-
-        # identify whether the parameter is in the path or query, or for OASv2, in the body
-        all_params[k]['in'] = this_param['in']
-
-        # assign the right data type/description to the parameter per the schema
-        for attribute in ('type', 'description'):
-            all_params[k][attribute] = keys[k][attribute]
-
-        # capture schema enum if available
-        if 'enum' in keys[k]:
-            all_params[k]['enum'] = keys[k]['enum']
-
-        # capture schema example if available
-        if 'example' in this_param['schema'] and k in this_param['schema']['example']:
-            all_params[k]['example'] = this_param['schema']['example'][k]
-
-    return all_params
-
-
-def unpack_params(operation, parameters, param_filters):
-    # Create dict with information on endpoint's parameters
-    unpacked_params = dict()
-
-    # Iterate through the endpoint's parameters
-    for p in parameters:
-        # Name the parameter
-        name = p['name']
-
-        # Consult the schema if there is one
-        if 'schema' in p:
-            unpacked_params.update(unpack_param_with_schema(unpacked_params, p))
-
-        # If there is no schema, then consult the required attribute
-        elif 'required' in p and p['required']:
-            unpacked_params.update(unpack_param_without_schema(unpacked_params, p, name, True))
-
-        # Otherwise the parameter is not required
-        else:
-            unpacked_params.update(unpack_param_without_schema(unpacked_params, p, name, False))
-
-    # Add custom library parameters to handle pagination
-    if 'perPage' in unpacked_params:
-        unpacked_params.update(generate_pagination_parameters(operation))
-
-    # Return parameters based on matching input filters
-    return return_params(operation, unpacked_params, param_filters)
-
-
 # Helper function to return parameters within OAS spec, optionally based on list of input filters
 def parse_params(operation, parameters, param_filters=None):
     if param_filters is None:
-        param_filters = list()
+        param_filters = []
     if parameters is None:
         return {}
 
-    return unpack_params(operation, parameters, param_filters)
+    # Create dict with information on endpoint's parameters
+    params = {}
+    for p in parameters:
+        name = p['name']
+
+        # consult the schema if there is one
+        if 'schema' in p:
+            # the parameter will have a top-level object 'schema' and within that, 'properties' in OASv2
+            # in OASv3, the parameter will only have this for query and path parameters, and requestBody params
+            # will be in a separate key
+            keys = p['schema']['properties']
+
+            # parse the properties and assign types and descriptions
+            for k in keys:
+                # if required, set required true
+                if 'required' in p['schema'] and k in p['schema']['required']:
+                    params[k] = {'required': True}
+                else:
+                    params[k] = {'required': False}
+
+                # identify whether the parameter is in the path or query, or for OASv2, in the body
+                params[k]['in'] = p['in']
+
+                # assign the right data type to the parameter per the schema
+                params[k]['type'] = keys[k]['type']
+
+                # assign the description to the parameter per the schema
+                params[k]['description'] = keys[k]['description']
+
+                # capture schema enum if available
+                if 'enum' in keys[k]:
+                    params[k]['enum'] = keys[k]['enum']
+
+                # capture schema example if available
+                if 'example' in p['schema'] and k in p['schema']['example']:
+                    params[k]['example'] = p['schema']['example'][k]
+
+        # if there is no schema, then consult the required attribute
+        elif 'required' in p and p['required']:
+            params[name] = {'required': True}
+
+            # identify whether the parameter is in the path or query, or for OASv2, in the body
+            params[name]['in'] = p['in']
+
+            # assign the right data type to the parameter
+            params[name]['type'] = p['type']
+
+            # assign the description to the parameter if it's available
+            if 'description' in p:
+                params[name]['description'] = p['description']
+
+            # fall back to required if there is no description
+            else:
+                params[name]['description'] = '(required)'
+
+            # capture the enum if available
+            if 'enum' in p:
+                params[name]['enum'] = p['enum']
+
+        # if there is no schema and no required attribute, then the parameter is not required
+        else:
+            params[name] = {'required': False}
+            params[name]['in'] = p['in']
+            params[name]['type'] = p['type']
+            params[name]['description'] = p['description']
+            if 'enum' in p:
+                params[name]['enum'] = p['enum']
+
+    # Add custom library parameters to handle pagination
+    if 'perPage' in params:
+        params.update(generate_pagination_parameters(operation))
+
+    # Return parameters based on matching input filters
+    return return_params(operation, params, param_filters)
 
 
 def generate_library(spec, version_number, is_github_action):
@@ -333,7 +317,7 @@ def generate_library(spec, version_number, is_github_action):
                             definition += f', **kwargs'
 
                     # Docstring
-                    param_descriptions = list()
+                    param_descriptions = []
                     all_params = parse_params(operation, parameters, ['required', 'pagination', 'optional'])
                     if all_params:
                         for p, values in all_params.items():
@@ -348,7 +332,7 @@ def generate_library(spec, version_number, is_github_action):
 
                     # Assert valid values for enum
                     enum_params = parse_params(operation, parameters, ['enum'])
-                    assert_blocks = list()
+                    assert_blocks = []
                     if enum_params:
                         for p, values in enum_params.items():
                             assert_blocks.append((p, values['enum']))
@@ -473,7 +457,7 @@ def generate_library(spec, version_number, is_github_action):
                                 definition += f', **kwargs'
 
                         # Docstring
-                        param_descriptions = list()
+                        param_descriptions = []
                         all_params = parse_params(operation, parameters, ['required', 'pagination', 'optional'])
                         if all_params:
                             for p, values in all_params.items():
