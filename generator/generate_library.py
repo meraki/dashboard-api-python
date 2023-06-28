@@ -23,7 +23,7 @@ REVERSE_PAGINATION = ['getNetworkEvents', 'getOrganizationConfigurationChanges']
 
 
 # Helper function to return pagination parameters depending on endpoint
-def generate_pagination_parameters(operation):
+def generate_pagination_parameters(operation: str):
     ret = {
         'total_pages': {
             'type': 'integer or string',
@@ -44,7 +44,7 @@ def generate_pagination_parameters(operation):
 
 
 # Returns full link to endpoint's documentation on Developer Hub
-def docs_url(operation):
+def docs_url(operation: str):
     base_url = 'https://developer.cisco.com/meraki/api-v1/#!'
     ret = ''
     for letter in operation:
@@ -56,7 +56,7 @@ def docs_url(operation):
 
 
 # Helper function to return the right params; used in parse_params
-def return_params(operation, params, param_filters):
+def return_params(operation: str, params: dict, param_filters):
     # Return parameters based on matching input filters
     if not param_filters:
         return params
@@ -81,7 +81,7 @@ def return_params(operation, params, param_filters):
         return ret
 
 
-def unpack_param_without_schema(all_params, this_param, name, is_required):
+def unpack_param_without_schema(all_params: dict, this_param: dict, name: str, is_required: bool):
 
     # Set required attribute
     all_params[name] = {'required': is_required}
@@ -109,7 +109,7 @@ def unpack_param_without_schema(all_params, this_param, name, is_required):
     return all_params
 
 
-def unpack_param_with_schema(all_params, this_param):
+def unpack_param_with_schema(all_params: dict, this_param: dict):
     # the parameter will have a top-level object 'schema' and within that, 'properties' in OASv2
     # in OASv3, the parameter will only have this for query and path parameters, and requestBody params
     # will be in a separate key
@@ -141,7 +141,7 @@ def unpack_param_with_schema(all_params, this_param):
     return all_params
 
 
-def unpack_params(operation, parameters, param_filters):
+def unpack_params(operation: str, parameters: dict, param_filters):
     # Create dict with information on endpoint's parameters
     unpacked_params = dict()
 
@@ -154,7 +154,7 @@ def unpack_params(operation, parameters, param_filters):
         if 'schema' in p:
             unpacked_params.update(unpack_param_with_schema(unpacked_params, p))
 
-        # If there is no schema, then consult the required attribute
+        # If there is no schema, then consult the required attribute if it exists
         elif 'required' in p and p['required']:
             unpacked_params.update(unpack_param_without_schema(unpacked_params, p, name, True))
 
@@ -171,7 +171,7 @@ def unpack_params(operation, parameters, param_filters):
 
 
 # Helper function to return parameters within OAS spec, optionally based on list of input filters
-def parse_params(operation, parameters, param_filters=None):
+def parse_params(operation: str, parameters: dict, param_filters=None):
     if param_filters is None:
         param_filters = list()
     if parameters is None:
@@ -180,7 +180,7 @@ def parse_params(operation, parameters, param_filters=None):
     return unpack_params(operation, parameters, param_filters)
 
 
-def generate_library(spec, version_number, is_github_action):
+def generate_library(spec: dict, version_number: str, is_github_action: bool):
     # Supported scopes list will include organizations, networks, devices, and all product types.
     supported_scopes = ['organizations', 'networks', 'devices', 'appliance', 'camera', 'cellularGateway', 'insight',
                         'sm', 'switch', 'wireless', 'sensor', 'administered', 'licensing', 'secureConnect']
@@ -199,11 +199,11 @@ def generate_library(spec, version_number, is_github_action):
     else:
         template_dir = ''
 
-    # Check paths and create sub-directories if needed
-    subdirs = ['meraki', 'meraki/api', 'meraki/api/batch', 'meraki/aio', 'meraki/aio/api', 'meraki/api/batch']
-    for dir in subdirs:
-        if not os.path.isdir(dir):
-            os.mkdir(dir)
+    # Check paths and create directories if needed
+    directories = ['meraki', 'meraki/api', 'meraki/api/batch', 'meraki/aio', 'meraki/aio/api', 'meraki/api/batch']
+    for directory in directories:
+        if not os.path.isdir(directory):
+            os.mkdir(directory)
 
     # Files that are not generated
     non_generated = ['__init__.py', 'config.py', 'exceptions.py', 'rest_session.py', 'api/__init__.py',
@@ -252,294 +252,330 @@ def generate_library(spec, version_number, is_github_action):
 
     # Generate API libraries
     # We will use newline=None to ensure that line breaks are handled correctly, especially when generating
-    # on Windows and using git autocrlf true
+    # on Windows and using `git autocrlf true`
     jinja_env = jinja2.Environment(trim_blocks=True, lstrip_blocks=True, keep_trailing_newline=True)
 
     # Iterate through the scopes creating standard, asyncio and batch modules for each
+    generate_modules(batchable_action_summaries, jinja_env, scopes, template_dir)
+
+
+def generate_modules(batchable_action_summaries, jinja_env, scopes, template_dir):
     for scope in scopes:
         print(f'...generating {scope}')
         section = scopes[scope]
 
         # Generate the standard module
         with open(f'meraki/api/{scope}.py', 'w', encoding='utf-8', newline=None) as output:
-            with open(f'{template_dir}class_template.jinja2', encoding='utf-8', newline=None) as fp:
-                class_template = fp.read()
-                template = jinja_env.from_string(class_template)
-                output.write(
-                    template.render(
-                        class_name=scope[0].upper() + scope[1:],
-                    )
-                )
 
-            # Generate Asyncio API libraries
+            # Open module file for Asyncio API libraries
             async_output = open(f'meraki/aio/api/{scope}.py', 'w', encoding='utf-8', newline=None)
-            with open(f'{template_dir}async_class_template.jinja2', encoding='utf-8', newline=None) as fp:
-                class_template = fp.read()
-                template = jinja_env.from_string(class_template)
-                async_output.write(
-                    template.render(
-                        class_name=scope[0].upper() + scope[1:],
-                    )
-                )
-
-            # Generate Action Batch API libraries
+            # Open module file for Action Batch API libraries
             batch_output = open(f'meraki/api/batch/{scope}.py', 'w', encoding='utf-8', newline=None)
-            with open(f'{template_dir}batch_class_template.jinja2', encoding='utf-8', newline=None) as fp:
-                class_template = fp.read()
-                template = jinja_env.from_string(class_template)
-                batch_output.write(
-                    template.render(
-                        class_name=scope[0].upper() + scope[1:],
-                    )
-                )
+
+            modules = [
+                {
+                    'template_name': 'class_template.jinja2',
+                    'module_output': output
+                },
+                {
+                    'template_name': 'async_class_template.jinja2',
+                    'module_output': async_output
+                },
+                {
+                    'template_name': 'batch_class_template.jinja2',
+                    'module_output': batch_output
+                }
+            ]
+
+            # Generate modules
+            for module in modules:
+                render_class_template(jinja_env, template_dir, module['template_name'], module['module_output'], scope)
 
             # Generate API & Asyncio API functions
-            for path, methods in section.items():
-                for method, endpoint in methods.items():
-                    # Get metadata
-                    tags = endpoint['tags']
-                    operation = endpoint['operationId']
-                    description = endpoint['summary']
-
-                    # will need updating for OASv3
-                    parameters = endpoint['parameters'] if 'parameters' in endpoint else None
-
-                    # Function definition
-                    definition = ''
-                    if parameters:
-                        for p, values in parse_params(operation, parameters, 'required').items():
-                            if values['type'] == 'array':
-                                definition += f', {p}: list'
-                            elif values['type'] == 'number':
-                                definition += f', {p}: float'
-                            elif values['type'] == 'integer':
-                                definition += f', {p}: int'
-                            elif values['type'] == 'boolean':
-                                definition += f', {p}: bool'
-                            elif values['type'] == 'object':
-                                definition += f', {p}: dict'
-                            elif values['type'] == 'string':
-                                definition += f', {p}: str'
-
-                        if 'perPage' in parse_params(operation, parameters):
-                            if operation in REVERSE_PAGINATION:
-                                definition += ", total_pages=1, direction='prev'"
-                            else:
-                                definition += ", total_pages=1, direction='next'"
-                            if operation == 'getNetworkEvents':
-                                definition += ', event_log_end_time=None'
-
-                        if parse_params(operation, parameters, ['optional']):
-                            definition += f', **kwargs'
-
-                    # Docstring
-                    param_descriptions = list()
-                    all_params = parse_params(operation, parameters, ['required', 'pagination', 'optional'])
-                    if all_params:
-                        for p, values in all_params.items():
-                            param_descriptions.append(f'{p} ({values["type"]}): {values["description"]}')
-
-                    # Combine keyword args with locals
-                    kwarg_line = ''
-                    if parse_params(operation, parameters, ['optional']):
-                        kwarg_line = 'kwargs.update(locals())'
-                    elif parse_params(operation, parameters, ['query', 'array', 'body']):
-                        kwarg_line = 'kwargs = locals()'
-
-                    # Assert valid values for enum
-                    enum_params = parse_params(operation, parameters, ['enum'])
-                    assert_blocks = list()
-                    if enum_params:
-                        for p, values in enum_params.items():
-                            assert_blocks.append((p, values['enum']))
-
-                    # Function body for GET endpoints
-                    query_params = array_params = body_params = path_params = {}
-                    if method == 'get':
-                        query_params = parse_params(operation, parameters, 'query')
-                        array_params = parse_params(operation, parameters, 'array')
-                        path_params = parse_params(operation, parameters, 'path')
-                        pagination_params = parse_params(operation, parameters, 'pagination')
-                        if query_params or array_params:
-                            if pagination_params:
-                                if operation == 'getNetworkEvents':
-                                    call_line = 'return self._session.get_pages(metadata, resource, params, ' \
-                                                'total_pages, direction, event_log_end_time)'
-                                else:
-                                    call_line = 'return self._session.get_pages(metadata, resource, params, ' \
-                                                'total_pages, direction)'
-                            else:
-                                call_line = 'return self._session.get(metadata, resource, params)'
-                        else:
-                            call_line = 'return self._session.get(metadata, resource)'
-
-                    # Function body for POST/PUT endpoints
-                    elif method == 'post' or method == 'put':
-                        body_params = parse_params(operation, parameters, 'body')
-                        path_params = parse_params(operation, parameters, 'path')
-                        if body_params:
-                            call_line = f'return self._session.{method}(metadata, resource, payload)'
-                        else:
-                            call_line = f'return self._session.{method}(metadata, resource)'
-
-                    # Function body for DELETE endpoints
-                    elif method == 'delete':
-                        path_params = parse_params(operation, parameters, 'path')
-                        call_line = 'return self._session.delete(metadata, resource)'
-
-                    # Add function to files
-                    with open(f'{template_dir}function_template.jinja2', encoding='utf-8', newline=None) as fp:
-                        function_template = fp.read()
-                        template = jinja_env.from_string(function_template)
-                        output.write(
-                            '\n\n' +
-                            template.render(
-                                operation=operation,
-                                function_definition=definition,
-                                description=description,
-                                doc_url=docs_url(operation),
-                                descriptions=param_descriptions,
-                                kwarg_line=kwarg_line,
-                                all_params=list(all_params.keys()),
-                                assert_blocks=assert_blocks,
-                                tags=tags,
-                                resource=path,
-                                query_params=query_params,
-                                array_params=array_params,
-                                body_params=body_params,
-                                path_params=path_params,
-                                call_line=call_line
-                            )
-                        )
-                        async_output.write(
-                            '\n\n' +
-                            template.render(
-                                operation=operation,
-                                function_definition=definition,
-                                description=description,
-                                doc_url=docs_url(operation),
-                                descriptions=param_descriptions,
-                                kwarg_line=kwarg_line,
-                                all_params=list(all_params.keys()),
-                                assert_blocks=assert_blocks,
-                                tags=tags,
-                                resource=path,
-                                query_params=query_params,
-                                array_params=array_params,
-                                body_params=body_params,
-                                path_params=path_params,
-                                call_line=call_line
-                            )
-                        )
+            generate_standard_and_async_functions(jinja_env, template_dir, section, output, async_output)
 
             # Generate API action batch functions
-            for path, methods in section.items():
-                for method, endpoint in methods.items():
-                    if endpoint['description'] in batchable_action_summaries:
-                        # Get metadata
-                        tags = endpoint['tags']
-                        operation = endpoint['operationId']
-                        description = endpoint['summary']
+            generate_action_batch_functions(jinja_env, template_dir, section, batch_output, batchable_action_summaries)
 
-                        # May need update for OASv3
-                        parameters = endpoint['parameters'] if 'parameters' in endpoint else None
 
-                        # Function definition
-                        definition = ''
-                        if parameters:
-                            for p, values in parse_params(operation, parameters, 'required').items():
-                                if values['type'] == 'array':
-                                    definition += f', {p}: list'
-                                elif values['type'] == 'number':
-                                    definition += f', {p}: float'
-                                elif values['type'] == 'integer':
-                                    definition += f', {p}: int'
-                                elif values['type'] == 'boolean':
-                                    definition += f', {p}: bool'
-                                elif values['type'] == 'object':
-                                    definition += f', {p}: dict'
-                                elif values['type'] == 'string':
-                                    definition += f', {p}: str'
+def generate_standard_and_async_functions(jinja_env: jinja2.Environment, template_dir: str, section: dict,
+                                          output: open, async_output: open):
+    for path, methods in section.items():
+        for method, endpoint in methods.items():
+            # Get metadata
+            tags = endpoint['tags']
+            operation = endpoint['operationId']
+            description = endpoint['summary']
 
-                            if 'perPage' in parse_params(operation, parameters):
-                                if operation in REVERSE_PAGINATION:
-                                    definition += ", total_pages=1, direction='prev'"
-                                else:
-                                    definition += ", total_pages=1, direction='next'"
-                                if operation == 'getNetworkEvents':
-                                    definition += ', event_log_end_time=None'
+            # will need updating for OASv3
+            parameters = endpoint['parameters'] if 'parameters' in endpoint else None
 
-                            if parse_params(operation, parameters, ['optional']):
-                                definition += f', **kwargs'
+            # Function definition
+            definition = ''
+            if parameters:
+                for p, values in parse_params(operation, parameters, 'required').items():
+                    if values['type'] == 'array':
+                        definition += f', {p}: list'
+                    elif values['type'] == 'number':
+                        definition += f', {p}: float'
+                    elif values['type'] == 'integer':
+                        definition += f', {p}: int'
+                    elif values['type'] == 'boolean':
+                        definition += f', {p}: bool'
+                    elif values['type'] == 'object':
+                        definition += f', {p}: dict'
+                    elif values['type'] == 'string':
+                        definition += f', {p}: str'
 
-                        # Docstring
-                        param_descriptions = list()
-                        all_params = parse_params(operation, parameters, ['required', 'pagination', 'optional'])
-                        if all_params:
-                            for p, values in all_params.items():
-                                param_descriptions.append(f'{p} ({values["type"]}): {values["description"]}')
+                if 'perPage' in parse_params(operation, parameters):
+                    if operation in REVERSE_PAGINATION:
+                        definition += ", total_pages=1, direction='prev'"
+                    else:
+                        definition += ", total_pages=1, direction='next'"
+                    if operation == 'getNetworkEvents':
+                        definition += ', event_log_end_time=None'
 
-                        # Combine keyword args with locals
-                        kwarg_line = ''
-                        if parse_params(operation, parameters, ['optional']):
-                            kwarg_line = 'kwargs.update(locals())'
+                if parse_params(operation, parameters, ['optional']):
+                    definition += f', **kwargs'
 
-                        # will need update for OASv3
-                        elif parse_params(operation, parameters, ['query', 'array', 'body']):
-                            kwarg_line = 'kwargs = locals()'
+            # Docstring
+            param_descriptions = list()
+            all_params = parse_params(operation, parameters, ['required', 'pagination', 'optional'])
+            if all_params:
+                for p, values in all_params.items():
+                    param_descriptions.append(f'{p} ({values["type"]}): {values["description"]}')
 
-                        # Assert valid values for enum
-                        enum_params = parse_params(operation, parameters, ['enum'])
-                        assert_blocks = list()
-                        if enum_params:
-                            for p, values in enum_params.items():
-                                assert_blocks.append((p, values['enum']))
+            # Combine keyword args with locals
+            kwarg_line = ''
+            if parse_params(operation, parameters, ['optional']):
+                kwarg_line = 'kwargs.update(locals())'
+            elif parse_params(operation, parameters, ['query', 'array', 'body']):
+                kwarg_line = 'kwargs = locals()'
 
-                        # Function body for GET endpoints
-                        query_params = array_params = body_params = {}
+            # Assert valid values for enum
+            enum_params = parse_params(operation, parameters, ['enum'])
+            assert_blocks = list()
+            if enum_params:
+                for p, values in enum_params.items():
+                    assert_blocks.append((p, values['enum']))
 
-                        # Function body for POST/PUT endpoints
-                        if method == 'post' or method == 'put':
+            # Function body for GET endpoints
+            query_params = array_params = body_params = path_params = {}
+            if method == 'get':
+                array_params, call_line, path_params, query_params = parse_get_params(operation, parameters)
 
-                            # will need update for OASv3
-                            body_params = parse_params(operation, parameters, 'body')
-                            if method == 'post':
-                                batch_operation = 'create'
-                            else:
-                                batch_operation = 'update'
+            # Function body for POST/PUT endpoints
+            elif method == 'post' or method == 'put':
+                body_params, call_line, path_params = parse_post_and_put_params(method, operation, parameters)
 
-                        # Function body for DELETE endpoints
-                        elif method == 'delete':
-                            batch_operation = 'destroy'
+            # Function body for DELETE endpoints
+            elif method == 'delete':
+                call_line, path_params = parse_delete_params(operation, parameters)
 
-                        # Function return statement
-                        call_line = 'return action'
+            # Add function to files
+            with open(f'{template_dir}function_template.jinja2', encoding='utf-8', newline=None) as fp:
+                function_template = fp.read()
+                template = jinja_env.from_string(function_template)
+                output.write(
+                    '\n\n' +
+                    template.render(
+                        operation=operation,
+                        function_definition=definition,
+                        description=description,
+                        doc_url=docs_url(operation),
+                        descriptions=param_descriptions,
+                        kwarg_line=kwarg_line,
+                        all_params=list(all_params.keys()),
+                        assert_blocks=assert_blocks,
+                        tags=tags,
+                        resource=path,
+                        query_params=query_params,
+                        array_params=array_params,
+                        body_params=body_params,
+                        path_params=path_params,
+                        call_line=call_line
+                    )
+                )
+                async_output.write(
+                    '\n\n' +
+                    template.render(
+                        operation=operation,
+                        function_definition=definition,
+                        description=description,
+                        doc_url=docs_url(operation),
+                        descriptions=param_descriptions,
+                        kwarg_line=kwarg_line,
+                        all_params=list(all_params.keys()),
+                        assert_blocks=assert_blocks,
+                        tags=tags,
+                        resource=path,
+                        query_params=query_params,
+                        array_params=array_params,
+                        body_params=body_params,
+                        path_params=path_params,
+                        call_line=call_line
+                    )
+                )
 
-                        # Add function to files
-                        with open(f'{template_dir}batch_function_template.jinja2', encoding='utf-8', newline=None) \
-                                as fp:
-                            function_template = fp.read()
-                            template = jinja_env.from_string(function_template)
-                            batch_output.write(
-                                '\n\n' +
-                                template.render(
-                                    operation=operation,
-                                    function_definition=definition,
-                                    description=description,
-                                    doc_url=docs_url(operation),
-                                    descriptions=param_descriptions,
-                                    kwarg_line=kwarg_line,
-                                    all_params=list(all_params.keys()),
-                                    assert_blocks=assert_blocks,
-                                    tags=tags,
-                                    resource=path,
-                                    query_params=query_params,
-                                    array_params=array_params,
-                                    body_params=body_params,
-                                    call_line=call_line,
-                                    batch_operation=batch_operation
-                                )
-                            )
+
+def parse_get_params(operation: str, parameters: dict):
+    query_params = parse_params(operation, parameters, 'query')
+    array_params = parse_params(operation, parameters, 'array')
+    path_params = parse_params(operation, parameters, 'path')
+    pagination_params = parse_params(operation, parameters, 'pagination')
+    if query_params or array_params:
+        if pagination_params:
+            if operation == 'getNetworkEvents':
+                call_line = 'return self._session.get_pages(metadata, resource, params, ' \
+                            'total_pages, direction, event_log_end_time)'
+            else:
+                call_line = 'return self._session.get_pages(metadata, resource, params, ' \
+                            'total_pages, direction)'
+        else:
+            call_line = 'return self._session.get(metadata, resource, params)'
+    else:
+        call_line = 'return self._session.get(metadata, resource)'
+    return array_params, call_line, path_params, query_params
+
+
+def parse_post_and_put_params(method: str, operation: str, parameters: dict):
+    body_params = parse_params(operation, parameters, 'body')
+    path_params = parse_params(operation, parameters, 'path')
+    if body_params:
+        call_line = f'return self._session.{method}(metadata, resource, payload)'
+    else:
+        call_line = f'return self._session.{method}(metadata, resource)'
+    return body_params, call_line, path_params
+
+
+def parse_delete_params(operation: str, parameters: dict):
+    path_params = parse_params(operation, parameters, 'path')
+    call_line = 'return self._session.delete(metadata, resource)'
+    return call_line, path_params
+
+
+def generate_action_batch_functions(jinja_env: jinja2.Environment, template_dir: str, section: dict,
+                                    batch_output: open, batchable_action_summaries: list):
+
+    for path, methods in section.items():
+        for method, endpoint in methods.items():
+            if endpoint['description'] in batchable_action_summaries:
+                # Get metadata
+                tags = endpoint['tags']
+                operation = endpoint['operationId']
+                description = endpoint['summary']
+
+                # May need update for OASv3
+                parameters = endpoint['parameters'] if 'parameters' in endpoint else None
+
+                # Function definition
+                definition = ''
+                if parameters:
+                    for p, values in parse_params(operation, parameters, 'required').items():
+                        if values['type'] == 'array':
+                            definition += f', {p}: list'
+                        elif values['type'] == 'number':
+                            definition += f', {p}: float'
+                        elif values['type'] == 'integer':
+                            definition += f', {p}: int'
+                        elif values['type'] == 'boolean':
+                            definition += f', {p}: bool'
+                        elif values['type'] == 'object':
+                            definition += f', {p}: dict'
+                        elif values['type'] == 'string':
+                            definition += f', {p}: str'
+
+                    if 'perPage' in parse_params(operation, parameters):
+                        if operation in REVERSE_PAGINATION:
+                            definition += ", total_pages=1, direction='prev'"
+                        else:
+                            definition += ", total_pages=1, direction='next'"
+                        if operation == 'getNetworkEvents':
+                            definition += ', event_log_end_time=None'
+
+                    if parse_params(operation, parameters, ['optional']):
+                        definition += f', **kwargs'
+
+                # Docstring
+                param_descriptions = list()
+                all_params = parse_params(operation, parameters, ['required', 'pagination', 'optional'])
+                if all_params:
+                    for p, values in all_params.items():
+                        param_descriptions.append(f'{p} ({values["type"]}): {values["description"]}')
+
+                # Combine keyword args with locals
+                kwarg_line = ''
+                if parse_params(operation, parameters, ['optional']):
+                    kwarg_line = 'kwargs.update(locals())'
+
+                # will need update for OASv3
+                elif parse_params(operation, parameters, ['query', 'array', 'body']):
+                    kwarg_line = 'kwargs = locals()'
+
+                # Assert valid values for enum
+                enum_params = parse_params(operation, parameters, ['enum'])
+                assert_blocks = list()
+                if enum_params:
+                    for p, values in enum_params.items():
+                        assert_blocks.append((p, values['enum']))
+
+                # Function body for GET endpoints
+                query_params = array_params = body_params = {}
+
+                # Function body for POST/PUT endpoints
+                if method == 'post' or method == 'put':
+
+                    # will need update for OASv3
+                    body_params = parse_params(operation, parameters, 'body')
+                    if method == 'post':
+                        batch_operation = 'create'
+                    else:
+                        batch_operation = 'update'
+
+                # Function body for DELETE endpoints
+                elif method == 'delete':
+                    batch_operation = 'destroy'
+
+                # Function return statement
+                call_line = 'return action'
+
+                # Add function to files
+                with open(f'{template_dir}batch_function_template.jinja2', encoding='utf-8', newline=None) \
+                        as fp:
+                    function_template = fp.read()
+                    template = jinja_env.from_string(function_template)
+                    batch_output.write(
+                        '\n\n' +
+                        template.render(
+                            operation=operation,
+                            function_definition=definition,
+                            description=description,
+                            doc_url=docs_url(operation),
+                            descriptions=param_descriptions,
+                            kwarg_line=kwarg_line,
+                            all_params=list(all_params.keys()),
+                            assert_blocks=assert_blocks,
+                            tags=tags,
+                            resource=path,
+                            query_params=query_params,
+                            array_params=array_params,
+                            body_params=body_params,
+                            call_line=call_line,
+                            batch_operation=batch_operation
+                        )
+                    )
+
+
+def render_class_template(jinja_env: jinja2.Environment, template_dir: str, template_name: str,
+                          output: open, scope: str):
+    with open(f'{template_dir}{template_name}', encoding='utf-8', newline=None) as fp:
+        class_template = fp.read()
+        template = jinja_env.from_string(class_template)
+        output.write(
+            template.render(
+                class_name=scope[0].upper() + scope[1:],
+            )
+        )
 
 
 # Prints READ_ME help message for user to read
