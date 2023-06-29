@@ -472,18 +472,21 @@ def generate_action_batch_functions(jinja_env: jinja2.Environment, template_dir:
                 definition = ''
                 if parameters:
                     for p, values in parse_params(operation, parameters, 'required').items():
-                        if values['type'] == 'array':
-                            definition += f', {p}: list'
-                        elif values['type'] == 'number':
-                            definition += f', {p}: float'
-                        elif values['type'] == 'integer':
-                            definition += f', {p}: int'
-                        elif values['type'] == 'boolean':
-                            definition += f', {p}: bool'
-                        elif values['type'] == 'object':
-                            definition += f', {p}: dict'
-                        elif values['type'] == 'string':
-                            definition += f', {p}: str'
+
+                        # Match OAS schema types to Python types
+                        match values['type']:
+                            case 'array':
+                                definition += f', {p}: list'
+                            case 'number':
+                                definition += f', {p}: float'
+                            case 'integer':
+                                definition += f', {p}: int'
+                            case 'boolean':
+                                definition += f', {p}: bool'
+                            case 'object':
+                                definition += f', {p}: dict'
+                            case 'string':
+                                definition += f', {p}: str'
 
                     if 'perPage' in parse_params(operation, parameters):
                         if operation in REVERSE_PAGINATION:
@@ -611,6 +614,15 @@ def main(inputs):
             if arg.lower() == 'true':
                 is_github_action = True
 
+    python_version_warning_string = f'The generator requires Python 3.10 at minimum, but your interpreter version is ' \
+                                    f'{sys.version}. Please consult the generator readme at your convenience: ' \
+                                    f'https://github.com/meraki/dashboard-api-python/blob/main/generator/readme.md'
+    # Check minimum Python version
+    if sys.version_info[0] != 3:
+        sys.exit(python_version_warning_string)
+    elif sys.version_info[1] < 10:
+        sys.exit(python_version_warning_string)
+
     # Retrieve latest OpenAPI specification
     if org_id:
         if not api_key:
@@ -625,7 +637,16 @@ def main(inputs):
                 print_help()
                 sys.exit(f'API key provided does not have access to org {org_id}')
     else:
-        spec = requests.get('https://api.meraki.com/api/v1/openapiSpec').json()
+        response = requests.get('https://api.meraki.com/api/v1/openapiSpec')
+        # Validate that the spec pulled successfully before trying to generate the library.
+        if response.ok:
+            spec = response.json()
+            print(f'Successfully pulled Meraki dashboard API OpenAPI spec.')
+        else:
+            print_help()
+            sys.exit(f'There was an HTTP error pulling the OpenAPI specification. Please try again in a few minutes. '
+                     f'If this continues for more than an hour, please contact Meraki support and mention that '
+                     f'"HTTP GET https://api.meraki.com/api/v1/openapiSpec" is failing.')
 
     generate_library(spec, version_number, is_github_action)
 

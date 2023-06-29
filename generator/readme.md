@@ -4,6 +4,8 @@ Generally speaking, you will not need to generate this yourself. Simply use the 
 
 However, if you participate in Early Access features, you may want to generate a library to match your org's spec. In which case, follow along.
 
+> **NB:** The generator requires Python 3.10 or later.
+
 1. Clone this repo locally.
 2. Open a terminal in this `generator` folder.
 3. *Optional:* If you want to work with beta endpoints, then first [review the warnings, and then opt one of your orgs into the Early API Access program](https://community.meraki.com/t5/Developers-APIs/UPDATED-Beta-testing-with-the-Meraki-Developer-Early-Access/m-p/145344#M5808). 

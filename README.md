@@ -28,11 +28,12 @@ While you can make direct HTTP requests to dashboard API in any programming lang
     * If you have both Python3 and Python2 installed, you may need to use `pip3` (so `pip3 install meraki`) along with `python3` on your system
     * If _meraki_ was previously installed, you can upgrade to the latest non-beta release with `pip install --upgrade meraki`
 
-5. Meraki dashboard API v1 is the current default. You can also specify the version of the library when installing with _pip_:
+5. The library supports Meraki dashboard API v1. You can also specify the version of the library when installing with _pip_:
     * See the full [release history](https://pypi.org/project/meraki/#history) to pick the version you want, or use `pip install meraki==` without including a version number to display the list of available versions
-    * v0 versions of the Python library begin with _0_ (0.**x**.**y**), and v1 versions begin with _1_ (1.0.0b**z** for beta)
-    * Specify the version you want with the install command; for example: `pip install meraki==0.x.y` for v0 or `pip install meraki==1.0.0bz` for v1 beta
+    * Versions begin with _1_ (1.0.0b**z** for beta)
+    * Specify the version you want with the install command; for example: `pip install meraki==1.34.0`
     * You can also see the version currently installed with `pip show meraki`
+    * End-of-life v0 versions of the Python library begin with _0_ (0.**x**.**y**) and are not supported nor recommended.
 
 ## Usage
 1. Export your API key as an [environment variable](https://www.twilio.com/blog/2017/01/how-to-set-environment-variables.html), for example:
@@ -60,8 +61,6 @@ While you can make direct HTTP requests to dashboard API in any programming lang
     ```python
     my_orgs = dashboard.organizations.getOrganizations()
     ```
-
-6. If you were using this module versions 0.34 and prior, that file's functions are included in the _legacy.py_ file, and you can adapt your existing scripts by replacing their `from meraki import meraki` line to `import meraki`
 
 ### Examples
 You can find fully working example scripts in the **examples** folder.
