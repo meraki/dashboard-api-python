@@ -44,6 +44,7 @@ def generate_pagination_parameters(operation: str):
 
 
 # Returns full link to endpoint's documentation on Developer Hub
+# Note: updates to the documentation site may impact these URLs.
 def docs_url(operation: str):
     base_url = 'https://developer.cisco.com/meraki/api-v1/#!'
     ret = ''

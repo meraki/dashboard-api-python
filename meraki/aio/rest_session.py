@@ -1,11 +1,12 @@
-import asyncio
+import sys
+from datetime import datetime
 import json
 import platform
 import random
-import ssl
-import sys
 import urllib.parse
-from datetime import datetime
+import asyncio
+import ssl
+
 
 import aiohttp
 
@@ -60,12 +61,24 @@ class AsyncRestSession:
         self._caller = caller
         self.use_iterator_for_get_pages = use_iterator_for_get_pages
 
+        # Check minimum Python version
+        version_warning_string = f'This library requires Python 3.7 at minimum. Python versions 3.6 and below ' \
+                                 f'are end of life and end of support per the Python maintainers, and your ' \
+                                 f'interpreter version details are: \n' \
+                                 f'platform.python_version_tuple()[0] = {platform.python_version_tuple()[0]}\n' \
+                                 f'platform.python_version_tuple()[1] = {platform.python_version_tuple()[1]}\n' \
+                                 f'platform.python_version is {platform.python_version()}\n' \
+                                 f'Please consult the readme at your convenience: ' \
+                                 f'https://github.com/meraki/dashboard-api-python'
+        if int(platform.python_version_tuple()[0]) != 3:
+            sys.exit(version_warning_string)
+        elif int(platform.python_version_tuple()[1]) < 7:
+            sys.exit(version_warning_string)
+
         # Check base URL
         if "v0" in self._base_url:
-            sys.exit(
-                f"If you want to use the Python library with v0 paths ({self._base_url} was configured as the base"
-                f' URL), then install the v0 library. See the "Setup" section @ https://github.com/meraki/dashboard-api-python/'
-            )
+            sys.exit(f'This library does not support dashboard API v0 ({self._base_url} was configured as the base'
+                     f' URL).  API v0 has been end of life since 2020 August 5.')
         elif self._base_url[-1] == "/":
             self._base_url = self._base_url[:-1]
 
@@ -131,8 +144,10 @@ class AsyncRestSession:
         kwargs.setdefault("timeout", self._single_request_timeout)
 
         # Ensure proper base URL
-        url = str(url)
-        if "meraki.com" in url or "meraki.cn" in url:
+        allowed_domains = ['meraki.com', 'meraki.cn']
+        parsed_url = urllib.parse.urlparse(url)
+
+        if any(domain in parsed_url.netloc for domain in allowed_domains):
             abs_url = url
         else:
             abs_url = self._base_url + url

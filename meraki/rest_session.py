@@ -1,10 +1,10 @@
+import sys
 from datetime import datetime
 import json
 import platform
 import random
-import sys
-import time
 import urllib.parse
+import time
 
 import requests
 
@@ -15,44 +15,43 @@ from meraki.__init__ import __version__
 
 def user_agent_extended(be_geo_id, caller):
     # Generate extended portion of the User-Agent
-    user_agent_extended = be_geo_id
-    user_agent_extended = {}
+    user_agent = dict()
 
     # Mimic pip system data collection per https://github.com/pypa/pip/blob/master/src/pip/_internal/network/session.py
-    user_agent_extended['implementation'] = {
+    user_agent['implementation'] = {
         "name": platform.python_implementation(),
     }
 
-    if user_agent_extended["implementation"]["name"] in ('CPython', 'Jython', 'IronPython'):
-        user_agent_extended["implementation"]["version"] = platform.python_version()
-    elif user_agent_extended["implementation"]["name"] == 'PyPy':
+    if user_agent["implementation"]["name"] in ('CPython', 'Jython', 'IronPython'):
+        user_agent["implementation"]["version"] = platform.python_version()
+    elif user_agent["implementation"]["name"] == 'PyPy':
         if sys.pypy_version_info.releaselevel == 'final':
             pypy_version_info = sys.pypy_version_info[:3]
         else:
             pypy_version_info = sys.pypy_version_info
-        user_agent_extended["implementation"]["version"] = ".".join(
+        user_agent["implementation"]["version"] = ".".join(
             [str(x) for x in pypy_version_info]
         )
 
     if sys.platform.startswith("darwin") and platform.mac_ver()[0]:
-        user_agent_extended["distro"] = {"name": "macOS", "version": platform.mac_ver()[0]}
+        user_agent["distro"] = {"name": "macOS", "version": platform.mac_ver()[0]}
 
     if platform.system():
-        user_agent_extended.setdefault("system", {})["name"] = platform.system()
+        user_agent.setdefault("system", {})["name"] = platform.system()
 
     if platform.release():
-        user_agent_extended.setdefault("system", {})["release"] = platform.release()
+        user_agent.setdefault("system", {})["release"] = platform.release()
 
     if platform.machine():
-        user_agent_extended["cpu"] = platform.machine()
+        user_agent["cpu"] = platform.machine()
 
     if be_geo_id:
-        user_agent_extended["be_geo_id"] = be_geo_id
+        user_agent["be_geo_id"] = be_geo_id
 
     if caller:
-        user_agent_extended["caller"] = caller
+        user_agent["caller"] = caller
 
-    return urllib.parse.quote(json.dumps(user_agent_extended))
+    return urllib.parse.quote(json.dumps(user_agent))
 
 
 # Main module interface
@@ -100,20 +99,12 @@ class RestSession(object):
         self._req_session = requests.session()
         self._req_session.encoding = 'utf-8'
 
-        # Check minimum Python version
-        python_version_warning_string = f'This library requires Python 3.7 at minimum. Python versions 3.6 and below ' \
-                                        f'are end of life and end of support per the Python maintainers, and your ' \
-                                        f'interpreter version is {sys.version}. Please consult the readme at your ' \
-                                        f'convenience: https://github.com/meraki/dashboard-api-python'
-        if sys.version_info[0] != 3:
-            sys.exit(python_version_warning_string)
-        elif sys.version_info[1] < 7:
-            sys.exit(python_version_warning_string)
+        self.check_python_version()
 
         # Check base URL
         if 'v0' in self._base_url:
-            sys.exit(f'If you want to use the Python library with v0 paths ({self._base_url} was configured as the base'
-                     f' URL), then install the v0 library. See the "Setup" section @ https://github.com/meraki/dashboard-api-python/')
+            sys.exit(f'This library does not support dashboard API v0 ({self._base_url} was configured as the base'
+                     f' URL).  API v0 has been end of life since 2020 August 5.')
         elif self._base_url[-1] == '/':
             self._base_url = self._base_url[:-1]
 
@@ -134,6 +125,21 @@ class RestSession(object):
         self._parameters['api_key'] = '*' * 36 + self._api_key[-4:]
         if self._logger:
             self._logger.info(f'Meraki dashboard API session initialized with these parameters: {self._parameters}')
+
+    def check_python_version(self):
+        # Check minimum Python version
+        version_warning_string = f'This library requires Python 3.7 at minimum. Python versions 3.6 and below ' \
+                                 f'are end of life and end of support per the Python maintainers, and your ' \
+                                 f'interpreter version details are: \n' \
+                                 f'platform.python_version_tuple()[0] = {platform.python_version_tuple()[0]}\n' \
+                                 f'platform.python_version_tuple()[1] = {platform.python_version_tuple()[1]}\n' \
+                                 f'platform.python_version is {platform.python_version()}\n' \
+                                 f'Please consult the readme at your convenience: ' \
+                                 f'https://github.com/meraki/dashboard-api-python'
+        if int(platform.python_version_tuple()[0]) != 3:
+            sys.exit(version_warning_string)
+        elif int(platform.python_version_tuple()[1]) < 7:
+            sys.exit(version_warning_string)
 
     @property
     def use_iterator_for_get_pages(self):
@@ -161,7 +167,10 @@ class RestSession(object):
         kwargs.setdefault('timeout', self._single_request_timeout)
 
         # Ensure proper base URL
-        if 'meraki.com' in url or 'meraki.cn' in url:
+        allowed_domains = ['meraki.com', 'meraki.cn']
+        parsed_url = urllib.parse.urlparse(url)
+
+        if any(domain in parsed_url.netloc for domain in allowed_domains):
             abs_url = url
         else:
             abs_url = self._base_url + url
