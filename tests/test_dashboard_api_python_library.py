@@ -2,6 +2,7 @@ import pytest
 import meraki
 import random
 import platform
+import time
 
 
 @pytest.fixture(scope='session')
@@ -207,4 +208,14 @@ def test_delete_policy_objects(dashboard, org_id, version_salt):
 
 def test_delete_network(dashboard, network):
     response = dashboard.networks.deleteNetwork(network['id'])
+
+    total_wait = 0
+    max_wait = 40
+
+    while response is not None and total_wait <= max_wait:
+        wait_time = random.randint(1, 20)
+        time.sleep(wait_time)
+        response = dashboard.networks.deleteNetwork(network['id'])
+        total_wait += wait_time
+
     assert response is None
