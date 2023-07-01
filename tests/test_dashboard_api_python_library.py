@@ -210,7 +210,7 @@ def test_delete_network(dashboard, network):
     response = dashboard.networks.deleteNetwork(network['id'])
 
     total_wait = 0
-    max_wait = 40
+    max_wait = 120
 
     while response is not None and total_wait <= max_wait:
         wait_time = random.randint(1, 20)
