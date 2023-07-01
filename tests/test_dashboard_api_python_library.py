@@ -84,17 +84,17 @@ def test_update_network(dashboard, network):
     assert updated_network['name'] == new_name
 
 
-def test_create_organization_policy_objects(dashboard, org_id, network):
+def test_create_organization_policy_objects(dashboard, org_id, network, version_salt):
     policy_objects = [
         {
-            "name": "Ham",
+            "name": f"Ham {version_salt}".replace('.', '-'),
             "category": "network",
             "type": "cidr",
             "cidr": "10.51.1.253",
             "networkIds": [network["id"]]
         },
         {
-            "name": "Hamlet",
+            "name": f"Hamlet {version_salt}".replace('.', '-'),
             "category": "network",
             "type": "cidr",
             "cidr": "10.17.38.0/24"
@@ -148,8 +148,13 @@ def test_create_network_appliance_vlan(dashboard, network):
         assert new_vlan["name"] == vlan["name"]
 
 
-def test_update_l3_firewall_rules(dashboard, org_id, network):
-    policy_objects = dashboard.organizations.getOrganizationPolicyObjects(org_id)
+def test_update_l3_firewall_rules(dashboard, org_id, network, version_salt):
+    # get all policy objects
+    all_policy_objects = dashboard.organizations.getOrganizationPolicyObjects(org_id)
+
+    # only interact with the ones created for this test run
+    policy_objects = [policy_object for policy_object in all_policy_objects
+                      if f"{version_salt}".replace('.', '-') in policy_object['name']]
     new_rules = {
         "rules": [
             {
@@ -182,11 +187,22 @@ def test_update_l3_firewall_rules(dashboard, org_id, network):
     assert updated_rules[1]["comment"] == "Ham"
 
 
-def test_delete_policy_objects(dashboard, org_id):
-    policy_objects = dashboard.organizations.getOrganizationPolicyObjects(org_id)
-    for policy_object in policy_objects:
-        response = dashboard.organizations.deleteOrganizationPolicyObject(org_id, policy_object["id"])
-        assert response is None
+def test_delete_policy_objects(dashboard, org_id, version_salt):
+    # get all policy objects
+    all_policy_objects = dashboard.organizations.getOrganizationPolicyObjects(org_id)
+
+    # only interact with the ones this test run created
+    for policy_object in all_policy_objects:
+        if f'{version_salt}'.replace('.', '-') in policy_object['name']:
+            response = dashboard.organizations.deleteOrganizationPolicyObject(org_id, policy_object["id"])
+            assert response is None
+
+    # ensure this one's policy objects are cleaned up
+    remaining_policy_objects = dashboard.organizations.getOrganizationPolicyObjects(org_id)
+    missed_policy_objects = [policy_object for policy_object in remaining_policy_objects
+                             if f'{version_salt}'.replace('.', '-') in policy_object['name']]
+    assert len(missed_policy_objects) == 0
+
 
 
 def test_delete_network(dashboard, network):
