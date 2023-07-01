@@ -141,6 +141,7 @@ def test_create_network_appliance_vlan(dashboard, network):
 
 def test_update_l3_firewall_rules(dashboard, org_id, network):
     policy_objects = dashboard.organizations.getOrganizationPolicyObjects(org_id)
+    print(f'policy_objects length is {len(policy_objects)}')
     new_rules = {
         "rules": [
             {
@@ -168,6 +169,8 @@ def test_update_l3_firewall_rules(dashboard, org_id, network):
     updated_rules = dashboard.appliance.updateNetworkApplianceFirewallL3FirewallRules(network["id"],
                                                                                       **new_rules)["rules"]
     assert updated_rules is not None
+    print(f'new_rules["rules"] length is {len(new_rules["rules"])}')
+    print(f'updated_rules length is {len(updated_rules)}')
     assert len(updated_rules) == 3
     assert updated_rules[0]["comment"] == "HamByIP"
     assert updated_rules[1]["comment"] == "Ham"
