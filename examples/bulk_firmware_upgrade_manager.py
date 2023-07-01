@@ -148,7 +148,6 @@ def action_batch_runner(batch_actions_lists, org_id):
     responses = list()
     number_of_batches = len(batch_actions_lists)
     number_of_batches_submitted = 0
-    wait_seconds = int(30)
 
     # Make a batch for each list
     for batch_action_list in batch_actions_lists:
@@ -177,7 +176,8 @@ def action_batch_queue_checker(org_id):
 
     while len(running_action_batches) > 4:
         print(
-            f'There are already five action batches in progress with a total of {total_running_actions} running actions. Waiting {wait_seconds} seconds.')
+            f'There are already five action batches in progress with a total of {total_running_actions} running '
+            f'actions. Waiting {wait_seconds} seconds.')
         time.sleep(wait_seconds)
         print('Checking again.')
 

@@ -27,7 +27,7 @@ async def analyzeOrganization(aiomeraki: meraki.aio.AsyncDashboardAPI, orgId: st
     for e in events:
         ip, port = e["srcIp"].rsplit(":", 1)
         ip = ip.strip("[]")  # remove brackets in case of ipv6
-        if not ipaddress.ip_address(ip).is_private:  # dont block private ip addresses on the public ip of the firewall
+        if not ipaddress.ip_address(ip).is_private:  # don't block private ip addresses on the public ip of the firewall
             ret[ip] = ret.get(ip, 0) + 1
 
     return ret
