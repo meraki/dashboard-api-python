@@ -1,5 +1,7 @@
 import pytest
 import meraki
+import random
+import platform
 
 
 @pytest.fixture(scope='session')
@@ -20,16 +22,23 @@ def org_id(pytestconfig):
 
 
 @pytest.fixture(scope='session')
-def network(dashboard, org_id):
+def version_salt():
+    python_version = platform.python_version()
+    salt = str(random.randint(1, 17381738))
+    return f'{python_version} {salt}'
+
+
+@pytest.fixture(scope='session')
+def network(dashboard, org_id, version_salt):
     # Replace with network details
-    name = "_GitHubAction Test Network"
-    producttypes = ["appliance", "switch", "wireless", "systemsManager", "sensor"]
+    name = f"_GitHubAction Test Network {version_salt}"
+    product_types = ["appliance", "switch", "wireless", "systemsManager", "sensor"]
     network_kwargs = {
         "tags": ["test_tag", "github", "shouldBeDeleted"],
         "timezone": "America/Los_Angeles"
     }
 
-    created_network = dashboard.organizations.createOrganizationNetwork(org_id, name, producttypes, **network_kwargs)
+    created_network = dashboard.organizations.createOrganizationNetwork(org_id, name, product_types, **network_kwargs)
     yield created_network
 
 
@@ -52,9 +61,9 @@ def test_get_organization(dashboard, org_id):
     assert isinstance(organization["id"], str)
 
 
-def test_create_network(dashboard, org_id, network):
+def test_create_network(dashboard, org_id, network, version_salt):
     assert network is not None
-    assert network['name'] == "_GitHubAction Test Network"
+    assert network['name'] == f"_GitHubAction Test Network {version_salt}"
 
 
 def test_get_networks(dashboard, org_id):
@@ -65,7 +74,7 @@ def test_get_networks(dashboard, org_id):
 
 def test_update_network(dashboard, network):
     # Replace with updated network details
-    new_name = "_GitHubAction Updated Test Network"
+    new_name = f"{network['name']} new"
     updated_network_data = {
         "name": new_name,
         "tags": ["updated_test_tag", "github", "shouldBeDeleted"]
@@ -141,7 +150,6 @@ def test_create_network_appliance_vlan(dashboard, network):
 
 def test_update_l3_firewall_rules(dashboard, org_id, network):
     policy_objects = dashboard.organizations.getOrganizationPolicyObjects(org_id)
-    print(f'policy_objects length is {len(policy_objects)}')
     new_rules = {
         "rules": [
             {
@@ -169,8 +177,6 @@ def test_update_l3_firewall_rules(dashboard, org_id, network):
     updated_rules = dashboard.appliance.updateNetworkApplianceFirewallL3FirewallRules(network["id"],
                                                                                       **new_rules)["rules"]
     assert updated_rules is not None
-    print(f'new_rules["rules"] length is {len(new_rules["rules"])}')
-    print(f'updated_rules length is {len(updated_rules)}')
     assert len(updated_rules) == 3
     assert updated_rules[0]["comment"] == "HamByIP"
     assert updated_rules[1]["comment"] == "Ham"
