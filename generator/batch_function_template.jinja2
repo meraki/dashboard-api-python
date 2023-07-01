@@ -51,7 +51,7 @@
         action = {
             "resource": resource,
             "operation": "{{ batch_operation }}",
-            {% if batch_operation != 'destroy'%}
+            {% if body_params|length > 0 and batch_operation != 'destroy'%}
             "body": payload
             {% endif %}
         }

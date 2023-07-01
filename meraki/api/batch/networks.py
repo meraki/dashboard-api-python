@@ -797,7 +797,6 @@ class ActionBatchNetworks(object):
         action = {
             "resource": resource,
             "operation": "create",
-            "body": payload
         }
         return action
         

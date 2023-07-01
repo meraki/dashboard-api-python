@@ -88,7 +88,6 @@ class ActionBatchAppliance(object):
         action = {
             "resource": resource,
             "operation": "create",
-            "body": payload
         }
         return action
         
@@ -996,7 +995,6 @@ class ActionBatchAppliance(object):
         action = {
             "resource": resource,
             "operation": "create",
-            "body": payload
         }
         return action
         
