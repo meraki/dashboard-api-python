@@ -337,7 +337,7 @@ def generate_standard_and_async_functions(jinja_env: jinja2.Environment, templat
                         definition += ', event_log_end_time=None'
 
                 if parse_params(operation, parameters, ['optional']):
-                    definition += f', **kwargs'
+                    definition += ', **kwargs'
 
             # Docstring
             param_descriptions = list()
