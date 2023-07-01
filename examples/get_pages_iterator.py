@@ -1,12 +1,5 @@
-import csv
-from datetime import datetime, timedelta
-import os
-import asyncio
 import argparse
-import ipaddress
-from typing import Dict,List
-import sys
-import time
+import asyncio
 
 import meraki
 
@@ -20,21 +13,26 @@ NETWORK_ID = ""
 
 def getNetworksLegacy(meraki: meraki.DashboardAPI, perPage=5):
     count = 0
-    for x in meraki.organizations.getOrganizationNetworks(organizationId=ORGANIZATION_ID, perPage=perPage, total_pages=-1):
+    for x in meraki.organizations.getOrganizationNetworks(organizationId=ORGANIZATION_ID, perPage=perPage,
+                                                          total_pages=-1):
         print(f"{x['id']} - {x['name']}")
         count = count + 1
     print(f"Found {count} networks")
+
 
 def getNetworksIterator(meraki: meraki.DashboardAPI, perPage=5):
     count = 0
-    for x in meraki.organizations.getOrganizationNetworks(organizationId=ORGANIZATION_ID, perPage=perPage,total_pages=-1):
+    for x in meraki.organizations.getOrganizationNetworks(organizationId=ORGANIZATION_ID, perPage=perPage,
+                                                          total_pages=-1):
         print(f"{x['id']} - {x['name']}")
         count = count + 1
     print(f"Found {count} networks")
 
+
 def getNetworkEventsLegacy(meraki: meraki.DashboardAPI, perPage=5):
     count = 0
-    result = meraki.networks.getNetworkEvents(networkId=NETWORK_ID, perPage=perPage,total_pages=50,productType="wireless")
+    result = meraki.networks.getNetworkEvents(networkId=NETWORK_ID, perPage=perPage, total_pages=50,
+                                              productType="wireless")
     for x in result["events"]:
         print(f"{x['occurredAt']}")
         count = count + 1
@@ -43,13 +41,14 @@ def getNetworkEventsLegacy(meraki: meraki.DashboardAPI, perPage=5):
 
 def getNetworkEventsIterator(meraki: meraki.DashboardAPI, perPage=5):
     count = 0
-    for x in meraki.networks.getNetworkEvents(networkId=NETWORK_ID, perPage=perPage,total_pages=50,productType="wireless"):
+    for x in meraki.networks.getNetworkEvents(networkId=NETWORK_ID, perPage=perPage, total_pages=50,
+                                              productType="wireless"):
         print(f"{x['occurredAt']}")
         count = count + 1
     print(f"Found {count} events")
 
-async def main():
 
+async def main():
     parser = argparse.ArgumentParser(description='Example for demonstrating the use_iterator_for_get_pages parameter')
 
     # Instantiate a Meraki dashboard API session
@@ -59,7 +58,7 @@ async def main():
         base_url="https://api.meraki.com/api/v1",
         log_file_prefix=__file__[:-3],
         print_console=True,
-        use_iterator_for_get_pages = True
+        use_iterator_for_get_pages=True
     )
 
     meraki_legacy = meraki.DashboardAPI(
@@ -67,18 +66,17 @@ async def main():
         base_url="https://api.meraki.com/api/v1",
         log_file_prefix=__file__[:-3],
         print_console=False,
-        use_iterator_for_get_pages = False
-        ) 
+        use_iterator_for_get_pages=False
+    )
 
-            
     print("Test legacy")
     getNetworksLegacy(meraki_legacy)
 
-    await asyncio.sleep(2) #just wait two seconds between the tests
+    await asyncio.sleep(2)  # just wait two seconds between the tests
 
     print("Test iterator")
     getNetworksIterator(meraki_iterator)
-            
+
     print("-----------------------------------------------------------------------")
     print("-----------------------------------------------------------------------")
     print("-----------------------------------------------------------------------")
@@ -87,7 +85,7 @@ async def main():
     print("Test legacy")
     getNetworkEventsLegacy(meraki_legacy)
 
-    await asyncio.sleep(2) #just wait two seconds between the tests
+    await asyncio.sleep(2)  # just wait two seconds between the tests
 
     print("Test iterator")
     getNetworkEventsIterator(meraki_iterator)
@@ -98,4 +96,3 @@ async def main():
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
     loop.run_until_complete(main())
-

@@ -1,7 +1,7 @@
-import csv
-from datetime import datetime
-import os
 import asyncio
+import csv
+import os
+from datetime import datetime
 
 import meraki.aio
 
@@ -81,10 +81,12 @@ async def listOrganization(aiomeraki: meraki.aio.AsyncDashboardAPI, org):
 
     # Stitch together one consolidated CSV per org
     output_file = open(f"{folder_name}.csv", mode="w", newline="\n")
-    field_names = ['id', 'mac', 'description', 'ip', 'ip6', 'ip6Local', 'user', 'firstSeen', 'lastSeen', 'manufacturer', 'os', 'recentDeviceSerial', 'recentDeviceName', 'recentDeviceMac', 'ssid', 'vlan', 'switchport', 'usage', 'status', 'notes', 'smInstalled', 'groupPolicy8021x']
+    field_names = ['id', 'mac', 'description', 'ip', 'ip6', 'ip6Local', 'user', 'firstSeen', 'lastSeen', 'manufacturer',
+                   'os', 'recentDeviceSerial', 'recentDeviceName', 'recentDeviceMac', 'ssid', 'vlan', 'switchport',
+                   'usage', 'status', 'notes', 'smInstalled', 'groupPolicy8021x']
     field_names.insert(0, "Network Name")
     field_names.insert(1, "Network ID")
-    
+
     csv_writer = csv.DictWriter(
         output_file,
         field_names,

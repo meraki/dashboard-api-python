@@ -1,36 +1,41 @@
 {
-	"organizationId": "YOUR ORG ID",
-	"networkId": "YOUR NETWORK ID",
-	"switchSerial": "YOUR SWITCH SERIAL",
-	"applianceSerial": "YOUR APPLIANCE SERIAL",
-	"vlans": {
-		"native": {
-			"id": 1,
-			"defaultGateway": "10.1.1.1",
-			"interfaceIp": "10.1.24.1"
-		},
-		"others": [{
-				"id": 9,
-				"interfaceIp": "192.168.9.2"
-			},
-			{
-				"id": 10,
-				"interfaceIp": "192.168.10.2"
-			},
-			{
-				"id": 100,
-				"interfaceIp": "192.168.100.2"
-			}
-		]
-	},
-	"fallbacks": [{
-		"knownParams": [{
-			"name": "dnsCustomNameservers",
-			"mode": [
-				"10.1.5.1",
-				"208.67.222.222",
-				"208.67.220.220"
-			]
-		}]
-	}]
+  "organizationId": "YOUR ORG ID",
+  "networkId": "YOUR NETWORK ID",
+  "switchSerial": "YOUR SWITCH SERIAL",
+  "applianceSerial": "YOUR APPLIANCE SERIAL",
+  "vlans": {
+    "native": {
+      "id": 1,
+      "defaultGateway": "10.1.1.1",
+      "interfaceIp": "10.1.24.1"
+    },
+    "others": [
+      {
+        "id": 9,
+        "interfaceIp": "192.168.9.2"
+      },
+      {
+        "id": 10,
+        "interfaceIp": "192.168.10.2"
+      },
+      {
+        "id": 100,
+        "interfaceIp": "192.168.100.2"
+      }
+    ]
+  },
+  "fallbacks": [
+    {
+      "knownParams": [
+        {
+          "name": "dnsCustomNameservers",
+          "mode": [
+            "10.1.5.1",
+            "208.67.222.222",
+            "208.67.220.220"
+          ]
+        }
+      ]
+    }
+  ]
 }

@@ -1,14 +1,12 @@
-import csv
-from datetime import datetime
-import os
-import json
 import argparse
+import json
+import os
 import sys
+import urllib.parse
+from datetime import datetime
 
 import meraki
 
-import urllib.parse
-import platform
 
 # This example pulls API calls from the passed in org_id from the last timespan
 # seconds, where the default timespan is 900 (hint 24 hours = 3600 seconds) and
@@ -47,7 +45,7 @@ def main(org_id, timespan):
         csvString += use['path'] + ','
         csvString += use['queryString'] + ','
         csvString += use['ts'].split('T')[0] + ','
-        csvString += use['ts'].split('T')[1].replace('Z','') + ','
+        csvString += use['ts'].split('T')[1].replace('Z', '') + ','
         csvString += str(use['responseCode']) + ','
         csvString += use['sourceIp'] + ','
 
@@ -93,7 +91,7 @@ def main(org_id, timespan):
             else:
                 csvString += ',,,,,,,,,'
         else:
-            csvString += use['userAgent']+ ','
+            csvString += use['userAgent'] + ','
             csvString += ',,,,,,,,,'
 
         csvString += '\r\n'
@@ -106,6 +104,7 @@ def main(org_id, timespan):
     file.write(csvString)
     file.close()
     print('Results written to ' + filename)
+
 
 if __name__ == '__main__':
     # First check for API key
