@@ -55,6 +55,22 @@ def user_agent_extended(be_geo_id, caller):
 
 
 # Main module interface
+def check_python_version():
+    # Check minimum Python version
+    version_warning_string = f'This library requires Python 3.7 at minimum. Python versions 3.6 and below ' \
+                             f'are end of life and end of support per the Python maintainers, and your ' \
+                             f'interpreter version details are: \n' \
+                             f'platform.python_version_tuple()[0] = {platform.python_version_tuple()[0]}\n' \
+                             f'platform.python_version_tuple()[1] = {platform.python_version_tuple()[1]}\n' \
+                             f'platform.python_version is {platform.python_version()}\n' \
+                             f'Please consult the readme at your convenience: ' \
+                             f'https://github.com/meraki/dashboard-api-python'
+    if int(platform.python_version_tuple()[0]) != 3:
+        sys.exit(version_warning_string)
+    elif int(platform.python_version_tuple()[1]) < 7:
+        sys.exit(version_warning_string)
+
+
 class RestSession(object):
     def __init__(
         self,
@@ -99,7 +115,7 @@ class RestSession(object):
         self._req_session = requests.session()
         self._req_session.encoding = 'utf-8'
 
-        self.check_python_version()
+        check_python_version()
 
         # Check base URL
         if 'v0' in self._base_url:
@@ -125,21 +141,6 @@ class RestSession(object):
         self._parameters['api_key'] = '*' * 36 + self._api_key[-4:]
         if self._logger:
             self._logger.info(f'Meraki dashboard API session initialized with these parameters: {self._parameters}')
-
-    def check_python_version(self):
-        # Check minimum Python version
-        version_warning_string = f'This library requires Python 3.7 at minimum. Python versions 3.6 and below ' \
-                                 f'are end of life and end of support per the Python maintainers, and your ' \
-                                 f'interpreter version details are: \n' \
-                                 f'platform.python_version_tuple()[0] = {platform.python_version_tuple()[0]}\n' \
-                                 f'platform.python_version_tuple()[1] = {platform.python_version_tuple()[1]}\n' \
-                                 f'platform.python_version is {platform.python_version()}\n' \
-                                 f'Please consult the readme at your convenience: ' \
-                                 f'https://github.com/meraki/dashboard-api-python'
-        if int(platform.python_version_tuple()[0]) != 3:
-            sys.exit(version_warning_string)
-        elif int(platform.python_version_tuple()[1]) < 7:
-            sys.exit(version_warning_string)
 
     @property
     def use_iterator_for_get_pages(self):
@@ -268,14 +269,28 @@ class RestSession(object):
                 else:
                     try:
                         message = response.json()
+                        message_is_dict = True
                     except ValueError:
                         message = response.content[:100]
+                        message_is_dict = False
 
-                    # Check specifically for action batch concurrency error
+                    # Check for specific concurrency errors
+                    network_delete_concurrency_error_text = 'This may be due to concurrent requests to delete networks.'
                     action_batch_concurrency_error = {'errors': [
                         'Too many concurrently executing batches. Maximum is 5 confirmed but not yet executed batches.']
                     }
-                    if message == action_batch_concurrency_error:
+                    # Check specifically for network delete concurrency error
+                    if message_is_dict and 'errors' in message.keys() \
+                            and network_delete_concurrency_error_text in message['errors'][0]:
+                        wait = self._action_batch_retry_wait_time
+                        if self._logger:
+                            self._logger.warning(f'{tag}, {operation} - {status} {reason}, retrying in {wait} seconds')
+                        time.sleep(wait)
+                        retries -= 1
+                        if retries == 0:
+                            raise APIError(metadata, response)
+                    # Check specifically for action batch concurrency error
+                    elif message == action_batch_concurrency_error:
                         wait = self._action_batch_retry_wait_time
                         if self._logger:
                             self._logger.warning(f'{tag}, {operation} - {status} {reason}, retrying in {wait} seconds')
