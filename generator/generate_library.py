@@ -631,7 +631,7 @@ def main(inputs):
             sys.exit(2)
         else:
             response = requests.get(f'https://api.meraki.com/api/v1/organizations/{org_id}/openapiSpec',
-                                    headers={f'Bearer: {api_key}'})
+                                    headers={'Authorization': f'Bearer {api_key}'})
             if response.ok:
                 spec = response.json()
             else:
