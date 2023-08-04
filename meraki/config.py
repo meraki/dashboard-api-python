@@ -25,7 +25,7 @@ NGINX_429_RETRY_WAIT_TIME = 60
 ACTION_BATCH_RETRY_WAIT_TIME = 60
 
 # Network deletion concurrency error retry wait time
-NETWORK_DELETE_RETRY_WAIT_TIME = 90
+NETWORK_DELETE_RETRY_WAIT_TIME = 120
 
 # Retry if encountering other 4XX error (besides 429)?
 RETRY_4XX_ERROR = False
