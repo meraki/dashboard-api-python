@@ -6,11 +6,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Get current date
-        id: date
-        run: echo "::set-output name=date::$(date +'%Y%m%d
-      - name: Set release name as environment variable
-        run: echo "RELEASE_NAME=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
       - uses: actions/checkout@v3
       - name: Set up Python
         uses: actions/setup-python@v4
