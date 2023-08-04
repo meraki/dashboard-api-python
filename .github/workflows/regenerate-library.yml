@@ -1,18 +1,21 @@
 name: Regenerate Python Library
 on:
-  release:
-    types: [created]
+  workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y%m%d
       - name: Set release name as environment variable
         run: echo "RELEASE_NAME=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
       - uses: actions/checkout@v3
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          python-version: '3.10'
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -23,13 +26,10 @@ jobs:
       - name: Regenerate Python Library
         run: |
           python generator/generate_library.py -g true -v $RELEASE_NAME
-      - name: Commit changes
-        run: |
-          git config --global user.name "GitHub Action on behalf of TKIPisalegacycipher"
-          git config --global user.email "support@meraki.com"
-          git add .
-          git commit -m "Auto-update library to release version $RELEASE_NAME."
-      - name: Push changes
-        uses: ad-m/github-push-action@master
+      - name: Commit changes to new branch
+        uses: EndBug/add-and-commit@v9
         with:
-          github_token: ${{ secrets.ACTION_RUNNER_GITHUB_TOKEN }}
+          author_name: GitHub Action
+          author_email: support@meraki.com
+          message: Automatically regenerated library.
+          new_branch: release
