@@ -272,7 +272,7 @@ class AsyncDevices:
 
     def getDeviceLossAndLatencyHistory(self, serial: str, ip: str, **kwargs):
         """
-        **Get the uplink loss percentage and latency in milliseconds, and goodput in kilobits per second for a wired network device.**
+        **Get the uplink loss percentage and latency in milliseconds, and goodput in kilobits per second for MX, MG and Z devices.**
         https://developer.cisco.com/meraki/api-v1/#!get-device-loss-and-latency-history
 
         - serial (string): Serial

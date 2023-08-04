@@ -1,6 +1,7 @@
 import getopt
 import os
 import sys
+import platform
 
 import jinja2
 import requests
@@ -41,6 +42,21 @@ def generate_pagination_parameters(operation: str):
                                      'description': 'ISO8601 Zulu/UTC time, to use in conjunction with startingAfter, '
                                                     'to retrieve events within a time window'}
     return ret
+
+
+def check_python_version():
+    # Check minimum Python version
+    version_warning_string = f'The generator requires Python 3.10 at minimum. ' \
+                             f'Your interpreter version details are: \n' \
+                             f'platform.python_version_tuple()[0] = {platform.python_version_tuple()[0]}\n' \
+                             f'platform.python_version_tuple()[1] = {platform.python_version_tuple()[1]}\n' \
+                             f'platform.python_version is {platform.python_version()}\n' \
+                             f'Please consult the generator readme at your convenience: ' \
+                             f'https://github.com/meraki/dashboard-api-python/blob/main/generator/readme.md'
+    if int(platform.python_version_tuple()[0]) != 3:
+        sys.exit(version_warning_string)
+    elif int(platform.python_version_tuple()[1]) < 7:
+        sys.exit(version_warning_string)
 
 
 # Returns full link to endpoint's documentation on Developer Hub
@@ -615,14 +631,7 @@ def main(inputs):
             if arg.lower() == 'true':
                 is_github_action = True
 
-    python_version_warning_string = f'The generator requires Python 3.10 at minimum, but your interpreter version is ' \
-                                    f'{sys.version}. Please consult the generator readme at your convenience: ' \
-                                    f'https://github.com/meraki/dashboard-api-python/blob/main/generator/readme.md'
-    # Check minimum Python version
-    if sys.version_info[0] != 3:
-        sys.exit(python_version_warning_string)
-    elif sys.version_info[1] < 10:
-        sys.exit(python_version_warning_string)
+    check_python_version()
 
     # Retrieve latest OpenAPI specification
     if org_id:

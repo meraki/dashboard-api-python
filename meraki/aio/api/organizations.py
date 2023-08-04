@@ -1576,6 +1576,48 @@ class AsyncOrganizations:
         
 
 
+    def getOrganizationDevicesAvailabilitiesChangeHistory(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **List the availability history information for devices in an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-availabilities-change-history
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 14 days. The default is 1 day.
+        - serials (array): Optional parameter to filter device availabilities history by device serial numbers
+        - productTypes (array): Optional parameter to filter device availabilities history by device product types
+        - networkIds (array): Optional parameter to filter device availabilities history by network IDs
+        - statuses (array): Optional parameter to filter device availabilities history by device statuses
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'monitor', 'devices', 'availabilities', 'changeHistory'],
+            'operation': 'getOrganizationDevicesAvailabilitiesChangeHistory'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/devices/availabilities/changeHistory'
+
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', 'serials', 'productTypes', 'networkIds', 'statuses', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['serials', 'productTypes', 'networkIds', 'statuses', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
     def getOrganizationDevicesPowerModulesStatusesByDevice(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the power status information for devices in an organization**

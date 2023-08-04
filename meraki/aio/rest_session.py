@@ -29,6 +29,7 @@ class AsyncRestSession:
         wait_on_rate_limit=WAIT_ON_RATE_LIMIT,
         nginx_429_retry_wait_time=NGINX_429_RETRY_WAIT_TIME,
         action_batch_retry_wait_time=ACTION_BATCH_RETRY_WAIT_TIME,
+        network_delete_retry_wait_time=NETWORK_DELETE_RETRY_WAIT_TIME,
         retry_4xx_error=RETRY_4XX_ERROR,
         retry_4xx_error_wait_time=RETRY_4XX_ERROR_WAIT_TIME,
         maximum_retries=MAXIMUM_RETRIES,
@@ -50,6 +51,7 @@ class AsyncRestSession:
         self._wait_on_rate_limit = wait_on_rate_limit
         self._nginx_429_retry_wait_time = nginx_429_retry_wait_time
         self._action_batch_retry_wait_time = action_batch_retry_wait_time
+        self._network_delete_retry_wait_time = network_delete_retry_wait_time
         self._retry_4xx_error = retry_4xx_error
         self._retry_4xx_error_wait_time = retry_4xx_error_wait_time
         self._maximum_retries = maximum_retries
@@ -249,15 +251,27 @@ class AsyncRestSession:
                     except aiohttp.client_exceptions.ContentTypeError:
                         try:
                             message = (await response.text())[:100]
+                            message_is_dict = True
                         except:
                             message = None
+                            message_is_dict = False
 
-                    # Check specifically for action batch concurrency error
-                    action_batch_concurrency_error = {
-                        "errors": [
-                            "Too many concurrently executing batches. Maximum is 5 confirmed but not yet executed batches."
-                        ]
+                    # Check for specific concurrency errors
+                    network_delete_concurrency_error_text = 'This may be due to concurrent requests to delete networks.'
+                    action_batch_concurrency_error = {'errors': [
+                        'Too many concurrently executing batches. Maximum is 5 confirmed but not yet executed batches.']
                     }
+                    # Check specifically for network delete concurrency error
+                    if message_is_dict and 'errors' in message.keys() \
+                            and network_delete_concurrency_error_text in message['errors'][0]:
+                        wait = self._network_delete_retry_wait_time
+                        if self._logger:
+                            self._logger.warning(f'{tag}, {operation} - {status} {reason}, retrying in {wait} seconds')
+                        time.sleep(wait)
+                        retries -= 1
+                        if retries == 0:
+                            raise APIError(metadata, response)
+                    # Check specifically for action batch concurrency error
                     if message == action_batch_concurrency_error:
                         wait = self._action_batch_retry_wait_time
                         if self._logger:

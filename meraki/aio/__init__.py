@@ -1,6 +1,5 @@
 import logging
 import os
-from datetime import datetime
 
 from meraki.aio.rest_session import *
 from meraki.aio.api.administered import AsyncAdministered
@@ -30,6 +29,7 @@ from meraki.config import (
     WAIT_ON_RATE_LIMIT,
     NGINX_429_RETRY_WAIT_TIME,
     ACTION_BATCH_RETRY_WAIT_TIME,
+    NETWORK_DELETE_RETRY_WAIT_TIME,
     RETRY_4XX_ERROR,
     RETRY_4XX_ERROR_WAIT_TIME,
     MAXIMUM_RETRIES,
@@ -59,6 +59,7 @@ class AsyncDashboardAPI:
     - wait_on_rate_limit (boolean): retry if 429 rate limit error encountered?
     - nginx_429_retry_wait_time (integer): Nginx 429 retry wait time
     - action_batch_retry_wait_time (integer): action batch concurrency error retry wait time
+    - network_delete_retry_wait_time (integer): network deletion concurrency error retry wait time
     - retry_4xx_error (boolean): retry if encountering other 4XX error (besides 429)?
     - retry_4xx_error_wait_time (integer): other 4XX error retry wait time
     - maximum_retries (integer): retry up to this many times when encountering 429s or other server-side errors
@@ -84,6 +85,7 @@ class AsyncDashboardAPI:
                  wait_on_rate_limit=WAIT_ON_RATE_LIMIT,
                  nginx_429_retry_wait_time=NGINX_429_RETRY_WAIT_TIME,
                  action_batch_retry_wait_time=ACTION_BATCH_RETRY_WAIT_TIME,
+                 network_delete_retry_wait_time=NETWORK_DELETE_RETRY_WAIT_TIME,
                  retry_4xx_error=RETRY_4XX_ERROR,
                  retry_4xx_error_wait_time=RETRY_4XX_ERROR_WAIT_TIME,
                  maximum_retries=MAXIMUM_RETRIES,
@@ -156,6 +158,7 @@ class AsyncDashboardAPI:
             wait_on_rate_limit=wait_on_rate_limit,
             nginx_429_retry_wait_time=nginx_429_retry_wait_time,
             action_batch_retry_wait_time=action_batch_retry_wait_time,
+            network_delete_retry_wait_time=network_delete_retry_wait_time,
             retry_4xx_error=retry_4xx_error,
             retry_4xx_error_wait_time=retry_4xx_error_wait_time,
             maximum_retries=maximum_retries,

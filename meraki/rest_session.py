@@ -83,6 +83,7 @@ class RestSession(object):
         wait_on_rate_limit=WAIT_ON_RATE_LIMIT,
         nginx_429_retry_wait_time=NGINX_429_RETRY_WAIT_TIME,
         action_batch_retry_wait_time=ACTION_BATCH_RETRY_WAIT_TIME,
+        network_delete_retry_wait_time=NETWORK_DELETE_RETRY_WAIT_TIME,
         retry_4xx_error=RETRY_4XX_ERROR,
         retry_4xx_error_wait_time=RETRY_4XX_ERROR_WAIT_TIME,
         maximum_retries=MAXIMUM_RETRIES,
@@ -103,6 +104,7 @@ class RestSession(object):
         self._wait_on_rate_limit = wait_on_rate_limit
         self._nginx_429_retry_wait_time = nginx_429_retry_wait_time
         self._action_batch_retry_wait_time = action_batch_retry_wait_time
+        self._network_delete_retry_wait_time = network_delete_retry_wait_time
         self._retry_4xx_error = retry_4xx_error
         self._retry_4xx_error_wait_time = retry_4xx_error_wait_time
         self._maximum_retries = maximum_retries
@@ -282,7 +284,7 @@ class RestSession(object):
                     # Check specifically for network delete concurrency error
                     if message_is_dict and 'errors' in message.keys() \
                             and network_delete_concurrency_error_text in message['errors'][0]:
-                        wait = self._action_batch_retry_wait_time
+                        wait = self._network_delete_retry_wait_time
                         if self._logger:
                             self._logger.warning(f'{tag}, {operation} - {status} {reason}, retrying in {wait} seconds')
                         time.sleep(wait)
