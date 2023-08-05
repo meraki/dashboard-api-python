@@ -1,6 +1,10 @@
 name: Regenerate Python Library
 on:
   workflow_dispatch:
+    inputs:
+      library_version:
+        description: 'The version of the new library'
+        required: true
 
 jobs:
   build:
@@ -20,7 +24,7 @@ jobs:
           rm -rf meraki
       - name: Regenerate Python Library
         run: |
-          python generator/generate_library.py -g true -v $RELEASE_NAME
+          python generator/generate_library.py -g true -v ${{ github.event.inputs.library_version }}
       - name: Commit changes to new branch
         uses: EndBug/add-and-commit@v9
         with:
