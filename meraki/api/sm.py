@@ -608,7 +608,7 @@ class Sm(object):
 
     def getNetworkSmProfiles(self, networkId: str):
         """
-        **List all profiles in a network**
+        **List all the profiles in the network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-profiles
 
         - networkId (string): Network ID

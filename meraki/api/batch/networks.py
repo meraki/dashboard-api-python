@@ -588,14 +588,17 @@ class ActionBatchNetworks(object):
 
 
 
-    def deleteNetworkMerakiAuthUser(self, networkId: str, merakiAuthUserId: str):
+    def deleteNetworkMerakiAuthUser(self, networkId: str, merakiAuthUserId: str, **kwargs):
         """
-        **Deauthorize a user**
+        **Delete an 802.1X RADIUS user, or deauthorize and optionally delete a splash guest or client VPN user.**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-meraki-auth-user
 
         - networkId (string): Network ID
         - merakiAuthUserId (string): Meraki auth user ID
+        - delete (boolean): If the ID supplied is for a splash guest or client VPN user, and that user is not authorized for any other networks in the organization, then also delete the user. 802.1X RADIUS users are always deleted regardless of this optional attribute.
         """
+
+        kwargs.update(locals())
 
         metadata = {
             'tags': ['networks', 'configure', 'merakiAuthUsers'],

@@ -2005,7 +2005,7 @@ class AsyncOrganizations:
 
         - organizationId (string): Organization ID
         - status (array): The status of an upgrade 
-        - productType (array): The product type in a given upgrade ID
+        - productTypes (array): The product type in a given upgrade ID
         """
 
         kwargs.update(locals())
@@ -2017,10 +2017,10 @@ class AsyncOrganizations:
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/firmware/upgrades'
 
-        query_params = ['status', 'productType', ]
+        query_params = ['status', 'productTypes', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['status', 'productType', ]
+        array_params = ['status', 'productTypes', ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
                 params[f'{k.strip()}[]'] = kwargs[f'{k}']
@@ -2038,14 +2038,14 @@ class AsyncOrganizations:
         - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 50. Default is 50.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 50.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - networkIds (array): Optional parameter to filter by network
         - serials (array): Optional parameter to filter by serial number.  All returned devices will have a serial number that is an exact match.
         - macs (array): Optional parameter to filter by one or more MAC addresses belonging to devices. All devices returned belong to MAC addresses that are an exact match.
-        - firmwareUpgradeIds (array): Optional parameter to filter by firmware upgrade ids.
         - firmwareUpgradeBatchIds (array): Optional parameter to filter by firmware upgrade batch ids.
+        - upgradeStatuses (array): Optional parameter to filter by firmware upgrade statuses.
         """
 
         kwargs.update(locals())
@@ -2057,10 +2057,10 @@ class AsyncOrganizations:
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/firmware/upgrades/byDevice'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'serials', 'macs', 'firmwareUpgradeIds', 'firmwareUpgradeBatchIds', ]
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'serials', 'macs', 'firmwareUpgradeBatchIds', 'upgradeStatuses', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', 'serials', 'macs', 'firmwareUpgradeIds', 'firmwareUpgradeBatchIds', ]
+        array_params = ['networkIds', 'serials', 'macs', 'firmwareUpgradeBatchIds', 'upgradeStatuses', ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
                 params[f'{k.strip()}[]'] = kwargs[f'{k}']
@@ -3344,7 +3344,7 @@ class AsyncOrganizations:
         - organizationId (string): Organization ID
         - t0 (string): The beginning of the timespan for the data.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
-        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 25 minutes and be less than or equal to 31 days. The default is 1 day.
         """
 
         kwargs.update(locals())
@@ -3371,7 +3371,7 @@ class AsyncOrganizations:
         - organizationId (string): Organization ID
         - t0 (string): The beginning of the timespan for the data.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
-        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 8 hours and be less than or equal to 31 days. The default is 1 day.
         """
 
         kwargs.update(locals())
@@ -3425,7 +3425,7 @@ class AsyncOrganizations:
         - organizationId (string): Organization ID
         - t0 (string): The beginning of the timespan for the data.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
-        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 8 hours and be less than or equal to 31 days. The default is 1 day.
         """
 
         kwargs.update(locals())
@@ -3452,7 +3452,7 @@ class AsyncOrganizations:
         - organizationId (string): Organization ID
         - t0 (string): The beginning of the timespan for the data.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
-        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 8 hours and be less than or equal to 31 days. The default is 1 day.
         """
 
         kwargs.update(locals())
@@ -3479,7 +3479,7 @@ class AsyncOrganizations:
         - organizationId (string): Organization ID
         - t0 (string): The beginning of the timespan for the data.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
-        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 8 hours and be less than or equal to 31 days. The default is 1 day.
         """
 
         kwargs.update(locals())
@@ -3506,7 +3506,7 @@ class AsyncOrganizations:
         - organizationId (string): Organization ID
         - t0 (string): The beginning of the timespan for the data.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
-        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 25 minutes and be less than or equal to 31 days. The default is 1 day.
         """
 
         kwargs.update(locals())
