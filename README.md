@@ -4,6 +4,8 @@ The Meraki Dashboard API Python library provides all current Meraki [dashboard A
 
     pip install --upgrade meraki
 
+If you participate in [our Early Access program](https://community.meraki.com/t5/Developers-APIs/UPDATED-Beta-testing-with-the-Meraki-Developer-Early-Access/m-p/145344#M5808) and would like to use early access features via the library, you'll [find instructions in the generator readme](https://github.com/meraki/dashboard-api-python/tree/main/generator#readme).
+
 ## Features
 
 While you can make direct HTTP requests to dashboard API in any programming language or REST API client, using a client library can make it easier for you to focus on your specific use case, without the overhead of having to write functions to handle the dashboard API calls. The Python library can also take care of error handling, logging, retries, and other convenient processes and options for you automatically.
