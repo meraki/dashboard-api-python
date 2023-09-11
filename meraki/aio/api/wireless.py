@@ -8,6 +8,50 @@ class AsyncWireless:
         
 
 
+    def updateDeviceWirelessAlternateManagementInterfaceIpv6(self, serial: str, **kwargs):
+        """
+        **Update alternate management interface IPv6 address**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-wireless-alternate-management-interface-ipv-6
+
+        - serial (string): Serial
+        - addresses (array): configured alternate management interface addresses
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'alternateManagementInterface', 'ipv6'],
+            'operation': 'updateDeviceWirelessAlternateManagementInterfaceIpv6'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        resource = f'/devices/{serial}/wireless/alternateManagementInterface/ipv6'
+
+        body_params = ['addresses', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def getDeviceWirelessBluetoothSettings(self, serial: str):
+        """
+        **Return the bluetooth settings for a wireless device**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-wireless-bluetooth-settings
+
+        - serial (string): Serial
+        """
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'bluetooth', 'settings'],
+            'operation': 'getDeviceWirelessBluetoothSettings'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        resource = f'/devices/{serial}/wireless/bluetooth/settings'
+
+        return self._session.get(metadata, resource)
+        
+
+
     def updateDeviceWirelessBluetoothSettings(self, serial: str, **kwargs):
         """
         **Update the bluetooth settings for a wireless device**
@@ -32,25 +76,6 @@ class AsyncWireless:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
-
-    def getDeviceWirelessBluetoothSettings(self, serial: str):
-        """
-        **Return the bluetooth settings for a wireless device**
-        https://developer.cisco.com/meraki/api-v1/#!get-device-wireless-bluetooth-settings
-
-        - serial (string): Serial
-        """
-
-        metadata = {
-            'tags': ['wireless', 'configure', 'bluetooth', 'settings'],
-            'operation': 'getDeviceWirelessBluetoothSettings'
-        }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/wireless/bluetooth/settings'
-
-        return self._session.get(metadata, resource)
         
 
 
@@ -808,6 +833,174 @@ class AsyncWireless:
         
 
 
+    def getNetworkWirelessEthernetPortsProfiles(self, networkId: str):
+        """
+        **List the AP port profiles for this network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ethernet-ports-profiles
+
+        - networkId (string): Network ID
+        """
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ethernet', 'ports', 'profiles'],
+            'operation': 'getNetworkWirelessEthernetPortsProfiles'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/wireless/ethernet/ports/profiles'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def createNetworkWirelessEthernetPortsProfile(self, networkId: str, name: str, ports: list, **kwargs):
+        """
+        **Create an AP port profile**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-wireless-ethernet-ports-profile
+
+        - networkId (string): Network ID
+        - name (string): AP port profile name
+        - ports (array): AP ports configuration
+        - usbPorts (array): AP usb ports configuration
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ethernet', 'ports', 'profiles'],
+            'operation': 'createNetworkWirelessEthernetPortsProfile'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/wireless/ethernet/ports/profiles'
+
+        body_params = ['name', 'ports', 'usbPorts', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def assignNetworkWirelessEthernetPortsProfiles(self, networkId: str, serials: list, profileId: str):
+        """
+        **Assign AP port profile to list of APs**
+        https://developer.cisco.com/meraki/api-v1/#!assign-network-wireless-ethernet-ports-profiles
+
+        - networkId (string): Network ID
+        - serials (array): List of AP serials
+        - profileId (string): AP profile ID
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ethernet', 'ports', 'profiles'],
+            'operation': 'assignNetworkWirelessEthernetPortsProfiles'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/wireless/ethernet/ports/profiles/assign'
+
+        body_params = ['serials', 'profileId', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def setNetworkWirelessEthernetPortsProfilesDefault(self, networkId: str, profileId: str):
+        """
+        **Set the AP port profile to be default for this network**
+        https://developer.cisco.com/meraki/api-v1/#!set-network-wireless-ethernet-ports-profiles-default
+
+        - networkId (string): Network ID
+        - profileId (string): AP profile ID
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ethernet', 'ports', 'profiles'],
+            'operation': 'setNetworkWirelessEthernetPortsProfilesDefault'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/wireless/ethernet/ports/profiles/setDefault'
+
+        body_params = ['profileId', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getNetworkWirelessEthernetPortsProfile(self, networkId: str, profileId: str):
+        """
+        **Show the AP port profile by ID for this network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ethernet-ports-profile
+
+        - networkId (string): Network ID
+        - profileId (string): Profile ID
+        """
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ethernet', 'ports', 'profiles'],
+            'operation': 'getNetworkWirelessEthernetPortsProfile'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        profileId = urllib.parse.quote(str(profileId), safe='')
+        resource = f'/networks/{networkId}/wireless/ethernet/ports/profiles/{profileId}'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def updateNetworkWirelessEthernetPortsProfile(self, networkId: str, profileId: str, **kwargs):
+        """
+        **Update the AP port profile by ID for this network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ethernet-ports-profile
+
+        - networkId (string): Network ID
+        - profileId (string): Profile ID
+        - name (string): AP port profile name
+        - ports (array): AP ports configuration
+        - usbPorts (array): AP usb ports configuration
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ethernet', 'ports', 'profiles'],
+            'operation': 'updateNetworkWirelessEthernetPortsProfile'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        profileId = urllib.parse.quote(str(profileId), safe='')
+        resource = f'/networks/{networkId}/wireless/ethernet/ports/profiles/{profileId}'
+
+        body_params = ['name', 'ports', 'usbPorts', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def deleteNetworkWirelessEthernetPortsProfile(self, networkId: str, profileId: str):
+        """
+        **Delete an AP port profile**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-wireless-ethernet-ports-profile
+
+        - networkId (string): Network ID
+        - profileId (string): Profile ID
+        """
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ethernet', 'ports', 'profiles'],
+            'operation': 'deleteNetworkWirelessEthernetPortsProfile'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        profileId = urllib.parse.quote(str(profileId), safe='')
+        resource = f'/networks/{networkId}/wireless/ethernet/ports/profiles/{profileId}'
+
+        return self._session.delete(metadata, resource)
+        
+
+
     def getNetworkWirelessFailedConnections(self, networkId: str, **kwargs):
         """
         **List of all failed client connection events on this network in a given time range**
@@ -1135,6 +1328,7 @@ class AsyncWireless:
         - locationAnalyticsEnabled (boolean): Toggle for enabling or disabling location analytics for your network
         - upgradeStrategy (string): The upgrade strategy to apply to the network. Must be one of 'minimizeUpgradeTime' or 'minimizeClientDowntime'. Requires firmware version MR 26.8 or higher'
         - ledLightsOn (boolean): Toggle for enabling or disabling LED lights on all APs in the network (making them run dark)
+        - namedVlans (object): Named VLAN settings for wireless networks.
         """
 
         kwargs.update(locals())
@@ -1150,7 +1344,7 @@ class AsyncWireless:
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/settings'
 
-        body_params = ['meshingEnabled', 'ipv6BridgeEnabled', 'locationAnalyticsEnabled', 'upgradeStrategy', 'ledLightsOn', ]
+        body_params = ['meshingEnabled', 'ipv6BridgeEnabled', 'locationAnalyticsEnabled', 'upgradeStrategy', 'ledLightsOn', 'namedVlans', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1300,6 +1494,7 @@ class AsyncWireless:
         - adultContentFilteringEnabled (boolean): Boolean indicating whether or not adult content will be blocked
         - dnsRewrite (object): DNS servers rewrite settings
         - speedBurst (object): The SpeedBurst setting for this SSID'
+        - namedVlans (object): Named VLAN settings.
         """
 
         kwargs.update(locals())
@@ -1337,7 +1532,7 @@ class AsyncWireless:
         number = urllib.parse.quote(str(number), safe='')
         resource = f'/networks/{networkId}/wireless/ssids/{number}'
 
-        body_params = ['name', 'enabled', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk', 'wpaEncryptionMode', 'dot11w', 'dot11r', 'splashPage', 'splashGuestSponsorDomains', 'oauth', 'localRadius', 'ldap', 'activeDirectory', 'radiusServers', 'radiusProxyEnabled', 'radiusTestingEnabled', 'radiusCalledStationId', 'radiusAuthenticationNasId', 'radiusServerTimeout', 'radiusServerAttemptsLimit', 'radiusFallbackEnabled', 'radiusCoaEnabled', 'radiusFailoverPolicy', 'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusAccountingInterimInterval', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging', 'concentratorNetworkId', 'secondaryConcentratorNetworkId', 'disassociateClientsOnVpnFailover', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 'walledGardenEnabled', 'walledGardenRanges', 'gre', 'radiusOverride', 'radiusGuestVlanEnabled', 'radiusGuestVlanId', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'perSsidBandwidthLimitUp', 'perSsidBandwidthLimitDown', 'lanIsolationEnabled', 'visible', 'availableOnAllAps', 'availabilityTags', 'mandatoryDhcpEnabled', 'adultContentFilteringEnabled', 'dnsRewrite', 'speedBurst', ]
+        body_params = ['name', 'enabled', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk', 'wpaEncryptionMode', 'dot11w', 'dot11r', 'splashPage', 'splashGuestSponsorDomains', 'oauth', 'localRadius', 'ldap', 'activeDirectory', 'radiusServers', 'radiusProxyEnabled', 'radiusTestingEnabled', 'radiusCalledStationId', 'radiusAuthenticationNasId', 'radiusServerTimeout', 'radiusServerAttemptsLimit', 'radiusFallbackEnabled', 'radiusCoaEnabled', 'radiusFailoverPolicy', 'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusAccountingInterimInterval', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging', 'concentratorNetworkId', 'secondaryConcentratorNetworkId', 'disassociateClientsOnVpnFailover', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 'walledGardenEnabled', 'walledGardenRanges', 'gre', 'radiusOverride', 'radiusGuestVlanEnabled', 'radiusGuestVlanId', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'perSsidBandwidthLimitUp', 'perSsidBandwidthLimitDown', 'lanIsolationEnabled', 'visible', 'availableOnAllAps', 'availabilityTags', 'mandatoryDhcpEnabled', 'adultContentFilteringEnabled', 'dnsRewrite', 'speedBurst', 'namedVlans', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)

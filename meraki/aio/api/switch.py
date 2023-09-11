@@ -1732,6 +1732,7 @@ class AsyncSwitch:
         - useCombinedPower (boolean): The use Combined Power as the default behavior of secondary power supplies on supported devices.
         - powerExceptions (array): Exceptions on a per switch basis to "useCombinedPower"
         - uplinkClientSampling (object): Uplink client sampling
+        - macBlocklist (object): MAC blocklist
         """
 
         kwargs.update(locals())
@@ -1743,7 +1744,7 @@ class AsyncSwitch:
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/switch/settings'
 
-        body_params = ['vlan', 'useCombinedPower', 'powerExceptions', 'uplinkClientSampling', ]
+        body_params = ['vlan', 'useCombinedPower', 'powerExceptions', 'uplinkClientSampling', 'macBlocklist', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
