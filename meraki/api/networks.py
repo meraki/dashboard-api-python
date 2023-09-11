@@ -258,6 +258,7 @@ class Networks(object):
         - pskGroup (string): Filters clients based on partial or full match for the iPSK name field.
         - description (string): Filters clients based on a partial or full match for the description field.
         - vlan (string): Filters clients based on the full match for the VLAN field.
+        - namedVlan (string): Filters clients based on the partial or full match for the named VLAN field.
         - recentDeviceConnections (array): Filters clients based on recent connection type. Can be one of 'Wired' or 'Wireless'.
         """
 
@@ -270,7 +271,7 @@ class Networks(object):
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/clients'
 
-        query_params = ['t0', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'statuses', 'ip', 'ip6', 'ip6Local', 'mac', 'os', 'pskGroup', 'description', 'vlan', 'recentDeviceConnections', ]
+        query_params = ['t0', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'statuses', 'ip', 'ip6', 'ip6Local', 'mac', 'os', 'pskGroup', 'description', 'vlan', 'namedVlan', 'recentDeviceConnections', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['statuses', 'recentDeviceConnections', ]
@@ -2008,6 +2009,7 @@ class Networks(object):
         - remoteStatusPageEnabled (boolean): Enables / disables access to the device status page (<a target='_blank'>http://[device's LAN IP])</a>. Optional. Can only be set if localStatusPageEnabled is set to true
         - localStatusPage (object): A hash of Local Status page(s)' authentication options applied to the Network.
         - securePort (object): A hash of SecureConnect options applied to the Network.
+        - namedVlans (object): A hash of Named VLANs options applied to the Network.
         """
 
         kwargs.update(locals())
@@ -2019,7 +2021,7 @@ class Networks(object):
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/settings'
 
-        body_params = ['localStatusPageEnabled', 'remoteStatusPageEnabled', 'localStatusPage', 'securePort', ]
+        body_params = ['localStatusPageEnabled', 'remoteStatusPageEnabled', 'localStatusPage', 'securePort', 'namedVlans', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -2331,6 +2333,189 @@ class Networks(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
+
+    def getNetworkVlanProfiles(self, networkId: str):
+        """
+        **List VLAN profiles for a network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-vlan-profiles
+
+        - networkId (string): Network ID
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'vlanProfiles'],
+            'operation': 'getNetworkVlanProfiles'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/vlanProfiles'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def createNetworkVlanProfile(self, networkId: str, name: str, vlanNames: list, vlanGroups: list, iname: str):
+        """
+        **Create a VLAN profile for a network**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-vlan-profile
+
+        - networkId (string): Network ID
+        - name (string): Name of the profile, string length must be from 1 to 255 characters
+        - vlanNames (array): An array of named VLANs
+        - vlanGroups (array): An array of VLAN groups
+        - iname (string): IName of the profile
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['networks', 'configure', 'vlanProfiles'],
+            'operation': 'createNetworkVlanProfile'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/vlanProfiles'
+
+        body_params = ['name', 'vlanNames', 'vlanGroups', 'iname', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getNetworkVlanProfilesAssignmentsByDevice(self, networkId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Get the assigned VLAN Profiles for devices in a network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-vlan-profiles-assignments-by-device
+
+        - networkId (string): Network ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - serials (array): Optional parameter to filter devices by serials. All devices returned belong to serial numbers that are an exact match.
+        - productTypes (array): Optional parameter to filter devices by product types.
+        - stackIds (array): Optional parameter to filter devices by Switch Stack ids.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['networks', 'configure', 'vlanProfiles', 'assignments', 'byDevice'],
+            'operation': 'getNetworkVlanProfilesAssignmentsByDevice'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/vlanProfiles/assignments/byDevice'
+
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'serials', 'productTypes', 'stackIds', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['serials', 'productTypes', 'stackIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def reassignNetworkVlanProfilesAssignments(self, networkId: str, serials: list, stackIds: list, **kwargs):
+        """
+        **Update the assigned VLAN Profile for devices in a network**
+        https://developer.cisco.com/meraki/api-v1/#!reassign-network-vlan-profiles-assignments
+
+        - networkId (string): Network ID
+        - serials (array): Array of Device Serials
+        - stackIds (array): Array of Switch Stack IDs
+        - vlanProfile (object): The VLAN Profile
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['networks', 'configure', 'vlanProfiles', 'assignments'],
+            'operation': 'reassignNetworkVlanProfilesAssignments'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/vlanProfiles/assignments/reassign'
+
+        body_params = ['vlanProfile', 'serials', 'stackIds', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getNetworkVlanProfile(self, networkId: str, iname: str):
+        """
+        **Get an existing VLAN profile of a network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-vlan-profile
+
+        - networkId (string): Network ID
+        - iname (string): Iname
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'vlanProfiles'],
+            'operation': 'getNetworkVlanProfile'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        iname = urllib.parse.quote(str(iname), safe='')
+        resource = f'/networks/{networkId}/vlanProfiles/{iname}'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def updateNetworkVlanProfile(self, networkId: str, iname: str, name: str, vlanNames: list, vlanGroups: list):
+        """
+        **Update an existing VLAN profile of a network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-vlan-profile
+
+        - networkId (string): Network ID
+        - iname (string): Iname
+        - name (string): Name of the profile, string length must be from 1 to 255 characters
+        - vlanNames (array): An array of named VLANs
+        - vlanGroups (array): An array of VLAN groups
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['networks', 'configure', 'vlanProfiles'],
+            'operation': 'updateNetworkVlanProfile'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        iname = urllib.parse.quote(str(iname), safe='')
+        resource = f'/networks/{networkId}/vlanProfiles/{iname}'
+
+        body_params = ['name', 'vlanNames', 'vlanGroups', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def deleteNetworkVlanProfile(self, networkId: str, iname: str):
+        """
+        **Delete a VLAN profile of a network**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-vlan-profile
+
+        - networkId (string): Network ID
+        - iname (string): Iname
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'vlanProfiles'],
+            'operation': 'deleteNetworkVlanProfile'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        iname = urllib.parse.quote(str(iname), safe='')
+        resource = f'/networks/{networkId}/vlanProfiles/{iname}'
+
+        return self._session.delete(metadata, resource)
         
 
 

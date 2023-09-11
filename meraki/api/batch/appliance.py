@@ -710,6 +710,38 @@ class ActionBatchAppliance(object):
 
 
 
+    def updateNetworkApplianceTrafficShapingVpnExclusions(self, networkId: str, **kwargs):
+        """
+        **Update VPN exclusion rules for an MX network.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-traffic-shaping-vpn-exclusions
+
+        - networkId (string): Network ID
+        - custom (array): Custom VPN exclusion rules. Pass an empty array to clear existing rules.
+        - majorApplications (array): Major Application based VPN exclusion rules. Pass an empty array to clear existing rules.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'trafficShaping', 'vpnExclusions'],
+            'operation': 'updateNetworkApplianceTrafficShapingVpnExclusions'
+        }
+        resource = f'/networks/{networkId}/appliance/trafficShaping/vpnExclusions'
+
+        body_params = ['custom', 'majorApplications', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
     def createNetworkApplianceVlan(self, networkId: str, id: str, name: str, **kwargs):
         """
         **Add a VLAN**

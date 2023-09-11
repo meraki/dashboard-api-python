@@ -860,3 +860,162 @@ class Camera(object):
 
         return self._session.put(metadata, resource, payload)
         
+
+
+    def getOrganizationCameraPermissions(self, organizationId: str):
+        """
+        **List the permissions scopes for this organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-camera-permissions
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            'tags': ['camera', 'configure', 'permissions'],
+            'operation': 'getOrganizationCameraPermissions'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/camera/permissions'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def getOrganizationCameraPermission(self, organizationId: str, permissionScopeId: str):
+        """
+        **Retrieve a single permission scope**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-camera-permission
+
+        - organizationId (string): Organization ID
+        - permissionScopeId (string): Permission scope ID
+        """
+
+        metadata = {
+            'tags': ['camera', 'configure', 'permissions'],
+            'operation': 'getOrganizationCameraPermission'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        permissionScopeId = urllib.parse.quote(str(permissionScopeId), safe='')
+        resource = f'/organizations/{organizationId}/camera/permissions/{permissionScopeId}'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def getOrganizationCameraRoles(self, organizationId: str):
+        """
+        **List all the roles in this organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-camera-roles
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            'tags': ['camera', 'configure', 'roles'],
+            'operation': 'getOrganizationCameraRoles'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/camera/roles'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def createOrganizationCameraRole(self, organizationId: str, name: str, **kwargs):
+        """
+        **Creates new role for this organization.**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-camera-role
+
+        - organizationId (string): Organization ID
+        - name (string): The name of the new role. Must be unique. This parameter is required.
+        - appliedOnDevices (array): Device tag on which this specified permission is applied.
+        - appliedOnNetworks (array): Network tag on which this specified permission is applied.
+        - appliedOrgWide (array): Permissions to be applied org wide.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['camera', 'configure', 'roles'],
+            'operation': 'createOrganizationCameraRole'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/camera/roles'
+
+        body_params = ['name', 'appliedOnDevices', 'appliedOnNetworks', 'appliedOrgWide', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getOrganizationCameraRole(self, organizationId: str, roleId: str):
+        """
+        **Retrieve a single role.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-camera-role
+
+        - organizationId (string): Organization ID
+        - roleId (string): Role ID
+        """
+
+        metadata = {
+            'tags': ['camera', 'configure', 'roles'],
+            'operation': 'getOrganizationCameraRole'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        roleId = urllib.parse.quote(str(roleId), safe='')
+        resource = f'/organizations/{organizationId}/camera/roles/{roleId}'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def deleteOrganizationCameraRole(self, organizationId: str, roleId: str):
+        """
+        **Delete an existing role for this organization.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-camera-role
+
+        - organizationId (string): Organization ID
+        - roleId (string): Role ID
+        """
+
+        metadata = {
+            'tags': ['camera', 'configure', 'roles'],
+            'operation': 'deleteOrganizationCameraRole'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        roleId = urllib.parse.quote(str(roleId), safe='')
+        resource = f'/organizations/{organizationId}/camera/roles/{roleId}'
+
+        return self._session.delete(metadata, resource)
+        
+
+
+    def updateOrganizationCameraRole(self, organizationId: str, roleId: str, **kwargs):
+        """
+        **Update an existing role in this organization.**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-camera-role
+
+        - organizationId (string): Organization ID
+        - roleId (string): Role ID
+        - name (string): The name of the new role. Must be unique.
+        - appliedOnDevices (array): Device tag on which this specified permission is applied.
+        - appliedOnNetworks (array): Network tag on which this specified permission is applied.
+        - appliedOrgWide (array): Permissions to be applied org wide.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['camera', 'configure', 'roles'],
+            'operation': 'updateOrganizationCameraRole'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        roleId = urllib.parse.quote(str(roleId), safe='')
+        resource = f'/organizations/{organizationId}/camera/roles/{roleId}'
+
+        body_params = ['name', 'appliedOnDevices', 'appliedOnNetworks', 'appliedOrgWide', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        

@@ -355,7 +355,7 @@ class Sensor(object):
         - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 100.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - networkIds (array): Optional parameter to filter readings by network.
