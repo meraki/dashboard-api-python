@@ -29,6 +29,7 @@ dashboard = meraki.DashboardAPI(suppress_logging=True, single_request_timeout=12
 # Configurable options
 # Organization ID. Replace this with your actual organization ID.
 organization_id = 'YOUR ORG ID HERE'  # Use your own organization ID.
+product_type = 'appliance'
 time_delta_in_days = 30  # Max is 1 month per the firmware upgrades endpoint docs
 actions_per_batch = 100  # Max number of actions to submit in a batch. 100 is the maximum. Bigger batches take longer.
 wait_factor = 0.33  # Wait factor for action batches when the action batch queue is full.
@@ -36,8 +37,8 @@ wait_factor = 0.33  # Wait factor for action batches when the action batch queue
 # Firmware IDs; not needed for rescheduling, only for upgrading. If you plan to use this for upgrading, then you should
 # first GET the availableVersions IDs and use those here instead, since they have probably changed from the time this
 # was published.
-mx_new_firmware_id = 2128  # Did you update this to your actual FW ID by GETing your availableFirmwareVersions?
-mx_old_firmware_id = 2009  # Did you update this to your actual FW ID by GETing your availableFirmwareVersions?
+new_firmware_id = 2128  # Did you update this to your actual FW ID by GETing your availableFirmwareVersions?
+old_firmware_id = 2009  # Did you update this to your actual FW ID by GETing your availableFirmwareVersions?
 
 
 def time_formatter(date_time_stamp):
@@ -54,7 +55,7 @@ utc_future_formatted = time_formatter(utc_future)
 
 action_reschedule_existing = {
     "products": {
-        "appliance":
+        f"{product_type}":
             {
                 "nextUpgrade": {
                     "time": utc_future_formatted
@@ -67,12 +68,12 @@ action_reschedule_existing = {
 # immediately. IMPORTANT: See API docs for more info before using this.
 action_schedule_new_upgrade = {
     "products": {
-        "appliance":
+        f"{product_type}":
             {
                 "nextUpgrade": {
                     "time": utc_future_formatted,
                     "toVersion": {
-                        "id": mx_new_firmware_id
+                        "id": new_firmware_id
                     }
                 }
             }
