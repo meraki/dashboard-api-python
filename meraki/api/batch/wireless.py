@@ -7,6 +7,37 @@ class ActionBatchWireless(object):
         
 
 
+    def updateDeviceWirelessAlternateManagementInterfaceIpv6(self, serial: str, **kwargs):
+        """
+        **Update alternate management interface IPv6 address**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-wireless-alternate-management-interface-ipv-6
+
+        - serial (string): Serial
+        - addresses (array): configured alternate management interface addresses
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'alternateManagementInterface', 'ipv6'],
+            'operation': 'updateDeviceWirelessAlternateManagementInterfaceIpv6'
+        }
+        resource = f'/devices/{serial}/wireless/alternateManagementInterface/ipv6'
+
+        body_params = ['addresses', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
     def updateDeviceWirelessBluetoothSettings(self, serial: str, **kwargs):
         """
         **Update the bluetooth settings for a wireless device**
@@ -131,6 +162,162 @@ class ActionBatchWireless(object):
             "resource": resource,
             "operation": "update",
             "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def createNetworkWirelessEthernetPortsProfile(self, networkId: str, name: str, ports: list, **kwargs):
+        """
+        **Create an AP port profile**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-wireless-ethernet-ports-profile
+
+        - networkId (string): Network ID
+        - name (string): AP port profile name
+        - ports (array): AP ports configuration
+        - usbPorts (array): AP usb ports configuration
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ethernet', 'ports', 'profiles'],
+            'operation': 'createNetworkWirelessEthernetPortsProfile'
+        }
+        resource = f'/networks/{networkId}/wireless/ethernet/ports/profiles'
+
+        body_params = ['name', 'ports', 'usbPorts', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def assignNetworkWirelessEthernetPortsProfiles(self, networkId: str, serials: list, profileId: str):
+        """
+        **Assign AP port profile to list of APs**
+        https://developer.cisco.com/meraki/api-v1/#!assign-network-wireless-ethernet-ports-profiles
+
+        - networkId (string): Network ID
+        - serials (array): List of AP serials
+        - profileId (string): AP profile ID
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ethernet', 'ports', 'profiles'],
+            'operation': 'assignNetworkWirelessEthernetPortsProfiles'
+        }
+        resource = f'/networks/{networkId}/wireless/ethernet/ports/profiles/assign'
+
+        body_params = ['serials', 'profileId', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def setNetworkWirelessEthernetPortsProfilesDefault(self, networkId: str, profileId: str):
+        """
+        **Set the AP port profile to be default for this network**
+        https://developer.cisco.com/meraki/api-v1/#!set-network-wireless-ethernet-ports-profiles-default
+
+        - networkId (string): Network ID
+        - profileId (string): AP profile ID
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ethernet', 'ports', 'profiles'],
+            'operation': 'setNetworkWirelessEthernetPortsProfilesDefault'
+        }
+        resource = f'/networks/{networkId}/wireless/ethernet/ports/profiles/setDefault'
+
+        body_params = ['profileId', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def updateNetworkWirelessEthernetPortsProfile(self, networkId: str, profileId: str, **kwargs):
+        """
+        **Update the AP port profile by ID for this network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ethernet-ports-profile
+
+        - networkId (string): Network ID
+        - profileId (string): Profile ID
+        - name (string): AP port profile name
+        - ports (array): AP ports configuration
+        - usbPorts (array): AP usb ports configuration
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ethernet', 'ports', 'profiles'],
+            'operation': 'updateNetworkWirelessEthernetPortsProfile'
+        }
+        resource = f'/networks/{networkId}/wireless/ethernet/ports/profiles/{profileId}'
+
+        body_params = ['name', 'ports', 'usbPorts', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def deleteNetworkWirelessEthernetPortsProfile(self, networkId: str, profileId: str):
+        """
+        **Delete an AP port profile**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-wireless-ethernet-ports-profile
+
+        - networkId (string): Network ID
+        - profileId (string): Profile ID
+        """
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ethernet', 'ports', 'profiles'],
+            'operation': 'deleteNetworkWirelessEthernetPortsProfile'
+        }
+        resource = f'/networks/{networkId}/wireless/ethernet/ports/profiles/{profileId}'
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
         }
         return action
         
@@ -273,6 +460,7 @@ class ActionBatchWireless(object):
         - locationAnalyticsEnabled (boolean): Toggle for enabling or disabling location analytics for your network
         - upgradeStrategy (string): The upgrade strategy to apply to the network. Must be one of 'minimizeUpgradeTime' or 'minimizeClientDowntime'. Requires firmware version MR 26.8 or higher'
         - ledLightsOn (boolean): Toggle for enabling or disabling LED lights on all APs in the network (making them run dark)
+        - namedVlans (object): Named VLAN settings for wireless networks.
         """
 
         kwargs.update(locals())
@@ -287,7 +475,7 @@ class ActionBatchWireless(object):
         }
         resource = f'/networks/{networkId}/wireless/settings'
 
-        body_params = ['meshingEnabled', 'ipv6BridgeEnabled', 'locationAnalyticsEnabled', 'upgradeStrategy', 'ledLightsOn', ]
+        body_params = ['meshingEnabled', 'ipv6BridgeEnabled', 'locationAnalyticsEnabled', 'upgradeStrategy', 'ledLightsOn', 'namedVlans', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -366,6 +554,7 @@ class ActionBatchWireless(object):
         - adultContentFilteringEnabled (boolean): Boolean indicating whether or not adult content will be blocked
         - dnsRewrite (object): DNS servers rewrite settings
         - speedBurst (object): The SpeedBurst setting for this SSID'
+        - namedVlans (object): Named VLAN settings.
         """
 
         kwargs.update(locals())
@@ -401,7 +590,7 @@ class ActionBatchWireless(object):
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}'
 
-        body_params = ['name', 'enabled', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk', 'wpaEncryptionMode', 'dot11w', 'dot11r', 'splashPage', 'splashGuestSponsorDomains', 'oauth', 'localRadius', 'ldap', 'activeDirectory', 'radiusServers', 'radiusProxyEnabled', 'radiusTestingEnabled', 'radiusCalledStationId', 'radiusAuthenticationNasId', 'radiusServerTimeout', 'radiusServerAttemptsLimit', 'radiusFallbackEnabled', 'radiusCoaEnabled', 'radiusFailoverPolicy', 'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusAccountingInterimInterval', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging', 'concentratorNetworkId', 'secondaryConcentratorNetworkId', 'disassociateClientsOnVpnFailover', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 'walledGardenEnabled', 'walledGardenRanges', 'gre', 'radiusOverride', 'radiusGuestVlanEnabled', 'radiusGuestVlanId', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'perSsidBandwidthLimitUp', 'perSsidBandwidthLimitDown', 'lanIsolationEnabled', 'visible', 'availableOnAllAps', 'availabilityTags', 'mandatoryDhcpEnabled', 'adultContentFilteringEnabled', 'dnsRewrite', 'speedBurst', ]
+        body_params = ['name', 'enabled', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk', 'wpaEncryptionMode', 'dot11w', 'dot11r', 'splashPage', 'splashGuestSponsorDomains', 'oauth', 'localRadius', 'ldap', 'activeDirectory', 'radiusServers', 'radiusProxyEnabled', 'radiusTestingEnabled', 'radiusCalledStationId', 'radiusAuthenticationNasId', 'radiusServerTimeout', 'radiusServerAttemptsLimit', 'radiusFallbackEnabled', 'radiusCoaEnabled', 'radiusFailoverPolicy', 'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusAccountingInterimInterval', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging', 'concentratorNetworkId', 'secondaryConcentratorNetworkId', 'disassociateClientsOnVpnFailover', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 'walledGardenEnabled', 'walledGardenRanges', 'gre', 'radiusOverride', 'radiusGuestVlanEnabled', 'radiusGuestVlanId', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'perSsidBandwidthLimitUp', 'perSsidBandwidthLimitDown', 'lanIsolationEnabled', 'visible', 'availableOnAllAps', 'availabilityTags', 'mandatoryDhcpEnabled', 'adultContentFilteringEnabled', 'dnsRewrite', 'speedBurst', 'namedVlans', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,

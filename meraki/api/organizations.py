@@ -1620,7 +1620,7 @@ class Organizations(object):
 
     def getOrganizationDevicesPowerModulesStatusesByDevice(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
-        **List the power status information for devices in an organization**
+        **List the most recent status information for power modules in rackmount MX and MS devices that support them**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-power-modules-statuses-by-device
 
         - organizationId (string): Organization ID
@@ -3560,6 +3560,39 @@ class Organizations(object):
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def getOrganizationUplinksLossAndLatency(self, organizationId: str, **kwargs):
+        """
+        **Return the uplink loss and latency for every MX in the organization from at latest 2 minutes ago**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-uplinks-loss-and-latency
+
+        - organizationId (string): Organization ID
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 60 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 5 minutes after t0. The latest possible time that t1 can be is 2 minutes into the past.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 5 minutes. The default is 5 minutes.
+        - uplink (string): Optional filter for a specific WAN uplink. Valid uplinks are wan1, wan2, wan3, cellular. Default will return all uplinks.
+        - ip (string): Optional filter for a specific destination IP. Default will return all destination IPs.
+        """
+
+        kwargs.update(locals())
+
+        if 'uplink' in kwargs:
+            options = ['cellular', 'wan1', 'wan2', 'wan3']
+            assert kwargs['uplink'] in options, f'''"uplink" cannot be "{kwargs['uplink']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['organizations', 'monitor', 'uplinksLossAndLatency'],
+            'operation': 'getOrganizationUplinksLossAndLatency'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/uplinksLossAndLatency'
+
+        query_params = ['t0', 't1', 'timespan', 'uplink', 'ip', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get(metadata, resource, params)
         
 
 

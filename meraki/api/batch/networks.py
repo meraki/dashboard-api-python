@@ -759,6 +759,7 @@ class ActionBatchNetworks(object):
         - remoteStatusPageEnabled (boolean): Enables / disables access to the device status page (<a target='_blank'>http://[device's LAN IP])</a>. Optional. Can only be set if localStatusPageEnabled is set to true
         - localStatusPage (object): A hash of Local Status page(s)' authentication options applied to the Network.
         - securePort (object): A hash of SecureConnect options applied to the Network.
+        - namedVlans (object): A hash of Named VLANs options applied to the Network.
         """
 
         kwargs.update(locals())
@@ -769,7 +770,7 @@ class ActionBatchNetworks(object):
         }
         resource = f'/networks/{networkId}/settings'
 
-        body_params = ['localStatusPageEnabled', 'remoteStatusPageEnabled', 'localStatusPage', 'securePort', ]
+        body_params = ['localStatusPageEnabled', 'remoteStatusPageEnabled', 'localStatusPage', 'securePort', 'namedVlans', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -831,6 +832,66 @@ class ActionBatchNetworks(object):
             "resource": resource,
             "operation": "create",
             "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def createNetworkVlanProfile(self, networkId: str, name: str, vlanNames: list, vlanGroups: list, iname: str):
+        """
+        **Create a VLAN profile for a network**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-vlan-profile
+
+        - networkId (string): Network ID
+        - name (string): Name of the profile, string length must be from 1 to 255 characters
+        - vlanNames (array): An array of named VLANs
+        - vlanGroups (array): An array of VLAN groups
+        - iname (string): IName of the profile
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['networks', 'configure', 'vlanProfiles'],
+            'operation': 'createNetworkVlanProfile'
+        }
+        resource = f'/networks/{networkId}/vlanProfiles'
+
+        body_params = ['name', 'vlanNames', 'vlanGroups', 'iname', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def deleteNetworkVlanProfile(self, networkId: str, iname: str):
+        """
+        **Delete a VLAN profile of a network**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-vlan-profile
+
+        - networkId (string): Network ID
+        - iname (string): Iname
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'vlanProfiles'],
+            'operation': 'deleteNetworkVlanProfile'
+        }
+        resource = f'/networks/{networkId}/vlanProfiles/{iname}'
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
         }
         return action
         
