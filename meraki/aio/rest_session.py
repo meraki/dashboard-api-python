@@ -1,3 +1,4 @@
+import logging
 import sys
 from datetime import datetime
 import json
@@ -249,12 +250,14 @@ class AsyncRestSession:
                     try:
                         message = await response.json(content_type = None)
                     except aiohttp.client_exceptions.ContentTypeError:
+                        logging.debug(f"message is {message}")
+                        logging.debug(f"message is dict? {isinstance(message, dict)}")
                         try:
                             message = (await response.text())[:100]
-                            message_is_dict = True
+                            logging.debug(f"message is {message}")
+                            logging.debug(f"message is dict? {isinstance(message, dict)}")
                         except:
                             message = None
-                            message_is_dict = False
 
                     # Check for specific concurrency errors
                     network_delete_concurrency_error_text = 'This may be due to concurrent requests to delete networks.'
@@ -272,7 +275,7 @@ class AsyncRestSession:
                         if retries == 0:
                             raise APIError(metadata, response)
                     # Check specifically for action batch concurrency error
-                    if message == action_batch_concurrency_error:
+                    elif message == action_batch_concurrency_error:
                         wait = self._action_batch_retry_wait_time
                         if self._logger:
                             self._logger.warning(
