@@ -149,6 +149,11 @@ class AsyncRestSession:
 
         # Ensure proper base URL
         allowed_domains = ['meraki.com', 'meraki.cn']
+
+        # aiohttp manipulates URLs as instances of the yarl.URL class
+        if not isinstance(url, str):
+            url = str(url)
+
         parsed_url = urllib.parse.urlparse(url)
 
         if any(domain in parsed_url.netloc for domain in allowed_domains):
