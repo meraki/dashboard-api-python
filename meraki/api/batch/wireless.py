@@ -998,7 +998,7 @@ class ActionBatchWireless(object):
 
     def updateNetworkWirelessSsidTrafficShapingRules(self, networkId: str, number: str, **kwargs):
         """
-        **Update the traffic shaping settings for an SSID on an MR network**
+        **Update the traffic shaping rules for an SSID on an MR network.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-traffic-shaping-rules
 
         - networkId (string): Network ID
