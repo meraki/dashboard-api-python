@@ -254,13 +254,11 @@ class AsyncRestSession:
                 else:
                     try:
                         message = await response.json(content_type = None)
+                        message_is_dict = True
                     except aiohttp.client_exceptions.ContentTypeError:
-                        logging.debug(f"message is {message}")
-                        logging.debug(f"message is dict? {isinstance(message, dict)}")
+                        message_is_dict = False
                         try:
                             message = (await response.text())[:100]
-                            logging.debug(f"message is {message}")
-                            logging.debug(f"message is dict? {isinstance(message, dict)}")
                         except:
                             message = None
 
