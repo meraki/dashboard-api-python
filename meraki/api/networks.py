@@ -730,7 +730,7 @@ class Networks(object):
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" or "prev" (default) page
         - event_log_end_time (string): ISO8601 Zulu/UTC time, to use in conjunction with startingAfter, to retrieve events within a time window
-        - productType (string): The product type to fetch events for. This parameter is required for networks with multiple device types. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, and cloudGateway
+        - productType (string): The product type to fetch events for. This parameter is required for networks with multiple device types. Valid types are wireless, appliance, switch, systemsManager, camera, and cellularGateway
         - includedEventTypes (array): A list of event types. The returned events will be filtered to only include events with these types.
         - excludedEventTypes (array): A list of event types. The returned events will be filtered to exclude events with these types.
         - deviceMac (string): The MAC address of the Meraki device which the list of events will be filtered with
@@ -749,7 +749,7 @@ class Networks(object):
         kwargs.update(locals())
 
         if 'productType' in kwargs:
-            options = ['appliance', 'camera', 'cellularGateway', 'cloudGateway', 'switch', 'systemsManager', 'wireless']
+            options = ['appliance', 'camera', 'cellularGateway', 'switch', 'systemsManager', 'wireless']
             assert kwargs['productType'] in options, f'''"productType" cannot be "{kwargs['productType']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -852,7 +852,7 @@ class Networks(object):
         kwargs.update(locals())
 
         if 'product' in kwargs:
-            options = ['appliance', 'camera', 'cellularGateway', 'cloudGateway', 'switch', 'switchCatalyst', 'wireless']
+            options = ['appliance', 'camera', 'cellularGateway', 'switch', 'switchCatalyst', 'wireless']
             assert kwargs['product'] in options, f'''"product" cannot be "{kwargs['product']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -2275,7 +2275,7 @@ class Networks(object):
 
     def getNetworkTrafficShapingApplicationCategories(self, networkId: str):
         """
-        **Returns the application categories for traffic shaping rules.**
+        **Returns the application categories for traffic shaping rules**
         https://developer.cisco.com/meraki/api-v1/#!get-network-traffic-shaping-application-categories
 
         - networkId (string): Network ID
