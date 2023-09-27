@@ -284,7 +284,7 @@ class RestSession(object):
                     # Check specifically for network delete concurrency error
                     if message_is_dict and 'errors' in message.keys() \
                             and network_delete_concurrency_error_text in message['errors'][0]:
-                        wait = random.randint(15, self._network_delete_retry_wait_time)
+                        wait = random.randint(30, self._network_delete_retry_wait_time)
                         if self._logger:
                             self._logger.warning(f'{tag}, {operation} - {status} {reason}, retrying in {wait} seconds')
                         time.sleep(wait)
