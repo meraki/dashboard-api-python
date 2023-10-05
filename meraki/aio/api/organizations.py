@@ -1998,12 +1998,17 @@ class AsyncOrganizations:
         
 
 
-    def getOrganizationFirmwareUpgrades(self, organizationId: str, **kwargs):
+    def getOrganizationFirmwareUpgrades(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **Get firmware upgrade information for an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-firmware-upgrades
 
         - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - status (array): Optional parameter to filter the upgrade by status.
         - productTypes (array): Optional parameter to filter the upgrade by product type.
         """
@@ -2017,7 +2022,7 @@ class AsyncOrganizations:
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/firmware/upgrades'
 
-        query_params = ['status', 'productTypes', ]
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'status', 'productTypes', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['status', 'productTypes', ]
@@ -2026,7 +2031,7 @@ class AsyncOrganizations:
                 params[f'{k.strip()}[]'] = kwargs[f'{k}']
                 params.pop(k.strip())
 
-        return self._session.get(metadata, resource, params)
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
         
 
 
@@ -3560,39 +3565,6 @@ class AsyncOrganizations:
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
-
-    def getOrganizationUplinksLossAndLatency(self, organizationId: str, **kwargs):
-        """
-        **Return the uplink loss and latency for every MX in the organization from at latest 2 minutes ago**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-uplinks-loss-and-latency
-
-        - organizationId (string): Organization ID
-        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 60 days from today.
-        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 5 minutes after t0. The latest possible time that t1 can be is 2 minutes into the past.
-        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 5 minutes. The default is 5 minutes.
-        - uplink (string): Optional filter for a specific WAN uplink. Valid uplinks are wan1, wan2, wan3, cellular. Default will return all uplinks.
-        - ip (string): Optional filter for a specific destination IP. Default will return all destination IPs.
-        """
-
-        kwargs.update(locals())
-
-        if 'uplink' in kwargs:
-            options = ['cellular', 'wan1', 'wan2', 'wan3']
-            assert kwargs['uplink'] in options, f'''"uplink" cannot be "{kwargs['uplink']}", & must be set to one of: {options}'''
-
-        metadata = {
-            'tags': ['organizations', 'monitor', 'uplinksLossAndLatency'],
-            'operation': 'getOrganizationUplinksLossAndLatency'
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/uplinksLossAndLatency'
-
-        query_params = ['t0', 't1', 'timespan', 'uplink', 'ip', ]
-        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
-
-        return self._session.get(metadata, resource, params)
         
 
 

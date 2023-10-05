@@ -428,6 +428,34 @@ class AsyncSm:
         
 
 
+    def installNetworkSmDeviceApps(self, networkId: str, deviceId: str, appIds: list, **kwargs):
+        """
+        **Install applications on a device**
+        https://developer.cisco.com/meraki/api-v1/#!install-network-sm-device-apps
+
+        - networkId (string): Network ID
+        - deviceId (string): Device ID
+        - appIds (array): ids of applications to be installed
+        - force (boolean): By default, installation of an app which is believed to already be present on the device will be skipped. If you'd like to force the installation of the app, set this parameter to true.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['sm', 'configure', 'devices'],
+            'operation': 'installNetworkSmDeviceApps'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        deviceId = urllib.parse.quote(str(deviceId), safe='')
+        resource = f'/networks/{networkId}/sm/devices/{deviceId}/installApps'
+
+        body_params = ['appIds', 'force', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
     def getNetworkSmDeviceNetworkAdapters(self, networkId: str, deviceId: str):
         """
         **List the network adapters of a device**
@@ -582,6 +610,33 @@ class AsyncSm:
         resource = f'/networks/{networkId}/sm/devices/{deviceId}/unenroll'
 
         return self._session.post(metadata, resource)
+        
+
+
+    def uninstallNetworkSmDeviceApps(self, networkId: str, deviceId: str, appIds: list):
+        """
+        **Uninstall applications on a device**
+        https://developer.cisco.com/meraki/api-v1/#!uninstall-network-sm-device-apps
+
+        - networkId (string): Network ID
+        - deviceId (string): Device ID
+        - appIds (array): ids of applications to be uninstalled
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['sm', 'configure', 'devices'],
+            'operation': 'uninstallNetworkSmDeviceApps'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        deviceId = urllib.parse.quote(str(deviceId), safe='')
+        resource = f'/networks/{networkId}/sm/devices/{deviceId}/uninstallApps'
+
+        body_params = ['appIds', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
         
 
 
