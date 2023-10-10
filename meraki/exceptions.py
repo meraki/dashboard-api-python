@@ -13,13 +13,17 @@ class APIResponseError(Exception):
     Exception class raised from HTTP class methods. Used as a single catch-all error for any possible
     requests exception error that might happen during communication with Meraki API to simplify caller coding.
     """
+
     def __init__(self, obj_name, status_code, error_msg):
         self.obj_name = obj_name
         self.status_code = status_code
         self.reason = error_msg
 
     def exc_message(self):
-        return f'HTTP call within object "{self.obj_name}" failed. Status code is "{self.status_code}". Error message is: "{self.reason}".'
+        return (
+            f'HTTP call within object "{self.obj_name}" failed. Status code is "{self.status_code}". '
+            f'Error message is: "{self.reason}".'
+        )
 
     def json(self):
         return dict(error=self.reason, status_code=self.status_code)
@@ -94,3 +98,13 @@ class AsyncAPIError(Exception):
 
     def __repr__(self):
         return f"{self.tag}, {self.operation} - {self.status} {self.reason}, {self.message}"
+
+
+class PythonVersionError(Exception):
+    """Exception raised for unsupported Python versions."""
+
+    def __init__(self, message):
+
+        self.message = message
+
+        super().__init__(self.message)

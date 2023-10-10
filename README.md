@@ -1,6 +1,6 @@
 # Meraki Dashboard API Python Library
 
-The Meraki Dashboard API Python library provides all current Meraki [dashboard API](https://developer.cisco.com/meraki/api-v1/) calls to interface with the Cisco Meraki cloud-managed platform. Meraki generates the library based on dashboard API's OpenAPI spec to keep it up to date with the latest API releases, and provides the full source code for the library including the tools used to generate the library, if you are participating in the Early Access program or would like to contribute to the development of the library. Meraki welcomes constructive pull requests that maintain backwards compatibility with prior versions. The library requires Python 3.7+, receives support from the community, and you can install it via [PyPI](https://pypi.org/project/meraki/):
+The Meraki Dashboard API Python library provides all current Meraki [dashboard API](https://developer.cisco.com/meraki/api-v1/) calls to interface with the Cisco Meraki cloud-managed platform. Meraki generates the library based on dashboard API's OpenAPI spec to keep it up to date with the latest API releases, and provides the full source code for the library including the tools used to generate the library, if you are participating in the Early Access program or would like to contribute to the development of the library. Meraki welcomes constructive pull requests that maintain backwards compatibility with prior versions. The library requires Python 3.8+, receives support from the community, and you can install it via [PyPI](https://pypi.org/project/meraki/):
 
     pip install --upgrade meraki
 
@@ -41,7 +41,7 @@ While you can make direct HTTP requests to dashboard API in any programming lang
 1. Export your API key as an [environment variable](https://www.twilio.com/blog/2017/01/how-to-set-environment-variables.html), for example:
 
     ```shell
-    export MERAKI_DASHBOARD_API_KEY=093b24e85df15a3e66f1fc359f4c48493eaa1b73
+    export MERAKI_DASHBOARD_API_KEY=YOUR_KEY_HERE
     ```
 
 2. Alternatively, define your API key as a variable in your source code; this method is not recommended due to its inherent insecurity.
@@ -79,7 +79,7 @@ The usage is similiar to the sequential version above. However it has has some d
 1. Export your API key as an [environment variable](https://www.twilio.com/blog/2017/01/how-to-set-environment-variables.html), for example:
 
     ```shell
-    export MERAKI_DASHBOARD_API_KEY=093b24e85df15a3e66f1fc359f4c48493eaa1b73
+    export MERAKI_DASHBOARD_API_KEY=YOUR_KEY_HERE
     ```
 
 2. Alternatively, define your API key as a variable in your source code; this method is not recommended due to its inherent insecurity.
@@ -107,11 +107,8 @@ The usage is similiar to the sequential version above. However it has has some d
 import asyncio
 
 if __name__ == "__main__":
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(my_async_entry_point())
-    
-    # if you are using Python 3.7+ you can also simply 
-    # use the following line instead of the two lines above
+
+    # replace my_async_entry_point with the name of your entry point method
     asyncio.run(my_async_entry_point())
 ```
 

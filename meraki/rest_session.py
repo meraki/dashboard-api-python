@@ -1,16 +1,15 @@
-import sys
-from datetime import datetime
-import json
-import platform
 import random
-import urllib.parse
 import time
-
 import requests
+import json
+import sys
 
-from meraki.config import *
-from meraki.exceptions import *
+import urllib.parse
+from datetime import datetime
+
 from meraki.__init__ import __version__
+from meraki.common import *
+from meraki.config import *
 
 
 def user_agent_extended(be_geo_id, caller):
@@ -55,22 +54,6 @@ def user_agent_extended(be_geo_id, caller):
 
 
 # Main module interface
-def check_python_version():
-    # Check minimum Python version
-    version_warning_string = f'This library requires Python 3.7 at minimum. Python versions 3.6 and below ' \
-                             f'are end of life and end of support per the Python maintainers, and your ' \
-                             f'interpreter version details are: \n' \
-                             f'platform.python_version_tuple()[0] = {platform.python_version_tuple()[0]}\n' \
-                             f'platform.python_version_tuple()[1] = {platform.python_version_tuple()[1]}\n' \
-                             f'platform.python_version is {platform.python_version()}\n' \
-                             f'Please consult the readme at your convenience: ' \
-                             f'https://github.com/meraki/dashboard-api-python'
-    if int(platform.python_version_tuple()[0]) != 3:
-        sys.exit(version_warning_string)
-    elif int(platform.python_version_tuple()[1]) < 7:
-        sys.exit(version_warning_string)
-
-
 class RestSession(object):
     def __init__(
         self,
@@ -207,7 +190,8 @@ class RestSession(object):
                     retries -= 1
                     if retries == 0:
                         if e.response and e.response.status_code:
-                            raise APIError(metadata, APIResponseError(e.__class__.__name__, e.response.status_code, str(e)))
+                            raise APIError(metadata, APIResponseError(e.__class__.__name__,
+                                                                      e.response.status_code, str(e)))
                         else:
                             raise APIError(metadata, APIResponseError(e.__class__.__name__, 503, str(e)))
                     else:

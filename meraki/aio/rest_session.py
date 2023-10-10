@@ -1,20 +1,17 @@
-import logging
-import sys
-from datetime import datetime
-import json
-import platform
 import random
-import urllib.parse
-import asyncio
-import ssl
 import time
+import asyncio
+import json
+import sys
+import ssl
 
-
+import urllib.parse
+from datetime import datetime
 import aiohttp
 
 from meraki.__init__ import __version__
+from meraki.common import *
 from meraki.config import *
-from meraki.exceptions import *
 from meraki.rest_session import user_agent_extended
 
 
@@ -66,18 +63,7 @@ class AsyncRestSession:
         self.use_iterator_for_get_pages = use_iterator_for_get_pages
 
         # Check minimum Python version
-        version_warning_string = f'This library requires Python 3.7 at minimum. Python versions 3.6 and below ' \
-                                 f'are end of life and end of support per the Python maintainers, and your ' \
-                                 f'interpreter version details are: \n' \
-                                 f'platform.python_version_tuple()[0] = {platform.python_version_tuple()[0]}\n' \
-                                 f'platform.python_version_tuple()[1] = {platform.python_version_tuple()[1]}\n' \
-                                 f'platform.python_version is {platform.python_version()}\n' \
-                                 f'Please consult the readme at your convenience: ' \
-                                 f'https://github.com/meraki/dashboard-api-python'
-        if int(platform.python_version_tuple()[0]) != 3:
-            sys.exit(version_warning_string)
-        elif int(platform.python_version_tuple()[1]) < 7:
-            sys.exit(version_warning_string)
+        check_python_version()
 
         # Check base URL
         if "v0" in self._base_url:

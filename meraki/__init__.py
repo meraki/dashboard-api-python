@@ -1,4 +1,3 @@
-from datetime import datetime
 import logging
 import os
 
@@ -30,6 +29,7 @@ from meraki.config import (
     WAIT_ON_RATE_LIMIT,
     NGINX_429_RETRY_WAIT_TIME,
     ACTION_BATCH_RETRY_WAIT_TIME,
+    NETWORK_DELETE_RETRY_WAIT_TIME,
     RETRY_4XX_ERROR,
     RETRY_4XX_ERROR_WAIT_TIME,
     MAXIMUM_RETRIES,
