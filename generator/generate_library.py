@@ -46,16 +46,17 @@ def generate_pagination_parameters(operation: str):
 
 def check_python_version():
     # Check minimum Python version
-    version_warning_string = f'The generator requires Python 3.10 at minimum. ' \
-                             f'Your interpreter version details are: \n' \
-                             f'platform.python_version_tuple()[0] = {platform.python_version_tuple()[0]}\n' \
-                             f'platform.python_version_tuple()[1] = {platform.python_version_tuple()[1]}\n' \
-                             f'platform.python_version is {platform.python_version()}\n' \
-                             f'Please consult the generator readme at your convenience: ' \
-                             f'https://github.com/meraki/dashboard-api-python/blob/main/generator/readme.md'
-    if int(platform.python_version_tuple()[0]) != 3:
-        sys.exit(version_warning_string)
-    elif int(platform.python_version_tuple()[1]) < 7:
+    version_warning_string = (
+            f"This library generator requires Python 3.10 at minimum. "
+            f"Your interpreter version is: {platform.python_version()}. "
+            f"Please consult the readme at your convenience: "
+            f"https://github.com/meraki/dashboard-api-python/blob/main/generator/readme.md "
+            f"Additional details: "
+            f"python_version_tuple()[0] = {platform.python_version_tuple()[0]}; "
+            f"python_version_tuple()[1] = {platform.python_version_tuple()[1]} "
+        )
+
+    if not (int(platform.python_version_tuple()[0]) == 3 and int(platform.python_version_tuple()[1]) >= 10):
         sys.exit(version_warning_string)
 
 
@@ -223,7 +224,7 @@ def generate_library(spec: dict, version_number: str, is_github_action: bool):
             os.mkdir(directory)
 
     # Files that are not generated
-    non_generated = ['__init__.py', 'config.py', 'exceptions.py', 'rest_session.py', 'api/__init__.py',
+    non_generated = ['__init__.py', 'config.py', 'common.py', 'exceptions.py', 'rest_session.py', 'api/__init__.py',
                      'aio/__init__.py', 'aio/rest_session.py', 'aio/api/__init__.py', 'api/batch/__init__.py']
     base_url = 'https://raw.githubusercontent.com/meraki/dashboard-api-python/master/meraki/'
     for file in non_generated:
