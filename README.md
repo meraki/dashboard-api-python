@@ -74,6 +74,15 @@ You can find fully working example scripts in the **examples** folder.
 ## AsyncIO
 **asyncio** is a library to write concurrent code using the **async/await** syntax. Special thanks to Heimo Stieg ([@coreGreenberet](https://github.com/coreGreenberet)) who has ported the API to asyncio.
 
+### Installation on macOS
+
+If you use a Mac, then you may need to take 
+[additional Python installation steps](https://bugs.python.org/issue43404) that aren't required on other platforms. This
+is [a limitation of macOS and not the library](https://github.com/meraki/dashboard-api-python/issues/226). This step is 
+not required on Windows.
+
+### Usage
+
 The usage is similiar to the sequential version above. However it has has some differences.
 
 1. Export your API key as an [environment variable](https://www.twilio.com/blog/2017/01/how-to-set-environment-variables.html), for example:
