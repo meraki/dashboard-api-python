@@ -1,12 +1,12 @@
-import random
-import time
 import asyncio
 import json
-import sys
+import random
 import ssl
-
+import sys
+import time
 import urllib.parse
 from datetime import datetime
+
 import aiohttp
 
 from meraki.__init__ import __version__

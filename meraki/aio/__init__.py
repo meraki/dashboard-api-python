@@ -1,7 +1,6 @@
 import logging
 import os
 
-from meraki.aio.rest_session import *
 from meraki.aio.api.administered import AsyncAdministered
 from meraki.aio.api.appliance import AsyncAppliance
 from meraki.aio.api.camera import AsyncCamera
@@ -15,10 +14,9 @@ from meraki.aio.api.sensor import AsyncSensor
 from meraki.aio.api.sm import AsyncSm
 from meraki.aio.api.switch import AsyncSwitch
 from meraki.aio.api.wireless import AsyncWireless
-
+from meraki.aio.rest_session import *
 # Batch class imports
 from meraki.api.batch import Batch
-
 # Config import
 from meraki.config import (
     API_KEY_ENVIRONMENT_VARIABLE,

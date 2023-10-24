@@ -1,8 +1,9 @@
-import pytest
-import meraki
-import random
 import platform
-import time
+import random
+
+import pytest
+
+import meraki
 
 
 @pytest.fixture(scope='session')

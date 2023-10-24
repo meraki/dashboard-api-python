@@ -1,7 +1,7 @@
 import getopt
 import os
-import sys
 import platform
+import sys
 
 import jinja2
 import requests

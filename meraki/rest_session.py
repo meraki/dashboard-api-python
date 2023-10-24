@@ -1,11 +1,11 @@
-import random
-import time
-import requests
 import json
+import random
 import sys
-
+import time
 import urllib.parse
 from datetime import datetime
+
+import requests
 
 from meraki.__init__ import __version__
 from meraki.common import *

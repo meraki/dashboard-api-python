@@ -5,7 +5,10 @@ from meraki.exceptions import *
 def check_python_version():
     # Check minimum Python version
 
-    if not (int(platform.python_version_tuple()[0]) == 3 and int(platform.python_version_tuple()[1]) >= 8):
+    if not (
+        int(platform.python_version_tuple()[0]) == 3
+        and int(platform.python_version_tuple()[1]) >= 8
+    ):
         message = (
             f"This library requires Python 3.8 at minimum. Python versions 3.7 and below "
             f"no longer receive security updates since reaching end of life and of support "

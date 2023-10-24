@@ -1,19 +1,19 @@
 # Package Constants
 
 # Meraki dashboard API key, set either at instantiation or as an environment variable
-API_KEY_ENVIRONMENT_VARIABLE = 'MERAKI_DASHBOARD_API_KEY'
+API_KEY_ENVIRONMENT_VARIABLE = "MERAKI_DASHBOARD_API_KEY"
 
 # Base URL preceding all endpoint resources
-DEFAULT_BASE_URL = 'https://api.meraki.com/api/v1'
+DEFAULT_BASE_URL = "https://api.meraki.com/api/v1"
 
 # Maximum number of seconds for each API call
 SINGLE_REQUEST_TIMEOUT = 60
 
 # Path for TLS/SSL certificate verification if behind local proxy
-CERTIFICATE_PATH = ''
+CERTIFICATE_PATH = ""
 
 # Proxy server and port, if needed, for HTTPS
-REQUESTS_PROXY = ''
+REQUESTS_PROXY = ""
 
 # Retry if 429 rate limit error encountered?
 WAIT_ON_RATE_LIMIT = True
@@ -40,10 +40,10 @@ MAXIMUM_RETRIES = 2
 OUTPUT_LOG = True
 
 # Path to output log; by default, working directory of script if not specified
-LOG_PATH = ''
+LOG_PATH = ""
 
 # Log file name appended with date and timestamp
-LOG_FILE_PREFIX = 'meraki_api_'
+LOG_FILE_PREFIX = "meraki_api_"
 
 # Print output logging to console?
 PRINT_TO_CONSOLE = True
@@ -65,7 +65,7 @@ SIMULATE_API_CALLS = False
 AIO_MAXIMUM_CONCURRENT_REQUESTS = 8
 
 # Legacy partner identifier for API usage tracking; can also be set as an environment variable BE_GEO_ID
-BE_GEO_ID = ''
+BE_GEO_ID = ""
 
 # Optional identifier for API usage tracking; can also be set as an environment variable MERAKI_PYTHON_SDK_CALLER
 # It's good practice to use this to identify your application using the format:
@@ -83,4 +83,4 @@ BE_GEO_ID = ''
 # don't want to report version number, then you would use, at minimum: 'SunshineRainbows hunter2ForLife'
 # The choice is yours as long as you follow the format. You should **not** include other information in this string.
 # If you are an official ecosystem partner, this is required.
-MERAKI_PYTHON_SDK_CALLER = ''
+MERAKI_PYTHON_SDK_CALLER = ""
