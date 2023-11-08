@@ -166,6 +166,7 @@ class AsyncDevices:
         - serial (string): Serial
         - target (string): FQDN, IPv4 or IPv6 address
         - count (integer): Count parameter to pass to ping. [1..5], default 5
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
 
         kwargs.update(locals())
@@ -177,7 +178,7 @@ class AsyncDevices:
         serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/liveTools/ping'
 
-        body_params = ['target', 'count', ]
+        body_params = ['target', 'count', 'callback', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -212,6 +213,7 @@ class AsyncDevices:
 
         - serial (string): Serial
         - count (integer): Count parameter to pass to ping. [1..5], default 5
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
 
         kwargs.update(locals())
@@ -223,7 +225,7 @@ class AsyncDevices:
         serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/liveTools/pingDevice'
 
-        body_params = ['count', ]
+        body_params = ['count', 'callback', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)

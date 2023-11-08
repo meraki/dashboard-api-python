@@ -2429,3 +2429,129 @@ class AsyncWireless:
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
         
+
+
+    def getOrganizationWirelessDevicesPacketLossByClient(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Get average packet loss for the given timespan for all clients in the organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-packet-loss-by-client
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - ssids (array): Filter results by SSID number.
+        - bands (array): Filter results by band. Valid bands are: 2.4, 5, and 6.
+        - macs (array): Filter results by client mac address(es).
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 90 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 90 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 5 minutes and be less than or equal to 90 days. The default is 7 days.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'monitor', 'devices', 'packetLoss', 'byClient'],
+            'operation': 'getOrganizationWirelessDevicesPacketLossByClient'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/devices/packetLoss/byClient'
+
+        query_params = ['networkIds', 'ssids', 'bands', 'macs', 'perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', 'ssids', 'bands', 'macs', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def getOrganizationWirelessDevicesPacketLossByDevice(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Get average packet loss for the given timespan for all devices in the organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-packet-loss-by-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device.
+        - ssids (array): Filter results by SSID number.
+        - bands (array): Filter results by band. Valid bands are: 2.4, 5, and 6.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 90 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 90 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 5 minutes and be less than or equal to 90 days. The default is 7 days.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'monitor', 'devices', 'packetLoss', 'byDevice'],
+            'operation': 'getOrganizationWirelessDevicesPacketLossByDevice'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/devices/packetLoss/byDevice'
+
+        query_params = ['networkIds', 'serials', 'ssids', 'bands', 'perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', 'serials', 'ssids', 'bands', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def getOrganizationWirelessDevicesPacketLossByNetwork(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Get average packet loss for the given timespan for all networks in the organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-packet-loss-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device.
+        - ssids (array): Filter results by SSID number.
+        - bands (array): Filter results by band. Valid bands are: 2.4, 5, and 6.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 90 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 90 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 5 minutes and be less than or equal to 90 days. The default is 7 days.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'monitor', 'devices', 'packetLoss', 'byNetwork'],
+            'operation': 'getOrganizationWirelessDevicesPacketLossByNetwork'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/devices/packetLoss/byNetwork'
+
+        query_params = ['networkIds', 'serials', 'ssids', 'bands', 'perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', 'serials', 'ssids', 'bands', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
