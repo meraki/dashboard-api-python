@@ -72,6 +72,7 @@ class AsyncSm:
         - wifiMacs (array): Filter devices by wifi mac(s).
         - serials (array): Filter devices by serial(s).
         - ids (array): Filter devices by id(s).
+        - uuids (array): Filter devices by uuid(s).
         - scope (array): Specify a scope (one of all, none, withAny, withAll, withoutAny, or withoutAll) and a set of tags.
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
@@ -87,10 +88,10 @@ class AsyncSm:
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/sm/devices'
 
-        query_params = ['fields', 'wifiMacs', 'serials', 'ids', 'scope', 'perPage', 'startingAfter', 'endingBefore', ]
+        query_params = ['fields', 'wifiMacs', 'serials', 'ids', 'uuids', 'scope', 'perPage', 'startingAfter', 'endingBefore', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['fields', 'wifiMacs', 'serials', 'ids', 'scope', ]
+        array_params = ['fields', 'wifiMacs', 'serials', 'ids', 'uuids', 'scope', ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
                 params[f'{k.strip()}[]'] = kwargs[f'{k}']
@@ -663,7 +664,7 @@ class AsyncSm:
 
     def getNetworkSmProfiles(self, networkId: str):
         """
-        **List all the profiles in the network**
+        **List all profiles in a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-profiles
 
         - networkId (string): Network ID
