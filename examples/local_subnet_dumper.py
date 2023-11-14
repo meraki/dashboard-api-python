@@ -128,7 +128,7 @@ print("done assembling subnets")
 json_object = json.dumps(all_subnets, indent=4)
 
 with open(
-    "../../../../../Users/jkuchta/AppData/Roaming/JetBrains/PyCharm2023.2/scratches/subnets.json",
+    "subnets.json",
     "w",
 ) as outfile:
     outfile.write(json_object)
