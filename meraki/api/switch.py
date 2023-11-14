@@ -2472,6 +2472,33 @@ class Switch(object):
         
 
 
+    def getOrganizationSummarySwitchPowerHistory(self, organizationId: str, **kwargs):
+        """
+        **Returns the total PoE power draw for all switch ports in the organization over the requested timespan (by default the last 24 hours)**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-summary-switch-power-history
+
+        - organizationId (string): Organization ID
+        - t0 (string): The beginning of the timespan for the data.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['switch', 'monitor', 'summary', 'power', 'history'],
+            'operation': 'getOrganizationSummarySwitchPowerHistory'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/summary/switch/power/history'
+
+        query_params = ['t0', 't1', 'timespan', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get(metadata, resource, params)
+        
+
+
     def cloneOrganizationSwitchDevices(self, organizationId: str, sourceSerial: str, targetSerials: list):
         """
         **Clone port-level and some switch-level configuration settings from a source switch to one or more target switches**

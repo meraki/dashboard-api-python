@@ -123,6 +123,7 @@ class Organizations(object):
         - actions (array): A set of changes to make as part of this action (<a href='https://developer.cisco.com/meraki/api/#/rest/guides/action-batches/'>more details</a>)
         - confirmed (boolean): Set to true for immediate execution. Set to false if the action should be previewed before executing. This property cannot be unset once it is true. Defaults to false.
         - synchronous (boolean): Set to true to force the batch to run synchronous. There can be at most 20 actions in synchronous batch. Defaults to false.
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
 
         kwargs.update(locals())
@@ -134,7 +135,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/actionBatches'
 
-        body_params = ['confirmed', 'synchronous', 'actions', ]
+        body_params = ['confirmed', 'synchronous', 'actions', 'callback', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -2268,6 +2269,7 @@ class Organizations(object):
         - deviceType (string): Device Type switch or wireless controller
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - search (string): Optional parameter to search on network name
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100000. Default is 1000.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
@@ -2286,7 +2288,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/inventory/onboarding/cloudMonitoring/networks'
 
-        query_params = ['deviceType', 'perPage', 'startingAfter', 'endingBefore', ]
+        query_params = ['deviceType', 'search', 'perPage', 'startingAfter', 'endingBefore', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -3594,6 +3596,27 @@ class Organizations(object):
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
+        
+
+
+    def getOrganizationWebhooksCallbacksStatus(self, organizationId: str, callbackId: str):
+        """
+        **Return the status of an API callback**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-webhooks-callbacks-status
+
+        - organizationId (string): Organization ID
+        - callbackId (string): Callback ID
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'webhooks', 'callbacks', 'statuses'],
+            'operation': 'getOrganizationWebhooksCallbacksStatus'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        callbackId = urllib.parse.quote(str(callbackId), safe='')
+        resource = f'/organizations/{organizationId}/webhooks/callbacks/statuses/{callbackId}'
+
+        return self._session.get(metadata, resource)
         
 
 
