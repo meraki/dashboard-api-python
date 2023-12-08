@@ -43,7 +43,7 @@ from meraki.config import (
 )
 from meraki.rest_session import *
 
-__version__ = '1.39.0'
+__version__ = '1.39.1'
 
 
 class DashboardAPI(object):

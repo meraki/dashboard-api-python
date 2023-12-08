@@ -2117,7 +2117,7 @@ class Organizations(object):
         - usedState (string): Filter results by used or unused inventory. Accepted values are 'used' or 'unused'.
         - search (string): Search for devices in inventory based on serial number, mac address, or model.
         - macs (array): Search for devices in inventory based on mac addresses.
-        - networkIds (array): Search for devices in inventory based on network ids.
+        - networkIds (array): Search for devices in inventory based on network ids. Use explicit 'null' value to get available devices only.
         - serials (array): Search for devices in inventory based on serials.
         - models (array): Search for devices in inventory based on model.
         - orderNumbers (array): Search for devices in inventory based on order numbers.
