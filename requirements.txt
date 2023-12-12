@@ -1,4 +1,4 @@
-aiohttp~=3.8.6
+aiohttp~=3.9.0
 requests~=2.31.0
 meraki~=1.38.0
 setuptools~=67.2.0
