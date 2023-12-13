@@ -1,4 +1,5 @@
 import urllib
+from meraki.common import validate_kwargs
 
 
 class CellularGateway(object):
@@ -47,6 +48,7 @@ class CellularGateway(object):
         resource = f'/devices/{serial}/cellularGateway/lan'
 
         body_params = ['reservedIpRanges', 'fixedIpAssignments', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -91,6 +93,7 @@ class CellularGateway(object):
         resource = f'/devices/{serial}/cellularGateway/portForwardingRules'
 
         body_params = ['rules', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -135,6 +138,7 @@ class CellularGateway(object):
         resource = f'/networks/{networkId}/cellularGateway/connectivityMonitoringDestinations'
 
         body_params = ['destinations', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -181,6 +185,7 @@ class CellularGateway(object):
         resource = f'/networks/{networkId}/cellularGateway/dhcp'
 
         body_params = ['dhcpLeaseTime', 'dnsNameservers', 'dnsCustomNameservers', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -226,6 +231,7 @@ class CellularGateway(object):
         resource = f'/networks/{networkId}/cellularGateway/subnetPool'
 
         body_params = ['mask', 'cidr', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -270,6 +276,7 @@ class CellularGateway(object):
         resource = f'/networks/{networkId}/cellularGateway/uplink'
 
         body_params = ['bandwidthLimits', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -302,6 +309,7 @@ class CellularGateway(object):
         resource = f'/organizations/{organizationId}/cellularGateway/uplink/statuses'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'serials', 'iccids', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['networkIds', 'serials', 'iccids', ]
