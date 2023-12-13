@@ -1,4 +1,5 @@
 import urllib
+from meraki.common import validate_kwargs
 
 
 class Insight(object):
@@ -32,6 +33,7 @@ class Insight(object):
         resource = f'/networks/{networkId}/insight/applications/{applicationId}/healthByTime'
 
         query_params = ['t0', 't1', 'timespan', 'resolution', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -97,6 +99,7 @@ class Insight(object):
         resource = f'/organizations/{organizationId}/insight/monitoredMediaServers'
 
         body_params = ['name', 'address', 'bestEffortMonitoringEnabled', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -147,6 +150,7 @@ class Insight(object):
         resource = f'/organizations/{organizationId}/insight/monitoredMediaServers/{monitoredMediaServerId}'
 
         body_params = ['name', 'address', 'bestEffortMonitoringEnabled', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
