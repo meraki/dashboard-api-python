@@ -1,4 +1,5 @@
 import urllib
+from meraki.common import validate_kwargs
 
 
 class Camera(object):
@@ -53,6 +54,7 @@ class Camera(object):
         resource = f'/devices/{serial}/camera/analytics/overview'
 
         query_params = ['t0', 't1', 'timespan', 'objectType', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -82,6 +84,7 @@ class Camera(object):
         resource = f'/devices/{serial}/camera/analytics/recent'
 
         query_params = ['objectType', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -136,6 +139,7 @@ class Camera(object):
         resource = f'/devices/{serial}/camera/analytics/zones/{zoneId}/history'
 
         query_params = ['t0', 't1', 'timespan', 'resolution', 'objectType', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -182,6 +186,7 @@ class Camera(object):
         resource = f'/devices/{serial}/camera/customAnalytics'
 
         body_params = ['enabled', 'artifactId', 'parameters', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -208,6 +213,7 @@ class Camera(object):
         resource = f'/devices/{serial}/camera/generateSnapshot'
 
         body_params = ['timestamp', 'fullframe', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -268,6 +274,7 @@ class Camera(object):
         resource = f'/devices/{serial}/camera/qualityAndRetention'
 
         body_params = ['profileId', 'motionBasedRetentionEnabled', 'audioRecordingEnabled', 'restrictedBandwidthModeEnabled', 'quality', 'resolution', 'motionDetectorVersion', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -315,6 +322,7 @@ class Camera(object):
         resource = f'/devices/{serial}/camera/sense'
 
         body_params = ['senseEnabled', 'mqttBrokerId', 'audioDetection', 'detectionModelId', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -378,6 +386,7 @@ class Camera(object):
         resource = f'/devices/{serial}/camera/video/settings'
 
         body_params = ['externalRtspEnabled', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -403,6 +412,7 @@ class Camera(object):
         resource = f'/devices/{serial}/camera/videoLink'
 
         query_params = ['timestamp', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -499,6 +509,7 @@ class Camera(object):
         resource = f'/networks/{networkId}/camera/qualityRetentionProfiles'
 
         body_params = ['name', 'motionBasedRetentionEnabled', 'restrictedBandwidthModeEnabled', 'audioRecordingEnabled', 'cloudArchiveEnabled', 'motionDetectorVersion', 'scheduleId', 'maxRetentionDays', 'videoSettings', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -555,6 +566,7 @@ class Camera(object):
         resource = f'/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}'
 
         body_params = ['name', 'motionBasedRetentionEnabled', 'restrictedBandwidthModeEnabled', 'audioRecordingEnabled', 'cloudArchiveEnabled', 'motionDetectorVersion', 'scheduleId', 'maxRetentionDays', 'videoSettings', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -622,6 +634,7 @@ class Camera(object):
         resource = f'/networks/{networkId}/camera/wirelessProfiles'
 
         body_params = ['name', 'ssid', 'identity', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -691,6 +704,7 @@ class Camera(object):
         resource = f'/networks/{networkId}/camera/wirelessProfiles/{wirelessProfileId}'
 
         body_params = ['name', 'ssid', 'identity', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -756,6 +770,7 @@ class Camera(object):
         resource = f'/organizations/{organizationId}/camera/customAnalytics/artifacts'
 
         body_params = ['name', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -824,6 +839,7 @@ class Camera(object):
         resource = f'/organizations/{organizationId}/camera/onboarding/statuses'
 
         query_params = ['serials', 'networkIds', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['serials', 'networkIds', ]
@@ -856,6 +872,7 @@ class Camera(object):
         resource = f'/organizations/{organizationId}/camera/onboarding/statuses'
 
         body_params = ['serial', 'wirelessCredentialsSent', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -943,6 +960,7 @@ class Camera(object):
         resource = f'/organizations/{organizationId}/camera/roles'
 
         body_params = ['name', 'appliedOnDevices', 'appliedOnNetworks', 'appliedOrgWide', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -1015,6 +1033,7 @@ class Camera(object):
         resource = f'/organizations/{organizationId}/camera/roles/{roleId}'
 
         body_params = ['name', 'appliedOnDevices', 'appliedOnNetworks', 'appliedOrgWide', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
