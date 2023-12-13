@@ -1,4 +1,5 @@
 import urllib
+from meraki.common import validate_kwargs
 
 
 class Wireless(object):
@@ -27,6 +28,7 @@ class Wireless(object):
         resource = f'/devices/{serial}/wireless/alternateManagementInterface/ipv6'
 
         body_params = ['addresses', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -73,6 +75,7 @@ class Wireless(object):
         resource = f'/devices/{serial}/wireless/bluetooth/settings'
 
         body_params = ['uuid', 'major', 'minor', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -108,6 +111,7 @@ class Wireless(object):
         resource = f'/devices/{serial}/wireless/connectionStats'
 
         query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -144,6 +148,7 @@ class Wireless(object):
         resource = f'/devices/{serial}/wireless/latencyStats'
 
         query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', 'fields', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -190,6 +195,7 @@ class Wireless(object):
         resource = f'/devices/{serial}/wireless/radio/settings'
 
         body_params = ['rfProfileId', 'twoFourGhzSettings', 'fiveGhzSettings', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -235,6 +241,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/airMarshal'
 
         query_params = ['t0', 'timespan', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -282,6 +289,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/alternateManagementInterface'
 
         body_params = ['enabled', 'vlanId', 'protocols', 'accessPoints', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -327,6 +335,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/billing'
 
         body_params = ['currency', 'plans', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -380,6 +389,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/bluetooth/settings'
 
         body_params = ['scanningEnabled', 'advertisingEnabled', 'uuid', 'majorMinorAssignmentMode', 'major', 'minor', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -417,6 +427,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/channelUtilizationHistory'
 
         query_params = ['t0', 't1', 'timespan', 'resolution', 'autoResolution', 'clientId', 'deviceSerial', 'apTag', 'band', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -455,6 +466,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/clientCountHistory'
 
         query_params = ['t0', 't1', 'timespan', 'resolution', 'autoResolution', 'clientId', 'deviceSerial', 'apTag', 'band', 'ssid', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -490,6 +502,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/clients/connectionStats'
 
         query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -526,6 +539,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/clients/latencyStats'
 
         query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', 'fields', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -563,6 +577,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/clients/{clientId}/connectionStats'
 
         query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -609,6 +624,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/clients/{clientId}/connectivityEvents'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', 'types', 'includedSeverities', 'band', 'ssidNumber', 'deviceSerial', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['types', 'includedSeverities', ]
@@ -645,6 +661,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/clients/{clientId}/latencyHistory'
 
         query_params = ['t0', 't1', 'timespan', 'resolution', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -683,6 +700,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/clients/{clientId}/latencyStats'
 
         query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', 'fields', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -718,6 +736,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/connectionStats'
 
         query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -756,6 +775,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/dataRateHistory'
 
         query_params = ['t0', 't1', 'timespan', 'resolution', 'autoResolution', 'clientId', 'deviceSerial', 'apTag', 'band', 'ssid', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -791,6 +811,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/devices/connectionStats'
 
         query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -827,6 +848,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/devices/latencyStats'
 
         query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', 'fields', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -873,6 +895,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/ethernet/ports/profiles'
 
         body_params = ['name', 'ports', 'usbPorts', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -974,6 +997,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/ethernet/ports/profiles/{profileId}'
 
         body_params = ['name', 'ports', 'usbPorts', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1032,6 +1056,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/failedConnections'
 
         query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', 'serial', 'clientId', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -1074,6 +1099,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/latencyHistory'
 
         query_params = ['t0', 't1', 'timespan', 'resolution', 'autoResolution', 'clientId', 'deviceSerial', 'apTag', 'band', 'ssid', 'accessCategory', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -1110,6 +1136,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/latencyStats'
 
         query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', 'fields', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -1139,6 +1166,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/meshStatuses'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -1164,6 +1192,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/rfProfiles'
 
         query_params = ['includeTemplateProfiles', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -1206,6 +1235,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/rfProfiles'
 
         body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', 'sixGhzSettings', 'transmission', 'perSsidSettings', 'flexRadios', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -1250,6 +1280,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/rfProfiles/{rfProfileId}'
 
         body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', 'sixGhzSettings', 'transmission', 'perSsidSettings', 'flexRadios', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1345,6 +1376,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/settings'
 
         body_params = ['meshingEnabled', 'ipv6BridgeEnabled', 'locationAnalyticsEnabled', 'upgradeStrategy', 'ledLightsOn', 'namedVlans', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1383,6 +1415,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/signalQualityHistory'
 
         query_params = ['t0', 't1', 'timespan', 'resolution', 'autoResolution', 'clientId', 'deviceSerial', 'apTag', 'band', 'ssid', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -1533,6 +1566,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/ssids/{number}'
 
         body_params = ['name', 'enabled', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk', 'wpaEncryptionMode', 'dot11w', 'dot11r', 'splashPage', 'splashGuestSponsorDomains', 'oauth', 'localRadius', 'ldap', 'activeDirectory', 'radiusServers', 'radiusProxyEnabled', 'radiusTestingEnabled', 'radiusCalledStationId', 'radiusAuthenticationNasId', 'radiusServerTimeout', 'radiusServerAttemptsLimit', 'radiusFallbackEnabled', 'radiusCoaEnabled', 'radiusFailoverPolicy', 'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusAccountingInterimInterval', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging', 'concentratorNetworkId', 'secondaryConcentratorNetworkId', 'disassociateClientsOnVpnFailover', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 'walledGardenEnabled', 'walledGardenRanges', 'gre', 'radiusOverride', 'radiusGuestVlanEnabled', 'radiusGuestVlanId', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'perSsidBandwidthLimitUp', 'perSsidBandwidthLimitDown', 'lanIsolationEnabled', 'visible', 'availableOnAllAps', 'availabilityTags', 'mandatoryDhcpEnabled', 'adultContentFilteringEnabled', 'dnsRewrite', 'speedBurst', 'namedVlans', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1583,6 +1617,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/ssids/{number}/bonjourForwarding'
 
         body_params = ['enabled', 'rules', 'exception', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1632,6 +1667,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/ssids/{number}/deviceTypeGroupPolicies'
 
         body_params = ['enabled', 'deviceTypePolicies', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1683,6 +1719,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/ssids/{number}/eapOverride'
 
         body_params = ['timeout', 'identity', 'maxRetries', 'eapolKey', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1732,6 +1769,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/ssids/{number}/firewall/l3FirewallRules'
 
         body_params = ['rules', 'allowLanAccess', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1780,6 +1818,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/ssids/{number}/firewall/l7FirewallRules'
 
         body_params = ['rules', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1818,6 +1857,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/ssids/{number}/hotspot20'
 
         body_params = ['enabled', 'operator', 'venue', 'networkAccessType', 'domains', 'roamConsortOis', 'mccMncs', 'naiRealms', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1890,6 +1930,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/ssids/{number}/identityPsks'
 
         body_params = ['name', 'passphrase', 'groupPolicyId', 'expiresAt', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -1945,6 +1986,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/ssids/{number}/identityPsks/{identityPskId}'
 
         body_params = ['name', 'passphrase', 'groupPolicyId', 'expiresAt', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -2018,6 +2060,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/ssids/{number}/schedules'
 
         body_params = ['enabled', 'ranges', 'rangesInSeconds', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -2084,6 +2127,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/ssids/{number}/splash/settings'
 
         body_params = ['splashUrl', 'useSplashUrl', 'splashTimeout', 'redirectUrl', 'useRedirectUrl', 'welcomeMessage', 'splashLogo', 'splashImage', 'splashPrepaidFront', 'blockAllTrafficBeforeSignOn', 'controllerDisconnectionBehavior', 'allowSimultaneousLogins', 'guestSponsorship', 'billing', 'sentryEnrollment', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -2116,6 +2160,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/ssids/{number}/trafficShaping/rules'
 
         body_params = ['trafficShapingEnabled', 'defaultRulesEnabled', 'rules', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -2187,6 +2232,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/ssids/{number}/vpn'
 
         body_params = ['concentrator', 'splitTunnel', 'failover', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -2225,6 +2271,7 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/usageHistory'
 
         query_params = ['t0', 't1', 'timespan', 'resolution', 'autoResolution', 'clientId', 'deviceSerial', 'apTag', 'band', 'ssid', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -2260,6 +2307,7 @@ class Wireless(object):
         resource = f'/organizations/{organizationId}/wireless/devices/channelUtilization/byDevice'
 
         query_params = ['networkIds', 'serials', 'perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', 'interval', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['networkIds', 'serials', ]
@@ -2301,6 +2349,7 @@ class Wireless(object):
         resource = f'/organizations/{organizationId}/wireless/devices/channelUtilization/byNetwork'
 
         query_params = ['networkIds', 'serials', 'perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', 'interval', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['networkIds', 'serials', ]
@@ -2342,6 +2391,7 @@ class Wireless(object):
         resource = f'/organizations/{organizationId}/wireless/devices/channelUtilization/history/byDevice/byInterval'
 
         query_params = ['networkIds', 'serials', 'perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', 'interval', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['networkIds', 'serials', ]
@@ -2383,6 +2433,7 @@ class Wireless(object):
         resource = f'/organizations/{organizationId}/wireless/devices/channelUtilization/history/byNetwork/byInterval'
 
         query_params = ['networkIds', 'serials', 'perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', 'interval', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['networkIds', 'serials', ]
@@ -2419,6 +2470,7 @@ class Wireless(object):
         resource = f'/organizations/{organizationId}/wireless/devices/ethernet/statuses'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['networkIds', ]
@@ -2461,6 +2513,7 @@ class Wireless(object):
         resource = f'/organizations/{organizationId}/wireless/devices/packetLoss/byClient'
 
         query_params = ['networkIds', 'ssids', 'bands', 'macs', 'perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['networkIds', 'ssids', 'bands', 'macs', ]
@@ -2503,6 +2556,7 @@ class Wireless(object):
         resource = f'/organizations/{organizationId}/wireless/devices/packetLoss/byDevice'
 
         query_params = ['networkIds', 'serials', 'ssids', 'bands', 'perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['networkIds', 'serials', 'ssids', 'bands', ]
@@ -2545,6 +2599,7 @@ class Wireless(object):
         resource = f'/organizations/{organizationId}/wireless/devices/packetLoss/byNetwork'
 
         query_params = ['networkIds', 'serials', 'ssids', 'bands', 'perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['networkIds', 'serials', 'ssids', 'bands', ]
