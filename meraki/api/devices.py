@@ -1,4 +1,5 @@
 import urllib
+from meraki.common import validate_kwargs
 
 
 class Devices(object):
@@ -54,6 +55,7 @@ class Devices(object):
         resource = f'/devices/{serial}'
 
         body_params = ['name', 'tags', 'lat', 'lng', 'address', 'notes', 'moveMapMarker', 'switchProfileId', 'floorPlanId', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -81,6 +83,7 @@ class Devices(object):
         resource = f'/devices/{serial}/blinkLeds'
 
         body_params = ['duration', 'period', 'duty', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -126,6 +129,7 @@ class Devices(object):
         resource = f'/devices/{serial}/cellular/sims'
 
         body_params = ['sims', 'simFailover', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -152,6 +156,7 @@ class Devices(object):
         resource = f'/devices/{serial}/clients'
 
         query_params = ['t0', 'timespan', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -179,6 +184,7 @@ class Devices(object):
         resource = f'/devices/{serial}/liveTools/ping'
 
         body_params = ['target', 'count', 'callback', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -226,6 +232,7 @@ class Devices(object):
         resource = f'/devices/{serial}/liveTools/pingDevice'
 
         body_params = ['count', 'callback', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -300,6 +307,7 @@ class Devices(object):
         resource = f'/devices/{serial}/lossAndLatencyHistory'
 
         query_params = ['t0', 't1', 'timespan', 'resolution', 'uplink', 'ip', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -343,8 +351,9 @@ class Devices(object):
         }
         serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/managementInterface'
-
+        
         body_params = ['wan1', 'wan2', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
