@@ -1,4 +1,5 @@
 import urllib
+from meraki.common import validate_kwargs
 
 
 class Sensor(object):
@@ -46,6 +47,7 @@ class Sensor(object):
         resource = f'/devices/{serial}/sensor/relationships'
 
         body_params = ['livestream', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -93,6 +95,7 @@ class Sensor(object):
         resource = f'/networks/{networkId}/sensor/alerts/overview/byMetric'
 
         query_params = ['t0', 't1', 'timespan', 'interval', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -141,6 +144,7 @@ class Sensor(object):
         resource = f'/networks/{networkId}/sensor/alerts/profiles'
 
         body_params = ['name', 'schedule', 'conditions', 'recipients', 'serials', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -193,6 +197,7 @@ class Sensor(object):
         resource = f'/networks/{networkId}/sensor/alerts/profiles/{id}'
 
         body_params = ['name', 'schedule', 'conditions', 'recipients', 'serials', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -335,6 +340,7 @@ class Sensor(object):
         resource = f'/organizations/{organizationId}/sensor/readings/history'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', 'networkIds', 'serials', 'metrics', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['networkIds', 'serials', 'metrics', ]
@@ -373,6 +379,7 @@ class Sensor(object):
         resource = f'/organizations/{organizationId}/sensor/readings/latest'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'serials', 'metrics', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['networkIds', 'serials', 'metrics', ]
