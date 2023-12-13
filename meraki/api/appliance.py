@@ -1,5 +1,5 @@
 import urllib
-
+from meraki.common import validate_kwargs
 
 class Appliance(object):
     def __init__(self, session):
@@ -124,6 +124,7 @@ class Appliance(object):
         resource = f'/devices/{serial}/appliance/radio/settings'
 
         body_params = ['rfProfileId', 'twoFourGhzSettings', 'fiveGhzSettings', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -226,6 +227,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/clients/{clientId}/security/events'
 
         query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'sortOrder', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -270,6 +272,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/connectivityMonitoringDestinations'
 
         body_params = ['destinations', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -321,6 +324,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/contentFiltering'
 
         body_params = ['allowedUrlPatterns', 'blockedUrlPatterns', 'blockedUrlCategories', 'urlCategoryListSize', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -384,6 +388,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/firewall/cellularFirewallRules'
 
         body_params = ['rules', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -456,6 +461,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/firewall/firewalledServices/{service}'
 
         body_params = ['access', 'allowedIps', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -500,6 +506,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/firewall/inboundCellularFirewallRules'
 
         body_params = ['rules', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -545,6 +552,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/firewall/inboundFirewallRules'
 
         body_params = ['rules', 'syslogDefaultRule', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -590,6 +598,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/firewall/l3FirewallRules'
 
         body_params = ['rules', 'syslogDefaultRule', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -634,6 +643,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/firewall/l7FirewallRules'
 
         body_params = ['rules', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -829,6 +839,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/firewall/settings'
 
         body_params = ['spoofingProtection', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -901,6 +912,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/ports/{portId}'
 
         body_params = ['enabled', 'dropUntaggedTraffic', 'type', 'vlan', 'allowedVlans', 'accessPolicy', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -947,6 +959,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/prefixes/delegated/statics'
 
         body_params = ['prefix', 'origin', 'description', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -997,6 +1010,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/prefixes/delegated/statics/{staticDelegatedPrefixId}'
 
         body_params = ['prefix', 'origin', 'description', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1065,6 +1079,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/rfProfiles'
 
         body_params = ['name', 'twoFourGhzSettings', 'fiveGhzSettings', 'perSsidSettings', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -1095,6 +1110,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/rfProfiles/{rfProfileId}'
 
         body_params = ['name', 'twoFourGhzSettings', 'fiveGhzSettings', 'perSsidSettings', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1174,6 +1190,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/security/events'
 
         query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'sortOrder', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -1227,6 +1244,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/security/intrusion'
 
         body_params = ['mode', 'idsRulesets', 'protectedNetworks', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1277,6 +1295,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/security/malware'
 
         body_params = ['mode', 'allowedUrls', 'allowedFiles', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1330,6 +1349,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/settings'
 
         body_params = ['clientTrackingMethod', 'deploymentMode', 'dynamicDns', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1377,6 +1397,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/singleLan'
 
         body_params = ['subnet', 'applianceIp', 'ipv6', 'mandatoryDhcp', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1464,6 +1485,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/ssids/{number}'
 
         body_params = ['name', 'enabled', 'defaultVlanId', 'authMode', 'psk', 'radiusServers', 'encryptionMode', 'wpaEncryptionMode', 'visible', 'dhcpEnforcedDeauthentication', 'dot11w', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1511,6 +1533,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/staticRoutes'
 
         body_params = ['name', 'subnet', 'gatewayIp', 'gatewayVlanId', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -1565,6 +1588,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/staticRoutes/{staticRouteId}'
 
         body_params = ['name', 'subnet', 'gatewayIp', 'gatewayVlanId', 'enabled', 'fixedIpAssignments', 'reservedIpRanges', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1630,6 +1654,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/trafficShaping'
 
         body_params = ['globalBandwidthLimits', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1677,6 +1702,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/trafficShaping/customPerformanceClasses'
 
         body_params = ['name', 'maxLatency', 'maxJitter', 'maxLossPercentage', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -1728,6 +1754,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/trafficShaping/customPerformanceClasses/{customPerformanceClassId}'
 
         body_params = ['name', 'maxLatency', 'maxJitter', 'maxLossPercentage', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1778,6 +1805,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/trafficShaping/rules'
 
         body_params = ['defaultRulesEnabled', 'rules', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1841,6 +1869,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/trafficShaping/uplinkBandwidth'
 
         body_params = ['bandwidthLimits', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1894,6 +1923,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/trafficShaping/uplinkSelection'
 
         body_params = ['activeActiveAutoVpnEnabled', 'defaultUplink', 'loadBalancingEnabled', 'failoverAndFailback', 'wanTrafficUplinkPreferences', 'vpnTrafficUplinkPreferences', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1920,6 +1950,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/trafficShaping/vpnExclusions'
 
         body_params = ['custom', 'majorApplications', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1948,6 +1979,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/uplinks/usageHistory'
 
         query_params = ['t0', 't1', 'timespan', 'resolution', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -2005,6 +2037,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/vlans'
 
         body_params = ['id', 'name', 'subnet', 'applianceIp', 'groupPolicyId', 'templateVlanType', 'cidr', 'mask', 'ipv6', 'mandatoryDhcp', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -2049,6 +2082,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/vlans/settings'
 
         body_params = ['vlansEnabled', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -2126,6 +2160,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/vlans/{vlanId}'
 
         body_params = ['name', 'subnet', 'applianceIp', 'groupPolicyId', 'vpnNatSubnet', 'dhcpHandling', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dhcpBootOptionsEnabled', 'dhcpBootNextServer', 'dhcpBootFilename', 'fixedIpAssignments', 'reservedIpRanges', 'dnsNameservers', 'dhcpOptions', 'templateVlanType', 'cidr', 'mask', 'ipv6', 'mandatoryDhcp', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -2194,6 +2229,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/vpn/bgp'
 
         body_params = ['enabled', 'asNumber', 'ibgpHoldTimer', 'neighbors', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -2244,6 +2280,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/vpn/siteToSiteVpn'
 
         body_params = ['mode', 'hubs', 'subnets', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -2292,6 +2329,7 @@ class Appliance(object):
         resource = f'/networks/{networkId}/appliance/warmSpare'
 
         body_params = ['enabled', 'spareSerial', 'uplinkMode', 'virtualIp1', 'virtualIp2', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -2348,6 +2386,7 @@ class Appliance(object):
         resource = f'/organizations/{organizationId}/appliance/security/events'
 
         query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'sortOrder', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -2422,6 +2461,7 @@ class Appliance(object):
         resource = f'/organizations/{organizationId}/appliance/trafficShaping/vpnExclusions/byNetwork'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['networkIds', ]
@@ -2460,6 +2500,7 @@ class Appliance(object):
         resource = f'/organizations/{organizationId}/appliance/uplink/statuses'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'serials', 'iccids', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['networkIds', 'serials', 'iccids', ]
@@ -2493,6 +2534,7 @@ class Appliance(object):
         resource = f'/organizations/{organizationId}/appliance/uplinks/usage/byNetwork'
 
         query_params = ['t0', 't1', 'timespan', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -2526,6 +2568,7 @@ class Appliance(object):
         resource = f'/organizations/{organizationId}/appliance/vpn/stats'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 't0', 't1', 'timespan', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['networkIds', ]
@@ -2562,6 +2605,7 @@ class Appliance(object):
         resource = f'/organizations/{organizationId}/appliance/vpn/statuses'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['networkIds', ]
@@ -2657,6 +2701,7 @@ class Appliance(object):
         resource = f'/organizations/{organizationId}/appliance/vpn/vpnFirewallRules'
 
         body_params = ['rules', 'syslogDefaultRule', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
