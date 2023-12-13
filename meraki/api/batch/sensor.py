@@ -1,4 +1,5 @@
 import urllib
+from meraki.common import validate_kwargs
 
 
 class ActionBatchSensor(object):
@@ -25,6 +26,7 @@ class ActionBatchSensor(object):
         resource = f'/devices/{serial}/sensor/relationships'
 
         body_params = ['livestream', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -60,6 +62,7 @@ class ActionBatchSensor(object):
         resource = f'/networks/{networkId}/sensor/alerts/profiles'
 
         body_params = ['name', 'schedule', 'conditions', 'recipients', 'serials', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -96,6 +99,7 @@ class ActionBatchSensor(object):
         resource = f'/networks/{networkId}/sensor/alerts/profiles/{id}'
 
         body_params = ['name', 'schedule', 'conditions', 'recipients', 'serials', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
