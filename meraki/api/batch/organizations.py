@@ -1,4 +1,5 @@
 import urllib
+from meraki.common import validate_kwargs
 
 
 class ActionBatchOrganizations(object):
@@ -32,6 +33,7 @@ class ActionBatchOrganizations(object):
         resource = f'/organizations/{organizationId}/adaptivePolicy/acls'
 
         body_params = ['name', 'description', 'rules', 'ipVersion', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -71,6 +73,7 @@ class ActionBatchOrganizations(object):
         resource = f'/organizations/{organizationId}/adaptivePolicy/acls/{aclId}'
 
         body_params = ['name', 'description', 'rules', 'ipVersion', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -131,6 +134,7 @@ class ActionBatchOrganizations(object):
         resource = f'/organizations/{organizationId}/adaptivePolicy/groups'
 
         body_params = ['name', 'sgt', 'description', 'policyObjects', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -166,6 +170,7 @@ class ActionBatchOrganizations(object):
         resource = f'/organizations/{organizationId}/adaptivePolicy/groups/{id}'
 
         body_params = ['name', 'sgt', 'description', 'policyObjects', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -230,6 +235,7 @@ class ActionBatchOrganizations(object):
         resource = f'/organizations/{organizationId}/adaptivePolicy/policies'
 
         body_params = ['sourceGroup', 'destinationGroup', 'acls', 'lastEntryRule', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -269,6 +275,7 @@ class ActionBatchOrganizations(object):
         resource = f'/organizations/{organizationId}/adaptivePolicy/policies/{id}'
 
         body_params = ['sourceGroup', 'destinationGroup', 'acls', 'lastEntryRule', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -326,6 +333,7 @@ class ActionBatchOrganizations(object):
         resource = f'/organizations/{organizationId}/adaptivePolicy/settings'
 
         body_params = ['enabledNetworks', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -365,6 +373,7 @@ class ActionBatchOrganizations(object):
         resource = f'/organizations/{organizationId}/alerts/profiles'
 
         body_params = ['type', 'alertCondition', 'recipients', 'networkTags', 'description', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -406,6 +415,7 @@ class ActionBatchOrganizations(object):
         resource = f'/organizations/{organizationId}/alerts/profiles/{alertConfigId}'
 
         body_params = ['enabled', 'type', 'alertCondition', 'recipients', 'networkTags', 'description', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -471,6 +481,7 @@ class ActionBatchOrganizations(object):
         resource = f'/organizations/{organizationId}/brandingPolicies'
 
         body_params = ['name', 'enabled', 'adminSettings', 'helpSettings', 'customLogo', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -503,6 +514,7 @@ class ActionBatchOrganizations(object):
         resource = f'/organizations/{organizationId}/brandingPolicies/priorities'
 
         body_params = ['brandingPolicyIds', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -543,6 +555,7 @@ class ActionBatchOrganizations(object):
         resource = f'/organizations/{organizationId}/brandingPolicies/{brandingPolicyId}'
 
         body_params = ['name', 'enabled', 'adminSettings', 'helpSettings', 'customLogo', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -602,6 +615,7 @@ class ActionBatchOrganizations(object):
         resource = f'/organizations/{organizationId}/configTemplates'
 
         body_params = ['name', 'timeZone', 'copyFromNetworkId', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -635,6 +649,7 @@ class ActionBatchOrganizations(object):
         resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}'
 
         body_params = ['name', 'timeZone', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -667,6 +682,7 @@ class ActionBatchOrganizations(object):
         resource = f'/organizations/{organizationId}/earlyAccess/features/optIns/{optInId}'
 
         body_params = ['limitScopeToNetworks', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -829,6 +845,7 @@ class ActionBatchOrganizations(object):
         resource = f'/organizations/{organizationId}/licenses/{licenseId}'
 
         body_params = ['deviceSerial', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -872,6 +889,7 @@ class ActionBatchOrganizations(object):
         resource = f'/organizations/{organizationId}/loginSecurity'
 
         body_params = ['enforcePasswordExpiration', 'passwordExpirationDays', 'enforceDifferentPasswords', 'numDifferentPasswords', 'enforceStrongPasswords', 'enforceAccountLockout', 'accountLockoutAttempts', 'enforceIdleTimeout', 'idleTimeoutMinutes', 'enforceTwoFactorAuth', 'enforceLoginIpRanges', 'loginIpRanges', 'apiAuthentication', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -908,6 +926,7 @@ class ActionBatchOrganizations(object):
         resource = f'/organizations/{organizationId}/networks'
 
         body_params = ['name', 'productTypes', 'tags', 'timeZone', 'copyFromNetworkId', 'notes', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -941,6 +960,7 @@ class ActionBatchOrganizations(object):
         resource = f'/organizations/{organizationId}/networks/combine'
 
         body_params = ['name', 'networkIds', 'enrollmentString', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -979,6 +999,7 @@ class ActionBatchOrganizations(object):
         resource = f'/organizations/{organizationId}/policyObjects'
 
         body_params = ['name', 'category', 'type', 'cidr', 'fqdn', 'mask', 'ip', 'groupIds', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -1012,6 +1033,7 @@ class ActionBatchOrganizations(object):
         resource = f'/organizations/{organizationId}/policyObjects/groups'
 
         body_params = ['name', 'category', 'objectIds', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -1045,6 +1067,7 @@ class ActionBatchOrganizations(object):
         resource = f'/organizations/{organizationId}/policyObjects/groups/{policyObjectGroupId}'
 
         body_params = ['name', 'objectIds', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -1108,6 +1131,7 @@ class ActionBatchOrganizations(object):
         resource = f'/organizations/{organizationId}/policyObjects/{policyObjectId}'
 
         body_params = ['name', 'cidr', 'fqdn', 'mask', 'ip', 'groupIds', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -1166,6 +1190,7 @@ class ActionBatchOrganizations(object):
         resource = f'/organizations/{organizationId}/saml/idps'
 
         body_params = ['x509certSha1Fingerprint', 'sloLogoutUrl', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -1199,6 +1224,7 @@ class ActionBatchOrganizations(object):
         resource = f'/organizations/{organizationId}/saml/idps/{idpId}'
 
         body_params = ['x509certSha1Fingerprint', 'sloLogoutUrl', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
