@@ -599,6 +599,11 @@ def generate_action_batch_functions(
 
                 batch_operation = this_action["operation"]
 
+                # May need update for OASv3
+                parameters = (
+                    endpoint["parameters"] if "parameters" in endpoint else None
+                )
+
                 # Function body for GET endpoints
                 query_params = array_params = body_params = {}
 
@@ -608,11 +613,6 @@ def generate_action_batch_functions(
                     body_params = parse_params(operation, parameters, "body")
 
                 # Function body for DELETE endpoints is empty (HTTP 204)
-
-                # May need update for OASv3
-                parameters = (
-                    endpoint["parameters"] if "parameters" in endpoint else None
-                )
 
                 # Function definition
                 definition = ""
