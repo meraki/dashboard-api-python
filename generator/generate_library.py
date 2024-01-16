@@ -589,12 +589,13 @@ def generate_action_batch_functions(
                 # Get metadata
                 tags = endpoint["tags"]
                 operation = endpoint["operationId"]
-                description = endpoint["summary"]
+                description = endpoint["description"]
+                summary = endpoint["summary"]
 
                 this_action = [
                     action
                     for action in batchable_actions
-                    if action["summary"] == description
+                    if action["summary"] == description or action["summary"] == summary
                 ][0]
 
                 batch_operation = this_action["operation"]
