@@ -28,7 +28,7 @@ class ActionBatchSwitch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "create",
+            "operation": "cycle",
             "body": payload
         }
         return action
@@ -376,7 +376,7 @@ class ActionBatchSwitch(object):
 
     def updateDeviceSwitchWarmSpare(self, serial: str, enabled: bool, **kwargs):
         """
-        **Update warm spare configuration for a switch**
+        **Update warm spare configuration for a switch. The spare will use the same L3 configuration as the primary. Note that this will irreversibly destroy any existing L3 configuration on the spare.**
         https://developer.cisco.com/meraki/api-v1/#!update-device-switch-warm-spare
 
         - serial (string): Serial
@@ -408,7 +408,7 @@ class ActionBatchSwitch(object):
 
     def createNetworkSwitchAccessPolicy(self, networkId: str, name: str, radiusServers: list, radiusTestingEnabled: bool, radiusCoaSupportEnabled: bool, radiusAccountingEnabled: bool, hostMode: str, urlRedirectWalledGardenEnabled: bool, **kwargs):
         """
-        **Create an access policy for a switch network**
+        **Create an access policy for a switch network. If you would like to enable Meraki Authentication, set radiusServers to empty array.**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-access-policy
 
         - networkId (string): Network ID
@@ -462,7 +462,7 @@ class ActionBatchSwitch(object):
 
     def updateNetworkSwitchAccessPolicy(self, networkId: str, accessPolicyNumber: str, **kwargs):
         """
-        **Update an access policy for a switch network**
+        **Update an access policy for a switch network. If you would like to enable Meraki Authentication, set radiusServers to empty array.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-access-policy
 
         - networkId (string): Network ID
@@ -577,7 +577,7 @@ class ActionBatchSwitch(object):
 
     def updateNetworkSwitchDhcpServerPolicy(self, networkId: str, **kwargs):
         """
-        **Update the DHCP server settings**
+        **Update the DHCP server settings. Blocked/allowed servers are only applied when default policy is allow/block, respectively**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-dhcp-server-policy
 
         - networkId (string): Network ID
@@ -959,7 +959,7 @@ class ActionBatchSwitch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "update",
+            "operation": "update_order",
             "body": payload
         }
         return action
@@ -1222,7 +1222,7 @@ class ActionBatchSwitch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "update",
+            "operation": "settings/actions/update",
             "body": payload
         }
         return action
@@ -1641,7 +1641,7 @@ class ActionBatchSwitch(object):
 
     def cloneOrganizationSwitchDevices(self, organizationId: str, sourceSerial: str, targetSerials: list):
         """
-        **Clone port-level and some switch-level configuration settings from a source switch to one or more target switches**
+        **Clone port-level and some switch-level configuration settings from a source switch to one or more target switches. Cloned settings include: Aggregation Groups, Power Settings, Multicast Settings, MTU Configuration, STP Bridge priority, Port Mirroring**
         https://developer.cisco.com/meraki/api-v1/#!clone-organization-switch-devices
 
         - organizationId (string): Organization ID
@@ -1661,7 +1661,7 @@ class ActionBatchSwitch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "create",
+            "operation": "clone",
             "body": payload
         }
         return action

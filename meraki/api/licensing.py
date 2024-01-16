@@ -54,6 +54,7 @@ class Licensing(object):
 
         - claimKey (string): The subscription's claim key
         - organizationId (string): The id of the organization claiming the subscription
+        - validate (boolean): Check if the provided claim key is valid and can be claimed into the organization.
         - name (string): Friendly name to identify the subscription
         - description (string): Extra details or notes about the subscription
         """

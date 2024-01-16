@@ -225,7 +225,7 @@ class ActionBatchWireless(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "create",
+            "operation": "aps",
             "body": payload
         }
         return action
@@ -256,7 +256,7 @@ class ActionBatchWireless(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "create",
+            "operation": "default",
             "body": payload
         }
         return action

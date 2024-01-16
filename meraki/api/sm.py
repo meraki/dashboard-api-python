@@ -166,7 +166,7 @@ class Sm(object):
         - wifiMacs (array): The wifiMacs of the devices to be locked.
         - ids (array): The ids of the devices to be locked.
         - serials (array): The serials of the devices to be locked.
-        - scope (array): The scope (one of all, none, withAny, withAll, withoutAny, or withoutAll) and a set of tags of the devices to be wiped.
+        - scope (array): The scope (one of all, none, withAny, withAll, withoutAny, or withoutAll) and a set of tags of the devices to be locked.
         - pin (integer): The pin number for locking macOS devices (a six digit number). Required only for macOS devices.
         """
 

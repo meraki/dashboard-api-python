@@ -137,7 +137,7 @@ class ActionBatchSensor(object):
 
     def updateNetworkSensorMqttBroker(self, networkId: str, mqttBrokerId: str, enabled: bool):
         """
-        **Update the sensor settings of an MQTT broker**
+        **Update the sensor settings of an MQTT broker. To update the broker itself, use /networks/{networkId}/mqttBrokers/{mqttBrokerId}.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-sensor-mqtt-broker
 
         - networkId (string): Network ID
