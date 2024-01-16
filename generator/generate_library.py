@@ -598,6 +598,10 @@ def generate_action_batch_functions(
                 ][0]
 
                 batch_operation = this_action["operation"]
+
+                # Function body for GET endpoints
+                query_params = array_params = body_params = {}
+
                 # Function body for POST/PUT endpoints
                 if method == "post" or method == "put":
                     # will need update for OASv3
@@ -668,9 +672,6 @@ def generate_action_batch_functions(
                 if enum_params:
                     for p, values in enum_params.items():
                         assert_blocks.append((p, values["enum"]))
-
-                # Function body for GET endpoints
-                query_params = array_params = body_params = {}
 
                 # Function return statement
                 call_line = "return action"
