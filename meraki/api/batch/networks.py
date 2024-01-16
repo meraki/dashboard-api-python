@@ -89,7 +89,7 @@ class ActionBatchNetworks(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "create",
+            "operation": "bind",
             "body": payload
         }
         return action
@@ -101,7 +101,7 @@ class ActionBatchNetworks(object):
 
     def provisionNetworkClients(self, networkId: str, clients: list, devicePolicy: str, **kwargs):
         """
-        **Provisions a client with a name and policy**
+        **Provisions a client with a name and policy. Clients can be provisioned before they associate to the network.**
         https://developer.cisco.com/meraki/api-v1/#!provision-network-clients
 
         - networkId (string): Network ID
@@ -128,7 +128,7 @@ class ActionBatchNetworks(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "create",
+            "operation": "provision",
             "body": payload
         }
         return action
@@ -159,7 +159,7 @@ class ActionBatchNetworks(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "create",
+            "operation": "claim",
             "body": payload
         }
         return action
@@ -194,7 +194,7 @@ class ActionBatchNetworks(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "create",
+            "operation": "claim",
             "body": payload
         }
         return action
@@ -225,7 +225,7 @@ class ActionBatchNetworks(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "create",
+            "operation": "remove",
             "body": payload
         }
         return action
@@ -800,7 +800,7 @@ class ActionBatchNetworks(object):
 
         action = {
             "resource": resource,
-            "operation": "create",
+            "operation": "split",
         }
         return action
         
@@ -830,7 +830,7 @@ class ActionBatchNetworks(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "create",
+            "operation": "unbind",
             "body": payload
         }
         return action
@@ -937,7 +937,7 @@ class ActionBatchNetworks(object):
 
     def deleteNetworkWebhooksPayloadTemplate(self, networkId: str, payloadTemplateId: str):
         """
-        **Destroy a webhook payload template for a network**
+        **Destroy a webhook payload template for a network. Does not work for included templates ('wpt_00001', 'wpt_00002', 'wpt_00003', 'wpt_00004', 'wpt_00005' or 'wpt_00006')**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-webhooks-payload-template
 
         - networkId (string): Network ID

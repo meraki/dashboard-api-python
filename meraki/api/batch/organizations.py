@@ -86,7 +86,7 @@ class ActionBatchOrganizations(object):
 
     def deleteOrganizationAdaptivePolicyAcl(self, organizationId: str, aclId: str):
         """
-        **Deletes the specified adaptive policy ACL**
+        **Deletes the specified adaptive policy ACL. Note this adaptive policy ACL will also be removed from policies using it.**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-adaptive-policy-acl
 
         - organizationId (string): Organization ID
@@ -146,7 +146,7 @@ class ActionBatchOrganizations(object):
 
     def updateOrganizationAdaptivePolicyGroup(self, organizationId: str, id: str, **kwargs):
         """
-        **Updates an adaptive policy group**
+        **Updates an adaptive policy group. If updating "Infrastructure", only the SGT is allowed. Cannot update "Unknown".**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-adaptive-policy-group
 
         - organizationId (string): Organization ID
@@ -682,7 +682,7 @@ class ActionBatchOrganizations(object):
 
     def assignOrganizationLicensesSeats(self, organizationId: str, licenseId: str, networkId: str, seatCount: int):
         """
-        **Assign SM seats to a network**
+        **Assign SM seats to a network. This will increase the managed SM device limit of the network**
         https://developer.cisco.com/meraki/api-v1/#!assign-organization-licenses-seats
 
         - organizationId (string): Organization ID
@@ -703,7 +703,7 @@ class ActionBatchOrganizations(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "create",
+            "operation": "assignSeats",
             "body": payload
         }
         return action
@@ -715,7 +715,7 @@ class ActionBatchOrganizations(object):
 
     def moveOrganizationLicenses(self, organizationId: str, destOrganizationId: str, licenseIds: list):
         """
-        **Move licenses to another organization**
+        **Move licenses to another organization. This will also move any devices that the licenses are assigned to**
         https://developer.cisco.com/meraki/api-v1/#!move-organization-licenses
 
         - organizationId (string): Organization ID
@@ -735,7 +735,7 @@ class ActionBatchOrganizations(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "create",
+            "operation": "move",
             "body": payload
         }
         return action
@@ -768,7 +768,7 @@ class ActionBatchOrganizations(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "create",
+            "operation": "moveSeats",
             "body": payload
         }
         return action
@@ -780,7 +780,7 @@ class ActionBatchOrganizations(object):
 
     def renewOrganizationLicensesSeats(self, organizationId: str, licenseIdToRenew: str, unusedLicenseId: str):
         """
-        **Renew SM seats of a license**
+        **Renew SM seats of a license. This will extend the license expiration date of managed SM devices covered by this license**
         https://developer.cisco.com/meraki/api-v1/#!renew-organization-licenses-seats
 
         - organizationId (string): Organization ID
@@ -800,7 +800,7 @@ class ActionBatchOrganizations(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "create",
+            "operation": "renewSeats",
             "body": payload
         }
         return action
@@ -944,7 +944,7 @@ class ActionBatchOrganizations(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "create",
+            "operation": "combine",
             "body": payload
         }
         return action

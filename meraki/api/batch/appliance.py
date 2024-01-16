@@ -940,7 +940,7 @@ class ActionBatchAppliance(object):
 
     def updateNetworkApplianceVpnSiteToSiteVpn(self, networkId: str, mode: str, **kwargs):
         """
-        **Update the site-to-site VPN settings of a network**
+        **Update the site-to-site VPN settings of a network. Only valid for MX networks in NAT mode.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-vpn-site-to-site-vpn
 
         - networkId (string): Network ID
@@ -1026,7 +1026,7 @@ class ActionBatchAppliance(object):
 
         action = {
             "resource": resource,
-            "operation": "create",
+            "operation": "swap",
         }
         return action
         
