@@ -1,4 +1,5 @@
 import urllib
+from meraki.common import validate_kwargs
 
 
 class Sm(object):
@@ -89,6 +90,7 @@ class Sm(object):
         resource = f'/networks/{networkId}/sm/devices'
 
         query_params = ['fields', 'wifiMacs', 'serials', 'ids', 'uuids', 'scope', 'perPage', 'startingAfter', 'endingBefore', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['fields', 'wifiMacs', 'serials', 'ids', 'uuids', 'scope', ]
@@ -123,6 +125,7 @@ class Sm(object):
         resource = f'/networks/{networkId}/sm/devices/checkin'
 
         body_params = ['wifiMacs', 'ids', 'serials', 'scope', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -151,6 +154,7 @@ class Sm(object):
         resource = f'/networks/{networkId}/sm/devices/fields'
 
         body_params = ['wifiMac', 'id', 'serial', 'deviceFields', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -180,6 +184,7 @@ class Sm(object):
         resource = f'/networks/{networkId}/sm/devices/lock'
 
         body_params = ['wifiMacs', 'ids', 'serials', 'scope', 'pin', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -210,6 +215,7 @@ class Sm(object):
         resource = f'/networks/{networkId}/sm/devices/modifyTags'
 
         body_params = ['wifiMacs', 'ids', 'serials', 'scope', 'tags', 'updateAction', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -239,6 +245,7 @@ class Sm(object):
         resource = f'/networks/{networkId}/sm/devices/move'
 
         body_params = ['wifiMacs', 'ids', 'serials', 'scope', 'newNetwork', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -267,6 +274,7 @@ class Sm(object):
         resource = f'/networks/{networkId}/sm/devices/wipe'
 
         body_params = ['wifiMac', 'id', 'serial', 'pin', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -340,6 +348,7 @@ class Sm(object):
         resource = f'/networks/{networkId}/sm/devices/{deviceId}/connectivity'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        validate_kwargs(body_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -371,6 +380,7 @@ class Sm(object):
         resource = f'/networks/{networkId}/sm/devices/{deviceId}/desktopLogs'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -402,6 +412,7 @@ class Sm(object):
         resource = f'/networks/{networkId}/sm/devices/{deviceId}/deviceCommandLogs'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -451,6 +462,7 @@ class Sm(object):
         resource = f'/networks/{networkId}/sm/devices/{deviceId}/installApps'
 
         body_params = ['appIds', 'force', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -503,6 +515,7 @@ class Sm(object):
         resource = f'/networks/{networkId}/sm/devices/{deviceId}/performanceHistory'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -700,6 +713,7 @@ class Sm(object):
         resource = f'/networks/{networkId}/sm/targetGroups'
 
         query_params = ['withDetails', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -726,6 +740,7 @@ class Sm(object):
         resource = f'/networks/{networkId}/sm/targetGroups'
 
         body_params = ['name', 'scope', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -753,6 +768,7 @@ class Sm(object):
         resource = f'/networks/{networkId}/sm/targetGroups/{targetGroupId}'
 
         query_params = ['withDetails', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -781,6 +797,7 @@ class Sm(object):
         resource = f'/networks/{networkId}/sm/targetGroups/{targetGroupId}'
 
         body_params = ['name', 'scope', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -831,6 +848,7 @@ class Sm(object):
         resource = f'/networks/{networkId}/sm/trustedAccessConfigs'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -860,6 +878,7 @@ class Sm(object):
         resource = f'/networks/{networkId}/sm/userAccessDevices'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -909,6 +928,7 @@ class Sm(object):
         resource = f'/networks/{networkId}/sm/users'
 
         query_params = ['ids', 'usernames', 'emails', 'scope', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['ids', 'usernames', 'emails', 'scope', ]

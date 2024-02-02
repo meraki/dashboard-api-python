@@ -1,4 +1,5 @@
 import urllib
+from meraki.common import validate_kwargs
 
 
 class ActionBatchCellularGateway(object):
@@ -26,6 +27,7 @@ class ActionBatchCellularGateway(object):
         resource = f'/devices/{serial}/cellularGateway/lan'
 
         body_params = ['reservedIpRanges', 'fixedIpAssignments', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -57,6 +59,7 @@ class ActionBatchCellularGateway(object):
         resource = f'/devices/{serial}/cellularGateway/portForwardingRules'
 
         body_params = ['rules', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -88,6 +91,7 @@ class ActionBatchCellularGateway(object):
         resource = f'/networks/{networkId}/cellularGateway/connectivityMonitoringDestinations'
 
         body_params = ['destinations', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -121,6 +125,7 @@ class ActionBatchCellularGateway(object):
         resource = f'/networks/{networkId}/cellularGateway/dhcp'
 
         body_params = ['dhcpLeaseTime', 'dnsNameservers', 'dnsCustomNameservers', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -153,6 +158,7 @@ class ActionBatchCellularGateway(object):
         resource = f'/networks/{networkId}/cellularGateway/subnetPool'
 
         body_params = ['mask', 'cidr', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -184,6 +190,7 @@ class ActionBatchCellularGateway(object):
         resource = f'/networks/{networkId}/cellularGateway/uplink'
 
         body_params = ['bandwidthLimits', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,

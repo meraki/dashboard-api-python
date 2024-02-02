@@ -1,4 +1,5 @@
 import urllib
+from meraki.common import validate_kwargs
 
 
 class ActionBatchAppliance(object):
@@ -27,6 +28,7 @@ class ActionBatchAppliance(object):
         resource = f'/devices/{serial}/appliance/radio/settings'
 
         body_params = ['rfProfileId', 'twoFourGhzSettings', 'fiveGhzSettings', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -114,6 +116,7 @@ class ActionBatchAppliance(object):
         resource = f'/networks/{networkId}/appliance/connectivityMonitoringDestinations'
 
         body_params = ['destinations', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -145,6 +148,7 @@ class ActionBatchAppliance(object):
         resource = f'/networks/{networkId}/appliance/firewall/l7FirewallRules'
 
         body_params = ['rules', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -182,6 +186,7 @@ class ActionBatchAppliance(object):
         resource = f'/networks/{networkId}/appliance/ports/{portId}'
 
         body_params = ['enabled', 'dropUntaggedTraffic', 'type', 'vlan', 'allowedVlans', 'accessPolicy', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -215,6 +220,7 @@ class ActionBatchAppliance(object):
         resource = f'/networks/{networkId}/appliance/prefixes/delegated/statics'
 
         body_params = ['prefix', 'origin', 'description', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -249,6 +255,7 @@ class ActionBatchAppliance(object):
         resource = f'/networks/{networkId}/appliance/prefixes/delegated/statics/{staticDelegatedPrefixId}'
 
         body_params = ['prefix', 'origin', 'description', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -309,6 +316,7 @@ class ActionBatchAppliance(object):
         resource = f'/networks/{networkId}/appliance/rfProfiles'
 
         body_params = ['name', 'twoFourGhzSettings', 'fiveGhzSettings', 'perSsidSettings', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -344,6 +352,7 @@ class ActionBatchAppliance(object):
         resource = f'/networks/{networkId}/appliance/rfProfiles/{rfProfileId}'
 
         body_params = ['name', 'twoFourGhzSettings', 'fiveGhzSettings', 'perSsidSettings', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -410,6 +419,7 @@ class ActionBatchAppliance(object):
         resource = f'/networks/{networkId}/appliance/settings'
 
         body_params = ['clientTrackingMethod', 'deploymentMode', 'dynamicDns', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -444,6 +454,7 @@ class ActionBatchAppliance(object):
         resource = f'/networks/{networkId}/appliance/singleLan'
 
         body_params = ['subnet', 'applianceIp', 'ipv6', 'mandatoryDhcp', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -496,6 +507,7 @@ class ActionBatchAppliance(object):
         resource = f'/networks/{networkId}/appliance/ssids/{number}'
 
         body_params = ['name', 'enabled', 'defaultVlanId', 'authMode', 'psk', 'radiusServers', 'encryptionMode', 'wpaEncryptionMode', 'visible', 'dhcpEnforcedDeauthentication', 'dot11w', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -530,6 +542,7 @@ class ActionBatchAppliance(object):
         resource = f'/networks/{networkId}/appliance/trafficShaping/customPerformanceClasses'
 
         body_params = ['name', 'maxLatency', 'maxJitter', 'maxLossPercentage', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -565,6 +578,7 @@ class ActionBatchAppliance(object):
         resource = f'/networks/{networkId}/appliance/trafficShaping/customPerformanceClasses/{customPerformanceClassId}'
 
         body_params = ['name', 'maxLatency', 'maxJitter', 'maxLossPercentage', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -626,6 +640,7 @@ class ActionBatchAppliance(object):
         resource = f'/networks/{networkId}/appliance/trafficShaping/rules'
 
         body_params = ['defaultRulesEnabled', 'rules', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -657,6 +672,7 @@ class ActionBatchAppliance(object):
         resource = f'/networks/{networkId}/appliance/trafficShaping/uplinkBandwidth'
 
         body_params = ['bandwidthLimits', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -697,6 +713,7 @@ class ActionBatchAppliance(object):
         resource = f'/networks/{networkId}/appliance/trafficShaping/uplinkSelection'
 
         body_params = ['activeActiveAutoVpnEnabled', 'defaultUplink', 'loadBalancingEnabled', 'failoverAndFailback', 'wanTrafficUplinkPreferences', 'vpnTrafficUplinkPreferences', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -729,6 +746,7 @@ class ActionBatchAppliance(object):
         resource = f'/networks/{networkId}/appliance/trafficShaping/vpnExclusions'
 
         body_params = ['custom', 'majorApplications', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -773,6 +791,7 @@ class ActionBatchAppliance(object):
         resource = f'/networks/{networkId}/appliance/vlans'
 
         body_params = ['id', 'name', 'subnet', 'applianceIp', 'groupPolicyId', 'templateVlanType', 'cidr', 'mask', 'ipv6', 'mandatoryDhcp', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -804,6 +823,7 @@ class ActionBatchAppliance(object):
         resource = f'/networks/{networkId}/appliance/vlans/settings'
 
         body_params = ['vlansEnabled', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -865,6 +885,7 @@ class ActionBatchAppliance(object):
         resource = f'/networks/{networkId}/appliance/vlans/{vlanId}'
 
         body_params = ['name', 'subnet', 'applianceIp', 'groupPolicyId', 'vpnNatSubnet', 'dhcpHandling', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dhcpBootOptionsEnabled', 'dhcpBootNextServer', 'dhcpBootFilename', 'fixedIpAssignments', 'reservedIpRanges', 'dnsNameservers', 'dhcpOptions', 'templateVlanType', 'cidr', 'mask', 'ipv6', 'mandatoryDhcp', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -925,6 +946,7 @@ class ActionBatchAppliance(object):
         resource = f'/networks/{networkId}/appliance/vpn/bgp'
 
         body_params = ['enabled', 'asNumber', 'ibgpHoldTimer', 'neighbors', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -962,6 +984,7 @@ class ActionBatchAppliance(object):
         resource = f'/networks/{networkId}/appliance/vpn/siteToSiteVpn'
 
         body_params = ['mode', 'hubs', 'subnets', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -997,6 +1020,7 @@ class ActionBatchAppliance(object):
         resource = f'/networks/{networkId}/appliance/warmSpare'
 
         body_params = ['enabled', 'spareSerial', 'uplinkMode', 'virtualIp1', 'virtualIp2', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,

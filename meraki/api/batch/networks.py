@@ -1,5 +1,5 @@
 import urllib
-
+from meraki.common import validate_kwargs
 
 class ActionBatchNetworks(object):
     def __init__(self):
@@ -29,6 +29,7 @@ class ActionBatchNetworks(object):
         resource = f'/networks/{networkId}'
 
         body_params = ['name', 'timeZone', 'tags', 'enrollmentString', 'notes', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -86,6 +87,7 @@ class ActionBatchNetworks(object):
         resource = f'/networks/{networkId}/bind'
 
         body_params = ['configTemplateId', 'autoBind', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -125,6 +127,7 @@ class ActionBatchNetworks(object):
         resource = f'/networks/{networkId}/clients/provision'
 
         body_params = ['clients', 'devicePolicy', 'groupPolicyId', 'policiesBySecurityAppliance', 'policiesBySsid', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -255,6 +258,7 @@ class ActionBatchNetworks(object):
         resource = f'/networks/{networkId}/firmwareUpgrades'
 
         body_params = ['upgradeWindow', 'timezone', 'products', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -293,6 +297,7 @@ class ActionBatchNetworks(object):
         resource = f'/networks/{networkId}/firmwareUpgrades/rollbacks'
 
         body_params = ['product', 'time', 'reasons', 'toVersion', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -327,6 +332,7 @@ class ActionBatchNetworks(object):
         resource = f'/networks/{networkId}/firmwareUpgrades/staged/groups'
 
         body_params = ['name', 'description', 'isDefault', 'assignedDevices', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -391,6 +397,7 @@ class ActionBatchNetworks(object):
         resource = f'/networks/{networkId}/floorPlans/{floorPlanId}'
 
         body_params = ['name', 'center', 'bottomLeftCorner', 'bottomRightCorner', 'topLeftCorner', 'topRightCorner', 'imageContents', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -462,6 +469,7 @@ class ActionBatchNetworks(object):
         resource = f'/networks/{networkId}/groupPolicies'
 
         body_params = ['name', 'scheduling', 'bandwidth', 'firewallAndTrafficShaping', 'contentFiltering', 'splashAuthSettings', 'vlanTagging', 'bonjourForwarding', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -508,6 +516,7 @@ class ActionBatchNetworks(object):
         resource = f'/networks/{networkId}/groupPolicies/{groupPolicyId}'
 
         body_params = ['name', 'scheduling', 'bandwidth', 'firewallAndTrafficShaping', 'contentFiltering', 'splashAuthSettings', 'vlanTagging', 'bonjourForwarding', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -575,6 +584,7 @@ class ActionBatchNetworks(object):
         resource = f'/networks/{networkId}/merakiAuthUsers'
 
         body_params = ['email', 'name', 'password', 'accountType', 'emailPasswordToUser', 'isAdmin', 'authorizations', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -639,6 +649,7 @@ class ActionBatchNetworks(object):
         resource = f'/networks/{networkId}/merakiAuthUsers/{merakiAuthUserId}'
 
         body_params = ['name', 'password', 'emailPasswordToUser', 'authorizations', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -674,6 +685,7 @@ class ActionBatchNetworks(object):
         resource = f'/networks/{networkId}/mqttBrokers'
 
         body_params = ['name', 'host', 'port', 'security', 'authentication', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -710,6 +722,7 @@ class ActionBatchNetworks(object):
         resource = f'/networks/{networkId}/mqttBrokers/{mqttBrokerId}'
 
         body_params = ['name', 'host', 'port', 'security', 'authentication', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -771,6 +784,7 @@ class ActionBatchNetworks(object):
         resource = f'/networks/{networkId}/settings'
 
         body_params = ['localStatusPageEnabled', 'remoteStatusPageEnabled', 'localStatusPage', 'securePort', 'namedVlans', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -827,6 +841,7 @@ class ActionBatchNetworks(object):
         resource = f'/networks/{networkId}/unbind'
 
         body_params = ['retainConfigs', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -922,6 +937,7 @@ class ActionBatchNetworks(object):
         resource = f'/networks/{networkId}/webhooks/payloadTemplates'
 
         body_params = ['name', 'body', 'headers', 'bodyFile', 'headersFile', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -984,6 +1000,7 @@ class ActionBatchNetworks(object):
         resource = f'/networks/{networkId}/webhooks/payloadTemplates/{payloadTemplateId}'
 
         body_params = ['name', 'body', 'headers', 'bodyFile', 'headersFile', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,

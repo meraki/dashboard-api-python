@@ -1,4 +1,5 @@
 import urllib
+from meraki.common import validate_kwargs
 
 
 class Organizations(object):
@@ -43,6 +44,7 @@ class Organizations(object):
         resource = f'/organizations'
 
         body_params = ['name', 'management', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -89,6 +91,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}'
 
         body_params = ['name', 'management', 'api', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -136,6 +139,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/actionBatches'
 
         body_params = ['confirmed', 'synchronous', 'actions', 'callback', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -165,6 +169,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/actionBatches'
 
         query_params = ['status', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -235,6 +240,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/actionBatches/{actionBatchId}'
 
         body_params = ['confirmed', 'synchronous', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -286,6 +292,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/adaptivePolicy/acls'
 
         body_params = ['name', 'description', 'rules', 'ipVersion', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -341,6 +348,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/adaptivePolicy/acls/{aclId}'
 
         body_params = ['name', 'description', 'rules', 'ipVersion', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -409,6 +417,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/adaptivePolicy/groups'
 
         body_params = ['name', 'sgt', 'description', 'policyObjects', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -460,6 +469,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/adaptivePolicy/groups/{id}'
 
         body_params = ['name', 'sgt', 'description', 'policyObjects', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -551,6 +561,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/adaptivePolicy/policies'
 
         body_params = ['sourceGroup', 'destinationGroup', 'acls', 'lastEntryRule', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -606,6 +617,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/adaptivePolicy/policies/{id}'
 
         body_params = ['sourceGroup', 'destinationGroup', 'acls', 'lastEntryRule', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -671,6 +683,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/adaptivePolicy/settings'
 
         body_params = ['enabledNetworks', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -727,6 +740,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/admins'
 
         body_params = ['email', 'name', 'orgAccess', 'tags', 'networks', 'authenticationMethod', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -761,6 +775,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/admins/{adminId}'
 
         body_params = ['name', 'orgAccess', 'tags', 'networks', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -834,6 +849,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/alerts/profiles'
 
         body_params = ['type', 'alertCondition', 'recipients', 'networkTags', 'description', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -870,6 +886,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/alerts/profiles/{alertConfigId}'
 
         body_params = ['enabled', 'type', 'alertCondition', 'recipients', 'networkTags', 'description', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -938,6 +955,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/apiRequests'
 
         query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'adminId', 'path', 'method', 'responseCode', 'sourceIp', 'userAgent', 'version', 'operationIds', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['operationIds', ]
@@ -971,6 +989,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/apiRequests/overview'
 
         query_params = ['t0', 't1', 'timespan', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -1008,6 +1027,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/apiRequests/overview/responseCodes/byInterval'
 
         query_params = ['t0', 't1', 'timespan', 'interval', 'version', 'operationIds', 'sourceIps', 'adminIds', 'userAgent', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['operationIds', 'sourceIps', 'adminIds', ]
@@ -1066,6 +1086,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/brandingPolicies'
 
         body_params = ['name', 'enabled', 'adminSettings', 'helpSettings', 'customLogo', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -1111,6 +1132,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/brandingPolicies/priorities'
 
         body_params = ['brandingPolicyIds', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1167,6 +1189,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/brandingPolicies/{brandingPolicyId}'
 
         body_params = ['name', 'enabled', 'adminSettings', 'helpSettings', 'customLogo', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1215,6 +1238,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/claim'
 
         body_params = ['orders', 'serials', 'licenses', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -1242,6 +1266,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/clients/bandwidthUsageHistory'
 
         query_params = ['t0', 't1', 'timespan', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -1269,6 +1294,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/clients/overview'
 
         query_params = ['t0', 't1', 'timespan', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -1299,6 +1325,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/clients/search'
 
         query_params = ['mac', 'perPage', 'startingAfter', 'endingBefore', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -1370,6 +1397,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/configTemplates'
 
         body_params = ['name', 'timeZone', 'copyFromNetworkId', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -1398,6 +1426,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}'
 
         body_params = ['name', 'timeZone', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1474,6 +1503,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/configurationChanges'
 
         query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'networkId', 'adminId', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -1521,6 +1551,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/devices'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'configurationUpdatedAfter', 'networkIds', 'productTypes', 'tags', 'tagsFilterType', 'name', 'mac', 'serial', 'model', 'macs', 'serials', 'sensorMetrics', 'sensorAlertProfileIds', 'models', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['networkIds', 'productTypes', 'tags', 'macs', 'serials', 'sensorMetrics', 'sensorAlertProfileIds', 'models', ]
@@ -1565,6 +1596,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/devices/availabilities'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'productTypes', 'serials', 'tags', 'tagsFilterType', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['networkIds', 'productTypes', 'serials', 'tags', ]
@@ -1607,6 +1639,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/devices/availabilities/changeHistory'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', 'serials', 'productTypes', 'networkIds', 'statuses', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['serials', 'productTypes', 'networkIds', 'statuses', ]
@@ -1651,6 +1684,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/devices/powerModules/statuses/byDevice'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'productTypes', 'serials', 'tags', 'tagsFilterType', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['networkIds', 'productTypes', 'serials', 'tags', ]
@@ -1699,6 +1733,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/devices/provisioning/statuses'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'productTypes', 'serials', 'status', 'tags', 'tagsFilterType', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['networkIds', 'productTypes', 'serials', 'tags', ]
@@ -1745,6 +1780,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/devices/statuses'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'serials', 'statuses', 'productTypes', 'models', 'tags', 'tagsFilterType', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['networkIds', 'serials', 'statuses', 'productTypes', 'models', 'tags', ]
@@ -1777,6 +1813,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/devices/statuses/overview'
 
         query_params = ['productTypes', 'networkIds', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['productTypes', 'networkIds', ]
@@ -1821,6 +1858,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/devices/uplinks/addresses/byDevice'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'productTypes', 'serials', 'tags', 'tagsFilterType', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['networkIds', 'productTypes', 'serials', 'tags', ]
@@ -1860,6 +1898,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/devices/uplinksLossAndLatency'
 
         query_params = ['t0', 't1', 'timespan', 'uplink', 'ip', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -1924,6 +1963,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/earlyAccess/features/optIns'
 
         body_params = ['shortName', 'limitScopeToNetworks', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -1972,6 +2012,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/earlyAccess/features/optIns/{optInId}'
 
         body_params = ['limitScopeToNetworks', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -2024,6 +2065,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/firmware/upgrades'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'status', 'productTypes', ]
+        validate_kwargs(body_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['status', 'productTypes', ]
@@ -2064,6 +2106,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/firmware/upgrades/byDevice'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'serials', 'macs', 'firmwareUpgradeBatchIds', 'upgradeStatuses', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['networkIds', 'serials', 'macs', 'firmwareUpgradeBatchIds', 'upgradeStatuses', ]
@@ -2097,6 +2140,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/inventory/claim'
 
         body_params = ['orders', 'serials', 'licenses', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -2143,6 +2187,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/inventory/devices'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'usedState', 'search', 'macs', 'networkIds', 'serials', 'models', 'orderNumbers', 'tags', 'tagsFilterType', 'productTypes', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['macs', 'networkIds', 'serials', 'models', 'orderNumbers', 'tags', 'productTypes', ]
@@ -2198,6 +2243,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/inventory/onboarding/cloudMonitoring/exportEvents'
 
         body_params = ['logEvent', 'timestamp', 'targetOS', 'request', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -2289,6 +2335,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/inventory/onboarding/cloudMonitoring/networks'
 
         query_params = ['deviceType', 'search', 'perPage', 'startingAfter', 'endingBefore', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -2339,6 +2386,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/inventory/release'
 
         body_params = ['serials', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -2375,6 +2423,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/licenses'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'deviceSerial', 'networkId', 'state', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -2548,6 +2597,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/licenses/{licenseId}'
 
         body_params = ['deviceSerial', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -2604,6 +2654,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/loginSecurity'
 
         body_params = ['enforcePasswordExpiration', 'passwordExpirationDays', 'enforceDifferentPasswords', 'numDifferentPasswords', 'enforceStrongPasswords', 'enforceAccountLockout', 'accountLockoutAttempts', 'enforceIdleTimeout', 'idleTimeoutMinutes', 'enforceTwoFactorAuth', 'enforceLoginIpRanges', 'loginIpRanges', 'apiAuthentication', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -2641,6 +2692,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/networks'
 
         query_params = ['configTemplateId', 'isBoundToConfigTemplate', 'tags', 'tagsFilterType', 'perPage', 'startingAfter', 'endingBefore', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['tags', ]
@@ -2677,6 +2729,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/networks'
 
         body_params = ['name', 'productTypes', 'tags', 'timeZone', 'copyFromNetworkId', 'notes', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -2704,6 +2757,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/networks/combine'
 
         body_params = ['name', 'networkIds', 'enrollmentString', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -2733,6 +2787,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/openapiSpec'
 
         query_params = ['version', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -2762,6 +2817,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/policyObjects'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -2794,6 +2850,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/policyObjects'
 
         body_params = ['name', 'category', 'type', 'cidr', 'fqdn', 'mask', 'ip', 'groupIds', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -2823,6 +2880,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/policyObjects/groups'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -2850,6 +2908,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/policyObjects/groups'
 
         body_params = ['name', 'category', 'objectIds', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -2899,6 +2958,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/policyObjects/groups/{policyObjectGroupId}'
 
         body_params = ['name', 'objectIds', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -2973,6 +3033,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/policyObjects/{policyObjectId}'
 
         body_params = ['name', 'cidr', 'fqdn', 'mask', 'ip', 'groupIds', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -3038,6 +3099,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/saml'
 
         body_params = ['enabled', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -3083,6 +3145,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/saml/idps'
 
         body_params = ['x509certSha1Fingerprint', 'sloLogoutUrl', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -3111,6 +3174,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/saml/idps/{idpId}'
 
         body_params = ['x509certSha1Fingerprint', 'sloLogoutUrl', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -3204,6 +3268,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/samlRoles'
 
         body_params = ['role', 'orgAccess', 'tags', 'networks', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -3259,6 +3324,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/samlRoles/{samlRoleId}'
 
         body_params = ['role', 'orgAccess', 'tags', 'networks', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -3337,6 +3403,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/snmp'
 
         body_params = ['v2cEnabled', 'v3Enabled', 'v3AuthMode', 'v3AuthPass', 'v3PrivMode', 'v3PrivPass', 'peerIps', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -3364,6 +3431,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/summary/top/appliances/byUtilization'
 
         query_params = ['t0', 't1', 'timespan', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -3391,6 +3459,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/summary/top/clients/byUsage'
 
         query_params = ['t0', 't1', 'timespan', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -3418,6 +3487,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/summary/top/clients/manufacturers/byUsage'
 
         query_params = ['t0', 't1', 'timespan', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -3445,6 +3515,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/summary/top/devices/byUsage'
 
         query_params = ['t0', 't1', 'timespan', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -3472,6 +3543,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/summary/top/devices/models/byUsage'
 
         query_params = ['t0', 't1', 'timespan', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -3499,6 +3571,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/summary/top/ssids/byUsage'
 
         query_params = ['t0', 't1', 'timespan', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -3526,6 +3599,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/summary/top/switches/byEnergyUsage'
 
         query_params = ['t0', 't1', 'timespan', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -3558,6 +3632,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/uplinks/statuses'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'serials', 'iccids', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['networkIds', 'serials', 'iccids', ]
@@ -3593,6 +3668,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/webhooks/alertTypes'
 
         query_params = ['productType', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -3647,6 +3723,7 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/webhooks/logs'
 
         query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'url', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)

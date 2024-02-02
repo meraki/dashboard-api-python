@@ -1,4 +1,5 @@
 import urllib
+from meraki.common import validate_kwargs
 
 
 class ActionBatchCamera(object):
@@ -27,6 +28,7 @@ class ActionBatchCamera(object):
         resource = f'/devices/{serial}/camera/customAnalytics'
 
         body_params = ['enabled', 'artifactId', 'parameters', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -74,6 +76,7 @@ class ActionBatchCamera(object):
         resource = f'/devices/{serial}/camera/qualityAndRetention'
 
         body_params = ['profileId', 'motionBasedRetentionEnabled', 'audioRecordingEnabled', 'restrictedBandwidthModeEnabled', 'quality', 'resolution', 'motionDetectorVersion', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -108,6 +111,7 @@ class ActionBatchCamera(object):
         resource = f'/devices/{serial}/camera/sense'
 
         body_params = ['senseEnabled', 'mqttBrokerId', 'audioDetection', 'detectionModelId', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -139,6 +143,7 @@ class ActionBatchCamera(object):
         resource = f'/devices/{serial}/camera/video/settings'
 
         body_params = ['externalRtspEnabled', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,

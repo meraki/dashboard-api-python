@@ -1,4 +1,5 @@
 import urllib
+from meraki.common import validate_kwargs
 
 
 class ActionBatchWireless(object):
@@ -25,6 +26,7 @@ class ActionBatchWireless(object):
         resource = f'/devices/{serial}/wireless/alternateManagementInterface/ipv6'
 
         body_params = ['addresses', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -58,6 +60,7 @@ class ActionBatchWireless(object):
         resource = f'/devices/{serial}/wireless/bluetooth/settings'
 
         body_params = ['uuid', 'major', 'minor', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -91,6 +94,7 @@ class ActionBatchWireless(object):
         resource = f'/devices/{serial}/wireless/radio/settings'
 
         body_params = ['rfProfileId', 'twoFourGhzSettings', 'fiveGhzSettings', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -125,6 +129,7 @@ class ActionBatchWireless(object):
         resource = f'/networks/{networkId}/wireless/alternateManagementInterface'
 
         body_params = ['enabled', 'vlanId', 'protocols', 'accessPoints', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -157,6 +162,7 @@ class ActionBatchWireless(object):
         resource = f'/networks/{networkId}/wireless/billing'
 
         body_params = ['currency', 'plans', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -190,6 +196,7 @@ class ActionBatchWireless(object):
         resource = f'/networks/{networkId}/wireless/ethernet/ports/profiles'
 
         body_params = ['name', 'ports', 'usbPorts', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -287,6 +294,7 @@ class ActionBatchWireless(object):
         resource = f'/networks/{networkId}/wireless/ethernet/ports/profiles/{profileId}'
 
         body_params = ['name', 'ports', 'usbPorts', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -361,6 +369,7 @@ class ActionBatchWireless(object):
         resource = f'/networks/{networkId}/wireless/rfProfiles'
 
         body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', 'sixGhzSettings', 'transmission', 'perSsidSettings', 'flexRadios', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -410,6 +419,7 @@ class ActionBatchWireless(object):
         resource = f'/networks/{networkId}/wireless/rfProfiles/{rfProfileId}'
 
         body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', 'sixGhzSettings', 'transmission', 'perSsidSettings', 'flexRadios', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -476,6 +486,7 @@ class ActionBatchWireless(object):
         resource = f'/networks/{networkId}/wireless/settings'
 
         body_params = ['meshingEnabled', 'ipv6BridgeEnabled', 'locationAnalyticsEnabled', 'upgradeStrategy', 'ledLightsOn', 'namedVlans', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -591,6 +602,7 @@ class ActionBatchWireless(object):
         resource = f'/networks/{networkId}/wireless/ssids/{number}'
 
         body_params = ['name', 'enabled', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk', 'wpaEncryptionMode', 'dot11w', 'dot11r', 'splashPage', 'splashGuestSponsorDomains', 'oauth', 'localRadius', 'ldap', 'activeDirectory', 'radiusServers', 'radiusProxyEnabled', 'radiusTestingEnabled', 'radiusCalledStationId', 'radiusAuthenticationNasId', 'radiusServerTimeout', 'radiusServerAttemptsLimit', 'radiusFallbackEnabled', 'radiusCoaEnabled', 'radiusFailoverPolicy', 'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusAccountingInterimInterval', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging', 'concentratorNetworkId', 'secondaryConcentratorNetworkId', 'disassociateClientsOnVpnFailover', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 'walledGardenEnabled', 'walledGardenRanges', 'gre', 'radiusOverride', 'radiusGuestVlanEnabled', 'radiusGuestVlanId', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'perSsidBandwidthLimitUp', 'perSsidBandwidthLimitDown', 'lanIsolationEnabled', 'visible', 'availableOnAllAps', 'availabilityTags', 'mandatoryDhcpEnabled', 'adultContentFilteringEnabled', 'dnsRewrite', 'speedBurst', 'namedVlans', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -625,6 +637,7 @@ class ActionBatchWireless(object):
         resource = f'/networks/{networkId}/wireless/ssids/{number}/bonjourForwarding'
 
         body_params = ['enabled', 'rules', 'exception', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -658,6 +671,7 @@ class ActionBatchWireless(object):
         resource = f'/networks/{networkId}/wireless/ssids/{number}/deviceTypeGroupPolicies'
 
         body_params = ['enabled', 'deviceTypePolicies', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -693,6 +707,7 @@ class ActionBatchWireless(object):
         resource = f'/networks/{networkId}/wireless/ssids/{number}/eapOverride'
 
         body_params = ['timeout', 'identity', 'maxRetries', 'eapolKey', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -726,6 +741,7 @@ class ActionBatchWireless(object):
         resource = f'/networks/{networkId}/wireless/ssids/{number}/firewall/l3FirewallRules'
 
         body_params = ['rules', 'allowLanAccess', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -758,6 +774,7 @@ class ActionBatchWireless(object):
         resource = f'/networks/{networkId}/wireless/ssids/{number}/firewall/l7FirewallRules'
 
         body_params = ['rules', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -801,6 +818,7 @@ class ActionBatchWireless(object):
         resource = f'/networks/{networkId}/wireless/ssids/{number}/hotspot20'
 
         body_params = ['enabled', 'operator', 'venue', 'networkAccessType', 'domains', 'roamConsortOis', 'mccMncs', 'naiRealms', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -836,6 +854,7 @@ class ActionBatchWireless(object):
         resource = f'/networks/{networkId}/wireless/ssids/{number}/identityPsks'
 
         body_params = ['name', 'passphrase', 'groupPolicyId', 'expiresAt', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -872,6 +891,7 @@ class ActionBatchWireless(object):
         resource = f'/networks/{networkId}/wireless/ssids/{number}/identityPsks/{identityPskId}'
 
         body_params = ['name', 'passphrase', 'groupPolicyId', 'expiresAt', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -933,6 +953,7 @@ class ActionBatchWireless(object):
         resource = f'/networks/{networkId}/wireless/ssids/{number}/schedules'
 
         body_params = ['enabled', 'ranges', 'rangesInSeconds', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -983,6 +1004,7 @@ class ActionBatchWireless(object):
         resource = f'/networks/{networkId}/wireless/ssids/{number}/splash/settings'
 
         body_params = ['splashUrl', 'useSplashUrl', 'splashTimeout', 'redirectUrl', 'useRedirectUrl', 'welcomeMessage', 'splashLogo', 'splashImage', 'splashPrepaidFront', 'blockAllTrafficBeforeSignOn', 'controllerDisconnectionBehavior', 'allowSimultaneousLogins', 'guestSponsorship', 'billing', 'sentryEnrollment', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -1020,6 +1042,7 @@ class ActionBatchWireless(object):
         resource = f'/networks/{networkId}/wireless/ssids/{number}/trafficShaping/rules'
 
         body_params = ['trafficShapingEnabled', 'defaultRulesEnabled', 'rules', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -1054,6 +1077,7 @@ class ActionBatchWireless(object):
         resource = f'/networks/{networkId}/wireless/ssids/{number}/vpn'
 
         body_params = ['concentrator', 'splitTunnel', 'failover', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,

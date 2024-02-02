@@ -1,4 +1,5 @@
 import urllib
+from meraki.common import validate_kwargs
 
 
 class Switch(object):
@@ -72,6 +73,7 @@ class Switch(object):
         resource = f'/devices/{serial}/switch/ports/statuses'
 
         query_params = ['t0', 'timespan', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -98,6 +100,7 @@ class Switch(object):
         resource = f'/devices/{serial}/switch/ports/statuses/packets'
 
         query_params = ['t0', 'timespan', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -183,6 +186,7 @@ class Switch(object):
         resource = f'/devices/{serial}/switch/ports/{portId}'
 
         body_params = ['name', 'tags', 'enabled', 'poeEnabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', 'adaptivePolicyGroupId', 'peerSgtCapable', 'flexibleStackingEnabled', 'daiTrusted', 'profile', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -239,6 +243,7 @@ class Switch(object):
         resource = f'/devices/{serial}/switch/routing/interfaces'
 
         body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ospfV3', 'ipv6', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -299,6 +304,7 @@ class Switch(object):
         resource = f'/devices/{serial}/switch/routing/interfaces/{interfaceId}'
 
         body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ospfV3', 'ipv6', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -393,6 +399,7 @@ class Switch(object):
         resource = f'/devices/{serial}/switch/routing/interfaces/{interfaceId}/dhcp'
 
         body_params = ['dhcpMode', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dnsNameserversOption', 'dnsCustomNameservers', 'bootOptionsEnabled', 'bootNextServer', 'bootFileName', 'dhcpOptions', 'reservedIpRanges', 'fixedIpAssignments', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -441,6 +448,7 @@ class Switch(object):
         resource = f'/devices/{serial}/switch/routing/staticRoutes'
 
         body_params = ['name', 'subnet', 'nextHopIp', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -493,6 +501,7 @@ class Switch(object):
         resource = f'/devices/{serial}/switch/routing/staticRoutes/{staticRouteId}'
 
         body_params = ['name', 'subnet', 'nextHopIp', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -559,6 +568,7 @@ class Switch(object):
         resource = f'/devices/{serial}/switch/warmSpare'
 
         body_params = ['enabled', 'spareSerial', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -670,6 +680,7 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/accessPolicies'
 
         body_params = ['name', 'radiusServers', 'radius', 'guestPortBouncing', 'radiusTestingEnabled', 'radiusCoaSupportEnabled', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusGroupAttribute', 'hostMode', 'accessPolicyType', 'increaseAccessSpeed', 'guestVlanId', 'dot1x', 'voiceVlanClients', 'urlRedirectWalledGardenEnabled', 'urlRedirectWalledGardenRanges', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -741,6 +752,7 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/accessPolicies/{accessPolicyNumber}'
 
         body_params = ['name', 'radiusServers', 'radius', 'guestPortBouncing', 'radiusTestingEnabled', 'radiusCoaSupportEnabled', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusGroupAttribute', 'hostMode', 'accessPolicyType', 'increaseAccessSpeed', 'guestVlanId', 'dot1x', 'voiceVlanClients', 'urlRedirectWalledGardenEnabled', 'urlRedirectWalledGardenRanges', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -809,6 +821,7 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/alternateManagementInterface'
 
         body_params = ['enabled', 'vlanId', 'protocols', 'switches', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -840,6 +853,7 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/dhcp/v4/servers/seen'
 
         query_params = ['t0', 'timespan', 'perPage', 'startingAfter', 'endingBefore', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -892,6 +906,7 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/dhcpServerPolicy'
 
         body_params = ['alerts', 'defaultPolicy', 'allowedServers', 'blockedServers', 'arpInspection', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -921,6 +936,7 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/trustedServers'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -977,6 +993,7 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/trustedServers/{trustedServerId}'
 
         body_params = ['mac', 'vlan', 'ipv4', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1027,6 +1044,7 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/warnings/byDevice'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -1116,6 +1134,7 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/linkAggregations'
 
         body_params = ['switchPorts', 'switchProfilePorts', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -1144,6 +1163,7 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/linkAggregations/{linkAggregationId}'
 
         body_params = ['switchPorts', 'switchProfilePorts', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1210,6 +1230,7 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/mtu'
 
         body_params = ['defaultMtuSize', 'overrides', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1258,6 +1279,7 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/portSchedules'
 
         body_params = ['name', 'portSchedule', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -1310,6 +1332,7 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/portSchedules/{portScheduleId}'
 
         body_params = ['name', 'portSchedule', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1364,6 +1387,7 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/qosRules'
 
         body_params = ['vlan', 'protocol', 'srcPort', 'srcPortRange', 'dstPort', 'dstPortRange', 'dscp', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -1487,6 +1511,7 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/qosRules/{qosRuleId}'
 
         body_params = ['vlan', 'protocol', 'srcPort', 'srcPortRange', 'dstPort', 'dstPortRange', 'dscp', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1532,6 +1557,7 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/routing/multicast'
 
         body_params = ['defaultSettings', 'overrides', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1697,6 +1723,7 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/routing/ospf'
 
         body_params = ['enabled', 'helloTimerInSeconds', 'deadTimerInSeconds', 'areas', 'v3', 'md5AuthenticationEnabled', 'md5AuthenticationKey', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1745,6 +1772,7 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/settings'
 
         body_params = ['vlan', 'useCombinedPower', 'powerExceptions', 'uplinkClientSampling', 'macBlocklist', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1945,6 +1973,7 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces'
 
         body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ipv6', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -2008,6 +2037,7 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}'
 
         body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ipv6', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -2109,6 +2139,7 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}/dhcp'
 
         body_params = ['dhcpMode', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dnsNameserversOption', 'dnsCustomNameservers', 'bootOptionsEnabled', 'bootNextServer', 'bootFileName', 'dhcpOptions', 'reservedIpRanges', 'fixedIpAssignments', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -2161,6 +2192,7 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes'
 
         body_params = ['name', 'subnet', 'nextHopIp', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -2217,6 +2249,7 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes/{staticRouteId}'
 
         body_params = ['name', 'subnet', 'nextHopIp', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -2286,6 +2319,7 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/stormControl'
 
         body_params = ['broadcastThreshold', 'multicastThreshold', 'unknownUnicastThreshold', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -2331,6 +2365,7 @@ class Switch(object):
         resource = f'/networks/{networkId}/switch/stp'
 
         body_params = ['rstpEnabled', 'stpBridgePriority', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -2466,6 +2501,7 @@ class Switch(object):
         resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles/{profileId}/ports/{portId}'
 
         body_params = ['name', 'tags', 'enabled', 'poeEnabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', 'flexibleStackingEnabled', 'daiTrusted', 'profile', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -2493,6 +2529,7 @@ class Switch(object):
         resource = f'/organizations/{organizationId}/summary/switch/power/history'
 
         query_params = ['t0', 't1', 'timespan', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -2519,6 +2556,7 @@ class Switch(object):
         resource = f'/organizations/{organizationId}/switch/devices/clone'
 
         body_params = ['sourceSerial', 'targetSerials', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -2556,6 +2594,7 @@ class Switch(object):
         resource = f'/organizations/{organizationId}/switch/ports/bySwitch'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'portProfileIds', 'name', 'mac', 'macs', 'serial', 'serials', 'configurationUpdatedAfter', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['networkIds', 'portProfileIds', 'macs', 'serials', ]

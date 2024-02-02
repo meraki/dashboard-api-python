@@ -1,4 +1,5 @@
 import urllib
+from meraki.common import validate_kwargs
 
 
 class ActionBatchDevices(object):
@@ -33,6 +34,7 @@ class ActionBatchDevices(object):
         resource = f'/devices/{serial}'
 
         body_params = ['name', 'tags', 'lat', 'lng', 'address', 'notes', 'moveMapMarker', 'switchProfileId', 'floorPlanId', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -65,6 +67,7 @@ class ActionBatchDevices(object):
         resource = f'/devices/{serial}/managementInterface'
 
         body_params = ['wan1', 'wan2', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,

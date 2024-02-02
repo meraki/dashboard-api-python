@@ -1,4 +1,5 @@
 import urllib
+from meraki.common import validate_kwargs
 
 
 class Licensing(object):
@@ -148,6 +149,7 @@ class Licensing(object):
         resource = f'/organizations/{organizationId}/licensing/coterm/licenses'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'invalidated', 'expired', ]
+        validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)

@@ -1,4 +1,5 @@
 import urllib
+from meraki.common import validate_kwargs
 
 
 class ActionBatchInsight(object):
@@ -27,6 +28,7 @@ class ActionBatchInsight(object):
         resource = f'/organizations/{organizationId}/insight/monitoredMediaServers'
 
         body_params = ['name', 'address', 'bestEffortMonitoringEnabled', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -61,6 +63,7 @@ class ActionBatchInsight(object):
         resource = f'/organizations/{organizationId}/insight/monitoredMediaServers/{monitoredMediaServerId}'
 
         body_params = ['name', 'address', 'bestEffortMonitoringEnabled', ]
+        validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
