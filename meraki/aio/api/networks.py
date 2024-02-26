@@ -673,13 +673,13 @@ class AsyncNetworks:
         https://developer.cisco.com/meraki/api-v1/#!vmx-network-devices-claim
 
         - networkId (string): Network ID
-        - size (string): The size of the vMX you claim. It can be one of: small, medium, large, 100
+        - size (string): The size of the vMX you claim. It can be one of: small, medium, large, xlarge, 100
         """
 
         kwargs = locals()
 
         if 'size' in kwargs:
-            options = ['100', 'large', 'medium', 'small']
+            options = ['100', 'large', 'medium', 'small', 'xlarge']
             assert kwargs['size'] in options, f'''"size" cannot be "{kwargs['size']}", & must be set to one of: {options}'''
 
         metadata = {

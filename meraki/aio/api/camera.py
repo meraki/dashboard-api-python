@@ -718,6 +718,68 @@ class AsyncCamera:
         
 
 
+    def getOrganizationCameraBoundariesAreasByDevice(self, organizationId: str, **kwargs):
+        """
+        **Returns all configured area boundaries of cameras**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-camera-boundaries-areas-by-device
+
+        - organizationId (string): Organization ID
+        - serials (array): A list of serial numbers. The returned cameras will be filtered to only include these serials.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['camera', 'configure', 'boundaries', 'areas', 'byDevice'],
+            'operation': 'getOrganizationCameraBoundariesAreasByDevice'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/camera/boundaries/areas/byDevice'
+
+        query_params = ['serials', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['serials', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get(metadata, resource, params)
+        
+
+
+    def getOrganizationCameraBoundariesLinesByDevice(self, organizationId: str, **kwargs):
+        """
+        **Returns all configured crossingline boundaries of cameras**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-camera-boundaries-lines-by-device
+
+        - organizationId (string): Organization ID
+        - serials (array): A list of serial numbers. The returned cameras will be filtered to only include these serials.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['camera', 'configure', 'boundaries', 'lines', 'byDevice'],
+            'operation': 'getOrganizationCameraBoundariesLinesByDevice'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/camera/boundaries/lines/byDevice'
+
+        query_params = ['serials', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['serials', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get(metadata, resource, params)
+        
+
+
     def getOrganizationCameraCustomAnalyticsArtifacts(self, organizationId: str):
         """
         **List Custom Analytics Artifacts**
@@ -801,6 +863,42 @@ class AsyncCamera:
         resource = f'/organizations/{organizationId}/camera/customAnalytics/artifacts/{artifactId}'
 
         return self._session.delete(metadata, resource)
+        
+
+
+    def getOrganizationCameraDetectionsHistoryByBoundaryByInterval(self, organizationId: str, boundaryIds: list, total_pages=1, direction='next', **kwargs):
+        """
+        **Returns analytics data for timespans**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-camera-detections-history-by-boundary-by-interval
+
+        - organizationId (string): Organization ID
+        - boundaryIds (array): A list of boundary ids. The returned cameras will be filtered to only include these ids.
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - duration (integer): The minimum time, in seconds, that the person or car remains in the area to be counted. Defaults to boundary configuration or 60.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 1 - 1000. Defaults to 1000.
+        - boundaryTypes (array): The detection types. Defaults to 'person'.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['camera', 'configure', 'detections', 'history', 'byBoundary', 'byInterval'],
+            'operation': 'getOrganizationCameraDetectionsHistoryByBoundaryByInterval'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/camera/detections/history/byBoundary/byInterval'
+
+        query_params = ['boundaryIds', 'duration', 'perPage', 'boundaryTypes', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['boundaryIds', 'boundaryTypes', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
         
 
 

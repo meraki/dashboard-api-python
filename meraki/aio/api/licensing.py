@@ -8,6 +8,35 @@ class AsyncLicensing:
         
 
 
+    def getAdministeredLicensingSubscriptionEntitlements(self, **kwargs):
+        """
+        **Retrieve the list of purchasable entitlements**
+        https://developer.cisco.com/meraki/api-v1/#!get-administered-licensing-subscription-entitlements
+
+        - skus (array): Filter to entitlements with the specified SKUs
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['licensing', 'configure', 'subscription', 'entitlements'],
+            'operation': 'getAdministeredLicensingSubscriptionEntitlements'
+        }
+        resource = f'/administered/licensing/subscription/entitlements'
+
+        query_params = ['skus', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['skus', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get(metadata, resource, params)
+        
+
+
     def getAdministeredLicensingSubscriptionSubscriptions(self, total_pages=1, direction='next', **kwargs):
         """
         **List available subscriptions**
@@ -94,6 +123,36 @@ class AsyncLicensing:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
+
+    def getAdministeredLicensingSubscriptionSubscriptionsComplianceStatuses(self, **kwargs):
+        """
+        **Get compliance status for requested subscriptions**
+        https://developer.cisco.com/meraki/api-v1/#!get-administered-licensing-subscription-subscriptions-compliance-statuses
+
+        - organizationIds (array): Organizations to get subscription compliance information for
+        - subscriptionIds (array): Subscription ids
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['licensing', 'configure', 'subscription', 'subscriptions', 'compliance', 'statuses'],
+            'operation': 'getAdministeredLicensingSubscriptionSubscriptionsComplianceStatuses'
+        }
+        resource = f'/administered/licensing/subscription/subscriptions/compliance/statuses'
+
+        query_params = ['organizationIds', 'subscriptionIds', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['organizationIds', 'subscriptionIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get(metadata, resource, params)
         
 
 
