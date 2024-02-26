@@ -46,6 +46,37 @@ class ActionBatchDevices(object):
 
 
 
+    def createDeviceLiveToolsThroughputTest(self, serial: str, **kwargs):
+        """
+        **Enqueue a job to test a device throughput, the test will run for 10 secs to test throughput**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-throughput-test
+
+        - serial (string): Serial
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['devices', 'liveTools', 'throughputTest'],
+            'operation': 'createDeviceLiveToolsThroughputTest'
+        }
+        resource = f'/devices/{serial}/liveTools/throughputTest'
+
+        body_params = ['callback', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "test",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
     def updateDeviceManagementInterface(self, serial: str, **kwargs):
         """
         **Update the management interface settings for a device**

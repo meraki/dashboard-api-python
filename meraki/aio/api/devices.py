@@ -158,6 +158,99 @@ class AsyncDevices:
         
 
 
+    def createDeviceLiveToolsArpTable(self, serial: str, **kwargs):
+        """
+        **Enqueue a job to perform a ARP table request for the device**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-arp-table
+
+        - serial (string): Serial
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['devices', 'liveTools', 'arpTable'],
+            'operation': 'createDeviceLiveToolsArpTable'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        resource = f'/devices/{serial}/liveTools/arpTable'
+
+        body_params = ['callback', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getDeviceLiveToolsArpTable(self, serial: str, arpTableId: str):
+        """
+        **Return an ARP table live tool job.**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-live-tools-arp-table
+
+        - serial (string): Serial
+        - arpTableId (string): Arp table ID
+        """
+
+        metadata = {
+            'tags': ['devices', 'liveTools', 'arpTable'],
+            'operation': 'getDeviceLiveToolsArpTable'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        arpTableId = urllib.parse.quote(str(arpTableId), safe='')
+        resource = f'/devices/{serial}/liveTools/arpTable/{arpTableId}'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def createDeviceLiveToolsCableTest(self, serial: str, ports: list, **kwargs):
+        """
+        **Enqueue a job to perform a cable test for the device on the specified ports.**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-cable-test
+
+        - serial (string): Serial
+        - ports (array): A list of ports for which to perform the cable test.
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['devices', 'liveTools', 'cableTest'],
+            'operation': 'createDeviceLiveToolsCableTest'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        resource = f'/devices/{serial}/liveTools/cableTest'
+
+        body_params = ['ports', 'callback', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getDeviceLiveToolsCableTest(self, serial: str, id: str):
+        """
+        **Return a cable test live tool job.**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-live-tools-cable-test
+
+        - serial (string): Serial
+        - id (string): ID
+        """
+
+        metadata = {
+            'tags': ['devices', 'liveTools', 'cableTest'],
+            'operation': 'getDeviceLiveToolsCableTest'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        id = urllib.parse.quote(str(id), safe='')
+        resource = f'/devices/{serial}/liveTools/cableTest/{id}'
+
+        return self._session.get(metadata, resource)
+        
+
+
     def createDeviceLiveToolsPing(self, serial: str, target: str, **kwargs):
         """
         **Enqueue a job to ping a target host from the device**
@@ -248,6 +341,100 @@ class AsyncDevices:
         serial = urllib.parse.quote(str(serial), safe='')
         id = urllib.parse.quote(str(id), safe='')
         resource = f'/devices/{serial}/liveTools/pingDevice/{id}'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def createDeviceLiveToolsThroughputTest(self, serial: str, **kwargs):
+        """
+        **Enqueue a job to test a device throughput, the test will run for 10 secs to test throughput**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-throughput-test
+
+        - serial (string): Serial
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['devices', 'liveTools', 'throughputTest'],
+            'operation': 'createDeviceLiveToolsThroughputTest'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        resource = f'/devices/{serial}/liveTools/throughputTest'
+
+        body_params = ['callback', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getDeviceLiveToolsThroughputTest(self, serial: str, throughputTestId: str):
+        """
+        **Return a throughput test job**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-live-tools-throughput-test
+
+        - serial (string): Serial
+        - throughputTestId (string): Throughput test ID
+        """
+
+        metadata = {
+            'tags': ['devices', 'liveTools', 'throughputTest'],
+            'operation': 'getDeviceLiveToolsThroughputTest'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        throughputTestId = urllib.parse.quote(str(throughputTestId), safe='')
+        resource = f'/devices/{serial}/liveTools/throughputTest/{throughputTestId}'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def createDeviceLiveToolsWakeOnLan(self, serial: str, vlanId: int, mac: str, **kwargs):
+        """
+        **Enqueue a job to send a Wake-on-LAN packet from the device**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-wake-on-lan
+
+        - serial (string): Serial
+        - vlanId (integer): The target's VLAN (1 to 4094)
+        - mac (string): The target's MAC address
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['devices', 'liveTools', 'wakeOnLan'],
+            'operation': 'createDeviceLiveToolsWakeOnLan'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        resource = f'/devices/{serial}/liveTools/wakeOnLan'
+
+        body_params = ['vlanId', 'mac', 'callback', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getDeviceLiveToolsWakeOnLan(self, serial: str, wakeOnLanId: str):
+        """
+        **Return a Wake-on-LAN job**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-live-tools-wake-on-lan
+
+        - serial (string): Serial
+        - wakeOnLanId (string): Wake on lan ID
+        """
+
+        metadata = {
+            'tags': ['devices', 'liveTools', 'wakeOnLan'],
+            'operation': 'getDeviceLiveToolsWakeOnLan'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        wakeOnLanId = urllib.parse.quote(str(wakeOnLanId), safe='')
+        resource = f'/devices/{serial}/liveTools/wakeOnLan/{wakeOnLanId}'
 
         return self._session.get(metadata, resource)
         

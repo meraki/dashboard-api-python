@@ -73,6 +73,7 @@ class Sm(object):
         - serials (array): Filter devices by serial(s).
         - ids (array): Filter devices by id(s).
         - uuids (array): Filter devices by uuid(s).
+        - systemTypes (array): Filter devices by system type(s).
         - scope (array): Specify a scope (one of all, none, withAny, withAll, withoutAny, or withoutAll) and a set of tags.
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
@@ -88,10 +89,10 @@ class Sm(object):
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/sm/devices'
 
-        query_params = ['fields', 'wifiMacs', 'serials', 'ids', 'uuids', 'scope', 'perPage', 'startingAfter', 'endingBefore', ]
+        query_params = ['fields', 'wifiMacs', 'serials', 'ids', 'uuids', 'systemTypes', 'scope', 'perPage', 'startingAfter', 'endingBefore', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['fields', 'wifiMacs', 'serials', 'ids', 'uuids', 'scope', ]
+        array_params = ['fields', 'wifiMacs', 'serials', 'ids', 'uuids', 'systemTypes', 'scope', ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
                 params[f'{k.strip()}[]'] = kwargs[f'{k}']
@@ -239,6 +240,66 @@ class Sm(object):
         resource = f'/networks/{networkId}/sm/devices/move'
 
         body_params = ['wifiMacs', 'ids', 'serials', 'scope', 'newNetwork', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def rebootNetworkSmDevices(self, networkId: str, **kwargs):
+        """
+        **Reboot a set of endpoints**
+        https://developer.cisco.com/meraki/api-v1/#!reboot-network-sm-devices
+
+        - networkId (string): Network ID
+        - wifiMacs (array): The wifiMacs of the endpoints to be rebooted.
+        - ids (array): The ids of the endpoints to be rebooted.
+        - serials (array): The serials of the endpoints to be rebooted.
+        - scope (array): The scope (one of all, none, withAny, withAll, withoutAny, or withoutAll) and a set of tags of the endpoints to be rebooted.
+        - kextPaths (array): The KextPaths of the endpoints to be rebooted. Available for macOS 11+
+        - notifyUser (boolean): Whether or not to notify the user before rebooting the endpoint. Available for macOS 11.3+
+        - rebuildKernelCache (boolean): Whether or not to rebuild the kernel cache when rebooting the endpoint. Available for macOS 11+
+        - requestRequiresNetworkTether (boolean): Whether or not the request requires network tethering. Available for macOS and supervised iOS or tvOS
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['sm', 'configure', 'devices'],
+            'operation': 'rebootNetworkSmDevices'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/sm/devices/reboot'
+
+        body_params = ['wifiMacs', 'ids', 'serials', 'scope', 'kextPaths', 'notifyUser', 'rebuildKernelCache', 'requestRequiresNetworkTether', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def shutdownNetworkSmDevices(self, networkId: str, **kwargs):
+        """
+        **Shutdown a set of endpoints**
+        https://developer.cisco.com/meraki/api-v1/#!shutdown-network-sm-devices
+
+        - networkId (string): Network ID
+        - wifiMacs (array): The wifiMacs of the endpoints to be shutdown.
+        - ids (array): The ids of the endpoints to be shutdown.
+        - serials (array): The serials of the endpoints to be shutdown.
+        - scope (array): The scope (one of all, none, withAny, withAll, withoutAny, or withoutAll) and a set of tags of the endpoints to be shutdown.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['sm', 'configure', 'devices'],
+            'operation': 'shutdownNetworkSmDevices'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/sm/devices/shutdown'
+
+        body_params = ['wifiMacs', 'ids', 'serials', 'scope', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -662,13 +723,16 @@ class Sm(object):
         
 
 
-    def getNetworkSmProfiles(self, networkId: str):
+    def getNetworkSmProfiles(self, networkId: str, **kwargs):
         """
         **List all profiles in a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-profiles
 
         - networkId (string): Network ID
+        - payloadTypes (array): Filter by payload types
         """
+
+        kwargs.update(locals())
 
         metadata = {
             'tags': ['sm', 'configure', 'profiles'],
@@ -677,7 +741,16 @@ class Sm(object):
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/sm/profiles'
 
-        return self._session.get(metadata, resource)
+        query_params = ['payloadTypes', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['payloadTypes', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get(metadata, resource, params)
         
 
 
@@ -963,6 +1036,141 @@ class Sm(object):
         
 
 
+    def getOrganizationSmAdminsRoles(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **List the Limited Access Roles for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-sm-admins-roles
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['sm', 'configure', 'admins', 'roles'],
+            'operation': 'getOrganizationSmAdminsRoles'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/sm/admins/roles'
+
+        query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def createOrganizationSmAdminsRole(self, organizationId: str, name: str, **kwargs):
+        """
+        **Create a Limited Access Role**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-sm-admins-role
+
+        - organizationId (string): Organization ID
+        - name (string): The name of the Limited Access Role
+        - scope (string): The scope of the Limited Access Role
+        - tags (array): The tags of the Limited Access Role
+        """
+
+        kwargs.update(locals())
+
+        if 'scope' in kwargs:
+            options = ['all_tags', 'some', 'without_all_tags', 'without_some']
+            assert kwargs['scope'] in options, f'''"scope" cannot be "{kwargs['scope']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['sm', 'configure', 'admins', 'roles'],
+            'operation': 'createOrganizationSmAdminsRole'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/sm/admins/roles'
+
+        body_params = ['name', 'scope', 'tags', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getOrganizationSmAdminsRole(self, organizationId: str, roleId: str):
+        """
+        **Return a Limited Access Role**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-sm-admins-role
+
+        - organizationId (string): Organization ID
+        - roleId (string): Role ID
+        """
+
+        metadata = {
+            'tags': ['sm', 'configure', 'admins', 'roles'],
+            'operation': 'getOrganizationSmAdminsRole'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        roleId = urllib.parse.quote(str(roleId), safe='')
+        resource = f'/organizations/{organizationId}/sm/admins/roles/{roleId}'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def updateOrganizationSmAdminsRole(self, organizationId: str, roleId: str, **kwargs):
+        """
+        **Update a Limited Access Role**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-sm-admins-role
+
+        - organizationId (string): Organization ID
+        - roleId (string): Role ID
+        - name (string): The name of the Limited Access Role
+        - scope (string): The scope of the Limited Access Role
+        - tags (array): The tags of the Limited Access Role
+        """
+
+        kwargs.update(locals())
+
+        if 'scope' in kwargs:
+            options = ['all_tags', 'some', 'without_all_tags', 'without_some']
+            assert kwargs['scope'] in options, f'''"scope" cannot be "{kwargs['scope']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['sm', 'configure', 'admins', 'roles'],
+            'operation': 'updateOrganizationSmAdminsRole'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        roleId = urllib.parse.quote(str(roleId), safe='')
+        resource = f'/organizations/{organizationId}/sm/admins/roles/{roleId}'
+
+        body_params = ['name', 'scope', 'tags', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def deleteOrganizationSmAdminsRole(self, organizationId: str, roleId: str):
+        """
+        **Delete a Limited Access Role**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-sm-admins-role
+
+        - organizationId (string): Organization ID
+        - roleId (string): Role ID
+        """
+
+        metadata = {
+            'tags': ['sm', 'configure', 'admins', 'roles'],
+            'operation': 'deleteOrganizationSmAdminsRole'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        roleId = urllib.parse.quote(str(roleId), safe='')
+        resource = f'/organizations/{organizationId}/sm/admins/roles/{roleId}'
+
+        return self._session.delete(metadata, resource)
+        
+
+
     def getOrganizationSmApnsCert(self, organizationId: str):
         """
         **Get the organization's APNS certificate**
@@ -979,6 +1187,67 @@ class Sm(object):
         resource = f'/organizations/{organizationId}/sm/apnsCert'
 
         return self._session.get(metadata, resource)
+        
+
+
+    def updateOrganizationSmSentryPoliciesAssignments(self, organizationId: str, items: list):
+        """
+        **Update an Organizations Sentry Policies using the provided list**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-sm-sentry-policies-assignments
+
+        - organizationId (string): Organization ID
+        - items (array): Sentry Group Policies for the Organization keyed by Network Id
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['sm', 'configure', 'sentry', 'policies', 'assignments'],
+            'operation': 'updateOrganizationSmSentryPoliciesAssignments'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/sm/sentry/policies/assignments'
+
+        body_params = ['items', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def getOrganizationSmSentryPoliciesAssignmentsByNetwork(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **List the Sentry Policies for an organization ordered in ascending order of priority**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-sm-sentry-policies-assignments-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter Sentry Policies by Network Id
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['sm', 'configure', 'sentry', 'policies', 'assignments', 'byNetwork'],
+            'operation': 'getOrganizationSmSentryPoliciesAssignmentsByNetwork'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/sm/sentry/policies/assignments/byNetwork'
+
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
         
 
 

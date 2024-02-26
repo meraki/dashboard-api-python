@@ -2472,6 +2472,25 @@ class AsyncAppliance:
         
 
 
+    def getOrganizationApplianceUplinksStatusesOverview(self, organizationId: str):
+        """
+        **Returns an overview of uplink statuses**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-uplinks-statuses-overview
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'uplinks', 'statuses', 'overview'],
+            'operation': 'getOrganizationApplianceUplinksStatusesOverview'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/appliance/uplinks/statuses/overview'
+
+        return self._session.get(metadata, resource)
+        
+
+
     def getOrganizationApplianceUplinksUsageByNetwork(self, organizationId: str, **kwargs):
         """
         **Get the sent and received bytes for each uplink of all MX and Z networks within an organization**
