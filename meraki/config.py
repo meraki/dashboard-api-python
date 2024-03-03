@@ -84,3 +84,6 @@ BE_GEO_ID = ""
 # The choice is yours as long as you follow the format. You should **not** include other information in this string.
 # If you are an official ecosystem partner, this is required.
 MERAKI_PYTHON_SDK_CALLER = ""
+
+# Enable or disable kwargs validation
+ENABLE_KWARGS_VALIDATION = False
