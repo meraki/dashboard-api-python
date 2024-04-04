@@ -10,7 +10,7 @@ class AsyncCamera:
 
     def getDeviceCameraAnalyticsLive(self, serial: str):
         """
-        **Returns live state from camera of analytics zones**
+        **Returns live state from camera analytics zones**
         https://developer.cisco.com/meraki/api-v1/#!get-device-camera-analytics-live
 
         - serial (string): Serial

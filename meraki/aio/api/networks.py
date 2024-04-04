@@ -503,7 +503,7 @@ class AsyncNetworks:
         - networkId (string): Network ID
         - clientId (string): Client ID
         - devicePolicy (string): The policy to assign. Can be 'Whitelisted', 'Blocked', 'Normal' or 'Group policy'. Required.
-        - groupPolicyId (string): [optional] If 'devicePolicy' is set to 'Group policy' this param is used to specify the group policy ID.
+        - groupPolicyId (string): [Optional] If 'devicePolicy' is set to 'Group policy' this param is used to specify the group policy ID.
         """
 
         kwargs.update(locals())
@@ -644,7 +644,7 @@ class AsyncNetworks:
 
     def claimNetworkDevices(self, networkId: str, serials: list):
         """
-        **Claim devices into a network. (Note: for recently claimed devices, it may take a few minutes for API requsts against that device to succeed)**
+        **Claim devices into a network. (Note: for recently claimed devices, it may take a few minutes for API requests against that device to succeed)**
         https://developer.cisco.com/meraki/api-v1/#!claim-network-devices
 
         - networkId (string): Network ID
@@ -1392,14 +1392,17 @@ class AsyncNetworks:
         
 
 
-    def deleteNetworkGroupPolicy(self, networkId: str, groupPolicyId: str):
+    def deleteNetworkGroupPolicy(self, networkId: str, groupPolicyId: str, **kwargs):
         """
         **Delete a group policy**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-group-policy
 
         - networkId (string): Network ID
         - groupPolicyId (string): Group policy ID
+        - force (boolean): If true, the system deletes the GP even if there are active clients using the GP. After deletion, active clients that were assigned to that Group Policy will be left without any policy applied. Default is false.
         """
+
+        kwargs.update(locals())
 
         metadata = {
             'tags': ['networks', 'configure', 'groupPolicies'],

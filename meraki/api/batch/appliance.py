@@ -383,6 +383,37 @@ class ActionBatchAppliance(object):
 
 
 
+    def updateNetworkApplianceSdwanInternetPolicies(self, networkId: str, **kwargs):
+        """
+        **Update SDWAN internet traffic preferences for an MX network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-sdwan-internet-policies
+
+        - networkId (string): Network ID
+        - wanTrafficUplinkPreferences (array): policies with respective traffic filters for an MX network
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'sdwan', 'internetPolicies'],
+            'operation': 'updateNetworkApplianceSdwanInternetPolicies'
+        }
+        resource = f'/networks/{networkId}/appliance/sdwan/internetPolicies'
+
+        body_params = ['wanTrafficUplinkPreferences', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
     def updateNetworkApplianceSettings(self, networkId: str, **kwargs):
         """
         **Update the appliance settings for a network**

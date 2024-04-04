@@ -27,13 +27,18 @@ class Appliance(object):
         
 
 
-    def getDeviceAppliancePerformance(self, serial: str):
+    def getDeviceAppliancePerformance(self, serial: str, **kwargs):
         """
         **Return the performance score for a single MX**
         https://developer.cisco.com/meraki/api-v1/#!get-device-appliance-performance
 
         - serial (string): Serial
+        - t0 (string): The beginning of the timespan for the data.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 30 minutes and be less than or equal to 14 days. The default is 30 minutes.
         """
+
+        kwargs.update(locals())
 
         metadata = {
             'tags': ['appliance', 'monitor', 'performance'],
@@ -42,7 +47,10 @@ class Appliance(object):
         serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/appliance/performance'
 
-        return self._session.get(metadata, resource)
+        query_params = ['t0', 't1', 'timespan', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get(metadata, resource, params)
         
 
 
@@ -1143,6 +1151,31 @@ class Appliance(object):
         
 
 
+    def updateNetworkApplianceSdwanInternetPolicies(self, networkId: str, **kwargs):
+        """
+        **Update SDWAN internet traffic preferences for an MX network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-sdwan-internet-policies
+
+        - networkId (string): Network ID
+        - wanTrafficUplinkPreferences (array): policies with respective traffic filters for an MX network
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'sdwan', 'internetPolicies'],
+            'operation': 'updateNetworkApplianceSdwanInternetPolicies'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/appliance/sdwan/internetPolicies'
+
+        body_params = ['wanTrafficUplinkPreferences', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
     def getNetworkApplianceSecurityEvents(self, networkId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the security events for a network**
@@ -1495,10 +1528,10 @@ class Appliance(object):
         https://developer.cisco.com/meraki/api-v1/#!create-network-appliance-static-route
 
         - networkId (string): Network ID
-        - name (string): The name of the new static route
-        - subnet (string): The subnet of the static route
-        - gatewayIp (string): The gateway IP (next hop) of the static route
-        - gatewayVlanId (string): The gateway IP (next hop) VLAN ID of the static route
+        - name (string): Name of the route
+        - subnet (string): Subnet of the route
+        - gatewayIp (string): Gateway IP address (next hop)
+        - gatewayVlanId (string): Gateway VLAN ID
         """
 
         kwargs.update(locals())
@@ -1545,13 +1578,13 @@ class Appliance(object):
 
         - networkId (string): Network ID
         - staticRouteId (string): Static route ID
-        - name (string): The name of the static route
-        - subnet (string): The subnet of the static route
-        - gatewayIp (string): The gateway IP (next hop) of the static route
-        - gatewayVlanId (string): The gateway IP (next hop) VLAN ID of the static route
-        - enabled (boolean): The enabled state of the static route
-        - fixedIpAssignments (object): The DHCP fixed IP assignments on the static route. This should be an object that contains mappings from MAC addresses to objects that themselves each contain "ip" and "name" string fields. See the sample request/response for more details.
-        - reservedIpRanges (array): The DHCP reserved IP ranges on the static route
+        - name (string): Name of the route
+        - subnet (string): Subnet of the route
+        - gatewayIp (string): Gateway IP address (next hop)
+        - gatewayVlanId (string): Gateway VLAN ID
+        - enabled (boolean): Whether the route should be enabled or not
+        - fixedIpAssignments (object): Fixed DHCP IP assignments on the route
+        - reservedIpRanges (array): DHCP reserved IP ranges
         """
 
         kwargs.update(locals())

@@ -1206,7 +1206,7 @@ class Organizations(object):
 
     def claimIntoOrganization(self, organizationId: str, **kwargs):
         """
-        **Claim a list of devices, licenses, and/or orders into an organization**
+        **Claim a list of devices, licenses, and/or orders into an organization inventory**
         https://developer.cisco.com/meraki/api-v1/#!claim-into-organization
 
         - organizationId (string): Organization ID
@@ -1260,7 +1260,7 @@ class Organizations(object):
 
     def getOrganizationClientsOverview(self, organizationId: str, **kwargs):
         """
-        **Return summary information around client data usage (in mb) across the given organization.**
+        **Return summary information around client data usage (in kb) across the given organization.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-clients-overview
 
         - organizationId (string): Organization ID
@@ -1308,7 +1308,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/clients/search'
 
-        query_params = ['mac', 'perPage', 'startingAfter', 'endingBefore', ]
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'mac', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -1386,6 +1386,27 @@ class Organizations(object):
         
 
 
+    def getOrganizationConfigTemplate(self, organizationId: str, configTemplateId: str):
+        """
+        **Return a single configuration template**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-config-template
+
+        - organizationId (string): Organization ID
+        - configTemplateId (string): Config template ID
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'configTemplates'],
+            'operation': 'getOrganizationConfigTemplate'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        configTemplateId = urllib.parse.quote(str(configTemplateId), safe='')
+        resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}'
+
+        return self._session.get(metadata, resource)
+        
+
+
     def updateOrganizationConfigTemplate(self, organizationId: str, configTemplateId: str, **kwargs):
         """
         **Update a configuration template**
@@ -1432,27 +1453,6 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}'
 
         return self._session.delete(metadata, resource)
-        
-
-
-    def getOrganizationConfigTemplate(self, organizationId: str, configTemplateId: str):
-        """
-        **Return a single configuration template**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-config-template
-
-        - organizationId (string): Organization ID
-        - configTemplateId (string): Config template ID
-        """
-
-        metadata = {
-            'tags': ['organizations', 'configure', 'configTemplates'],
-            'operation': 'getOrganizationConfigTemplate'
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        configTemplateId = urllib.parse.quote(str(configTemplateId), safe='')
-        resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}'
-
-        return self._session.get(metadata, resource)
         
 
 
@@ -2162,6 +2162,52 @@ class Organizations(object):
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def createOrganizationInventoryDevicesSwapsBulk(self, organizationId: str, swaps: list):
+        """
+        **Swap the devices identified by devices.old with a devices.new, then perform the :afterAction on the devices.old.**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-inventory-devices-swaps-bulk
+
+        - organizationId (string): Organization ID
+        - swaps (array): List of replacments to perform
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'inventory', 'devices', 'swaps', 'bulk'],
+            'operation': 'createOrganizationInventoryDevicesSwapsBulk'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/inventory/devices/swaps/bulk'
+
+        body_params = ['swaps', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getOrganizationInventoryDevicesSwapsBulk(self, organizationId: str, id: str):
+        """
+        **List of device swaps for a given request ID ({id}).**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-inventory-devices-swaps-bulk
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'inventory', 'devices', 'swaps', 'bulk'],
+            'operation': 'getOrganizationInventoryDevicesSwapsBulk'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        id = urllib.parse.quote(str(id), safe='')
+        resource = f'/organizations/{organizationId}/inventory/devices/swaps/bulk/{id}'
+
+        return self._session.get(metadata, resource)
         
 
 

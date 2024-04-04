@@ -7,6 +7,37 @@ class ActionBatchSensor(object):
         
 
 
+    def createDeviceSensorCommand(self, serial: str, operation: str):
+        """
+        **Sends a command to a sensor**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-sensor-command
+
+        - serial (string): Serial
+        - operation (string): Operation to run on the sensor. 'enableDownstreamPower', 'disableDownstreamPower', and 'cycleDownstreamPower' turn power on/off to the device that is connected downstream of an MT40 power monitor. 'refreshData' causes an MT15 or MT40 device to upload its latest readings so that they are immediately available in the Dashboard API.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['sensor', 'configure', 'commands'],
+            'operation': 'createDeviceSensorCommand'
+        }
+        resource = f'/devices/{serial}/sensor/commands'
+
+        body_params = ['operation', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
     def updateDeviceSensorRelationships(self, serial: str, **kwargs):
         """
         **Assign one or more sensor roles to a given sensor or camera device.**

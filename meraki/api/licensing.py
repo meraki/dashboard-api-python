@@ -126,7 +126,7 @@ class Licensing(object):
         
 
 
-    def getAdministeredLicensingSubscriptionSubscriptionsComplianceStatuses(self, **kwargs):
+    def getAdministeredLicensingSubscriptionSubscriptionsComplianceStatuses(self, organizationIds: list, **kwargs):
         """
         **Get compliance status for requested subscriptions**
         https://developer.cisco.com/meraki/api-v1/#!get-administered-licensing-subscription-subscriptions-compliance-statuses
