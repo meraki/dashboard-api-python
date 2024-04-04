@@ -458,7 +458,7 @@ class ActionBatchWireless(object):
         - meshingEnabled (boolean): Toggle for enabling or disabling meshing in a network
         - ipv6BridgeEnabled (boolean): Toggle for enabling or disabling IPv6 bridging in a network (Note: if enabled, SSIDs must also be configured to use bridge mode)
         - locationAnalyticsEnabled (boolean): Toggle for enabling or disabling location analytics for your network
-        - upgradeStrategy (string): The upgrade strategy to apply to the network. Must be one of 'minimizeUpgradeTime' or 'minimizeClientDowntime'. Requires firmware version MR 26.8 or higher'
+        - upgradeStrategy (string): The default strategy that network devices will use to perform an upgrade. Requires firmware version MR 26.8 or higher.
         - ledLightsOn (boolean): Toggle for enabling or disabling LED lights on all APs in the network (making them run dark)
         - namedVlans (object): Named VLAN settings for wireless networks.
         """
@@ -713,7 +713,7 @@ class ActionBatchWireless(object):
 
         - networkId (string): Network ID
         - number (string): Number
-        - rules (array): An ordered array of the firewall rules for this SSID (not including the local LAN access rule or the default rule)
+        - rules (array): An ordered array of the firewall rules for this SSID (not including the local LAN access rule or the default rule).
         - allowLanAccess (boolean): Allow wireless client access to local LAN (boolean value - true allows access and false denies access) (optional)
         """
 

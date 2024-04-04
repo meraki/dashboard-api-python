@@ -8,6 +8,96 @@ class AsyncSensor:
         
 
 
+    def getDeviceSensorCommands(self, serial: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Returns a historical log of all commands**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-sensor-commands
+
+        - serial (string): Serial
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - operations (array): Optional parameter to filter commands by operation. Allowed values are disableDownstreamPower, enableDownstreamPower, cycleDownstreamPower, and refreshData.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 10.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - sortOrder (string): Sorted order of entries. Order options are 'ascending' and 'descending'. Default is 'descending'.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 30 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 30 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 30 days. The default is 30 days.
+        """
+
+        kwargs.update(locals())
+
+        if 'sortOrder' in kwargs:
+            options = ['ascending', 'descending']
+            assert kwargs['sortOrder'] in options, f'''"sortOrder" cannot be "{kwargs['sortOrder']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['sensor', 'configure', 'commands'],
+            'operation': 'getDeviceSensorCommands'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        resource = f'/devices/{serial}/sensor/commands'
+
+        query_params = ['operations', 'perPage', 'startingAfter', 'endingBefore', 'sortOrder', 't0', 't1', 'timespan', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['operations', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def createDeviceSensorCommand(self, serial: str, operation: str):
+        """
+        **Sends a command to a sensor**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-sensor-command
+
+        - serial (string): Serial
+        - operation (string): Operation to run on the sensor. 'enableDownstreamPower', 'disableDownstreamPower', and 'cycleDownstreamPower' turn power on/off to the device that is connected downstream of an MT40 power monitor. 'refreshData' causes an MT15 or MT40 device to upload its latest readings so that they are immediately available in the Dashboard API.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['sensor', 'configure', 'commands'],
+            'operation': 'createDeviceSensorCommand'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        resource = f'/devices/{serial}/sensor/commands'
+
+        body_params = ['operation', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getDeviceSensorCommand(self, serial: str, commandId: str):
+        """
+        **Returns information about the command's execution, including the status**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-sensor-command
+
+        - serial (string): Serial
+        - commandId (string): Command ID
+        """
+
+        metadata = {
+            'tags': ['sensor', 'configure', 'commands'],
+            'operation': 'getDeviceSensorCommand'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        commandId = urllib.parse.quote(str(commandId), safe='')
+        resource = f'/devices/{serial}/sensor/commands/{commandId}'
+
+        return self._session.get(metadata, resource)
+        
+
+
     def getDeviceSensorRelationships(self, serial: str):
         """
         **List the sensor roles for a given sensor or camera device.**

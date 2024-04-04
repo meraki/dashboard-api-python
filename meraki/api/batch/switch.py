@@ -49,8 +49,8 @@ class ActionBatchSwitch(object):
         - tags (array): The list of tags of the switch port.
         - enabled (boolean): The status of the switch port.
         - poeEnabled (boolean): The PoE status of the switch port.
-        - type (string): The type of the switch port ('trunk' or 'access').
-        - vlan (integer): The VLAN of the switch port. A null value will clear the value set for trunk ports.
+        - type (string): The type of the switch port ('trunk', 'access' or 'stack').
+        - vlan (integer): The VLAN of the switch port. For a trunk port, this is the native VLAN. A null value will clear the value set for trunk ports.
         - voiceVlan (integer): The voice VLAN of the switch port. Only applicable to access ports.
         - allowedVlans (string): The VLANs allowed on the switch port. Only applicable to trunk ports.
         - isolationEnabled (boolean): The isolation status of the switch port.
@@ -75,7 +75,7 @@ class ActionBatchSwitch(object):
         kwargs.update(locals())
 
         if 'type' in kwargs:
-            options = ['access', 'trunk']
+            options = ['access', 'stack', 'trunk']
             assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
         if 'stpGuard' in kwargs:
             options = ['bpdu guard', 'disabled', 'loop guard', 'root guard']
@@ -904,12 +904,12 @@ class ActionBatchSwitch(object):
 
         - networkId (string): Network ID
         - vlan (integer): The VLAN of the incoming packet. A null value will match any VLAN.
-        - protocol (string): The protocol of the incoming packet. Can be one of "ANY", "TCP" or "UDP". Default value is "ANY"
+        - protocol (string): The protocol of the incoming packet. Default value is "ANY"
         - srcPort (integer): The source port of the incoming packet. Applicable only if protocol is TCP or UDP.
-        - srcPortRange (string): The source port range of the incoming packet. Applicable only if protocol is set to TCP or UDP. Example: 70-80
+        - srcPortRange (string): The source port range of the incoming packet. Applicable only if protocol is set to TCP or UDP.
         - dstPort (integer): The destination port of the incoming packet. Applicable only if protocol is TCP or UDP.
-        - dstPortRange (string): The destination port range of the incoming packet. Applicable only if protocol is set to TCP or UDP. Example: 70-80
-        - dscp (integer): DSCP tag. Set this to -1 to trust incoming DSCP. Default value is 0
+        - dstPortRange (string): The destination port range of the incoming packet. Applicable only if protocol is set to TCP or UDP.
+        - dscp (integer): DSCP tag for the incoming packet. Set this to -1 to trust incoming DSCP. Default value is 0
         """
 
         kwargs.update(locals())
@@ -1003,12 +1003,12 @@ class ActionBatchSwitch(object):
         - networkId (string): Network ID
         - qosRuleId (string): Qos rule ID
         - vlan (integer): The VLAN of the incoming packet. A null value will match any VLAN.
-        - protocol (string): The protocol of the incoming packet. Can be one of "ANY", "TCP" or "UDP". Default value is "ANY".
+        - protocol (string): The protocol of the incoming packet. Default value is "ANY"
         - srcPort (integer): The source port of the incoming packet. Applicable only if protocol is TCP or UDP.
-        - srcPortRange (string): The source port range of the incoming packet. Applicable only if protocol is set to TCP or UDP. Example: 70-80
+        - srcPortRange (string): The source port range of the incoming packet. Applicable only if protocol is set to TCP or UDP.
         - dstPort (integer): The destination port of the incoming packet. Applicable only if protocol is TCP or UDP.
-        - dstPortRange (string): The destination port range of the incoming packet. Applicable only if protocol is set to TCP or UDP. Example: 70-80
-        - dscp (integer): DSCP tag that should be assigned to incoming packet. Set this to -1 to trust incoming DSCP. Default value is 0.
+        - dstPortRange (string): The destination port range of the incoming packet. Applicable only if protocol is set to TCP or UDP.
+        - dscp (integer): DSCP tag that should be assigned to incoming packet. Set this to -1 to trust incoming DSCP. Default value is 0
         """
 
         kwargs.update(locals())
@@ -1134,7 +1134,7 @@ class ActionBatchSwitch(object):
 
         - networkId (string): Network ID
         - rendezvousPointId (string): Rendezvous point ID
-        - interfaceIp (string): The IP address of the interface to use
+        - interfaceIp (string): The IP address of the interface where the RP needs to be created.
         - multicastGroup (string): 'Any', or the IP address of a multicast group
         """
 
@@ -1583,8 +1583,8 @@ class ActionBatchSwitch(object):
         - tags (array): The list of tags of the switch template port.
         - enabled (boolean): The status of the switch template port.
         - poeEnabled (boolean): The PoE status of the switch template port.
-        - type (string): The type of the switch template port ('trunk' or 'access').
-        - vlan (integer): The VLAN of the switch template port. A null value will clear the value set for trunk ports.
+        - type (string): The type of the switch template port ('trunk', 'access' or 'stack').
+        - vlan (integer): The VLAN of the switch template port. For a trunk port, this is the native VLAN. A null value will clear the value set for trunk ports.
         - voiceVlan (integer): The voice VLAN of the switch template port. Only applicable to access ports.
         - allowedVlans (string): The VLANs allowed on the switch template port. Only applicable to trunk ports.
         - isolationEnabled (boolean): The isolation status of the switch template port.
@@ -1607,7 +1607,7 @@ class ActionBatchSwitch(object):
         kwargs.update(locals())
 
         if 'type' in kwargs:
-            options = ['access', 'trunk']
+            options = ['access', 'stack', 'trunk']
             assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
         if 'stpGuard' in kwargs:
             options = ['bpdu guard', 'disabled', 'loop guard', 'root guard']

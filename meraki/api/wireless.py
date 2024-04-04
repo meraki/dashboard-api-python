@@ -585,9 +585,9 @@ class Wireless(object):
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
         - types (array): A list of event types to include. If not specified, events of all types will be returned. Valid types are 'assoc', 'disassoc', 'auth', 'deauth', 'dns', 'dhcp', 'roam', 'connection' and/or 'sticky'.
+        - band (string): Filter results by band. Valid bands are '2.4', '5' or '6'.
+        - ssidNumber (integer): Filter results by SSID. If not specified, events for all SSIDs will be returned.
         - includedSeverities (array): A list of severities to include. If not specified, events of all severities will be returned. Valid severities are 'good', 'info', 'warn' and/or 'bad'.
-        - band (string): Filter results by band (either '2.4', '5', '6').
-        - ssidNumber (integer): An SSID number to include. If not specified, events for all SSIDs will be returned.
         - deviceSerial (string): Filter results by an AP's serial number.
         """
 
@@ -608,7 +608,7 @@ class Wireless(object):
         clientId = urllib.parse.quote(str(clientId), safe='')
         resource = f'/networks/{networkId}/wireless/clients/{clientId}/connectivityEvents'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', 'types', 'includedSeverities', 'band', 'ssidNumber', 'deviceSerial', ]
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', 'types', 'band', 'ssidNumber', 'includedSeverities', 'deviceSerial', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['types', 'includedSeverities', ]
@@ -1326,7 +1326,7 @@ class Wireless(object):
         - meshingEnabled (boolean): Toggle for enabling or disabling meshing in a network
         - ipv6BridgeEnabled (boolean): Toggle for enabling or disabling IPv6 bridging in a network (Note: if enabled, SSIDs must also be configured to use bridge mode)
         - locationAnalyticsEnabled (boolean): Toggle for enabling or disabling location analytics for your network
-        - upgradeStrategy (string): The upgrade strategy to apply to the network. Must be one of 'minimizeUpgradeTime' or 'minimizeClientDowntime'. Requires firmware version MR 26.8 or higher'
+        - upgradeStrategy (string): The default strategy that network devices will use to perform an upgrade. Requires firmware version MR 26.8 or higher.
         - ledLightsOn (boolean): Toggle for enabling or disabling LED lights on all APs in the network (making them run dark)
         - namedVlans (object): Named VLAN settings for wireless networks.
         """
@@ -1717,7 +1717,7 @@ class Wireless(object):
 
         - networkId (string): Network ID
         - number (string): Number
-        - rules (array): An ordered array of the firewall rules for this SSID (not including the local LAN access rule or the default rule)
+        - rules (array): An ordered array of the firewall rules for this SSID (not including the local LAN access rule or the default rule).
         - allowLanAccess (boolean): Allow wireless client access to local LAN (boolean value - true allows access and false denies access) (optional)
         """
 
@@ -2549,6 +2549,89 @@ class Wireless(object):
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['networkIds', 'serials', 'ssids', 'bands', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def getOrganizationWirelessRfProfilesAssignmentsByDevice(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **List the RF profiles of an organization by device**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-rf-profiles-assignments-by-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter devices by network.
+        - productTypes (array): Optional parameter to filter devices by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, and sensor.
+        - name (string): Optional parameter to filter RF profiles by device name. All returned devices will have a name that contains the search term or is an exact match.
+        - mac (string): Optional parameter to filter RF profiles by device MAC address. All returned devices will have a MAC address that contains the search term or is an exact match.
+        - serial (string): Optional parameter to filter RF profiles by device serial number. All returned devices will have a serial number that contains the search term or is an exact match.
+        - model (string): Optional parameter to filter RF profiles by device model. All returned devices will have a model that contains the search term or is an exact match.
+        - macs (array): Optional parameter to filter RF profiles by one or more device MAC addresses. All returned devices will have a MAC address that is an exact match.
+        - serials (array): Optional parameter to filter RF profiles by one or more device serial numbers. All returned devices will have a serial number that is an exact match.
+        - models (array): Optional parameter to filter RF profiles by one or more device models. All returned devices will have a model that is an exact match.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'rfProfiles', 'assignments', 'byDevice'],
+            'operation': 'getOrganizationWirelessRfProfilesAssignmentsByDevice'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/rfProfiles/assignments/byDevice'
+
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'productTypes', 'name', 'mac', 'serial', 'model', 'macs', 'serials', 'models', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', 'productTypes', 'macs', 'serials', 'models', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def getOrganizationWirelessSsidsStatusesByDevice(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **List status information of all BSSIDs in your organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-ssids-statuses-by-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Optional parameter to filter the result set by the included set of network IDs
+        - serials (array): A list of serial numbers. The returned devices will be filtered to only include these serials.
+        - bssids (array): A list of BSSIDs. The returned devices will be filtered to only include these BSSIDs.
+        - hideDisabled (boolean): If true, the returned devices will not include disabled SSIDs. (default: false)
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 500. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ssids', 'statuses', 'byDevice'],
+            'operation': 'getOrganizationWirelessSsidsStatusesByDevice'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/ssids/statuses/byDevice'
+
+        query_params = ['networkIds', 'serials', 'bssids', 'hideDisabled', 'perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', 'serials', 'bssids', ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
                 params[f'{k.strip()}[]'] = kwargs[f'{k}']
