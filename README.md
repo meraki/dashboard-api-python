@@ -6,7 +6,7 @@ cloud-managed platform. Meraki generates the library based on dashboard API's Op
 the latest API releases, and provides the full source code for the library including the tools used to generate the
 library, if you are participating in the Early Access program or would like to contribute to the development of the
 library. Meraki welcomes constructive pull requests that maintain backwards compatibility with prior versions. The
-library requires Python 3.8+, receives support from the community, and you can install it
+library requires Python 3.10+, receives support from the community, and you can install it
 via [PyPI](https://pypi.org/project/meraki/):
 
     pip install --upgrade meraki
