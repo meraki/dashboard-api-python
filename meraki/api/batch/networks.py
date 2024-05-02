@@ -283,7 +283,7 @@ class ActionBatchNetworks(object):
         kwargs.update(locals())
 
         if 'product' in kwargs:
-            options = ['appliance', 'camera', 'cellularGateway', 'switch', 'switchCatalyst', 'wireless']
+            options = ['appliance', 'camera', 'cellularGateway', 'secureConnect', 'switch', 'switchCatalyst', 'wireless']
             assert kwargs['product'] in options, f'''"product" cannot be "{kwargs['product']}", & must be set to one of: {options}'''
 
         metadata = {

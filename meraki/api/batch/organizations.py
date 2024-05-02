@@ -1236,3 +1236,120 @@ class ActionBatchOrganizations(object):
 
 
 
+
+
+    def deleteOrganizationSplashAsset(self, organizationId: str, id: str):
+        """
+        **Delete a Splash Theme Asset**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-splash-asset
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'splash', 'assets'],
+            'operation': 'deleteOrganizationSplashAsset'
+        }
+        resource = f'/organizations/{organizationId}/splash/assets/{id}'
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+        
+
+
+
+
+
+    def createOrganizationSplashTheme(self, organizationId: str, **kwargs):
+        """
+        **Create a Splash Theme**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-splash-theme
+
+        - organizationId (string): Organization ID
+        - name (string): theme name
+        - baseTheme (string): base theme id 
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'splash', 'themes'],
+            'operation': 'createOrganizationSplashTheme'
+        }
+        resource = f'/organizations/{organizationId}/splash/themes'
+
+        body_params = ['name', 'baseTheme', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def deleteOrganizationSplashTheme(self, organizationId: str, id: str):
+        """
+        **Delete a Splash Theme**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-splash-theme
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'splash', 'themes'],
+            'operation': 'deleteOrganizationSplashTheme'
+        }
+        resource = f'/organizations/{organizationId}/splash/themes/{id}'
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+        
+
+
+
+
+
+    def createOrganizationSplashThemeAsset(self, organizationId: str, themeIdentifier: str, **kwargs):
+        """
+        **Create a Splash Theme Asset**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-splash-theme-asset
+
+        - organizationId (string): Organization ID
+        - themeIdentifier (string): Theme identifier
+        - name (string): File name. Will overwrite files with same name.
+        - content (string): a file containing the asset content
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'splash', 'themes', 'assets'],
+            'operation': 'createOrganizationSplashThemeAsset'
+        }
+        resource = f'/organizations/{organizationId}/splash/themes/{themeIdentifier}/assets'
+
+        body_params = ['name', 'content', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+

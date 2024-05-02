@@ -2021,7 +2021,11 @@ class Appliance(object):
         - cidr (string): CIDR of the pool of subnets. Applicable only for template network. Each network bound to the template will automatically pick a subnet from this pool to build its own VLAN.
         - mask (integer): Mask used for the subnet of all bound to the template networks. Applicable only for template network.
         - ipv6 (object): IPv6 configuration on the VLAN
+        - dhcpHandling (string): The appliance's handling of DHCP requests on this VLAN. One of: 'Run a DHCP server', 'Relay DHCP to another server' or 'Do not respond to DHCP requests'
+        - dhcpLeaseTime (string): The term of DHCP leases if the appliance is running a DHCP server on this VLAN. One of: '30 minutes', '1 hour', '4 hours', '12 hours', '1 day' or '1 week'
         - mandatoryDhcp (object): Mandatory DHCP will enforce that clients connecting to this VLAN must use the IP address assigned by the DHCP server. Clients who use a static IP address won't be able to associate. Only available on firmware versions 17.0 and above
+        - dhcpBootOptionsEnabled (boolean): Use DHCP boot options specified in other properties
+        - dhcpOptions (array): The list of DHCP options that will be included in DHCP responses. Each object in the list should have "code", "type", and "value" properties.
         """
 
         kwargs.update(locals())
@@ -2029,6 +2033,12 @@ class Appliance(object):
         if 'templateVlanType' in kwargs:
             options = ['same', 'unique']
             assert kwargs['templateVlanType'] in options, f'''"templateVlanType" cannot be "{kwargs['templateVlanType']}", & must be set to one of: {options}'''
+        if 'dhcpHandling' in kwargs:
+            options = ['Do not respond to DHCP requests', 'Relay DHCP to another server', 'Run a DHCP server']
+            assert kwargs['dhcpHandling'] in options, f'''"dhcpHandling" cannot be "{kwargs['dhcpHandling']}", & must be set to one of: {options}'''
+        if 'dhcpLeaseTime' in kwargs:
+            options = ['1 day', '1 hour', '1 week', '12 hours', '30 minutes', '4 hours']
+            assert kwargs['dhcpLeaseTime'] in options, f'''"dhcpLeaseTime" cannot be "{kwargs['dhcpLeaseTime']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['appliance', 'configure', 'vlans'],
@@ -2037,7 +2047,7 @@ class Appliance(object):
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/vlans'
 
-        body_params = ['id', 'name', 'subnet', 'applianceIp', 'groupPolicyId', 'templateVlanType', 'cidr', 'mask', 'ipv6', 'mandatoryDhcp', ]
+        body_params = ['id', 'name', 'subnet', 'applianceIp', 'groupPolicyId', 'templateVlanType', 'cidr', 'mask', 'ipv6', 'dhcpHandling', 'dhcpLeaseTime', 'mandatoryDhcp', 'dhcpBootOptionsEnabled', 'dhcpOptions', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)

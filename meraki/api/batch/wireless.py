@@ -104,6 +104,140 @@ class ActionBatchWireless(object):
 
 
 
+    def createNetworkWirelessAirMarshalRule(self, networkId: str, type: str, match: dict):
+        """
+        **Creates a new rule**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-wireless-air-marshal-rule
+
+        - networkId (string): Network ID
+        - type (string): Indicates if this rule will allow, block, or alert.
+        - match (object): Object describing the rule specification.
+        """
+
+        kwargs = locals()
+
+        if 'type' in kwargs:
+            options = ['alert', 'allow', 'block']
+            assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'airMarshal', 'rules'],
+            'operation': 'createNetworkWirelessAirMarshalRule'
+        }
+        resource = f'/networks/{networkId}/wireless/airMarshal/rules'
+
+        body_params = ['type', 'match', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def updateNetworkWirelessAirMarshalRule(self, networkId: str, ruleId: str, **kwargs):
+        """
+        **Update a rule**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-air-marshal-rule
+
+        - networkId (string): Network ID
+        - ruleId (string): Rule ID
+        - type (string): Indicates if this rule will allow, block, or alert.
+        - match (object): Object describing the rule specification.
+        """
+
+        kwargs.update(locals())
+
+        if 'type' in kwargs:
+            options = ['alert', 'allow', 'block']
+            assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'airMarshal', 'rules'],
+            'operation': 'updateNetworkWirelessAirMarshalRule'
+        }
+        resource = f'/networks/{networkId}/wireless/airMarshal/rules/{ruleId}'
+
+        body_params = ['type', 'match', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def deleteNetworkWirelessAirMarshalRule(self, networkId: str, ruleId: str):
+        """
+        **Delete an Air Marshal rule.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-wireless-air-marshal-rule
+
+        - networkId (string): Network ID
+        - ruleId (string): Rule ID
+        """
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'airMarshal', 'rules'],
+            'operation': 'deleteNetworkWirelessAirMarshalRule'
+        }
+        resource = f'/networks/{networkId}/wireless/airMarshal/rules/{ruleId}'
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+        
+
+
+
+
+
+    def updateNetworkWirelessAirMarshalSettings(self, networkId: str, defaultPolicy: str):
+        """
+        **Updates Air Marshal settings.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-air-marshal-settings
+
+        - networkId (string): Network ID
+        - defaultPolicy (string): Allows clients to access rogue networks. Blocked by default.
+        """
+
+        kwargs = locals()
+
+        if 'defaultPolicy' in kwargs:
+            options = ['allow', 'block']
+            assert kwargs['defaultPolicy'] in options, f'''"defaultPolicy" cannot be "{kwargs['defaultPolicy']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'airMarshal', 'settings'],
+            'operation': 'updateNetworkWirelessAirMarshalSettings'
+        }
+        resource = f'/networks/{networkId}/wireless/airMarshal/settings'
+
+        body_params = ['defaultPolicy', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
     def updateNetworkWirelessAlternateManagementInterface(self, networkId: str, **kwargs):
         """
         **Update alternate management interface and device static IP**
@@ -566,7 +700,7 @@ class ActionBatchWireless(object):
             options = ['access disabled', 'access enabled']
             assert kwargs['enterpriseAdminAccess'] in options, f'''"enterpriseAdminAccess" cannot be "{kwargs['enterpriseAdminAccess']}", & must be set to one of: {options}'''
         if 'encryptionMode' in kwargs:
-            options = ['wep', 'wpa']
+            options = ['open', 'wep', 'wpa', 'wpa-eap']
             assert kwargs['encryptionMode'] in options, f'''"encryptionMode" cannot be "{kwargs['encryptionMode']}", & must be set to one of: {options}'''
         if 'wpaEncryptionMode' in kwargs:
             options = ['WPA1 and WPA2', 'WPA1 only', 'WPA2 only', 'WPA3 192-bit Security', 'WPA3 Transition Mode', 'WPA3 only']

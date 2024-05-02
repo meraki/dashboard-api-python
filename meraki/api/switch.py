@@ -221,7 +221,6 @@ class Switch(object):
         - vlanId (integer): The VLAN this routed interface is on. VLAN must be between 1 and 4094.
         - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a routed interface. Required if this is the first IPv4 interface.
         - ospfSettings (object): The OSPF routing settings of the interface.
-        - ospfV3 (object): The OSPFv3 routing settings of the interface.
         - ipv6 (object): The IPv6 settings of the interface.
         """
 
@@ -238,7 +237,7 @@ class Switch(object):
         serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/switch/routing/interfaces'
 
-        body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ospfV3', 'ipv6', ]
+        body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ipv6', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -280,7 +279,6 @@ class Switch(object):
         - vlanId (integer): The VLAN this routed interface is on. VLAN must be between 1 and 4094.
         - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a routed interface. Required if this is the first IPv4 interface.
         - ospfSettings (object): The OSPF routing settings of the interface.
-        - ospfV3 (object): The OSPFv3 routing settings of the interface.
         - ipv6 (object): The IPv6 settings of the interface.
         """
 
@@ -298,7 +296,7 @@ class Switch(object):
         interfaceId = urllib.parse.quote(str(interfaceId), safe='')
         resource = f'/devices/{serial}/switch/routing/interfaces/{interfaceId}'
 
-        body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ospfV3', 'ipv6', ]
+        body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ipv6', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
