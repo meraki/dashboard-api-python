@@ -1030,6 +1030,325 @@ class Organizations(object):
         
 
 
+    def getOrganizationAssuranceAlerts(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Return all health alerts for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-alerts
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 4 - 300. Default is 30.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - sortOrder (string): Sorted order of entries. Order options are 'ascending' and 'descending'. Default is 'ascending'.
+        - networkId (string): Optional parameter to filter alerts by network ids.
+        - severity (string): Optional parameter to filter by severity type.
+        - types (array): Optional parameter to filter by alert type.
+        - tsStart (string): Optional parameter to filter by starting timestamp
+        - tsEnd (string): Optional parameter to filter by end timestamp
+        - category (string): Optional parameter to filter by category.
+        - sortBy (string): Optional parameter to set column to sort by.
+        - serials (array): Optional parameter to filter by primary device serial
+        - deviceTypes (array): Optional parameter to filter by device types
+        - deviceTags (array): Optional parameter to filter by device tags
+        - active (boolean): Optional parameter to filter by active alerts defaults to true
+        - dismissed (boolean): Optional parameter to filter by dismissed alerts defaults to false
+        - resolved (boolean): Optional parameter to filter by resolved alerts defaults to false
+        - suppressAlertsForOfflineNodes (boolean): When set to true the api will only return connectivity alerts for a given device if that device is in an offline state. This only applies to devices. This is ignored when resolved is true. Example:  If a Switch has a VLan Mismatch and is Unreachable. only the Unreachable alert will be returned. Defaults to false.
+        """
+
+        kwargs.update(locals())
+
+        if 'sortOrder' in kwargs:
+            options = ['ascending', 'descending']
+            assert kwargs['sortOrder'] in options, f'''"sortOrder" cannot be "{kwargs['sortOrder']}", & must be set to one of: {options}'''
+        if 'category' in kwargs:
+            options = ['configuration', 'connectivity', 'device_health', 'insights']
+            assert kwargs['category'] in options, f'''"category" cannot be "{kwargs['category']}", & must be set to one of: {options}'''
+        if 'sortBy' in kwargs:
+            options = ['category', 'dismissedAt', 'resolvedAt', 'severity', 'startedAt']
+            assert kwargs['sortBy'] in options, f'''"sortBy" cannot be "{kwargs['sortBy']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'alerts'],
+            'operation': 'getOrganizationAssuranceAlerts'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/assurance/alerts'
+
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'sortOrder', 'networkId', 'severity', 'types', 'tsStart', 'tsEnd', 'category', 'sortBy', 'serials', 'deviceTypes', 'deviceTags', 'active', 'dismissed', 'resolved', 'suppressAlertsForOfflineNodes', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['types', 'serials', 'deviceTypes', 'deviceTags', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def dismissOrganizationAssuranceAlerts(self, organizationId: str, alertIds: list):
+        """
+        **Dismiss health alerts**
+        https://developer.cisco.com/meraki/api-v1/#!dismiss-organization-assurance-alerts
+
+        - organizationId (string): Organization ID
+        - alertIds (array): Parameter to dismiss alerts by ID
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'alerts'],
+            'operation': 'dismissOrganizationAssuranceAlerts'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/assurance/alerts/dismiss'
+
+        body_params = ['alertIds', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getOrganizationAssuranceAlertsOverview(self, organizationId: str, **kwargs):
+        """
+        **Return overview of active health alerts for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-alerts-overview
+
+        - organizationId (string): Organization ID
+        - networkId (string): Optional parameter to filter alerts overview by network ids.
+        - severity (string): Optional parameter to filter alerts overview by severity type.
+        - types (array): Optional parameter to filter by alert type.
+        - tsStart (string): Optional parameter to filter by starting timestamp
+        - tsEnd (string): Optional parameter to filter by end timestamp
+        - serials (array): Optional parameter to filter by primary device serial
+        - deviceTypes (array): Optional parameter to filter by device types
+        - deviceTags (array): Optional parameter to filter by device tags
+        - active (boolean): Optional parameter to filter by active alerts defaults to true
+        - dismissed (boolean): Optional parameter to filter by dismissed alerts defaults to false
+        - resolved (boolean): Optional parameter to filter by resolved alerts defaults to false
+        - suppressAlertsForOfflineNodes (boolean): When set to true the api will only return connectivity alerts for a given device if that device is in an offline state. This only applies to devices. This is ignored when resolved is true. Example:  If a Switch has a VLan Mismatch and is Unreachable. only the Unreachable alert will be returned. Defaults to false.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'alerts', 'overview'],
+            'operation': 'getOrganizationAssuranceAlertsOverview'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/assurance/alerts/overview'
+
+        query_params = ['networkId', 'severity', 'types', 'tsStart', 'tsEnd', 'serials', 'deviceTypes', 'deviceTags', 'active', 'dismissed', 'resolved', 'suppressAlertsForOfflineNodes', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['types', 'serials', 'deviceTypes', 'deviceTags', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get(metadata, resource, params)
+        
+
+
+    def getOrganizationAssuranceAlertsOverviewByNetwork(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Return a Summary of Alerts grouped by network and severity**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-alerts-overview-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - sortOrder (string): Sorted order of entries. Order options are 'ascending' and 'descending'. Default is 'ascending'.
+        - networkId (string): Optional parameter to filter alerts overview by network id.
+        - severity (string): Optional parameter to filter alerts overview by severity type.
+        - types (array): Optional parameter to filter by alert type.
+        - tsStart (string): Optional parameter to filter by starting timestamp
+        - tsEnd (string): Optional parameter to filter by end timestamp
+        - serials (array): Optional parameter to filter by primary device serial
+        - deviceTypes (array): Optional parameter to filter by device types
+        - deviceTags (array): Optional parameter to filter by device tags
+        - active (boolean): Optional parameter to filter by active alerts defaults to true
+        - dismissed (boolean): Optional parameter to filter by dismissed alerts defaults to false
+        - resolved (boolean): Optional parameter to filter by resolved alerts defaults to false
+        - suppressAlertsForOfflineNodes (boolean): When set to true the api will only return connectivity alerts for a given device if that device is in an offline state. This only applies to devices. This is ignored when resolved is true. Example:  If a Switch has a VLan Mismatch and is Unreachable. only the Unreachable alert will be returned. Defaults to false.
+        """
+
+        kwargs.update(locals())
+
+        if 'sortOrder' in kwargs:
+            options = ['ascending', 'descending']
+            assert kwargs['sortOrder'] in options, f'''"sortOrder" cannot be "{kwargs['sortOrder']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'alerts', 'overview', 'byNetwork'],
+            'operation': 'getOrganizationAssuranceAlertsOverviewByNetwork'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/assurance/alerts/overview/byNetwork'
+
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'sortOrder', 'networkId', 'severity', 'types', 'tsStart', 'tsEnd', 'serials', 'deviceTypes', 'deviceTags', 'active', 'dismissed', 'resolved', 'suppressAlertsForOfflineNodes', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['types', 'serials', 'deviceTypes', 'deviceTags', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def getOrganizationAssuranceAlertsOverviewByType(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Return a Summary of Alerts grouped by type and severity**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-alerts-overview-by-type
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - sortOrder (string): Sorted order of entries. Order options are 'ascending' and 'descending'. Default is 'ascending'.
+        - networkId (string): Optional parameter to filter alerts overview by network ids.
+        - severity (string): Optional parameter to filter alerts overview by severity type.
+        - types (array): Optional parameter to filter by alert type.
+        - tsStart (string): Optional parameter to filter by starting timestamp
+        - tsEnd (string): Optional parameter to filter by end timestamp
+        - sortBy (string): Optional parameter to set column to sort by.
+        - serials (array): Optional parameter to filter by primary device serial
+        - deviceTypes (array): Optional parameter to filter by device types
+        - deviceTags (array): Optional parameter to filter by device tags
+        - active (boolean): Optional parameter to filter by active alerts defaults to true
+        - dismissed (boolean): Optional parameter to filter by dismissed alerts defaults to false
+        - resolved (boolean): Optional parameter to filter by resolved alerts defaults to false
+        - suppressAlertsForOfflineNodes (boolean): When set to true the api will only return connectivity alerts for a given device if that device is in an offline state. This only applies to devices. This is ignored when resolved is true. Example:  If a Switch has a VLan Mismatch and is Unreachable. only the Unreachable alert will be returned. Defaults to false.
+        """
+
+        kwargs.update(locals())
+
+        if 'sortOrder' in kwargs:
+            options = ['ascending', 'descending']
+            assert kwargs['sortOrder'] in options, f'''"sortOrder" cannot be "{kwargs['sortOrder']}", & must be set to one of: {options}'''
+        if 'sortBy' in kwargs:
+            options = ['count', 'lastAlertedAt', 'networkCount', 'severity', 'startedAt']
+            assert kwargs['sortBy'] in options, f'''"sortBy" cannot be "{kwargs['sortBy']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'alerts', 'overview', 'byType'],
+            'operation': 'getOrganizationAssuranceAlertsOverviewByType'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/assurance/alerts/overview/byType'
+
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'sortOrder', 'networkId', 'severity', 'types', 'tsStart', 'tsEnd', 'sortBy', 'serials', 'deviceTypes', 'deviceTags', 'active', 'dismissed', 'resolved', 'suppressAlertsForOfflineNodes', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['types', 'serials', 'deviceTypes', 'deviceTags', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def getOrganizationAssuranceAlertsOverviewHistorical(self, organizationId: str, segmentDuration: int, tsStart: str, **kwargs):
+        """
+        **Returns historical health alert overviews**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-alerts-overview-historical
+
+        - organizationId (string): Organization ID
+        - segmentDuration (integer): Amount of time in seconds for each segment in the returned dataset
+        - tsStart (string): Parameter to define starting timestamp of historical totals
+        - networkId (string): Optional parameter to filter alerts overview by network ids.
+        - severity (string): Optional parameter to filter alerts overview by severity type.
+        - types (array): Optional parameter to filter by alert type.
+        - tsEnd (string): Optional parameter to filter by end timestamp defaults to the current time
+        - serials (array): Optional parameter to filter by primary device serial
+        - deviceTypes (array): Optional parameter to filter by device types
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'alerts', 'overview', 'historical'],
+            'operation': 'getOrganizationAssuranceAlertsOverviewHistorical'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/assurance/alerts/overview/historical'
+
+        query_params = ['segmentDuration', 'networkId', 'severity', 'types', 'tsStart', 'tsEnd', 'serials', 'deviceTypes', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['types', 'serials', 'deviceTypes', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get(metadata, resource, params)
+        
+
+
+    def restoreOrganizationAssuranceAlerts(self, organizationId: str, alertIds: list):
+        """
+        **Restore health alerts from dismissed**
+        https://developer.cisco.com/meraki/api-v1/#!restore-organization-assurance-alerts
+
+        - organizationId (string): Organization ID
+        - alertIds (array): Parameter to restore alerts by ID
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'alerts'],
+            'operation': 'restoreOrganizationAssuranceAlerts'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/assurance/alerts/restore'
+
+        body_params = ['alertIds', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getOrganizationAssuranceAlert(self, organizationId: str, id: str):
+        """
+        **Return a singular Health Alert by its id**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-alert
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'alerts'],
+            'operation': 'getOrganizationAssuranceAlert'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        id = urllib.parse.quote(str(id), safe='')
+        resource = f'/organizations/{organizationId}/assurance/alerts/{id}'
+
+        return self._session.get(metadata, resource)
+        
+
+
     def getOrganizationBrandingPolicies(self, organizationId: str):
         """
         **List the branding policies of an organization**
@@ -1503,7 +1822,7 @@ class Organizations(object):
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - configurationUpdatedAfter (string): Filter results by whether or not the device's configuration has been updated after the given timestamp
         - networkIds (array): Optional parameter to filter devices by network.
-        - productTypes (array): Optional parameter to filter devices by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, and sensor.
+        - productTypes (array): Optional parameter to filter devices by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, and secureConnect.
         - tags (array): Optional parameter to filter devices by tags.
         - tagsFilterType (string): Optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return networks which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
         - name (string): Optional parameter to filter devices by name. All returned devices will have a name that contains the search term or is an exact match.
@@ -1629,6 +1948,39 @@ class Organizations(object):
         
 
 
+    def getOrganizationDevicesOverviewByModel(self, organizationId: str, **kwargs):
+        """
+        **Lists the count for each device model**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-overview-by-model
+
+        - organizationId (string): Organization ID
+        - models (array): Optional parameter to filter devices by one or more models. All returned devices will have a model that is an exact match.
+        - networkIds (array): Optional parameter to filter devices by networkId.
+        - productTypes (array): Optional parameter to filter device by device product types. This filter uses multiple exact matches.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'devices', 'overview', 'byModel'],
+            'operation': 'getOrganizationDevicesOverviewByModel'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/devices/overview/byModel'
+
+        query_params = ['models', 'networkIds', 'productTypes', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['models', 'networkIds', 'productTypes', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get(metadata, resource, params)
+        
+
+
     def getOrganizationDevicesPowerModulesStatusesByDevice(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the most recent status information for power modules in rackmount MX and MS devices that support them**
@@ -1735,7 +2087,7 @@ class Organizations(object):
         - networkIds (array): Optional parameter to filter devices by network ids.
         - serials (array): Optional parameter to filter devices by serials.
         - statuses (array): Optional parameter to filter devices by statuses. Valid statuses are ["online", "alerting", "offline", "dormant"].
-        - productTypes (array): An optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, and sensor.
+        - productTypes (array): An optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, and secureConnect.
         - models (array): Optional parameter to filter devices by models.
         - tags (array): An optional parameter to filter devices by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below).
         - tagsFilterType (string): An optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return devices which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
@@ -1773,7 +2125,7 @@ class Organizations(object):
         https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-statuses-overview
 
         - organizationId (string): Organization ID
-        - productTypes (array): An optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, and sensor.
+        - productTypes (array): An optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, and secureConnect.
         - networkIds (array): An optional parameter to filter device statuses by network.
         """
 
@@ -2133,7 +2485,7 @@ class Organizations(object):
         - orderNumbers (array): Search for devices in inventory based on order numbers.
         - tags (array): Filter devices by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below).
         - tagsFilterType (string): To use with 'tags' parameter, to filter devices which contain ANY or ALL given tags. Accepted values are 'withAnyTags' or 'withAllTags', default is 'withAnyTags'.
-        - productTypes (array): Filter devices by product type. Accepted values are appliance, camera, cellularGateway, sensor, switch, systemsManager, and wireless.
+        - productTypes (array): Filter devices by product type. Accepted values are appliance, camera, cellularGateway, secureConnect, sensor, switch, systemsManager, and wireless.
         """
 
         kwargs.update(locals())
@@ -3396,6 +3748,142 @@ class Organizations(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
+        
+
+
+    def getOrganizationSplashAsset(self, organizationId: str, id: str):
+        """
+        **Get a Splash Theme Asset**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-splash-asset
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'splash', 'assets'],
+            'operation': 'getOrganizationSplashAsset'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        id = urllib.parse.quote(str(id), safe='')
+        resource = f'/organizations/{organizationId}/splash/assets/{id}'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def deleteOrganizationSplashAsset(self, organizationId: str, id: str):
+        """
+        **Delete a Splash Theme Asset**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-splash-asset
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'splash', 'assets'],
+            'operation': 'deleteOrganizationSplashAsset'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        id = urllib.parse.quote(str(id), safe='')
+        resource = f'/organizations/{organizationId}/splash/assets/{id}'
+
+        return self._session.delete(metadata, resource)
+        
+
+
+    def getOrganizationSplashThemes(self, organizationId: str):
+        """
+        **List Splash Themes**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-splash-themes
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'splash', 'themes'],
+            'operation': 'getOrganizationSplashThemes'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/splash/themes'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def createOrganizationSplashTheme(self, organizationId: str, **kwargs):
+        """
+        **Create a Splash Theme**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-splash-theme
+
+        - organizationId (string): Organization ID
+        - name (string): theme name
+        - baseTheme (string): base theme id 
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'splash', 'themes'],
+            'operation': 'createOrganizationSplashTheme'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/splash/themes'
+
+        body_params = ['name', 'baseTheme', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def deleteOrganizationSplashTheme(self, organizationId: str, id: str):
+        """
+        **Delete a Splash Theme**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-splash-theme
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'splash', 'themes'],
+            'operation': 'deleteOrganizationSplashTheme'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        id = urllib.parse.quote(str(id), safe='')
+        resource = f'/organizations/{organizationId}/splash/themes/{id}'
+
+        return self._session.delete(metadata, resource)
+        
+
+
+    def createOrganizationSplashThemeAsset(self, organizationId: str, themeIdentifier: str, **kwargs):
+        """
+        **Create a Splash Theme Asset**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-splash-theme-asset
+
+        - organizationId (string): Organization ID
+        - themeIdentifier (string): Theme identifier
+        - name (string): File name. Will overwrite files with same name.
+        - content (string): a file containing the asset content
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'splash', 'themes', 'assets'],
+            'operation': 'createOrganizationSplashThemeAsset'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        themeIdentifier = urllib.parse.quote(str(themeIdentifier), safe='')
+        resource = f'/organizations/{organizationId}/splash/themes/{themeIdentifier}/assets'
+
+        body_params = ['name', 'content', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
         
 
 
