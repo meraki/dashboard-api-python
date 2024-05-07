@@ -206,7 +206,7 @@ class AsyncDevices:
 
     def createDeviceLiveToolsCableTest(self, serial: str, ports: list, **kwargs):
         """
-        **Enqueue a job to perform a cable test for the device on the specified ports.**
+        **Enqueue a job to perform a cable test for the device on the specified ports**
         https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-cable-test
 
         - serial (string): Serial

@@ -241,6 +241,118 @@ class AsyncWireless:
         
 
 
+    def createNetworkWirelessAirMarshalRule(self, networkId: str, type: str, match: dict):
+        """
+        **Creates a new rule**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-wireless-air-marshal-rule
+
+        - networkId (string): Network ID
+        - type (string): Indicates if this rule will allow, block, or alert.
+        - match (object): Object describing the rule specification.
+        """
+
+        kwargs = locals()
+
+        if 'type' in kwargs:
+            options = ['alert', 'allow', 'block']
+            assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'airMarshal', 'rules'],
+            'operation': 'createNetworkWirelessAirMarshalRule'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/wireless/airMarshal/rules'
+
+        body_params = ['type', 'match', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def updateNetworkWirelessAirMarshalRule(self, networkId: str, ruleId: str, **kwargs):
+        """
+        **Update a rule**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-air-marshal-rule
+
+        - networkId (string): Network ID
+        - ruleId (string): Rule ID
+        - type (string): Indicates if this rule will allow, block, or alert.
+        - match (object): Object describing the rule specification.
+        """
+
+        kwargs.update(locals())
+
+        if 'type' in kwargs:
+            options = ['alert', 'allow', 'block']
+            assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'airMarshal', 'rules'],
+            'operation': 'updateNetworkWirelessAirMarshalRule'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        ruleId = urllib.parse.quote(str(ruleId), safe='')
+        resource = f'/networks/{networkId}/wireless/airMarshal/rules/{ruleId}'
+
+        body_params = ['type', 'match', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def deleteNetworkWirelessAirMarshalRule(self, networkId: str, ruleId: str):
+        """
+        **Delete an Air Marshal rule.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-wireless-air-marshal-rule
+
+        - networkId (string): Network ID
+        - ruleId (string): Rule ID
+        """
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'airMarshal', 'rules'],
+            'operation': 'deleteNetworkWirelessAirMarshalRule'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        ruleId = urllib.parse.quote(str(ruleId), safe='')
+        resource = f'/networks/{networkId}/wireless/airMarshal/rules/{ruleId}'
+
+        return self._session.delete(metadata, resource)
+        
+
+
+    def updateNetworkWirelessAirMarshalSettings(self, networkId: str, defaultPolicy: str):
+        """
+        **Updates Air Marshal settings.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-air-marshal-settings
+
+        - networkId (string): Network ID
+        - defaultPolicy (string): Allows clients to access rogue networks. Blocked by default.
+        """
+
+        kwargs = locals()
+
+        if 'defaultPolicy' in kwargs:
+            options = ['allow', 'block']
+            assert kwargs['defaultPolicy'] in options, f'''"defaultPolicy" cannot be "{kwargs['defaultPolicy']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'airMarshal', 'settings'],
+            'operation': 'updateNetworkWirelessAirMarshalSettings'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/wireless/airMarshal/settings'
+
+        body_params = ['defaultPolicy', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
     def getNetworkWirelessAlternateManagementInterface(self, networkId: str):
         """
         **Return alternate management interface and devices with IP assigned**
@@ -1506,7 +1618,7 @@ class AsyncWireless:
             options = ['access disabled', 'access enabled']
             assert kwargs['enterpriseAdminAccess'] in options, f'''"enterpriseAdminAccess" cannot be "{kwargs['enterpriseAdminAccess']}", & must be set to one of: {options}'''
         if 'encryptionMode' in kwargs:
-            options = ['wep', 'wpa']
+            options = ['open', 'wep', 'wpa', 'wpa-eap']
             assert kwargs['encryptionMode'] in options, f'''"encryptionMode" cannot be "{kwargs['encryptionMode']}", & must be set to one of: {options}'''
         if 'wpaEncryptionMode' in kwargs:
             options = ['WPA1 and WPA2', 'WPA1 only', 'WPA2 only', 'WPA3 192-bit Security', 'WPA3 Transition Mode', 'WPA3 only']
@@ -1786,6 +1898,27 @@ class AsyncWireless:
         
 
 
+    def getNetworkWirelessSsidHotspot20(self, networkId: str, number: str):
+        """
+        **Return the Hotspot 2.0 settings for an SSID**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssid-hotspot-2-0
+
+        - networkId (string): Network ID
+        - number (string): Number
+        """
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ssids', 'hotspot20'],
+            'operation': 'getNetworkWirelessSsidHotspot20'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        number = urllib.parse.quote(str(number), safe='')
+        resource = f'/networks/{networkId}/wireless/ssids/{number}/hotspot20'
+
+        return self._session.get(metadata, resource)
+        
+
+
     def updateNetworkWirelessSsidHotspot20(self, networkId: str, number: str, **kwargs):
         """
         **Update the Hotspot 2.0 settings of an SSID**
@@ -1821,27 +1954,6 @@ class AsyncWireless:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
-
-    def getNetworkWirelessSsidHotspot20(self, networkId: str, number: str):
-        """
-        **Return the Hotspot 2.0 settings for an SSID**
-        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-ssid-hotspot-2-0
-
-        - networkId (string): Network ID
-        - number (string): Number
-        """
-
-        metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'hotspot20'],
-            'operation': 'getNetworkWirelessSsidHotspot20'
-        }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        number = urllib.parse.quote(str(number), safe='')
-        resource = f'/networks/{networkId}/wireless/ssids/{number}/hotspot20'
-
-        return self._session.get(metadata, resource)
         
 
 
@@ -2232,6 +2344,78 @@ class AsyncWireless:
         
 
 
+    def getOrganizationWirelessAirMarshalRules(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Returns the current Air Marshal rules for this organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-air-marshal-rules
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): (optional) The set of network IDs to include.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'airMarshal', 'rules'],
+            'operation': 'getOrganizationWirelessAirMarshalRules'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/airMarshal/rules'
+
+        query_params = ['networkIds', 'perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def getOrganizationWirelessAirMarshalSettingsByNetwork(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Returns the current Air Marshal settings for this network**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-air-marshal-settings-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): The network IDs to include in the result set.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'airMarshal', 'settings', 'byNetwork'],
+            'operation': 'getOrganizationWirelessAirMarshalSettingsByNetwork'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/airMarshal/settings/byNetwork'
+
+        query_params = ['networkIds', 'perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
     def getOrganizationWirelessDevicesChannelUtilizationByDevice(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **Get average channel utilization for all bands in a network, split by AP**
@@ -2570,7 +2754,7 @@ class AsyncWireless:
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - networkIds (array): Optional parameter to filter devices by network.
-        - productTypes (array): Optional parameter to filter devices by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, and sensor.
+        - productTypes (array): Optional parameter to filter devices by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, and secureConnect.
         - name (string): Optional parameter to filter RF profiles by device name. All returned devices will have a name that contains the search term or is an exact match.
         - mac (string): Optional parameter to filter RF profiles by device MAC address. All returned devices will have a MAC address that contains the search term or is an exact match.
         - serial (string): Optional parameter to filter RF profiles by device serial number. All returned devices will have a serial number that contains the search term or is an exact match.
@@ -2613,7 +2797,7 @@ class AsyncWireless:
         - networkIds (array): Optional parameter to filter the result set by the included set of network IDs
         - serials (array): A list of serial numbers. The returned devices will be filtered to only include these serials.
         - bssids (array): A list of BSSIDs. The returned devices will be filtered to only include these BSSIDs.
-        - hideDisabled (boolean): If true, the returned devices will not include disabled SSIDs. (default: false)
+        - hideDisabled (boolean): If true, the returned devices will not include disabled SSIDs. (default: true)
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 500. Default is 100.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
