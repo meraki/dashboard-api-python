@@ -48,7 +48,7 @@ class ActionBatchDevices(object):
 
     def createDeviceLiveToolsThroughputTest(self, serial: str, **kwargs):
         """
-        **Enqueue a job to test a device throughput, the test will run for 10 secs to test throughput**
+        **Enqueue a job to test a device throughput, the test will run for 10 secs to test throughput. This endpoint has a rate limit of one request every five seconds per device.**
         https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-throughput-test
 
         - serial (string): Serial

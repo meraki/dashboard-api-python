@@ -114,6 +114,51 @@ class AsyncWireless:
         
 
 
+    def getDeviceWirelessElectronicShelfLabel(self, serial: str):
+        """
+        **Return the ESL settings of a device**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-wireless-electronic-shelf-label
+
+        - serial (string): Serial
+        """
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'electronicShelfLabel'],
+            'operation': 'getDeviceWirelessElectronicShelfLabel'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        resource = f'/devices/{serial}/wireless/electronicShelfLabel'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def updateDeviceWirelessElectronicShelfLabel(self, serial: str, **kwargs):
+        """
+        **Update the ESL settings of a device**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-wireless-electronic-shelf-label
+
+        - serial (string): Serial
+        - channel (string): Desired ESL channel for the device, or 'Auto' (case insensitive) to use the recommended channel
+        - enabled (boolean): Turn ESL features on and off for this device
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'electronicShelfLabel'],
+            'operation': 'updateDeviceWirelessElectronicShelfLabel'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        resource = f'/devices/{serial}/wireless/electronicShelfLabel'
+
+        body_params = ['channel', 'enabled', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
     def getDeviceWirelessLatencyStats(self, serial: str, **kwargs):
         """
         **Aggregated latency info for a given AP on this network**
@@ -945,6 +990,70 @@ class AsyncWireless:
         
 
 
+    def getNetworkWirelessElectronicShelfLabel(self, networkId: str):
+        """
+        **Return the ESL settings of a wireless network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-electronic-shelf-label
+
+        - networkId (string): Network ID
+        """
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'electronicShelfLabel'],
+            'operation': 'getNetworkWirelessElectronicShelfLabel'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/wireless/electronicShelfLabel'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def updateNetworkWirelessElectronicShelfLabel(self, networkId: str, **kwargs):
+        """
+        **Update the ESL settings of a wireless network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-electronic-shelf-label
+
+        - networkId (string): Network ID
+        - hostname (string): Desired ESL hostname of the network
+        - enabled (boolean): Turn ESL features on and off for this network
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'electronicShelfLabel'],
+            'operation': 'updateNetworkWirelessElectronicShelfLabel'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/wireless/electronicShelfLabel'
+
+        body_params = ['hostname', 'enabled', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def getNetworkWirelessElectronicShelfLabelConfiguredDevices(self, networkId: str):
+        """
+        **Get a list of all ESL eligible devices of a network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-electronic-shelf-label-configured-devices
+
+        - networkId (string): Network ID
+        """
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'electronicShelfLabel', 'configuredDevices'],
+            'operation': 'getNetworkWirelessElectronicShelfLabelConfiguredDevices'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/wireless/electronicShelfLabel/configuredDevices'
+
+        return self._session.get(metadata, resource)
+        
+
+
     def getNetworkWirelessEthernetPortsProfiles(self, networkId: str):
         """
         **List the AP port profiles for this network**
@@ -1550,14 +1659,14 @@ class AsyncWireless:
         - number (string): Number
         - name (string): The name of the SSID
         - enabled (boolean): Whether or not the SSID is enabled
-        - authMode (string): The association control method for the SSID ('open', 'open-enhanced', 'psk', 'open-with-radius', 'open-with-nac', '8021x-meraki', '8021x-nac', '8021x-radius', '8021x-google', '8021x-localradius', 'ipsk-with-radius', 'ipsk-without-radius' or 'ipsk-with-nac')
+        - authMode (string): The association control method for the SSID ('open', 'open-enhanced', 'psk', 'open-with-radius', 'open-with-nac', '8021x-meraki', '8021x-nac', '8021x-radius', '8021x-google', '8021x-entra', '8021x-localradius', 'ipsk-with-radius', 'ipsk-without-radius' or 'ipsk-with-nac')
         - enterpriseAdminAccess (string): Whether or not an SSID is accessible by 'enterprise' administrators ('access disabled' or 'access enabled')
         - encryptionMode (string): The psk encryption mode for the SSID ('wep' or 'wpa'). This param is only valid if the authMode is 'psk'
         - psk (string): The passkey for the SSID. This param is only valid if the authMode is 'psk'
         - wpaEncryptionMode (string): The types of WPA encryption. ('WPA1 only', 'WPA1 and WPA2', 'WPA2 only', 'WPA3 Transition Mode', 'WPA3 only' or 'WPA3 192-bit Security')
         - dot11w (object): The current setting for Protected Management Frames (802.11w).
         - dot11r (object): The current setting for 802.11r
-        - splashPage (string): The type of splash page for the SSID ('None', 'Click-through splash page', 'Billing', 'Password-protected with Meraki RADIUS', 'Password-protected with custom RADIUS', 'Password-protected with Active Directory', 'Password-protected with LDAP', 'SMS authentication', 'Systems Manager Sentry', 'Facebook Wi-Fi', 'Google OAuth', 'Sponsored guest', 'Cisco ISE' or 'Google Apps domain'). This attribute is not supported for template children.
+        - splashPage (string): The type of splash page for the SSID ('None', 'Click-through splash page', 'Billing', 'Password-protected with Meraki RADIUS', 'Password-protected with custom RADIUS', 'Password-protected with Active Directory', 'Password-protected with LDAP', 'SMS authentication', 'Systems Manager Sentry', 'Facebook Wi-Fi', 'Google OAuth', 'Microsoft Entra ID', 'Sponsored guest', 'Cisco ISE' or 'Google Apps domain'). This attribute is not supported for template children.
         - splashGuestSponsorDomains (array): Array of valid sponsor email domains for sponsored guest splash type.
         - oauth (object): The OAuth settings of this SSID. Only valid if splashPage is 'Google OAuth'.
         - localRadius (object): The current setting for Local Authentication, a built-in RADIUS server on the access point. Only valid if authMode is '8021x-localradius'.
@@ -1612,7 +1721,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         if 'authMode' in kwargs:
-            options = ['8021x-google', '8021x-localradius', '8021x-meraki', '8021x-nac', '8021x-radius', 'ipsk-with-nac', 'ipsk-with-radius', 'ipsk-without-radius', 'open', 'open-enhanced', 'open-with-nac', 'open-with-radius', 'psk']
+            options = ['8021x-entra', '8021x-google', '8021x-localradius', '8021x-meraki', '8021x-nac', '8021x-radius', 'ipsk-with-nac', 'ipsk-with-radius', 'ipsk-without-radius', 'open', 'open-enhanced', 'open-with-nac', 'open-with-radius', 'psk']
             assert kwargs['authMode'] in options, f'''"authMode" cannot be "{kwargs['authMode']}", & must be set to one of: {options}'''
         if 'enterpriseAdminAccess' in kwargs:
             options = ['access disabled', 'access enabled']
@@ -1624,7 +1733,7 @@ class AsyncWireless:
             options = ['WPA1 and WPA2', 'WPA1 only', 'WPA2 only', 'WPA3 192-bit Security', 'WPA3 Transition Mode', 'WPA3 only']
             assert kwargs['wpaEncryptionMode'] in options, f'''"wpaEncryptionMode" cannot be "{kwargs['wpaEncryptionMode']}", & must be set to one of: {options}'''
         if 'splashPage' in kwargs:
-            options = ['Billing', 'Cisco ISE', 'Click-through splash page', 'Facebook Wi-Fi', 'Google Apps domain', 'Google OAuth', 'None', 'Password-protected with Active Directory', 'Password-protected with LDAP', 'Password-protected with Meraki RADIUS', 'Password-protected with custom RADIUS', 'SMS authentication', 'Sponsored guest', 'Systems Manager Sentry']
+            options = ['Billing', 'Cisco ISE', 'Click-through splash page', 'Facebook Wi-Fi', 'Google Apps domain', 'Google OAuth', 'Microsoft Entra ID', 'None', 'Password-protected with Active Directory', 'Password-protected with LDAP', 'Password-protected with Meraki RADIUS', 'Password-protected with custom RADIUS', 'SMS authentication', 'Sponsored guest', 'Systems Manager Sentry']
             assert kwargs['splashPage'] in options, f'''"splashPage" cannot be "{kwargs['splashPage']}", & must be set to one of: {options}'''
         if 'radiusFailoverPolicy' in kwargs:
             options = ['Allow access', 'Deny access']
@@ -2184,6 +2293,9 @@ class AsyncWireless:
 
         kwargs.update(locals())
 
+        if 'splashTimeout' in kwargs:
+            options = [30, 60, 120, 240, 480, 720, 1080, 1440, 2880, 5760, 7200, 10080, 20160, 43200, 86400, 129600]
+            assert kwargs['splashTimeout'] in options, f'''"splashTimeout" cannot be "{kwargs['splashTimeout']}", & must be set to one of: {options}'''
         if 'controllerDisconnectionBehavior' in kwargs:
             options = ['default', 'open', 'restricted']
             assert kwargs['controllerDisconnectionBehavior'] in options, f'''"controllerDisconnectionBehavior" cannot be "{kwargs['controllerDisconnectionBehavior']}", & must be set to one of: {options}'''
@@ -2754,7 +2866,7 @@ class AsyncWireless:
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - networkIds (array): Optional parameter to filter devices by network.
-        - productTypes (array): Optional parameter to filter devices by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, and secureConnect.
+        - productTypes (array): Optional parameter to filter devices by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, wirelessController, and secureConnect.
         - name (string): Optional parameter to filter RF profiles by device name. All returned devices will have a name that contains the search term or is an exact match.
         - mac (string): Optional parameter to filter RF profiles by device MAC address. All returned devices will have a MAC address that contains the search term or is an exact match.
         - serial (string): Optional parameter to filter RF profiles by device serial number. All returned devices will have a serial number that contains the search term or is an exact match.
@@ -2806,7 +2918,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'statuses', 'byDevice'],
+            'tags': ['wireless', 'monitor', 'ssids', 'statuses', 'byDevice'],
             'operation': 'getOrganizationWirelessSsidsStatusesByDevice'
         }
         organizationId = urllib.parse.quote(str(organizationId), safe='')

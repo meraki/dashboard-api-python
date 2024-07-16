@@ -138,16 +138,17 @@ class ActionBatchNetworks(object):
 
 
 
-    def claimNetworkDevices(self, networkId: str, serials: list):
+    def claimNetworkDevices(self, networkId: str, serials: list, **kwargs):
         """
         **Claim devices into a network. (Note: for recently claimed devices, it may take a few minutes for API requests against that device to succeed). This operation can be used up to ten times within a single five minute window.**
         https://developer.cisco.com/meraki/api-v1/#!claim-network-devices
 
         - networkId (string): Network ID
         - serials (array): A list of serials of devices to claim
+        - addAtomically (boolean): Whether to claim devices atomically. If true, all devices will be claimed or none will be claimed. Default is true.
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         metadata = {
             'tags': ['networks', 'configure', 'devices'],
@@ -283,7 +284,7 @@ class ActionBatchNetworks(object):
         kwargs.update(locals())
 
         if 'product' in kwargs:
-            options = ['appliance', 'camera', 'cellularGateway', 'secureConnect', 'switch', 'switchCatalyst', 'wireless']
+            options = ['appliance', 'camera', 'cellularGateway', 'secureConnect', 'switch', 'switchCatalyst', 'wireless', 'wirelessController']
             assert kwargs['product'] in options, f'''"product" cannot be "{kwargs['product']}", & must be set to one of: {options}'''
 
         metadata = {
