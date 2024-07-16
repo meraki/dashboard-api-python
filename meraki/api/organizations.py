@@ -1071,7 +1071,7 @@ class Organizations(object):
             assert kwargs['sortBy'] in options, f'''"sortBy" cannot be "{kwargs['sortBy']}", & must be set to one of: {options}'''
 
         metadata = {
-            'tags': ['organizations', 'configure', 'alerts'],
+            'tags': ['organizations', 'monitor', 'alerts'],
             'operation': 'getOrganizationAssuranceAlerts'
         }
         organizationId = urllib.parse.quote(str(organizationId), safe='')
@@ -1096,13 +1096,13 @@ class Organizations(object):
         https://developer.cisco.com/meraki/api-v1/#!dismiss-organization-assurance-alerts
 
         - organizationId (string): Organization ID
-        - alertIds (array): Parameter to dismiss alerts by ID
+        - alertIds (array): Array of alert IDs to dismiss
         """
 
         kwargs = locals()
 
         metadata = {
-            'tags': ['organizations', 'configure', 'alerts'],
+            'tags': ['organizations', 'monitor', 'alerts'],
             'operation': 'dismissOrganizationAssuranceAlerts'
         }
         organizationId = urllib.parse.quote(str(organizationId), safe='')
@@ -1138,7 +1138,7 @@ class Organizations(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'alerts', 'overview'],
+            'tags': ['organizations', 'monitor', 'alerts', 'overview'],
             'operation': 'getOrganizationAssuranceAlertsOverview'
         }
         organizationId = urllib.parse.quote(str(organizationId), safe='')
@@ -1190,7 +1190,7 @@ class Organizations(object):
             assert kwargs['sortOrder'] in options, f'''"sortOrder" cannot be "{kwargs['sortOrder']}", & must be set to one of: {options}'''
 
         metadata = {
-            'tags': ['organizations', 'configure', 'alerts', 'overview', 'byNetwork'],
+            'tags': ['organizations', 'monitor', 'alerts', 'overview', 'byNetwork'],
             'operation': 'getOrganizationAssuranceAlertsOverviewByNetwork'
         }
         organizationId = urllib.parse.quote(str(organizationId), safe='')
@@ -1246,7 +1246,7 @@ class Organizations(object):
             assert kwargs['sortBy'] in options, f'''"sortBy" cannot be "{kwargs['sortBy']}", & must be set to one of: {options}'''
 
         metadata = {
-            'tags': ['organizations', 'configure', 'alerts', 'overview', 'byType'],
+            'tags': ['organizations', 'monitor', 'alerts', 'overview', 'byType'],
             'operation': 'getOrganizationAssuranceAlertsOverviewByType'
         }
         organizationId = urllib.parse.quote(str(organizationId), safe='')
@@ -1284,7 +1284,7 @@ class Organizations(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'alerts', 'overview', 'historical'],
+            'tags': ['organizations', 'monitor', 'alerts', 'overview', 'historical'],
             'operation': 'getOrganizationAssuranceAlertsOverviewHistorical'
         }
         organizationId = urllib.parse.quote(str(organizationId), safe='')
@@ -1309,13 +1309,13 @@ class Organizations(object):
         https://developer.cisco.com/meraki/api-v1/#!restore-organization-assurance-alerts
 
         - organizationId (string): Organization ID
-        - alertIds (array): Parameter to restore alerts by ID
+        - alertIds (array): Array of alert IDs to restore
         """
 
         kwargs = locals()
 
         metadata = {
-            'tags': ['organizations', 'configure', 'alerts'],
+            'tags': ['organizations', 'monitor', 'alerts'],
             'operation': 'restoreOrganizationAssuranceAlerts'
         }
         organizationId = urllib.parse.quote(str(organizationId), safe='')
@@ -1338,7 +1338,7 @@ class Organizations(object):
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'alerts'],
+            'tags': ['organizations', 'monitor', 'alerts'],
             'operation': 'getOrganizationAssuranceAlert'
         }
         organizationId = urllib.parse.quote(str(organizationId), safe='')
@@ -1556,9 +1556,14 @@ class Organizations(object):
         https://developer.cisco.com/meraki/api-v1/#!get-organization-clients-bandwidth-usage-history
 
         - organizationId (string): Organization ID
+        - networkTag (string): Match result to an exact network tag
+        - deviceTag (string): Match result to an exact device tag
+        - networkId (string): Match result to an exact network id
+        - ssidName (string): Filter results by ssid name
+        - usageUplink (string): Filter results by usage uplink
         - t0 (string): The beginning of the timespan for the data.
-        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
-        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 186 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 186 days. The default is 1 day.
         """
 
         kwargs.update(locals())
@@ -1570,7 +1575,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/clients/bandwidthUsageHistory'
 
-        query_params = ['t0', 't1', 'timespan', ]
+        query_params = ['networkTag', 'deviceTag', 'networkId', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -1822,7 +1827,7 @@ class Organizations(object):
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - configurationUpdatedAfter (string): Filter results by whether or not the device's configuration has been updated after the given timestamp
         - networkIds (array): Optional parameter to filter devices by network.
-        - productTypes (array): Optional parameter to filter devices by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, and secureConnect.
+        - productTypes (array): Optional parameter to filter devices by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, wirelessController, and secureConnect.
         - tags (array): Optional parameter to filter devices by tags.
         - tagsFilterType (string): Optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return networks which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
         - name (string): Optional parameter to filter devices by name. All returned devices will have a name that contains the search term or is an exact match.
@@ -1874,7 +1879,7 @@ class Organizations(object):
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - networkIds (array): Optional parameter to filter device availabilities by network ID. This filter uses multiple exact matches.
-        - productTypes (array): Optional parameter to filter device availabilities by device product types. This filter uses multiple exact matches.
+        - productTypes (array): Optional parameter to filter device availabilities by device product types. This filter uses multiple exact matches. Valid types are wireless, appliance, switch, camera, cellularGateway, sensor, and wirelessController
         - serials (array): Optional parameter to filter device availabilities by device serial numbers. This filter uses multiple exact matches.
         - tags (array): An optional parameter to filter devices by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below). This filter uses multiple exact matches.
         - tagsFilterType (string): An optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return devices which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
@@ -1945,6 +1950,32 @@ class Organizations(object):
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def bulkUpdateOrganizationDevicesDetails(self, organizationId: str, serials: list, details: list):
+        """
+        **Updating device details (currently only used for Catalyst devices)**
+        https://developer.cisco.com/meraki/api-v1/#!bulk-update-organization-devices-details
+
+        - organizationId (string): Organization ID
+        - serials (array): A list of serials of devices to update
+        - details (array): An array of details
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'devices', 'details', 'bulkUpdate'],
+            'operation': 'bulkUpdateOrganizationDevicesDetails'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/devices/details/bulkUpdate'
+
+        body_params = ['serials', 'details', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
         
 
 
@@ -2087,7 +2118,7 @@ class Organizations(object):
         - networkIds (array): Optional parameter to filter devices by network ids.
         - serials (array): Optional parameter to filter devices by serials.
         - statuses (array): Optional parameter to filter devices by statuses. Valid statuses are ["online", "alerting", "offline", "dormant"].
-        - productTypes (array): An optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, and secureConnect.
+        - productTypes (array): An optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, wirelessController, and secureConnect.
         - models (array): Optional parameter to filter devices by models.
         - tags (array): An optional parameter to filter devices by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below).
         - tagsFilterType (string): An optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return devices which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
@@ -2125,7 +2156,7 @@ class Organizations(object):
         https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-statuses-overview
 
         - organizationId (string): Organization ID
-        - productTypes (array): An optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, and secureConnect.
+        - productTypes (array): An optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, wirelessController, and secureConnect.
         - networkIds (array): An optional parameter to filter device statuses by network.
         """
 
@@ -2414,6 +2445,7 @@ class Organizations(object):
         - macs (array): Optional parameter to filter by one or more MAC addresses belonging to devices. All devices returned belong to MAC addresses that are an exact match.
         - firmwareUpgradeBatchIds (array): Optional parameter to filter by firmware upgrade batch ids.
         - upgradeStatuses (array): Optional parameter to filter by firmware upgrade statuses.
+        - currentUpgradesOnly (boolean): Optional parameter to filter to only current or pending upgrade statuses
         """
 
         kwargs.update(locals())
@@ -2425,7 +2457,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/firmware/upgrades/byDevice'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'serials', 'macs', 'firmwareUpgradeBatchIds', 'upgradeStatuses', ]
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'serials', 'macs', 'firmwareUpgradeBatchIds', 'upgradeStatuses', 'currentUpgradesOnly', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['networkIds', 'serials', 'macs', 'firmwareUpgradeBatchIds', 'upgradeStatuses', ]
@@ -2485,7 +2517,7 @@ class Organizations(object):
         - orderNumbers (array): Search for devices in inventory based on order numbers.
         - tags (array): Filter devices by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below).
         - tagsFilterType (string): To use with 'tags' parameter, to filter devices which contain ANY or ALL given tags. Accepted values are 'withAnyTags' or 'withAllTags', default is 'withAnyTags'.
-        - productTypes (array): Filter devices by product type. Accepted values are appliance, camera, cellularGateway, secureConnect, sensor, switch, systemsManager, and wireless.
+        - productTypes (array): Filter devices by product type. Accepted values are appliance, camera, cellularGateway, secureConnect, sensor, switch, systemsManager, wireless, and wirelessController.
         """
 
         kwargs.update(locals())
@@ -3030,6 +3062,7 @@ class Organizations(object):
         - isBoundToConfigTemplate (boolean): An optional parameter to filter config template bound networks. If configTemplateId is set, this cannot be false.
         - tags (array): An optional parameter to filter networks by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below).
         - tagsFilterType (string): An optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return networks which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
+        - productTypes (array): An optional parameter to filter networks by product type. Results will have at least one of the included product types.
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100000. Default is 1000.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
@@ -3048,10 +3081,10 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/networks'
 
-        query_params = ['configTemplateId', 'isBoundToConfigTemplate', 'tags', 'tagsFilterType', 'perPage', 'startingAfter', 'endingBefore', ]
+        query_params = ['configTemplateId', 'isBoundToConfigTemplate', 'tags', 'tagsFilterType', 'productTypes', 'perPage', 'startingAfter', 'endingBefore', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['tags', ]
+        array_params = ['tags', 'productTypes', ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
                 params[f'{k.strip()}[]'] = kwargs[f'{k}']
@@ -3893,9 +3926,15 @@ class Organizations(object):
         https://developer.cisco.com/meraki/api-v1/#!get-organization-summary-top-appliances-by-utilization
 
         - organizationId (string): Organization ID
+        - networkTag (string): Match result to an exact network tag
+        - deviceTag (string): Match result to an exact device tag
+        - networkId (string): Match result to an exact network id
+        - quantity (integer): Set number of desired results to return. Default is 10.
+        - ssidName (string): Filter results by ssid name
+        - usageUplink (string): Filter results by usage uplink
         - t0 (string): The beginning of the timespan for the data.
-        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
-        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 25 minutes and be less than or equal to 31 days. The default is 1 day.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 186 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 25 minutes and be less than or equal to 186 days. The default is 1 day.
         """
 
         kwargs.update(locals())
@@ -3907,7 +3946,73 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/summary/top/appliances/byUtilization'
 
-        query_params = ['t0', 't1', 'timespan', ]
+        query_params = ['networkTag', 'deviceTag', 'networkId', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get(metadata, resource, params)
+        
+
+
+    def getOrganizationSummaryTopApplicationsByUsage(self, organizationId: str, **kwargs):
+        """
+        **Return the top applications sorted by data usage over given time range**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-summary-top-applications-by-usage
+
+        - organizationId (string): Organization ID
+        - networkTag (string): Match result to an exact network tag
+        - device (string): Match result to an exact device tag
+        - networkId (string): Match result to an exact network id
+        - quantity (integer): Set number of desired results to return. Default is 10.
+        - ssidName (string): Filter results by ssid name
+        - usageUplink (string): Filter results by usage uplink
+        - t0 (string): The beginning of the timespan for the data.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 186 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 25 minutes and be less than or equal to 186 days. The default is 1 day.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'monitor', 'summary', 'top', 'applications', 'byUsage'],
+            'operation': 'getOrganizationSummaryTopApplicationsByUsage'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/summary/top/applications/byUsage'
+
+        query_params = ['networkTag', 'device', 'networkId', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get(metadata, resource, params)
+        
+
+
+    def getOrganizationSummaryTopApplicationsCategoriesByUsage(self, organizationId: str, **kwargs):
+        """
+        **Return the top application categories sorted by data usage over given time range**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-summary-top-applications-categories-by-usage
+
+        - organizationId (string): Organization ID
+        - networkTag (string): Match result to an exact network tag
+        - deviceTag (string): Match result to an exact device tag
+        - networkId (string): Match result to an exact network id
+        - quantity (integer): Set number of desired results to return. Default is 10.
+        - ssidName (string): Filter results by ssid name
+        - usageUplink (string): Filter results by usage uplink
+        - t0 (string): The beginning of the timespan for the data.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 186 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 25 minutes and be less than or equal to 186 days. The default is 1 day.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'monitor', 'summary', 'top', 'applications', 'categories', 'byUsage'],
+            'operation': 'getOrganizationSummaryTopApplicationsCategoriesByUsage'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/summary/top/applications/categories/byUsage'
+
+        query_params = ['networkTag', 'deviceTag', 'networkId', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -3920,9 +4025,15 @@ class Organizations(object):
         https://developer.cisco.com/meraki/api-v1/#!get-organization-summary-top-clients-by-usage
 
         - organizationId (string): Organization ID
+        - networkTag (string): Match result to an exact network tag
+        - deviceTag (string): Match result to an exact device tag
+        - networkId (string): Match result to an exact network id
+        - quantity (integer): Set number of desired results to return. Default is 10.
+        - ssidName (string): Filter results by ssid name
+        - usageUplink (string): Filter results by usage uplink
         - t0 (string): The beginning of the timespan for the data.
-        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
-        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 8 hours and be less than or equal to 31 days. The default is 1 day.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 186 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 8 hours and be less than or equal to 186 days. The default is 1 day.
         """
 
         kwargs.update(locals())
@@ -3934,7 +4045,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/summary/top/clients/byUsage'
 
-        query_params = ['t0', 't1', 'timespan', ]
+        query_params = ['networkTag', 'deviceTag', 'networkId', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -3947,9 +4058,15 @@ class Organizations(object):
         https://developer.cisco.com/meraki/api-v1/#!get-organization-summary-top-clients-manufacturers-by-usage
 
         - organizationId (string): Organization ID
+        - networkTag (string): Match result to an exact network tag
+        - deviceTag (string): Match result to an exact device tag
+        - networkId (string): Match result to an exact network id
+        - quantity (integer): Set number of desired results to return. Default is 10.
+        - ssidName (string): Filter results by ssid name
+        - usageUplink (string): Filter results by usage uplink
         - t0 (string): The beginning of the timespan for the data.
-        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
-        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 186 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 186 days. The default is 1 day.
         """
 
         kwargs.update(locals())
@@ -3961,7 +4078,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/summary/top/clients/manufacturers/byUsage'
 
-        query_params = ['t0', 't1', 'timespan', ]
+        query_params = ['networkTag', 'deviceTag', 'networkId', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -3974,9 +4091,15 @@ class Organizations(object):
         https://developer.cisco.com/meraki/api-v1/#!get-organization-summary-top-devices-by-usage
 
         - organizationId (string): Organization ID
+        - networkTag (string): Match result to an exact network tag
+        - deviceTag (string): Match result to an exact device tag
+        - networkId (string): Match result to an exact network id
+        - quantity (integer): Set number of desired results to return. Default is 10.
+        - ssidName (string): Filter results by ssid name
+        - usageUplink (string): Filter results by usage uplink
         - t0 (string): The beginning of the timespan for the data.
-        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
-        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 8 hours and be less than or equal to 31 days. The default is 1 day.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 186 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 8 hours and be less than or equal to 186 days. The default is 1 day.
         """
 
         kwargs.update(locals())
@@ -3988,7 +4111,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/summary/top/devices/byUsage'
 
-        query_params = ['t0', 't1', 'timespan', ]
+        query_params = ['networkTag', 'deviceTag', 'networkId', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -4001,9 +4124,15 @@ class Organizations(object):
         https://developer.cisco.com/meraki/api-v1/#!get-organization-summary-top-devices-models-by-usage
 
         - organizationId (string): Organization ID
+        - networkTag (string): Match result to an exact network tag
+        - deviceTag (string): Match result to an exact device tag
+        - networkId (string): Match result to an exact network id
+        - quantity (integer): Set number of desired results to return. Default is 10.
+        - ssidName (string): Filter results by ssid name
+        - usageUplink (string): Filter results by usage uplink
         - t0 (string): The beginning of the timespan for the data.
-        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
-        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 8 hours and be less than or equal to 31 days. The default is 1 day.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 186 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 8 hours and be less than or equal to 186 days. The default is 1 day.
         """
 
         kwargs.update(locals())
@@ -4015,7 +4144,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/summary/top/devices/models/byUsage'
 
-        query_params = ['t0', 't1', 'timespan', ]
+        query_params = ['networkTag', 'deviceTag', 'networkId', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -4030,6 +4159,12 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkTag (string): Match result to an exact network tag
+        - deviceTag (string): Match result to an exact device tag
+        - networkId (string): Match result to an exact network id
+        - quantity (integer): Set number of desired results to return. Default is 10.
+        - ssidName (string): Filter results by ssid name
+        - usageUplink (string): Filter results by usage uplink
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 5000.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
@@ -4044,7 +4179,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/summary/top/networks/byStatus'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        query_params = ['networkTag', 'deviceTag', 'networkId', 'quantity', 'ssidName', 'usageUplink', 'perPage', 'startingAfter', 'endingBefore', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -4057,9 +4192,15 @@ class Organizations(object):
         https://developer.cisco.com/meraki/api-v1/#!get-organization-summary-top-ssids-by-usage
 
         - organizationId (string): Organization ID
+        - networkTag (string): Match result to an exact network tag
+        - deviceTag (string): Match result to an exact device tag
+        - networkId (string): Match result to an exact network id
+        - quantity (integer): Set number of desired results to return. Default is 10.
+        - ssidName (string): Filter results by ssid name
+        - usageUplink (string): Filter results by usage uplink
         - t0 (string): The beginning of the timespan for the data.
-        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
-        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 8 hours and be less than or equal to 31 days. The default is 1 day.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 186 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 8 hours and be less than or equal to 186 days. The default is 1 day.
         """
 
         kwargs.update(locals())
@@ -4071,7 +4212,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/summary/top/ssids/byUsage'
 
-        query_params = ['t0', 't1', 'timespan', ]
+        query_params = ['networkTag', 'deviceTag', 'networkId', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -4084,9 +4225,15 @@ class Organizations(object):
         https://developer.cisco.com/meraki/api-v1/#!get-organization-summary-top-switches-by-energy-usage
 
         - organizationId (string): Organization ID
+        - networkTag (string): Match result to an exact network tag
+        - deviceTag (string): Match result to an exact device tag
+        - networkId (string): Match result to an exact network id
+        - quantity (integer): Set number of desired results to return. Default is 10.
+        - ssidName (string): Filter results by ssid name
+        - usageUplink (string): Filter results by usage uplink
         - t0 (string): The beginning of the timespan for the data.
-        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
-        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 25 minutes and be less than or equal to 31 days. The default is 1 day.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 186 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 25 minutes and be less than or equal to 186 days. The default is 1 day.
         """
 
         kwargs.update(locals())
@@ -4098,7 +4245,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/summary/top/switches/byEnergyUsage'
 
-        query_params = ['t0', 't1', 'timespan', ]
+        query_params = ['networkTag', 'deviceTag', 'networkId', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)

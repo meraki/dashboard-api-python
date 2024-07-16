@@ -648,6 +648,38 @@ class ActionBatchOrganizations(object):
 
 
 
+    def bulkUpdateOrganizationDevicesDetails(self, organizationId: str, serials: list, details: list):
+        """
+        **Updating device details (currently only used for Catalyst devices)**
+        https://developer.cisco.com/meraki/api-v1/#!bulk-update-organization-devices-details
+
+        - organizationId (string): Organization ID
+        - serials (array): A list of serials of devices to update
+        - details (array): An array of details
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'devices', 'details', 'bulkUpdate'],
+            'operation': 'bulkUpdateOrganizationDevicesDetails'
+        }
+        resource = f'/organizations/{organizationId}/devices/details/bulkUpdate'
+
+        body_params = ['serials', 'details', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "details/update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
     def updateOrganizationEarlyAccessFeaturesOptIn(self, organizationId: str, optInId: str, **kwargs):
         """
         **Update an early access feature opt-in for an organization**
