@@ -6,6 +6,12 @@ API_KEY_ENVIRONMENT_VARIABLE = "MERAKI_DASHBOARD_API_KEY"
 # Base URL preceding all endpoint resources
 DEFAULT_BASE_URL = "https://api.meraki.com/api/v1"
 
+# Alternate End Point URLs
+CANADA_BASE_URL = "https://api.meraki.ca/api/v1"
+CHINA_BASE_URL = "https://api.meraki.cn/api/v1"
+INDIA_BASE_URL = "https://api.meraki.in/api/v1"
+UNITED_STATES_FED_BASE_URL = "https://api.gov-meraki.com/api/v1"
+
 # Maximum number of seconds for each API call
 SINGLE_REQUEST_TIMEOUT = 60
 
