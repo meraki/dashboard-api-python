@@ -15,22 +15,28 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
+      - name: Set up pipenv
+        uses: actions/cache@v2
+        with: 
+          path: ~/.local/share/virtualenvs
+          key: ${{ runner.os }}-pipenv-${{ hashfiles('**/Pipfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pipenv-
       - name: Install dependencies
-        uses: VaultVulp/action-pipenv@v2.0.1
-        with:
-          command: install -d
-          
+        run: |
+          python -m pip install --upgrade pip
+          pip install pipenv
+          pip install --deploy
       - name: Delete folder
         run: |
           rm -rf meraki
       - name: Regenerate Python Library
-        uses: VaultVulp/action-pipenv@v2.0.1
-        with:
-          command: python generator/generate_library.py -g true -v ${{ github.event.inputs.library_version }}
+        run: |
+          pipenv run python generator/generate_library.py -g true -v ${{ github.event.inputs.library_version }}
       - name: Commit changes to new branch
         uses: EndBug/add-and-commit@v9
         with:
           author_name: GitHub Action
           author_email: support@meraki.com
-          message: Automatically regenerated library.
+          message: Automatically regenerated library to version ${{ github.event.inputs.library_version }}.
           new_branch: release
