@@ -1,9 +1,11 @@
 import meraki
 
+### work in progress
+
 print(
     f"To use this tool, you must supply your organization ID. Your organization ID should be an integer."
 )
-organization_id = "102908"
+organization_id = ""
 # organization_id = input(f"Enter your organization ID:")
 
 all_rf_profiles = list()

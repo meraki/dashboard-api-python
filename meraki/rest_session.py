@@ -153,7 +153,7 @@ class RestSession(object):
         kwargs.setdefault('timeout', self._single_request_timeout)
 
         # Ensure proper base URL
-        allowed_domains = ['meraki.com', 'meraki.cn', 'meraki.in', 'gov-meraki.com']
+        allowed_domains = ['meraki.com', 'meraki.ca', 'meraki.cn', 'meraki.in', 'gov-meraki.com']
         parsed_url = urllib.parse.urlparse(url)
 
         if any(domain in parsed_url.netloc for domain in allowed_domains):
@@ -446,10 +446,10 @@ class RestSession(object):
                 break
 
             # Append that page's results, depending on the endpoint
-            if type(results) == list:
+            if isinstance(results, list):
                 results.extend(response.json())
             # For event log endpoint
-            elif type(results) == dict:
+            elif isinstance(results, dict):
                 try:
                     start = response.json()['pageStartAt']
                 except KeyError:
