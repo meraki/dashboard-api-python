@@ -153,7 +153,7 @@ class RestSession(object):
         kwargs.setdefault('timeout', self._single_request_timeout)
 
         # Ensure proper base URL
-        allowed_domains = ['meraki.com', 'meraki.cn']
+        allowed_domains = ['meraki.com', 'meraki.cn', 'meraki.in', 'gov-meraki.com']
         parsed_url = urllib.parse.urlparse(url)
 
         if any(domain in parsed_url.netloc for domain in allowed_domains):
@@ -180,7 +180,8 @@ class RestSession(object):
                         response.close()
                     if self._logger:
                         self._logger.info(f'{method} {abs_url}')
-                    response = self._req_session.request(method, abs_url, allow_redirects=False, **kwargs)
+                    response = self._req_session.request(method, abs_url, allow_redirects=False,
+                                                         **kwargs)
                     reason = response.reason if response.reason else ''
                     status = response.status_code
                 except requests.exceptions.RequestException as e:
@@ -449,7 +450,10 @@ class RestSession(object):
                 results.extend(response.json())
             # For event log endpoint
             elif type(results) == dict:
-                start = response.json()['pageStartAt']
+                try:
+                    start = response.json()['pageStartAt']
+                except KeyError:
+                    print(response.headers)
                 end = response.json()['pageEndAt']
                 events = response.json()['events']
                 if direction == 'next':
