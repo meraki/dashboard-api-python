@@ -642,16 +642,17 @@ class AsyncNetworks:
         
 
 
-    def claimNetworkDevices(self, networkId: str, serials: list):
+    def claimNetworkDevices(self, networkId: str, serials: list, **kwargs):
         """
         **Claim devices into a network. (Note: for recently claimed devices, it may take a few minutes for API requests against that device to succeed)**
         https://developer.cisco.com/meraki/api-v1/#!claim-network-devices
 
         - networkId (string): Network ID
         - serials (array): A list of serials of devices to claim
+        - addAtomically (boolean): Whether to claim devices atomically. If true, all devices will be claimed or none will be claimed. Default is true.
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         metadata = {
             'tags': ['networks', 'configure', 'devices'],
@@ -730,7 +731,7 @@ class AsyncNetworks:
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" or "prev" (default) page
         - event_log_end_time (string): ISO8601 Zulu/UTC time, to use in conjunction with startingAfter, to retrieve events within a time window
-        - productType (string): The product type to fetch events for. This parameter is required for networks with multiple device types. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, and secureConnect
+        - productType (string): The product type to fetch events for. This parameter is required for networks with multiple device types. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, wirelessController, and secureConnect
         - includedEventTypes (array): A list of event types. The returned events will be filtered to only include events with these types.
         - excludedEventTypes (array): A list of event types. The returned events will be filtered to exclude events with these types.
         - deviceMac (string): The MAC address of the Meraki device which the list of events will be filtered with
@@ -741,6 +742,8 @@ class AsyncNetworks:
         - clientName (string): The name, or partial name, of the client which the list of events will be filtered with
         - smDeviceMac (string): The MAC address of the Systems Manager device which the list of events will be filtered with
         - smDeviceName (string): The name of the Systems Manager device which the list of events will be filtered with
+        - eventDetails (string): The details of the event(Catalyst device only) which the list of events will be filtered with
+        - eventSeverity (string): The severity of the event(Catalyst device only) which the list of events will be filtered with
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 10.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
@@ -749,7 +752,7 @@ class AsyncNetworks:
         kwargs.update(locals())
 
         if 'productType' in kwargs:
-            options = ['appliance', 'camera', 'cellularGateway', 'secureConnect', 'switch', 'systemsManager', 'wireless']
+            options = ['appliance', 'camera', 'cellularGateway', 'secureConnect', 'switch', 'systemsManager', 'wireless', 'wirelessController']
             assert kwargs['productType'] in options, f'''"productType" cannot be "{kwargs['productType']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -759,7 +762,7 @@ class AsyncNetworks:
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/events'
 
-        query_params = ['productType', 'includedEventTypes', 'excludedEventTypes', 'deviceMac', 'deviceSerial', 'deviceName', 'clientIp', 'clientMac', 'clientName', 'smDeviceMac', 'smDeviceName', 'perPage', 'startingAfter', 'endingBefore', ]
+        query_params = ['productType', 'includedEventTypes', 'excludedEventTypes', 'deviceMac', 'deviceSerial', 'deviceName', 'clientIp', 'clientMac', 'clientName', 'smDeviceMac', 'smDeviceName', 'eventDetails', 'eventSeverity', 'perPage', 'startingAfter', 'endingBefore', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['includedEventTypes', 'excludedEventTypes', ]
@@ -852,7 +855,7 @@ class AsyncNetworks:
         kwargs.update(locals())
 
         if 'product' in kwargs:
-            options = ['appliance', 'camera', 'cellularGateway', 'secureConnect', 'switch', 'switchCatalyst', 'wireless']
+            options = ['appliance', 'camera', 'cellularGateway', 'secureConnect', 'switch', 'switchCatalyst', 'wireless', 'wirelessController']
             assert kwargs['product'] in options, f'''"product" cannot be "{kwargs['product']}", & must be set to one of: {options}'''
 
         metadata = {
