@@ -113,6 +113,7 @@ class AsyncDevices:
 
         - serial (string): Serial
         - sims (array): List of SIMs. If a SIM was previously configured and not specified in this request, it will remain unchanged.
+        - simOrdering (array): Specifies the ordering of all SIMs for an MG: primary, secondary, and not-in-use (when applicable). It's required for devices with 3 or more SIMs and can be used in place of 'isPrimary' for dual-SIM devices. To indicate eSIM, use 'sim3'. Sim failover will occur only between primary and secondary sim slots.
         - simFailover (object): SIM Failover settings.
         """
 
@@ -125,7 +126,7 @@ class AsyncDevices:
         serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/cellular/sims'
 
-        body_params = ['sims', 'simFailover', ]
+        body_params = ['sims', 'simOrdering', 'simFailover', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)

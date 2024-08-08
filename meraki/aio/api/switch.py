@@ -157,6 +157,7 @@ class AsyncSwitch:
         - flexibleStackingEnabled (boolean): For supported switches (e.g. MS420/MS425), whether or not the port has flexible stacking enabled.
         - daiTrusted (boolean): If true, ARP packets for this port will be considered trusted, and Dynamic ARP Inspection will allow the traffic.
         - profile (object): Profile attributes
+        - dot3az (object): dot3az settings for the port
         """
 
         kwargs.update(locals())
@@ -182,7 +183,7 @@ class AsyncSwitch:
         portId = urllib.parse.quote(str(portId), safe='')
         resource = f'/devices/{serial}/switch/ports/{portId}'
 
-        body_params = ['name', 'tags', 'enabled', 'poeEnabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', 'adaptivePolicyGroupId', 'peerSgtCapable', 'flexibleStackingEnabled', 'daiTrusted', 'profile', ]
+        body_params = ['name', 'tags', 'enabled', 'poeEnabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', 'adaptivePolicyGroupId', 'peerSgtCapable', 'flexibleStackingEnabled', 'daiTrusted', 'profile', 'dot3az', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -2436,6 +2437,7 @@ class AsyncSwitch:
         - flexibleStackingEnabled (boolean): For supported switches (e.g. MS420/MS425), whether or not the port has flexible stacking enabled.
         - daiTrusted (boolean): If true, ARP packets for this port will be considered trusted, and Dynamic ARP Inspection will allow the traffic.
         - profile (object): Profile attributes
+        - dot3az (object): dot3az settings for the port
         """
 
         kwargs.update(locals())
@@ -2463,7 +2465,7 @@ class AsyncSwitch:
         portId = urllib.parse.quote(str(portId), safe='')
         resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles/{profileId}/ports/{portId}'
 
-        body_params = ['name', 'tags', 'enabled', 'poeEnabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', 'flexibleStackingEnabled', 'daiTrusted', 'profile', ]
+        body_params = ['name', 'tags', 'enabled', 'poeEnabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', 'flexibleStackingEnabled', 'daiTrusted', 'profile', 'dot3az', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -2477,8 +2479,8 @@ class AsyncSwitch:
 
         - organizationId (string): Organization ID
         - t0 (string): The beginning of the timespan for the data.
-        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
-        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 186 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 186 days. The default is 1 day.
         """
 
         kwargs.update(locals())
@@ -2534,14 +2536,14 @@ class AsyncSwitch:
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 50. Default is 50.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - networkIds (array): Optional parameter to filter switchports by network.
-        - portProfileIds (array): Optional parameter to filter switchports belonging to the specified port profiles.
-        - name (string): Optional parameter to filter switchports belonging to switches by name. All returned switches will have a name that contains the search term or is an exact match.
-        - mac (string): Optional parameter to filter switchports belonging to switches by MAC address. All returned switches will have a MAC address that contains the search term or is an exact match.
-        - macs (array): Optional parameter to filter switchports by one or more MAC addresses belonging to devices. All switchports returned belong to MAC addresses of switches that are an exact match.
-        - serial (string): Optional parameter to filter switchports belonging to switches by serial number. All returned switches will have a serial number that contains the search term or is an exact match.
-        - serials (array): Optional parameter to filter switchports belonging to switches with one or more serial numbers. All switchports returned belong to serial numbers of switches that are an exact match.
-        - configurationUpdatedAfter (string): Optional parameter to filter results by switches where the configuration has been updated after the given timestamp.
+        - configurationUpdatedAfter (string): Optional parameter to filter items to switches where the configuration has been updated after the given timestamp.
+        - mac (string): Optional parameter to filter items to switches with MAC addresses that contain the search term or are an exact match.
+        - macs (array): Optional parameter to filter items to switches that have one of the provided MAC addresses.
+        - name (string): Optional parameter to filter items to switches with names that contain the search term or are an exact match.
+        - networkIds (array): Optional parameter to filter items to switches in one of the provided networks.
+        - portProfileIds (array): Optional parameter to filter items to switches that contain switchports belonging to one of the specified port profiles.
+        - serial (string): Optional parameter to filter items to switches with serial number that contains the search term or are an exact match.
+        - serials (array): Optional parameter to filter items to switches that have one of the provided serials.
         """
 
         kwargs.update(locals())
@@ -2553,10 +2555,10 @@ class AsyncSwitch:
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/switch/ports/bySwitch'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'portProfileIds', 'name', 'mac', 'macs', 'serial', 'serials', 'configurationUpdatedAfter', ]
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'configurationUpdatedAfter', 'mac', 'macs', 'name', 'networkIds', 'portProfileIds', 'serial', 'serials', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', 'portProfileIds', 'macs', 'serials', ]
+        array_params = ['macs', 'networkIds', 'portProfileIds', 'serials', ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
                 params[f'{k.strip()}[]'] = kwargs[f'{k}']
@@ -2573,8 +2575,8 @@ class AsyncSwitch:
 
         - organizationId (string): Organization ID
         - t0 (string): The beginning of the timespan for the data.
-        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
-        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 12 hours and be less than or equal to 31 days. The default is 1 day.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 186 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 12 hours and be less than or equal to 186 days. The default is 1 day.
         """
 
         kwargs.update(locals())

@@ -969,7 +969,7 @@ class ActionBatchAppliance(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "update",
+            "operation": "settings/update",
             "body": payload
         }
         return action
