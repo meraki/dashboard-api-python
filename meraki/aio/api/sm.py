@@ -975,7 +975,7 @@ class AsyncSm:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['sm', 'configure', 'users'],
+            'tags': ['sm', 'configure'],
             'operation': 'getNetworkSmUsers'
         }
         networkId = urllib.parse.quote(str(networkId), safe='')
@@ -1004,7 +1004,7 @@ class AsyncSm:
         """
 
         metadata = {
-            'tags': ['sm', 'configure', 'users', 'deviceProfiles'],
+            'tags': ['sm', 'configure', 'deviceProfiles'],
             'operation': 'getNetworkSmUserDeviceProfiles'
         }
         networkId = urllib.parse.quote(str(networkId), safe='')
@@ -1025,7 +1025,7 @@ class AsyncSm:
         """
 
         metadata = {
-            'tags': ['sm', 'configure', 'users', 'softwares'],
+            'tags': ['sm', 'configure', 'softwares'],
             'operation': 'getNetworkSmUserSoftwares'
         }
         networkId = urllib.parse.quote(str(networkId), safe='')

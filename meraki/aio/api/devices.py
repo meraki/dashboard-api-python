@@ -211,7 +211,7 @@ class AsyncDevices:
         https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-cable-test
 
         - serial (string): Serial
-        - ports (array): A list of ports for which to perform the cable test.
+        - ports (array): A list of ports for which to perform the cable test.  For Catalyst switches, IOS interface names are also supported, such as "GigabitEthernet1/0/8", "Gi1/0/8", or even "1/0/8".
         - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
 

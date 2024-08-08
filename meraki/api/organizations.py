@@ -717,7 +717,7 @@ class Organizations(object):
         - orgAccess (string): The privilege of the dashboard administrator on the organization. Can be one of 'full', 'read-only', 'enterprise' or 'none'
         - tags (array): The list of tags that the dashboard administrator has privileges on
         - networks (array): The list of networks that the dashboard administrator has privileges on
-        - authenticationMethod (string): The method of authentication the user will use to sign in to the Meraki dashboard. Can be one of 'Email' or 'Cisco SecureX Sign-On'. The default is Email authentication
+        - authenticationMethod (string): No longer used as of Cisco SecureX end-of-life. Can be one of 'Email'. The default is Email authentication.
         """
 
         kwargs.update(locals())
@@ -726,7 +726,7 @@ class Organizations(object):
             options = ['enterprise', 'full', 'none', 'read-only']
             assert kwargs['orgAccess'] in options, f'''"orgAccess" cannot be "{kwargs['orgAccess']}", & must be set to one of: {options}'''
         if 'authenticationMethod' in kwargs:
-            options = ['Cisco SecureX Sign-On', 'Email']
+            options = ['Email']
             assert kwargs['authenticationMethod'] in options, f'''"authenticationMethod" cannot be "{kwargs['authenticationMethod']}", & must be set to one of: {options}'''
 
         metadata = {
@@ -1126,6 +1126,7 @@ class Organizations(object):
         - types (array): Optional parameter to filter by alert type.
         - tsStart (string): Optional parameter to filter by starting timestamp
         - tsEnd (string): Optional parameter to filter by end timestamp
+        - category (string): Optional parameter to filter by category.
         - serials (array): Optional parameter to filter by primary device serial
         - deviceTypes (array): Optional parameter to filter by device types
         - deviceTags (array): Optional parameter to filter by device tags
@@ -1137,6 +1138,10 @@ class Organizations(object):
 
         kwargs.update(locals())
 
+        if 'category' in kwargs:
+            options = ['configuration', 'connectivity', 'device_health', 'insights']
+            assert kwargs['category'] in options, f'''"category" cannot be "{kwargs['category']}", & must be set to one of: {options}'''
+
         metadata = {
             'tags': ['organizations', 'monitor', 'alerts', 'overview'],
             'operation': 'getOrganizationAssuranceAlertsOverview'
@@ -1144,7 +1149,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/assurance/alerts/overview'
 
-        query_params = ['networkId', 'severity', 'types', 'tsStart', 'tsEnd', 'serials', 'deviceTypes', 'deviceTags', 'active', 'dismissed', 'resolved', 'suppressAlertsForOfflineNodes', ]
+        query_params = ['networkId', 'severity', 'types', 'tsStart', 'tsEnd', 'category', 'serials', 'deviceTypes', 'deviceTags', 'active', 'dismissed', 'resolved', 'suppressAlertsForOfflineNodes', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['types', 'serials', 'deviceTypes', 'deviceTags', ]
@@ -1174,6 +1179,7 @@ class Organizations(object):
         - types (array): Optional parameter to filter by alert type.
         - tsStart (string): Optional parameter to filter by starting timestamp
         - tsEnd (string): Optional parameter to filter by end timestamp
+        - category (string): Optional parameter to filter by category.
         - serials (array): Optional parameter to filter by primary device serial
         - deviceTypes (array): Optional parameter to filter by device types
         - deviceTags (array): Optional parameter to filter by device tags
@@ -1188,6 +1194,9 @@ class Organizations(object):
         if 'sortOrder' in kwargs:
             options = ['ascending', 'descending']
             assert kwargs['sortOrder'] in options, f'''"sortOrder" cannot be "{kwargs['sortOrder']}", & must be set to one of: {options}'''
+        if 'category' in kwargs:
+            options = ['configuration', 'connectivity', 'device_health', 'insights']
+            assert kwargs['category'] in options, f'''"category" cannot be "{kwargs['category']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['organizations', 'monitor', 'alerts', 'overview', 'byNetwork'],
@@ -1196,7 +1205,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/assurance/alerts/overview/byNetwork'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'sortOrder', 'networkId', 'severity', 'types', 'tsStart', 'tsEnd', 'serials', 'deviceTypes', 'deviceTags', 'active', 'dismissed', 'resolved', 'suppressAlertsForOfflineNodes', ]
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'sortOrder', 'networkId', 'severity', 'types', 'tsStart', 'tsEnd', 'category', 'serials', 'deviceTypes', 'deviceTags', 'active', 'dismissed', 'resolved', 'suppressAlertsForOfflineNodes', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['types', 'serials', 'deviceTypes', 'deviceTags', ]
@@ -1226,6 +1235,7 @@ class Organizations(object):
         - types (array): Optional parameter to filter by alert type.
         - tsStart (string): Optional parameter to filter by starting timestamp
         - tsEnd (string): Optional parameter to filter by end timestamp
+        - category (string): Optional parameter to filter by category.
         - sortBy (string): Optional parameter to set column to sort by.
         - serials (array): Optional parameter to filter by primary device serial
         - deviceTypes (array): Optional parameter to filter by device types
@@ -1241,6 +1251,9 @@ class Organizations(object):
         if 'sortOrder' in kwargs:
             options = ['ascending', 'descending']
             assert kwargs['sortOrder'] in options, f'''"sortOrder" cannot be "{kwargs['sortOrder']}", & must be set to one of: {options}'''
+        if 'category' in kwargs:
+            options = ['configuration', 'connectivity', 'device_health', 'insights']
+            assert kwargs['category'] in options, f'''"category" cannot be "{kwargs['category']}", & must be set to one of: {options}'''
         if 'sortBy' in kwargs:
             options = ['count', 'lastAlertedAt', 'networkCount', 'severity', 'startedAt']
             assert kwargs['sortBy'] in options, f'''"sortBy" cannot be "{kwargs['sortBy']}", & must be set to one of: {options}'''
@@ -1252,7 +1265,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/assurance/alerts/overview/byType'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'sortOrder', 'networkId', 'severity', 'types', 'tsStart', 'tsEnd', 'sortBy', 'serials', 'deviceTypes', 'deviceTags', 'active', 'dismissed', 'resolved', 'suppressAlertsForOfflineNodes', ]
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'sortOrder', 'networkId', 'severity', 'types', 'tsStart', 'tsEnd', 'category', 'sortBy', 'serials', 'deviceTypes', 'deviceTags', 'active', 'dismissed', 'resolved', 'suppressAlertsForOfflineNodes', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['types', 'serials', 'deviceTypes', 'deviceTags', ]
@@ -1277,11 +1290,16 @@ class Organizations(object):
         - severity (string): Optional parameter to filter alerts overview by severity type.
         - types (array): Optional parameter to filter by alert type.
         - tsEnd (string): Optional parameter to filter by end timestamp defaults to the current time
+        - category (string): Optional parameter to filter by category.
         - serials (array): Optional parameter to filter by primary device serial
         - deviceTypes (array): Optional parameter to filter by device types
         """
 
         kwargs.update(locals())
+
+        if 'category' in kwargs:
+            options = ['configuration', 'connectivity', 'device_health', 'insights']
+            assert kwargs['category'] in options, f'''"category" cannot be "{kwargs['category']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['organizations', 'monitor', 'alerts', 'overview', 'historical'],
@@ -1290,7 +1308,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/assurance/alerts/overview/historical'
 
-        query_params = ['segmentDuration', 'networkId', 'severity', 'types', 'tsStart', 'tsEnd', 'serials', 'deviceTypes', ]
+        query_params = ['segmentDuration', 'networkId', 'severity', 'types', 'tsStart', 'tsEnd', 'category', 'serials', 'deviceTypes', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['types', 'serials', 'deviceTypes', ]
@@ -1558,7 +1576,6 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - networkTag (string): Match result to an exact network tag
         - deviceTag (string): Match result to an exact device tag
-        - networkId (string): Match result to an exact network id
         - ssidName (string): Filter results by ssid name
         - usageUplink (string): Filter results by usage uplink
         - t0 (string): The beginning of the timespan for the data.
@@ -1575,7 +1592,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/clients/bandwidthUsageHistory'
 
-        query_params = ['networkTag', 'deviceTag', 'networkId', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
+        query_params = ['networkTag', 'deviceTag', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -1816,7 +1833,7 @@ class Organizations(object):
 
     def getOrganizationDevices(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
-        **List the devices in an organization**
+        **List the devices in an organization that have been assigned to a network.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-devices
 
         - organizationId (string): Organization ID
@@ -3928,7 +3945,6 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - networkTag (string): Match result to an exact network tag
         - deviceTag (string): Match result to an exact device tag
-        - networkId (string): Match result to an exact network id
         - quantity (integer): Set number of desired results to return. Default is 10.
         - ssidName (string): Filter results by ssid name
         - usageUplink (string): Filter results by usage uplink
@@ -3946,7 +3962,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/summary/top/appliances/byUtilization'
 
-        query_params = ['networkTag', 'deviceTag', 'networkId', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
+        query_params = ['networkTag', 'deviceTag', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -4027,7 +4043,6 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - networkTag (string): Match result to an exact network tag
         - deviceTag (string): Match result to an exact device tag
-        - networkId (string): Match result to an exact network id
         - quantity (integer): Set number of desired results to return. Default is 10.
         - ssidName (string): Filter results by ssid name
         - usageUplink (string): Filter results by usage uplink
@@ -4045,7 +4060,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/summary/top/clients/byUsage'
 
-        query_params = ['networkTag', 'deviceTag', 'networkId', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
+        query_params = ['networkTag', 'deviceTag', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -4060,7 +4075,6 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - networkTag (string): Match result to an exact network tag
         - deviceTag (string): Match result to an exact device tag
-        - networkId (string): Match result to an exact network id
         - quantity (integer): Set number of desired results to return. Default is 10.
         - ssidName (string): Filter results by ssid name
         - usageUplink (string): Filter results by usage uplink
@@ -4078,7 +4092,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/summary/top/clients/manufacturers/byUsage'
 
-        query_params = ['networkTag', 'deviceTag', 'networkId', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
+        query_params = ['networkTag', 'deviceTag', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -4093,7 +4107,6 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - networkTag (string): Match result to an exact network tag
         - deviceTag (string): Match result to an exact device tag
-        - networkId (string): Match result to an exact network id
         - quantity (integer): Set number of desired results to return. Default is 10.
         - ssidName (string): Filter results by ssid name
         - usageUplink (string): Filter results by usage uplink
@@ -4111,7 +4124,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/summary/top/devices/byUsage'
 
-        query_params = ['networkTag', 'deviceTag', 'networkId', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
+        query_params = ['networkTag', 'deviceTag', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -4126,7 +4139,6 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - networkTag (string): Match result to an exact network tag
         - deviceTag (string): Match result to an exact device tag
-        - networkId (string): Match result to an exact network id
         - quantity (integer): Set number of desired results to return. Default is 10.
         - ssidName (string): Filter results by ssid name
         - usageUplink (string): Filter results by usage uplink
@@ -4144,7 +4156,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/summary/top/devices/models/byUsage'
 
-        query_params = ['networkTag', 'deviceTag', 'networkId', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
+        query_params = ['networkTag', 'deviceTag', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -4161,7 +4173,6 @@ class Organizations(object):
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkTag (string): Match result to an exact network tag
         - deviceTag (string): Match result to an exact device tag
-        - networkId (string): Match result to an exact network id
         - quantity (integer): Set number of desired results to return. Default is 10.
         - ssidName (string): Filter results by ssid name
         - usageUplink (string): Filter results by usage uplink
@@ -4179,7 +4190,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/summary/top/networks/byStatus'
 
-        query_params = ['networkTag', 'deviceTag', 'networkId', 'quantity', 'ssidName', 'usageUplink', 'perPage', 'startingAfter', 'endingBefore', ]
+        query_params = ['networkTag', 'deviceTag', 'quantity', 'ssidName', 'usageUplink', 'perPage', 'startingAfter', 'endingBefore', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -4194,7 +4205,6 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - networkTag (string): Match result to an exact network tag
         - deviceTag (string): Match result to an exact device tag
-        - networkId (string): Match result to an exact network id
         - quantity (integer): Set number of desired results to return. Default is 10.
         - ssidName (string): Filter results by ssid name
         - usageUplink (string): Filter results by usage uplink
@@ -4212,7 +4222,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/summary/top/ssids/byUsage'
 
-        query_params = ['networkTag', 'deviceTag', 'networkId', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
+        query_params = ['networkTag', 'deviceTag', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -4227,7 +4237,6 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - networkTag (string): Match result to an exact network tag
         - deviceTag (string): Match result to an exact device tag
-        - networkId (string): Match result to an exact network id
         - quantity (integer): Set number of desired results to return. Default is 10.
         - ssidName (string): Filter results by ssid name
         - usageUplink (string): Filter results by usage uplink
@@ -4245,7 +4254,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/summary/top/switches/byEnergyUsage'
 
-        query_params = ['networkTag', 'deviceTag', 'networkId', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
+        query_params = ['networkTag', 'deviceTag', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)

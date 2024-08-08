@@ -574,12 +574,14 @@ class ActionBatchWireless(object):
 
     def updateNetworkWirelessRfProfile(self, networkId: str, rfProfileId: str, **kwargs):
         """
-        **Updates specified RF profile for this network**
+        **Updates specified RF profile for this network. Note: built-in RF profiles can only be assigned as a default, and its attributes are immutable**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-rf-profile
 
         - networkId (string): Network ID
         - rfProfileId (string): Rf profile ID
         - name (string): The name of the new profile. Must be unique.
+        - isIndoorDefault (boolean): Set this profile as the default indoor rf profile. If the profile ID is one of 'indoor' or 'outdoor',   then a new profile will be created from the respective ID and set as the default
+        - isOutdoorDefault (boolean): Set this profile as the default outdoor rf profile. If the profile ID is one of 'indoor' or 'outdoor',   then a new profile will be created from the respective ID and set as the default
         - clientBalancingEnabled (boolean): Steers client to best available access point. Can be either true or false.
         - minBitrateType (string): Minimum bitrate can be set to either 'band' or 'ssid'.
         - bandSelectionType (string): Band selection can be set to either 'ssid' or 'ap'.
@@ -607,7 +609,7 @@ class ActionBatchWireless(object):
         }
         resource = f'/networks/{networkId}/wireless/rfProfiles/{rfProfileId}'
 
-        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', 'sixGhzSettings', 'transmission', 'perSsidSettings', 'flexRadios', ]
+        body_params = ['name', 'isIndoorDefault', 'isOutdoorDefault', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', 'sixGhzSettings', 'transmission', 'perSsidSettings', 'flexRadios', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
