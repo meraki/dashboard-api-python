@@ -738,6 +738,7 @@ class Wireless(object):
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - sortOrder (string): Sorted order of entries. Order options are 'ascending' and 'descending'. Default is 'ascending'.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
@@ -750,6 +751,9 @@ class Wireless(object):
 
         kwargs.update(locals())
 
+        if 'sortOrder' in kwargs:
+            options = ['ascending', 'descending']
+            assert kwargs['sortOrder'] in options, f'''"sortOrder" cannot be "{kwargs['sortOrder']}", & must be set to one of: {options}'''
         if 'band' in kwargs:
             options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
@@ -765,7 +769,7 @@ class Wireless(object):
         clientId = urllib.parse.quote(str(clientId), safe='')
         resource = f'/networks/{networkId}/wireless/clients/{clientId}/connectivityEvents'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', 'types', 'band', 'ssidNumber', 'includedSeverities', 'deviceSerial', ]
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'sortOrder', 't0', 't1', 'timespan', 'types', 'band', 'ssidNumber', 'includedSeverities', 'deviceSerial', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['types', 'includedSeverities', ]
@@ -1441,6 +1445,8 @@ class Wireless(object):
         - networkId (string): Network ID
         - rfProfileId (string): Rf profile ID
         - name (string): The name of the new profile. Must be unique.
+        - isIndoorDefault (boolean): Set this profile as the default indoor rf profile. If the profile ID is one of 'indoor' or 'outdoor',   then a new profile will be created from the respective ID and set as the default
+        - isOutdoorDefault (boolean): Set this profile as the default outdoor rf profile. If the profile ID is one of 'indoor' or 'outdoor',   then a new profile will be created from the respective ID and set as the default
         - clientBalancingEnabled (boolean): Steers client to best available access point. Can be either true or false.
         - minBitrateType (string): Minimum bitrate can be set to either 'band' or 'ssid'.
         - bandSelectionType (string): Band selection can be set to either 'ssid' or 'ap'.
@@ -1470,7 +1476,7 @@ class Wireless(object):
         rfProfileId = urllib.parse.quote(str(rfProfileId), safe='')
         resource = f'/networks/{networkId}/wireless/rfProfiles/{rfProfileId}'
 
-        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', 'sixGhzSettings', 'transmission', 'perSsidSettings', 'flexRadios', ]
+        body_params = ['name', 'isIndoorDefault', 'isOutdoorDefault', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', 'sixGhzSettings', 'transmission', 'perSsidSettings', 'flexRadios', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)

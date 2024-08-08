@@ -321,6 +321,7 @@ class ActionBatchSwitch(object):
         - name (string): Name or description for layer 3 static route
         - subnet (string): The subnet which is routed via this static route and should be specified in CIDR notation (ex. 1.2.3.0/24)
         - nextHopIp (string): IP address of the next hop device to which the device sends its traffic for the subnet
+        - managementNextHop (string): Optional fallback IP address for management traffic
         - advertiseViaOspfEnabled (boolean): Option to advertise static route via OSPF
         - preferOverOspfRoutesEnabled (boolean): Option to prefer static route over OSPF routes
         """
@@ -333,7 +334,7 @@ class ActionBatchSwitch(object):
         }
         resource = f'/devices/{serial}/switch/routing/staticRoutes/{staticRouteId}'
 
-        body_params = ['name', 'subnet', 'nextHopIp', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', ]
+        body_params = ['name', 'subnet', 'nextHopIp', 'managementNextHop', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -1451,6 +1452,7 @@ class ActionBatchSwitch(object):
         - name (string): Name or description for layer 3 static route
         - subnet (string): The subnet which is routed via this static route and should be specified in CIDR notation (ex. 1.2.3.0/24)
         - nextHopIp (string): IP address of the next hop device to which the device sends its traffic for the subnet
+        - managementNextHop (string): Optional fallback IP address for management traffic
         - advertiseViaOspfEnabled (boolean): Option to advertise static route via OSPF
         - preferOverOspfRoutesEnabled (boolean): Option to prefer static route over OSPF routes
         """
@@ -1463,7 +1465,7 @@ class ActionBatchSwitch(object):
         }
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes/{staticRouteId}'
 
-        body_params = ['name', 'subnet', 'nextHopIp', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', ]
+        body_params = ['name', 'subnet', 'nextHopIp', 'managementNextHop', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
