@@ -26,7 +26,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pipenv
-          pipenv install --deploy
+          pipenv install --python 3.10
       - name: Delete folder
         run: |
           rm -rf meraki
