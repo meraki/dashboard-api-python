@@ -744,6 +744,7 @@ class AsyncNetworks:
         - smDeviceName (string): The name of the Systems Manager device which the list of events will be filtered with
         - eventDetails (string): The details of the event(Catalyst device only) which the list of events will be filtered with
         - eventSeverity (string): The severity of the event(Catalyst device only) which the list of events will be filtered with
+        - isCatalyst (boolean): Boolean indicating that whether it is a Catalyst device. For Catalyst device, eventDetails and eventSeverity can be used to filter events.
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 10.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
@@ -762,7 +763,7 @@ class AsyncNetworks:
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/events'
 
-        query_params = ['productType', 'includedEventTypes', 'excludedEventTypes', 'deviceMac', 'deviceSerial', 'deviceName', 'clientIp', 'clientMac', 'clientName', 'smDeviceMac', 'smDeviceName', 'eventDetails', 'eventSeverity', 'perPage', 'startingAfter', 'endingBefore', ]
+        query_params = ['productType', 'includedEventTypes', 'excludedEventTypes', 'deviceMac', 'deviceSerial', 'deviceName', 'clientIp', 'clientMac', 'clientName', 'smDeviceMac', 'smDeviceName', 'eventDetails', 'eventSeverity', 'isCatalyst', 'perPage', 'startingAfter', 'endingBefore', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['includedEventTypes', 'excludedEventTypes', ]
@@ -1440,7 +1441,7 @@ class AsyncNetworks:
 
     def getNetworkMerakiAuthUsers(self, networkId: str):
         """
-        **List the users configured under Meraki Authentication for a network (splash guest or RADIUS users for a wireless network, or client VPN users for a MX network)**
+        **List the authorized users configured under Meraki Authentication for a network (splash guest or RADIUS users for a wireless network, or client VPN users for a MX network)**
         https://developer.cisco.com/meraki/api-v1/#!get-network-meraki-auth-users
 
         - networkId (string): Network ID

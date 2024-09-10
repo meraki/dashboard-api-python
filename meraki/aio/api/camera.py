@@ -484,6 +484,7 @@ class AsyncCamera:
         - audioRecordingEnabled (boolean): Whether or not to record audio. Can be either true or false. Defaults to false.
         - cloudArchiveEnabled (boolean): Create redundant video backup using Cloud Archive. Can be either true or false. Defaults to false.
         - motionDetectorVersion (integer): The version of the motion detector that will be used by the camera. Only applies to Gen 2 cameras. Defaults to v2.
+        - smartRetention (object): Smart Retention records footage in two qualities and intelligently retains higher quality when motion, people or vehicles are detected.
         - scheduleId (string): Schedule for which this camera will record video, or 'null' to always record.
         - maxRetentionDays (integer): The maximum number of days for which the data will be stored, or 'null' to keep data until storage space runs out. If the former, it can be one of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 14, 30, 60, 90] days.
         - videoSettings (object): Video quality and resolution settings for all the camera models.
@@ -498,7 +499,7 @@ class AsyncCamera:
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/camera/qualityRetentionProfiles'
 
-        body_params = ['name', 'motionBasedRetentionEnabled', 'restrictedBandwidthModeEnabled', 'audioRecordingEnabled', 'cloudArchiveEnabled', 'motionDetectorVersion', 'scheduleId', 'maxRetentionDays', 'videoSettings', ]
+        body_params = ['name', 'motionBasedRetentionEnabled', 'restrictedBandwidthModeEnabled', 'audioRecordingEnabled', 'cloudArchiveEnabled', 'motionDetectorVersion', 'smartRetention', 'scheduleId', 'maxRetentionDays', 'videoSettings', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -539,6 +540,7 @@ class AsyncCamera:
         - audioRecordingEnabled (boolean): Whether or not to record audio. Can be either true or false. Defaults to false.
         - cloudArchiveEnabled (boolean): Create redundant video backup using Cloud Archive. Can be either true or false. Defaults to false.
         - motionDetectorVersion (integer): The version of the motion detector that will be used by the camera. Only applies to Gen 2 cameras. Defaults to v2.
+        - smartRetention (object): Smart Retention records footage in two qualities and intelligently retains higher quality when motion, people or vehicles are detected.
         - scheduleId (string): Schedule for which this camera will record video, or 'null' to always record.
         - maxRetentionDays (integer): The maximum number of days for which the data will be stored, or 'null' to keep data until storage space runs out. If the former, it can be one of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 14, 30, 60, 90] days.
         - videoSettings (object): Video quality and resolution settings for all the camera models.
@@ -554,7 +556,7 @@ class AsyncCamera:
         qualityRetentionProfileId = urllib.parse.quote(str(qualityRetentionProfileId), safe='')
         resource = f'/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}'
 
-        body_params = ['name', 'motionBasedRetentionEnabled', 'restrictedBandwidthModeEnabled', 'audioRecordingEnabled', 'cloudArchiveEnabled', 'motionDetectorVersion', 'scheduleId', 'maxRetentionDays', 'videoSettings', ]
+        body_params = ['name', 'motionBasedRetentionEnabled', 'restrictedBandwidthModeEnabled', 'audioRecordingEnabled', 'cloudArchiveEnabled', 'motionDetectorVersion', 'smartRetention', 'scheduleId', 'maxRetentionDays', 'videoSettings', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)

@@ -276,6 +276,300 @@ class CellularGateway(object):
         
 
 
+    def getOrganizationCellularGatewayEsimsInventory(self, organizationId: str, **kwargs):
+        """
+        **The eSIM inventory of a given organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-cellular-gateway-esims-inventory
+
+        - organizationId (string): Organization ID
+        - eids (array): Optional parameter to filter the results by EID.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['cellularGateway', 'configure', 'esims', 'inventory'],
+            'operation': 'getOrganizationCellularGatewayEsimsInventory'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/cellularGateway/esims/inventory'
+
+        query_params = ['eids', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['eids', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get(metadata, resource, params)
+        
+
+
+    def updateOrganizationCellularGatewayEsimsInventory(self, organizationId: str, id: str, **kwargs):
+        """
+        **Toggle the status of an eSIM**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-cellular-gateway-esims-inventory
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        - status (string): Status the eSIM will be updated to
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['cellularGateway', 'configure', 'esims', 'inventory'],
+            'operation': 'updateOrganizationCellularGatewayEsimsInventory'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        id = urllib.parse.quote(str(id), safe='')
+        resource = f'/organizations/{organizationId}/cellularGateway/esims/inventory/{id}'
+
+        body_params = ['status', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def getOrganizationCellularGatewayEsimsServiceProviders(self, organizationId: str):
+        """
+        **Service providers customers can add accounts for.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-cellular-gateway-esims-service-providers
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            'tags': ['cellularGateway', 'configure', 'esims', 'serviceProviders'],
+            'operation': 'getOrganizationCellularGatewayEsimsServiceProviders'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/cellularGateway/esims/serviceProviders'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def getOrganizationCellularGatewayEsimsServiceProvidersAccounts(self, organizationId: str, **kwargs):
+        """
+        **Inventory of service provider accounts tied to the organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-cellular-gateway-esims-service-providers-accounts
+
+        - organizationId (string): Organization ID
+        - accountIds (array): Optional parameter to filter the results by service provider account IDs.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['cellularGateway', 'configure', 'esims', 'serviceProviders', 'accounts'],
+            'operation': 'getOrganizationCellularGatewayEsimsServiceProvidersAccounts'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/cellularGateway/esims/serviceProviders/accounts'
+
+        query_params = ['accountIds', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['accountIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get(metadata, resource, params)
+        
+
+
+    def createOrganizationCellularGatewayEsimsServiceProvidersAccount(self, organizationId: str, accountId: str, apiKey: str, serviceProvider: dict, title: str, username: str):
+        """
+        **Add a service provider account.**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-cellular-gateway-esims-service-providers-account
+
+        - organizationId (string): Organization ID
+        - accountId (string): Service provider account ID
+        - apiKey (string): Service provider account API key
+        - serviceProvider (object): Service Provider information
+        - title (string): Service provider account name
+        - username (string): Service provider account username
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['cellularGateway', 'configure', 'esims', 'serviceProviders', 'accounts'],
+            'operation': 'createOrganizationCellularGatewayEsimsServiceProvidersAccount'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/cellularGateway/esims/serviceProviders/accounts'
+
+        body_params = ['accountId', 'apiKey', 'serviceProvider', 'title', 'username', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getOrganizationCellularGatewayEsimsServiceProvidersAccountsCommunicationPlans(self, organizationId: str, accountIds: list):
+        """
+        **The communication plans available for a given provider.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-cellular-gateway-esims-service-providers-accounts-communication-plans
+
+        - organizationId (string): Organization ID
+        - accountIds (array): Account IDs that communication plans will be fetched for
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['cellularGateway', 'configure', 'esims', 'serviceProviders', 'accounts', 'communicationPlans'],
+            'operation': 'getOrganizationCellularGatewayEsimsServiceProvidersAccountsCommunicationPlans'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/cellularGateway/esims/serviceProviders/accounts/communicationPlans'
+
+        query_params = ['accountIds', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['accountIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get(metadata, resource, params)
+        
+
+
+    def getOrganizationCellularGatewayEsimsServiceProvidersAccountsRatePlans(self, organizationId: str, accountIds: list):
+        """
+        **The rate plans available for a given provider.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-cellular-gateway-esims-service-providers-accounts-rate-plans
+
+        - organizationId (string): Organization ID
+        - accountIds (array): Account IDs that rate plans will be fetched for
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['cellularGateway', 'configure', 'esims', 'serviceProviders', 'accounts', 'ratePlans'],
+            'operation': 'getOrganizationCellularGatewayEsimsServiceProvidersAccountsRatePlans'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/cellularGateway/esims/serviceProviders/accounts/ratePlans'
+
+        query_params = ['accountIds', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['accountIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get(metadata, resource, params)
+        
+
+
+    def updateOrganizationCellularGatewayEsimsServiceProvidersAccount(self, organizationId: str, accountId: str, **kwargs):
+        """
+        **Edit service provider account info stored in Meraki's database.**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-cellular-gateway-esims-service-providers-account
+
+        - organizationId (string): Organization ID
+        - accountId (string): Account ID
+        - title (string): Service provider account name used on the Meraki UI
+        - apiKey (string): Service provider account API key
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['cellularGateway', 'configure', 'esims', 'serviceProviders', 'accounts'],
+            'operation': 'updateOrganizationCellularGatewayEsimsServiceProvidersAccount'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        accountId = urllib.parse.quote(str(accountId), safe='')
+        resource = f'/organizations/{organizationId}/cellularGateway/esims/serviceProviders/accounts/{accountId}'
+
+        body_params = ['title', 'apiKey', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def deleteOrganizationCellularGatewayEsimsServiceProvidersAccount(self, organizationId: str, accountId: str):
+        """
+        **Remove a service provider account's integration with the Dashboard.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-cellular-gateway-esims-service-providers-account
+
+        - organizationId (string): Organization ID
+        - accountId (string): Account ID
+        """
+
+        metadata = {
+            'tags': ['cellularGateway', 'configure', 'esims', 'serviceProviders', 'accounts'],
+            'operation': 'deleteOrganizationCellularGatewayEsimsServiceProvidersAccount'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        accountId = urllib.parse.quote(str(accountId), safe='')
+        resource = f'/organizations/{organizationId}/cellularGateway/esims/serviceProviders/accounts/{accountId}'
+
+        return self._session.delete(metadata, resource)
+        
+
+
+    def createOrganizationCellularGatewayEsimsSwap(self, organizationId: str, swaps: list):
+        """
+        **Swap which profile an eSIM uses.**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-cellular-gateway-esims-swap
+
+        - organizationId (string): Organization ID
+        - swaps (array): Each object represents a swap for one eSIM
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['cellularGateway', 'configure', 'esims', 'swap'],
+            'operation': 'createOrganizationCellularGatewayEsimsSwap'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/cellularGateway/esims/swap'
+
+        body_params = ['swaps', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def updateOrganizationCellularGatewayEsimsSwap(self, id: str, organizationId: str):
+        """
+        **Get the status of a profile swap.**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-cellular-gateway-esims-swap
+
+        - id (string): eSIM EID
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            'tags': ['cellularGateway', 'configure', 'esims', 'swap'],
+            'operation': 'updateOrganizationCellularGatewayEsimsSwap'
+        }
+        id = urllib.parse.quote(str(id), safe='')
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/cellularGateway/esims/swap/{id}'
+
+        return self._session.put(metadata, resource)
+        
+
+
     def getOrganizationCellularGatewayUplinkStatuses(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the uplink status of every Meraki MG cellular gateway in the organization**

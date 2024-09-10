@@ -687,13 +687,16 @@ class AsyncOrganizations:
         
 
 
-    def getOrganizationAdmins(self, organizationId: str):
+    def getOrganizationAdmins(self, organizationId: str, **kwargs):
         """
         **List the dashboard administrators in this organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-admins
 
         - organizationId (string): Organization ID
+        - networkIds (array): Optional parameter to filter the result set by the included set of network IDs
         """
+
+        kwargs.update(locals())
 
         metadata = {
             'tags': ['organizations', 'configure', 'admins'],
@@ -702,7 +705,16 @@ class AsyncOrganizations:
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/admins'
 
-        return self._session.get(metadata, resource)
+        query_params = ['networkIds', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get(metadata, resource, params)
         
 
 
@@ -1900,6 +1912,7 @@ class AsyncOrganizations:
         - serials (array): Optional parameter to filter device availabilities by device serial numbers. This filter uses multiple exact matches.
         - tags (array): An optional parameter to filter devices by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below). This filter uses multiple exact matches.
         - tagsFilterType (string): An optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return devices which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
+        - statuses (array): Optional parameter to filter device availabilities by device status. This filter uses multiple exact matches.
         """
 
         kwargs.update(locals())
@@ -1915,10 +1928,10 @@ class AsyncOrganizations:
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/devices/availabilities'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'productTypes', 'serials', 'tags', 'tagsFilterType', ]
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'productTypes', 'serials', 'tags', 'tagsFilterType', 'statuses', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', 'productTypes', 'serials', 'tags', ]
+        array_params = ['networkIds', 'productTypes', 'serials', 'tags', 'statuses', ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
                 params[f'{k.strip()}[]'] = kwargs[f'{k}']
