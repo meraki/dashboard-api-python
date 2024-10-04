@@ -193,6 +193,7 @@ def main():
         "sensor",
         "licensing",
         "secureConnect",
+        "wirelessController",
     ]
     # legacy scopes = ['organizations', 'networks', 'devices',
     #           'appliance', 'camera', 'cellularGateway', 'insight', 'sm', 'switch', 'wireless']
