@@ -2534,6 +2534,44 @@ class AsyncWireless:
         
 
 
+    def getOrganizationWirelessClientsOverviewByDevice(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **List access point client count at the moment in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-clients-overview-by-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Optional parameter to filter access points client counts by network ID. This filter uses multiple exact matches.
+        - serials (array): Optional parameter to filter access points client counts by its serial numbers. This filter uses multiple exact matches.
+        - campusGatewayClusterIds (array): Optional parameter to filter access points client counts by MCG cluster IDs. This filter uses multiple exact matches.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'clients', 'overview', 'byDevice'],
+            'operation': 'getOrganizationWirelessClientsOverviewByDevice'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/clients/overview/byDevice'
+
+        query_params = ['networkIds', 'serials', 'campusGatewayClusterIds', 'perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', 'serials', 'campusGatewayClusterIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
     def getOrganizationWirelessDevicesChannelUtilizationByDevice(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **Get average channel utilization for all bands in a network, split by AP**
@@ -2851,6 +2889,44 @@ class AsyncWireless:
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['networkIds', 'serials', 'ssids', 'bands', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def getOrganizationWirelessDevicesWirelessControllersByDevice(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **List of Catalyst access points information**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-wireless-controllers-by-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Optional parameter to filter access points by network ID. This filter uses multiple exact matches.
+        - serials (array): Optional parameter to filter access points by its cloud ID. This filter uses multiple exact matches.
+        - controllerSerials (array): Optional parameter to filter access points by its wireless LAN controller cloud ID. This filter uses multiple exact matches.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'devices', 'wirelessControllers', 'byDevice'],
+            'operation': 'getOrganizationWirelessDevicesWirelessControllersByDevice'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/devices/wirelessControllers/byDevice'
+
+        query_params = ['networkIds', 'serials', 'controllerSerials', 'perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', 'serials', 'controllerSerials', ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
                 params[f'{k.strip()}[]'] = kwargs[f'{k}']
