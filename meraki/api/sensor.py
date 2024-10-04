@@ -167,10 +167,10 @@ class Sensor(object):
         https://developer.cisco.com/meraki/api-v1/#!get-network-sensor-alerts-overview-by-metric
 
         - networkId (string): Network ID
-        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
-        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
-        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 7 days.
-        - interval (integer): The time interval in seconds for returned data. The valid intervals are: 86400, 604800. The default is 604800.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 731 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 366 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 366 days. The default is 7 days. If interval is provided, the timespan will be autocalculated.
+        - interval (integer): The time interval in seconds for returned data. The valid intervals are: 900, 3600, 86400, 604800, 2592000. The default is 604800. Interval is calculated if time params are provided.
         """
 
         kwargs.update(locals())
