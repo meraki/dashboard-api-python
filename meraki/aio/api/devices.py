@@ -252,6 +252,53 @@ class AsyncDevices:
         
 
 
+    def createDeviceLiveToolsLedsBlink(self, serial: str, duration: int, **kwargs):
+        """
+        **Enqueue a job to blink LEDs on a device**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-leds-blink
+
+        - serial (string): Serial
+        - duration (integer): The duration in seconds to blink LEDs.
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['devices', 'liveTools', 'leds', 'blink'],
+            'operation': 'createDeviceLiveToolsLedsBlink'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        resource = f'/devices/{serial}/liveTools/leds/blink'
+
+        body_params = ['duration', 'callback', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getDeviceLiveToolsLedsBlink(self, serial: str, ledsBlinkId: str):
+        """
+        **Return a blink LEDs job**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-live-tools-leds-blink
+
+        - serial (string): Serial
+        - ledsBlinkId (string): Leds blink ID
+        """
+
+        metadata = {
+            'tags': ['devices', 'liveTools', 'leds', 'blink'],
+            'operation': 'getDeviceLiveToolsLedsBlink'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        ledsBlinkId = urllib.parse.quote(str(ledsBlinkId), safe='')
+        resource = f'/devices/{serial}/liveTools/leds/blink/{ledsBlinkId}'
+
+        return self._session.get(metadata, resource)
+        
+
+
     def createDeviceLiveToolsPing(self, serial: str, target: str, **kwargs):
         """
         **Enqueue a job to ping a target host from the device**

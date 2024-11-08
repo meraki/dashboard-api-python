@@ -698,6 +698,7 @@ class ActionBatchWireless(object):
         - number (string): Number
         - name (string): The name of the SSID
         - enabled (boolean): Whether or not the SSID is enabled
+        - localAuth (boolean): Extended local auth flag for Enterprise NAC
         - authMode (string): The association control method for the SSID ('open', 'open-enhanced', 'psk', 'open-with-radius', 'open-with-nac', '8021x-meraki', '8021x-nac', '8021x-radius', '8021x-google', '8021x-entra', '8021x-localradius', 'ipsk-with-radius', 'ipsk-without-radius' or 'ipsk-with-nac')
         - enterpriseAdminAccess (string): Whether or not an SSID is accessible by 'enterprise' administrators ('access disabled' or 'access enabled')
         - encryptionMode (string): The psk encryption mode for the SSID ('wep' or 'wpa'). This param is only valid if the authMode is 'psk'
@@ -790,7 +791,7 @@ class ActionBatchWireless(object):
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}'
 
-        body_params = ['name', 'enabled', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk', 'wpaEncryptionMode', 'dot11w', 'dot11r', 'splashPage', 'splashGuestSponsorDomains', 'oauth', 'localRadius', 'ldap', 'activeDirectory', 'radiusServers', 'radiusProxyEnabled', 'radiusTestingEnabled', 'radiusCalledStationId', 'radiusAuthenticationNasId', 'radiusServerTimeout', 'radiusServerAttemptsLimit', 'radiusFallbackEnabled', 'radiusCoaEnabled', 'radiusFailoverPolicy', 'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusAccountingInterimInterval', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging', 'concentratorNetworkId', 'secondaryConcentratorNetworkId', 'disassociateClientsOnVpnFailover', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 'walledGardenEnabled', 'walledGardenRanges', 'gre', 'radiusOverride', 'radiusGuestVlanEnabled', 'radiusGuestVlanId', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'perSsidBandwidthLimitUp', 'perSsidBandwidthLimitDown', 'lanIsolationEnabled', 'visible', 'availableOnAllAps', 'availabilityTags', 'mandatoryDhcpEnabled', 'adultContentFilteringEnabled', 'dnsRewrite', 'speedBurst', 'namedVlans', ]
+        body_params = ['name', 'enabled', 'localAuth', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk', 'wpaEncryptionMode', 'dot11w', 'dot11r', 'splashPage', 'splashGuestSponsorDomains', 'oauth', 'localRadius', 'ldap', 'activeDirectory', 'radiusServers', 'radiusProxyEnabled', 'radiusTestingEnabled', 'radiusCalledStationId', 'radiusAuthenticationNasId', 'radiusServerTimeout', 'radiusServerAttemptsLimit', 'radiusFallbackEnabled', 'radiusCoaEnabled', 'radiusFailoverPolicy', 'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusAccountingInterimInterval', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging', 'concentratorNetworkId', 'secondaryConcentratorNetworkId', 'disassociateClientsOnVpnFailover', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 'walledGardenEnabled', 'walledGardenRanges', 'gre', 'radiusOverride', 'radiusGuestVlanEnabled', 'radiusGuestVlanId', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'perSsidBandwidthLimitUp', 'perSsidBandwidthLimitDown', 'lanIsolationEnabled', 'visible', 'availableOnAllAps', 'availabilityTags', 'mandatoryDhcpEnabled', 'adultContentFilteringEnabled', 'dnsRewrite', 'speedBurst', 'namedVlans', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -1258,6 +1259,37 @@ class ActionBatchWireless(object):
         resource = f'/networks/{networkId}/wireless/ssids/{number}/vpn'
 
         body_params = ['concentrator', 'splitTunnel', 'failover', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def recalculateOrganizationWirelessRadioAutoRfChannels(self, organizationId: str, networkIds: list):
+        """
+        **Recalculates automatically assigned channels for every AP within specified the specified network(s). Note: This could cause a brief loss in connectivity for wireless clients.**
+        https://developer.cisco.com/meraki/api-v1/#!recalculate-organization-wireless-radio-auto-rf-channels
+
+        - organizationId (string): Organization ID
+        - networkIds (array): A list of network ids (limit: 15).
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'radio', 'autoRf', 'channels'],
+            'operation': 'recalculateOrganizationWirelessRadioAutoRfChannels'
+        }
+        resource = f'/organizations/{organizationId}/wireless/radio/autoRf/channels/recalculate'
+
+        body_params = ['networkIds', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
