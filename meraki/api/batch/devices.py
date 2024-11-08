@@ -46,6 +46,38 @@ class ActionBatchDevices(object):
 
 
 
+    def createDeviceLiveToolsLedsBlink(self, serial: str, duration: int, **kwargs):
+        """
+        **Enqueue a job to blink LEDs on a device. This endpoint has a rate limit of one request every 10 seconds.**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-leds-blink
+
+        - serial (string): Serial
+        - duration (integer): The duration in seconds to blink LEDs.
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['devices', 'liveTools', 'leds', 'blink'],
+            'operation': 'createDeviceLiveToolsLedsBlink'
+        }
+        resource = f'/devices/{serial}/liveTools/leds/blink'
+
+        body_params = ['duration', 'callback', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "blink",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
     def createDeviceLiveToolsThroughputTest(self, serial: str, **kwargs):
         """
         **Enqueue a job to test a device throughput, the test will run for 10 secs to test throughput. This endpoint has a rate limit of one request every five seconds per device.**

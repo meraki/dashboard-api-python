@@ -367,6 +367,158 @@ class ActionBatchNetworks(object):
 
 
 
+    def batchNetworkFloorPlansAutoLocateJobs(self, networkId: str, jobs: list):
+        """
+        **Schedule auto locate jobs for one or more floor plans in a network**
+        https://developer.cisco.com/meraki/api-v1/#!batch-network-floor-plans-auto-locate-jobs
+
+        - networkId (string): Network ID
+        - jobs (array): The list of auto locate jobs to be scheduled. Up to 100 jobs can be provided in a request.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['networks', 'configure', 'floorPlans', 'autoLocate', 'jobs'],
+            'operation': 'batchNetworkFloorPlansAutoLocateJobs'
+        }
+        resource = f'/networks/{networkId}/floorPlans/autoLocate/jobs/batch'
+
+        body_params = ['jobs', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "batch_create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def cancelNetworkFloorPlansAutoLocateJob(self, networkId: str, jobId: str):
+        """
+        **Cancel a scheduled or running auto locate job**
+        https://developer.cisco.com/meraki/api-v1/#!cancel-network-floor-plans-auto-locate-job
+
+        - networkId (string): Network ID
+        - jobId (string): Job ID
+        """
+
+        metadata = {
+            'tags': ['networks', 'configure', 'floorPlans', 'autoLocate', 'jobs'],
+            'operation': 'cancelNetworkFloorPlansAutoLocateJob'
+        }
+        resource = f'/networks/{networkId}/floorPlans/autoLocate/jobs/{jobId}/cancel'
+
+        action = {
+            "resource": resource,
+            "operation": "cancel",
+        }
+        return action
+        
+
+
+
+
+
+    def publishNetworkFloorPlansAutoLocateJob(self, networkId: str, jobId: str, **kwargs):
+        """
+        **Update the status of a finished auto locate job to be published, and update device locations**
+        https://developer.cisco.com/meraki/api-v1/#!publish-network-floor-plans-auto-locate-job
+
+        - networkId (string): Network ID
+        - jobId (string): Job ID
+        - devices (array): The list of devices to publish positions for
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['networks', 'configure', 'floorPlans', 'autoLocate', 'jobs'],
+            'operation': 'publishNetworkFloorPlansAutoLocateJob'
+        }
+        resource = f'/networks/{networkId}/floorPlans/autoLocate/jobs/{jobId}/publish'
+
+        body_params = ['devices', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "publish",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def recalculateNetworkFloorPlansAutoLocateJob(self, networkId: str, jobId: str, **kwargs):
+        """
+        **Trigger auto locate recalculation for a job, and optionally set anchors**
+        https://developer.cisco.com/meraki/api-v1/#!recalculate-network-floor-plans-auto-locate-job
+
+        - networkId (string): Network ID
+        - jobId (string): Job ID
+        - devices (array): The list of devices to update anchor positions for
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['networks', 'configure', 'floorPlans', 'autoLocate', 'jobs'],
+            'operation': 'recalculateNetworkFloorPlansAutoLocateJob'
+        }
+        resource = f'/networks/{networkId}/floorPlans/autoLocate/jobs/{jobId}/recalculate'
+
+        body_params = ['devices', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "recalculate",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def batchNetworkFloorPlansDevicesUpdate(self, networkId: str, assignments: list):
+        """
+        **Update floorplan assignments for a batch of devices**
+        https://developer.cisco.com/meraki/api-v1/#!batch-network-floor-plans-devices-update
+
+        - networkId (string): Network ID
+        - assignments (array): List of floorplan assignments to update. Up to 100 floor plan assignments can be provided in a request.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['networks', 'configure', 'floorPlans', 'devices'],
+            'operation': 'batchNetworkFloorPlansDevicesUpdate'
+        }
+        resource = f'/networks/{networkId}/floorPlans/devices/batchUpdate'
+
+        body_params = ['assignments', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "batch_update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
     def updateNetworkFloorPlan(self, networkId: str, floorPlanId: str, **kwargs):
         """
         **Update a floor plan's geolocation and other meta data**
