@@ -40,6 +40,7 @@ from meraki.config import (
     BE_GEO_ID,
     MERAKI_PYTHON_SDK_CALLER,
     USE_ITERATOR_FOR_GET_PAGES,
+    ENABLE_KWARGS_VALIDATION,
 )
 from meraki.rest_session import *
 
@@ -72,6 +73,7 @@ class DashboardAPI(object):
     - be_geo_id (string): optional partner identifier for API usage tracking; can also be set as an environment variable BE_GEO_ID
     - caller (string): optional identifier for API usage tracking; can also be set as an environment variable MERAKI_PYTHON_SDK_CALLER
     - use_iterator_for_get_pages (boolean): list* methods will return an iterator with each object instead of a complete list with all items
+    - enable_kwarg_validation (boolean): enable kwargs validation?
     """
 
     def __init__(self,
@@ -97,6 +99,7 @@ class DashboardAPI(object):
                  caller=MERAKI_PYTHON_SDK_CALLER,
                  use_iterator_for_get_pages=USE_ITERATOR_FOR_GET_PAGES,
                  inherit_logging_config=INHERIT_LOGGING_CONFIG,
+                 enable_kwarg_validation=ENABLE_KWARGS_VALIDATION,
                  ):
 
         # Check API key
@@ -167,20 +170,21 @@ class DashboardAPI(object):
             use_iterator_for_get_pages=use_iterator_for_get_pages,
         )
 
+        self._enable_kwargs_validation = enable_kwarg_validation
         # API endpoints by section
-        self.administered = Administered(self._session)
-        self.organizations = Organizations(self._session)
-        self.networks = Networks(self._session)
-        self.devices = Devices(self._session)
-        self.appliance = Appliance(self._session)
-        self.camera = Camera(self._session)
-        self.cellularGateway = CellularGateway(self._session)
-        self.insight = Insight(self._session)
-        self.licensing = Licensing(self._session)
-        self.sensor = Sensor(self._session)
-        self.sm = Sm(self._session)
-        self.switch = Switch(self._session)
-        self.wireless = Wireless(self._session)
+        self.administered = Administered(self._session, self._enable_kwargs_validation )
+        self.organizations = Organizations(self._session, self._enable_kwargs_validation )
+        self.networks = Networks(self._session, self._enable_kwargs_validation )
+        self.devices = Devices(self._session, self._enable_kwargs_validation )
+        self.appliance = Appliance(self._session, self._enable_kwargs_validation )
+        self.camera = Camera(self._session, self._enable_kwargs_validation )
+        self.cellularGateway = CellularGateway(self._session, self._enable_kwargs_validation )
+        self.insight = Insight(self._session, self._enable_kwargs_validation )
+        self.licensing = Licensing(self._session, self._enable_kwargs_validation )
+        self.sensor = Sensor(self._session, self._enable_kwargs_validation )
+        self.sm = Sm(self._session, self._enable_kwargs_validation )
+        self.switch = Switch(self._session, self._enable_kwargs_validation )
+        self.wireless = Wireless(self._session, self._enable_kwargs_validation )
 
         # Batch definitions
-        self.batch = Batch()
+        self.batch = Batch(self._enable_kwargs_validation )
