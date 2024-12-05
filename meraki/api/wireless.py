@@ -2554,7 +2554,7 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'clients', 'overview', 'byDevice'],
+            'tags': ['wireless', 'monitor', 'clients', 'overview', 'byDevice'],
             'operation': 'getOrganizationWirelessClientsOverviewByDevice'
         }
         organizationId = urllib.parse.quote(str(organizationId), safe='')
@@ -2918,7 +2918,7 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'devices', 'wirelessControllers', 'byDevice'],
+            'tags': ['wireless', 'monitor', 'devices', 'wirelessControllers', 'byDevice'],
             'operation': 'getOrganizationWirelessDevicesWirelessControllersByDevice'
         }
         organizationId = urllib.parse.quote(str(organizationId), safe='')

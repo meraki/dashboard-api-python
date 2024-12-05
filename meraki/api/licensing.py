@@ -157,14 +157,14 @@ class Licensing(object):
         
 
 
-    def bindAdministeredLicensingSubscriptionSubscription(self, subscriptionId: str, networkIds: list, **kwargs):
+    def bindAdministeredLicensingSubscriptionSubscription(self, subscriptionId: str, **kwargs):
         """
         **Bind networks to a subscription**
         https://developer.cisco.com/meraki/api-v1/#!bind-administered-licensing-subscription-subscription
 
         - subscriptionId (string): Subscription ID
-        - networkIds (array): List of network ids to bind to the subscription
         - validate (boolean): Check if the provided networks can be bound to the subscription. Returns any licensing problems and does not commit the results.
+        - networkIds (array): List of network ids to bind to the subscription
         """
 
         kwargs.update(locals())

@@ -2571,6 +2571,51 @@ class Switch(object):
         
 
 
+    def getOrganizationSwitchPortsClientsOverviewByDevice(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **List the number of clients for all switchports with at least one online client in an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-ports-clients-overview-by-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 20. Default is 20.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - configurationUpdatedAfter (string): Optional parameter to filter items to switches where the configuration has been updated after the given timestamp.
+        - mac (string): Optional parameter to filter items to switches with MAC addresses that contain the search term or are an exact match.
+        - macs (array): Optional parameter to filter items to switches that have one of the provided MAC addresses.
+        - name (string): Optional parameter to filter items to switches with names that contain the search term or are an exact match.
+        - networkIds (array): Optional parameter to filter items to switches in one of the provided networks.
+        - portProfileIds (array): Optional parameter to filter items to switches that contain switchports belonging to one of the specified port profiles.
+        - serial (string): Optional parameter to filter items to switches with serial number that contains the search term or are an exact match.
+        - serials (array): Optional parameter to filter items to switches that have one of the provided serials.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['switch', 'monitor', 'ports', 'clients', 'overview', 'byDevice'],
+            'operation': 'getOrganizationSwitchPortsClientsOverviewByDevice'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/switch/ports/clients/overview/byDevice'
+
+        query_params = ['t0', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'configurationUpdatedAfter', 'mac', 'macs', 'name', 'networkIds', 'portProfileIds', 'serial', 'serials', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['macs', 'networkIds', 'portProfileIds', 'serials', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
     def getOrganizationSwitchPortsOverview(self, organizationId: str, **kwargs):
         """
         **Returns the counts of all active ports for the requested timespan, grouped by speed**
@@ -2629,6 +2674,51 @@ class Switch(object):
         resource = f'/organizations/{organizationId}/switch/ports/statuses/bySwitch'
 
         query_params = ['perPage', 'startingAfter', 'endingBefore', 'configurationUpdatedAfter', 'mac', 'macs', 'name', 'networkIds', 'portProfileIds', 'serial', 'serials', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['macs', 'networkIds', 'portProfileIds', 'serials', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def getOrganizationSwitchPortsTopologyDiscoveryByDevice(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **List most recently seen LLDP/CDP discovery and topology information per switch port in an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-ports-topology-discovery-by-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 20. Default is 10.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - configurationUpdatedAfter (string): Optional parameter to filter items to switches where the configuration has been updated after the given timestamp.
+        - mac (string): Optional parameter to filter items to switches with MAC addresses that contain the search term or are an exact match.
+        - macs (array): Optional parameter to filter items to switches that have one of the provided MAC addresses.
+        - name (string): Optional parameter to filter items to switches with names that contain the search term or are an exact match.
+        - networkIds (array): Optional parameter to filter items to switches in one of the provided networks.
+        - portProfileIds (array): Optional parameter to filter items to switches that contain switchports belonging to one of the specified port profiles.
+        - serial (string): Optional parameter to filter items to switches with serial number that contains the search term or are an exact match.
+        - serials (array): Optional parameter to filter items to switches that have one of the provided serials.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['switch', 'monitor', 'ports', 'topology', 'discovery', 'byDevice'],
+            'operation': 'getOrganizationSwitchPortsTopologyDiscoveryByDevice'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/switch/ports/topology/discovery/byDevice'
+
+        query_params = ['t0', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'configurationUpdatedAfter', 'mac', 'macs', 'name', 'networkIds', 'portProfileIds', 'serial', 'serials', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['macs', 'networkIds', 'portProfileIds', 'serials', ]

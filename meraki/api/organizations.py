@@ -2839,16 +2839,17 @@ class Organizations(object):
         
 
 
-    def createOrganizationInventoryOnboardingCloudMonitoringPrepare(self, organizationId: str, devices: list):
+    def createOrganizationInventoryOnboardingCloudMonitoringPrepare(self, organizationId: str, devices: list, **kwargs):
         """
         **Initiates or updates an import session**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-inventory-onboarding-cloud-monitoring-prepare
 
         - organizationId (string): Organization ID
         - devices (array): A set of devices to import (or update)
+        - options (object): Additional options for the import
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         metadata = {
             'tags': ['organizations', 'configure', 'inventory', 'onboarding', 'cloudMonitoring', 'prepare'],
@@ -2857,7 +2858,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/inventory/onboarding/cloudMonitoring/prepare'
 
-        body_params = ['devices', ]
+        body_params = ['devices', 'options', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)

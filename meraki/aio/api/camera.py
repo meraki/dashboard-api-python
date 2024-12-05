@@ -486,7 +486,7 @@ class AsyncCamera:
         - motionDetectorVersion (integer): The version of the motion detector that will be used by the camera. Only applies to Gen 2 cameras. Defaults to v2.
         - smartRetention (object): Smart Retention records footage in two qualities and intelligently retains higher quality when motion, people or vehicles are detected.
         - scheduleId (string): Schedule for which this camera will record video, or 'null' to always record.
-        - maxRetentionDays (integer): The maximum number of days for which the data will be stored, or 'null' to keep data until storage space runs out. If the former, it can be one of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 14, 30, 60, 90] days.
+        - maxRetentionDays (integer): The maximum number of days for which the data will be stored, or 'null' to keep data until storage space runs out. If the former, it can be in the range of one to ninety days.
         - videoSettings (object): Video quality and resolution settings for all the camera models.
         """
 
@@ -542,7 +542,7 @@ class AsyncCamera:
         - motionDetectorVersion (integer): The version of the motion detector that will be used by the camera. Only applies to Gen 2 cameras. Defaults to v2.
         - smartRetention (object): Smart Retention records footage in two qualities and intelligently retains higher quality when motion, people or vehicles are detected.
         - scheduleId (string): Schedule for which this camera will record video, or 'null' to always record.
-        - maxRetentionDays (integer): The maximum number of days for which the data will be stored, or 'null' to keep data until storage space runs out. If the former, it can be one of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 14, 30, 60, 90] days.
+        - maxRetentionDays (integer): The maximum number of days for which the data will be stored, or 'null' to keep data until storage space runs out. If the former, it can be in the range of one to ninety days.
         - videoSettings (object): Video quality and resolution settings for all the camera models.
         """
 
