@@ -2524,7 +2524,7 @@ class Appliance(object):
         """
 
         metadata = {
-            'tags': ['appliance', 'configure', 'uplinks', 'statuses', 'overview'],
+            'tags': ['appliance', 'monitor', 'uplinks', 'statuses', 'overview'],
             'operation': 'getOrganizationApplianceUplinksStatusesOverview'
         }
         organizationId = urllib.parse.quote(str(organizationId), safe='')

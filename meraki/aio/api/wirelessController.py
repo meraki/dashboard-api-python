@@ -106,7 +106,7 @@ class AsyncWirelessController:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wirelessController', 'configure', 'connections'],
+            'tags': ['wirelessController', 'monitor', 'connections'],
             'operation': 'getOrganizationWirelessControllerConnections'
         }
         organizationId = urllib.parse.quote(str(organizationId), safe='')
@@ -145,7 +145,7 @@ class AsyncWirelessController:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wirelessController', 'configure', 'devices', 'interfaces', 'l2', 'byDevice'],
+            'tags': ['wirelessController', 'monitor', 'devices', 'interfaces', 'l2', 'byDevice'],
             'operation': 'getOrganizationWirelessControllerDevicesInterfacesL2ByDevice'
         }
         organizationId = urllib.parse.quote(str(organizationId), safe='')
@@ -185,7 +185,7 @@ class AsyncWirelessController:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wirelessController', 'configure', 'devices', 'interfaces', 'l2', 'statuses', 'changeHistory', 'byDevice'],
+            'tags': ['wirelessController', 'monitor', 'devices', 'interfaces', 'l2', 'statuses', 'changeHistory', 'byDevice'],
             'operation': 'getOrganizationWirelessControllerDevicesInterfacesL2StatusesChangeHistoryByDevice'
         }
         organizationId = urllib.parse.quote(str(organizationId), safe='')
@@ -224,7 +224,7 @@ class AsyncWirelessController:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wirelessController', 'configure', 'devices', 'interfaces', 'l2', 'usage', 'history', 'byInterval'],
+            'tags': ['wirelessController', 'monitor', 'devices', 'interfaces', 'l2', 'usage', 'history', 'byInterval'],
             'operation': 'getOrganizationWirelessControllerDevicesInterfacesL2UsageHistoryByInterval'
         }
         organizationId = urllib.parse.quote(str(organizationId), safe='')
@@ -263,7 +263,7 @@ class AsyncWirelessController:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wirelessController', 'configure', 'devices', 'interfaces', 'l3', 'byDevice'],
+            'tags': ['wirelessController', 'monitor', 'devices', 'interfaces', 'l3', 'byDevice'],
             'operation': 'getOrganizationWirelessControllerDevicesInterfacesL3ByDevice'
         }
         organizationId = urllib.parse.quote(str(organizationId), safe='')
@@ -303,7 +303,7 @@ class AsyncWirelessController:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wirelessController', 'configure', 'devices', 'interfaces', 'l3', 'statuses', 'changeHistory', 'byDevice'],
+            'tags': ['wirelessController', 'monitor', 'devices', 'interfaces', 'l3', 'statuses', 'changeHistory', 'byDevice'],
             'operation': 'getOrganizationWirelessControllerDevicesInterfacesL3StatusesChangeHistoryByDevice'
         }
         organizationId = urllib.parse.quote(str(organizationId), safe='')
@@ -342,7 +342,7 @@ class AsyncWirelessController:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wirelessController', 'configure', 'devices', 'interfaces', 'l3', 'usage', 'history', 'byInterval'],
+            'tags': ['wirelessController', 'monitor', 'devices', 'interfaces', 'l3', 'usage', 'history', 'byInterval'],
             'operation': 'getOrganizationWirelessControllerDevicesInterfacesL3UsageHistoryByInterval'
         }
         organizationId = urllib.parse.quote(str(organizationId), safe='')
@@ -382,7 +382,7 @@ class AsyncWirelessController:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wirelessController', 'configure', 'devices', 'interfaces', 'packets', 'overview', 'byDevice'],
+            'tags': ['wirelessController', 'monitor', 'devices', 'interfaces', 'packets', 'overview', 'byDevice'],
             'operation': 'getOrganizationWirelessControllerDevicesInterfacesPacketsOverviewByDevice'
         }
         organizationId = urllib.parse.quote(str(organizationId), safe='')
@@ -422,7 +422,7 @@ class AsyncWirelessController:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wirelessController', 'configure', 'devices', 'interfaces', 'usage', 'history', 'byInterval'],
+            'tags': ['wirelessController', 'monitor', 'devices', 'interfaces', 'usage', 'history', 'byInterval'],
             'operation': 'getOrganizationWirelessControllerDevicesInterfacesUsageHistoryByInterval'
         }
         organizationId = urllib.parse.quote(str(organizationId), safe='')
@@ -461,7 +461,7 @@ class AsyncWirelessController:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wirelessController', 'configure', 'devices', 'redundancy', 'failover', 'history'],
+            'tags': ['wirelessController', 'monitor', 'devices', 'redundancy', 'failover', 'history'],
             'operation': 'getOrganizationWirelessControllerDevicesRedundancyFailoverHistory'
         }
         organizationId = urllib.parse.quote(str(organizationId), safe='')
@@ -497,7 +497,7 @@ class AsyncWirelessController:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wirelessController', 'configure', 'devices', 'redundancy', 'statuses'],
+            'tags': ['wirelessController', 'monitor', 'devices', 'redundancy', 'statuses'],
             'operation': 'getOrganizationWirelessControllerDevicesRedundancyStatuses'
         }
         organizationId = urllib.parse.quote(str(organizationId), safe='')
@@ -573,7 +573,7 @@ class AsyncWirelessController:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wirelessController', 'configure', 'overview', 'byDevice'],
+            'tags': ['wirelessController', 'monitor', 'overview', 'byDevice'],
             'operation': 'getOrganizationWirelessControllerOverviewByDevice'
         }
         organizationId = urllib.parse.quote(str(organizationId), safe='')
