@@ -648,6 +648,42 @@ class ActionBatchOrganizations(object):
 
 
 
+    def createOrganizationDevicesControllerMigration(self, organizationId: str, serials: list, target: str):
+        """
+        **Migrate devices to another controller or management mode**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-devices-controller-migration
+
+        - organizationId (string): Organization ID
+        - serials (array): A list of Meraki Serials to migrate
+        - target (string): The controller or management mode to which the devices will be migrated
+        """
+
+        kwargs = locals()
+
+        if 'target' in kwargs:
+            options = ['wirelessController']
+            assert kwargs['target'] in options, f'''"target" cannot be "{kwargs['target']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'devices', 'controller', 'migrations'],
+            'operation': 'createOrganizationDevicesControllerMigration'
+        }
+        resource = f'/organizations/{organizationId}/devices/controller/migrations'
+
+        body_params = ['serials', 'target', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "mr/actions/migrate",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
     def bulkUpdateOrganizationDevicesDetails(self, organizationId: str, serials: list, details: list):
         """
         **Updating device details (currently only used for Catalyst devices)**
