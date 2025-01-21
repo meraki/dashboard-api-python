@@ -1658,8 +1658,12 @@ class Networks(object):
         networkId = urllib.parse.quote(str(networkId), safe='')
         merakiAuthUserId = urllib.parse.quote(str(merakiAuthUserId), safe='')
         resource = f'/networks/{networkId}/merakiAuthUsers/{merakiAuthUserId}'
+        
+        query_params = ['delete']
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        return self._session.delete(metadata, resource)
+
+        return self._session.delete(metadata, resource, params)
         
 
 
