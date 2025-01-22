@@ -498,6 +498,7 @@ class RestSession(object):
     def delete(self, metadata, url, json=None):
         metadata['method'] = 'DELETE'
         metadata['url'] = url
+        metadata['json'] = json
         response = self.request(metadata, 'DELETE', url, json=json)
         if response:
             response.close()
