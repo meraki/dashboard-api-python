@@ -482,7 +482,7 @@ def generate_standard_and_async_functions(
 
             # Function body for DELETE endpoints
             elif method == "delete":
-                call_line, path_params = parse_delete_params(operation, parameters)
+                call_line, path_params, query_params = parse_delete_params(operation, parameters)
 
             # Add function to files
             with open(
@@ -569,9 +569,14 @@ def parse_post_and_put_params(method: str, operation: str, parameters: dict):
 
 
 def parse_delete_params(operation: str, parameters: dict):
+    query_params = parse_params(operation, parameters, "query")
     path_params = parse_params(operation, parameters, "path")
-    call_line = "return self._session.delete(metadata, resource)"
-    return call_line, path_params
+
+    if query_params:
+        call_line = "return self._session.delete(metadata, resource, params)"
+    else:
+        call_line = "return self._session.delete(metadata, resource)"
+    return call_line, path_params, query_params
 
 
 def generate_action_batch_functions(
