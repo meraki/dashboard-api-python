@@ -1541,7 +1541,10 @@ class Networks(object):
         groupPolicyId = urllib.parse.quote(str(groupPolicyId), safe='')
         resource = f'/networks/{networkId}/groupPolicies/{groupPolicyId}'
 
-        return self._session.delete(metadata, resource)
+        query_params = ['force', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.delete(metadata, resource, params)
         
 
 
@@ -1659,7 +1662,10 @@ class Networks(object):
         merakiAuthUserId = urllib.parse.quote(str(merakiAuthUserId), safe='')
         resource = f'/networks/{networkId}/merakiAuthUsers/{merakiAuthUserId}'
 
-        return self._session.delete(metadata, resource)
+        query_params = ['delete', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.delete(metadata, resource, params)
         
 
 
