@@ -1,6 +1,6 @@
 [project]
 name = "dashboard-api-python"
-version = "1.54.0"
+version = "1.55.0-alpha"
 description = "Meraki library for Python"
 authors = [
     {name = "Your Name",email = "you@example.com"}

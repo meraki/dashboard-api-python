@@ -1021,9 +1021,14 @@ class AsyncWireless:
         - networkId (string): Network ID
         - hostname (string): Desired ESL hostname of the network
         - enabled (boolean): Turn ESL features on and off for this network
+        - mode (string): Electronic shelf label mode of the network. Valid options are 'Bluetooth', 'high frequency'
         """
 
         kwargs.update(locals())
+
+        if 'mode' in kwargs:
+            options = ['Bluetooth', 'high frequency']
+            assert kwargs['mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['wireless', 'configure', 'electronicShelfLabel'],
@@ -1032,7 +1037,7 @@ class AsyncWireless:
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/electronicShelfLabel'
 
-        body_params = ['hostname', 'enabled', ]
+        body_params = ['hostname', 'enabled', 'mode', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1666,7 +1671,7 @@ class AsyncWireless:
         - name (string): The name of the SSID
         - enabled (boolean): Whether or not the SSID is enabled
         - localAuth (boolean): Extended local auth flag for Enterprise NAC
-        - authMode (string): The association control method for the SSID ('open', 'open-enhanced', 'psk', 'open-with-radius', 'open-with-nac', '8021x-meraki', '8021x-nac', '8021x-radius', '8021x-google', '8021x-entra', '8021x-localradius', 'ipsk-with-radius', 'ipsk-without-radius' or 'ipsk-with-nac')
+        - authMode (string): The association control method for the SSID ('open', 'open-enhanced', 'psk', 'open-with-radius', 'open-with-nac', '8021x-meraki', '8021x-nac', '8021x-radius', '8021x-google', '8021x-entra', '8021x-localradius', 'ipsk-with-radius', 'ipsk-without-radius', 'ipsk-with-nac' or 'ipsk-with-radius-easy-psk')
         - enterpriseAdminAccess (string): Whether or not an SSID is accessible by 'enterprise' administrators ('access disabled' or 'access enabled')
         - encryptionMode (string): The psk encryption mode for the SSID ('wep' or 'wpa'). This param is only valid if the authMode is 'psk'
         - psk (string): The passkey for the SSID. This param is only valid if the authMode is 'psk'
@@ -1729,7 +1734,7 @@ class AsyncWireless:
         kwargs.update(locals())
 
         if 'authMode' in kwargs:
-            options = ['8021x-entra', '8021x-google', '8021x-localradius', '8021x-meraki', '8021x-nac', '8021x-radius', 'ipsk-with-nac', 'ipsk-with-radius', 'ipsk-without-radius', 'open', 'open-enhanced', 'open-with-nac', 'open-with-radius', 'psk']
+            options = ['8021x-entra', '8021x-google', '8021x-localradius', '8021x-meraki', '8021x-nac', '8021x-radius', 'ipsk-with-nac', 'ipsk-with-radius', 'ipsk-with-radius-easy-psk', 'ipsk-without-radius', 'open', 'open-enhanced', 'open-with-nac', 'open-with-radius', 'psk']
             assert kwargs['authMode'] in options, f'''"authMode" cannot be "{kwargs['authMode']}", & must be set to one of: {options}'''
         if 'enterpriseAdminAccess' in kwargs:
             options = ['access disabled', 'access enabled']
@@ -2297,6 +2302,7 @@ class AsyncWireless:
         - guestSponsorship (object): Details associated with guest sponsored splash.
         - billing (object): Details associated with billing splash.
         - sentryEnrollment (object): Systems Manager sentry enrollment splash settings.
+        - selfRegistration (object): Self-registration settings for splash with Meraki authentication.
         """
 
         kwargs.update(locals())
@@ -2316,7 +2322,7 @@ class AsyncWireless:
         number = urllib.parse.quote(str(number), safe='')
         resource = f'/networks/{networkId}/wireless/ssids/{number}/splash/settings'
 
-        body_params = ['splashUrl', 'useSplashUrl', 'splashTimeout', 'redirectUrl', 'useRedirectUrl', 'welcomeMessage', 'themeId', 'splashLogo', 'splashImage', 'splashPrepaidFront', 'blockAllTrafficBeforeSignOn', 'controllerDisconnectionBehavior', 'allowSimultaneousLogins', 'guestSponsorship', 'billing', 'sentryEnrollment', ]
+        body_params = ['splashUrl', 'useSplashUrl', 'splashTimeout', 'redirectUrl', 'useRedirectUrl', 'welcomeMessage', 'themeId', 'splashLogo', 'splashImage', 'splashPrepaidFront', 'blockAllTrafficBeforeSignOn', 'controllerDisconnectionBehavior', 'allowSimultaneousLogins', 'guestSponsorship', 'billing', 'sentryEnrollment', 'selfRegistration', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -2900,6 +2906,86 @@ class AsyncWireless:
         
 
 
+    def getOrganizationWirelessDevicesPowerModeHistory(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Return a record of power mode changes for wireless devices in the organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-power-mode-history
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 1 day from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 1 day after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 1 day. The default is 1 day.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 20. Default is 10.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter the result set by the included set of network IDs
+        - serials (array): Optional parameter to filter device availabilities history by device serial numbers
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'monitor', 'devices', 'power', 'mode', 'history'],
+            'operation': 'getOrganizationWirelessDevicesPowerModeHistory'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/devices/power/mode/history'
+
+        query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'networkIds', 'serials', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', 'serials', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def getOrganizationWirelessDevicesSystemCpuLoadHistory(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Return the CPU Load history for a list of wireless devices in the organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-system-cpu-load-history
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 1 day from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 1 day after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 1 day. The default is 1 day.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 20. Default is 10.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter the result set by the included set of network IDs
+        - serials (array): Optional parameter to filter device availabilities history by device serial numbers
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'monitor', 'devices', 'system', 'cpu', 'load', 'history'],
+            'operation': 'getOrganizationWirelessDevicesSystemCpuLoadHistory'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/devices/system/cpu/load/history'
+
+        query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'networkIds', 'serials', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', 'serials', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
     def getOrganizationWirelessDevicesWirelessControllersByDevice(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **List of Catalyst access points information**
@@ -3004,6 +3090,120 @@ class AsyncWireless:
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def getOrganizationWirelessSsidsFirewallIsolationAllowlistEntries(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **List the L2 isolation allow list MAC entry in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-ssids-firewall-isolation-allowlist-entries
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): networkIds array to filter out results
+        - ssids (array): ssids number array to filter out results
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ssids', 'firewall', 'isolation', 'allowlist', 'entries'],
+            'operation': 'getOrganizationWirelessSsidsFirewallIsolationAllowlistEntries'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/ssids/firewall/isolation/allowlist/entries'
+
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'ssids', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', 'ssids', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def createOrganizationWirelessSsidsFirewallIsolationAllowlistEntry(self, organizationId: str, client: dict, ssid: dict, network: dict, **kwargs):
+        """
+        **Create isolation allow list MAC entry for this organization**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-wireless-ssids-firewall-isolation-allowlist-entry
+
+        - organizationId (string): Organization ID
+        - client (object): The client of allowlist
+        - ssid (object): The SSID that allowlist belongs to
+        - network (object): The Network that allowlist belongs to
+        - description (string): The description of mac address
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ssids', 'firewall', 'isolation', 'allowlist', 'entries'],
+            'operation': 'createOrganizationWirelessSsidsFirewallIsolationAllowlistEntry'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/ssids/firewall/isolation/allowlist/entries'
+
+        body_params = ['description', 'client', 'ssid', 'network', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def deleteOrganizationWirelessSsidsFirewallIsolationAllowlistEntry(self, organizationId: str, entryId: str):
+        """
+        **Destroy isolation allow list MAC entry for this organization**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-wireless-ssids-firewall-isolation-allowlist-entry
+
+        - organizationId (string): Organization ID
+        - entryId (string): Entry ID
+        """
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ssids', 'firewall', 'isolation', 'allowlist', 'entries'],
+            'operation': 'deleteOrganizationWirelessSsidsFirewallIsolationAllowlistEntry'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        entryId = urllib.parse.quote(str(entryId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/ssids/firewall/isolation/allowlist/entries/{entryId}'
+
+        return self._session.delete(metadata, resource)
+        
+
+
+    def updateOrganizationWirelessSsidsFirewallIsolationAllowlistEntry(self, organizationId: str, entryId: str, **kwargs):
+        """
+        **Update isolation allow list MAC entry info**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-wireless-ssids-firewall-isolation-allowlist-entry
+
+        - organizationId (string): Organization ID
+        - entryId (string): Entry ID
+        - description (string): The description of mac address
+        - client (object): The client of allowlist
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ssids', 'firewall', 'isolation', 'allowlist', 'entries'],
+            'operation': 'updateOrganizationWirelessSsidsFirewallIsolationAllowlistEntry'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        entryId = urllib.parse.quote(str(entryId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/ssids/firewall/isolation/allowlist/entries/{entryId}'
+
+        body_params = ['description', 'client', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
         
 
 

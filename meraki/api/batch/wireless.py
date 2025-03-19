@@ -344,9 +344,14 @@ class ActionBatchWireless(object):
         - networkId (string): Network ID
         - hostname (string): Desired ESL hostname of the network
         - enabled (boolean): Turn ESL features on and off for this network
+        - mode (string): Electronic shelf label mode of the network. Valid options are 'Bluetooth', 'high frequency'
         """
 
         kwargs.update(locals())
+
+        if 'mode' in kwargs:
+            options = ['Bluetooth', 'high frequency']
+            assert kwargs['mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['wireless', 'configure', 'electronicShelfLabel'],
@@ -354,7 +359,7 @@ class ActionBatchWireless(object):
         }
         resource = f'/networks/{networkId}/wireless/electronicShelfLabel'
 
-        body_params = ['hostname', 'enabled', ]
+        body_params = ['hostname', 'enabled', 'mode', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -699,7 +704,7 @@ class ActionBatchWireless(object):
         - name (string): The name of the SSID
         - enabled (boolean): Whether or not the SSID is enabled
         - localAuth (boolean): Extended local auth flag for Enterprise NAC
-        - authMode (string): The association control method for the SSID ('open', 'open-enhanced', 'psk', 'open-with-radius', 'open-with-nac', '8021x-meraki', '8021x-nac', '8021x-radius', '8021x-google', '8021x-entra', '8021x-localradius', 'ipsk-with-radius', 'ipsk-without-radius' or 'ipsk-with-nac')
+        - authMode (string): The association control method for the SSID ('open', 'open-enhanced', 'psk', 'open-with-radius', 'open-with-nac', '8021x-meraki', '8021x-nac', '8021x-radius', '8021x-google', '8021x-entra', '8021x-localradius', 'ipsk-with-radius', 'ipsk-without-radius', 'ipsk-with-nac' or 'ipsk-with-radius-easy-psk')
         - enterpriseAdminAccess (string): Whether or not an SSID is accessible by 'enterprise' administrators ('access disabled' or 'access enabled')
         - encryptionMode (string): The psk encryption mode for the SSID ('wep' or 'wpa'). This param is only valid if the authMode is 'psk'
         - psk (string): The passkey for the SSID. This param is only valid if the authMode is 'psk'
@@ -762,7 +767,7 @@ class ActionBatchWireless(object):
         kwargs.update(locals())
 
         if 'authMode' in kwargs:
-            options = ['8021x-entra', '8021x-google', '8021x-localradius', '8021x-meraki', '8021x-nac', '8021x-radius', 'ipsk-with-nac', 'ipsk-with-radius', 'ipsk-without-radius', 'open', 'open-enhanced', 'open-with-nac', 'open-with-radius', 'psk']
+            options = ['8021x-entra', '8021x-google', '8021x-localradius', '8021x-meraki', '8021x-nac', '8021x-radius', 'ipsk-with-nac', 'ipsk-with-radius', 'ipsk-with-radius-easy-psk', 'ipsk-without-radius', 'open', 'open-enhanced', 'open-with-nac', 'open-with-radius', 'psk']
             assert kwargs['authMode'] in options, f'''"authMode" cannot be "{kwargs['authMode']}", & must be set to one of: {options}'''
         if 'enterpriseAdminAccess' in kwargs:
             options = ['access disabled', 'access enabled']
@@ -1171,6 +1176,7 @@ class ActionBatchWireless(object):
         - guestSponsorship (object): Details associated with guest sponsored splash.
         - billing (object): Details associated with billing splash.
         - sentryEnrollment (object): Systems Manager sentry enrollment splash settings.
+        - selfRegistration (object): Self-registration settings for splash with Meraki authentication.
         """
 
         kwargs.update(locals())
@@ -1188,7 +1194,7 @@ class ActionBatchWireless(object):
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}/splash/settings'
 
-        body_params = ['splashUrl', 'useSplashUrl', 'splashTimeout', 'redirectUrl', 'useRedirectUrl', 'welcomeMessage', 'themeId', 'splashLogo', 'splashImage', 'splashPrepaidFront', 'blockAllTrafficBeforeSignOn', 'controllerDisconnectionBehavior', 'allowSimultaneousLogins', 'guestSponsorship', 'billing', 'sentryEnrollment', ]
+        body_params = ['splashUrl', 'useSplashUrl', 'splashTimeout', 'redirectUrl', 'useRedirectUrl', 'welcomeMessage', 'themeId', 'splashLogo', 'splashImage', 'splashPrepaidFront', 'blockAllTrafficBeforeSignOn', 'controllerDisconnectionBehavior', 'allowSimultaneousLogins', 'guestSponsorship', 'billing', 'sentryEnrollment', 'selfRegistration', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -1291,6 +1297,99 @@ class ActionBatchWireless(object):
         resource = f'/organizations/{organizationId}/wireless/radio/autoRf/channels/recalculate'
 
         body_params = ['networkIds', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def createOrganizationWirelessSsidsFirewallIsolationAllowlistEntry(self, organizationId: str, client: dict, ssid: dict, network: dict, **kwargs):
+        """
+        **Create isolation allow list MAC entry for this organization**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-wireless-ssids-firewall-isolation-allowlist-entry
+
+        - organizationId (string): Organization ID
+        - client (object): The client of allowlist
+        - ssid (object): The SSID that allowlist belongs to
+        - network (object): The Network that allowlist belongs to
+        - description (string): The description of mac address
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ssids', 'firewall', 'isolation', 'allowlist', 'entries'],
+            'operation': 'createOrganizationWirelessSsidsFirewallIsolationAllowlistEntry'
+        }
+        resource = f'/organizations/{organizationId}/wireless/ssids/firewall/isolation/allowlist/entries'
+
+        body_params = ['description', 'client', 'ssid', 'network', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def deleteOrganizationWirelessSsidsFirewallIsolationAllowlistEntry(self, organizationId: str, entryId: str):
+        """
+        **Destroy isolation allow list MAC entry for this organization**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-wireless-ssids-firewall-isolation-allowlist-entry
+
+        - organizationId (string): Organization ID
+        - entryId (string): Entry ID
+        """
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ssids', 'firewall', 'isolation', 'allowlist', 'entries'],
+            'operation': 'deleteOrganizationWirelessSsidsFirewallIsolationAllowlistEntry'
+        }
+        resource = f'/organizations/{organizationId}/wireless/ssids/firewall/isolation/allowlist/entries/{entryId}'
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+        
+
+
+
+
+
+    def updateOrganizationWirelessSsidsFirewallIsolationAllowlistEntry(self, organizationId: str, entryId: str, **kwargs):
+        """
+        **Update isolation allow list MAC entry info**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-wireless-ssids-firewall-isolation-allowlist-entry
+
+        - organizationId (string): Organization ID
+        - entryId (string): Entry ID
+        - description (string): The description of mac address
+        - client (object): The client of allowlist
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ssids', 'firewall', 'isolation', 'allowlist', 'entries'],
+            'operation': 'updateOrganizationWirelessSsidsFirewallIsolationAllowlistEntry'
+        }
+        resource = f'/organizations/{organizationId}/wireless/ssids/firewall/isolation/allowlist/entries/{entryId}'
+
+        body_params = ['description', 'client', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
