@@ -5,10 +5,29 @@ name: Lint Python library generator
 on:
   push:
     branches:
+    branches:
       - 'main'
+      - 'release'
+    paths-ignore:
+      - '.github/**'
+      - 'examples/**'
+      - 'meraki/aio/**'
+      - 'notebooks/**'
+      - 'README.md'
+      - 'LICENSE'
+      - 'setup.py'
   pull_request:
     branches:
       - 'main'
+      - 'release'
+    paths-ignore:
+      - '.github/**'
+      - 'examples/**'
+      - 'meraki/aio/**'
+      - 'notebooks/**'
+      - 'README.md'
+      - 'LICENSE'
+      - 'setup.py'
   workflow_dispatch:
 
 jobs:

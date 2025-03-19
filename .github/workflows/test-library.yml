@@ -19,6 +19,7 @@ on:
   pull_request:
     branches:
       - 'main'
+      - 'release'
     paths-ignore:
       - '.github/**'
       - 'examples/**'
