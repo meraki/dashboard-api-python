@@ -244,6 +244,7 @@ def generate_library(spec: dict, version_number: str, is_github_action: bool):
         "licensing",
         "secureConnect",
         "wirelessController",
+        "campusGateway"
     ]
     # legacy scopes = ['organizations', 'networks', 'devices', 'appliance', 'camera', 'cellularGateway', 'insight',
     #                  'sm', 'switch', 'wireless']
