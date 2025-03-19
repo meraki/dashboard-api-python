@@ -29,6 +29,7 @@ jobs:
       - name: Set new version for Poetry
         run: |
           sed -i "s/^version = \".*\"/version = \"${{ github.event.inputs.library_version }}\"/" pyproject.toml
+          poetry lock
       - name: Commit changes to new branch
         uses: EndBug/add-and-commit@v9
         with:
