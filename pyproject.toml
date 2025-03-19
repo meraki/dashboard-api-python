@@ -1,10 +1,12 @@
 [project]
-name = "dashboard-api-python"
+name = "meraki"
 version = "1.54.0"
 description = "Meraki library for Python"
 authors = [
-    {name = "Your Name",email = "you@example.com"}
+    {name = "Cisco Meraki",email = "api-feedback@meraki.net"}
 ]
+homepage = "https://github.com/meraki/dashboard-api-python"
+repository = "https://github.com/meraki/dashboard-api-python"
 license = {text = "MIT License"}
 readme = "README.md"
 requires-python = ">=3.10"
