@@ -49,7 +49,7 @@ class ActionBatchSwitch(object):
         - tags (array): The list of tags of the switch port.
         - enabled (boolean): The status of the switch port.
         - poeEnabled (boolean): The PoE status of the switch port.
-        - type (string): The type of the switch port ('trunk', 'access' or 'stack').
+        - type (string): The type of the switch port ('trunk', 'access', 'stack' or 'routed').
         - vlan (integer): The VLAN of the switch port. For a trunk port, this is the native VLAN. A null value will clear the value set for trunk ports.
         - voiceVlan (integer): The voice VLAN of the switch port. Only applicable to access ports.
         - allowedVlans (string): The VLANs allowed on the switch port. Only applicable to trunk ports.
@@ -76,7 +76,7 @@ class ActionBatchSwitch(object):
         kwargs.update(locals())
 
         if 'type' in kwargs:
-            options = ['access', 'stack', 'trunk']
+            options = ['access', 'routed', 'stack', 'trunk']
             assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
         if 'stpGuard' in kwargs:
             options = ['bpdu guard', 'disabled', 'loop guard', 'root guard']
@@ -1585,7 +1585,7 @@ class ActionBatchSwitch(object):
         - tags (array): The list of tags of the switch template port.
         - enabled (boolean): The status of the switch template port.
         - poeEnabled (boolean): The PoE status of the switch template port.
-        - type (string): The type of the switch template port ('trunk', 'access' or 'stack').
+        - type (string): The type of the switch template port ('trunk', 'access', 'stack' or 'routed').
         - vlan (integer): The VLAN of the switch template port. For a trunk port, this is the native VLAN. A null value will clear the value set for trunk ports.
         - voiceVlan (integer): The voice VLAN of the switch template port. Only applicable to access ports.
         - allowedVlans (string): The VLANs allowed on the switch template port. Only applicable to trunk ports.
@@ -1610,7 +1610,7 @@ class ActionBatchSwitch(object):
         kwargs.update(locals())
 
         if 'type' in kwargs:
-            options = ['access', 'stack', 'trunk']
+            options = ['access', 'routed', 'stack', 'trunk']
             assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
         if 'stpGuard' in kwargs:
             options = ['bpdu guard', 'disabled', 'loop guard', 'root guard']

@@ -219,6 +219,8 @@ class AsyncSensor:
         - schedule (object): The sensor schedule to use with the alert profile.
         - recipients (object): List of recipients that will receive the alert.
         - serials (array): List of device serials assigned to this sensor alert profile.
+        - includeSensorUrl (boolean): Include dashboard link to sensor in messages (default: true).
+        - message (string): A custom message that will appear in email and text message alerts.
         """
 
         kwargs.update(locals())
@@ -230,7 +232,7 @@ class AsyncSensor:
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/sensor/alerts/profiles'
 
-        body_params = ['name', 'schedule', 'conditions', 'recipients', 'serials', ]
+        body_params = ['name', 'schedule', 'conditions', 'recipients', 'serials', 'includeSensorUrl', 'message', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -270,6 +272,8 @@ class AsyncSensor:
         - conditions (array): List of conditions that will cause the profile to send an alert.
         - recipients (object): List of recipients that will receive the alert.
         - serials (array): List of device serials assigned to this sensor alert profile.
+        - includeSensorUrl (boolean): Include dashboard link to sensor in messages (default: true).
+        - message (string): A custom message that will appear in email and text message alerts.
         """
 
         kwargs.update(locals())
@@ -282,7 +286,7 @@ class AsyncSensor:
         id = urllib.parse.quote(str(id), safe='')
         resource = f'/networks/{networkId}/sensor/alerts/profiles/{id}'
 
-        body_params = ['name', 'schedule', 'conditions', 'recipients', 'serials', ]
+        body_params = ['name', 'schedule', 'conditions', 'recipients', 'serials', 'includeSensorUrl', 'message', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -412,7 +416,7 @@ class AsyncSensor:
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days. The default is 2 hours.
         - networkIds (array): Optional parameter to filter readings by network.
         - serials (array): Optional parameter to filter readings by sensor.
-        - metrics (array): Types of sensor readings to retrieve. If no metrics are supplied, all available types of readings will be retrieved. Allowed values are apparentPower, battery, button, co2, current, door, downstreamPower, frequency, humidity, indoorAirQuality, noise, pm25, powerFactor, realPower, remoteLockoutSwitch, temperature, tvoc, voltage, and water.
+        - metrics (array): Types of sensor readings to retrieve. If no metrics are supplied, all available types of readings will be retrieved.
         """
 
         kwargs.update(locals())
@@ -450,7 +454,7 @@ class AsyncSensor:
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - networkIds (array): Optional parameter to filter readings by network.
         - serials (array): Optional parameter to filter readings by sensor.
-        - metrics (array): Types of sensor readings to retrieve. If no metrics are supplied, all available types of readings will be retrieved. Allowed values are apparentPower, battery, button, co2, current, door, downstreamPower, frequency, humidity, indoorAirQuality, noise, pm25, powerFactor, realPower, remoteLockoutSwitch, temperature, tvoc, voltage, and water.
+        - metrics (array): Types of sensor readings to retrieve. If no metrics are supplied, all available types of readings will be retrieved.
         """
 
         kwargs.update(locals())
