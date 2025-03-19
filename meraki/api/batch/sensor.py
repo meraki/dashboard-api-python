@@ -80,6 +80,8 @@ class ActionBatchSensor(object):
         - schedule (object): The sensor schedule to use with the alert profile.
         - recipients (object): List of recipients that will receive the alert.
         - serials (array): List of device serials assigned to this sensor alert profile.
+        - includeSensorUrl (boolean): Include dashboard link to sensor in messages (default: true).
+        - message (string): A custom message that will appear in email and text message alerts.
         """
 
         kwargs.update(locals())
@@ -90,7 +92,7 @@ class ActionBatchSensor(object):
         }
         resource = f'/networks/{networkId}/sensor/alerts/profiles'
 
-        body_params = ['name', 'schedule', 'conditions', 'recipients', 'serials', ]
+        body_params = ['name', 'schedule', 'conditions', 'recipients', 'serials', 'includeSensorUrl', 'message', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -116,6 +118,8 @@ class ActionBatchSensor(object):
         - conditions (array): List of conditions that will cause the profile to send an alert.
         - recipients (object): List of recipients that will receive the alert.
         - serials (array): List of device serials assigned to this sensor alert profile.
+        - includeSensorUrl (boolean): Include dashboard link to sensor in messages (default: true).
+        - message (string): A custom message that will appear in email and text message alerts.
         """
 
         kwargs.update(locals())
@@ -126,7 +130,7 @@ class ActionBatchSensor(object):
         }
         resource = f'/networks/{networkId}/sensor/alerts/profiles/{id}'
 
-        body_params = ['name', 'schedule', 'conditions', 'recipients', 'serials', ]
+        body_params = ['name', 'schedule', 'conditions', 'recipients', 'serials', 'includeSensorUrl', 'message', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,

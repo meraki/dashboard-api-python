@@ -1183,6 +1183,7 @@ class AsyncNetworks:
         - bottomRightCorner (object): The longitude and latitude of the bottom right corner of your floor plan.
         - topLeftCorner (object): The longitude and latitude of the top left corner of your floor plan.
         - topRightCorner (object): The longitude and latitude of the top right corner of your floor plan.
+        - floorNumber (integer): The floor number of the floors within the building
         """
 
         kwargs.update(locals())
@@ -1194,7 +1195,7 @@ class AsyncNetworks:
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/floorPlans'
 
-        body_params = ['name', 'center', 'bottomLeftCorner', 'bottomRightCorner', 'topLeftCorner', 'topRightCorner', 'imageContents', ]
+        body_params = ['name', 'center', 'bottomLeftCorner', 'bottomRightCorner', 'topLeftCorner', 'topRightCorner', 'floorNumber', 'imageContents', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -1360,6 +1361,7 @@ class AsyncNetworks:
         - bottomRightCorner (object): The longitude and latitude of the bottom right corner of your floor plan.
         - topLeftCorner (object): The longitude and latitude of the top left corner of your floor plan.
         - topRightCorner (object): The longitude and latitude of the top right corner of your floor plan.
+        - floorNumber (integer): The floor number of the floors within the building
         - imageContents (string): The file contents (a base 64 encoded string) of your new image. Supported formats are PNG, GIF, and JPG. Note that all images are saved as PNG files, regardless of the format they are uploaded in. If you upload a new image, and you do NOT specify any new geolocation fields ('center, 'topLeftCorner', etc), the floor plan will be recentered with no rotation in order to maintain the aspect ratio of your new image.
         """
 
@@ -1373,7 +1375,7 @@ class AsyncNetworks:
         floorPlanId = urllib.parse.quote(str(floorPlanId), safe='')
         resource = f'/networks/{networkId}/floorPlans/{floorPlanId}'
 
-        body_params = ['name', 'center', 'bottomLeftCorner', 'bottomRightCorner', 'topLeftCorner', 'topRightCorner', 'imageContents', ]
+        body_params = ['name', 'center', 'bottomLeftCorner', 'bottomRightCorner', 'topLeftCorner', 'topRightCorner', 'floorNumber', 'imageContents', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1541,7 +1543,10 @@ class AsyncNetworks:
         groupPolicyId = urllib.parse.quote(str(groupPolicyId), safe='')
         resource = f'/networks/{networkId}/groupPolicies/{groupPolicyId}'
 
-        return self._session.delete(metadata, resource)
+        query_params = ['force', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.delete(metadata, resource, params)
         
 
 
@@ -1659,7 +1664,10 @@ class AsyncNetworks:
         merakiAuthUserId = urllib.parse.quote(str(merakiAuthUserId), safe='')
         resource = f'/networks/{networkId}/merakiAuthUsers/{merakiAuthUserId}'
 
-        return self._session.delete(metadata, resource)
+        query_params = ['delete', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.delete(metadata, resource, params)
         
 
 

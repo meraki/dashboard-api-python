@@ -50,7 +50,7 @@ class ActionBatchCamera(object):
         - motionBasedRetentionEnabled (boolean): Boolean indicating if motion-based retention is enabled(true) or disabled(false) on the camera.
         - audioRecordingEnabled (boolean): Boolean indicating if audio recording is enabled(true) or disabled(false) on the camera
         - restrictedBandwidthModeEnabled (boolean): Boolean indicating if restricted bandwidth is enabled(true) or disabled(false) on the camera. This setting does not apply to MV2 cameras.
-        - quality (string): Quality of the camera. Can be one of 'Standard', 'High' or 'Enhanced'. Not all qualities are supported by every camera model.
+        - quality (string): Quality of the camera. Can be one of 'Standard', 'High', 'Enhanced' or 'Ultra'. Not all qualities are supported by every camera model.
         - resolution (string): Resolution of the camera. Can be one of '1280x720', '1920x1080', '1080x1080', '2112x2112', '2880x2880', '2688x1512' or '3840x2160'.Not all resolutions are supported by every camera model.
         - motionDetectorVersion (integer): The version of the motion detector that will be used by the camera. Only applies to Gen 2 cameras. Defaults to v2.
         """
@@ -58,7 +58,7 @@ class ActionBatchCamera(object):
         kwargs.update(locals())
 
         if 'quality' in kwargs:
-            options = ['Enhanced', 'High', 'Standard']
+            options = ['Enhanced', 'High', 'Standard', 'Ultra']
             assert kwargs['quality'] in options, f'''"quality" cannot be "{kwargs['quality']}", & must be set to one of: {options}'''
         if 'resolution' in kwargs:
             options = ['1080x1080', '1280x720', '1920x1080', '2112x2112', '2688x1512', '2880x2880', '3840x2160']

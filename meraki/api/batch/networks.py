@@ -532,6 +532,7 @@ class ActionBatchNetworks(object):
         - bottomRightCorner (object): The longitude and latitude of the bottom right corner of your floor plan.
         - topLeftCorner (object): The longitude and latitude of the top left corner of your floor plan.
         - topRightCorner (object): The longitude and latitude of the top right corner of your floor plan.
+        - floorNumber (integer): The floor number of the floors within the building
         - imageContents (string): The file contents (a base 64 encoded string) of your new image. Supported formats are PNG, GIF, and JPG. Note that all images are saved as PNG files, regardless of the format they are uploaded in. If you upload a new image, and you do NOT specify any new geolocation fields ('center, 'topLeftCorner', etc), the floor plan will be recentered with no rotation in order to maintain the aspect ratio of your new image.
         """
 
@@ -543,7 +544,7 @@ class ActionBatchNetworks(object):
         }
         resource = f'/networks/{networkId}/floorPlans/{floorPlanId}'
 
-        body_params = ['name', 'center', 'bottomLeftCorner', 'bottomRightCorner', 'topLeftCorner', 'topRightCorner', 'imageContents', ]
+        body_params = ['name', 'center', 'bottomLeftCorner', 'bottomRightCorner', 'topLeftCorner', 'topRightCorner', 'floorNumber', 'imageContents', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
