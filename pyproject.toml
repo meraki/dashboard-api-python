@@ -1,0 +1,23 @@
+[project]
+name = "dashboard-api-python"
+version = "1.54.0"
+description = "Meraki library for Python"
+authors = [
+    {name = "Your Name",email = "you@example.com"}
+]
+license = {text = "MIT License"}
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "requests (>=2.32.2,<3.0.0)",
+    "aiohttp (>=3.9.4,<4.0.0)",
+    "meraki (>=1.54.0,<2.0.0)",
+    "jinja2 (==3.1.4)",
+    "pytest (>=7.2.1,<8.0.0)",
+    "setuptools (>=70.0.0,<71.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
