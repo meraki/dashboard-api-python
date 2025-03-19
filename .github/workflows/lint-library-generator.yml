@@ -5,7 +5,6 @@ name: Lint Python library generator
 on:
   push:
     branches:
-    branches:
       - 'main'
       - 'release'
     paths-ignore:
