@@ -136,7 +136,7 @@ class Switch(object):
         - tags (array): The list of tags of the switch port.
         - enabled (boolean): The status of the switch port.
         - poeEnabled (boolean): The PoE status of the switch port.
-        - type (string): The type of the switch port ('trunk', 'access' or 'stack').
+        - type (string): The type of the switch port ('trunk', 'access', 'stack' or 'routed').
         - vlan (integer): The VLAN of the switch port. For a trunk port, this is the native VLAN. A null value will clear the value set for trunk ports.
         - voiceVlan (integer): The voice VLAN of the switch port. Only applicable to access ports.
         - allowedVlans (string): The VLANs allowed on the switch port. Only applicable to trunk ports.
@@ -163,7 +163,7 @@ class Switch(object):
         kwargs.update(locals())
 
         if 'type' in kwargs:
-            options = ['access', 'stack', 'trunk']
+            options = ['access', 'routed', 'stack', 'trunk']
             assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
         if 'stpGuard' in kwargs:
             options = ['bpdu guard', 'disabled', 'loop guard', 'root guard']
@@ -190,13 +190,24 @@ class Switch(object):
         
 
 
-    def getDeviceSwitchRoutingInterfaces(self, serial: str):
+    def getDeviceSwitchRoutingInterfaces(self, serial: str, **kwargs):
         """
         **List layer 3 interfaces for a switch**
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-routing-interfaces
 
         - serial (string): Serial
+        - mode (string): Optional parameter to filter L3 interfaces by mode.
+        - protocol (string): Optional parameter to filter L3 interfaces by protocol.
         """
+
+        kwargs.update(locals())
+
+        if 'mode' in kwargs:
+            options = ['loopback', 'routed', 'vlan']
+            assert kwargs['mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
+        if 'protocol' in kwargs:
+            options = ['ipv4', 'ipv6']
+            assert kwargs['protocol'] in options, f'''"protocol" cannot be "{kwargs['protocol']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['switch', 'configure', 'routing', 'interfaces'],
@@ -205,7 +216,10 @@ class Switch(object):
         serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/switch/routing/interfaces'
 
-        return self._session.get(metadata, resource)
+        query_params = ['mode', 'protocol', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get(metadata, resource, params)
         
 
 
@@ -2421,7 +2435,7 @@ class Switch(object):
         - tags (array): The list of tags of the switch template port.
         - enabled (boolean): The status of the switch template port.
         - poeEnabled (boolean): The PoE status of the switch template port.
-        - type (string): The type of the switch template port ('trunk', 'access' or 'stack').
+        - type (string): The type of the switch template port ('trunk', 'access', 'stack' or 'routed').
         - vlan (integer): The VLAN of the switch template port. For a trunk port, this is the native VLAN. A null value will clear the value set for trunk ports.
         - voiceVlan (integer): The voice VLAN of the switch template port. Only applicable to access ports.
         - allowedVlans (string): The VLANs allowed on the switch template port. Only applicable to trunk ports.
@@ -2446,7 +2460,7 @@ class Switch(object):
         kwargs.update(locals())
 
         if 'type' in kwargs:
-            options = ['access', 'stack', 'trunk']
+            options = ['access', 'routed', 'stack', 'trunk']
             assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
         if 'stpGuard' in kwargs:
             options = ['bpdu guard', 'disabled', 'loop guard', 'root guard']

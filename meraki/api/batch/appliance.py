@@ -158,6 +158,37 @@ class ActionBatchAppliance(object):
 
 
 
+    def updateNetworkApplianceFirewallMulticastForwarding(self, networkId: str, rules: list):
+        """
+        **Update static multicast forward rules for a network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-firewall-multicast-forwarding
+
+        - networkId (string): Network ID
+        - rules (array): Static multicast forwarding rules. Pass an empty array to clear all rules.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'firewall', 'multicastForwarding'],
+            'operation': 'updateNetworkApplianceFirewallMulticastForwarding'
+        }
+        resource = f'/networks/{networkId}/appliance/firewall/multicastForwarding'
+
+        body_params = ['rules', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
     def updateNetworkAppliancePort(self, networkId: str, portId: str, **kwargs):
         """
         **Update the per-port VLAN settings for a single MX port.**
@@ -988,6 +1019,7 @@ class ActionBatchAppliance(object):
         - mode (string): The site-to-site VPN mode. Can be one of 'none', 'spoke' or 'hub'
         - hubs (array): The list of VPN hubs, in order of preference. In spoke mode, at least 1 hub is required.
         - subnets (array): The list of subnets and their VPN presence.
+        - subnet (object): Configuration of subnet features
         """
 
         kwargs.update(locals())
@@ -1002,7 +1034,7 @@ class ActionBatchAppliance(object):
         }
         resource = f'/networks/{networkId}/appliance/vpn/siteToSiteVpn'
 
-        body_params = ['mode', 'hubs', 'subnets', ]
+        body_params = ['mode', 'hubs', 'subnets', 'subnet', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -1068,6 +1100,405 @@ class ActionBatchAppliance(object):
         action = {
             "resource": resource,
             "operation": "swap",
+        }
+        return action
+        
+
+
+
+
+
+    def createOrganizationApplianceDnsLocalProfile(self, organizationId: str, name: str):
+        """
+        **Create a new local DNS profile**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-appliance-dns-local-profile
+
+        - organizationId (string): Organization ID
+        - name (string): Name of profile
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'dns', 'local', 'profiles'],
+            'operation': 'createOrganizationApplianceDnsLocalProfile'
+        }
+        resource = f'/organizations/{organizationId}/appliance/dns/local/profiles'
+
+        body_params = ['name', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def createOrganizationApplianceDnsLocalProfilesAssignmentsBulkCreate(self, organizationId: str, items: list):
+        """
+        **Assign the local DNS profile to networks in the organization**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-appliance-dns-local-profiles-assignments-bulk-create
+
+        - organizationId (string): Organization ID
+        - items (array): List containing the network ID and Profile ID
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'dns', 'local', 'profiles', 'assignments', 'bulkCreate'],
+            'operation': 'createOrganizationApplianceDnsLocalProfilesAssignmentsBulkCreate'
+        }
+        resource = f'/organizations/{organizationId}/appliance/dns/local/profiles/assignments/bulkCreate'
+
+        body_params = ['items', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "bulk_create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def createOrganizationApplianceDnsLocalProfilesAssignmentsBulkDelete(self, organizationId: str, items: list):
+        """
+        **Unassign the local DNS profile to networks in the organization**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-appliance-dns-local-profiles-assignments-bulk-delete
+
+        - organizationId (string): Organization ID
+        - items (array): List containing the assignment ID
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'dns', 'local', 'profiles', 'assignments', 'bulkDelete'],
+            'operation': 'createOrganizationApplianceDnsLocalProfilesAssignmentsBulkDelete'
+        }
+        resource = f'/organizations/{organizationId}/appliance/dns/local/profiles/assignments/bulkDelete'
+
+        body_params = ['items', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "bulk_delete",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def updateOrganizationApplianceDnsLocalProfile(self, organizationId: str, profileId: str, name: str):
+        """
+        **Update a local DNS profile**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-appliance-dns-local-profile
+
+        - organizationId (string): Organization ID
+        - profileId (string): Profile ID
+        - name (string): Name of profile
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'dns', 'local', 'profiles'],
+            'operation': 'updateOrganizationApplianceDnsLocalProfile'
+        }
+        resource = f'/organizations/{organizationId}/appliance/dns/local/profiles/{profileId}'
+
+        body_params = ['name', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def deleteOrganizationApplianceDnsLocalProfile(self, organizationId: str, profileId: str):
+        """
+        **Deletes a local DNS profile**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-appliance-dns-local-profile
+
+        - organizationId (string): Organization ID
+        - profileId (string): Profile ID
+        """
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'dns', 'local', 'profiles'],
+            'operation': 'deleteOrganizationApplianceDnsLocalProfile'
+        }
+        resource = f'/organizations/{organizationId}/appliance/dns/local/profiles/{profileId}'
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+        
+
+
+
+
+
+    def createOrganizationApplianceDnsLocalRecord(self, organizationId: str, hostname: str, address: str, profile: dict):
+        """
+        **Create a new local DNS record**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-appliance-dns-local-record
+
+        - organizationId (string): Organization ID
+        - hostname (string): Hostname for the DNS record
+        - address (string): IP for the DNS record
+        - profile (object): The profile the DNS record is associated with
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'dns', 'local', 'records'],
+            'operation': 'createOrganizationApplianceDnsLocalRecord'
+        }
+        resource = f'/organizations/{organizationId}/appliance/dns/local/records'
+
+        body_params = ['hostname', 'address', 'profile', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def updateOrganizationApplianceDnsLocalRecord(self, organizationId: str, recordId: str, **kwargs):
+        """
+        **Updates a local DNS record**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-appliance-dns-local-record
+
+        - organizationId (string): Organization ID
+        - recordId (string): Record ID
+        - hostname (string): Hostname for the DNS record
+        - address (string): IP for the DNS record
+        - profile (object): The profile the DNS record is associated with
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'dns', 'local', 'records'],
+            'operation': 'updateOrganizationApplianceDnsLocalRecord'
+        }
+        resource = f'/organizations/{organizationId}/appliance/dns/local/records/{recordId}'
+
+        body_params = ['hostname', 'address', 'profile', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def deleteOrganizationApplianceDnsLocalRecord(self, organizationId: str, recordId: str):
+        """
+        **Deletes a local DNS record**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-appliance-dns-local-record
+
+        - organizationId (string): Organization ID
+        - recordId (string): Record ID
+        """
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'dns', 'local', 'records'],
+            'operation': 'deleteOrganizationApplianceDnsLocalRecord'
+        }
+        resource = f'/organizations/{organizationId}/appliance/dns/local/records/{recordId}'
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+        
+
+
+
+
+
+    def createOrganizationApplianceDnsSplitProfile(self, organizationId: str, name: str, hostnames: list, nameservers: dict):
+        """
+        **Create a new split DNS profile**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-appliance-dns-split-profile
+
+        - organizationId (string): Organization ID
+        - name (string): Name of profile
+        - hostnames (array): The hostname patterns to match for redirection. For more information on Split DNS hostname pattern formatting, please consult the Split DNS KB.
+        - nameservers (object): Contains the nameserver information for redirection.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'dns', 'split', 'profiles'],
+            'operation': 'createOrganizationApplianceDnsSplitProfile'
+        }
+        resource = f'/organizations/{organizationId}/appliance/dns/split/profiles'
+
+        body_params = ['name', 'hostnames', 'nameservers', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def createOrganizationApplianceDnsSplitProfilesAssignmentsBulkCreate(self, organizationId: str, items: list):
+        """
+        **Assign the split DNS profile to networks in the organization**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-appliance-dns-split-profiles-assignments-bulk-create
+
+        - organizationId (string): Organization ID
+        - items (array): List containing the network ID and Profile ID
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'dns', 'split', 'profiles', 'assignments', 'bulkCreate'],
+            'operation': 'createOrganizationApplianceDnsSplitProfilesAssignmentsBulkCreate'
+        }
+        resource = f'/organizations/{organizationId}/appliance/dns/split/profiles/assignments/bulkCreate'
+
+        body_params = ['items', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "bulk_create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def createOrganizationApplianceDnsSplitProfilesAssignmentsBulkDelete(self, organizationId: str, items: list):
+        """
+        **Unassign the split DNS profile to networks in the organization**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-appliance-dns-split-profiles-assignments-bulk-delete
+
+        - organizationId (string): Organization ID
+        - items (array): List containing the assignment ID
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'dns', 'split', 'profiles', 'assignments', 'bulkDelete'],
+            'operation': 'createOrganizationApplianceDnsSplitProfilesAssignmentsBulkDelete'
+        }
+        resource = f'/organizations/{organizationId}/appliance/dns/split/profiles/assignments/bulkDelete'
+
+        body_params = ['items', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "bulk_delete",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def updateOrganizationApplianceDnsSplitProfile(self, organizationId: str, profileId: str, **kwargs):
+        """
+        **Update a split DNS profile**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-appliance-dns-split-profile
+
+        - organizationId (string): Organization ID
+        - profileId (string): Profile ID
+        - name (string): Name of profile
+        - hostnames (array): The hostname patterns to match for redirection. For more information on Split DNS hostname pattern formatting, please consult the Split DNS KB.
+        - nameservers (object): Contains the nameserver information for redirection.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'dns', 'split', 'profiles'],
+            'operation': 'updateOrganizationApplianceDnsSplitProfile'
+        }
+        resource = f'/organizations/{organizationId}/appliance/dns/split/profiles/{profileId}'
+
+        body_params = ['name', 'hostnames', 'nameservers', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def deleteOrganizationApplianceDnsSplitProfile(self, organizationId: str, profileId: str):
+        """
+        **Deletes a split DNS profile**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-appliance-dns-split-profile
+
+        - organizationId (string): Organization ID
+        - profileId (string): Profile ID
+        """
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'dns', 'split', 'profiles'],
+            'operation': 'deleteOrganizationApplianceDnsSplitProfile'
+        }
+        resource = f'/organizations/{organizationId}/appliance/dns/split/profiles/{profileId}'
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
         }
         return action
         
