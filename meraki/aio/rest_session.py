@@ -388,6 +388,8 @@ class AsyncRestSession:
             # just prepare the list
             if type(results) == list:
                 return_items = results
+            elif type(results) == dict and "items" in results:
+                return_items = results["items"]
             # For event log endpoint
             elif type(results) == dict:
                 if direction == "next":
@@ -467,6 +469,11 @@ class AsyncRestSession:
                 # Append that page's results, depending on the endpoint
                 if type(results) == list:
                     results.extend(await response.json(content_type = None))
+                elif isinstance(results, dict) and "items" in results:
+                    json_response = await response.json(content_type=None)
+                    results.extend(json_response["items"])
+                    if "meta" in results:
+                        results["meta"]["counts"]["items"]["remaining"] = json_response["meta"]["counts"]["items"]["remaining"]
                 # For event log endpoint
                 elif type(results) == dict:
                     json_response = await response.json(content_type = None)
