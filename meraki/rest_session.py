@@ -207,15 +207,18 @@ class RestSession(object):
 
                 # Rate limit 429 errors
                 elif status == 429:
-                    if 'Retry-After' in response.headers:
-                        wait = int(response.headers['Retry-After'])
+                    # Retry if 429 retries are enabled and there are retries left
+                    if self._wait_on_rate_limit and retries > 0:
+                        if 'Retry-After' in response.headers:
+                            wait = int(response.headers['Retry-After'])
+                        else:
+                            wait = random.randint(1, self._nginx_429_retry_wait_time)
+                        if self._logger:
+                            self._logger.warning(f'{tag}, {operation} - {status} {reason}, retrying in {wait} seconds')
+                        time.sleep(wait)
+                        retries -= 1
+                    # We're either out of retries or the client told us not to retry
                     else:
-                        wait = random.randint(1, self._nginx_429_retry_wait_time)
-                    if self._logger:
-                        self._logger.warning(f'{tag}, {operation} - {status} {reason}, retrying in {wait} seconds')
-                    time.sleep(wait)
-                    retries -= 1
-                    if retries == 0:
                         raise APIError(metadata, response)
 
                 # 5XX errors
@@ -249,7 +252,7 @@ class RestSession(object):
             action_batch_errors = [error for error in message['errors'] if action_batch_concurrency_error_text in error]
 
             if network_deletion_errors:
-                wait = random.randint(30, self._network_delete_retry_wait_time)
+                wait = random.randint(10, self._network_delete_retry_wait_time)
                 if self._logger:
                     self._logger.warning(f'{tag}, {operation} - {status} {reason}, retrying in {wait} seconds')
                 time.sleep(wait)

@@ -22,6 +22,7 @@ CERTIFICATE_PATH = ""
 REQUESTS_PROXY = ""
 
 # Retry if 429 rate limit error encountered?
+# Please note, setting to False means your application will not retry upon a 429. Not intended for production apps.
 WAIT_ON_RATE_LIMIT = True
 
 # Nginx 429 retry wait time

@@ -14,7 +14,7 @@ def api_key(pytestconfig):
 
 @pytest.fixture(scope='session')
 def dashboard(api_key):
-    return meraki.DashboardAPI(api_key, suppress_logging=True, network_delete_retry_wait_time=600)
+    return meraki.DashboardAPI(api_key, suppress_logging=True, network_delete_retry_wait_time=600, maximum_retries=50)
 
 
 @pytest.fixture(scope='session')
