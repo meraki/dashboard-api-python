@@ -241,12 +241,15 @@ class RestSession(object):
         except ValueError:
             message = response.content[:100]
             message_is_dict = False
-        # Check for specific concurrency errors
-        network_delete_concurrency_error_text = 'delete or combine networks'
-        action_batch_concurrency_error_text = 'executing batches'
 
         # Check specifically for concurrency errors
+        network_delete_concurrency_error_text = 'concurrent'
+        action_batch_concurrency_error_text = 'executing batches'
+
         if message_is_dict and 'errors' in message.keys():
+            errors = message['errors']
+            if self._logger:
+                self._logger.warning(f'{tag}, {operation} - {status} {reason} {errors}')
             network_deletion_errors = [error for error in message['errors'] if network_delete_concurrency_error_text in
                                        error]
             action_batch_errors = [error for error in message['errors'] if action_batch_concurrency_error_text in error]
