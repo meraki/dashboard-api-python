@@ -752,7 +752,7 @@ def main(inputs):
     is_github_action = False
 
     try:
-        opts, args = getopt.getopt(inputs, "ho:k:v:g:")
+        opts, args = getopt.getopt(inputs, "ho:k:v:av:g:")
     except getopt.GetoptError:
         print_help()
         sys.exit(2)
