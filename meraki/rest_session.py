@@ -252,7 +252,7 @@ class RestSession(object):
             action_batch_errors = [error for error in message['errors'] if action_batch_concurrency_error_text in error]
 
             if network_deletion_errors:
-                wait = random.randint(10, self._network_delete_retry_wait_time)
+                wait = random.randint(30, self._network_delete_retry_wait_time)
                 if self._logger:
                     self._logger.warning(f'{tag}, {operation} - {status} {reason}, retrying in {wait} seconds')
                 time.sleep(wait)
