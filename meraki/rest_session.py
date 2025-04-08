@@ -246,15 +246,8 @@ class RestSession(object):
         network_delete_concurrency_error_text = 'concurrent'
         action_batch_concurrency_error_text = 'executing batches'
 
-        if message_is_dict and 'errors' in message.keys():
-            errors = message['errors']
-            if self._logger:
-                self._logger.warning(f'{tag}, {operation} - {status} {reason} {errors}')
-            network_deletion_errors = [error for error in message['errors'] if network_delete_concurrency_error_text in
-                                       error]
-            action_batch_errors = [error for error in message['errors'] if action_batch_concurrency_error_text in error]
-
-            if network_deletion_errors:
+        if operation == 'deleteNetwork' and response.status_code == 400:
+            if network_delete_concurrency_error_text in message['errors'][0]:
                 wait = random.randint(30, self._network_delete_retry_wait_time)
                 if self._logger:
                     self._logger.warning(f'{tag}, {operation} - {status} {reason}, retrying in {wait} seconds')
@@ -262,7 +255,12 @@ class RestSession(object):
                 retries -= 1
                 if retries == 0:
                     raise APIError(metadata, response)
-            elif action_batch_errors:
+
+        elif message_is_dict and 'errors' in message.keys():
+
+            action_batch_errors = [error for error in message['errors'] if action_batch_concurrency_error_text in error]
+
+            if action_batch_errors:
                 wait = self._action_batch_retry_wait_time
                 if self._logger:
                     self._logger.warning(f'{tag}, {operation} - {status} {reason}, retrying in {wait} seconds')
@@ -271,7 +269,7 @@ class RestSession(object):
                 if retries == 0:
                     raise APIError(metadata, response)
 
-        if self._retry_4xx_error:
+        elif self._retry_4xx_error:
             wait = random.randint(1, self._retry_4xx_error_wait_time)
             if self._logger:
                 self._logger.warning(f'{tag}, {operation} - {status} {reason}, retrying in {wait} seconds')
