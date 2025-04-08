@@ -377,6 +377,8 @@ class RestSession(object):
             # just prepare the list
             if type(results) == list:
                 return_items = results
+            elif type(results) == dict and "items" in results:
+                return_items = results["items"]
             # For event log endpoint
             elif type(results) == dict:
                 if direction == "next":
@@ -448,6 +450,10 @@ class RestSession(object):
             # Append that page's results, depending on the endpoint
             if isinstance(results, list):
                 results.extend(response.json())
+            elif isinstance(results, dict) and "items" in results:
+                results["items"].extend(response.json()["items"])
+                if "meta" in results:
+                    results["meta"]["counts"]["items"]["remaining"] = response.json()["meta"]["counts"]["items"]["remaining"]
             # For event log endpoint
             elif isinstance(results, dict):
                 try:
