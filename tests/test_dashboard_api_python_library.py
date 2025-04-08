@@ -15,7 +15,7 @@ def api_key(pytestconfig):
 @pytest.fixture(scope='session')
 def dashboard(api_key):
     return meraki.DashboardAPI(api_key, suppress_logging=True, network_delete_retry_wait_time=1000,
-                               maximum_retries=1000)
+                               maximum_retries=1000, caller='Pytest for Meraki Python Library')
 
 
 @pytest.fixture(scope='session')
