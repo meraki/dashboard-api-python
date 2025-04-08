@@ -748,6 +748,68 @@ class ActionBatchOrganizations(object):
 
 
 
+    def disableOrganizationIntegrationsXdrNetworks(self, organizationId: str, networks: list):
+        """
+        **Disable XDR on networks**
+        https://developer.cisco.com/meraki/api-v1/#!disable-organization-integrations-xdr-networks
+
+        - organizationId (string): Organization ID
+        - networks (array): List containing the network ID and the product type to disable XDR on
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'integrations', 'xdr', 'networks'],
+            'operation': 'disableOrganizationIntegrationsXdrNetworks'
+        }
+        resource = f'/organizations/{organizationId}/integrations/xdr/networks/disable'
+
+        body_params = ['networks', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "disable",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def enableOrganizationIntegrationsXdrNetworks(self, organizationId: str, networks: list):
+        """
+        **Enable XDR on networks**
+        https://developer.cisco.com/meraki/api-v1/#!enable-organization-integrations-xdr-networks
+
+        - organizationId (string): Organization ID
+        - networks (array): List containing the network ID and the product type to enable XDR on
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'integrations', 'xdr', 'networks'],
+            'operation': 'enableOrganizationIntegrationsXdrNetworks'
+        }
+        resource = f'/organizations/{organizationId}/integrations/xdr/networks/enable'
+
+        body_params = ['networks', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "enable",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
     def assignOrganizationLicensesSeats(self, organizationId: str, licenseId: str, networkId: str, seatCount: int):
         """
         **Assign SM seats to a network. This will increase the managed SM device limit of the network**
@@ -920,7 +982,8 @@ class ActionBatchOrganizations(object):
         - passwordExpirationDays (integer): Number of days after which users will be forced to change their password.
         - enforceDifferentPasswords (boolean): Boolean indicating whether users, when setting a new password, are forced to choose a new password that is different from any past passwords.
         - numDifferentPasswords (integer): Number of recent passwords that new password must be distinct from.
-        - enforceStrongPasswords (boolean): Boolean indicating whether users will be forced to choose strong passwords for their accounts. Strong passwords are at least 8 characters that contain 3 of the following: number, uppercase letter, lowercase letter, and symbol
+        - enforceStrongPasswords (boolean): Deprecated. Values of 'false' are always ignored.
+        - minimumPasswordLength (integer): Minimum number of characters required in admins' passwords.
         - enforceAccountLockout (boolean): Boolean indicating whether users' Dashboard accounts will be locked out after a specified number of consecutive failed login attempts.
         - accountLockoutAttempts (integer): Number of consecutive failed login attempts after which users' accounts will be locked.
         - enforceIdleTimeout (boolean): Boolean indicating whether users will be logged out after being idle for the specified number of minutes.
@@ -939,7 +1002,7 @@ class ActionBatchOrganizations(object):
         }
         resource = f'/organizations/{organizationId}/loginSecurity'
 
-        body_params = ['enforcePasswordExpiration', 'passwordExpirationDays', 'enforceDifferentPasswords', 'numDifferentPasswords', 'enforceStrongPasswords', 'enforceAccountLockout', 'accountLockoutAttempts', 'enforceIdleTimeout', 'idleTimeoutMinutes', 'enforceTwoFactorAuth', 'enforceLoginIpRanges', 'loginIpRanges', 'apiAuthentication', ]
+        body_params = ['enforcePasswordExpiration', 'passwordExpirationDays', 'enforceDifferentPasswords', 'numDifferentPasswords', 'enforceStrongPasswords', 'minimumPasswordLength', 'enforceAccountLockout', 'accountLockoutAttempts', 'enforceIdleTimeout', 'idleTimeoutMinutes', 'enforceTwoFactorAuth', 'enforceLoginIpRanges', 'loginIpRanges', 'apiAuthentication', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,

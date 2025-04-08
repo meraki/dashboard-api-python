@@ -2688,6 +2688,92 @@ class Organizations(object):
         
 
 
+    def getOrganizationIntegrationsXdrNetworks(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Returns the networks in the organization that have XDR enabled**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-integrations-xdr-networks
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Optional parameter to filter the results by network IDs
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 20.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'integrations', 'xdr', 'networks'],
+            'operation': 'getOrganizationIntegrationsXdrNetworks'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/integrations/xdr/networks'
+
+        query_params = ['networkIds', 'perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def disableOrganizationIntegrationsXdrNetworks(self, organizationId: str, networks: list):
+        """
+        **Disable XDR on networks**
+        https://developer.cisco.com/meraki/api-v1/#!disable-organization-integrations-xdr-networks
+
+        - organizationId (string): Organization ID
+        - networks (array): List containing the network ID and the product type to disable XDR on
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'integrations', 'xdr', 'networks'],
+            'operation': 'disableOrganizationIntegrationsXdrNetworks'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/integrations/xdr/networks/disable'
+
+        body_params = ['networks', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def enableOrganizationIntegrationsXdrNetworks(self, organizationId: str, networks: list):
+        """
+        **Enable XDR on networks**
+        https://developer.cisco.com/meraki/api-v1/#!enable-organization-integrations-xdr-networks
+
+        - organizationId (string): Organization ID
+        - networks (array): List containing the network ID and the product type to enable XDR on
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'integrations', 'xdr', 'networks'],
+            'operation': 'enableOrganizationIntegrationsXdrNetworks'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/integrations/xdr/networks/enable'
+
+        body_params = ['networks', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
     def claimIntoOrganizationInventory(self, organizationId: str, **kwargs):
         """
         **Claim a list of devices, licenses, and/or orders into an organization inventory**
@@ -3242,7 +3328,8 @@ class Organizations(object):
         - passwordExpirationDays (integer): Number of days after which users will be forced to change their password.
         - enforceDifferentPasswords (boolean): Boolean indicating whether users, when setting a new password, are forced to choose a new password that is different from any past passwords.
         - numDifferentPasswords (integer): Number of recent passwords that new password must be distinct from.
-        - enforceStrongPasswords (boolean): Boolean indicating whether users will be forced to choose strong passwords for their accounts. Strong passwords are at least 8 characters that contain 3 of the following: number, uppercase letter, lowercase letter, and symbol
+        - enforceStrongPasswords (boolean): Deprecated. Values of 'false' are always ignored.
+        - minimumPasswordLength (integer): Minimum number of characters required in admins' passwords.
         - enforceAccountLockout (boolean): Boolean indicating whether users' Dashboard accounts will be locked out after a specified number of consecutive failed login attempts.
         - accountLockoutAttempts (integer): Number of consecutive failed login attempts after which users' accounts will be locked.
         - enforceIdleTimeout (boolean): Boolean indicating whether users will be logged out after being idle for the specified number of minutes.
@@ -3262,7 +3349,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/loginSecurity'
 
-        body_params = ['enforcePasswordExpiration', 'passwordExpirationDays', 'enforceDifferentPasswords', 'numDifferentPasswords', 'enforceStrongPasswords', 'enforceAccountLockout', 'accountLockoutAttempts', 'enforceIdleTimeout', 'idleTimeoutMinutes', 'enforceTwoFactorAuth', 'enforceLoginIpRanges', 'loginIpRanges', 'apiAuthentication', ]
+        body_params = ['enforcePasswordExpiration', 'passwordExpirationDays', 'enforceDifferentPasswords', 'numDifferentPasswords', 'enforceStrongPasswords', 'minimumPasswordLength', 'enforceAccountLockout', 'accountLockoutAttempts', 'enforceIdleTimeout', 'idleTimeoutMinutes', 'enforceTwoFactorAuth', 'enforceLoginIpRanges', 'loginIpRanges', 'apiAuthentication', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)

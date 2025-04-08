@@ -53,6 +53,7 @@ class Licensing(object):
         - endDate (string): Filter subscriptions by end date, ISO 8601 format. To filter with a range of dates, use 'endDate[<option>]=?' in the request. Accepted options include lt, gt, lte, gte.
         - statuses (array): List of statuses that returned subscriptions can have
         - productTypes (array): List of product types that returned subscriptions need to have entitlements for.
+        - skus (array): List of SKUs that returned subscriptions need to have entitlements for.
         - name (string): Search for subscription name
         """
 
@@ -64,10 +65,10 @@ class Licensing(object):
         }
         resource = f'/administered/licensing/subscription/subscriptions'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'subscriptionIds', 'organizationIds', 'startDate', 'endDate', 'statuses', 'productTypes', 'name', ]
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'subscriptionIds', 'organizationIds', 'startDate', 'endDate', 'statuses', 'productTypes', 'skus', 'name', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['subscriptionIds', 'organizationIds', 'statuses', 'productTypes', ]
+        array_params = ['subscriptionIds', 'organizationIds', 'statuses', 'productTypes', 'skus', ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
                 params[f'{k.strip()}[]'] = kwargs[f'{k}']
