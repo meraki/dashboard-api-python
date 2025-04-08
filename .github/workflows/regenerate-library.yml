@@ -5,6 +5,9 @@ on:
       library_version:
         description: 'The version of the new library'
         required: true
+      api_version:
+        description: 'The corresponding version of the API'
+        required: true
 
 jobs:
   build:
@@ -26,7 +29,7 @@ jobs:
           rm -rf meraki
       - name: Regenerate Python Library
         run: |
-          poetry run python generator/generate_library.py -g true -v ${{ github.event.inputs.library_version }} -o ${{ secrets.TEST_ORG_ID }} -k ${{ secrets.TEST_ORG_API_KEY }}
+          poetry run python generator/generate_library.py -g true -v ${{ github.event.inputs.library_version }} -av ${{ github.event.inputs.api_version }} -o ${{ secrets.TEST_ORG_ID }} -k ${{ secrets.TEST_ORG_API_KEY }}
       - name: Set new version for Poetry
         run: |
           sed -i "s/^version = \".*\"/version = \"${{ github.event.inputs.library_version }}\"/" pyproject.toml
@@ -36,5 +39,5 @@ jobs:
         with:
           author_name: GitHub Action
           author_email: support@meraki.com
-          message: Automatically regenerated library to version ${{ github.event.inputs.library_version }}.
+          message: Automatically regenerated library to version ${{ github.event.inputs.library_version }} for API version ${{ github.event.inputs.api_version }}.
           new_branch: release

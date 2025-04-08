@@ -15,10 +15,10 @@ pip[3] install requests
 This script generates the Meraki Python library using either the public OpenAPI specification, or, with an API key & org
 ID as inputs, a specific dashboard org's OpenAPI spec.
 
-=== USAGE ===
-python[3] generate_library.py [-o <org_id>] [-k <api_key>] [-v <version_number>] [-g <is_called_from_github_action>]
-API key can, and is recommended to, be set as an environment variable named MERAKI_DASHBOARD_API_KEY. 
-"""
+=== USAGE === python[3] generate_library.py [-o <org_id>] [-k <api_key>] [-v <version_number>] [-av 
+<api_version_number>] [-g <is_called_from_github_action>] 
+
+API key can, and is recommended to, be set as an environment variable named MERAKI_DASHBOARD_API_KEY."""
 
 REVERSE_PAGINATION = ["getNetworkEvents", "getOrganizationConfigurationChanges"]
 
@@ -226,7 +226,7 @@ def parse_params(operation: str, parameters: dict, param_filters=None):
     return unpack_params(operation, parameters, param_filters)
 
 
-def generate_library(spec: dict, version_number: str, is_github_action: bool):
+def generate_library(spec: dict, version_number: str, api_version_number: str, is_github_action: bool):
     # Supported scopes list will include organizations, networks, devices, and all product types.
     supported_scopes = [
         "organizations",
@@ -295,9 +295,14 @@ def generate_library(spec: dict, version_number: str, is_github_action: bool):
         with open(f"meraki/{file}", "w+", encoding="utf-8", newline=None) as fp:
             contents = response.text
             if file == "__init__.py":
+                # replace library version
                 start = contents.find("__version__ = ")
                 end = contents.find("\n", start)
                 contents = f"{contents[:start]}__version__ = '{version_number}'{contents[end:]}"
+                # replace API version
+                start = contents.find("__api_version__ = ")
+                end = contents.find("\n", start)
+                contents = f"{contents[:start]}__api_version__ = '{api_version_number}'{contents[end:]}"
             fp.write(contents)
 
     # Organize data from OpenAPI specification
@@ -743,6 +748,7 @@ def main(inputs):
     api_key = os.environ.get("MERAKI_DASHBOARD_API_KEY")
     org_id = None
     version_number = "custom"
+    api_version_number = "custom"
     is_github_action = False
 
     try:
@@ -760,6 +766,8 @@ def main(inputs):
             api_key = arg
         elif opt == "-v":
             version_number = arg
+        elif opt == "-av":
+            api_version_number = arg
         elif opt == "-g":
             if arg.lower() == "true":
                 is_github_action = True
@@ -795,7 +803,7 @@ def main(inputs):
                 f'"HTTP GET https://api.meraki.com/api/v1/openapiSpec" is failing.'
             )
 
-    generate_library(spec, version_number, is_github_action)
+    generate_library(spec, version_number, api_version_number, is_github_action)
 
 
 if __name__ == "__main__":
