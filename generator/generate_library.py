@@ -15,7 +15,7 @@ pip[3] install requests
 This script generates the Meraki Python library using either the public OpenAPI specification, or, with an API key & org
 ID as inputs, a specific dashboard org's OpenAPI spec.
 
-=== USAGE === python[3] generate_library.py [-o <org_id>] [-k <api_key>] [-v <version_number>] [-av 
+=== USAGE === python[3] generate_library.py [-o <org_id>] [-k <api_key>] [-v <version_number>] [-a 
 <api_version_number>] [-g <is_called_from_github_action>] 
 
 API key can, and is recommended to, be set as an environment variable named MERAKI_DASHBOARD_API_KEY."""
@@ -752,7 +752,7 @@ def main(inputs):
     is_github_action = False
 
     try:
-        opts, args = getopt.getopt(inputs, "ho:k:v:av:g:")
+        opts, args = getopt.getopt(inputs, "ho:k:v:a:g:")
     except getopt.GetoptError:
         print_help()
         sys.exit(2)
@@ -766,7 +766,7 @@ def main(inputs):
             api_key = arg
         elif opt == "-v":
             version_number = arg
-        elif opt == "-av":
+        elif opt == "-a":
             api_version_number = arg
         elif opt == "-g":
             if arg.lower() == "true":

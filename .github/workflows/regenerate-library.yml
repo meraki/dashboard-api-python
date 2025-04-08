@@ -29,7 +29,7 @@ jobs:
           rm -rf meraki
       - name: Regenerate Python Library
         run: |
-          poetry run python generator/generate_library.py -g true -v ${{ github.event.inputs.library_version }} -av ${{ github.event.inputs.api_version }} -o ${{ secrets.TEST_ORG_ID }} -k ${{ secrets.TEST_ORG_API_KEY }}
+          poetry run python generator/generate_library.py -g true -v ${{ github.event.inputs.library_version }} -a ${{ github.event.inputs.api_version }} -o ${{ secrets.TEST_ORG_ID }} -k ${{ secrets.TEST_ORG_API_KEY }}
       - name: Set new version for Poetry
         run: |
           sed -i "s/^version = \".*\"/version = \"${{ github.event.inputs.library_version }}\"/" pyproject.toml
