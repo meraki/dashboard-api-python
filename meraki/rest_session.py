@@ -16,41 +16,16 @@ def user_agent_extended(be_geo_id, caller):
     # Generate extended portion of the User-Agent
     user_agent = dict()
 
-    # Mimic pip system data collection per https://github.com/pypa/pip/blob/master/src/pip/_internal/network/session.py
-    user_agent['implementation'] = {
-        "name": platform.python_implementation(),
-    }
-
-    if user_agent["implementation"]["name"] in ('CPython', 'Jython', 'IronPython'):
-        user_agent["implementation"]["version"] = platform.python_version()
-    elif user_agent["implementation"]["name"] == 'PyPy':
-        if sys.pypy_version_info.releaselevel == 'final':
-            pypy_version_info = sys.pypy_version_info[:3]
-        else:
-            pypy_version_info = sys.pypy_version_info
-        user_agent["implementation"]["version"] = ".".join(
-            [str(x) for x in pypy_version_info]
-        )
-
-    if sys.platform.startswith("darwin") and platform.mac_ver()[0]:
-        user_agent["distro"] = {"name": "macOS", "version": platform.mac_ver()[0]}
-
-    if platform.system():
-        user_agent.setdefault("system", {})["name"] = platform.system()
-
-    if platform.release():
-        user_agent.setdefault("system", {})["release"] = platform.release()
-
-    if platform.machine():
-        user_agent["cpu"] = platform.machine()
-
-    if be_geo_id:
-        user_agent["be_geo_id"] = be_geo_id
-
     if caller:
         user_agent["caller"] = caller
+    elif be_geo_id:
+        user_agent["caller"] = be_geo_id
+    else:
+        user_agent["caller"] = "unidentified"
 
-    return urllib.parse.quote(json.dumps(user_agent))
+    caller_string = f'Caller/({user_agent["caller"]})'
+
+    return json.dumps(caller_string)
 
 
 # Main module interface
@@ -254,51 +229,57 @@ class RestSession(object):
 
                 # 4XX errors
                 else:
-                    try:
-                        message = response.json()
-                        message_is_dict = True
-                    except ValueError:
-                        message = response.content[:100]
-                        message_is_dict = False
+                    retries = self.handle_4xx_errors(metadata, operation, reason, response, retries, status, tag)
 
-                    # Check for specific concurrency errors
-                    network_delete_concurrency_error_text = 'This may be due to concurrent requests to delete networks.'
-                    action_batch_concurrency_error = {'errors': [
-                        'Too many concurrently executing batches. Maximum is 5 confirmed but not yet executed batches.']
-                    }
-                    # Check specifically for network delete concurrency error
-                    if message_is_dict and 'errors' in message.keys() \
-                            and network_delete_concurrency_error_text in message['errors'][0]:
-                        wait = random.randint(30, self._network_delete_retry_wait_time)
-                        if self._logger:
-                            self._logger.warning(f'{tag}, {operation} - {status} {reason}, retrying in {wait} seconds')
-                        time.sleep(wait)
-                        retries -= 1
-                        if retries == 0:
-                            raise APIError(metadata, response)
-                    # Check specifically for action batch concurrency error
-                    elif message == action_batch_concurrency_error:
-                        wait = self._action_batch_retry_wait_time
-                        if self._logger:
-                            self._logger.warning(f'{tag}, {operation} - {status} {reason}, retrying in {wait} seconds')
-                        time.sleep(wait)
-                        retries -= 1
-                        if retries == 0:
-                            raise APIError(metadata, response)
-                    elif self._retry_4xx_error:
-                        wait = random.randint(1, self._retry_4xx_error_wait_time)
-                        if self._logger:
-                            self._logger.warning(f'{tag}, {operation} - {status} {reason}, retrying in {wait} seconds')
-                        time.sleep(wait)
-                        retries -= 1
-                        if retries == 0:
-                            raise APIError(metadata, response)
+    def handle_4xx_errors(self, metadata, operation, reason, response, retries, status, tag):
+        try:
+            message = response.json()
+            message_is_dict = True
+        except ValueError:
+            message = response.content[:100]
+            message_is_dict = False
+        # Check for specific concurrency errors
+        network_delete_concurrency_error_text = 'delete or combine networks'
+        action_batch_concurrency_error_text = 'executing batches'
 
-                    # All other client-side errors
-                    else:
-                        if self._logger:
-                            self._logger.error(f'{tag}, {operation} - {status} {reason}, {message}')
-                        raise APIError(metadata, response)
+        # Check specifically for concurrency errors
+        if message_is_dict and 'errors' in message.keys():
+            network_deletion_errors = [error for error in message['errors'] if network_delete_concurrency_error_text in
+                                       error]
+            action_batch_errors = [error for error in message['errors'] if action_batch_concurrency_error_text in error]
+
+            if network_deletion_errors:
+                wait = random.randint(30, self._network_delete_retry_wait_time)
+                if self._logger:
+                    self._logger.warning(f'{tag}, {operation} - {status} {reason}, retrying in {wait} seconds')
+                time.sleep(wait)
+                retries -= 1
+                if retries == 0:
+                    raise APIError(metadata, response)
+            elif action_batch_errors:
+                wait = self._action_batch_retry_wait_time
+                if self._logger:
+                    self._logger.warning(f'{tag}, {operation} - {status} {reason}, retrying in {wait} seconds')
+                time.sleep(wait)
+                retries -= 1
+                if retries == 0:
+                    raise APIError(metadata, response)
+
+        if self._retry_4xx_error:
+            wait = random.randint(1, self._retry_4xx_error_wait_time)
+            if self._logger:
+                self._logger.warning(f'{tag}, {operation} - {status} {reason}, retrying in {wait} seconds')
+            time.sleep(wait)
+            retries -= 1
+            if retries == 0:
+                raise APIError(metadata, response)
+
+        # All other client-side errors
+        else:
+            if self._logger:
+                self._logger.error(f'{tag}, {operation} - {status} {reason}, {message}')
+            raise APIError(metadata, response)
+        return retries
 
     def get(self, metadata, url, params=None):
         metadata['method'] = 'GET'
@@ -375,12 +356,12 @@ class RestSession(object):
 
             return_items = []
             # just prepare the list
-            if type(results) == list:
+            if isinstance(results, list):
                 return_items = results
-            elif type(results) == dict and "items" in results:
+            elif isinstance(results, dict) and "items" in results:
                 return_items = results["items"]
             # For event log endpoint
-            elif type(results) == dict:
+            elif isinstance(results, dict):
                 if direction == "next":
                     return_items = results["events"][::-1]
                 else:
@@ -395,9 +376,9 @@ class RestSession(object):
                 response = self.request(metadata, 'GET', nextlink)
 
     def _get_pages_legacy(self, metadata, url, params=None, total_pages=-1, direction='next', event_log_end_time=None):
-        if type(total_pages) == str and total_pages.lower() == 'all':
+        if isinstance(total_pages, str) and total_pages.lower() == 'all':
             total_pages = -1
-        elif type(total_pages) == str and total_pages.isnumeric():
+        elif isinstance(total_pages, str) and total_pages.isnumeric():
             total_pages = int(total_pages)
         metadata['page'] = 1
 
@@ -410,7 +391,7 @@ class RestSession(object):
             results = response.json()
 
         # For event log endpoint when using 'next' direction, so results/events are sorted chronologically
-        if type(results) == dict and metadata['operation'] == 'getNetworkEvents' and direction == 'next':
+        if isinstance(results, dict) and metadata['operation'] == 'getNetworkEvents' and direction == 'next':
             results['events'] = results['events'][::-1]
 
         # Get additional pages if more than one requested

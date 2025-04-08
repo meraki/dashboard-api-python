@@ -71,6 +71,7 @@ SIMULATE_API_CALLS = False
 AIO_MAXIMUM_CONCURRENT_REQUESTS = 8
 
 # Legacy partner identifier for API usage tracking; can also be set as an environment variable BE_GEO_ID
+# This is no longer used. Please use MERAKI_PYTHON_SDK_CALLER instead.
 BE_GEO_ID = ""
 
 # Optional identifier for API usage tracking; can also be set as an environment variable MERAKI_PYTHON_SDK_CALLER
