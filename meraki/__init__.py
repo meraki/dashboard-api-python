@@ -43,7 +43,7 @@ from meraki.config import (
 )
 from meraki.rest_session import *
 
-__version__ = '2.0.0'
+__version__ = '2.0.1'
 __api_version__ = '1.57.0'
 
 
