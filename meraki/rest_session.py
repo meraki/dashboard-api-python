@@ -25,7 +25,7 @@ def user_agent_extended(be_geo_id, caller):
 
     caller_string = f'Caller/({user_agent["caller"]})'
 
-    return json.dumps(caller_string)
+    return caller_string
 
 
 # Main module interface
@@ -246,7 +246,10 @@ class RestSession(object):
         network_delete_concurrency_error_text = 'concurrent'
         action_batch_concurrency_error_text = 'executing batches'
 
+        # First we check for network deletion concurrency errors
         if operation == 'deleteNetwork' and response.status_code == 400:
+            # message['errors'][0] is the first error, and it contains helpful text
+            # here we use it to confirm that the 400 error is related to concurrent requests
             if network_delete_concurrency_error_text in message['errors'][0]:
                 wait = random.randint(30, self._network_delete_retry_wait_time)
                 if self._logger:
@@ -256,19 +259,20 @@ class RestSession(object):
                 if retries == 0:
                     raise APIError(metadata, response)
 
-        elif message_is_dict and 'errors' in message.keys():
+        # Next we check for action batch concurrency errors
+        # message['errors'][0] is the first error, and it contains helpful text
+        # here we use it to confirm that the 400 error is related to concurrent requests
+        elif (message_is_dict and 'errors' in message.keys() and action_batch_concurrency_error_text
+              in message['errors'][0]):
+            wait = self._action_batch_retry_wait_time
+            if self._logger:
+                self._logger.warning(f'{tag}, {operation} - {status} {reason}, retrying in {wait} seconds')
+            time.sleep(wait)
+            retries -= 1
+            if retries == 0:
+                raise APIError(metadata, response)
 
-            action_batch_errors = [error for error in message['errors'] if action_batch_concurrency_error_text in error]
-
-            if action_batch_errors:
-                wait = self._action_batch_retry_wait_time
-                if self._logger:
-                    self._logger.warning(f'{tag}, {operation} - {status} {reason}, retrying in {wait} seconds')
-                time.sleep(wait)
-                retries -= 1
-                if retries == 0:
-                    raise APIError(metadata, response)
-
+        # Then we check if the user asked to retry other 4xx errors, based on their session config
         elif self._retry_4xx_error:
             wait = random.randint(1, self._retry_4xx_error_wait_time)
             if self._logger:
@@ -278,7 +282,7 @@ class RestSession(object):
             if retries == 0:
                 raise APIError(metadata, response)
 
-        # All other client-side errors
+        # All other client-side errors will raise an error
         else:
             if self._logger:
                 self._logger.error(f'{tag}, {operation} - {status} {reason}, {message}')
