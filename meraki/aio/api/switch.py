@@ -196,15 +196,11 @@ class AsyncSwitch:
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-routing-interfaces
 
         - serial (string): Serial
-        - mode (string): Optional parameter to filter L3 interfaces by mode.
         - protocol (string): Optional parameter to filter L3 interfaces by protocol.
         """
 
         kwargs.update(locals())
 
-        if 'mode' in kwargs:
-            options = ['loopback', 'routed', 'vlan']
-            assert kwargs['mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
         if 'protocol' in kwargs:
             options = ['ipv4', 'ipv6']
             assert kwargs['protocol'] in options, f'''"protocol" cannot be "{kwargs['protocol']}", & must be set to one of: {options}'''
@@ -216,25 +212,25 @@ class AsyncSwitch:
         serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/switch/routing/interfaces'
 
-        query_params = ['mode', 'protocol', ]
+        query_params = ['protocol', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
         
 
 
-    def createDeviceSwitchRoutingInterface(self, serial: str, **kwargs):
+    def createDeviceSwitchRoutingInterface(self, serial: str, name: str, **kwargs):
         """
         **Create a layer 3 interface for a switch**
         https://developer.cisco.com/meraki/api-v1/#!create-device-switch-routing-interface
 
         - serial (string): Serial
         - name (string): A friendly name or description for the interface or VLAN.
-        - subnet (string): The network that this routed interface is on, in CIDR notation (ex. 10.1.1.0/24).
-        - interfaceIp (string): The IP address this switch will use for layer 3 routing on this VLAN or subnet. This cannot be the same         as the switch's management IP.
+        - subnet (string): The network that this L3 interface is on, in CIDR notation (ex. 10.1.1.0/24).
+        - interfaceIp (string): The IP address that will be used for Layer 3 routing on this VLAN or subnet. This cannot be the same         as the device management IP.
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
-        - vlanId (integer): The VLAN this routed interface is on. VLAN must be between 1 and 4094.
-        - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a routed interface. Required if this is the first IPv4 interface.
+        - vlanId (integer): The VLAN this L3 interface is on. VLAN must be between 1 and 4094.
+        - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a L3 interface. Required if this is the first IPv4 interface.
         - ospfSettings (object): The OSPF routing settings of the interface.
         - ipv6 (object): The IPv6 settings of the interface.
         """
@@ -288,11 +284,11 @@ class AsyncSwitch:
         - serial (string): Serial
         - interfaceId (string): Interface ID
         - name (string): A friendly name or description for the interface or VLAN.
-        - subnet (string): The network that this routed interface is on, in CIDR notation (ex. 10.1.1.0/24).
-        - interfaceIp (string): The IP address this switch will use for layer 3 routing on this VLAN or subnet. This cannot be the same         as the switch's management IP.
+        - subnet (string): The network that this L3 interface is on, in CIDR notation (ex. 10.1.1.0/24).
+        - interfaceIp (string): The IP address that will be used for Layer 3 routing on this VLAN or subnet. This cannot be the same         as the device management IP.
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
-        - vlanId (integer): The VLAN this routed interface is on. VLAN must be between 1 and 4094.
-        - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a routed interface. Required if this is the first IPv4 interface.
+        - vlanId (integer): The VLAN this L3 interface is on. VLAN must be between 1 and 4094.
+        - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a L3 interface. Required if this is the first IPv4 interface.
         - ospfSettings (object): The OSPF routing settings of the interface.
         - ipv6 (object): The IPv6 settings of the interface.
         """
@@ -1906,14 +1902,21 @@ class AsyncSwitch:
         
 
 
-    def getNetworkSwitchStackRoutingInterfaces(self, networkId: str, switchStackId: str):
+    def getNetworkSwitchStackRoutingInterfaces(self, networkId: str, switchStackId: str, **kwargs):
         """
         **List layer 3 interfaces for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-stack-routing-interfaces
 
         - networkId (string): Network ID
         - switchStackId (string): Switch stack ID
+        - protocol (string): Optional parameter to filter L3 interfaces by protocol.
         """
+
+        kwargs.update(locals())
+
+        if 'protocol' in kwargs:
+            options = ['ipv4', 'ipv6']
+            assert kwargs['protocol'] in options, f'''"protocol" cannot be "{kwargs['protocol']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['switch', 'configure', 'stacks', 'routing', 'interfaces'],
@@ -1923,11 +1926,14 @@ class AsyncSwitch:
         switchStackId = urllib.parse.quote(str(switchStackId), safe='')
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces'
 
-        return self._session.get(metadata, resource)
+        query_params = ['protocol', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get(metadata, resource, params)
         
 
 
-    def createNetworkSwitchStackRoutingInterface(self, networkId: str, switchStackId: str, name: str, vlanId: int, **kwargs):
+    def createNetworkSwitchStackRoutingInterface(self, networkId: str, switchStackId: str, name: str, **kwargs):
         """
         **Create a layer 3 interface for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-stack-routing-interface
@@ -1935,11 +1941,11 @@ class AsyncSwitch:
         - networkId (string): Network ID
         - switchStackId (string): Switch stack ID
         - name (string): A friendly name or description for the interface or VLAN.
-        - vlanId (integer): The VLAN this routed interface is on. VLAN must be between 1 and 4094.
-        - subnet (string): The network that this routed interface is on, in CIDR notation (ex. 10.1.1.0/24).
-        - interfaceIp (string): The IP address this switch stack will use for layer 3 routing on this VLAN or subnet. This cannot be the same as the switch's management IP.
-        - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are, 'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
-        - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route. This IP address must exist in a subnet with a routed interface.
+        - subnet (string): The network that this L3 interface is on, in CIDR notation (ex. 10.1.1.0/24).
+        - interfaceIp (string): The IP address that will be used for Layer 3 routing on this VLAN or subnet. This cannot be the same         as the device management IP.
+        - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
+        - vlanId (integer): The VLAN this L3 interface is on. VLAN must be between 1 and 4094.
+        - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a L3 interface. Required if this is the first IPv4 interface.
         - ospfSettings (object): The OSPF routing settings of the interface.
         - ipv6 (object): The IPv6 settings of the interface.
         """
@@ -1997,11 +2003,11 @@ class AsyncSwitch:
         - switchStackId (string): Switch stack ID
         - interfaceId (string): Interface ID
         - name (string): A friendly name or description for the interface or VLAN.
-        - subnet (string): The network that this routed interface is on, in CIDR notation (ex. 10.1.1.0/24).
-        - interfaceIp (string): The IP address this switch stack will use for layer 3 routing on this VLAN or subnet. This cannot be the same as the switch's management IP.
-        - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are, 'disabled', 'enabled' or 'IGMP snooping querier'.
-        - vlanId (integer): The VLAN this routed interface is on. VLAN must be between 1 and 4094.
-        - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route. This IP address must exist in a subnet with a routed interface.
+        - subnet (string): The network that this L3 interface is on, in CIDR notation (ex. 10.1.1.0/24).
+        - interfaceIp (string): The IP address that will be used for Layer 3 routing on this VLAN or subnet. This cannot be the same         as the device management IP.
+        - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
+        - vlanId (integer): The VLAN this L3 interface is on. VLAN must be between 1 and 4094.
+        - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a L3 interface. Required if this is the first IPv4 interface.
         - ospfSettings (object): The OSPF routing settings of the interface.
         - ipv6 (object): The IPv6 settings of the interface.
         """

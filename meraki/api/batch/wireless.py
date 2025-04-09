@@ -44,9 +44,12 @@ class ActionBatchWireless(object):
         https://developer.cisco.com/meraki/api-v1/#!update-device-wireless-bluetooth-settings
 
         - serial (string): Serial
-        - uuid (string): Desired UUID of the beacon. If the value is set to null it will reset to Dashboard's automatically generated value.
-        - major (integer): Desired major value of the beacon. If the value is set to null it will reset to Dashboard's automatically generated value.
-        - minor (integer): Desired minor value of the beacon. If the value is set to null it will reset to Dashboard's automatically generated value.
+        - uuid (string): Desired UUID of the beacon. If the value is set to null it will reset to Dashboard's
+          automatically generated value.
+        - major (integer): Desired major value of the beacon. If the value is set to null it will reset to
+          Dashboard's automatically generated value.
+        - minor (integer): Desired minor value of the beacon. If the value is set to null it will reset to
+          Dashboard's automatically generated value.
         """
 
         kwargs.update(locals())
@@ -105,7 +108,7 @@ class ActionBatchWireless(object):
 
     def updateDeviceWirelessRadioSettings(self, serial: str, **kwargs):
         """
-        **Update the radio settings of a device**
+        **Update the radio settings overrides of a device, which take precedence over RF profiles.**
         https://developer.cisco.com/meraki/api-v1/#!update-device-wireless-radio-settings
 
         - serial (string): Serial

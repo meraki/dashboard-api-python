@@ -2474,10 +2474,10 @@ class Appliance(object):
         
 
 
-    def createOrganizationApplianceDnsLocalProfilesAssignmentsBulkCreate(self, organizationId: str, items: list):
+    def bulkOrganizationApplianceDnsLocalProfilesAssignmentsCreate(self, organizationId: str, items: list):
         """
         **Assign the local DNS profile to networks in the organization**
-        https://developer.cisco.com/meraki/api-v1/#!create-organization-appliance-dns-local-profiles-assignments-bulk-create
+        https://developer.cisco.com/meraki/api-v1/#!bulk-organization-appliance-dns-local-profiles-assignments-create
 
         - organizationId (string): Organization ID
         - items (array): List containing the network ID and Profile ID
@@ -2486,8 +2486,8 @@ class Appliance(object):
         kwargs = locals()
 
         metadata = {
-            'tags': ['appliance', 'configure', 'dns', 'local', 'profiles', 'assignments', 'bulkCreate'],
-            'operation': 'createOrganizationApplianceDnsLocalProfilesAssignmentsBulkCreate'
+            'tags': ['appliance', 'configure', 'dns', 'local', 'profiles', 'assignments'],
+            'operation': 'bulkOrganizationApplianceDnsLocalProfilesAssignmentsCreate'
         }
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/appliance/dns/local/profiles/assignments/bulkCreate'
