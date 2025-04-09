@@ -63,6 +63,10 @@ class AsyncSensor:
 
         kwargs = locals()
 
+        if 'operation' in kwargs:
+            options = ['cycleDownstreamPower', 'disableDownstreamPower', 'enableDownstreamPower', 'refreshData']
+            assert kwargs['operation'] in options, f'''"operation" cannot be "{kwargs['operation']}", & must be set to one of: {options}'''
+
         metadata = {
             'tags': ['sensor', 'configure', 'commands'],
             'operation': 'createDeviceSensorCommand'
