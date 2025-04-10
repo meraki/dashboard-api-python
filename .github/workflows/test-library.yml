@@ -7,6 +7,7 @@ on:
     branches:
       - 'main'
       - 'release'
+      - 'dev_rest_session'
     paths-ignore:
       - '.github/**'
       - 'examples/**'
@@ -20,6 +21,7 @@ on:
     branches:
       - 'main'
       - 'release'
+      - 'dev_rest_session'
     paths-ignore:
       - '.github/**'
       - 'examples/**'
