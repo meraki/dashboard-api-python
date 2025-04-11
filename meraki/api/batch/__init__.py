@@ -13,16 +13,16 @@ from meraki.api.batch.wireless import ActionBatchWireless
 
 # Batch class
 class Batch:
-    def __init__(self):
+    def __init__(self, enable_kwarg_validation):
         # Action Batch helper API endpoints by section
-        self.organizations = ActionBatchOrganizations()
-        self.networks = ActionBatchNetworks()
-        self.devices = ActionBatchDevices()
-        self.appliance = ActionBatchAppliance()
-        self.camera = ActionBatchCamera()
-        self.cellularGateway = ActionBatchCellularGateway()
-        self.insight = ActionBatchInsight()
-        self.sensor = ActionBatchSensor()
-        self.sm = ActionBatchSm()
-        self.switch = ActionBatchSwitch()
-        self.wireless = ActionBatchWireless()
+        self.organizations = ActionBatchOrganizations(enable_kwarg_validation)
+        self.networks = ActionBatchNetworks(enable_kwarg_validation)
+        self.devices = ActionBatchDevices(enable_kwarg_validation)
+        self.appliance = ActionBatchAppliance(enable_kwarg_validation)
+        self.camera = ActionBatchCamera(enable_kwarg_validation)
+        self.cellularGateway = ActionBatchCellularGateway(enable_kwarg_validation)
+        self.insight = ActionBatchInsight(enable_kwarg_validation)
+        self.sensor = ActionBatchSensor(enable_kwarg_validation)
+        self.sm = ActionBatchSm(enable_kwarg_validation)
+        self.switch = ActionBatchSwitch(enable_kwarg_validation)
+        self.wireless = ActionBatchWireless(enable_kwarg_validation)
