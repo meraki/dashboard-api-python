@@ -5,8 +5,6 @@ class Camera(object):
     def __init__(self, session):
         super(Camera, self).__init__()
         self._session = session
-        
-
 
     def getDeviceCameraAnalyticsLive(self, serial: str):
         """
@@ -24,8 +22,6 @@ class Camera(object):
         resource = f'/devices/{serial}/camera/analytics/live'
 
         return self._session.get(metadata, resource)
-        
-
 
     def getDeviceCameraAnalyticsOverview(self, serial: str, **kwargs):
         """
@@ -43,7 +39,8 @@ class Camera(object):
 
         if 'objectType' in kwargs:
             options = ['person', 'vehicle']
-            assert kwargs['objectType'] in options, f'''"objectType" cannot be "{kwargs['objectType']}", & must be set to one of: {options}'''
+            assert kwargs[
+                       'objectType'] in options, f'''"objectType" cannot be "{kwargs['objectType']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['camera', 'monitor', 'analytics', 'overview'],
@@ -56,8 +53,6 @@ class Camera(object):
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getDeviceCameraAnalyticsRecent(self, serial: str, **kwargs):
         """
@@ -72,7 +67,8 @@ class Camera(object):
 
         if 'objectType' in kwargs:
             options = ['person', 'vehicle']
-            assert kwargs['objectType'] in options, f'''"objectType" cannot be "{kwargs['objectType']}", & must be set to one of: {options}'''
+            assert kwargs[
+                       'objectType'] in options, f'''"objectType" cannot be "{kwargs['objectType']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['camera', 'monitor', 'analytics', 'recent'],
@@ -85,8 +81,6 @@ class Camera(object):
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getDeviceCameraAnalyticsZones(self, serial: str):
         """
@@ -104,8 +98,6 @@ class Camera(object):
         resource = f'/devices/{serial}/camera/analytics/zones'
 
         return self._session.get(metadata, resource)
-        
-
 
     def getDeviceCameraAnalyticsZoneHistory(self, serial: str, zoneId: str, **kwargs):
         """
@@ -125,7 +117,8 @@ class Camera(object):
 
         if 'objectType' in kwargs:
             options = ['person', 'vehicle']
-            assert kwargs['objectType'] in options, f'''"objectType" cannot be "{kwargs['objectType']}", & must be set to one of: {options}'''
+            assert kwargs[
+                       'objectType'] in options, f'''"objectType" cannot be "{kwargs['objectType']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['camera', 'monitor', 'analytics', 'zones', 'history'],
@@ -139,8 +132,6 @@ class Camera(object):
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getDeviceCameraCustomAnalytics(self, serial: str):
         """
@@ -158,8 +149,6 @@ class Camera(object):
         resource = f'/devices/{serial}/camera/customAnalytics'
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateDeviceCameraCustomAnalytics(self, serial: str, **kwargs):
         """
@@ -185,8 +174,6 @@ class Camera(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def generateDeviceCameraSnapshot(self, serial: str, **kwargs):
         """
@@ -211,8 +198,6 @@ class Camera(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getDeviceCameraQualityAndRetention(self, serial: str):
         """
@@ -230,8 +215,6 @@ class Camera(object):
         resource = f'/devices/{serial}/camera/qualityAndRetention'
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateDeviceCameraQualityAndRetention(self, serial: str, **kwargs):
         """
@@ -252,13 +235,16 @@ class Camera(object):
 
         if 'quality' in kwargs:
             options = ['Enhanced', 'High', 'Standard', 'Ultra']
-            assert kwargs['quality'] in options, f'''"quality" cannot be "{kwargs['quality']}", & must be set to one of: {options}'''
+            assert kwargs[
+                       'quality'] in options, f'''"quality" cannot be "{kwargs['quality']}", & must be set to one of: {options}'''
         if 'resolution' in kwargs:
             options = ['1080x1080', '1280x720', '1920x1080', '2112x2112', '2688x1512', '2880x2880', '3840x2160']
-            assert kwargs['resolution'] in options, f'''"resolution" cannot be "{kwargs['resolution']}", & must be set to one of: {options}'''
+            assert kwargs[
+                       'resolution'] in options, f'''"resolution" cannot be "{kwargs['resolution']}", & must be set to one of: {options}'''
         if 'motionDetectorVersion' in kwargs:
             options = [1, 2]
-            assert kwargs['motionDetectorVersion'] in options, f'''"motionDetectorVersion" cannot be "{kwargs['motionDetectorVersion']}", & must be set to one of: {options}'''
+            assert kwargs[
+                       'motionDetectorVersion'] in options, f'''"motionDetectorVersion" cannot be "{kwargs['motionDetectorVersion']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['camera', 'configure', 'qualityAndRetention'],
@@ -267,12 +253,11 @@ class Camera(object):
         serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/camera/qualityAndRetention'
 
-        body_params = ['profileId', 'motionBasedRetentionEnabled', 'audioRecordingEnabled', 'restrictedBandwidthModeEnabled', 'quality', 'resolution', 'motionDetectorVersion', ]
+        body_params = ['profileId', 'motionBasedRetentionEnabled', 'audioRecordingEnabled',
+                       'restrictedBandwidthModeEnabled', 'quality', 'resolution', 'motionDetectorVersion', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getDeviceCameraSense(self, serial: str):
         """
@@ -290,8 +275,6 @@ class Camera(object):
         resource = f'/devices/{serial}/camera/sense'
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateDeviceCameraSense(self, serial: str, **kwargs):
         """
@@ -318,8 +301,6 @@ class Camera(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getDeviceCameraSenseObjectDetectionModels(self, serial: str):
         """
@@ -337,8 +318,6 @@ class Camera(object):
         resource = f'/devices/{serial}/camera/sense/objectDetectionModels'
 
         return self._session.get(metadata, resource)
-        
-
 
     def getDeviceCameraVideoSettings(self, serial: str):
         """
@@ -356,8 +335,6 @@ class Camera(object):
         resource = f'/devices/{serial}/camera/video/settings'
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateDeviceCameraVideoSettings(self, serial: str, **kwargs):
         """
@@ -381,8 +358,6 @@ class Camera(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getDeviceCameraVideoLink(self, serial: str, **kwargs):
         """
@@ -406,8 +381,6 @@ class Camera(object):
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getDeviceCameraWirelessProfiles(self, serial: str):
         """
@@ -425,8 +398,6 @@ class Camera(object):
         resource = f'/devices/{serial}/camera/wirelessProfiles'
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateDeviceCameraWirelessProfiles(self, serial: str, ids: dict):
         """
@@ -450,8 +421,6 @@ class Camera(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkCameraQualityRetentionProfiles(self, networkId: str):
         """
@@ -469,8 +438,6 @@ class Camera(object):
         resource = f'/networks/{networkId}/camera/qualityRetentionProfiles'
 
         return self._session.get(metadata, resource)
-        
-
 
     def createNetworkCameraQualityRetentionProfile(self, networkId: str, name: str, **kwargs):
         """
@@ -499,12 +466,12 @@ class Camera(object):
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/camera/qualityRetentionProfiles'
 
-        body_params = ['name', 'motionBasedRetentionEnabled', 'restrictedBandwidthModeEnabled', 'audioRecordingEnabled', 'cloudArchiveEnabled', 'motionDetectorVersion', 'smartRetention', 'scheduleId', 'maxRetentionDays', 'videoSettings', ]
+        body_params = ['name', 'motionBasedRetentionEnabled', 'restrictedBandwidthModeEnabled', 'audioRecordingEnabled',
+                       'cloudArchiveEnabled', 'motionDetectorVersion', 'smartRetention', 'scheduleId',
+                       'maxRetentionDays', 'videoSettings', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str):
         """
@@ -524,8 +491,6 @@ class Camera(object):
         resource = f'/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}'
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str, **kwargs):
         """
@@ -556,12 +521,12 @@ class Camera(object):
         qualityRetentionProfileId = urllib.parse.quote(str(qualityRetentionProfileId), safe='')
         resource = f'/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}'
 
-        body_params = ['name', 'motionBasedRetentionEnabled', 'restrictedBandwidthModeEnabled', 'audioRecordingEnabled', 'cloudArchiveEnabled', 'motionDetectorVersion', 'smartRetention', 'scheduleId', 'maxRetentionDays', 'videoSettings', ]
+        body_params = ['name', 'motionBasedRetentionEnabled', 'restrictedBandwidthModeEnabled', 'audioRecordingEnabled',
+                       'cloudArchiveEnabled', 'motionDetectorVersion', 'smartRetention', 'scheduleId',
+                       'maxRetentionDays', 'videoSettings', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str):
         """
@@ -581,8 +546,6 @@ class Camera(object):
         resource = f'/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}'
 
         return self._session.delete(metadata, resource)
-        
-
 
     def getNetworkCameraSchedules(self, networkId: str):
         """
@@ -600,8 +563,6 @@ class Camera(object):
         resource = f'/networks/{networkId}/camera/schedules'
 
         return self._session.get(metadata, resource)
-        
-
 
     def createNetworkCameraWirelessProfile(self, networkId: str, name: str, ssid: dict, **kwargs):
         """
@@ -627,8 +588,6 @@ class Camera(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getNetworkCameraWirelessProfiles(self, networkId: str):
         """
@@ -646,8 +605,6 @@ class Camera(object):
         resource = f'/networks/{networkId}/camera/wirelessProfiles'
 
         return self._session.get(metadata, resource)
-        
-
 
     def getNetworkCameraWirelessProfile(self, networkId: str, wirelessProfileId: str):
         """
@@ -667,8 +624,6 @@ class Camera(object):
         resource = f'/networks/{networkId}/camera/wirelessProfiles/{wirelessProfileId}'
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkCameraWirelessProfile(self, networkId: str, wirelessProfileId: str, **kwargs):
         """
@@ -696,8 +651,6 @@ class Camera(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteNetworkCameraWirelessProfile(self, networkId: str, wirelessProfileId: str):
         """
@@ -717,8 +670,6 @@ class Camera(object):
         resource = f'/networks/{networkId}/camera/wirelessProfiles/{wirelessProfileId}'
 
         return self._session.delete(metadata, resource)
-        
-
 
     def getOrganizationCameraBoundariesAreasByDevice(self, organizationId: str, **kwargs):
         """
@@ -748,8 +699,6 @@ class Camera(object):
                 params.pop(k.strip())
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getOrganizationCameraBoundariesLinesByDevice(self, organizationId: str, **kwargs):
         """
@@ -779,8 +728,6 @@ class Camera(object):
                 params.pop(k.strip())
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getOrganizationCameraCustomAnalyticsArtifacts(self, organizationId: str):
         """
@@ -798,8 +745,6 @@ class Camera(object):
         resource = f'/organizations/{organizationId}/camera/customAnalytics/artifacts'
 
         return self._session.get(metadata, resource)
-        
-
 
     def createOrganizationCameraCustomAnalyticsArtifact(self, organizationId: str, **kwargs):
         """
@@ -823,8 +768,6 @@ class Camera(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getOrganizationCameraCustomAnalyticsArtifact(self, organizationId: str, artifactId: str):
         """
@@ -844,8 +787,6 @@ class Camera(object):
         resource = f'/organizations/{organizationId}/camera/customAnalytics/artifacts/{artifactId}'
 
         return self._session.get(metadata, resource)
-        
-
 
     def deleteOrganizationCameraCustomAnalyticsArtifact(self, organizationId: str, artifactId: str):
         """
@@ -865,10 +806,9 @@ class Camera(object):
         resource = f'/organizations/{organizationId}/camera/customAnalytics/artifacts/{artifactId}'
 
         return self._session.delete(metadata, resource)
-        
 
-
-    def getOrganizationCameraDetectionsHistoryByBoundaryByInterval(self, organizationId: str, boundaryIds: list, total_pages=1, direction='next', **kwargs):
+    def getOrganizationCameraDetectionsHistoryByBoundaryByInterval(self, organizationId: str, boundaryIds: list,
+                                                                   total_pages=1, direction='next', **kwargs):
         """
         **Returns analytics data for timespans**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-camera-detections-history-by-boundary-by-interval
@@ -891,18 +831,16 @@ class Camera(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/camera/detections/history/byBoundary/byInterval'
 
-        query_params = ['boundaryIds', 'duration', 'perPage', 'boundaryTypes', ]
+        query_params = ['boundaryIds', 'duration', 'perPage', 'boundaryTypes', 'ranges']
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['boundaryIds', 'boundaryTypes', ]
+        array_params = ['boundaryIds', 'boundaryTypes', 'ranges']
         for k, v in kwargs.items():
             if k.strip() in array_params:
                 params[f'{k.strip()}[]'] = kwargs[f'{k}']
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def getOrganizationCameraOnboardingStatuses(self, organizationId: str, **kwargs):
         """
@@ -933,8 +871,6 @@ class Camera(object):
                 params.pop(k.strip())
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def updateOrganizationCameraOnboardingStatuses(self, organizationId: str, **kwargs):
         """
@@ -959,8 +895,6 @@ class Camera(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getOrganizationCameraPermissions(self, organizationId: str):
         """
@@ -978,8 +912,6 @@ class Camera(object):
         resource = f'/organizations/{organizationId}/camera/permissions'
 
         return self._session.get(metadata, resource)
-        
-
 
     def getOrganizationCameraPermission(self, organizationId: str, permissionScopeId: str):
         """
@@ -999,8 +931,6 @@ class Camera(object):
         resource = f'/organizations/{organizationId}/camera/permissions/{permissionScopeId}'
 
         return self._session.get(metadata, resource)
-        
-
 
     def getOrganizationCameraRoles(self, organizationId: str):
         """
@@ -1018,8 +948,6 @@ class Camera(object):
         resource = f'/organizations/{organizationId}/camera/roles'
 
         return self._session.get(metadata, resource)
-        
-
 
     def createOrganizationCameraRole(self, organizationId: str, name: str, **kwargs):
         """
@@ -1046,8 +974,6 @@ class Camera(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getOrganizationCameraRole(self, organizationId: str, roleId: str):
         """
@@ -1067,8 +993,6 @@ class Camera(object):
         resource = f'/organizations/{organizationId}/camera/roles/{roleId}'
 
         return self._session.get(metadata, resource)
-        
-
 
     def deleteOrganizationCameraRole(self, organizationId: str, roleId: str):
         """
@@ -1088,8 +1012,6 @@ class Camera(object):
         resource = f'/organizations/{organizationId}/camera/roles/{roleId}'
 
         return self._session.delete(metadata, resource)
-        
-
 
     def updateOrganizationCameraRole(self, organizationId: str, roleId: str, **kwargs):
         """
@@ -1118,4 +1040,4 @@ class Camera(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
+
