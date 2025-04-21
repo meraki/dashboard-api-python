@@ -146,7 +146,7 @@ class RestSession(object):
         self._req_session = requests.session()
         self._req_session.encoding = 'utf-8'
 
-        # Check Python version
+        # Check the Python version
         check_python_version()
 
         # Check base URL
@@ -289,8 +289,6 @@ class RestSession(object):
             kwargs.setdefault('proxies', {'https': self._requests_proxy})
         kwargs.setdefault('timeout', self._single_request_timeout)
 
-        return response
-
 
     def handle_4xx_errors(self, metadata, operation, reason, response, retries, status, tag):
         try:
@@ -304,7 +302,7 @@ class RestSession(object):
         network_delete_concurrency_error_text = 'concurrent'
         action_batch_concurrency_error_text = 'executing batches'
 
-        # First we check for network deletion concurrency errors
+        # First, we check for network deletion concurrency errors
         if operation == 'deleteNetwork' and response.status_code == 400:
             # message['errors'][0] is the first error, and it contains helpful text
             # here we use it to confirm that the 400 error is related to concurrent requests
@@ -317,7 +315,7 @@ class RestSession(object):
                 if retries == 0:
                     raise APIError(metadata, response)
 
-        # Next we check for action batch concurrency errors
+        # Next, we check for action batch concurrency errors
         # message['errors'][0] is the first error, and it contains helpful text
         # here we use it to confirm that the 400 error is related to concurrent requests
         elif (message_is_dict and 'errors' in message.keys() and action_batch_concurrency_error_text
@@ -401,7 +399,7 @@ class RestSession(object):
                     # Break out of loop if startingAfter returned from next link is within 5 minutes of current time
                     if delta.total_seconds() < 300:
                         break
-                    # Or if next page is past the specified window's end time
+                    # Or if the next page is past the specified window's end time
                     elif event_log_end_time and starting_after > event_log_end_time:
                         break
 
@@ -425,7 +423,7 @@ class RestSession(object):
             response.close()
 
             return_items = []
-            # just prepare the list
+            # Just prepare the list
             if isinstance(results, list):
                 return_items = results
             elif isinstance(results, dict) and "items" in results:
