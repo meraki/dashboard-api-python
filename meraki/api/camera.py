@@ -891,10 +891,10 @@ class Camera(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/camera/detections/history/byBoundary/byInterval'
 
-        query_params = ['boundaryIds', 'duration', 'perPage', 'boundaryTypes', 'ranges']
+        query_params = ['boundaryIds', 'duration', 'perPage', 'boundaryTypes', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['boundaryIds', 'boundaryTypes', 'ranges']
+        array_params = ['boundaryIds', 'boundaryTypes', ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
                 params[f'{k.strip()}[]'] = kwargs[f'{k}']
