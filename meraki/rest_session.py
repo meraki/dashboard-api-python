@@ -50,7 +50,7 @@ def encode_params(_, data):
                 # List params
                 if v is not None and not isinstance(v, dict):
                     """
-                    Add a query parameter pair for each value to the list of results. 
+                    Add a query parameter key-value pair for each value to the list of results. 
                     Ex. {"param": ["value_1", "value_2"]} => [(param, value_1), (param, value_2)]
                     """
                     result.append(
@@ -62,7 +62,8 @@ def encode_params(_, data):
                 # Dict params
                 else:
                     """
-                    Append each dict key to the parameter name
+                    Append each dict key to the parameter name. 
+                    Add a query parameter key-value pair for each value to the list of results. 
                     {"param": [{"key_1": "value_1"}, {"key_2": "value_2"}]} => [(param + key_1, value1), (param + key_2, value2)]
                     """
                     for k_1, v_1 in v.items():
