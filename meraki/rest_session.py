@@ -77,11 +77,14 @@ def encode_params(_, data):
         return urlencode(result, doseq=True)
     else:
         return data
+
+
 # Monkey patch the _encode_params from the requests library with the encode_params function above
 requests.models.RequestEncodingMixin._encode_params = encode_params
 
+
 def user_agent_extended(be_geo_id, caller):
-    # Generate extended portion of the User-Agent
+    # Generate the extended portion of the User-Agent
     user_agent = dict()
 
     if caller:
@@ -204,7 +207,7 @@ class RestSession(object):
         else:
             abs_url = self._base_url + url
 
-        # Set maximum number of retries
+        # Set the maximum number of retries
         retries = self._maximum_retries
 
         # Option to simulate non-safe API calls without actually sending them
@@ -301,6 +304,9 @@ class RestSession(object):
                 # 4XX errors
                 else:
                     retries = self.handle_4xx_errors(metadata, operation, reason, response, retries, status, tag)
+
+        return response
+
 
     def handle_4xx_errors(self, metadata, operation, reason, response, retries, status, tag):
         try:
