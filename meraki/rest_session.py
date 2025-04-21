@@ -20,6 +20,17 @@ def encode_params(_, data):
     Will successfully encode parameters when passed as a dict or a list of
     2-tuples. Order is retained if data is a list of 2-tuples but arbitrary
     if parameters are supplied as a dict.
+
+    MERAKI OVERRIDE:
+    By default, when parameters are supplied as a dict, only the object keys
+    are encoded.
+
+    Ex. {"param": [{"key_1":"value_1"}, {"key_2":"value_2"}]} => ?param[]=key_1&param[]=key_2
+
+    Now when parameters are supplied as a dict, dict keys will be appended to
+    parameter names. This adds support for the "array of objects" query parameter type.
+
+    Ex. {"param": [{"key_1":"value_1"}, {"key_2":"value_2"}]} => ?param[]key_1=value_1&param[]key_2=value_2
     """
     if isinstance(data, (str, bytes)):
         return data
@@ -27,18 +38,33 @@ def encode_params(_, data):
         return data
     elif hasattr(data, "__iter__"):
         result = []
+        # Get each query parameter key value pair
         for k, vs in to_key_val_list(data):
+            """
+            Turn value into list/iterable if it is not already. 
+            Ex. {"param": "value"} => {"param": ["value"]}
+            """
             if isinstance(vs, basestring) or not hasattr(vs, "__iter__"):
                 vs = [vs]
             for v in vs:
+                # List params
                 if v is not None and not isinstance(v, dict):
+                    """
+                    Add a query parameter pair for each value to the list of results. 
+                    Ex. {"param": ["value_1", "value_2"]} => [(param, value_1), (param, value_2)]
+                    """
                     result.append(
                         (
                             k.encode("utf-8") if isinstance(k, str) else k,
                             v.encode("utf-8") if isinstance(v, str) else v,
                         )
                     )
+                # Dict params
                 else:
+                    """
+                    Append each dict key to the parameter name
+                    {"param": [{"key_1": "value_1"}, {"key_2": "value_2"}]} => [(param + key_1, value1), (param + key_2, value2)]
+                    """
                     for k_1, v_1 in v.items():
                         result.append(
                             (
