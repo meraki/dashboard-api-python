@@ -73,10 +73,11 @@ def encode_params(_, data):
                                 (v + v_1).encode("utf-8") if isinstance(v, str) else v_1,
                             )
                         )
+        # Return URL encoded string
         return urlencode(result, doseq=True)
     else:
         return data
-
+# Monkey patch the _encode_params from the requests library with the encode_params function above
 requests.models.RequestEncodingMixin._encode_params = encode_params
 
 def user_agent_extended(be_geo_id, caller):
