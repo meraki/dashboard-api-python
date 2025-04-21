@@ -6,11 +6,51 @@ import urllib.parse
 from datetime import datetime
 
 import requests
+from requests.utils import to_key_val_list
+from requests.compat import basestring, urlencode
 
 from meraki.__init__ import __version__
 from meraki.common import *
 from meraki.config import *
 
+
+def encode_params(_, data):
+    """Encode parameters in a piece of data.
+
+    Will successfully encode parameters when passed as a dict or a list of
+    2-tuples. Order is retained if data is a list of 2-tuples but arbitrary
+    if parameters are supplied as a dict.
+    """
+    if isinstance(data, (str, bytes)):
+        return data
+    elif hasattr(data, "read"):
+        return data
+    elif hasattr(data, "__iter__"):
+        result = []
+        for k, vs in to_key_val_list(data):
+            if isinstance(vs, basestring) or not hasattr(vs, "__iter__"):
+                vs = [vs]
+            for v in vs:
+                if v is not None and not isinstance(v, dict):
+                    result.append(
+                        (
+                            k.encode("utf-8") if isinstance(k, str) else k,
+                            v.encode("utf-8") if isinstance(v, str) else v,
+                        )
+                    )
+                else:
+                    for k_1, v_1 in v.items():
+                        result.append(
+                            (
+                                (k + k_1).encode("utf-8") if isinstance(k, str) else k_1,
+                                (v + v_1).encode("utf-8") if isinstance(v, str) else v_1,
+                            )
+                        )
+        return urlencode(result, doseq=True)
+    else:
+        return data
+
+requests.models.RequestEncodingMixin._encode_params = encode_params
 
 def user_agent_extended(be_geo_id, caller):
     # Generate extended portion of the User-Agent
