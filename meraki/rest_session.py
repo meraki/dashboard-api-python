@@ -234,6 +234,8 @@ class RestSession(object):
                 else:
                     retries = self.handle_4xx_errors(metadata, operation, reason, response, retries, status, tag)
 
+        return response
+
     def handle_4xx_errors(self, metadata, operation, reason, response, retries, status, tag):
         try:
             message = response.json()
