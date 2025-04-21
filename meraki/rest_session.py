@@ -5,6 +5,8 @@ import json
 import time
 
 import requests
+from requests.utils import to_key_val_list
+from requests.compat import basestring, urlencode
 
 from meraki.__init__ import __version__
 from meraki.common import *
@@ -12,6 +14,91 @@ from meraki.response_handler import *
 from meraki.config import *
 
 
+def encode_params(_, data):
+    """Encode parameters in a piece of data.
+
+    Will successfully encode parameters when passed as a dict or a list of
+    2-tuples. Order is retained if data is a list of 2-tuples but arbitrary
+    if parameters are supplied as a dict.
+
+    MERAKI OVERRIDE:
+    By default, when parameters are supplied as a dict, only the object keys
+    are encoded.
+
+    Ex. {"param": [{"key_1":"value_1"}, {"key_2":"value_2"}]} => ?param[]=key_1&param[]=key_2
+
+    Now when parameters are supplied as a dict, dict keys will be appended to
+    parameter names. This adds support for the "array of objects" query parameter type.
+
+    Ex. {"param": [{"key_1":"value_1"}, {"key_2":"value_2"}]} => ?param[]key_1=value_1&param[]key_2=value_2
+    """
+    if isinstance(data, (str, bytes)):
+        return data
+    elif hasattr(data, "read"):
+        return data
+    elif hasattr(data, "__iter__"):
+        result = []
+        # Get each query parameter key value pair
+        for k, vs in to_key_val_list(data):
+            """
+            Turn value into list/iterable if it is not already. 
+            Ex. {"param": "value"} => {"param": ["value"]}
+            """
+            if isinstance(vs, basestring) or not hasattr(vs, "__iter__"):
+                vs = [vs]
+            for v in vs:
+                # List params
+                if v is not None and not isinstance(v, dict):
+                    """
+                    Add a query parameter key-value pair for each value to the list of results. 
+                    Ex. {"param": ["value_1", "value_2"]} => [(param, value_1), (param, value_2)]
+                    """
+                    result.append(
+                        (
+                            k.encode("utf-8") if isinstance(k, str) else k,
+                            v.encode("utf-8") if isinstance(v, str) else v,
+                        )
+                    )
+                # Dict params
+                else:
+                    """
+                    Append each dict key to the parameter name. 
+                    Add a query parameter key-value pair for each value to the list of results. 
+                    {"param": [{"key_1": "value_1"}, {"key_2": "value_2"}]} => [(param + key_1, value1), (param + key_2, value2)]
+                    """
+                    for k_1, v_1 in v.items():
+                        result.append(
+                            (
+                                (k + k_1).encode("utf-8") if isinstance(k, str) else k_1,
+                                (v + v_1).encode("utf-8") if isinstance(v, str) else v_1,
+                            )
+                        )
+        # Return URL encoded string
+        return urlencode(result, doseq=True)
+    else:
+        return data
+
+
+# Monkey patch the _encode_params from the requests library with the encode_params function above
+requests.models.RequestEncodingMixin._encode_params = encode_params
+
+
+def user_agent_extended(be_geo_id, caller):
+    # Generate the extended portion of the User-Agent
+    user_agent = dict()
+
+    if caller:
+        user_agent["caller"] = caller
+    elif be_geo_id:
+        user_agent["caller"] = be_geo_id
+    else:
+        user_agent["caller"] = "unidentified"
+
+    caller_string = f'Caller/({user_agent["caller"]})'
+
+    return caller_string
+
+  
 # Main module interface
 class RestSession(object):
     def __init__(
@@ -102,7 +189,7 @@ class RestSession(object):
         # Ensure proper base URL
         abs_url = validate_base_url(self, url)
 
-        # Set maximum number of retries
+        # Set the maximum number of retries
         retries = self._maximum_retries
 
         # Option to simulate non-safe API calls without actually sending them
@@ -201,6 +288,9 @@ class RestSession(object):
         if self._requests_proxy:
             kwargs.setdefault('proxies', {'https': self._requests_proxy})
         kwargs.setdefault('timeout', self._single_request_timeout)
+
+        return response
+
 
     def handle_4xx_errors(self, metadata, operation, reason, response, retries, status, tag):
         try:

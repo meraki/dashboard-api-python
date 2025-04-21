@@ -1,6 +1,6 @@
 [project]
 name = "meraki"
-version = "2.0.1"
+version = "2.0.2"
 description = "Meraki library for Python"
 authors = [
     {name = "Cisco Meraki",email = "api-feedback@meraki.net"}
