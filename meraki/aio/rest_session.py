@@ -5,7 +5,7 @@ import ssl
 import sys
 import time
 import urllib.parse
-from datetime import datetime
+from datetime import datetime, timezone
 
 import aiohttp
 
@@ -66,18 +66,14 @@ class AsyncRestSession:
         check_python_version()
 
         # Check base URL
-        if "v0" in self._base_url:
-            sys.exit(f'This library does not support dashboard API v0 ({self._base_url} was configured as the base'
-                     f' URL).  API v0 has been end of life since 2020 August 5.')
-        elif self._base_url[-1] == "/":
-            self._base_url = self._base_url[:-1]
+        reject_v0_base_url(self)
 
         # Update the headers for the session
         self._headers = {
             "Authorization": "Bearer " + self._api_key,
             "Content-Type": "application/json",
             "User-Agent": f"python-meraki/aio-{self._version} "
-                          + user_agent_extended(self._be_geo_id, self._caller),
+                          + validate_user_agent(self._be_geo_id, self._caller),
         }
         if self._certificate_path:
             self._sslcontext = ssl.create_default_context()
