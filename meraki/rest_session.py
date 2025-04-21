@@ -193,6 +193,8 @@ class RestSession(object):
                     case status if status != 429 and 400 <= status < 500:
                         retries = self.handle_4xx_errors(metadata, operation, reason, response, retries, status, tag)
 
+        return response
+
     def prepare_request(self, kwargs):
         if self._certificate_path:
             kwargs.setdefault('verify', self._certificate_path)
