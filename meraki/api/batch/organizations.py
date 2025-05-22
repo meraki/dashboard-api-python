@@ -445,7 +445,7 @@ class ActionBatchOrganizations(object):
 
 
 
-    def createOrganizationBrandingPolicy(self, organizationId: str, **kwargs):
+    def createOrganizationBrandingPolicy(self, organizationId: str, name: str, **kwargs):
         """
         **Add a new branding policy to an organization**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-branding-policy
@@ -516,7 +516,7 @@ class ActionBatchOrganizations(object):
 
 
 
-    def updateOrganizationBrandingPolicy(self, organizationId: str, brandingPolicyId: str, **kwargs):
+    def updateOrganizationBrandingPolicy(self, organizationId: str, brandingPolicyId: str, name: str, **kwargs):
         """
         **Update a branding policy**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-branding-policy

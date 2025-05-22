@@ -1349,6 +1349,32 @@ class AsyncWireless:
         
 
 
+    def updateNetworkWirelessLocationScanning(self, networkId: str, **kwargs):
+        """
+        **Change scanning API settings**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-location-scanning
+
+        - networkId (string): Network ID
+        - enabled (boolean): Collect location and scanning analytics
+        - api (object): Enable push API for scanning events, analytics must be enabled
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'location', 'scanning'],
+            'operation': 'updateNetworkWirelessLocationScanning'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/wireless/location/scanning'
+
+        body_params = ['enabled', 'api', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
     def getNetworkWirelessMeshStatuses(self, networkId: str, total_pages=1, direction='next', **kwargs):
         """
         **List wireless mesh statuses for repeaters**
@@ -1727,6 +1753,7 @@ class AsyncWireless:
         - visible (boolean): Boolean indicating whether APs should advertise or hide this SSID. APs will only broadcast this SSID if set to true
         - availableOnAllAps (boolean): Boolean indicating whether all APs should broadcast the SSID or if it should be restricted to APs matching any availability tags. Can only be false if the SSID has availability tags.
         - availabilityTags (array): Accepts a list of tags for this SSID. If availableOnAllAps is false, then the SSID will only be broadcast by APs with tags matching any of the tags in this list.
+        - adaptivePolicyGroupId (string): Adaptive policy group ID this SSID is assigned to.
         - mandatoryDhcpEnabled (boolean): If true, Mandatory DHCP will enforce that clients connecting to this SSID must use the IP address assigned by the DHCP server. Clients who use a static IP address won't be able to associate.
         - adultContentFilteringEnabled (boolean): Boolean indicating whether or not adult content will be blocked
         - dnsRewrite (object): DNS servers rewrite settings
@@ -1769,7 +1796,7 @@ class AsyncWireless:
         number = urllib.parse.quote(str(number), safe='')
         resource = f'/networks/{networkId}/wireless/ssids/{number}'
 
-        body_params = ['name', 'enabled', 'localAuth', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk', 'wpaEncryptionMode', 'dot11w', 'dot11r', 'splashPage', 'splashGuestSponsorDomains', 'oauth', 'localRadius', 'ldap', 'activeDirectory', 'radiusServers', 'radiusProxyEnabled', 'radiusTestingEnabled', 'radiusCalledStationId', 'radiusAuthenticationNasId', 'radiusServerTimeout', 'radiusServerAttemptsLimit', 'radiusFallbackEnabled', 'radiusRadsec', 'radiusCoaEnabled', 'radiusFailoverPolicy', 'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusAccountingInterimInterval', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging', 'concentratorNetworkId', 'secondaryConcentratorNetworkId', 'disassociateClientsOnVpnFailover', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 'walledGardenEnabled', 'walledGardenRanges', 'gre', 'radiusOverride', 'radiusGuestVlanEnabled', 'radiusGuestVlanId', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'perSsidBandwidthLimitUp', 'perSsidBandwidthLimitDown', 'lanIsolationEnabled', 'visible', 'availableOnAllAps', 'availabilityTags', 'mandatoryDhcpEnabled', 'adultContentFilteringEnabled', 'dnsRewrite', 'speedBurst', 'namedVlans', ]
+        body_params = ['name', 'enabled', 'localAuth', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk', 'wpaEncryptionMode', 'dot11w', 'dot11r', 'splashPage', 'splashGuestSponsorDomains', 'oauth', 'localRadius', 'ldap', 'activeDirectory', 'radiusServers', 'radiusProxyEnabled', 'radiusTestingEnabled', 'radiusCalledStationId', 'radiusAuthenticationNasId', 'radiusServerTimeout', 'radiusServerAttemptsLimit', 'radiusFallbackEnabled', 'radiusRadsec', 'radiusCoaEnabled', 'radiusFailoverPolicy', 'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusAccountingInterimInterval', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging', 'concentratorNetworkId', 'secondaryConcentratorNetworkId', 'disassociateClientsOnVpnFailover', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 'walledGardenEnabled', 'walledGardenRanges', 'gre', 'radiusOverride', 'radiusGuestVlanEnabled', 'radiusGuestVlanId', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'perSsidBandwidthLimitUp', 'perSsidBandwidthLimitDown', 'lanIsolationEnabled', 'visible', 'availableOnAllAps', 'availabilityTags', 'adaptivePolicyGroupId', 'mandatoryDhcpEnabled', 'adultContentFilteringEnabled', 'dnsRewrite', 'speedBurst', 'namedVlans', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -2949,6 +2976,144 @@ class AsyncWireless:
         
 
 
+    def getOrganizationWirelessDevicesRadsecCertificatesAuthorities(self, organizationId: str, **kwargs):
+        """
+        **Query for details on the organization's RADSEC device Certificate Authority certificates (CAs)**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-radsec-certificates-authorities
+
+        - organizationId (string): Organization ID
+        - certificateAuthorityIds (array): Optional parameter to filter CAs by one or more CA IDs. All returned CAs will have an ID that is an exact match.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'devices', 'radsec', 'certificates', 'authorities'],
+            'operation': 'getOrganizationWirelessDevicesRadsecCertificatesAuthorities'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/devices/radsec/certificates/authorities'
+
+        query_params = ['certificateAuthorityIds', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['certificateAuthorityIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get(metadata, resource, params)
+        
+
+
+    def updateOrganizationWirelessDevicesRadsecCertificatesAuthorities(self, organizationId: str, **kwargs):
+        """
+        **Update an organization's RADSEC device Certificate Authority (CA) state**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-wireless-devices-radsec-certificates-authorities
+
+        - organizationId (string): Organization ID
+        - status (string): The "status" to update the Certificate Authority to. Only valid option is "trusted".
+        - certificateAuthorityId (string): The ID of the Certificate Authority to update.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'devices', 'radsec', 'certificates', 'authorities'],
+            'operation': 'updateOrganizationWirelessDevicesRadsecCertificatesAuthorities'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/devices/radsec/certificates/authorities'
+
+        body_params = ['status', 'certificateAuthorityId', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def createOrganizationWirelessDevicesRadsecCertificatesAuthority(self, organizationId: str):
+        """
+        **Create an organization's RADSEC device Certificate Authority (CA)**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-wireless-devices-radsec-certificates-authority
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'devices', 'radsec', 'certificates', 'authorities'],
+            'operation': 'createOrganizationWirelessDevicesRadsecCertificatesAuthority'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/devices/radsec/certificates/authorities'
+
+        return self._session.post(metadata, resource)
+        
+
+
+    def getOrganizationWirelessDevicesRadsecCertificatesAuthoritiesCrls(self, organizationId: str, **kwargs):
+        """
+        **Query for certificate revocation list (CRL) for the organization's RADSEC device Certificate Authorities (CAs).**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-radsec-certificates-authorities-crls
+
+        - organizationId (string): Organization ID
+        - certificateAuthorityIds (array): Optional parameter to filter CAs by one or more CA IDs. All returned CAs will have an ID that is an exact match.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'devices', 'radsec', 'certificates', 'authorities', 'crls'],
+            'operation': 'getOrganizationWirelessDevicesRadsecCertificatesAuthoritiesCrls'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/devices/radsec/certificates/authorities/crls'
+
+        query_params = ['certificateAuthorityIds', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['certificateAuthorityIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get(metadata, resource, params)
+        
+
+
+    def getOrganizationWirelessDevicesRadsecCertificatesAuthoritiesCrlsDeltas(self, organizationId: str, **kwargs):
+        """
+        **Query for all delta certificate revocation list (CRL) for the organization's RADSEC device Certificate Authority (CA) with the given id.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-radsec-certificates-authorities-crls-deltas
+
+        - organizationId (string): Organization ID
+        - certificateAuthorityIds (array): Parameter to filter CAs by one or more CA IDs. All returned CAs will have an ID that is an exact match.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'devices', 'radsec', 'certificates', 'authorities', 'crls', 'deltas'],
+            'operation': 'getOrganizationWirelessDevicesRadsecCertificatesAuthoritiesCrlsDeltas'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/devices/radsec/certificates/authorities/crls/deltas'
+
+        query_params = ['certificateAuthorityIds', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['certificateAuthorityIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get(metadata, resource, params)
+        
+
+
     def getOrganizationWirelessDevicesSystemCpuLoadHistory(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **Return the CPU Load history for a list of wireless devices in the organization.**
@@ -3027,6 +3192,157 @@ class AsyncWireless:
         
 
 
+    def getOrganizationWirelessLocationScanningByNetwork(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Return scanning API settings**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-location-scanning-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 250. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter scanning settings by network ID.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'location', 'scanning', 'byNetwork'],
+            'operation': 'getOrganizationWirelessLocationScanningByNetwork'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/location/scanning/byNetwork'
+
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def getOrganizationWirelessLocationScanningReceivers(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Return scanning API receivers**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-location-scanning-receivers
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 250. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter scanning API receivers by network ID.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'location', 'scanning', 'receivers'],
+            'operation': 'getOrganizationWirelessLocationScanningReceivers'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/location/scanning/receivers'
+
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def createOrganizationWirelessLocationScanningReceiver(self, organizationId: str, network: dict, url: str, version: str, radio: dict, sharedSecret: str):
+        """
+        **Add new receiver for scanning API**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-wireless-location-scanning-receiver
+
+        - organizationId (string): Organization ID
+        - network (object): Add scanning API receiver for network
+        - url (string): Receiver Url
+        - version (string): Scanning API Version
+        - radio (object): Add scanning API Radio
+        - sharedSecret (string): Secret Value for Receiver
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'location', 'scanning', 'receivers'],
+            'operation': 'createOrganizationWirelessLocationScanningReceiver'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/location/scanning/receivers'
+
+        body_params = ['network', 'url', 'version', 'radio', 'sharedSecret', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def updateOrganizationWirelessLocationScanningReceiver(self, organizationId: str, receiverId: str, **kwargs):
+        """
+        **Change scanning API receiver settings**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-wireless-location-scanning-receiver
+
+        - organizationId (string): Organization ID
+        - receiverId (string): Receiver ID
+        - url (string): Receiver Url
+        - version (string): Scanning API Version
+        - radio (object): Add scanning API Radio
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'location', 'scanning', 'receivers'],
+            'operation': 'updateOrganizationWirelessLocationScanningReceiver'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        receiverId = urllib.parse.quote(str(receiverId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/location/scanning/receivers/{receiverId}'
+
+        body_params = ['url', 'version', 'radio', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def deleteOrganizationWirelessLocationScanningReceiver(self, organizationId: str, receiverId: str):
+        """
+        **Delete a scanning API receiver**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-wireless-location-scanning-receiver
+
+        - organizationId (string): Organization ID
+        - receiverId (string): Receiver ID
+        """
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'location', 'scanning', 'receivers'],
+            'operation': 'deleteOrganizationWirelessLocationScanningReceiver'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        receiverId = urllib.parse.quote(str(receiverId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/location/scanning/receivers/{receiverId}'
+
+        return self._session.delete(metadata, resource)
+        
+
+
     def recalculateOrganizationWirelessRadioAutoRfChannels(self, organizationId: str, networkIds: list):
         """
         **Recalculates automatically assigned channels for every AP within specified the specified network(s)**
@@ -3064,7 +3380,7 @@ class AsyncWireless:
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - networkIds (array): Optional parameter to filter devices by network.
-        - productTypes (array): Optional parameter to filter devices by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, wirelessController, and secureConnect.
+        - productTypes (array): Optional parameter to filter devices by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, wirelessController, campusGateway, and secureConnect.
         - name (string): Optional parameter to filter RF profiles by device name. All returned devices will have a name that contains the search term or is an exact match.
         - mac (string): Optional parameter to filter RF profiles by device MAC address. All returned devices will have a MAC address that contains the search term or is an exact match.
         - serial (string): Optional parameter to filter RF profiles by device serial number. All returned devices will have a serial number that contains the search term or is an exact match.

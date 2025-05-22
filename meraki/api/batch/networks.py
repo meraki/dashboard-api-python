@@ -146,6 +146,7 @@ class ActionBatchNetworks(object):
         - networkId (string): Network ID
         - serials (array): A list of serials of devices to claim
         - addAtomically (boolean): Whether to claim devices atomically. If true, all devices will be claimed or none will be claimed. Default is true.
+        - detailsByDevice (array): Optional details for claimed devices (currently only used for Catalyst devices)
         """
 
         kwargs.update(locals())
@@ -156,7 +157,7 @@ class ActionBatchNetworks(object):
         }
         resource = f'/networks/{networkId}/devices/claim'
 
-        body_params = ['serials', ]
+        body_params = ['serials', 'detailsByDevice', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,

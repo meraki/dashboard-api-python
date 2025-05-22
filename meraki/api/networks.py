@@ -650,6 +650,7 @@ class Networks(object):
         - networkId (string): Network ID
         - serials (array): A list of serials of devices to claim
         - addAtomically (boolean): Whether to claim devices atomically. If true, all devices will be claimed or none will be claimed. Default is true.
+        - detailsByDevice (array): Optional details for claimed devices (currently only used for Catalyst devices)
         """
 
         kwargs.update(locals())
@@ -661,7 +662,7 @@ class Networks(object):
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/devices/claim'
 
-        body_params = ['serials', ]
+        body_params = ['serials', 'detailsByDevice', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -731,7 +732,7 @@ class Networks(object):
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" or "prev" (default) page
         - event_log_end_time (string): ISO8601 Zulu/UTC time, to use in conjunction with startingAfter, to retrieve events within a time window
-        - productType (string): The product type to fetch events for. This parameter is required for networks with multiple device types. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, wirelessController, and secureConnect
+        - productType (string): The product type to fetch events for. This parameter is required for networks with multiple device types. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, wirelessController, campusGateway, and secureConnect
         - includedEventTypes (array): A list of event types. The returned events will be filtered to only include events with these types.
         - excludedEventTypes (array): A list of event types. The returned events will be filtered to exclude events with these types.
         - deviceMac (string): The MAC address of the Meraki device which the list of events will be filtered with
@@ -753,7 +754,7 @@ class Networks(object):
         kwargs.update(locals())
 
         if 'productType' in kwargs:
-            options = ['appliance', 'camera', 'cellularGateway', 'secureConnect', 'switch', 'systemsManager', 'wireless', 'wirelessController']
+            options = ['appliance', 'camera', 'campusGateway', 'cellularGateway', 'secureConnect', 'switch', 'systemsManager', 'wireless', 'wirelessController']
             assert kwargs['productType'] in options, f'''"productType" cannot be "{kwargs['productType']}", & must be set to one of: {options}'''
 
         metadata = {
