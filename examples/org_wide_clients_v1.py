@@ -7,8 +7,8 @@ import meraki
 
 # Either input your API key below by uncommenting line 10 and changing line 16 to api_key=API_KEY,
 # or set an environment variable (preferred) to define your API key. The former is insecure and not recommended.
-# For example, in Linux/macOS:  export MERAKI_DASHBOARD_API_KEY=093b24e85df15a3e66f1fc359f4c48493eaa1b73
-# API_KEY = '093b24e85df15a3e66f1fc359f4c48493eaa1b73'
+# For example, in Linux/macOS:  export MERAKI_DASHBOARD_API_KEY=your-key-here
+# API_KEY = 'your-key-here'
 
 
 def main():
