@@ -280,6 +280,7 @@ def generate_library(spec: dict, version_number: str, api_version_number: str, i
         "config.py",
         "common.py",
         "exceptions.py",
+        "response_handler.py",
         "rest_session.py",
         "api/__init__.py",
         "aio/__init__.py",
@@ -657,7 +658,7 @@ def generate_action_batch_functions(
                             definition += ", event_log_end_time=None"
 
                     if parse_params(operation, parameters, ["optional"]):
-                        definition += f", **kwargs"
+                        definition += ", **kwargs"
 
                 # Docstring
                 param_descriptions = list()
@@ -794,13 +795,13 @@ def main(inputs):
         # Validate that the spec pulled successfully before trying to generate the library.
         if response.ok:
             spec = response.json()
-            print(f"Successfully pulled Meraki dashboard API OpenAPI spec.")
+            print("Successfully pulled Meraki dashboard API OpenAPI spec.")
         else:
             print_help()
             sys.exit(
-                f"There was an HTTP error pulling the OpenAPI specification. Please try again in a few minutes. "
-                f"If this continues for more than an hour, please contact Meraki support and mention that "
-                f'"HTTP GET https://api.meraki.com/api/v1/openapiSpec" is failing.'
+                "There was an HTTP error pulling the OpenAPI specification. Please try again in a few minutes. "
+                "If this continues for more than an hour, please contact Meraki support and mention that "
+                '"HTTP GET https://api.meraki.com/api/v1/openapiSpec" is failing.'
             )
 
     generate_library(spec, version_number, api_version_number, is_github_action)
