@@ -327,11 +327,14 @@ def generate_library(spec: dict, version_number: str, api_version_number: str, i
             # the endpoint has a scope defined by the first tag
             # There are a handful of operations that are currently mistagged
             # This helps ensure they are scoped to the correct module
-            match tags[2]:
-                case 'spaces':
-                    scope = 'spaces'
-                case _:
-                    scope = tags[0]
+            if len(tags) > 2:
+                match tags[2]:
+                    case 'spaces':
+                        scope = 'spaces'
+                    case _:
+                        scope = tags[0]
+            else:
+                scope = tags[0]
 
             # Needs documentation
             if path not in scopes[scope]:
