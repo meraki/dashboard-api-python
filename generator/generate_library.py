@@ -202,7 +202,7 @@ def unpack_params(operation: str, parameters: dict, param_filters):
                 unpack_param_without_schema(unpacked_params, p, name, True)
             )
 
-        # Otherwise the parameter is not required
+        # Otherwise, the parameter is not required
         else:
             unpacked_params.update(
                 unpack_param_without_schema(unpacked_params, p, name, False)
@@ -244,7 +244,8 @@ def generate_library(spec: dict, version_number: str, api_version_number: str, i
         "licensing",
         "secureConnect",
         "wirelessController",
-        "campusGateway"
+        "campusGateway",
+        "spaces"
     ]
     # legacy scopes = ['organizations', 'networks', 'devices', 'appliance', 'camera', 'cellularGateway', 'insight',
     #                  'sm', 'switch', 'wireless']
@@ -324,7 +325,13 @@ def generate_library(spec: dict, version_number: str, api_version_number: str, i
             operations.append(operation)
 
             # the endpoint has a scope defined by the first tag
-            scope = tags[0]
+            # There are a handful of operations that are currently mistagged
+            # This helps ensure they are scoped to the correct module
+            match tags[2]:
+                case 'spaces':
+                    scope = 'spaces'
+                case _:
+                    scope = tags[0]
 
             # Needs documentation
             if path not in scopes[scope]:
@@ -333,7 +340,7 @@ def generate_library(spec: dict, version_number: str, api_version_number: str, i
             else:
                 scopes[scope][path][method] = endpoint
 
-    # Inform the user of the number of operations found
+    # Inform the user how many operations were found
     print(f"Total of {len(operations)} endpoints found from OpenAPI spec...")
 
     # Generate API libraries
@@ -737,7 +744,7 @@ def render_class_template(
         )
 
 
-# Prints READ_ME help message for user to read
+# Prints a READ_ME help message for user to read
 def print_help():
     lines = READ_ME.split("\n")
     for line in lines:
@@ -775,7 +782,7 @@ def main(inputs):
 
     check_python_version()
 
-    # Retrieve latest OpenAPI specification
+    # Retrieve the latest OpenAPI specification
     if org_id:
         if not api_key:
             print_help()
