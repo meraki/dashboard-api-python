@@ -1398,7 +1398,7 @@ class Organizations(object):
         
 
 
-    def createOrganizationBrandingPolicy(self, organizationId: str, **kwargs):
+    def createOrganizationBrandingPolicy(self, organizationId: str, name: str, **kwargs):
         """
         **Add a new branding policy to an organization**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-branding-policy
@@ -1497,7 +1497,7 @@ class Organizations(object):
         
 
 
-    def updateOrganizationBrandingPolicy(self, organizationId: str, brandingPolicyId: str, **kwargs):
+    def updateOrganizationBrandingPolicy(self, organizationId: str, brandingPolicyId: str, name: str, **kwargs):
         """
         **Update a branding policy**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-branding-policy
@@ -1856,7 +1856,7 @@ class Organizations(object):
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - configurationUpdatedAfter (string): Filter results by whether or not the device's configuration has been updated after the given timestamp
         - networkIds (array): Optional parameter to filter devices by network.
-        - productTypes (array): Optional parameter to filter devices by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, wirelessController, and secureConnect.
+        - productTypes (array): Optional parameter to filter devices by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, wirelessController, campusGateway, and secureConnect.
         - tags (array): Optional parameter to filter devices by tags.
         - tagsFilterType (string): Optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return networks which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
         - name (string): Optional parameter to filter devices by name. All returned devices will have a name that contains the search term or is an exact match.
@@ -2191,6 +2191,35 @@ class Organizations(object):
         resource = f'/organizations/{organizationId}/devices/packetCapture/captures'
 
         body_params = ['serials', 'name', 'outputType', 'destination', 'ports', 'notes', 'duration', 'filterExpression', 'interface', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def bulkOrganizationDevicesPacketCaptureCapturesCreate(self, organizationId: str, devices: list, name: str, **kwargs):
+        """
+        **Perform a packet capture on multiple devices and store in Meraki Cloud.**
+        https://developer.cisco.com/meraki/api-v1/#!bulk-organization-devices-packet-capture-captures-create
+
+        - organizationId (string): Organization ID
+        - devices (array): Device details (maximum of 20 devices allowed)
+        - name (string): Name of packet capture file
+        - notes (string): Reason for capture
+        - duration (integer): Duration of the capture in seconds
+        - filterExpression (string): Filter expression for the capture
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'devices', 'packetCapture', 'captures'],
+            'operation': 'bulkOrganizationDevicesPacketCaptureCapturesCreate'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/devices/packetCapture/captures/bulkCreate'
+
+        body_params = ['devices', 'notes', 'duration', 'filterExpression', 'name', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -2541,7 +2570,7 @@ class Organizations(object):
         - networkIds (array): Optional parameter to filter devices by network ids.
         - serials (array): Optional parameter to filter devices by serials.
         - statuses (array): Optional parameter to filter devices by statuses. Valid statuses are ["online", "alerting", "offline", "dormant"].
-        - productTypes (array): An optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, wirelessController, and secureConnect.
+        - productTypes (array): An optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, wirelessController, campusGateway, and secureConnect.
         - models (array): Optional parameter to filter devices by models.
         - tags (array): An optional parameter to filter devices by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below).
         - tagsFilterType (string): An optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return devices which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
@@ -2579,7 +2608,7 @@ class Organizations(object):
         https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-statuses-overview
 
         - organizationId (string): Organization ID
-        - productTypes (array): An optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, wirelessController, and secureConnect.
+        - productTypes (array): An optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, wirelessController, campusGateway, and secureConnect.
         - networkIds (array): An optional parameter to filter device statuses by network.
         """
 
@@ -2622,7 +2651,7 @@ class Organizations(object):
         - interval (integer): The time interval in seconds for returned data. The valid intervals are: 300, 1200, 3600, 14400. The default is 300. Interval is calculated if time params are provided.
         - networkIds (array): Optional parameter to filter the result set by the included set of network IDs
         - serials (array): Optional parameter to filter device availabilities history by device serial numbers
-        - productTypes (array): Optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, wirelessController, and secureConnect.
+        - productTypes (array): Optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, wirelessController, campusGateway, and secureConnect.
         """
 
         kwargs.update(locals())
@@ -3142,7 +3171,7 @@ class Organizations(object):
         - orderNumbers (array): Search for devices in inventory based on order numbers.
         - tags (array): Filter devices by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below).
         - tagsFilterType (string): To use with 'tags' parameter, to filter devices which contain ANY or ALL given tags. Accepted values are 'withAnyTags' or 'withAllTags', default is 'withAnyTags'.
-        - productTypes (array): Filter devices by product type. Accepted values are appliance, camera, cellularGateway, secureConnect, sensor, switch, systemsManager, wireless, and wirelessController.
+        - productTypes (array): Filter devices by product type. Accepted values are appliance, camera, campusGateway, cellularGateway, secureConnect, sensor, switch, systemsManager, wireless, and wirelessController.
         """
 
         kwargs.update(locals())
@@ -4921,7 +4950,7 @@ class Organizations(object):
         kwargs.update(locals())
 
         if 'productType' in kwargs:
-            options = ['appliance', 'camera', 'cellularGateway', 'health', 'platform', 'sensor', 'sm', 'switch', 'wireless']
+            options = ['appliance', 'camera', 'cellularGateway', 'platform', 'sensor', 'sm', 'switch', 'wireless']
             assert kwargs['productType'] in options, f'''"productType" cannot be "{kwargs['productType']}", & must be set to one of: {options}'''
 
         metadata = {
