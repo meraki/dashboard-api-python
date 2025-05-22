@@ -532,6 +532,38 @@ class ActionBatchWireless(object):
 
 
 
+    def updateNetworkWirelessLocationScanning(self, networkId: str, **kwargs):
+        """
+        **Change scanning API settings**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-location-scanning
+
+        - networkId (string): Network ID
+        - enabled (boolean): Collect location and scanning analytics
+        - api (object): Enable push API for scanning events, analytics must be enabled
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'location', 'scanning'],
+            'operation': 'updateNetworkWirelessLocationScanning'
+        }
+        resource = f'/networks/{networkId}/wireless/location/scanning'
+
+        body_params = ['enabled', 'api', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
     def createNetworkWirelessRfProfile(self, networkId: str, name: str, bandSelectionType: str, **kwargs):
         """
         **Creates new RF profile for this network**
@@ -760,6 +792,7 @@ class ActionBatchWireless(object):
         - visible (boolean): Boolean indicating whether APs should advertise or hide this SSID. APs will only broadcast this SSID if set to true
         - availableOnAllAps (boolean): Boolean indicating whether all APs should broadcast the SSID or if it should be restricted to APs matching any availability tags. Can only be false if the SSID has availability tags.
         - availabilityTags (array): Accepts a list of tags for this SSID. If availableOnAllAps is false, then the SSID will only be broadcast by APs with tags matching any of the tags in this list.
+        - adaptivePolicyGroupId (string): Adaptive policy group ID this SSID is assigned to.
         - mandatoryDhcpEnabled (boolean): If true, Mandatory DHCP will enforce that clients connecting to this SSID must use the IP address assigned by the DHCP server. Clients who use a static IP address won't be able to associate.
         - adultContentFilteringEnabled (boolean): Boolean indicating whether or not adult content will be blocked
         - dnsRewrite (object): DNS servers rewrite settings
@@ -800,7 +833,7 @@ class ActionBatchWireless(object):
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}'
 
-        body_params = ['name', 'enabled', 'localAuth', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk', 'wpaEncryptionMode', 'dot11w', 'dot11r', 'splashPage', 'splashGuestSponsorDomains', 'oauth', 'localRadius', 'ldap', 'activeDirectory', 'radiusServers', 'radiusProxyEnabled', 'radiusTestingEnabled', 'radiusCalledStationId', 'radiusAuthenticationNasId', 'radiusServerTimeout', 'radiusServerAttemptsLimit', 'radiusFallbackEnabled', 'radiusRadsec', 'radiusCoaEnabled', 'radiusFailoverPolicy', 'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusAccountingInterimInterval', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging', 'concentratorNetworkId', 'secondaryConcentratorNetworkId', 'disassociateClientsOnVpnFailover', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 'walledGardenEnabled', 'walledGardenRanges', 'gre', 'radiusOverride', 'radiusGuestVlanEnabled', 'radiusGuestVlanId', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'perSsidBandwidthLimitUp', 'perSsidBandwidthLimitDown', 'lanIsolationEnabled', 'visible', 'availableOnAllAps', 'availabilityTags', 'mandatoryDhcpEnabled', 'adultContentFilteringEnabled', 'dnsRewrite', 'speedBurst', 'namedVlans', ]
+        body_params = ['name', 'enabled', 'localAuth', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk', 'wpaEncryptionMode', 'dot11w', 'dot11r', 'splashPage', 'splashGuestSponsorDomains', 'oauth', 'localRadius', 'ldap', 'activeDirectory', 'radiusServers', 'radiusProxyEnabled', 'radiusTestingEnabled', 'radiusCalledStationId', 'radiusAuthenticationNasId', 'radiusServerTimeout', 'radiusServerAttemptsLimit', 'radiusFallbackEnabled', 'radiusRadsec', 'radiusCoaEnabled', 'radiusFailoverPolicy', 'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusAccountingInterimInterval', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging', 'concentratorNetworkId', 'secondaryConcentratorNetworkId', 'disassociateClientsOnVpnFailover', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 'walledGardenEnabled', 'walledGardenRanges', 'gre', 'radiusOverride', 'radiusGuestVlanEnabled', 'radiusGuestVlanId', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'perSsidBandwidthLimitUp', 'perSsidBandwidthLimitDown', 'lanIsolationEnabled', 'visible', 'availableOnAllAps', 'availabilityTags', 'adaptivePolicyGroupId', 'mandatoryDhcpEnabled', 'adultContentFilteringEnabled', 'dnsRewrite', 'speedBurst', 'namedVlans', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -1274,6 +1307,101 @@ class ActionBatchWireless(object):
             "resource": resource,
             "operation": "update",
             "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def createOrganizationWirelessLocationScanningReceiver(self, organizationId: str, network: dict, url: str, version: str, radio: dict, sharedSecret: str):
+        """
+        **Add new receiver for scanning API**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-wireless-location-scanning-receiver
+
+        - organizationId (string): Organization ID
+        - network (object): Add scanning API receiver for network
+        - url (string): Receiver Url
+        - version (string): Scanning API Version
+        - radio (object): Add scanning API Radio
+        - sharedSecret (string): Secret Value for Receiver
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'location', 'scanning', 'receivers'],
+            'operation': 'createOrganizationWirelessLocationScanningReceiver'
+        }
+        resource = f'/organizations/{organizationId}/wireless/location/scanning/receivers'
+
+        body_params = ['network', 'url', 'version', 'radio', 'sharedSecret', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def updateOrganizationWirelessLocationScanningReceiver(self, organizationId: str, receiverId: str, **kwargs):
+        """
+        **Change scanning API receiver settings**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-wireless-location-scanning-receiver
+
+        - organizationId (string): Organization ID
+        - receiverId (string): Receiver ID
+        - url (string): Receiver Url
+        - version (string): Scanning API Version
+        - radio (object): Add scanning API Radio
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'location', 'scanning', 'receivers'],
+            'operation': 'updateOrganizationWirelessLocationScanningReceiver'
+        }
+        resource = f'/organizations/{organizationId}/wireless/location/scanning/receivers/{receiverId}'
+
+        body_params = ['url', 'version', 'radio', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def deleteOrganizationWirelessLocationScanningReceiver(self, organizationId: str, receiverId: str):
+        """
+        **Delete a scanning API receiver**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-wireless-location-scanning-receiver
+
+        - organizationId (string): Organization ID
+        - receiverId (string): Receiver ID
+        """
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'location', 'scanning', 'receivers'],
+            'operation': 'deleteOrganizationWirelessLocationScanningReceiver'
+        }
+        resource = f'/organizations/{organizationId}/wireless/location/scanning/receivers/{receiverId}'
+
+        action = {
+            "resource": resource,
+            "operation": "delete",
         }
         return action
         

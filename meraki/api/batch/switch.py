@@ -62,6 +62,8 @@ class ActionBatchSwitch(object):
         - accessPolicyType (string): The type of the access policy of the switch port. Only applicable to access ports. Can be one of 'Open', 'Custom access policy', 'MAC allow list' or 'Sticky MAC allow list'.
         - accessPolicyNumber (integer): The number of a custom access policy to configure on the switch port. Only applicable when 'accessPolicyType' is 'Custom access policy'.
         - macAllowList (array): Only devices with MAC addresses specified in this list will have access to this port. Up to 20 MAC addresses can be defined. Only applicable when 'accessPolicyType' is 'MAC allow list'.
+        - macWhitelistLimit (integer): The maximum number of MAC addresses for regular MAC allow list. Only applicable when 'accessPolicyType' is 'MAC allow list'.
+          Note: Config only supported on verions greater than ms18 only for classic switches.
         - stickyMacAllowList (array): The initial list of MAC addresses for sticky Mac allow list. Only applicable when 'accessPolicyType' is 'Sticky MAC allow list'.
         - stickyMacAllowListLimit (integer): The maximum number of MAC addresses for sticky MAC allow list. Only applicable when 'accessPolicyType' is 'Sticky MAC allow list'.
         - stormControlEnabled (boolean): The storm control status of the switch port.
@@ -94,7 +96,7 @@ class ActionBatchSwitch(object):
         }
         resource = f'/devices/{serial}/switch/ports/{portId}'
 
-        body_params = ['name', 'tags', 'enabled', 'poeEnabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', 'adaptivePolicyGroupId', 'peerSgtCapable', 'flexibleStackingEnabled', 'daiTrusted', 'profile', 'dot3az', ]
+        body_params = ['name', 'tags', 'enabled', 'poeEnabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'macWhitelistLimit', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', 'adaptivePolicyGroupId', 'peerSgtCapable', 'flexibleStackingEnabled', 'daiTrusted', 'profile', 'dot3az', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -114,7 +116,7 @@ class ActionBatchSwitch(object):
         https://developer.cisco.com/meraki/api-v1/#!create-device-switch-routing-interface
 
         - serial (string): Serial
-        - name (string): A friendly name or description for the interface or VLAN.
+        - name (string): A friendly name or description for the interface or VLAN (max length 128 characters).
         - subnet (string): The network that this L3 interface is on, in CIDR notation (ex. 10.1.1.0/24).
         - interfaceIp (string): The IP address that will be used for Layer 3 routing on this VLAN or subnet. This cannot be the same         as the device management IP.
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
@@ -157,7 +159,7 @@ class ActionBatchSwitch(object):
 
         - serial (string): Serial
         - interfaceId (string): Interface ID
-        - name (string): A friendly name or description for the interface or VLAN.
+        - name (string): A friendly name or description for the interface or VLAN (max length 128 characters).
         - subnet (string): The network that this L3 interface is on, in CIDR notation (ex. 10.1.1.0/24).
         - interfaceIp (string): The IP address that will be used for Layer 3 routing on this VLAN or subnet. This cannot be the same         as the device management IP.
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
@@ -412,7 +414,7 @@ class ActionBatchSwitch(object):
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-access-policy
 
         - networkId (string): Network ID
-        - name (string): Name of the access policy
+        - name (string): Name of the access policy(max length 255)
         - radiusServers (array): List of RADIUS servers to require connecting devices to authenticate against before granting network access
         - radiusTestingEnabled (boolean): If enabled, Meraki devices will periodically send access-request messages to these RADIUS servers
         - radiusCoaSupportEnabled (boolean): Change of authentication for RADIUS re-authentication and disconnection
@@ -467,7 +469,7 @@ class ActionBatchSwitch(object):
 
         - networkId (string): Network ID
         - accessPolicyNumber (string): Access policy number
-        - name (string): Name of the access policy
+        - name (string): Name of the access policy(max length 255)
         - radiusServers (array): List of RADIUS servers to require connecting devices to authenticate against before granting network access
         - radius (object): Object for RADIUS Settings
         - guestPortBouncing (boolean): If enabled, Meraki devices will periodically send access-request messages to these RADIUS servers
@@ -1239,7 +1241,7 @@ class ActionBatchSwitch(object):
 
         - networkId (string): Network ID
         - switchStackId (string): Switch stack ID
-        - name (string): A friendly name or description for the interface or VLAN.
+        - name (string): A friendly name or description for the interface or VLAN (max length 128 characters).
         - subnet (string): The network that this L3 interface is on, in CIDR notation (ex. 10.1.1.0/24).
         - interfaceIp (string): The IP address that will be used for Layer 3 routing on this VLAN or subnet. This cannot be the same         as the device management IP.
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
@@ -1283,7 +1285,7 @@ class ActionBatchSwitch(object):
         - networkId (string): Network ID
         - switchStackId (string): Switch stack ID
         - interfaceId (string): Interface ID
-        - name (string): A friendly name or description for the interface or VLAN.
+        - name (string): A friendly name or description for the interface or VLAN (max length 128 characters).
         - subnet (string): The network that this L3 interface is on, in CIDR notation (ex. 10.1.1.0/24).
         - interfaceIp (string): The IP address that will be used for Layer 3 routing on this VLAN or subnet. This cannot be the same         as the device management IP.
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
@@ -1598,6 +1600,8 @@ class ActionBatchSwitch(object):
         - accessPolicyType (string): The type of the access policy of the switch template port. Only applicable to access ports. Can be one of 'Open', 'Custom access policy', 'MAC allow list' or 'Sticky MAC allow list'.
         - accessPolicyNumber (integer): The number of a custom access policy to configure on the switch template port. Only applicable when 'accessPolicyType' is 'Custom access policy'.
         - macAllowList (array): Only devices with MAC addresses specified in this list will have access to this port. Up to 20 MAC addresses can be defined. Only applicable when 'accessPolicyType' is 'MAC allow list'.
+        - macWhitelistLimit (integer): The maximum number of MAC addresses for regular MAC allow list. Only applicable when 'accessPolicyType' is 'MAC allow list'.
+          Note: Config only supported on verions greater than ms18 only for classic switches.
         - stickyMacAllowList (array): The initial list of MAC addresses for sticky Mac allow list. Only applicable when 'accessPolicyType' is 'Sticky MAC allow list'.
         - stickyMacAllowListLimit (integer): The maximum number of MAC addresses for sticky MAC allow list. Only applicable when 'accessPolicyType' is 'Sticky MAC allow list'.
         - stormControlEnabled (boolean): The storm control status of the switch template port.
@@ -1628,7 +1632,7 @@ class ActionBatchSwitch(object):
         }
         resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles/{profileId}/ports/{portId}'
 
-        body_params = ['name', 'tags', 'enabled', 'poeEnabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', 'flexibleStackingEnabled', 'daiTrusted', 'profile', 'dot3az', ]
+        body_params = ['name', 'tags', 'enabled', 'poeEnabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'macWhitelistLimit', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', 'flexibleStackingEnabled', 'daiTrusted', 'profile', 'dot3az', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
