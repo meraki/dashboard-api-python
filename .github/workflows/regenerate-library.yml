@@ -39,5 +39,5 @@ jobs:
         with:
           author_name: GitHub Action
           author_email: support@meraki.com
-          message: Automatically regenerated library to version ${{ github.event.inputs.library_version }} for API version ${{ github.event.inputs.api_version }}.
+          message: Auto-generated library v${{ github.event.inputs.library_version }} for API v${{ github.event.inputs.api_version }}.
           new_branch: release
