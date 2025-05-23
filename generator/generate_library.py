@@ -6,6 +6,8 @@ import sys
 import jinja2
 import requests
 
+import common as common
+
 READ_ME = """
 === PREREQUISITES ===
 Include the jinja2 files in same directory as this script, and install Python requests
@@ -308,40 +310,7 @@ def generate_library(spec: dict, version_number: str, api_version_number: str, i
             fp.write(contents)
 
     # Organize data from OpenAPI specification
-    operations = list()  # list of operation IDs
-    for path, methods in paths.items():
-        # method is the HTTP action, e.g. get, put, etc.
-        for method in methods:
-            # endpoint is the method for that specific path
-            endpoint = paths[path][method]
-
-            # the endpoint has tags
-            tags = endpoint["tags"]
-
-            # the endpoint has an operationId
-            operation = endpoint["operationId"]
-
-            # add the operation ID to the list
-            operations.append(operation)
-
-            # the endpoint has a scope defined by the first tag
-            # There are a handful of operations that are currently mistagged
-            # This helps ensure they are scoped to the correct module
-            if len(tags) > 2:
-                match tags[2]:
-                    case 'spaces':
-                        scope = 'spaces'
-                    case _:
-                        scope = tags[0]
-            else:
-                scope = tags[0]
-
-            # Needs documentation
-            if path not in scopes[scope]:
-                scopes[scope][path] = {method: endpoint}
-            # Needs documentation
-            else:
-                scopes[scope][path][method] = endpoint
+    operations, scopes = common.organize_spec(paths, scopes)
 
     # Inform the user how many operations were found
     print(f"Total of {len(operations)} endpoints found from OpenAPI spec...")

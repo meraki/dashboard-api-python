@@ -3,6 +3,7 @@ import sys
 
 import requests
 from jinja2 import Template
+import common as common
 
 CALL_TEMPLATE = Template(
     """import meraki
@@ -12,7 +13,7 @@ CALL_TEMPLATE = Template(
 # In your own code, use an environment variable as shown under the Usage section
 # @ https://github.com/meraki/dashboard-api-python/
 
-API_KEY = '75dd5334bef4d2bc96f26138c163c0a3fa0b5ca6'
+API_KEY = 'your-key-here'
 
 dashboard = meraki.DashboardAPI(API_KEY)
 {{ parameter_assignments }}
@@ -194,6 +195,8 @@ def main():
         "licensing",
         "secureConnect",
         "wirelessController",
+        "campusGateway",
+        "spaces"
     ]
     # legacy scopes = ['organizations', 'networks', 'devices',
     #           'appliance', 'camera', 'cellularGateway', 'insight', 'sm', 'switch', 'wireless']
@@ -202,19 +205,8 @@ def main():
     # Scopes used when generating the library will depend on the provided version of the API spec.
     scopes = {tag["name"]: {} for tag in tags if tag["name"] in supported_scopes}
 
-    # Organize data
-    operations = []
-    for path, methods in paths.items():
-        for method in methods:
-            endpoint = paths[path][method]
-            tags = endpoint["tags"]
-            operation = endpoint["operationId"]
-            operations.append(operation)
-            scope = tags[0]
-            if path not in scopes[scope]:
-                scopes[scope][path] = {method: endpoint}
-            else:
-                scopes[scope][path][method] = endpoint
+    # Organize data from OpenAPI specification
+    operations, scopes = common.organize_spec(paths, scopes)
 
     # Generate API libraries
     for scope in scopes:
@@ -299,9 +291,9 @@ def main():
                             parameters_text += f"{param_name}, "
                         for k, v in optional.items():
                             if k == "total_pages" and v == "all":
-                                parameters_text += f"total_pages='all'"
+                                parameters_text += "total_pages='all'"
                             elif k == "total_pages" and v == 1:
-                                parameters_text += f"total_pages=1"
+                                parameters_text += "total_pages=1"
                             elif type(v) == str:
                                 parameters_text += f"\n    {k}='{v}', "
                             else:
