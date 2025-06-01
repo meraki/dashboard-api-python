@@ -2,7 +2,7 @@ import urllib
 
 
 class {{ class_name }}(object):
-    def __init__(self, session):
+    def __init__(self, session, enable_kwargs_validation):
         super({{ class_name }}, self).__init__()
         self._session = session
-        
+        self.enable_kwargs_validation = enable_kwargs_validation

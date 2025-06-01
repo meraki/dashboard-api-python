@@ -31,6 +31,8 @@
 
         {% if query_params|length > 0 %}
         query_params = [{% for param in query_params %}'{{ param }}', {% endfor %}]
+        if self.enable_kwargs_validation:
+            validate_kwargs(query_params)
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         {% endif %}
@@ -44,6 +46,8 @@
         {% endif %}
         {% if body_params|length > 0 %}
         body_params = [{% for param in body_params %}'{{ param }}', {% endfor %}]
+        if self.enable_kwargs_validation:
+            validate_kwargs(body_params)
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         {% endif %}
