@@ -265,6 +265,8 @@ class RestSession(object):
                                 self._logger.warning(f'{tag}, {operation} - {status} {reason}, retrying in {wait} seconds')
                             time.sleep(wait)
                             retries -= 1
+                            if retries == 0:
+                                raise APIError(metadata, response)
                         # We're either out of retries or the client told us not to retry
                         else:
                             raise APIError(metadata, response)
