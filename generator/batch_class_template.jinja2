@@ -2,6 +2,6 @@ import urllib
 
 
 class ActionBatch{{ class_name }}(object):
-    def __init__(self):
+    def __init__(self, enable_kwargs_validation):
         super(ActionBatch{{ class_name }}, self).__init__()
-        
+        self.enable_kwargs_validation = enable_kwargs_validation
