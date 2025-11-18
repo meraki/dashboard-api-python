@@ -82,13 +82,15 @@ BE_GEO_ID = ""
 # 1. Application name precedes vendor name in all cases.
 # 2. If your application or vendor name normally contains spaces or special casing, you should omit them in favor of
 #    normal CamelCasing here.
-# 3. The optional slash and version number are optional. Leave both out if you like.
+# 3. The slash and version number are optional. Leave both out if you like.
 # 4. The slash is a forward slash, '/' -- not a backslash.
-# 5. Don't use the 'Meraki' name in your application name here. Maybe in general? I'm a config file, not a lawyer.
+# 5. Don't use the 'Meraki' or 'Cisco' names in your application name here. Maybe in general? I'm a config file, not a
+#    lawyer.
 # Example 1: if your application is named 'Mambo', version number is 5.0, and your vendor/company name is Vega, then
 # you would use, at minimum: 'Mambo Vega'. Optionally: 'Mambo/5.0 Vega'.
 # Example 2: if your application is named 'Sunshine Rainbows', and company name is 'hunter2 for Life', and if you
 # don't want to report version number, then you would use, at minimum: 'SunshineRainbows hunter2ForLife'
 # The choice is yours as long as you follow the format. You should **not** include other information in this string.
 # If you are an official ecosystem partner, this is required.
+# For more guidance, please refer to https://developer.cisco.com/meraki/api-v1/user-agents-overview/
 MERAKI_PYTHON_SDK_CALLER = ""

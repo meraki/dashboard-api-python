@@ -1,6 +1,6 @@
 [project]
 name = "meraki"
-version = "2.0.1"
+version = "2.0.3"
 description = "Meraki library for Python"
 authors = [
     {name = "Cisco Meraki",email = "api-feedback@meraki.net"}
@@ -10,10 +10,9 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "requests (>=2.32.2,<3.0.0)",
-    "aiohttp (>=3.9.4,<4.0.0)",
+    "aiohttp (>=3.11.18,<4.0.0)",
     "jinja2 (==3.1.6)",
-    "pytest (>=7.2.1,<8.0.0)",
-    "setuptools (>=70.0.0,<71.0.0)"
+    "pytest (>=8.3.5,<9.0.0)"
 ]
 
 [project.urls]
@@ -21,5 +20,5 @@ homepage = "https://github.com/meraki/dashboard-api-python"
 repository = "https://github.com/meraki/dashboard-api-python"
 
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
+requires = ["poetry-core>=2.0.0,<3.0.0","setuptools>=78.1.1,<79.0.0"]
 build-backend = "poetry.core.masonry.api"

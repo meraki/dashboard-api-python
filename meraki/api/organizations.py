@@ -1398,7 +1398,7 @@ class Organizations(object):
         
 
 
-    def createOrganizationBrandingPolicy(self, organizationId: str, **kwargs):
+    def createOrganizationBrandingPolicy(self, organizationId: str, name: str, **kwargs):
         """
         **Add a new branding policy to an organization**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-branding-policy
@@ -1497,7 +1497,7 @@ class Organizations(object):
         
 
 
-    def updateOrganizationBrandingPolicy(self, organizationId: str, brandingPolicyId: str, **kwargs):
+    def updateOrganizationBrandingPolicy(self, organizationId: str, brandingPolicyId: str, name: str, **kwargs):
         """
         **Update a branding policy**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-branding-policy
@@ -1856,7 +1856,7 @@ class Organizations(object):
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - configurationUpdatedAfter (string): Filter results by whether or not the device's configuration has been updated after the given timestamp
         - networkIds (array): Optional parameter to filter devices by network.
-        - productTypes (array): Optional parameter to filter devices by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, wirelessController, and secureConnect.
+        - productTypes (array): Optional parameter to filter devices by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, wirelessController, campusGateway, and secureConnect.
         - tags (array): Optional parameter to filter devices by tags.
         - tagsFilterType (string): Optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return networks which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
         - name (string): Optional parameter to filter devices by name. All returned devices will have a name that contains the search term or is an exact match.
@@ -2114,6 +2114,356 @@ class Organizations(object):
         
 
 
+    def getOrganizationDevicesPacketCaptureCaptures(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **List Packet Captures**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-packet-capture-captures
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - captureIds (array): Return the packet captures of the specified capture ids
+        - networkIds (array): Return the packet captures of the specified network(s)
+        - serials (array): Return the packet captures of the specified device(s)
+        - process (array): Return the packet captures of the specified process
+        - captureStatus (array): Return the packet captures of the specified capture status
+        - name (array): Return the packet captures matching the specified name
+        - clientMac (array): Return the packet captures matching the specified client macs
+        - notes (string): Return the packet captures matching the specified notes
+        - deviceName (string): Return the packet captures matching the specified device name
+        - adminName (string): Return the packet captures matching the admin name
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 10.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - sortOrder (string): Sorted order of entries. Order options are 'ascending' and 'descending'. Default is 'descending'.
+        """
+
+        kwargs.update(locals())
+
+        if 'sortOrder' in kwargs:
+            options = ['ascending', 'descending']
+            assert kwargs['sortOrder'] in options, f'''"sortOrder" cannot be "{kwargs['sortOrder']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'devices', 'packetCapture', 'captures'],
+            'operation': 'getOrganizationDevicesPacketCaptureCaptures'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/devices/packetCapture/captures'
+
+        query_params = ['captureIds', 'networkIds', 'serials', 'process', 'captureStatus', 'name', 'clientMac', 'notes', 'deviceName', 'adminName', 'perPage', 'startingAfter', 'endingBefore', 'sortOrder', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['captureIds', 'networkIds', 'serials', 'process', 'captureStatus', 'name', 'clientMac', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def createOrganizationDevicesPacketCaptureCapture(self, organizationId: str, serials: list, name: str, **kwargs):
+        """
+        **Perform a packet capture on a device and store in Meraki Cloud**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-devices-packet-capture-capture
+
+        - organizationId (string): Organization ID
+        - serials (array): The serial(s) of the device(s)
+        - name (string): Name of packet capture file
+        - outputType (string): Output type of packet capture file. Possible values: text, pcap, cloudshark, or upload_to_cloud
+        - destination (string): Destination of packet capture file. Possible values: [upload_to_cloud]
+        - ports (string): Ports of packet capture file, comma-separated
+        - notes (string): Reason for taking the packet capture
+        - duration (integer): Duration in seconds of packet capture
+        - filterExpression (string): Filter expression for packet capture
+        - interface (string): Interface of the device
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'devices', 'packetCapture', 'captures'],
+            'operation': 'createOrganizationDevicesPacketCaptureCapture'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/devices/packetCapture/captures'
+
+        body_params = ['serials', 'name', 'outputType', 'destination', 'ports', 'notes', 'duration', 'filterExpression', 'interface', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def bulkOrganizationDevicesPacketCaptureCapturesCreate(self, organizationId: str, devices: list, name: str, **kwargs):
+        """
+        **Perform a packet capture on multiple devices and store in Meraki Cloud.**
+        https://developer.cisco.com/meraki/api-v1/#!bulk-organization-devices-packet-capture-captures-create
+
+        - organizationId (string): Organization ID
+        - devices (array): Device details (maximum of 20 devices allowed)
+        - name (string): Name of packet capture file
+        - notes (string): Reason for capture
+        - duration (integer): Duration of the capture in seconds
+        - filterExpression (string): Filter expression for the capture
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'devices', 'packetCapture', 'captures'],
+            'operation': 'bulkOrganizationDevicesPacketCaptureCapturesCreate'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/devices/packetCapture/captures/bulkCreate'
+
+        body_params = ['devices', 'notes', 'duration', 'filterExpression', 'name', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def bulkOrganizationDevicesPacketCaptureCapturesDelete(self, organizationId: str, captureIds: list):
+        """
+        **BulkDelete packet captures from cloud**
+        https://developer.cisco.com/meraki/api-v1/#!bulk-organization-devices-packet-capture-captures-delete
+
+        - organizationId (string): Organization ID
+        - captureIds (array): Delete the packet captures of the specified capture ids
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'devices', 'packetCapture', 'captures'],
+            'operation': 'bulkOrganizationDevicesPacketCaptureCapturesDelete'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/devices/packetCapture/captures/bulkDelete'
+
+        body_params = ['captureIds', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def deleteOrganizationDevicesPacketCaptureCapture(self, organizationId: str, captureId: str):
+        """
+        **Delete a single packet capture from cloud using captureId**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-devices-packet-capture-capture
+
+        - organizationId (string): Organization ID
+        - captureId (string): Capture ID
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'devices', 'packetCapture', 'captures'],
+            'operation': 'deleteOrganizationDevicesPacketCaptureCapture'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        captureId = urllib.parse.quote(str(captureId), safe='')
+        resource = f'/organizations/{organizationId}/devices/packetCapture/captures/{captureId}'
+
+        return self._session.delete(metadata, resource)
+        
+
+
+    def generateOrganizationDevicesPacketCaptureCaptureDownloadUrl(self, organizationId: str, captureId: str):
+        """
+        **Get presigned download URL for given packet capture id**
+        https://developer.cisco.com/meraki/api-v1/#!generate-organization-devices-packet-capture-capture-download-url
+
+        - organizationId (string): Organization ID
+        - captureId (string): Capture ID
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'devices', 'packetCapture', 'captures', 'downloadUrl'],
+            'operation': 'generateOrganizationDevicesPacketCaptureCaptureDownloadUrl'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        captureId = urllib.parse.quote(str(captureId), safe='')
+        resource = f'/organizations/{organizationId}/devices/packetCapture/captures/{captureId}/downloadUrl/generate'
+
+        return self._session.post(metadata, resource)
+        
+
+
+    def stopOrganizationDevicesPacketCaptureCapture(self, organizationId: str, captureId: str, serials: list):
+        """
+        **Stop a specific packet capture (not supported for Catalyst devices)**
+        https://developer.cisco.com/meraki/api-v1/#!stop-organization-devices-packet-capture-capture
+
+        - organizationId (string): Organization ID
+        - captureId (string): Capture ID
+        - serials (array): The serial(s) of the device(s) to stop the capture on
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'devices', 'packetCapture', 'captures'],
+            'operation': 'stopOrganizationDevicesPacketCaptureCapture'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        captureId = urllib.parse.quote(str(captureId), safe='')
+        resource = f'/organizations/{organizationId}/devices/packetCapture/captures/{captureId}/stop'
+
+        body_params = ['serials', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getOrganizationDevicesPacketCaptureSchedules(self, organizationId: str, **kwargs):
+        """
+        **List the Packet Capture Schedules**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-packet-capture-schedules
+
+        - organizationId (string): Organization ID
+        - scheduleIds (array): Return the packet captures schedules of the specified packet capture schedule ids
+        - networkIds (array): Return the scheduled packet captures of the specified network(s)
+        - deviceIds (array): Return the scheduled packet captures of the specified device(s)
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'devices', 'packetCapture', 'schedules'],
+            'operation': 'getOrganizationDevicesPacketCaptureSchedules'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/devices/packetCapture/schedules'
+
+        query_params = ['scheduleIds', 'networkIds', 'deviceIds', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['scheduleIds', 'networkIds', 'deviceIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get(metadata, resource, params)
+        
+
+
+    def createOrganizationDevicesPacketCaptureSchedule(self, organizationId: str, devices: list, **kwargs):
+        """
+        **Create a schedule for packet capture**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-devices-packet-capture-schedule
+
+        - organizationId (string): Organization ID
+        - devices (array): device details
+        - name (string): Name of the packet capture file
+        - notes (string): Reason for capture
+        - duration (integer): Duration of the capture in seconds
+        - filterExpression (string): Filter expression for the capture
+        - enabled (boolean): Enable or disable the schedule
+        - schedule (object): Schedule details
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'devices', 'packetCapture', 'schedules'],
+            'operation': 'createOrganizationDevicesPacketCaptureSchedule'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/devices/packetCapture/schedules'
+
+        body_params = ['devices', 'name', 'notes', 'duration', 'filterExpression', 'enabled', 'schedule', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def reorderOrganizationDevicesPacketCaptureSchedules(self, organizationId: str, order: list):
+        """
+        **Bulk update priorities of pcap schedules**
+        https://developer.cisco.com/meraki/api-v1/#!reorder-organization-devices-packet-capture-schedules
+
+        - organizationId (string): Organization ID
+        - order (array): Array of schedule IDs and their priorities to reorder.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'devices', 'packetCapture', 'schedules'],
+            'operation': 'reorderOrganizationDevicesPacketCaptureSchedules'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/devices/packetCapture/schedules/reorder'
+
+        body_params = ['order', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def updateOrganizationDevicesPacketCaptureSchedule(self, organizationId: str, scheduleId: str, devices: list, **kwargs):
+        """
+        **Update a schedule for packet capture**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-devices-packet-capture-schedule
+
+        - organizationId (string): Organization ID
+        - scheduleId (string): Schedule ID
+        - devices (array): device details
+        - name (string): Name of the packet capture file
+        - notes (string): Reason for capture
+        - duration (integer): Duration of the capture in seconds
+        - filterExpression (string): Filter expression for the capture
+        - enabled (boolean): Enable or disable the schedule
+        - schedule (object): Schedule details
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'devices', 'packetCapture', 'schedules'],
+            'operation': 'updateOrganizationDevicesPacketCaptureSchedule'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        scheduleId = urllib.parse.quote(str(scheduleId), safe='')
+        resource = f'/organizations/{organizationId}/devices/packetCapture/schedules/{scheduleId}'
+
+        body_params = ['devices', 'name', 'notes', 'duration', 'filterExpression', 'enabled', 'schedule', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def deleteOrganizationDevicesPacketCaptureSchedule(self, organizationId: str, scheduleId: str):
+        """
+        **Delete schedule from cloud**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-devices-packet-capture-schedule
+
+        - organizationId (string): Organization ID
+        - scheduleId (string): Delete the capture schedules of the specified capture schedule id
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'devices', 'packetCapture', 'schedules'],
+            'operation': 'deleteOrganizationDevicesPacketCaptureSchedule'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/devices/packetCapture/schedules/{scheduleId}'
+
+        return self._session.delete(metadata, resource)
+        
+
+
     def getOrganizationDevicesPowerModulesStatusesByDevice(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **List the most recent status information for power modules in rackmount MX and MS devices that support them**
@@ -2220,7 +2570,7 @@ class Organizations(object):
         - networkIds (array): Optional parameter to filter devices by network ids.
         - serials (array): Optional parameter to filter devices by serials.
         - statuses (array): Optional parameter to filter devices by statuses. Valid statuses are ["online", "alerting", "offline", "dormant"].
-        - productTypes (array): An optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, wirelessController, and secureConnect.
+        - productTypes (array): An optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, wirelessController, campusGateway, and secureConnect.
         - models (array): Optional parameter to filter devices by models.
         - tags (array): An optional parameter to filter devices by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below).
         - tagsFilterType (string): An optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return devices which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
@@ -2258,7 +2608,7 @@ class Organizations(object):
         https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-statuses-overview
 
         - organizationId (string): Organization ID
-        - productTypes (array): An optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, wirelessController, and secureConnect.
+        - productTypes (array): An optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, wirelessController, campusGateway, and secureConnect.
         - networkIds (array): An optional parameter to filter device statuses by network.
         """
 
@@ -2301,7 +2651,7 @@ class Organizations(object):
         - interval (integer): The time interval in seconds for returned data. The valid intervals are: 300, 1200, 3600, 14400. The default is 300. Interval is calculated if time params are provided.
         - networkIds (array): Optional parameter to filter the result set by the included set of network IDs
         - serials (array): Optional parameter to filter device availabilities history by device serial numbers
-        - productTypes (array): Optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, wirelessController, and secureConnect.
+        - productTypes (array): Optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, wirelessController, campusGateway, and secureConnect.
         """
 
         kwargs.update(locals())
@@ -2821,7 +3171,7 @@ class Organizations(object):
         - orderNumbers (array): Search for devices in inventory based on order numbers.
         - tags (array): Filter devices by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below).
         - tagsFilterType (string): To use with 'tags' parameter, to filter devices which contain ANY or ALL given tags. Accepted values are 'withAnyTags' or 'withAllTags', default is 'withAnyTags'.
-        - productTypes (array): Filter devices by product type. Accepted values are appliance, camera, cellularGateway, secureConnect, sensor, switch, systemsManager, wireless, and wirelessController.
+        - productTypes (array): Filter devices by product type. Accepted values are appliance, camera, campusGateway, cellularGateway, secureConnect, sensor, switch, systemsManager, wireless, and wirelessController.
         """
 
         kwargs.update(locals())
@@ -4600,7 +4950,7 @@ class Organizations(object):
         kwargs.update(locals())
 
         if 'productType' in kwargs:
-            options = ['appliance', 'camera', 'cellularGateway', 'health', 'platform', 'sensor', 'sm', 'switch', 'wireless']
+            options = ['appliance', 'camera', 'cellularGateway', 'platform', 'sensor', 'sm', 'switch', 'wireless']
             assert kwargs['productType'] in options, f'''"productType" cannot be "{kwargs['productType']}", & must be set to one of: {options}'''
 
         metadata = {

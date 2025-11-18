@@ -57,7 +57,7 @@ class APIError(Exception):
         except ValueError:
             self.message = self.response.content[:100].decode("UTF-8").strip()
             if (
-                type(self.message) == str
+                isinstance(self.message, str)
                 and self.status == 404
                 and self.reason == "Not Found"
             ):
@@ -85,7 +85,7 @@ class AsyncAPIError(Exception):
             response.reason if response is not None and response.reason else None
         )
         self.message = message
-        if type(self.message) == str:
+        if isinstance(self.message, str):
             self.message = self.message.strip()
             if self.status == 404 and self.reason == "Not Found":
                 self.message += (
@@ -107,3 +107,15 @@ class PythonVersionError(Exception):
         self.message = message
 
         super().__init__(self.message)
+
+
+class SessionInputError(Exception): 
+    """Exception raised for unsupported session inputs."""
+    
+    def __init__(self, argument, value, message, doc_link):
+        self.argument = argument
+        self.value = value
+        self.message = message
+        self.doc_link = doc_link
+        
+        super().__init__(f'{self.message} {self.doc_link}')

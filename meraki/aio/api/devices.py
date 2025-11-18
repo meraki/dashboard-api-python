@@ -299,6 +299,52 @@ class AsyncDevices:
         
 
 
+    def createDeviceLiveToolsMacTable(self, serial: str, **kwargs):
+        """
+        **Enqueue a job to request the MAC table from the device**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-mac-table
+
+        - serial (string): Serial
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['devices', 'liveTools', 'macTable'],
+            'operation': 'createDeviceLiveToolsMacTable'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        resource = f'/devices/{serial}/liveTools/macTable'
+
+        body_params = ['callback', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getDeviceLiveToolsMacTable(self, serial: str, macTableId: str):
+        """
+        **Return a MAC table live tool job.**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-live-tools-mac-table
+
+        - serial (string): Serial
+        - macTableId (string): Mac table ID
+        """
+
+        metadata = {
+            'tags': ['devices', 'liveTools', 'macTable'],
+            'operation': 'getDeviceLiveToolsMacTable'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        macTableId = urllib.parse.quote(str(macTableId), safe='')
+        resource = f'/devices/{serial}/liveTools/macTable/{macTableId}'
+
+        return self._session.get(metadata, resource)
+        
+
+
     def createDeviceLiveToolsPing(self, serial: str, target: str, **kwargs):
         """
         **Enqueue a job to ping a target host from the device**

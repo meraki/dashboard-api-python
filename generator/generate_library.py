@@ -6,6 +6,8 @@ import sys
 import jinja2
 import requests
 
+import common as common
+
 READ_ME = """
 === PREREQUISITES ===
 Include the jinja2 files in same directory as this script, and install Python requests
@@ -202,7 +204,7 @@ def unpack_params(operation: str, parameters: dict, param_filters):
                 unpack_param_without_schema(unpacked_params, p, name, True)
             )
 
-        # Otherwise the parameter is not required
+        # Otherwise, the parameter is not required
         else:
             unpacked_params.update(
                 unpack_param_without_schema(unpacked_params, p, name, False)
@@ -244,7 +246,8 @@ def generate_library(spec: dict, version_number: str, api_version_number: str, i
         "licensing",
         "secureConnect",
         "wirelessController",
-        "campusGateway"
+        "campusGateway",
+        "spaces"
     ]
     # legacy scopes = ['organizations', 'networks', 'devices', 'appliance', 'camera', 'cellularGateway', 'insight',
     #                  'sm', 'switch', 'wireless']
@@ -280,6 +283,7 @@ def generate_library(spec: dict, version_number: str, api_version_number: str, i
         "config.py",
         "common.py",
         "exceptions.py",
+        "response_handler.py",
         "rest_session.py",
         "api/__init__.py",
         "aio/__init__.py",
@@ -306,33 +310,9 @@ def generate_library(spec: dict, version_number: str, api_version_number: str, i
             fp.write(contents)
 
     # Organize data from OpenAPI specification
-    operations = list()  # list of operation IDs
-    for path, methods in paths.items():
-        # method is the HTTP action, e.g. get, put, etc.
-        for method in methods:
-            # endpoint is the method for that specific path
-            endpoint = paths[path][method]
+    operations, scopes = common.organize_spec(paths, scopes)
 
-            # the endpoint has tags
-            tags = endpoint["tags"]
-
-            # the endpoint has an operationId
-            operation = endpoint["operationId"]
-
-            # add the operation ID to the list
-            operations.append(operation)
-
-            # the endpoint has a scope defined by the first tag
-            scope = tags[0]
-
-            # Needs documentation
-            if path not in scopes[scope]:
-                scopes[scope][path] = {method: endpoint}
-            # Needs documentation
-            else:
-                scopes[scope][path][method] = endpoint
-
-    # Inform the user of the number of operations found
+    # Inform the user how many operations were found
     print(f"Total of {len(operations)} endpoints found from OpenAPI spec...")
 
     # Generate API libraries
@@ -657,7 +637,7 @@ def generate_action_batch_functions(
                             definition += ", event_log_end_time=None"
 
                     if parse_params(operation, parameters, ["optional"]):
-                        definition += f", **kwargs"
+                        definition += ", **kwargs"
 
                 # Docstring
                 param_descriptions = list()
@@ -736,7 +716,7 @@ def render_class_template(
         )
 
 
-# Prints READ_ME help message for user to read
+# Prints a READ_ME help message for user to read
 def print_help():
     lines = READ_ME.split("\n")
     for line in lines:
@@ -774,7 +754,7 @@ def main(inputs):
 
     check_python_version()
 
-    # Retrieve latest OpenAPI specification
+    # Retrieve the latest OpenAPI specification
     if org_id:
         if not api_key:
             print_help()
@@ -794,13 +774,13 @@ def main(inputs):
         # Validate that the spec pulled successfully before trying to generate the library.
         if response.ok:
             spec = response.json()
-            print(f"Successfully pulled Meraki dashboard API OpenAPI spec.")
+            print("Successfully pulled Meraki dashboard API OpenAPI spec.")
         else:
             print_help()
             sys.exit(
-                f"There was an HTTP error pulling the OpenAPI specification. Please try again in a few minutes. "
-                f"If this continues for more than an hour, please contact Meraki support and mention that "
-                f'"HTTP GET https://api.meraki.com/api/v1/openapiSpec" is failing.'
+                "There was an HTTP error pulling the OpenAPI specification. Please try again in a few minutes. "
+                "If this continues for more than an hour, please contact Meraki support and mention that "
+                '"HTTP GET https://api.meraki.com/api/v1/openapiSpec" is failing.'
             )
 
     generate_library(spec, version_number, api_version_number, is_github_action)

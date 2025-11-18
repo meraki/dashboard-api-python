@@ -445,7 +445,7 @@ class ActionBatchOrganizations(object):
 
 
 
-    def createOrganizationBrandingPolicy(self, organizationId: str, **kwargs):
+    def createOrganizationBrandingPolicy(self, organizationId: str, name: str, **kwargs):
         """
         **Add a new branding policy to an organization**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-branding-policy
@@ -516,7 +516,7 @@ class ActionBatchOrganizations(object):
 
 
 
-    def updateOrganizationBrandingPolicy(self, organizationId: str, brandingPolicyId: str, **kwargs):
+    def updateOrganizationBrandingPolicy(self, organizationId: str, brandingPolicyId: str, name: str, **kwargs):
         """
         **Update a branding policy**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-branding-policy
@@ -708,6 +708,195 @@ class ActionBatchOrganizations(object):
             "resource": resource,
             "operation": "details/update",
             "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def bulkOrganizationDevicesPacketCaptureCapturesDelete(self, organizationId: str, captureIds: list):
+        """
+        **BulkDelete packet captures from cloud**
+        https://developer.cisco.com/meraki/api-v1/#!bulk-organization-devices-packet-capture-captures-delete
+
+        - organizationId (string): Organization ID
+        - captureIds (array): Delete the packet captures of the specified capture ids
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'devices', 'packetCapture', 'captures'],
+            'operation': 'bulkOrganizationDevicesPacketCaptureCapturesDelete'
+        }
+        resource = f'/organizations/{organizationId}/devices/packetCapture/captures/bulkDelete'
+
+        body_params = ['captureIds', ]
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+        
+
+
+
+
+
+    def deleteOrganizationDevicesPacketCaptureCapture(self, organizationId: str, captureId: str):
+        """
+        **Delete a single packet capture from cloud using captureId**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-devices-packet-capture-capture
+
+        - organizationId (string): Organization ID
+        - captureId (string): Capture ID
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'devices', 'packetCapture', 'captures'],
+            'operation': 'deleteOrganizationDevicesPacketCaptureCapture'
+        }
+        resource = f'/organizations/{organizationId}/devices/packetCapture/captures/{captureId}'
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+        
+
+
+
+
+
+    def createOrganizationDevicesPacketCaptureSchedule(self, organizationId: str, devices: list, **kwargs):
+        """
+        **Create a schedule for packet capture**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-devices-packet-capture-schedule
+
+        - organizationId (string): Organization ID
+        - devices (array): device details
+        - name (string): Name of the packet capture file
+        - notes (string): Reason for capture
+        - duration (integer): Duration of the capture in seconds
+        - filterExpression (string): Filter expression for the capture
+        - enabled (boolean): Enable or disable the schedule
+        - schedule (object): Schedule details
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'devices', 'packetCapture', 'schedules'],
+            'operation': 'createOrganizationDevicesPacketCaptureSchedule'
+        }
+        resource = f'/organizations/{organizationId}/devices/packetCapture/schedules'
+
+        body_params = ['devices', 'name', 'notes', 'duration', 'filterExpression', 'enabled', 'schedule', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def reorderOrganizationDevicesPacketCaptureSchedules(self, organizationId: str, order: list):
+        """
+        **Bulk update priorities of pcap schedules**
+        https://developer.cisco.com/meraki/api-v1/#!reorder-organization-devices-packet-capture-schedules
+
+        - organizationId (string): Organization ID
+        - order (array): Array of schedule IDs and their priorities to reorder.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'devices', 'packetCapture', 'schedules'],
+            'operation': 'reorderOrganizationDevicesPacketCaptureSchedules'
+        }
+        resource = f'/organizations/{organizationId}/devices/packetCapture/schedules/reorder'
+
+        body_params = ['order', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "reorder",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def updateOrganizationDevicesPacketCaptureSchedule(self, organizationId: str, scheduleId: str, devices: list, **kwargs):
+        """
+        **Update a schedule for packet capture**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-devices-packet-capture-schedule
+
+        - organizationId (string): Organization ID
+        - scheduleId (string): Schedule ID
+        - devices (array): device details
+        - name (string): Name of the packet capture file
+        - notes (string): Reason for capture
+        - duration (integer): Duration of the capture in seconds
+        - filterExpression (string): Filter expression for the capture
+        - enabled (boolean): Enable or disable the schedule
+        - schedule (object): Schedule details
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'devices', 'packetCapture', 'schedules'],
+            'operation': 'updateOrganizationDevicesPacketCaptureSchedule'
+        }
+        resource = f'/organizations/{organizationId}/devices/packetCapture/schedules/{scheduleId}'
+
+        body_params = ['devices', 'name', 'notes', 'duration', 'filterExpression', 'enabled', 'schedule', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def deleteOrganizationDevicesPacketCaptureSchedule(self, organizationId: str, scheduleId: str):
+        """
+        **Delete schedule from cloud**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-devices-packet-capture-schedule
+
+        - organizationId (string): Organization ID
+        - scheduleId (string): Delete the capture schedules of the specified capture schedule id
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'devices', 'packetCapture', 'schedules'],
+            'operation': 'deleteOrganizationDevicesPacketCaptureSchedule'
+        }
+        resource = f'/organizations/{organizationId}/devices/packetCapture/schedules/{scheduleId}'
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
         }
         return action
         
