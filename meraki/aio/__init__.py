@@ -4,6 +4,7 @@ import os
 from meraki.aio.api.administered import AsyncAdministered
 from meraki.aio.api.appliance import AsyncAppliance
 from meraki.aio.api.camera import AsyncCamera
+from meraki.aio.api.campusGateway import AsyncCampusGateway
 from meraki.aio.api.cellularGateway import AsyncCellularGateway
 from meraki.aio.api.devices import AsyncDevices
 from meraki.aio.api.insight import AsyncInsight
@@ -12,8 +13,10 @@ from meraki.aio.api.networks import AsyncNetworks
 from meraki.aio.api.organizations import AsyncOrganizations
 from meraki.aio.api.sensor import AsyncSensor
 from meraki.aio.api.sm import AsyncSm
+from meraki.aio.api.spaces import AsyncSpaces
 from meraki.aio.api.switch import AsyncSwitch
 from meraki.aio.api.wireless import AsyncWireless
+from meraki.aio.api.wirelessController import AsyncWirelessController
 from meraki.aio.rest_session import *
 # Batch class imports
 from meraki.api.batch import Batch
@@ -181,6 +184,9 @@ class AsyncDashboardAPI:
         self.switch = AsyncSwitch(self._session)
         self.sm = AsyncSm(self._session)
         self.wireless = AsyncWireless(self._session)
+        self.spaces = AsyncSpaces(self._session)
+        self.wirelessController = AsyncWirelessController(self._session)
+        self.campusGateway = AsyncCampusGateway(self._session)
 
         # Batch definitions
         self.batch = Batch()
