@@ -49,12 +49,12 @@ class AsyncLicensing:
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - subscriptionIds (array): List of subscription ids to fetch
-        - startDate (string): Filter subscriptions by start date, ISO 8601 format. To filter with a range of dates, use 'startDate[<option>]=?' in the request. Accepted options include lt, gt, lte, gte.
-        - endDate (string): Filter subscriptions by end date, ISO 8601 format. To filter with a range of dates, use 'endDate[<option>]=?' in the request. Accepted options include lt, gt, lte, gte.
         - statuses (array): List of statuses that returned subscriptions can have
         - productTypes (array): List of product types that returned subscriptions need to have entitlements for.
         - skus (array): List of SKUs that returned subscriptions need to have entitlements for.
         - name (string): Search for subscription name
+        - startDate (string): Filter subscriptions by start date, ISO 8601 format. To filter with a range of dates, use 'startDate[<option>]=?' in the request. Accepted options include lt, gt, lte, gte.
+        - endDate (string): Filter subscriptions by end date, ISO 8601 format. To filter with a range of dates, use 'endDate[<option>]=?' in the request. Accepted options include lt, gt, lte, gte.
         """
 
         kwargs.update(locals())
@@ -65,7 +65,7 @@ class AsyncLicensing:
         }
         resource = f'/administered/licensing/subscription/subscriptions'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'subscriptionIds', 'organizationIds', 'startDate', 'endDate', 'statuses', 'productTypes', 'skus', 'name', ]
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'subscriptionIds', 'organizationIds', 'statuses', 'productTypes', 'skus', 'name', 'startDate', 'endDate', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['subscriptionIds', 'organizationIds', 'statuses', 'productTypes', 'skus', ]

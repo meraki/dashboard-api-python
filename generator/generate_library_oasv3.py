@@ -12,14 +12,50 @@ pip[3] install requests
 
 === DESCRIPTION ===
 This script generates the Meraki Python library using either the public OpenAPI specification, or, with an API key & org
-ID as inputs, a specific dashboard org's OpenAPI spec.
+ID as inputs, a specific dashboard org's OpenAPI spec. This version is compatible with OpenAPI Specification v3.
 
 === USAGE ===
-python[3] generate_library_oasv2.py [-o <org_id>] [-k <api_key>] [-v <version_number>] [-g <is_called_from_github_action>]
+python[3] generate_library_oasv3.py [-o <org_id>] [-k <api_key>] [-v <version_number>] [-g <is_called_from_github_action>]
 API key can, and is recommended to, be set as an environment variable named MERAKI_DASHBOARD_API_KEY. 
 """
 
 REVERSE_PAGINATION = ['getNetworkEvents', 'getOrganizationConfigurationChanges']
+
+
+# Helper function to resolve $ref references in OASv3
+def resolve_ref(spec, ref):
+    """
+    Resolve a $ref reference in OASv3 spec.
+    Example: #/components/schemas/Network -> spec['components']['schemas']['Network']
+    """
+    if not ref.startswith('#/'):
+        return None
+    
+    parts = ref[2:].split('/')  # Remove '#/' and split
+    result = spec
+    for part in parts:
+        if isinstance(result, dict) and part in result:
+            result = result[part]
+        else:
+            return None
+    return result
+
+
+# Helper function to get schema from OASv3 parameter or requestBody
+def get_schema_from_item(item, spec):
+    """
+    Extract schema from an OASv3 parameter or requestBody content item.
+    Handles both inline schemas and $ref references.
+    """
+    if 'schema' in item:
+        schema = item['schema']
+        # If it's a $ref, resolve it
+        if '$ref' in schema:
+            resolved = resolve_ref(spec, schema['$ref'])
+            if resolved:
+                return resolved
+        return schema
+    return None
 
 
 # Helper function to return pagination parameters depending on endpoint
@@ -81,85 +117,124 @@ def return_params(operation, params, param_filters):
         return ret
 
 
-# Helper function to return parameters within OAS spec, optionally based on list of input filters
-def parse_params(operation, parameters, param_filters=None):
+# Helper function to parse requestBody from OASv3
+def parse_request_body(operation, request_body, spec):
+    """
+    Parse requestBody from OASv3 specification.
+    In OASv3, requestBody has a 'content' object with media types (e.g., 'application/json').
+    """
+    if not request_body:
+        return {}
+    
+    params = {}
+    
+    # OASv3 requestBody has a 'content' object
+    if 'content' in request_body:
+        # Usually we want application/json
+        content = request_body['content']
+        json_content = content.get('application/json', {})
+        
+        if json_content:
+            schema = get_schema_from_item(json_content, spec)
+            if schema and 'properties' in schema:
+                # Get required fields from schema
+                required_fields = schema.get('required', [])
+                
+                # Parse each property
+                for prop_name, prop_schema in schema['properties'].items():
+                    # Resolve $ref if present
+                    if '$ref' in prop_schema:
+                        resolved = resolve_ref(spec, prop_schema['$ref'])
+                        if resolved:
+                            prop_schema = resolved
+                    
+                    params[prop_name] = {
+                        'required': prop_name in required_fields,
+                        'in': 'body',
+                        'type': prop_schema.get('type', 'object'),
+                        'description': prop_schema.get('description', ''),
+                    }
+                    
+                    # Handle enum
+                    if 'enum' in prop_schema:
+                        params[prop_name]['enum'] = prop_schema['enum']
+                    
+                    # Handle array type
+                    if prop_schema.get('type') == 'array':
+                        params[prop_name]['type'] = 'array'
+                        if 'items' in prop_schema:
+                            items = prop_schema['items']
+                            if '$ref' in items:
+                                resolved = resolve_ref(spec, items['$ref'])
+                                if resolved:
+                                    params[prop_name]['items'] = resolved
+    
+    return params
+
+
+# Helper function to return parameters within OASv3 spec, optionally based on list of input filters
+def parse_params(operation, parameters, request_body, spec, param_filters=None):
+    """
+    Parse parameters from OASv3 specification.
+    In OASv3, body parameters are in requestBody, not in parameters with in='body'.
+    """
     if param_filters is None:
         param_filters = []
-    if parameters is None:
-        return {}
-
+    
     # Create dict with information on endpoint's parameters
     params = {}
-    for p in parameters:
-        name = p['name']
-
-        # consult the schema if there is one
-        if 'schema' in p:
-            # the parameter will have a top-level object 'schema' and within that, 'properties' in OASv2
-            # in OASv3, the parameter will only have this for query and path parameters, and requestBody params
-            # will be in a separate key
-            keys = p['schema']['properties']
-
-            # parse the properties and assign types and descriptions
-            for k in keys:
-                # if required, set required true
-                if 'required' in p['schema'] and k in p['schema']['required']:
-                    params[k] = {'required': True}
-                else:
-                    params[k] = {'required': False}
-
-                # identify whether the parameter is in the path or query, or for OASv2, in the body
-                params[k]['in'] = p['in']
-
-                # assign the right data type to the parameter per the schema
-                params[k]['type'] = keys[k]['type']
-
-                # assign the description to the parameter per the schema
-                params[k]['description'] = keys[k]['description']
-
-                # capture schema enum if available
-                if 'enum' in keys[k]:
-                    params[k]['enum'] = keys[k]['enum']
-
-                # capture schema example if available
-                if 'example' in p['schema'] and k in p['schema']['example']:
-                    params[k]['example'] = p['schema']['example'][k]
-
-        # if there is no schema, then consult the required attribute
-        elif 'required' in p and p['required']:
-            params[name] = {'required': True}
-
-            # identify whether the parameter is in the path or query, or for OASv2, in the body
-            params[name]['in'] = p['in']
-
-            # assign the right data type to the parameter
-            params[name]['type'] = p['type']
-
-            # assign the description to the parameter if it's available
-            if 'description' in p:
-                params[name]['description'] = p['description']
-
-            # fall back to required if there is no description
+    
+    # Parse path and query parameters (these are still in 'parameters')
+    if parameters:
+        for p in parameters:
+            name = p['name']
+            param_in = p.get('in', 'query')  # 'path', 'query', 'header', 'cookie'
+            
+            # Get schema (OASv3 uses 'schema' directly, not nested in 'schema.properties')
+            schema = get_schema_from_item(p, spec)
+            
+            if schema:
+                # OASv3: schema is directly on the parameter, not nested
+                param_type = schema.get('type', 'string')
+                
+                params[name] = {
+                    'required': p.get('required', False),
+                    'in': param_in,
+                    'type': param_type,
+                    'description': schema.get('description', p.get('description', '')),
+                }
+                
+                # Handle enum
+                if 'enum' in schema:
+                    params[name]['enum'] = schema['enum']
+                
+                # Handle array type
+                if param_type == 'array' and 'items' in schema:
+                    items = schema['items']
+                    if '$ref' in items:
+                        resolved = resolve_ref(spec, items['$ref'])
+                        if resolved:
+                            params[name]['items'] = resolved
             else:
-                params[name]['description'] = '(required)'
-
-            # capture the enum if available
-            if 'enum' in p:
-                params[name]['enum'] = p['enum']
-
-        # if there is no schema and no required attribute, then the parameter is not required
-        else:
-            params[name] = {'required': False}
-            params[name]['in'] = p['in']
-            params[name]['type'] = p['type']
-            params[name]['description'] = p['description']
-            if 'enum' in p:
-                params[name]['enum'] = p['enum']
-
+                # Fallback: use parameter directly if no schema
+                params[name] = {
+                    'required': p.get('required', False),
+                    'in': param_in,
+                    'type': p.get('type', 'string'),
+                    'description': p.get('description', ''),
+                }
+                if 'enum' in p:
+                    params[name]['enum'] = p['enum']
+    
+    # Parse requestBody (OASv3 specific)
+    if request_body:
+        body_params = parse_request_body(operation, request_body, spec)
+        params.update(body_params)
+    
     # Add custom library parameters to handle pagination
     if 'perPage' in params:
         params.update(generate_pagination_parameters(operation))
-
+    
     # Return parameters based on matching input filters
     return return_params(operation, params, param_filters)
 
@@ -286,13 +361,15 @@ def generate_library(spec, version_number, is_github_action):
                     operation = endpoint['operationId']
                     description = endpoint['summary']
 
-                    # will need updating for OASv3
-                    parameters = endpoint['parameters'] if 'parameters' in endpoint else None
+                    # OASv3: parameters are for path/query/header/cookie, requestBody is separate
+                    parameters = endpoint.get('parameters', None)
+                    request_body = endpoint.get('requestBody', None)
 
                     # Function definition
                     definition = ''
-                    if parameters:
-                        for p, values in parse_params(operation, parameters, 'required').items():
+                    parsed_params = parse_params(operation, parameters, request_body, spec, 'required')
+                    if parsed_params:
+                        for p, values in parsed_params.items():
                             if values['type'] == 'array':
                                 definition += f', {p}: list'
                             elif values['type'] == 'number':
@@ -306,7 +383,8 @@ def generate_library(spec, version_number, is_github_action):
                             elif values['type'] == 'string':
                                 definition += f', {p}: str'
 
-                        if 'perPage' in parse_params(operation, parameters):
+                        all_parsed_params = parse_params(operation, parameters, request_body, spec)
+                        if 'perPage' in all_parsed_params:
                             if operation in REVERSE_PAGINATION:
                                 definition += ", total_pages=1, direction='prev'"
                             else:
@@ -314,25 +392,29 @@ def generate_library(spec, version_number, is_github_action):
                             if operation == 'getNetworkEvents':
                                 definition += ', event_log_end_time=None'
 
-                        if parse_params(operation, parameters, ['optional']):
+                        optional_params = parse_params(operation, parameters, request_body, spec, ['optional'])
+                        if optional_params:
                             definition += f', **kwargs'
 
                     # Docstring
                     param_descriptions = []
-                    all_params = parse_params(operation, parameters, ['required', 'pagination', 'optional'])
+                    all_params = parse_params(operation, parameters, request_body, spec, ['required', 'pagination', 'optional'])
                     if all_params:
                         for p, values in all_params.items():
                             param_descriptions.append(f'{p} ({values["type"]}): {values["description"]}')
 
                     # Combine keyword args with locals
                     kwarg_line = ''
-                    if parse_params(operation, parameters, ['optional']):
+                    optional_params = parse_params(operation, parameters, request_body, spec, ['optional'])
+                    if optional_params:
                         kwarg_line = 'kwargs.update(locals())'
-                    elif parse_params(operation, parameters, ['query', 'array', 'body']):
-                        kwarg_line = 'kwargs = locals()'
+                    else:
+                        query_body_array = parse_params(operation, parameters, request_body, spec, ['query', 'array', 'body'])
+                        if query_body_array:
+                            kwarg_line = 'kwargs = locals()'
 
                     # Assert valid values for enum
-                    enum_params = parse_params(operation, parameters, ['enum'])
+                    enum_params = parse_params(operation, parameters, request_body, spec, ['enum'])
                     assert_blocks = []
                     if enum_params:
                         for p, values in enum_params.items():
@@ -341,10 +423,10 @@ def generate_library(spec, version_number, is_github_action):
                     # Function body for GET endpoints
                     query_params = array_params = body_params = path_params = {}
                     if method == 'get':
-                        query_params = parse_params(operation, parameters, 'query')
-                        array_params = parse_params(operation, parameters, 'array')
-                        path_params = parse_params(operation, parameters, 'path')
-                        pagination_params = parse_params(operation, parameters, 'pagination')
+                        query_params = parse_params(operation, parameters, request_body, spec, 'query')
+                        array_params = parse_params(operation, parameters, request_body, spec, 'array')
+                        path_params = parse_params(operation, parameters, request_body, spec, 'path')
+                        pagination_params = parse_params(operation, parameters, request_body, spec, 'pagination')
                         if query_params or array_params:
                             if pagination_params:
                                 if operation == 'getNetworkEvents':
@@ -360,8 +442,8 @@ def generate_library(spec, version_number, is_github_action):
 
                     # Function body for POST/PUT endpoints
                     elif method == 'post' or method == 'put':
-                        body_params = parse_params(operation, parameters, 'body')
-                        path_params = parse_params(operation, parameters, 'path')
+                        body_params = parse_params(operation, parameters, request_body, spec, 'body')
+                        path_params = parse_params(operation, parameters, request_body, spec, 'path')
                         if body_params:
                             call_line = f'return self._session.{method}(metadata, resource, payload)'
                         else:
@@ -369,7 +451,7 @@ def generate_library(spec, version_number, is_github_action):
 
                     # Function body for DELETE endpoints
                     elif method == 'delete':
-                        path_params = parse_params(operation, parameters, 'path')
+                        path_params = parse_params(operation, parameters, request_body, spec, 'path')
                         call_line = 'return self._session.delete(metadata, resource)'
 
                     # Add function to files
@@ -426,13 +508,15 @@ def generate_library(spec, version_number, is_github_action):
                         operation = endpoint['operationId']
                         description = endpoint['summary']
 
-                        # May need update for OASv3
-                        parameters = endpoint['parameters'] if 'parameters' in endpoint else None
+                        # OASv3: parameters are for path/query/header/cookie, requestBody is separate
+                        parameters = endpoint.get('parameters', None)
+                        request_body = endpoint.get('requestBody', None)
 
                         # Function definition
                         definition = ''
-                        if parameters:
-                            for p, values in parse_params(operation, parameters, 'required').items():
+                        parsed_params = parse_params(operation, parameters, request_body, spec, 'required')
+                        if parsed_params:
+                            for p, values in parsed_params.items():
                                 if values['type'] == 'array':
                                     definition += f', {p}: list'
                                 elif values['type'] == 'number':
@@ -446,7 +530,8 @@ def generate_library(spec, version_number, is_github_action):
                                 elif values['type'] == 'string':
                                     definition += f', {p}: str'
 
-                            if 'perPage' in parse_params(operation, parameters):
+                            all_parsed_params = parse_params(operation, parameters, request_body, spec)
+                            if 'perPage' in all_parsed_params:
                                 if operation in REVERSE_PAGINATION:
                                     definition += ", total_pages=1, direction='prev'"
                                 else:
@@ -454,27 +539,29 @@ def generate_library(spec, version_number, is_github_action):
                                 if operation == 'getNetworkEvents':
                                     definition += ', event_log_end_time=None'
 
-                            if parse_params(operation, parameters, ['optional']):
+                            optional_params = parse_params(operation, parameters, request_body, spec, ['optional'])
+                            if optional_params:
                                 definition += f', **kwargs'
 
                         # Docstring
                         param_descriptions = []
-                        all_params = parse_params(operation, parameters, ['required', 'pagination', 'optional'])
+                        all_params = parse_params(operation, parameters, request_body, spec, ['required', 'pagination', 'optional'])
                         if all_params:
                             for p, values in all_params.items():
                                 param_descriptions.append(f'{p} ({values["type"]}): {values["description"]}')
 
                         # Combine keyword args with locals
                         kwarg_line = ''
-                        if parse_params(operation, parameters, ['optional']):
+                        optional_params = parse_params(operation, parameters, request_body, spec, ['optional'])
+                        if optional_params:
                             kwarg_line = 'kwargs.update(locals())'
-
-                        # will need update for OASv3
-                        elif parse_params(operation, parameters, ['query', 'array', 'body']):
-                            kwarg_line = 'kwargs = locals()'
+                        else:
+                            query_body_array = parse_params(operation, parameters, request_body, spec, ['query', 'array', 'body'])
+                            if query_body_array:
+                                kwarg_line = 'kwargs = locals()'
 
                         # Assert valid values for enum
-                        enum_params = parse_params(operation, parameters, ['enum'])
+                        enum_params = parse_params(operation, parameters, request_body, spec, ['enum'])
                         assert_blocks = list()
                         if enum_params:
                             for p, values in enum_params.items():
@@ -485,9 +572,7 @@ def generate_library(spec, version_number, is_github_action):
 
                         # Function body for POST/PUT endpoints
                         if method == 'post' or method == 'put':
-
-                            # will need update for OASv3
-                            body_params = parse_params(operation, parameters, 'body')
+                            body_params = parse_params(operation, parameters, request_body, spec, 'body')
                             if method == 'post':
                                 batch_operation = 'create'
                             else:
@@ -566,18 +651,27 @@ def main(inputs):
             print_help()
             sys.exit(2)
         else:
+            # Request OASv3 spec by adding version=3 parameter
             response = requests.get(f'https://api.meraki.com/api/v1/organizations/{org_id}/openapiSpec',
-                                    headers={'Authorization': f'Bearer {api_key}'})
+                                    headers={'Authorization': f'Bearer {api_key}'},
+                                    params={'version': 3})
             if response.ok:
                 spec = response.json()
             else:
                 print_help()
                 sys.exit(f'API key provided does not have access to org {org_id}')
     else:
-        spec = requests.get('https://api.meraki.com/api/v1/openapiSpec').json()
+        # Request OASv3 spec by adding version=3 parameter
+        response = requests.get('https://api.meraki.com/api/v1/openapiSpec', params={'version': 3})
+        if response.ok:
+            spec = response.json()
+        else:
+            print_help()
+            sys.exit('Failed to retrieve OpenAPI v3 specification. Please try again.')
 
     generate_library(spec, version_number, is_github_action)
 
 
 if __name__ == '__main__':
     main(sys.argv[1:])
+

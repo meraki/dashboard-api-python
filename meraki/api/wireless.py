@@ -173,8 +173,8 @@ class Wireless(object):
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
         - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
-        - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
+        - vlan (integer): Filter results by VLAN
         - fields (string): Partial selection: If present, this call will return only the selected fields of ["rawDistribution", "avg"]. All fields will be returned by default. Selected fields must be entered as a comma separated string.
         """
 
@@ -191,7 +191,7 @@ class Wireless(object):
         serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/wireless/latencyStats'
 
-        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', 'fields', ]
+        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'apTag', 'vlan', 'fields', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -258,6 +258,46 @@ class Wireless(object):
         }
         serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/wireless/status'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def createDeviceWirelessZigbeeEnrollment(self, serial: str):
+        """
+        **Enqueue a job to start enrolling door locks on zigbee configured wireless devices**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-wireless-zigbee-enrollment
+
+        - serial (string): Serial
+        """
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'zigbee', 'enrollments'],
+            'operation': 'createDeviceWirelessZigbeeEnrollment'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        resource = f'/devices/{serial}/wireless/zigbee/enrollments'
+
+        return self._session.post(metadata, resource)
+        
+
+
+    def getDeviceWirelessZigbeeEnrollment(self, serial: str, enrollmentId: str):
+        """
+        **Return an enrollment**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-wireless-zigbee-enrollment
+
+        - serial (string): Serial
+        - enrollmentId (string): Enrollment ID
+        """
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'zigbee', 'enrollments'],
+            'operation': 'getDeviceWirelessZigbeeEnrollment'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        enrollmentId = urllib.parse.quote(str(enrollmentId), safe='')
+        resource = f'/devices/{serial}/wireless/zigbee/enrollments/{enrollmentId}'
 
         return self._session.get(metadata, resource)
         
@@ -667,8 +707,8 @@ class Wireless(object):
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
         - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
-        - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
+        - vlan (integer): Filter results by VLAN
         - fields (string): Partial selection: If present, this call will return only the selected fields of ["rawDistribution", "avg"]. All fields will be returned by default. Selected fields must be entered as a comma separated string.
         """
 
@@ -685,7 +725,7 @@ class Wireless(object):
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/clients/latencyStats'
 
-        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', 'fields', ]
+        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'apTag', 'vlan', 'fields', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -827,8 +867,8 @@ class Wireless(object):
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
         - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
-        - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
+        - vlan (integer): Filter results by VLAN
         - fields (string): Partial selection: If present, this call will return only the selected fields of ["rawDistribution", "avg"]. All fields will be returned by default. Selected fields must be entered as a comma separated string.
         """
 
@@ -846,7 +886,7 @@ class Wireless(object):
         clientId = urllib.parse.quote(str(clientId), safe='')
         resource = f'/networks/{networkId}/wireless/clients/{clientId}/latencyStats'
 
-        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', 'fields', ]
+        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'apTag', 'vlan', 'fields', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -972,8 +1012,8 @@ class Wireless(object):
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
         - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
-        - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
+        - vlan (integer): Filter results by VLAN
         - fields (string): Partial selection: If present, this call will return only the selected fields of ["rawDistribution", "avg"]. All fields will be returned by default. Selected fields must be entered as a comma separated string.
         """
 
@@ -990,7 +1030,7 @@ class Wireless(object):
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/devices/latencyStats'
 
-        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', 'fields', ]
+        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'apTag', 'vlan', 'fields', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -1324,8 +1364,8 @@ class Wireless(object):
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
         - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
-        - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
+        - vlan (integer): Filter results by VLAN
         - fields (string): Partial selection: If present, this call will return only the selected fields of ["rawDistribution", "avg"]. All fields will be returned by default. Selected fields must be entered as a comma separated string.
         """
 
@@ -1342,7 +1382,7 @@ class Wireless(object):
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/latencyStats'
 
-        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', 'fields', ]
+        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'apTag', 'vlan', 'fields', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -1699,7 +1739,6 @@ class Wireless(object):
         - number (string): Number
         - name (string): The name of the SSID
         - enabled (boolean): Whether or not the SSID is enabled
-        - localAuth (boolean): Extended local auth flag for Enterprise NAC
         - authMode (string): The association control method for the SSID ('open', 'open-enhanced', 'psk', 'open-with-radius', 'open-with-nac', '8021x-meraki', '8021x-nac', '8021x-radius', '8021x-google', '8021x-entra', '8021x-localradius', 'ipsk-with-radius', 'ipsk-without-radius', 'ipsk-with-nac' or 'ipsk-with-radius-easy-psk')
         - enterpriseAdminAccess (string): Whether or not an SSID is accessible by 'enterprise' administrators ('access disabled' or 'access enabled')
         - encryptionMode (string): The psk encryption mode for the SSID ('wep' or 'wpa'). This param is only valid if the authMode is 'psk'
@@ -1707,7 +1746,7 @@ class Wireless(object):
         - wpaEncryptionMode (string): The types of WPA encryption. ('WPA1 only', 'WPA1 and WPA2', 'WPA2 only', 'WPA3 Transition Mode', 'WPA3 only' or 'WPA3 192-bit Security')
         - dot11w (object): The current setting for Protected Management Frames (802.11w).
         - dot11r (object): The current setting for 802.11r
-        - splashPage (string): The type of splash page for the SSID ('None', 'Click-through splash page', 'Billing', 'Password-protected with Meraki RADIUS', 'Password-protected with custom RADIUS', 'Password-protected with Active Directory', 'Password-protected with LDAP', 'SMS authentication', 'Systems Manager Sentry', 'Facebook Wi-Fi', 'Google OAuth', 'Microsoft Entra ID', 'Sponsored guest', 'Cisco ISE' or 'Google Apps domain'). This attribute is not supported for template children.
+        - splashPage (string): The type of splash page for the SSID ('None', 'Click-through splash page', 'Billing', 'Password-protected with Meraki RADIUS', 'Password-protected with custom RADIUS', 'Password-protected with Active Directory', 'Password-protected with LDAP', 'SMS authentication', 'Systems Manager Sentry', 'Facebook Wi-Fi', 'Google OAuth', 'Microsoft Entra ID', 'Sponsored guest', 'Cisco ISE' or 'Google Apps domain').This attribute is not supported for template children.
         - splashGuestSponsorDomains (array): Array of valid sponsor email domains for sponsored guest splash type.
         - oauth (object): The OAuth settings of this SSID. Only valid if splashPage is 'Google OAuth'.
         - localRadius (object): The current setting for Local Authentication, a built-in RADIUS server on the access point. Only valid if authMode is '8021x-localradius'.
@@ -1729,7 +1768,7 @@ class Wireless(object):
         - radiusAccountingServers (array): The RADIUS accounting 802.1X servers to be used for authentication. This param is only valid if the authMode is 'open-with-radius', '8021x-radius' or 'ipsk-with-radius' and radiusAccountingEnabled is 'true'
         - radiusAccountingInterimInterval (integer): The interval (in seconds) in which accounting information is updated and sent to the RADIUS accounting server.
         - radiusAttributeForGroupPolicies (string): Specify the RADIUS attribute used to look up group policies ('Filter-Id', 'Reply-Message', 'Airespace-ACL-Name' or 'Aruba-User-Role'). Access points must receive this attribute in the RADIUS Access-Accept message
-        - ipAssignmentMode (string): The client IP assignment mode ('NAT mode', 'Bridge mode', 'Layer 3 roaming', 'Ethernet over GRE', 'Layer 3 roaming with a concentrator' or 'VPN')
+        - ipAssignmentMode (string): The client IP assignment mode ('NAT mode', 'Bridge mode', 'Layer 3 roaming', 'Ethernet over GRE', 'Layer 3 roaming with a concentrator', 'VPN' or 'Campus Gateway')
         - useVlanTagging (boolean): Whether or not traffic should be directed to use specific VLANs. This param is only valid if the ipAssignmentMode is 'Bridge mode' or 'Layer 3 roaming'
         - concentratorNetworkId (string): The concentrator to use when the ipAssignmentMode is 'Layer 3 roaming with a concentrator' or 'VPN'.
         - secondaryConcentratorNetworkId (string): The secondary concentrator to use when the ipAssignmentMode is 'VPN'. If configured, the APs will switch to using this concentrator if the primary concentrator is unreachable. This param is optional. ('disabled' represents no secondary concentrator.)
@@ -1759,6 +1798,8 @@ class Wireless(object):
         - dnsRewrite (object): DNS servers rewrite settings
         - speedBurst (object): The SpeedBurst setting for this SSID'
         - namedVlans (object): Named VLAN settings.
+        - localAuthFallback (object): The current configuration for Local Authentication Fallback. Enables the Access Point (AP) to store client authentication data for a specified duration that can be adjusted as needed.
+        - radiusAccountingStartDelay (integer): The delay (in seconds) before sending the first RADIUS accounting start message. Must be between 0 and 60 seconds.
         """
 
         kwargs.update(locals())
@@ -1796,7 +1837,7 @@ class Wireless(object):
         number = urllib.parse.quote(str(number), safe='')
         resource = f'/networks/{networkId}/wireless/ssids/{number}'
 
-        body_params = ['name', 'enabled', 'localAuth', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk', 'wpaEncryptionMode', 'dot11w', 'dot11r', 'splashPage', 'splashGuestSponsorDomains', 'oauth', 'localRadius', 'ldap', 'activeDirectory', 'radiusServers', 'radiusProxyEnabled', 'radiusTestingEnabled', 'radiusCalledStationId', 'radiusAuthenticationNasId', 'radiusServerTimeout', 'radiusServerAttemptsLimit', 'radiusFallbackEnabled', 'radiusRadsec', 'radiusCoaEnabled', 'radiusFailoverPolicy', 'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusAccountingInterimInterval', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging', 'concentratorNetworkId', 'secondaryConcentratorNetworkId', 'disassociateClientsOnVpnFailover', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 'walledGardenEnabled', 'walledGardenRanges', 'gre', 'radiusOverride', 'radiusGuestVlanEnabled', 'radiusGuestVlanId', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'perSsidBandwidthLimitUp', 'perSsidBandwidthLimitDown', 'lanIsolationEnabled', 'visible', 'availableOnAllAps', 'availabilityTags', 'adaptivePolicyGroupId', 'mandatoryDhcpEnabled', 'adultContentFilteringEnabled', 'dnsRewrite', 'speedBurst', 'namedVlans', ]
+        body_params = ['name', 'enabled', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk', 'wpaEncryptionMode', 'dot11w', 'dot11r', 'splashPage', 'splashGuestSponsorDomains', 'oauth', 'localRadius', 'ldap', 'activeDirectory', 'radiusServers', 'radiusProxyEnabled', 'radiusTestingEnabled', 'radiusCalledStationId', 'radiusAuthenticationNasId', 'radiusServerTimeout', 'radiusServerAttemptsLimit', 'radiusFallbackEnabled', 'radiusRadsec', 'radiusCoaEnabled', 'radiusFailoverPolicy', 'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusAccountingInterimInterval', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging', 'concentratorNetworkId', 'secondaryConcentratorNetworkId', 'disassociateClientsOnVpnFailover', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 'walledGardenEnabled', 'walledGardenRanges', 'gre', 'radiusOverride', 'radiusGuestVlanEnabled', 'radiusGuestVlanId', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'perSsidBandwidthLimitUp', 'perSsidBandwidthLimitDown', 'lanIsolationEnabled', 'visible', 'availableOnAllAps', 'availabilityTags', 'adaptivePolicyGroupId', 'mandatoryDhcpEnabled', 'adultContentFilteringEnabled', 'dnsRewrite', 'speedBurst', 'namedVlans', 'localAuthFallback', 'radiusAccountingStartDelay', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1981,7 +2022,7 @@ class Wireless(object):
 
         - networkId (string): Network ID
         - number (string): Number
-        - rules (array): An ordered array of the firewall rules for this SSID (not including the local LAN access rule or the default rule).
+        - rules (array): An ordered array of the firewall rules for this SSID.
         - allowLanAccess (boolean): Allow wireless client access to local LAN (boolean value - true allows access and false denies access) (optional)
         """
 
@@ -2235,6 +2276,34 @@ class Wireless(object):
         resource = f'/networks/{networkId}/wireless/ssids/{number}/identityPsks/{identityPskId}'
 
         return self._session.delete(metadata, resource)
+        
+
+
+    def updateNetworkWirelessSsidOpenRoaming(self, networkId: str, number: str, **kwargs):
+        """
+        **Update the OpenRoaming setting for the SSID**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-open-roaming
+
+        - networkId (string): Network ID
+        - number (string): Number
+        - enabled (boolean): If true, OpenRoaming is enabled on this SSID.
+        - tenantId (string): The OpenRoaming DNA Spaces tenant ID.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ssids', 'openRoaming'],
+            'operation': 'updateNetworkWirelessSsidOpenRoaming'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        number = urllib.parse.quote(str(number), safe='')
+        resource = f'/networks/{networkId}/wireless/ssids/{number}/openRoaming'
+
+        body_params = ['enabled', 'tenantId', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
         
 
 
@@ -2497,6 +2566,34 @@ class Wireless(object):
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
+        
+
+
+    def updateNetworkWirelessZigbee(self, networkId: str, **kwargs):
+        """
+        **Update Zigbee Configs for specified network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-zigbee
+
+        - networkId (string): Network ID
+        - enabled (boolean): To enable/disable Zigbee on the network
+        - iotController (object): Zigbee's IoT controller details
+        - lockManagement (object): Login Credentials of on-premises lock management
+        - defaults (object): Default Settings for Zigbee Devices
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'zigbee'],
+            'operation': 'updateNetworkWirelessZigbee'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/wireless/zigbee'
+
+        body_params = ['enabled', 'iotController', 'lockManagement', 'defaults', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
         
 
 
@@ -3343,6 +3440,70 @@ class Wireless(object):
         
 
 
+    def getOrganizationWirelessMqttSettings(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Return MQTT Settings for networks**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-mqtt-settings
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 250. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter mqtt settings by network ID.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'mqtt', 'settings'],
+            'operation': 'getOrganizationWirelessMqttSettings'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/mqtt/settings'
+
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def updateOrganizationWirelessMqttSettings(self, organizationId: str, network: dict, mqtt: dict, **kwargs):
+        """
+        **Add new broker config for wireless MQTT**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-wireless-mqtt-settings
+
+        - organizationId (string): Organization ID
+        - network (object): Add MQTT Settings for network
+        - mqtt (object): MQTT Settings for network
+        - ble (object): MQTT BLE Settings for network
+        - wifi (object): MQTT Wi-Fi Settings for network
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'mqtt', 'settings'],
+            'operation': 'updateOrganizationWirelessMqttSettings'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/mqtt/settings'
+
+        body_params = ['network', 'mqtt', 'ble', 'wifi', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
     def recalculateOrganizationWirelessRadioAutoRfChannels(self, organizationId: str, networkIds: list):
         """
         **Recalculates automatically assigned channels for every AP within specified the specified network(s)**
@@ -3526,6 +3687,43 @@ class Wireless(object):
         
 
 
+    def getOrganizationWirelessSsidsOpenRoamingByNetwork(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Returns an array of objects, each containing SSID OpenRoaming configs for the corresponding network**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-ssids-open-roaming-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter OpenRoaming configuration by Network Id.
+        - includeDisabledSsids (boolean): Optional parameter to include OpenRoaming configuration for disabled ssids.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ssids', 'openRoaming', 'byNetwork'],
+            'operation': 'getOrganizationWirelessSsidsOpenRoamingByNetwork'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/ssids/openRoaming/byNetwork'
+
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'includeDisabledSsids', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
     def getOrganizationWirelessSsidsStatusesByDevice(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **List status information of all BSSIDs in your organization**
@@ -3562,4 +3760,216 @@ class Wireless(object):
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def getOrganizationWirelessZigbeeByNetwork(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Return list of Zigbee configs**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-zigbee-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Filter by specified Network IDs
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'zigbee', 'byNetwork'],
+            'operation': 'getOrganizationWirelessZigbeeByNetwork'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/zigbee/byNetwork'
+
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def getOrganizationWirelessZigbeeDevices(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **List the Zigbee wireless devices for an organization or the supplied network(s)**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-zigbee-devices
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 10.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Parameter of networks you want the zigbee devices for. E.g.: networkIds[]=N_12345678&networkIds[]=N_3456
+        - isEnrolled (boolean): Filter devices based on if they are enrolled or not
+        - search (string): Filter devices by their name, tag or serial
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'zigbee', 'devices'],
+            'operation': 'getOrganizationWirelessZigbeeDevices'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/zigbee/devices'
+
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'isEnrolled', 'search', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def updateOrganizationWirelessZigbeeDevice(self, organizationId: str, id: str, enrolled: bool, **kwargs):
+        """
+        **Endpoint to update zigbee gateways**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-wireless-zigbee-device
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        - enrolled (boolean): Parameter to enroll or unenroll the zigbee devices
+        - channel (string): The new channel for the zigbee device
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'zigbee', 'devices'],
+            'operation': 'updateOrganizationWirelessZigbeeDevice'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        id = urllib.parse.quote(str(id), safe='')
+        resource = f'/organizations/{organizationId}/wireless/zigbee/devices/{id}'
+
+        body_params = ['enrolled', 'channel', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def createOrganizationWirelessZigbeeDisenrollment(self, organizationId: str, **kwargs):
+        """
+        **Enqueue a job to start disenrolling door locks on zigbee configured wireless devices**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-wireless-zigbee-disenrollment
+
+        - organizationId (string): Organization ID
+        - doorLockIds (array): A list of Meraki door lock ids to disenroll from the device
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'zigbee', 'disenrollments'],
+            'operation': 'createOrganizationWirelessZigbeeDisenrollment'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/zigbee/disenrollments'
+
+        body_params = ['doorLockIds', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getOrganizationWirelessZigbeeDisenrollment(self, organizationId: str, disenrollmentId: str):
+        """
+        **Return a disenrollment**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-zigbee-disenrollment
+
+        - organizationId (string): Organization ID
+        - disenrollmentId (string): Disenrollment ID
+        """
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'zigbee', 'disenrollments'],
+            'operation': 'getOrganizationWirelessZigbeeDisenrollment'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        disenrollmentId = urllib.parse.quote(str(disenrollmentId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/zigbee/disenrollments/{disenrollmentId}'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def getOrganizationWirelessZigbeeDoorLocks(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Return the list of door locks for a network**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-zigbee-door-locks
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter by specified Network IDs
+        - serial (string): Filter by device serial
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 500. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'zigbee', 'doorLocks'],
+            'operation': 'getOrganizationWirelessZigbeeDoorLocks'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/zigbee/doorLocks'
+
+        query_params = ['networkIds', 'serial', 'perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def updateOrganizationWirelessZigbeeDoorLock(self, organizationId: str, doorLockId: str, **kwargs):
+        """
+        **Endpoint to batch update door locks params**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-wireless-zigbee-door-lock
+
+        - organizationId (string): Organization ID
+        - doorLockId (string): Door lock ID
+        - name (string): Door lock name to update
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'zigbee', 'doorLocks'],
+            'operation': 'updateOrganizationWirelessZigbeeDoorLock'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        doorLockId = urllib.parse.quote(str(doorLockId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/zigbee/doorLocks/{doorLockId}'
+
+        body_params = ['name', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
         

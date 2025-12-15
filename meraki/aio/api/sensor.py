@@ -404,6 +404,42 @@ class AsyncSensor:
         
 
 
+    def getOrganizationSensorGatewaysConnectionsLatest(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Returns latest sensor-gateway connectivity data.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-sensor-gateways-connections-latest
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - sensorSerials (array): List of sensor serials to filter connectivity data by sensor.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['sensor', 'monitor', 'gateways', 'connections', 'latest'],
+            'operation': 'getOrganizationSensorGatewaysConnectionsLatest'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/sensor/gateways/connections/latest'
+
+        query_params = ['sensorSerials', 'perPage', 'startingAfter', 'endingBefore', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['sensorSerials', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
     def getOrganizationSensorReadingsHistory(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **Return all reported readings from sensors in a given timespan, sorted by timestamp**

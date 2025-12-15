@@ -739,7 +739,7 @@ class ActionBatchAppliance(object):
 
         - networkId (string): Network ID
         - activeActiveAutoVpnEnabled (boolean): Toggle for enabling or disabling active-active AutoVPN
-        - defaultUplink (string): The default uplink. Must be one of: 'wan1' or 'wan2'
+        - defaultUplink (string): The default uplink. Must be a WAN interface 'wanX'
         - loadBalancingEnabled (boolean): Toggle for enabling or disabling load balancing
         - failoverAndFailback (object): WAN failover and failback behavior
         - wanTrafficUplinkPreferences (array): Array of uplink preference rules for WAN traffic
@@ -902,7 +902,7 @@ class ActionBatchAppliance(object):
         - groupPolicyId (string): The id of the desired group policy to apply to the VLAN
         - vpnNatSubnet (string): The translated VPN subnet if VPN and VPN subnet translation are enabled on the VLAN
         - dhcpHandling (string): The appliance's handling of DHCP requests on this VLAN. One of: 'Run a DHCP server', 'Relay DHCP to another server' or 'Do not respond to DHCP requests'
-        - dhcpRelayServerIps (array): The IPs of the DHCP servers that DHCP requests should be relayed to
+        - dhcpRelayServerIps (array): The IPs (IPv4) of the DHCP servers that DHCP requests should be relayed to. CIDR/subnet notation and hostnames are not supported.
         - dhcpLeaseTime (string): The term of DHCP leases if the appliance is running a DHCP server on this VLAN. One of: '30 minutes', '1 hour', '4 hours', '12 hours', '1 day' or '1 week'
         - dhcpBootOptionsEnabled (boolean): Use DHCP boot options specified in other properties
         - dhcpBootNextServer (string): DHCP boot option to direct boot clients to the server to load the boot file from
@@ -1012,7 +1012,7 @@ class ActionBatchAppliance(object):
 
     def updateNetworkApplianceVpnSiteToSiteVpn(self, networkId: str, mode: str, **kwargs):
         """
-        **Update the site-to-site VPN settings of a network. Only valid for MX networks in NAT mode.**
+        **Update the site-to-site VPN settings of a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-vpn-site-to-site-vpn
 
         - networkId (string): Network ID
@@ -1499,6 +1499,37 @@ class ActionBatchAppliance(object):
         action = {
             "resource": resource,
             "operation": "destroy",
+        }
+        return action
+        
+
+
+
+
+
+    def updateOrganizationApplianceVpnSiteToSiteIpsecPeersSlas(self, organizationId: str, **kwargs):
+        """
+        **Update the IPsec SLA policies for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-appliance-vpn-site-to-site-ipsec-peers-slas
+
+        - organizationId (string): Organization ID
+        - items (array): List of IPsec SLA policies
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'vpn', 'siteToSite', 'ipsec', 'peers', 'slas'],
+            'operation': 'updateOrganizationApplianceVpnSiteToSiteIpsecPeersSlas'
+        }
+        resource = f'/organizations/{organizationId}/appliance/vpn/siteToSite/ipsec/peers/slas'
+
+        body_params = ['items', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
         }
         return action
         

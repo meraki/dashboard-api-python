@@ -614,7 +614,7 @@ class ActionBatchWireless(object):
 
     def updateNetworkWirelessRfProfile(self, networkId: str, rfProfileId: str, **kwargs):
         """
-        **Updates specified RF profile for this network. Note: built-in RF profiles can only be assigned as a default, and its attributes are immutable**
+        **Updates specified RF profile for this network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-rf-profile
 
         - networkId (string): Network ID
@@ -738,7 +738,6 @@ class ActionBatchWireless(object):
         - number (string): Number
         - name (string): The name of the SSID
         - enabled (boolean): Whether or not the SSID is enabled
-        - localAuth (boolean): Extended local auth flag for Enterprise NAC
         - authMode (string): The association control method for the SSID ('open', 'open-enhanced', 'psk', 'open-with-radius', 'open-with-nac', '8021x-meraki', '8021x-nac', '8021x-radius', '8021x-google', '8021x-entra', '8021x-localradius', 'ipsk-with-radius', 'ipsk-without-radius', 'ipsk-with-nac' or 'ipsk-with-radius-easy-psk')
         - enterpriseAdminAccess (string): Whether or not an SSID is accessible by 'enterprise' administrators ('access disabled' or 'access enabled')
         - encryptionMode (string): The psk encryption mode for the SSID ('wep' or 'wpa'). This param is only valid if the authMode is 'psk'
@@ -746,7 +745,7 @@ class ActionBatchWireless(object):
         - wpaEncryptionMode (string): The types of WPA encryption. ('WPA1 only', 'WPA1 and WPA2', 'WPA2 only', 'WPA3 Transition Mode', 'WPA3 only' or 'WPA3 192-bit Security')
         - dot11w (object): The current setting for Protected Management Frames (802.11w).
         - dot11r (object): The current setting for 802.11r
-        - splashPage (string): The type of splash page for the SSID ('None', 'Click-through splash page', 'Billing', 'Password-protected with Meraki RADIUS', 'Password-protected with custom RADIUS', 'Password-protected with Active Directory', 'Password-protected with LDAP', 'SMS authentication', 'Systems Manager Sentry', 'Facebook Wi-Fi', 'Google OAuth', 'Microsoft Entra ID', 'Sponsored guest', 'Cisco ISE' or 'Google Apps domain'). This attribute is not supported for template children.
+        - splashPage (string): The type of splash page for the SSID ('None', 'Click-through splash page', 'Billing', 'Password-protected with Meraki RADIUS', 'Password-protected with custom RADIUS', 'Password-protected with Active Directory', 'Password-protected with LDAP', 'SMS authentication', 'Systems Manager Sentry', 'Facebook Wi-Fi', 'Google OAuth', 'Microsoft Entra ID', 'Sponsored guest', 'Cisco ISE' or 'Google Apps domain').This attribute is not supported for template children.
         - splashGuestSponsorDomains (array): Array of valid sponsor email domains for sponsored guest splash type.
         - oauth (object): The OAuth settings of this SSID. Only valid if splashPage is 'Google OAuth'.
         - localRadius (object): The current setting for Local Authentication, a built-in RADIUS server on the access point. Only valid if authMode is '8021x-localradius'.
@@ -768,7 +767,7 @@ class ActionBatchWireless(object):
         - radiusAccountingServers (array): The RADIUS accounting 802.1X servers to be used for authentication. This param is only valid if the authMode is 'open-with-radius', '8021x-radius' or 'ipsk-with-radius' and radiusAccountingEnabled is 'true'
         - radiusAccountingInterimInterval (integer): The interval (in seconds) in which accounting information is updated and sent to the RADIUS accounting server.
         - radiusAttributeForGroupPolicies (string): Specify the RADIUS attribute used to look up group policies ('Filter-Id', 'Reply-Message', 'Airespace-ACL-Name' or 'Aruba-User-Role'). Access points must receive this attribute in the RADIUS Access-Accept message
-        - ipAssignmentMode (string): The client IP assignment mode ('NAT mode', 'Bridge mode', 'Layer 3 roaming', 'Ethernet over GRE', 'Layer 3 roaming with a concentrator' or 'VPN')
+        - ipAssignmentMode (string): The client IP assignment mode ('NAT mode', 'Bridge mode', 'Layer 3 roaming', 'Ethernet over GRE', 'Layer 3 roaming with a concentrator', 'VPN' or 'Campus Gateway')
         - useVlanTagging (boolean): Whether or not traffic should be directed to use specific VLANs. This param is only valid if the ipAssignmentMode is 'Bridge mode' or 'Layer 3 roaming'
         - concentratorNetworkId (string): The concentrator to use when the ipAssignmentMode is 'Layer 3 roaming with a concentrator' or 'VPN'.
         - secondaryConcentratorNetworkId (string): The secondary concentrator to use when the ipAssignmentMode is 'VPN'. If configured, the APs will switch to using this concentrator if the primary concentrator is unreachable. This param is optional. ('disabled' represents no secondary concentrator.)
@@ -798,6 +797,8 @@ class ActionBatchWireless(object):
         - dnsRewrite (object): DNS servers rewrite settings
         - speedBurst (object): The SpeedBurst setting for this SSID'
         - namedVlans (object): Named VLAN settings.
+        - localAuthFallback (object): The current configuration for Local Authentication Fallback. Enables the Access Point (AP) to store client authentication data for a specified duration that can be adjusted as needed.
+        - radiusAccountingStartDelay (integer): The delay (in seconds) before sending the first RADIUS accounting start message. Must be between 0 and 60 seconds.
         """
 
         kwargs.update(locals())
@@ -833,7 +834,7 @@ class ActionBatchWireless(object):
         }
         resource = f'/networks/{networkId}/wireless/ssids/{number}'
 
-        body_params = ['name', 'enabled', 'localAuth', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk', 'wpaEncryptionMode', 'dot11w', 'dot11r', 'splashPage', 'splashGuestSponsorDomains', 'oauth', 'localRadius', 'ldap', 'activeDirectory', 'radiusServers', 'radiusProxyEnabled', 'radiusTestingEnabled', 'radiusCalledStationId', 'radiusAuthenticationNasId', 'radiusServerTimeout', 'radiusServerAttemptsLimit', 'radiusFallbackEnabled', 'radiusRadsec', 'radiusCoaEnabled', 'radiusFailoverPolicy', 'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusAccountingInterimInterval', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging', 'concentratorNetworkId', 'secondaryConcentratorNetworkId', 'disassociateClientsOnVpnFailover', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 'walledGardenEnabled', 'walledGardenRanges', 'gre', 'radiusOverride', 'radiusGuestVlanEnabled', 'radiusGuestVlanId', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'perSsidBandwidthLimitUp', 'perSsidBandwidthLimitDown', 'lanIsolationEnabled', 'visible', 'availableOnAllAps', 'availabilityTags', 'adaptivePolicyGroupId', 'mandatoryDhcpEnabled', 'adultContentFilteringEnabled', 'dnsRewrite', 'speedBurst', 'namedVlans', ]
+        body_params = ['name', 'enabled', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk', 'wpaEncryptionMode', 'dot11w', 'dot11r', 'splashPage', 'splashGuestSponsorDomains', 'oauth', 'localRadius', 'ldap', 'activeDirectory', 'radiusServers', 'radiusProxyEnabled', 'radiusTestingEnabled', 'radiusCalledStationId', 'radiusAuthenticationNasId', 'radiusServerTimeout', 'radiusServerAttemptsLimit', 'radiusFallbackEnabled', 'radiusRadsec', 'radiusCoaEnabled', 'radiusFailoverPolicy', 'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusAccountingInterimInterval', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging', 'concentratorNetworkId', 'secondaryConcentratorNetworkId', 'disassociateClientsOnVpnFailover', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 'walledGardenEnabled', 'walledGardenRanges', 'gre', 'radiusOverride', 'radiusGuestVlanEnabled', 'radiusGuestVlanId', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'perSsidBandwidthLimitUp', 'perSsidBandwidthLimitDown', 'lanIsolationEnabled', 'visible', 'availableOnAllAps', 'availabilityTags', 'adaptivePolicyGroupId', 'mandatoryDhcpEnabled', 'adultContentFilteringEnabled', 'dnsRewrite', 'speedBurst', 'namedVlans', 'localAuthFallback', 'radiusAccountingStartDelay', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -956,7 +957,7 @@ class ActionBatchWireless(object):
 
         - networkId (string): Network ID
         - number (string): Number
-        - rules (array): An ordered array of the firewall rules for this SSID (not including the local LAN access rule or the default rule).
+        - rules (array): An ordered array of the firewall rules for this SSID.
         - allowLanAccess (boolean): Allow wireless client access to local LAN (boolean value - true allows access and false denies access) (optional)
         """
 
@@ -1155,6 +1156,39 @@ class ActionBatchWireless(object):
 
 
 
+    def updateNetworkWirelessSsidOpenRoaming(self, networkId: str, number: str, **kwargs):
+        """
+        **Update the OpenRoaming setting for the SSID**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-open-roaming
+
+        - networkId (string): Network ID
+        - number (string): Number
+        - enabled (boolean): If true, OpenRoaming is enabled on this SSID.
+        - tenantId (string): The OpenRoaming DNA Spaces tenant ID.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'ssids', 'openRoaming'],
+            'operation': 'updateNetworkWirelessSsidOpenRoaming'
+        }
+        resource = f'/networks/{networkId}/wireless/ssids/{number}/openRoaming'
+
+        body_params = ['enabled', 'tenantId', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
     def updateNetworkWirelessSsidSchedules(self, networkId: str, number: str, **kwargs):
         """
         **Update the outage schedule for the SSID**
@@ -1315,6 +1349,40 @@ class ActionBatchWireless(object):
 
 
 
+    def updateNetworkWirelessZigbee(self, networkId: str, **kwargs):
+        """
+        **Update Zigbee Configs for specified network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-zigbee
+
+        - networkId (string): Network ID
+        - enabled (boolean): To enable/disable Zigbee on the network
+        - iotController (object): Zigbee's IoT controller details
+        - lockManagement (object): Login Credentials of on-premises lock management
+        - defaults (object): Default Settings for Zigbee Devices
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'zigbee'],
+            'operation': 'updateNetworkWirelessZigbee'
+        }
+        resource = f'/networks/{networkId}/wireless/zigbee'
+
+        body_params = ['enabled', 'iotController', 'lockManagement', 'defaults', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
     def createOrganizationWirelessLocationScanningReceiver(self, organizationId: str, network: dict, url: str, version: str, radio: dict, sharedSecret: str):
         """
         **Add new receiver for scanning API**
@@ -1401,7 +1469,41 @@ class ActionBatchWireless(object):
 
         action = {
             "resource": resource,
-            "operation": "delete",
+            "operation": "destroy",
+        }
+        return action
+        
+
+
+
+
+
+    def updateOrganizationWirelessMqttSettings(self, organizationId: str, network: dict, mqtt: dict, **kwargs):
+        """
+        **Add new broker config for wireless MQTT**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-wireless-mqtt-settings
+
+        - organizationId (string): Organization ID
+        - network (object): Add MQTT Settings for network
+        - mqtt (object): MQTT Settings for network
+        - ble (object): MQTT BLE Settings for network
+        - wifi (object): MQTT Wi-Fi Settings for network
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'mqtt', 'settings'],
+            'operation': 'updateOrganizationWirelessMqttSettings'
+        }
+        resource = f'/organizations/{organizationId}/wireless/mqtt/settings'
+
+        body_params = ['network', 'mqtt', 'ble', 'wifi', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
         }
         return action
         
@@ -1412,7 +1514,7 @@ class ActionBatchWireless(object):
 
     def recalculateOrganizationWirelessRadioAutoRfChannels(self, organizationId: str, networkIds: list):
         """
-        **Recalculates automatically assigned channels for every AP within specified the specified network(s). Note: This could cause a brief loss in connectivity for wireless clients.**
+        **Recalculates automatically assigned channels for every AP within specified the specified network(s)**
         https://developer.cisco.com/meraki/api-v1/#!recalculate-organization-wireless-radio-auto-rf-channels
 
         - organizationId (string): Organization ID
@@ -1521,6 +1623,71 @@ class ActionBatchWireless(object):
         resource = f'/organizations/{organizationId}/wireless/ssids/firewall/isolation/allowlist/entries/{entryId}'
 
         body_params = ['description', 'client', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def updateOrganizationWirelessZigbeeDevice(self, organizationId: str, id: str, enrolled: bool, **kwargs):
+        """
+        **Endpoint to update zigbee gateways**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-wireless-zigbee-device
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        - enrolled (boolean): Parameter to enroll or unenroll the zigbee devices
+        - channel (string): The new channel for the zigbee device
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'zigbee', 'devices'],
+            'operation': 'updateOrganizationWirelessZigbeeDevice'
+        }
+        resource = f'/organizations/{organizationId}/wireless/zigbee/devices/{id}'
+
+        body_params = ['enrolled', 'channel', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def updateOrganizationWirelessZigbeeDoorLock(self, organizationId: str, doorLockId: str, **kwargs):
+        """
+        **Endpoint to batch update door locks params**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-wireless-zigbee-door-lock
+
+        - organizationId (string): Organization ID
+        - doorLockId (string): Door lock ID
+        - name (string): Door lock name to update
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'zigbee', 'doorLocks'],
+            'operation': 'updateOrganizationWirelessZigbeeDoorLock'
+        }
+        resource = f'/organizations/{organizationId}/wireless/zigbee/doorLocks/{doorLockId}'
+
+        body_params = ['name', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,

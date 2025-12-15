@@ -86,7 +86,7 @@ class ActionBatchOrganizations(object):
 
     def deleteOrganizationAdaptivePolicyAcl(self, organizationId: str, aclId: str):
         """
-        **Deletes the specified adaptive policy ACL. Note this adaptive policy ACL will also be removed from policies using it.**
+        **Deletes the specified adaptive policy ACL**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-adaptive-policy-acl
 
         - organizationId (string): Organization ID
@@ -146,7 +146,7 @@ class ActionBatchOrganizations(object):
 
     def updateOrganizationAdaptivePolicyGroup(self, organizationId: str, id: str, **kwargs):
         """
-        **Updates an adaptive policy group. If updating "Infrastructure", only the SGT is allowed. Cannot update "Unknown".**
+        **Updates an adaptive policy group**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-adaptive-policy-group
 
         - organizationId (string): Organization ID
@@ -1001,7 +1001,7 @@ class ActionBatchOrganizations(object):
 
     def assignOrganizationLicensesSeats(self, organizationId: str, licenseId: str, networkId: str, seatCount: int):
         """
-        **Assign SM seats to a network. This will increase the managed SM device limit of the network**
+        **Assign SM seats to a network**
         https://developer.cisco.com/meraki/api-v1/#!assign-organization-licenses-seats
 
         - organizationId (string): Organization ID
@@ -1034,7 +1034,7 @@ class ActionBatchOrganizations(object):
 
     def moveOrganizationLicenses(self, organizationId: str, destOrganizationId: str, licenseIds: list):
         """
-        **Move licenses to another organization. This will also move any devices that the licenses are assigned to**
+        **Move licenses to another organization**
         https://developer.cisco.com/meraki/api-v1/#!move-organization-licenses
 
         - organizationId (string): Organization ID
@@ -1099,7 +1099,7 @@ class ActionBatchOrganizations(object):
 
     def renewOrganizationLicensesSeats(self, organizationId: str, licenseIdToRenew: str, unusedLicenseId: str):
         """
-        **Renew SM seats of a license. This will extend the license expiration date of managed SM devices covered by this license**
+        **Renew SM seats of a license**
         https://developer.cisco.com/meraki/api-v1/#!renew-organization-licenses-seats
 
         - organizationId (string): Organization ID
@@ -1474,6 +1474,7 @@ class ActionBatchOrganizations(object):
 
         - organizationId (string): Organization ID
         - x509certSha1Fingerprint (string): Fingerprint (SHA1) of the SAML certificate provided by your Identity Provider (IdP). This will be used for encryption / validation.
+        - ssoLoginUrl (string): Dashboard will redirect users to this URL to log in again when their sessions expire.
         - sloLogoutUrl (string): Dashboard will redirect users to this URL when they sign out.
         """
 
@@ -1485,7 +1486,7 @@ class ActionBatchOrganizations(object):
         }
         resource = f'/organizations/{organizationId}/saml/idps'
 
-        body_params = ['x509certSha1Fingerprint', 'sloLogoutUrl', ]
+        body_params = ['x509certSha1Fingerprint', 'ssoLoginUrl', 'sloLogoutUrl', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -1507,6 +1508,7 @@ class ActionBatchOrganizations(object):
         - organizationId (string): Organization ID
         - idpId (string): Idp ID
         - x509certSha1Fingerprint (string): Fingerprint (SHA1) of the SAML certificate provided by your Identity Provider (IdP). This will be used for encryption / validation.
+        - ssoLoginUrl (string): Dashboard will redirect users to this URL to log in again when their sessions expire.
         - sloLogoutUrl (string): Dashboard will redirect users to this URL when they sign out.
         """
 
@@ -1518,7 +1520,7 @@ class ActionBatchOrganizations(object):
         }
         resource = f'/organizations/{organizationId}/saml/idps/{idpId}'
 
-        body_params = ['x509certSha1Fingerprint', 'sloLogoutUrl', ]
+        body_params = ['x509certSha1Fingerprint', 'ssoLoginUrl', 'sloLogoutUrl', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,

@@ -247,7 +247,8 @@ def generate_library(spec: dict, version_number: str, api_version_number: str, i
         "secureConnect",
         "wirelessController",
         "campusGateway",
-        "spaces"
+        "spaces",
+        "nac"
     ]
     # legacy scopes = ['organizations', 'networks', 'devices', 'appliance', 'camera', 'cellularGateway', 'insight',
     #                  'sm', 'switch', 'wireless']
