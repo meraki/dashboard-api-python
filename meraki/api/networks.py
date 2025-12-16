@@ -293,7 +293,7 @@ class Networks(object):
         - clients (string): A list of client keys, MACs or IPs separated by comma.
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - ssidNumber (integer): An SSID number to include. If not specified, eveusage histories application usagents for all SSIDs will be returned.
+        - ssidNumber (integer): An SSID number to include. If not specified, events for all SSIDs will be returned.
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
@@ -2906,7 +2906,7 @@ class Networks(object):
 
         - networkId (string): Network ID
         - url (string): The URL where the test webhook will be sent
-        - sharedSecret (string): The shared secret the test webhook will send. Optional. Defaults to an empty string.
+        - sharedSecret (string): The shared secret the test webhook will send. Optional. Defaults to HTTP server's shared secret. Otherwise, defaults to an empty string.
         - payloadTemplateId (string): The ID of the payload template of the test webhook. Defaults to the HTTP server's template ID if one exists for the given URL, or Generic template ID otherwise
         - payloadTemplateName (string): The name of the payload template.
         - alertTypeId (string): The type of alert which the test webhook will send. Optional. Defaults to power_supply_down.

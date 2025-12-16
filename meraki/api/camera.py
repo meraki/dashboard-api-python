@@ -868,13 +868,14 @@ class Camera(object):
         
 
 
-    def getOrganizationCameraDetectionsHistoryByBoundaryByInterval(self, organizationId: str, boundaryIds: list, total_pages=1, direction='next', **kwargs):
+    def getOrganizationCameraDetectionsHistoryByBoundaryByInterval(self, organizationId: str, boundaryIds: list, ranges: list, total_pages=1, direction='next', **kwargs):
         """
         **Returns analytics data for timespans**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-camera-detections-history-by-boundary-by-interval
 
         - organizationId (string): Organization ID
         - boundaryIds (array): A list of boundary ids. The returned cameras will be filtered to only include these ids.
+        - ranges (array): A list of time ranges with intervals
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - duration (integer): The minimum time, in seconds, that the person or car remains in the area to be counted. Defaults to boundary configuration or 60.
@@ -891,10 +892,10 @@ class Camera(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/camera/detections/history/byBoundary/byInterval'
 
-        query_params = ['boundaryIds', 'duration', 'perPage', 'boundaryTypes', ]
+        query_params = ['boundaryIds', 'ranges', 'duration', 'perPage', 'boundaryTypes', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['boundaryIds', 'boundaryTypes', ]
+        array_params = ['boundaryIds', 'ranges', 'boundaryTypes', ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
                 params[f'{k.strip()}[]'] = kwargs[f'{k}']

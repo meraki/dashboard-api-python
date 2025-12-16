@@ -101,7 +101,7 @@ class ActionBatchNetworks(object):
 
     def provisionNetworkClients(self, networkId: str, clients: list, devicePolicy: str, **kwargs):
         """
-        **Provisions a client with a name and policy. Clients can be provisioned before they associate to the network.**
+        **Provisions a client with a name and policy**
         https://developer.cisco.com/meraki/api-v1/#!provision-network-clients
 
         - networkId (string): Network ID
@@ -140,7 +140,7 @@ class ActionBatchNetworks(object):
 
     def claimNetworkDevices(self, networkId: str, serials: list, **kwargs):
         """
-        **Claim devices into a network. (Note: for recently claimed devices, it may take a few minutes for API requests against that device to succeed). This operation can be used up to ten times within a single five minute window.**
+        **Claim devices into a network. (Note: for recently claimed devices, it may take a few minutes for API requests against that device to succeed)**
         https://developer.cisco.com/meraki/api-v1/#!claim-network-devices
 
         - networkId (string): Network ID
@@ -958,7 +958,7 @@ class ActionBatchNetworks(object):
 
         action = {
             "resource": resource,
-            "operation": "split",
+            "operation": "create",
         }
         return action
         
@@ -988,7 +988,7 @@ class ActionBatchNetworks(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "unbind",
+            "operation": "create",
             "body": payload
         }
         return action
@@ -1095,7 +1095,7 @@ class ActionBatchNetworks(object):
 
     def deleteNetworkWebhooksPayloadTemplate(self, networkId: str, payloadTemplateId: str):
         """
-        **Destroy a webhook payload template for a network. Does not work for included templates ('wpt_00001', 'wpt_00002', 'wpt_00003', 'wpt_00004', 'wpt_00005' or 'wpt_00006')**
+        **Destroy a webhook payload template for a network**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-webhooks-payload-template
 
         - networkId (string): Network ID

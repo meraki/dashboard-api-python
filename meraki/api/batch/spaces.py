@@ -16,7 +16,7 @@ class ActionBatchSpaces(object):
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'spaces', 'integration'],
+            'tags': ['spaces', 'configure', 'integration'],
             'operation': 'removeOrganizationSpacesIntegration'
         }
         resource = f'/organizations/{organizationId}/spaces/integration/remove'

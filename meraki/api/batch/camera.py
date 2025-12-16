@@ -154,7 +154,7 @@ class ActionBatchCamera(object):
 
     def updateDeviceCameraWirelessProfiles(self, serial: str, ids: dict):
         """
-        **Assign wireless profiles to the given camera. Incremental updates are not supported, all profile assignment need to be supplied at once.**
+        **Assign wireless profiles to the given camera**
         https://developer.cisco.com/meraki/api-v1/#!update-device-camera-wireless-profiles
 
         - serial (string): Serial

@@ -136,13 +136,14 @@ class Switch(object):
         - tags (array): The list of tags of the switch port.
         - enabled (boolean): The status of the switch port.
         - poeEnabled (boolean): The PoE status of the switch port.
-        - type (string): The type of the switch port ('trunk', 'access', 'stack' or 'routed').
+        - type (string): The type of the switch port ('access', 'trunk', 'stack', 'routed', 'svl' or 'dad').
         - vlan (integer): The VLAN of the switch port. For a trunk port, this is the native VLAN. A null value will clear the value set for trunk ports.
         - voiceVlan (integer): The voice VLAN of the switch port. Only applicable to access ports.
         - allowedVlans (string): The VLANs allowed on the switch port. Only applicable to trunk ports.
         - isolationEnabled (boolean): The isolation status of the switch port.
         - rstpEnabled (boolean): The rapid spanning tree protocol status.
         - stpGuard (string): The state of the STP guard ('disabled', 'root guard', 'bpdu guard' or 'loop guard').
+        - stpPortFastTrunk (boolean): The state of STP PortFast Trunk on the switch port.
         - linkNegotiation (string): The link speed for the switch port.
         - portScheduleId (string): The ID of the port schedule. A value of null will clear the port schedule.
         - udld (string): The action to take when Unidirectional Link is detected (Alert only, Enforce). Default configuration is Alert only.
@@ -160,12 +161,13 @@ class Switch(object):
         - daiTrusted (boolean): If true, ARP packets for this port will be considered trusted, and Dynamic ARP Inspection will allow the traffic.
         - profile (object): Profile attributes
         - dot3az (object): dot3az settings for the port
+        - highSpeed (object): High speed port enablement settings for C9500-32QC
         """
 
         kwargs.update(locals())
 
         if 'type' in kwargs:
-            options = ['access', 'routed', 'stack', 'trunk']
+            options = ['access', 'dad', 'routed', 'stack', 'svl', 'trunk']
             assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
         if 'stpGuard' in kwargs:
             options = ['bpdu guard', 'disabled', 'loop guard', 'root guard']
@@ -185,7 +187,7 @@ class Switch(object):
         portId = urllib.parse.quote(str(portId), safe='')
         resource = f'/devices/{serial}/switch/ports/{portId}'
 
-        body_params = ['name', 'tags', 'enabled', 'poeEnabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'macWhitelistLimit', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', 'adaptivePolicyGroupId', 'peerSgtCapable', 'flexibleStackingEnabled', 'daiTrusted', 'profile', 'dot3az', ]
+        body_params = ['name', 'tags', 'enabled', 'poeEnabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'stpPortFastTrunk', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'macWhitelistLimit', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', 'adaptivePolicyGroupId', 'peerSgtCapable', 'flexibleStackingEnabled', 'daiTrusted', 'profile', 'dot3az', 'highSpeed', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -198,11 +200,15 @@ class Switch(object):
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-routing-interfaces
 
         - serial (string): Serial
+        - mode (string): Optional parameter to filter L3 interfaces by mode.
         - protocol (string): Optional parameter to filter L3 interfaces by protocol.
         """
 
         kwargs.update(locals())
 
+        if 'mode' in kwargs:
+            options = ['loopback', 'oob_management', 'routed', 'vlan']
+            assert kwargs['mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
         if 'protocol' in kwargs:
             options = ['ipv4', 'ipv6']
             assert kwargs['protocol'] in options, f'''"protocol" cannot be "{kwargs['protocol']}", & must be set to one of: {options}'''
@@ -214,7 +220,7 @@ class Switch(object):
         serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/switch/routing/interfaces'
 
-        query_params = ['protocol', ]
+        query_params = ['mode', 'protocol', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -228,17 +234,24 @@ class Switch(object):
 
         - serial (string): Serial
         - name (string): A friendly name or description for the interface or VLAN (max length 128 characters).
+        - mode (string): L3 Interface mode, can be one of 'vlan', 'routed', 'loopback'. Default is 'vlan'. CS 17.18 or higher is required for 'routed' mode. 
         - subnet (string): The network that this L3 interface is on, in CIDR notation (ex. 10.1.1.0/24).
+        - switchPortId (string): Switch Port ID when in Routed mode (CS 17.18 or higher required)
         - interfaceIp (string): The IP address that will be used for Layer 3 routing on this VLAN or subnet. This cannot be the same         as the device management IP.
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
         - vlanId (integer): The VLAN this L3 interface is on. VLAN must be between 1 and 4094.
         - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a L3 interface. Required if this is the first IPv4 interface.
         - ospfSettings (object): The OSPF routing settings of the interface.
         - ipv6 (object): The IPv6 settings of the interface.
+        - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
+        - loopback (object): The loopback settings of the interface.
         """
 
         kwargs.update(locals())
 
+        if 'mode' in kwargs:
+            options = ['loopback', 'oob_management', 'routed', 'vlan']
+            assert kwargs['mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
         if 'multicastRouting' in kwargs:
             options = ['IGMP snooping querier', 'disabled', 'enabled']
             assert kwargs['multicastRouting'] in options, f'''"multicastRouting" cannot be "{kwargs['multicastRouting']}", & must be set to one of: {options}'''
@@ -250,7 +263,7 @@ class Switch(object):
         serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/switch/routing/interfaces'
 
-        body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ipv6', ]
+        body_params = ['name', 'mode', 'subnet', 'switchPortId', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ipv6', 'vrf', 'loopback', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -287,12 +300,15 @@ class Switch(object):
         - interfaceId (string): Interface ID
         - name (string): A friendly name or description for the interface or VLAN (max length 128 characters).
         - subnet (string): The network that this L3 interface is on, in CIDR notation (ex. 10.1.1.0/24).
+        - switchPortId (string): Switch Port ID when in Routed mode (CS 17.18 or higher required)
         - interfaceIp (string): The IP address that will be used for Layer 3 routing on this VLAN or subnet. This cannot be the same         as the device management IP.
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
         - vlanId (integer): The VLAN this L3 interface is on. VLAN must be between 1 and 4094.
         - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a L3 interface. Required if this is the first IPv4 interface.
         - ospfSettings (object): The OSPF routing settings of the interface.
         - ipv6 (object): The IPv6 settings of the interface.
+        - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
+        - loopback (object): The loopback settings of the interface.
         """
 
         kwargs.update(locals())
@@ -309,7 +325,7 @@ class Switch(object):
         interfaceId = urllib.parse.quote(str(interfaceId), safe='')
         resource = f'/devices/{serial}/switch/routing/interfaces/{interfaceId}'
 
-        body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ipv6', ]
+        body_params = ['name', 'subnet', 'switchPortId', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ipv6', 'vrf', 'loopback', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -440,6 +456,7 @@ class Switch(object):
         - name (string): Name or description for layer 3 static route
         - advertiseViaOspfEnabled (boolean): Option to advertise static route via OSPF
         - preferOverOspfRoutesEnabled (boolean): Option to prefer static route over OSPF routes
+        - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
         """
 
         kwargs.update(locals())
@@ -451,7 +468,7 @@ class Switch(object):
         serial = urllib.parse.quote(str(serial), safe='')
         resource = f'/devices/{serial}/switch/routing/staticRoutes'
 
-        body_params = ['name', 'subnet', 'nextHopIp', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', ]
+        body_params = ['name', 'subnet', 'nextHopIp', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', 'vrf', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -492,6 +509,7 @@ class Switch(object):
         - managementNextHop (string): Optional fallback IP address for management traffic
         - advertiseViaOspfEnabled (boolean): Option to advertise static route via OSPF
         - preferOverOspfRoutesEnabled (boolean): Option to prefer static route over OSPF routes
+        - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
         """
 
         kwargs.update(locals())
@@ -504,7 +522,7 @@ class Switch(object):
         staticRouteId = urllib.parse.quote(str(staticRouteId), safe='')
         resource = f'/devices/{serial}/switch/routing/staticRoutes/{staticRouteId}'
 
-        body_params = ['name', 'subnet', 'nextHopIp', 'managementNextHop', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', ]
+        body_params = ['name', 'subnet', 'nextHopIp', 'managementNextHop', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', 'vrf', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -640,7 +658,7 @@ class Switch(object):
         
 
 
-    def createNetworkSwitchAccessPolicy(self, networkId: str, name: str, radiusServers: list, radiusTestingEnabled: bool, radiusCoaSupportEnabled: bool, radiusAccountingEnabled: bool, hostMode: str, urlRedirectWalledGardenEnabled: bool, **kwargs):
+    def createNetworkSwitchAccessPolicy(self, networkId: str, name: str, radiusServers: list, radiusAccountingEnabled: bool, **kwargs):
         """
         **Create an access policy for a switch network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-access-policy
@@ -648,21 +666,23 @@ class Switch(object):
         - networkId (string): Network ID
         - name (string): Name of the access policy(max length 255)
         - radiusServers (array): List of RADIUS servers to require connecting devices to authenticate against before granting network access
-        - radiusTestingEnabled (boolean): If enabled, Meraki devices will periodically send access-request messages to these RADIUS servers
-        - radiusCoaSupportEnabled (boolean): Change of authentication for RADIUS re-authentication and disconnection
         - radiusAccountingEnabled (boolean): Enable to send start, interim-update and stop messages to a configured RADIUS accounting server for tracking connected clients
-        - hostMode (string): Choose the Host Mode for the access policy.
-        - urlRedirectWalledGardenEnabled (boolean): Enable to restrict access for clients to a specific set of IP addresses or hostnames prior to authentication
         - radius (object): Object for RADIUS Settings
         - guestPortBouncing (boolean): If enabled, Meraki devices will periodically send access-request messages to these RADIUS servers
+        - radiusTestingEnabled (boolean): If enabled, Meraki devices will periodically send access-request messages to these RADIUS servers
+        - radiusCoaSupportEnabled (boolean): Change of authentication for RADIUS re-authentication and disconnection
         - radiusAccountingServers (array): List of RADIUS accounting servers to require connecting devices to authenticate against before granting network access
         - radiusGroupAttribute (string): Acceptable values are `""` for None, or `"11"` for Group Policies ACL
+        - hostMode (string): Choose the Host Mode for the access policy.
         - accessPolicyType (string): Access Type of the policy. Automatically 'Hybrid authentication' when hostMode is 'Multi-Domain'.
         - increaseAccessSpeed (boolean): Enabling this option will make switches execute 802.1X and MAC-bypass authentication simultaneously so that clients authenticate faster. Only required when accessPolicyType is 'Hybrid Authentication.
         - guestVlanId (integer): ID for the guest VLAN allow unauthorized devices access to limited network resources
         - dot1x (object): 802.1x Settings
         - voiceVlanClients (boolean): CDP/LLDP capable voice clients will be able to use this VLAN. Automatically true when hostMode is 'Multi-Domain'.
+        - urlRedirectWalledGardenEnabled (boolean): Enable to restrict access for clients to a specific set of IP addresses or hostnames prior to authentication
         - urlRedirectWalledGardenRanges (array): IP address ranges, in CIDR notation, to restrict access for clients to a specific set of IP addresses or hostnames prior to authentication
+        - guestGroupPolicyId (string): Group policy Number for guest group policy
+        - guestSgtId (integer): Security Group Tag ID for guest group policy
         """
 
         kwargs.update(locals())
@@ -681,7 +701,7 @@ class Switch(object):
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/switch/accessPolicies'
 
-        body_params = ['name', 'radiusServers', 'radius', 'guestPortBouncing', 'radiusTestingEnabled', 'radiusCoaSupportEnabled', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusGroupAttribute', 'hostMode', 'accessPolicyType', 'increaseAccessSpeed', 'guestVlanId', 'dot1x', 'voiceVlanClients', 'urlRedirectWalledGardenEnabled', 'urlRedirectWalledGardenRanges', ]
+        body_params = ['name', 'radiusServers', 'radius', 'guestPortBouncing', 'radiusTestingEnabled', 'radiusCoaSupportEnabled', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusGroupAttribute', 'hostMode', 'accessPolicyType', 'increaseAccessSpeed', 'guestVlanId', 'dot1x', 'voiceVlanClients', 'urlRedirectWalledGardenEnabled', 'urlRedirectWalledGardenRanges', 'guestGroupPolicyId', 'guestSgtId', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -733,6 +753,8 @@ class Switch(object):
         - voiceVlanClients (boolean): CDP/LLDP capable voice clients will be able to use this VLAN. Automatically true when hostMode is 'Multi-Domain'.
         - urlRedirectWalledGardenEnabled (boolean): Enable to restrict access for clients to a specific set of IP addresses or hostnames prior to authentication
         - urlRedirectWalledGardenRanges (array): IP address ranges, in CIDR notation, to restrict access for clients to a specific set of IP addresses or hostnames prior to authentication
+        - guestGroupPolicyId (string): Group policy Number for guest group policy
+        - guestSgtId (integer): Security Group Tag ID for guest group policy
         """
 
         kwargs.update(locals())
@@ -752,7 +774,7 @@ class Switch(object):
         accessPolicyNumber = urllib.parse.quote(str(accessPolicyNumber), safe='')
         resource = f'/networks/{networkId}/switch/accessPolicies/{accessPolicyNumber}'
 
-        body_params = ['name', 'radiusServers', 'radius', 'guestPortBouncing', 'radiusTestingEnabled', 'radiusCoaSupportEnabled', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusGroupAttribute', 'hostMode', 'accessPolicyType', 'increaseAccessSpeed', 'guestVlanId', 'dot1x', 'voiceVlanClients', 'urlRedirectWalledGardenEnabled', 'urlRedirectWalledGardenRanges', ]
+        body_params = ['name', 'radiusServers', 'radius', 'guestPortBouncing', 'radiusTestingEnabled', 'radiusCoaSupportEnabled', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusGroupAttribute', 'hostMode', 'accessPolicyType', 'increaseAccessSpeed', 'guestVlanId', 'dot1x', 'voiceVlanClients', 'urlRedirectWalledGardenEnabled', 'urlRedirectWalledGardenRanges', 'guestGroupPolicyId', 'guestSgtId', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1569,7 +1591,7 @@ class Switch(object):
         
 
 
-    def createNetworkSwitchRoutingMulticastRendezvousPoint(self, networkId: str, interfaceIp: str, multicastGroup: str):
+    def createNetworkSwitchRoutingMulticastRendezvousPoint(self, networkId: str, interfaceIp: str, multicastGroup: str, **kwargs):
         """
         **Create a multicast rendezvous point**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-routing-multicast-rendezvous-point
@@ -1577,9 +1599,10 @@ class Switch(object):
         - networkId (string): Network ID
         - interfaceIp (string): The IP address of the interface where the RP needs to be created.
         - multicastGroup (string): 'Any', or the IP address of a multicast group
+        - vrf (object): The VRF with PIM enabled L3 interface
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         metadata = {
             'tags': ['switch', 'configure', 'routing', 'multicast', 'rendezvousPoints'],
@@ -1588,7 +1611,7 @@ class Switch(object):
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/switch/routing/multicast/rendezvousPoints'
 
-        body_params = ['interfaceIp', 'multicastGroup', ]
+        body_params = ['interfaceIp', 'multicastGroup', 'vrf', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -1637,7 +1660,7 @@ class Switch(object):
         
 
 
-    def updateNetworkSwitchRoutingMulticastRendezvousPoint(self, networkId: str, rendezvousPointId: str, interfaceIp: str, multicastGroup: str):
+    def updateNetworkSwitchRoutingMulticastRendezvousPoint(self, networkId: str, rendezvousPointId: str, interfaceIp: str, multicastGroup: str, **kwargs):
         """
         **Update a multicast rendezvous point**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-routing-multicast-rendezvous-point
@@ -1646,9 +1669,10 @@ class Switch(object):
         - rendezvousPointId (string): Rendezvous point ID
         - interfaceIp (string): The IP address of the interface where the RP needs to be created.
         - multicastGroup (string): 'Any', or the IP address of a multicast group
+        - vrf (object): The VRF with PIM enabled L3 interface
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         metadata = {
             'tags': ['switch', 'configure', 'routing', 'multicast', 'rendezvousPoints'],
@@ -1658,20 +1682,23 @@ class Switch(object):
         rendezvousPointId = urllib.parse.quote(str(rendezvousPointId), safe='')
         resource = f'/networks/{networkId}/switch/routing/multicast/rendezvousPoints/{rendezvousPointId}'
 
-        body_params = ['interfaceIp', 'multicastGroup', ]
+        body_params = ['interfaceIp', 'multicastGroup', 'vrf', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
         
 
 
-    def getNetworkSwitchRoutingOspf(self, networkId: str):
+    def getNetworkSwitchRoutingOspf(self, networkId: str, **kwargs):
         """
         **Return layer 3 OSPF routing configuration**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-routing-ospf
 
         - networkId (string): Network ID
+        - vrf (string): The VRF to return the OSPF routing configuration for. When not provided, the default VRF is used. Included on networks with IOS XE 17.18 or higher
         """
+
+        kwargs.update(locals())
 
         metadata = {
             'tags': ['switch', 'configure', 'routing', 'ospf'],
@@ -1680,7 +1707,10 @@ class Switch(object):
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/switch/routing/ospf'
 
-        return self._session.get(metadata, resource)
+        query_params = ['vrf', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get(metadata, resource, params)
         
 
 
@@ -1690,6 +1720,7 @@ class Switch(object):
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-routing-ospf
 
         - networkId (string): Network ID
+        - vrf (string): The VRF to return the OSPF routing configuration for. When not provided, the default VRF is used. Requires IOS XE 17.18 or higher
         - enabled (boolean): Boolean value to enable or disable OSPF routing. OSPF routing is disabled by default.
         - helloTimerInSeconds (integer): Time interval in seconds at which hello packet will be sent to OSPF neighbors to maintain connectivity. Value must be between 1 and 255. Default is 10 seconds.
         - deadTimerInSeconds (integer): Time interval to determine when the peer will be declared inactive/dead. Value must be between 1 and 65535
@@ -1745,6 +1776,7 @@ class Switch(object):
         - powerExceptions (array): Exceptions on a per switch basis to "useCombinedPower"
         - uplinkClientSampling (object): Uplink client sampling
         - macBlocklist (object): MAC blocklist
+        - uplinkSelection (object): Settings related to uplink selection on IOS-XE switches.
         """
 
         kwargs.update(locals())
@@ -1756,7 +1788,7 @@ class Switch(object):
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/switch/settings'
 
-        body_params = ['vlan', 'useCombinedPower', 'powerExceptions', 'uplinkClientSampling', 'macBlocklist', ]
+        body_params = ['vlan', 'useCombinedPower', 'powerExceptions', 'uplinkClientSampling', 'macBlocklist', 'uplinkSelection', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -1911,11 +1943,15 @@ class Switch(object):
 
         - networkId (string): Network ID
         - switchStackId (string): Switch stack ID
+        - mode (string): Optional parameter to filter L3 interfaces by mode.
         - protocol (string): Optional parameter to filter L3 interfaces by protocol.
         """
 
         kwargs.update(locals())
 
+        if 'mode' in kwargs:
+            options = ['loopback', 'oob_management', 'routed', 'vlan']
+            assert kwargs['mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
         if 'protocol' in kwargs:
             options = ['ipv4', 'ipv6']
             assert kwargs['protocol'] in options, f'''"protocol" cannot be "{kwargs['protocol']}", & must be set to one of: {options}'''
@@ -1928,7 +1964,7 @@ class Switch(object):
         switchStackId = urllib.parse.quote(str(switchStackId), safe='')
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces'
 
-        query_params = ['protocol', ]
+        query_params = ['mode', 'protocol', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
@@ -1943,17 +1979,24 @@ class Switch(object):
         - networkId (string): Network ID
         - switchStackId (string): Switch stack ID
         - name (string): A friendly name or description for the interface or VLAN (max length 128 characters).
+        - mode (string): L3 Interface mode, can be one of 'vlan', 'routed', 'loopback'. Default is 'vlan'. CS 17.18 or higher is required for 'routed' mode. 
         - subnet (string): The network that this L3 interface is on, in CIDR notation (ex. 10.1.1.0/24).
+        - switchPortId (string): Switch Port ID when in Routed mode (CS 17.18 or higher required)
         - interfaceIp (string): The IP address that will be used for Layer 3 routing on this VLAN or subnet. This cannot be the same         as the device management IP.
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
         - vlanId (integer): The VLAN this L3 interface is on. VLAN must be between 1 and 4094.
         - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a L3 interface. Required if this is the first IPv4 interface.
         - ospfSettings (object): The OSPF routing settings of the interface.
         - ipv6 (object): The IPv6 settings of the interface.
+        - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
+        - loopback (object): The loopback settings of the interface.
         """
 
         kwargs.update(locals())
 
+        if 'mode' in kwargs:
+            options = ['loopback', 'oob_management', 'routed', 'vlan']
+            assert kwargs['mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
         if 'multicastRouting' in kwargs:
             options = ['IGMP snooping querier', 'disabled', 'enabled']
             assert kwargs['multicastRouting'] in options, f'''"multicastRouting" cannot be "{kwargs['multicastRouting']}", & must be set to one of: {options}'''
@@ -1966,7 +2009,7 @@ class Switch(object):
         switchStackId = urllib.parse.quote(str(switchStackId), safe='')
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces'
 
-        body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ipv6', ]
+        body_params = ['name', 'mode', 'subnet', 'switchPortId', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ipv6', 'vrf', 'loopback', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -2006,12 +2049,15 @@ class Switch(object):
         - interfaceId (string): Interface ID
         - name (string): A friendly name or description for the interface or VLAN (max length 128 characters).
         - subnet (string): The network that this L3 interface is on, in CIDR notation (ex. 10.1.1.0/24).
+        - switchPortId (string): Switch Port ID when in Routed mode (CS 17.18 or higher required)
         - interfaceIp (string): The IP address that will be used for Layer 3 routing on this VLAN or subnet. This cannot be the same         as the device management IP.
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
         - vlanId (integer): The VLAN this L3 interface is on. VLAN must be between 1 and 4094.
         - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a L3 interface. Required if this is the first IPv4 interface.
         - ospfSettings (object): The OSPF routing settings of the interface.
         - ipv6 (object): The IPv6 settings of the interface.
+        - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
+        - loopback (object): The loopback settings of the interface.
         """
 
         kwargs.update(locals())
@@ -2029,7 +2075,7 @@ class Switch(object):
         interfaceId = urllib.parse.quote(str(interfaceId), safe='')
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}'
 
-        body_params = ['name', 'subnet', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ipv6', ]
+        body_params = ['name', 'subnet', 'switchPortId', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ipv6', 'vrf', 'loopback', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -2170,6 +2216,7 @@ class Switch(object):
         - name (string): Name or description for layer 3 static route
         - advertiseViaOspfEnabled (boolean): Option to advertise static route via OSPF
         - preferOverOspfRoutesEnabled (boolean): Option to prefer static route over OSPF routes
+        - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
         """
 
         kwargs.update(locals())
@@ -2182,7 +2229,7 @@ class Switch(object):
         switchStackId = urllib.parse.quote(str(switchStackId), safe='')
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes'
 
-        body_params = ['name', 'subnet', 'nextHopIp', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', ]
+        body_params = ['name', 'subnet', 'nextHopIp', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', 'vrf', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -2226,6 +2273,7 @@ class Switch(object):
         - managementNextHop (string): Optional fallback IP address for management traffic
         - advertiseViaOspfEnabled (boolean): Option to advertise static route via OSPF
         - preferOverOspfRoutesEnabled (boolean): Option to prefer static route over OSPF routes
+        - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
         """
 
         kwargs.update(locals())
@@ -2239,7 +2287,7 @@ class Switch(object):
         staticRouteId = urllib.parse.quote(str(staticRouteId), safe='')
         resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes/{staticRouteId}'
 
-        body_params = ['name', 'subnet', 'nextHopIp', 'managementNextHop', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', ]
+        body_params = ['name', 'subnet', 'nextHopIp', 'managementNextHop', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', 'vrf', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -2443,13 +2491,14 @@ class Switch(object):
         - tags (array): The list of tags of the switch template port.
         - enabled (boolean): The status of the switch template port.
         - poeEnabled (boolean): The PoE status of the switch template port.
-        - type (string): The type of the switch template port ('trunk', 'access', 'stack' or 'routed').
+        - type (string): The type of the switch template port ('access', 'trunk', 'stack', 'routed', 'svl' or 'dad').
         - vlan (integer): The VLAN of the switch template port. For a trunk port, this is the native VLAN. A null value will clear the value set for trunk ports.
         - voiceVlan (integer): The voice VLAN of the switch template port. Only applicable to access ports.
         - allowedVlans (string): The VLANs allowed on the switch template port. Only applicable to trunk ports.
         - isolationEnabled (boolean): The isolation status of the switch template port.
         - rstpEnabled (boolean): The rapid spanning tree protocol status.
         - stpGuard (string): The state of the STP guard ('disabled', 'root guard', 'bpdu guard' or 'loop guard').
+        - stpPortFastTrunk (boolean): The state of STP PortFast Trunk on the switch template port.
         - linkNegotiation (string): The link speed for the switch template port.
         - portScheduleId (string): The ID of the port schedule. A value of null will clear the port schedule.
         - udld (string): The action to take when Unidirectional Link is detected (Alert only, Enforce). Default configuration is Alert only.
@@ -2465,12 +2514,13 @@ class Switch(object):
         - daiTrusted (boolean): If true, ARP packets for this port will be considered trusted, and Dynamic ARP Inspection will allow the traffic.
         - profile (object): Profile attributes
         - dot3az (object): dot3az settings for the port
+        - highSpeed (object): High speed port enablement settings for C9500-32QC
         """
 
         kwargs.update(locals())
 
         if 'type' in kwargs:
-            options = ['access', 'routed', 'stack', 'trunk']
+            options = ['access', 'dad', 'routed', 'stack', 'svl', 'trunk']
             assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
         if 'stpGuard' in kwargs:
             options = ['bpdu guard', 'disabled', 'loop guard', 'root guard']
@@ -2492,7 +2542,7 @@ class Switch(object):
         portId = urllib.parse.quote(str(portId), safe='')
         resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles/{profileId}/ports/{portId}'
 
-        body_params = ['name', 'tags', 'enabled', 'poeEnabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'macWhitelistLimit', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', 'flexibleStackingEnabled', 'daiTrusted', 'profile', 'dot3az', ]
+        body_params = ['name', 'tags', 'enabled', 'poeEnabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'stpPortFastTrunk', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'macWhitelistLimit', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', 'flexibleStackingEnabled', 'daiTrusted', 'profile', 'dot3az', 'highSpeed', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)

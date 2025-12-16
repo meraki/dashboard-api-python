@@ -196,7 +196,8 @@ def main():
         "secureConnect",
         "wirelessController",
         "campusGateway",
-        "spaces"
+        "spaces",
+        "nac"
     ]
     # legacy scopes = ['organizations', 'networks', 'devices',
     #           'appliance', 'camera', 'cellularGateway', 'insight', 'sm', 'switch', 'wireless']

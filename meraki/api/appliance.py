@@ -446,7 +446,7 @@ class Appliance(object):
         - networkId (string): Network ID
         - service (string): Service
         - access (string): A string indicating the rule for which IPs are allowed to use the specified service. Acceptable values are "blocked" (no remote IPs can access the service), "restricted" (only allowed IPs can access the service), and "unrestriced" (any remote IP can access the service). This field is required
-        - allowedIps (array): An array of allowed IPs that can access the service. This field is required if "access" is set to "restricted". Otherwise this field is ignored
+        - allowedIps (array): An array of allowed CIDRs that can access the service. This field is required if "access" is set to "restricted". Otherwise this field is ignored
         """
 
         kwargs.update(locals())
@@ -1931,7 +1931,7 @@ class Appliance(object):
 
         - networkId (string): Network ID
         - activeActiveAutoVpnEnabled (boolean): Toggle for enabling or disabling active-active AutoVPN
-        - defaultUplink (string): The default uplink. Must be one of: 'wan1' or 'wan2'
+        - defaultUplink (string): The default uplink. Must be a WAN interface 'wanX'
         - loadBalancingEnabled (boolean): Toggle for enabling or disabling load balancing
         - failoverAndFailback (object): WAN failover and failback behavior
         - wanTrafficUplinkPreferences (array): Array of uplink preference rules for WAN traffic
@@ -2014,7 +2014,7 @@ class Appliance(object):
 
     def getNetworkApplianceVlans(self, networkId: str):
         """
-        **List the VLANs for an MX network**
+        **List the VLANs for a Cisco Secure Router network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-vlans
 
         - networkId (string): Network ID
@@ -2157,7 +2157,7 @@ class Appliance(object):
         - groupPolicyId (string): The id of the desired group policy to apply to the VLAN
         - vpnNatSubnet (string): The translated VPN subnet if VPN and VPN subnet translation are enabled on the VLAN
         - dhcpHandling (string): The appliance's handling of DHCP requests on this VLAN. One of: 'Run a DHCP server', 'Relay DHCP to another server' or 'Do not respond to DHCP requests'
-        - dhcpRelayServerIps (array): The IPs of the DHCP servers that DHCP requests should be relayed to
+        - dhcpRelayServerIps (array): The IPs (IPv4) of the DHCP servers that DHCP requests should be relayed to. CIDR/subnet notation and hostnames are not supported.
         - dhcpLeaseTime (string): The term of DHCP leases if the appliance is running a DHCP server on this VLAN. One of: '30 minutes', '1 hour', '4 hours', '12 hours', '1 day' or '1 week'
         - dhcpBootOptionsEnabled (boolean): Use DHCP boot options specified in other properties
         - dhcpBootNextServer (string): DHCP boot option to direct boot clients to the server to load the boot file from
@@ -3061,13 +3061,16 @@ class Appliance(object):
         
 
 
-    def getOrganizationApplianceUplinksStatusesOverview(self, organizationId: str):
+    def getOrganizationApplianceUplinksStatusesOverview(self, organizationId: str, **kwargs):
         """
         **Returns an overview of uplink statuses**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-uplinks-statuses-overview
 
         - organizationId (string): Organization ID
+        - networkIds (array): A list of network IDs. The returned devices will be filtered to only include these networks.
         """
+
+        kwargs.update(locals())
 
         metadata = {
             'tags': ['appliance', 'monitor', 'uplinks', 'statuses', 'overview'],
@@ -3076,7 +3079,16 @@ class Appliance(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/appliance/uplinks/statuses/overview'
 
-        return self._session.get(metadata, resource)
+        query_params = ['networkIds', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get(metadata, resource, params)
         
 
 
@@ -3104,6 +3116,50 @@ class Appliance(object):
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
+        
+
+
+    def getOrganizationApplianceVpnSiteToSiteIpsecPeersSlas(self, organizationId: str):
+        """
+        **Get the list of available IPsec SLA policies for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-vpn-site-to-site-ipsec-peers-slas
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'vpn', 'siteToSite', 'ipsec', 'peers', 'slas'],
+            'operation': 'getOrganizationApplianceVpnSiteToSiteIpsecPeersSlas'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/appliance/vpn/siteToSite/ipsec/peers/slas'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def updateOrganizationApplianceVpnSiteToSiteIpsecPeersSlas(self, organizationId: str, **kwargs):
+        """
+        **Update the IPsec SLA policies for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-appliance-vpn-site-to-site-ipsec-peers-slas
+
+        - organizationId (string): Organization ID
+        - items (array): List of IPsec SLA policies
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'vpn', 'siteToSite', 'ipsec', 'peers', 'slas'],
+            'operation': 'updateOrganizationApplianceVpnSiteToSiteIpsecPeersSlas'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/appliance/vpn/siteToSite/ipsec/peers/slas'
+
+        body_params = ['items', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
         
 
 

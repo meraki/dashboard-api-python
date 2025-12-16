@@ -345,6 +345,52 @@ class AsyncDevices:
         
 
 
+    def createDeviceLiveToolsMulticastRouting(self, serial: str, **kwargs):
+        """
+        **Enqueue a job to perform a Multicast routing request for the device**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-multicast-routing
+
+        - serial (string): Serial
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['devices', 'liveTools', 'multicastRouting'],
+            'operation': 'createDeviceLiveToolsMulticastRouting'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        resource = f'/devices/{serial}/liveTools/multicastRouting'
+
+        body_params = ['callback', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getDeviceLiveToolsMulticastRouting(self, serial: str, multicastRoutingId: str):
+        """
+        **Return a Multicast routing live tool job.**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-live-tools-multicast-routing
+
+        - serial (string): Serial
+        - multicastRoutingId (string): Multicast routing ID
+        """
+
+        metadata = {
+            'tags': ['devices', 'liveTools', 'multicastRouting'],
+            'operation': 'getDeviceLiveToolsMulticastRouting'
+        }
+        serial = urllib.parse.quote(str(serial), safe='')
+        multicastRoutingId = urllib.parse.quote(str(multicastRoutingId), safe='')
+        resource = f'/devices/{serial}/liveTools/multicastRouting/{multicastRoutingId}'
+
+        return self._session.get(metadata, resource)
+        
+
+
     def createDeviceLiveToolsPing(self, serial: str, target: str, **kwargs):
         """
         **Enqueue a job to ping a target host from the device**

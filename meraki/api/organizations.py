@@ -1358,6 +1358,44 @@ class Organizations(object):
         
 
 
+    def getOrganizationAssuranceAlertsTaxonomyCategories(self, organizationId: str):
+        """
+        **Return a list of Category Types**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-alerts-taxonomy-categories
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            'tags': ['organizations', 'monitor', 'alerts', 'taxonomy', 'categories'],
+            'operation': 'getOrganizationAssuranceAlertsTaxonomyCategories'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/assurance/alerts/taxonomy/categories'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def getOrganizationAssuranceAlertsTaxonomyTypes(self, organizationId: str):
+        """
+        **Return a list of alert types**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-alerts-taxonomy-types
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            'tags': ['organizations', 'monitor', 'alerts', 'taxonomy', 'types'],
+            'operation': 'getOrganizationAssuranceAlertsTaxonomyTypes'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/assurance/alerts/taxonomy/types'
+
+        return self._session.get(metadata, resource)
+        
+
+
     def getOrganizationAssuranceAlert(self, organizationId: str, id: str):
         """
         **Return a singular Health Alert by its id**
@@ -1851,7 +1889,7 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 5000. Default is 1000.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - configurationUpdatedAfter (string): Filter results by whether or not the device's configuration has been updated after the given timestamp
@@ -2132,6 +2170,9 @@ class Organizations(object):
         - notes (string): Return the packet captures matching the specified notes
         - deviceName (string): Return the packet captures matching the specified device name
         - adminName (string): Return the packet captures matching the admin name
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 365 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 365 days. The default is 365 days.
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 10.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
@@ -2151,7 +2192,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/devices/packetCapture/captures'
 
-        query_params = ['captureIds', 'networkIds', 'serials', 'process', 'captureStatus', 'name', 'clientMac', 'notes', 'deviceName', 'adminName', 'perPage', 'startingAfter', 'endingBefore', 'sortOrder', ]
+        query_params = ['captureIds', 'networkIds', 'serials', 'process', 'captureStatus', 'name', 'clientMac', 'notes', 'deviceName', 'adminName', 't0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'sortOrder', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['captureIds', 'networkIds', 'serials', 'process', 'captureStatus', 'name', 'clientMac', ]
@@ -2939,7 +2980,8 @@ class Organizations(object):
         - macs (array): Optional parameter to filter by one or more MAC addresses belonging to devices. All devices returned belong to MAC addresses that are an exact match.
         - firmwareUpgradeBatchIds (array): Optional parameter to filter by firmware upgrade batch ids.
         - upgradeStatuses (array): Optional parameter to filter by firmware upgrade statuses.
-        - currentUpgradesOnly (boolean): Optional parameter to filter to only current or pending upgrade statuses
+        - currentUpgradesOnly (boolean): Optional parameter to filter to only current or pending upgrade statuses.
+        - limitPerDevice (integer): Optional parameter to limit the number of upgrade statuses returned per device. If omitted, a value of 5 is used.
         """
 
         kwargs.update(locals())
@@ -2951,7 +2993,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/firmware/upgrades/byDevice'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'serials', 'macs', 'firmwareUpgradeBatchIds', 'upgradeStatuses', 'currentUpgradesOnly', ]
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'serials', 'macs', 'firmwareUpgradeBatchIds', 'upgradeStatuses', 'currentUpgradesOnly', 'limitPerDevice', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = ['networkIds', 'serials', 'macs', 'firmwareUpgradeBatchIds', 'upgradeStatuses', ]
@@ -3836,6 +3878,45 @@ class Organizations(object):
         
 
 
+    def getOrganizationPoliciesAssignmentsByClient(self, organizationId: str, networkIds: list, total_pages=1, direction='next', **kwargs):
+        """
+        **Get policies for all clients with policies**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-policies-assignments-by-client
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Network Ids (minimum: 1, maximum: 30)
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        - includeUndetectedClients (boolean): Include provisioned clients that have not associated to the network. Default: false
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'policies', 'assignments', 'byClient'],
+            'operation': 'getOrganizationPoliciesAssignmentsByClient'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/policies/assignments/byClient'
+
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 't0', 'timespan', 'includeUndetectedClients', 'networkIds', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
     def getOrganizationPolicyObjects(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **Lists Policy Objects belonging to the organization.**
@@ -4123,6 +4204,7 @@ class Organizations(object):
 
         - organizationId (string): Organization ID
         - enabled (boolean): Boolean for updating SAML SSO enabled settings.
+        - spInitiated (object): SP-Initiated SSO settings
         """
 
         kwargs.update(locals())
@@ -4134,7 +4216,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/saml'
 
-        body_params = ['enabled', ]
+        body_params = ['enabled', 'spInitiated', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -4167,6 +4249,7 @@ class Organizations(object):
 
         - organizationId (string): Organization ID
         - x509certSha1Fingerprint (string): Fingerprint (SHA1) of the SAML certificate provided by your Identity Provider (IdP). This will be used for encryption / validation.
+        - ssoLoginUrl (string): Dashboard will redirect users to this URL to log in again when their sessions expire.
         - sloLogoutUrl (string): Dashboard will redirect users to this URL when they sign out.
         """
 
@@ -4179,7 +4262,7 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/saml/idps'
 
-        body_params = ['x509certSha1Fingerprint', 'sloLogoutUrl', ]
+        body_params = ['x509certSha1Fingerprint', 'ssoLoginUrl', 'sloLogoutUrl', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -4194,6 +4277,7 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - idpId (string): Idp ID
         - x509certSha1Fingerprint (string): Fingerprint (SHA1) of the SAML certificate provided by your Identity Provider (IdP). This will be used for encryption / validation.
+        - ssoLoginUrl (string): Dashboard will redirect users to this URL to log in again when their sessions expire.
         - sloLogoutUrl (string): Dashboard will redirect users to this URL when they sign out.
         """
 
@@ -4207,7 +4291,7 @@ class Organizations(object):
         idpId = urllib.parse.quote(str(idpId), safe='')
         resource = f'/organizations/{organizationId}/saml/idps/{idpId}'
 
-        body_params = ['x509certSha1Fingerprint', 'sloLogoutUrl', ]
+        body_params = ['x509certSha1Fingerprint', 'ssoLoginUrl', 'sloLogoutUrl', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -4282,7 +4366,7 @@ class Organizations(object):
 
         - organizationId (string): Organization ID
         - role (string): The role of the SAML administrator
-        - orgAccess (string): The privilege of the SAML administrator on the organization. Can be one of 'none', 'read-only', 'full' or 'enterprise'
+        - orgAccess (string): The privilege of the SAML administrator on the organization. Can be one of 'none', 'read-only', 'full' or 'enterprise' or a custom role in the format custom-role:ID:NAME.
         - tags (array): The list of tags that the SAML administrator has privileges on
         - networks (array): The list of networks that the SAML administrator has privileges on
         """
@@ -4336,7 +4420,7 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - samlRoleId (string): Saml role ID
         - role (string): The role of the SAML administrator
-        - orgAccess (string): The privilege of the SAML administrator on the organization. Can be one of 'none', 'read-only', 'full' or 'enterprise'
+        - orgAccess (string): The privilege of the SAML administrator on the organization. Can be one of 'none', 'read-only', 'full' or 'enterprise' or a custom role in the format custom-role:ID:NAME.
         - tags (array): The list of tags that the SAML administrator has privileges on
         - networks (array): The list of networks that the SAML administrator has privileges on
         """
@@ -4584,7 +4668,7 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - networkTag (string): Match result to an exact network tag
         - deviceTag (string): Match result to an exact device tag
-        - quantity (integer): Set number of desired results to return. Default is 10.
+        - quantity (integer): Set number of desired results to return. Default is 10. Maximum is 50
         - ssidName (string): Filter results by ssid name
         - usageUplink (string): Filter results by usage uplink
         - t0 (string): The beginning of the timespan for the data.
@@ -4617,7 +4701,7 @@ class Organizations(object):
         - networkTag (string): Match result to an exact network tag
         - device (string): Match result to an exact device tag
         - networkId (string): Match result to an exact network id
-        - quantity (integer): Set number of desired results to return. Default is 10.
+        - quantity (integer): Set number of desired results to return. Default is 10. Maximum is 50
         - ssidName (string): Filter results by ssid name
         - usageUplink (string): Filter results by usage uplink
         - t0 (string): The beginning of the timespan for the data.
@@ -4650,7 +4734,7 @@ class Organizations(object):
         - networkTag (string): Match result to an exact network tag
         - deviceTag (string): Match result to an exact device tag
         - networkId (string): Match result to an exact network id
-        - quantity (integer): Set number of desired results to return. Default is 10.
+        - quantity (integer): Set number of desired results to return. Default is 10. Maximum is 50
         - ssidName (string): Filter results by ssid name
         - usageUplink (string): Filter results by usage uplink
         - t0 (string): The beginning of the timespan for the data.
@@ -4682,7 +4766,7 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - networkTag (string): Match result to an exact network tag
         - deviceTag (string): Match result to an exact device tag
-        - quantity (integer): Set number of desired results to return. Default is 10.
+        - quantity (integer): Set number of desired results to return. Default is 10. Maximum is 50
         - ssidName (string): Filter results by ssid name
         - usageUplink (string): Filter results by usage uplink
         - t0 (string): The beginning of the timespan for the data.
@@ -4714,7 +4798,7 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - networkTag (string): Match result to an exact network tag
         - deviceTag (string): Match result to an exact device tag
-        - quantity (integer): Set number of desired results to return. Default is 10.
+        - quantity (integer): Set number of desired results to return. Default is 10. Maximum is 50
         - ssidName (string): Filter results by ssid name
         - usageUplink (string): Filter results by usage uplink
         - t0 (string): The beginning of the timespan for the data.
@@ -4746,7 +4830,7 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - networkTag (string): Match result to an exact network tag
         - deviceTag (string): Match result to an exact device tag
-        - quantity (integer): Set number of desired results to return. Default is 10.
+        - quantity (integer): Set number of desired results to return. Default is 10. Maximum is 50
         - ssidName (string): Filter results by ssid name
         - usageUplink (string): Filter results by usage uplink
         - t0 (string): The beginning of the timespan for the data.
@@ -4778,7 +4862,7 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - networkTag (string): Match result to an exact network tag
         - deviceTag (string): Match result to an exact device tag
-        - quantity (integer): Set number of desired results to return. Default is 10.
+        - quantity (integer): Set number of desired results to return. Default is 10. Maximum is 50
         - ssidName (string): Filter results by ssid name
         - usageUplink (string): Filter results by usage uplink
         - t0 (string): The beginning of the timespan for the data.
@@ -4812,7 +4896,7 @@ class Organizations(object):
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkTag (string): Match result to an exact network tag
         - deviceTag (string): Match result to an exact device tag
-        - quantity (integer): Set number of desired results to return. Default is 10.
+        - quantity (integer): Set number of desired results to return. Default is 10. Maximum is 50
         - ssidName (string): Filter results by ssid name
         - usageUplink (string): Filter results by usage uplink
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 5000.
@@ -4844,7 +4928,7 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - networkTag (string): Match result to an exact network tag
         - deviceTag (string): Match result to an exact device tag
-        - quantity (integer): Set number of desired results to return. Default is 10.
+        - quantity (integer): Set number of desired results to return. Default is 10. Maximum is 50
         - ssidName (string): Filter results by ssid name
         - usageUplink (string): Filter results by usage uplink
         - t0 (string): The beginning of the timespan for the data.
@@ -4876,7 +4960,7 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - networkTag (string): Match result to an exact network tag
         - deviceTag (string): Match result to an exact device tag
-        - quantity (integer): Set number of desired results to return. Default is 10.
+        - quantity (integer): Set number of desired results to return. Default is 10. Maximum is 50
         - ssidName (string): Filter results by ssid name
         - usageUplink (string): Filter results by usage uplink
         - t0 (string): The beginning of the timespan for the data.
