@@ -5,15 +5,23 @@ description = "Meraki library for Python"
 authors = [
     {name = "Cisco Meraki",email = "api-feedback@meraki.net"}
 ]
-license = {text = "MIT License"}
+license = "MIT"
 readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+]
+keywords = ["meraki", "dashboard", "cisco", "python"]
 requires-python = ">=3.10"
+
 dependencies = [
     "requests (>=2.32.2,<3.0.0)",
     "aiohttp (>=3.11.18,<4.0.0)",
+]
+
+[dependency-groups]
+dev = [
     "jinja2 (==3.1.6)",
     "pytest (>=8.3.5,<10.0.0)",
-    "setuptools (>=78.1.1,<79.0.0)"
 ]
 
 [project.urls]
@@ -21,5 +29,5 @@ homepage = "https://github.com/meraki/dashboard-api-python"
 repository = "https://github.com/meraki/dashboard-api-python"
 
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0","setuptools>=78.1.1,<79.0.0"]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
