@@ -467,7 +467,7 @@ class AsyncRestSession:
                     results.extend(await response.json(content_type = None))
                 elif isinstance(results, dict) and "items" in results:
                     json_response = await response.json(content_type=None)
-                    results.extend(json_response["items"])
+                    results["items"].extend(json_response["items"])
                     if "meta" in results:
                         results["meta"]["counts"]["items"]["remaining"] = json_response["meta"]["counts"]["items"]["remaining"]
                 # For event log endpoint
