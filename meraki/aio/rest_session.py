@@ -240,7 +240,10 @@ class AsyncRestSession:
                             message_is_dict = True
                         else:
                             message_is_dict = False
-                    except aiohttp.client_exceptions.ContentTypeError:
+                    except (
+                        json.decoder.JSONDecodeError,
+                        aiohttp.client_exceptions.ContentTypeError,
+                    ):
                         message_is_dict = False
                         try:
                             message = (await response.text())[:100]
