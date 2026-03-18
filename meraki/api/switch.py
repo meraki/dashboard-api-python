@@ -84,8 +84,8 @@ class Switch(object):
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-ports-statuses-packets
 
         - serial (string): Serial
-        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 1 day from today.
-        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 1 day. The default is 1 day.
+        - t0 (string): The beginning of the timespan for the data. The value is used only to determine the elapsed duration between t0 and the time of the request; the API snaps that duration to the nearest preset window (5 minutes, 15 minutes, 1 hour, or 1 day).
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify t0. The value must be in seconds and be less than or equal to 86400 seconds (1 day). The default is 1 day.
         """
 
         kwargs.update(locals())

@@ -174,7 +174,7 @@ class Sensor(object):
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 731 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 366 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 366 days. The default is 7 days. If interval is provided, the timespan will be autocalculated.
-        - interval (integer): The time interval in seconds for returned data. The valid intervals are: 900, 3600, 86400, 604800, 2592000. The default is 604800. Interval is calculated if time params are provided.
+        - interval (integer): The time interval in seconds for returned data. The valid intervals are: 900, 3600, 86400, 604800, 2629746. The default is 604800. Interval is calculated if time params are provided.
         """
 
         kwargs.update(locals())
@@ -451,7 +451,7 @@ class Sensor(object):
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days and 6 hours from today.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days, 5 hours, 49 minutes, and 12 seconds from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days. The default is 2 hours.
         - networkIds (array): Optional parameter to filter readings by network.

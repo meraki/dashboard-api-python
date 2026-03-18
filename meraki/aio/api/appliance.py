@@ -870,7 +870,7 @@ class AsyncAppliance:
 
     def getNetworkAppliancePorts(self, networkId: str):
         """
-        **List per-port VLAN settings for all ports of a MX.**
+        **List per-port VLAN settings for all ports of a secure router or security appliance.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-ports
 
         - networkId (string): Network ID
@@ -889,7 +889,7 @@ class AsyncAppliance:
 
     def getNetworkAppliancePort(self, networkId: str, portId: str):
         """
-        **Return per-port VLAN settings for a single MX port.**
+        **Return per-port VLAN settings for a single secure router or security appliance port.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-port
 
         - networkId (string): Network ID
@@ -910,7 +910,7 @@ class AsyncAppliance:
 
     def updateNetworkAppliancePort(self, networkId: str, portId: str, **kwargs):
         """
-        **Update the per-port VLAN settings for a single MX port.**
+        **Update the per-port VLAN settings for a single secure router or security appliance port.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-port
 
         - networkId (string): Network ID
@@ -1984,6 +1984,50 @@ class AsyncAppliance:
         
 
 
+    def connectNetworkApplianceUmbrellaAccount(self, networkId: str, api: dict):
+        """
+        **Connect a Cisco Umbrella account to this network**
+        https://developer.cisco.com/meraki/api-v1/#!connect-network-appliance-umbrella-account
+
+        - networkId (string): Network ID
+        - api (object): Umbrella API credentials
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'umbrella', 'account'],
+            'operation': 'connectNetworkApplianceUmbrellaAccount'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/appliance/umbrella/account/connect'
+
+        body_params = ['api', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def disconnectNetworkApplianceUmbrellaAccount(self, networkId: str):
+        """
+        **Disconnect Umbrella account from this network**
+        https://developer.cisco.com/meraki/api-v1/#!disconnect-network-appliance-umbrella-account
+
+        - networkId (string): Network ID
+        """
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'umbrella', 'account'],
+            'operation': 'disconnectNetworkApplianceUmbrellaAccount'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/appliance/umbrella/account/disconnect'
+
+        return self._session.post(metadata, resource)
+        
+
+
     def getNetworkApplianceUplinksUsageHistory(self, networkId: str, **kwargs):
         """
         **Get the sent and received bytes for each uplink of a network.**
@@ -2014,7 +2058,7 @@ class AsyncAppliance:
 
     def getNetworkApplianceVlans(self, networkId: str):
         """
-        **List the VLANs for a Cisco Secure Router network**
+        **List the VLANs for a Security Appliance network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-vlans
 
         - networkId (string): Network ID
@@ -2047,6 +2091,7 @@ class AsyncAppliance:
         - mask (integer): Mask used for the subnet of all bound to the template networks. Applicable only for template network.
         - ipv6 (object): IPv6 configuration on the VLAN
         - dhcpHandling (string): The appliance's handling of DHCP requests on this VLAN. One of: 'Run a DHCP server', 'Relay DHCP to another server' or 'Do not respond to DHCP requests'
+        - dhcpRelayServerIps (array): The IPs (IPv4) of the DHCP servers that DHCP requests should be relayed to. CIDR/subnet notation and hostnames are not supported.
         - dhcpLeaseTime (string): The term of DHCP leases if the appliance is running a DHCP server on this VLAN. One of: '30 minutes', '1 hour', '4 hours', '12 hours', '1 day' or '1 week'
         - mandatoryDhcp (object): Mandatory DHCP will enforce that clients connecting to this VLAN must use the IP address assigned by the DHCP server. Clients who use a static IP address won't be able to associate. Only available on firmware versions 17.0 and above
         - dhcpBootOptionsEnabled (boolean): Use DHCP boot options specified in other properties
@@ -2074,7 +2119,7 @@ class AsyncAppliance:
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/appliance/vlans'
 
-        body_params = ['id', 'name', 'subnet', 'applianceIp', 'groupPolicyId', 'templateVlanType', 'cidr', 'mask', 'ipv6', 'dhcpHandling', 'dhcpLeaseTime', 'mandatoryDhcp', 'dhcpBootOptionsEnabled', 'dhcpBootNextServer', 'dhcpBootFilename', 'dhcpOptions', ]
+        body_params = ['id', 'name', 'subnet', 'applianceIp', 'groupPolicyId', 'templateVlanType', 'cidr', 'mask', 'ipv6', 'dhcpHandling', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'mandatoryDhcp', 'dhcpBootOptionsEnabled', 'dhcpBootNextServer', 'dhcpBootFilename', 'dhcpOptions', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
