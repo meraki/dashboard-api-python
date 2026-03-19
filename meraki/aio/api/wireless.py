@@ -102,6 +102,9 @@ class AsyncWireless:
         if 'band' in kwargs:
             options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
+        if 'ssid' in kwargs:
+            options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+            assert kwargs['ssid'] in options, f'''"ssid" cannot be "{kwargs['ssid']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['wireless', 'monitor', 'connectionStats'],
@@ -183,6 +186,9 @@ class AsyncWireless:
         if 'band' in kwargs:
             options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
+        if 'ssid' in kwargs:
+            options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+            assert kwargs['ssid'] in options, f'''"ssid" cannot be "{kwargs['ssid']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['wireless', 'monitor', 'latencyStats'],
@@ -681,6 +687,9 @@ class AsyncWireless:
         if 'band' in kwargs:
             options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
+        if 'ssid' in kwargs:
+            options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+            assert kwargs['ssid'] in options, f'''"ssid" cannot be "{kwargs['ssid']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['wireless', 'monitor', 'clients', 'connectionStats'],
@@ -717,6 +726,9 @@ class AsyncWireless:
         if 'band' in kwargs:
             options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
+        if 'ssid' in kwargs:
+            options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+            assert kwargs['ssid'] in options, f'''"ssid" cannot be "{kwargs['ssid']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['wireless', 'monitor', 'clients', 'latencyStats'],
@@ -753,6 +765,9 @@ class AsyncWireless:
         if 'band' in kwargs:
             options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
+        if 'ssid' in kwargs:
+            options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+            assert kwargs['ssid'] in options, f'''"ssid" cannot be "{kwargs['ssid']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['wireless', 'monitor', 'clients', 'connectionStats'],
@@ -877,6 +892,9 @@ class AsyncWireless:
         if 'band' in kwargs:
             options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
+        if 'ssid' in kwargs:
+            options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+            assert kwargs['ssid'] in options, f'''"ssid" cannot be "{kwargs['ssid']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['wireless', 'monitor', 'clients', 'latencyStats'],
@@ -913,6 +931,9 @@ class AsyncWireless:
         if 'band' in kwargs:
             options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
+        if 'ssid' in kwargs:
+            options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+            assert kwargs['ssid'] in options, f'''"ssid" cannot be "{kwargs['ssid']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['wireless', 'monitor', 'connectionStats'],
@@ -986,6 +1007,9 @@ class AsyncWireless:
         if 'band' in kwargs:
             options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
+        if 'ssid' in kwargs:
+            options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+            assert kwargs['ssid'] in options, f'''"ssid" cannot be "{kwargs['ssid']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['wireless', 'monitor', 'devices', 'connectionStats'],
@@ -1022,6 +1046,9 @@ class AsyncWireless:
         if 'band' in kwargs:
             options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
+        if 'ssid' in kwargs:
+            options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+            assert kwargs['ssid'] in options, f'''"ssid" cannot be "{kwargs['ssid']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['wireless', 'monitor', 'devices', 'latencyStats'],
@@ -1296,6 +1323,9 @@ class AsyncWireless:
         if 'band' in kwargs:
             options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
+        if 'ssid' in kwargs:
+            options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+            assert kwargs['ssid'] in options, f'''"ssid" cannot be "{kwargs['ssid']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['wireless', 'monitor', 'failedConnections'],
@@ -1374,6 +1404,9 @@ class AsyncWireless:
         if 'band' in kwargs:
             options = ['2.4', '5', '6']
             assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
+        if 'ssid' in kwargs:
+            options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+            assert kwargs['ssid'] in options, f'''"ssid" cannot be "{kwargs['ssid']}", & must be set to one of: {options}'''
 
         metadata = {
             'tags': ['wireless', 'monitor', 'latencyStats'],
@@ -1441,6 +1474,34 @@ class AsyncWireless:
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def updateNetworkWirelessRadioRrm(self, networkId: str, **kwargs):
+        """
+        **Update the AutoRF settings for a wireless network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-radio-rrm
+
+        - networkId (string): Network ID
+        - busyHour (object): Busy Hour settings
+        - channel (object): Channel settings
+        - fra (object): FRA settings
+        - ai (object): AI settings
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'radio', 'rrm'],
+            'operation': 'updateNetworkWirelessRadioRrm'
+        }
+        networkId = urllib.parse.quote(str(networkId), safe='')
+        resource = f'/networks/{networkId}/wireless/radio/rrm'
+
+        body_params = ['busyHour', 'channel', 'fra', 'ai', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
         
 
 
@@ -1629,6 +1690,7 @@ class AsyncWireless:
         - locationAnalyticsEnabled (boolean): Toggle for enabling or disabling location analytics for your network
         - upgradeStrategy (string): The default strategy that network devices will use to perform an upgrade. Requires firmware version MR 26.8 or higher.
         - ledLightsOn (boolean): Toggle for enabling or disabling LED lights on all APs in the network (making them run dark)
+        - multicastToUnicastConversion (object): Multicast-to-unicast conversion settings across the network
         - namedVlans (object): Named VLAN settings for wireless networks.
         """
 
@@ -1645,7 +1707,7 @@ class AsyncWireless:
         networkId = urllib.parse.quote(str(networkId), safe='')
         resource = f'/networks/{networkId}/wireless/settings'
 
-        body_params = ['meshingEnabled', 'ipv6BridgeEnabled', 'locationAnalyticsEnabled', 'upgradeStrategy', 'ledLightsOn', 'namedVlans', ]
+        body_params = ['meshingEnabled', 'ipv6BridgeEnabled', 'locationAnalyticsEnabled', 'upgradeStrategy', 'ledLightsOn', 'multicastToUnicastConversion', 'namedVlans', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
@@ -3073,6 +3135,122 @@ class AsyncWireless:
         
 
 
+    def getOrganizationWirelessDevicesProvisioningDeployments(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **List the zero touch deployments for wireless access points in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-provisioning-deployments
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 20.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - search (string): Filter by MAC address, serial number, new device name, old device name, or model.
+        - sortBy (string): Field used to sort results. Default is 'status'.
+        - sortOrder (string): Sort order. Default is 'asc'.
+        - deploymentType (string): Filter deployments by type.
+        """
+
+        kwargs.update(locals())
+
+        if 'sortBy' in kwargs:
+            options = ['afterAction', 'createdAt', 'deploymentId', 'name', 'status']
+            assert kwargs['sortBy'] in options, f'''"sortBy" cannot be "{kwargs['sortBy']}", & must be set to one of: {options}'''
+        if 'sortOrder' in kwargs:
+            options = ['asc', 'desc']
+            assert kwargs['sortOrder'] in options, f'''"sortOrder" cannot be "{kwargs['sortOrder']}", & must be set to one of: {options}'''
+        if 'deploymentType' in kwargs:
+            options = ['deploy', 'replace']
+            assert kwargs['deploymentType'] in options, f'''"deploymentType" cannot be "{kwargs['deploymentType']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'devices', 'provisioning', 'deployments'],
+            'operation': 'getOrganizationWirelessDevicesProvisioningDeployments'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/devices/provisioning/deployments'
+
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'search', 'sortBy', 'sortOrder', 'deploymentType', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def createOrganizationWirelessDevicesProvisioningDeployment(self, organizationId: str, items: list, **kwargs):
+        """
+        **Create a zero touch deployment for a wireless access point**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-wireless-devices-provisioning-deployment
+
+        - organizationId (string): Organization ID
+        - items (array): List of zero touch deployments to create
+        - meta (object): Metadata relevant to the paginated dataset
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'devices', 'provisioning', 'deployments'],
+            'operation': 'createOrganizationWirelessDevicesProvisioningDeployment'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/devices/provisioning/deployments'
+
+        body_params = ['items', 'meta', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def updateOrganizationWirelessDevicesProvisioningDeployments(self, organizationId: str, items: list, **kwargs):
+        """
+        **Update a zero touch deployment**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-wireless-devices-provisioning-deployments
+
+        - organizationId (string): Organization ID
+        - items (array): List of zero touch deployments to create
+        - meta (object): Metadata relevant to the paginated dataset
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'devices', 'provisioning', 'deployments'],
+            'operation': 'updateOrganizationWirelessDevicesProvisioningDeployments'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/devices/provisioning/deployments'
+
+        body_params = ['items', 'meta', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+        
+
+
+    def deleteOrganizationWirelessDevicesProvisioningDeployment(self, organizationId: str, deploymentId: str):
+        """
+        **Delete a zero touch deployment**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-wireless-devices-provisioning-deployment
+
+        - organizationId (string): Organization ID
+        - deploymentId (string): Deployment ID
+        """
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'devices', 'provisioning', 'deployments'],
+            'operation': 'deleteOrganizationWirelessDevicesProvisioningDeployment'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        deploymentId = urllib.parse.quote(str(deploymentId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/devices/provisioning/deployments/{deploymentId}'
+
+        return self._session.delete(metadata, resource)
+        
+
+
     def getOrganizationWirelessDevicesRadsecCertificatesAuthorities(self, organizationId: str, **kwargs):
         """
         **Query for details on the organization's RADSEC device Certificate Authority certificates (CAs)**
@@ -3526,6 +3704,47 @@ class AsyncWireless:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
+
+    def getOrganizationWirelessRadioRrmByNetwork(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **List the AutoRF settings of an organization by network**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-radio-rrm-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Optional parameter to filter results by network.
+        - startingAfter (string): Retrieving items after this network ID
+        - endingBefore (string): Retrieving items before this network ID
+        - perPage (integer): Number of items per page
+        - sortOrder (string): The sort order of items
+        """
+
+        kwargs.update(locals())
+
+        if 'sortOrder' in kwargs:
+            options = ['ascending', 'descending']
+            assert kwargs['sortOrder'] in options, f'''"sortOrder" cannot be "{kwargs['sortOrder']}", & must be set to one of: {options}'''
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'radio', 'rrm', 'byNetwork'],
+            'operation': 'getOrganizationWirelessRadioRrmByNetwork'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/wireless/radio/rrm/byNetwork'
+
+        query_params = ['networkIds', 'startingAfter', 'endingBefore', 'perPage', 'sortOrder', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['networkIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
         
 
 

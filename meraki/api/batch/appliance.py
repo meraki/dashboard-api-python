@@ -191,7 +191,7 @@ class ActionBatchAppliance(object):
 
     def updateNetworkAppliancePort(self, networkId: str, portId: str, **kwargs):
         """
-        **Update the per-port VLAN settings for a single MX port.**
+        **Update the per-port VLAN settings for a single secure router or security appliance port.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-port
 
         - networkId (string): Network ID
@@ -804,6 +804,62 @@ class ActionBatchAppliance(object):
 
 
 
+    def connectNetworkApplianceUmbrellaAccount(self, networkId: str, api: dict):
+        """
+        **Connect a Cisco Umbrella account to this network**
+        https://developer.cisco.com/meraki/api-v1/#!connect-network-appliance-umbrella-account
+
+        - networkId (string): Network ID
+        - api (object): Umbrella API credentials
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'umbrella', 'account'],
+            'operation': 'connectNetworkApplianceUmbrellaAccount'
+        }
+        resource = f'/networks/{networkId}/appliance/umbrella/account/connect'
+
+        body_params = ['api', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def disconnectNetworkApplianceUmbrellaAccount(self, networkId: str):
+        """
+        **Disconnect Umbrella account from this network**
+        https://developer.cisco.com/meraki/api-v1/#!disconnect-network-appliance-umbrella-account
+
+        - networkId (string): Network ID
+        """
+
+        metadata = {
+            'tags': ['appliance', 'configure', 'umbrella', 'account'],
+            'operation': 'disconnectNetworkApplianceUmbrellaAccount'
+        }
+        resource = f'/networks/{networkId}/appliance/umbrella/account/disconnect'
+
+        action = {
+            "resource": resource,
+            "operation": "create",
+        }
+        return action
+        
+
+
+
+
+
     def createNetworkApplianceVlan(self, networkId: str, id: str, name: str, **kwargs):
         """
         **Add a VLAN**
@@ -820,9 +876,12 @@ class ActionBatchAppliance(object):
         - mask (integer): Mask used for the subnet of all bound to the template networks. Applicable only for template network.
         - ipv6 (object): IPv6 configuration on the VLAN
         - dhcpHandling (string): The appliance's handling of DHCP requests on this VLAN. One of: 'Run a DHCP server', 'Relay DHCP to another server' or 'Do not respond to DHCP requests'
+        - dhcpRelayServerIps (array): The IPs (IPv4) of the DHCP servers that DHCP requests should be relayed to. CIDR/subnet notation and hostnames are not supported.
         - dhcpLeaseTime (string): The term of DHCP leases if the appliance is running a DHCP server on this VLAN. One of: '30 minutes', '1 hour', '4 hours', '12 hours', '1 day' or '1 week'
         - mandatoryDhcp (object): Mandatory DHCP will enforce that clients connecting to this VLAN must use the IP address assigned by the DHCP server. Clients who use a static IP address won't be able to associate. Only available on firmware versions 17.0 and above
         - dhcpBootOptionsEnabled (boolean): Use DHCP boot options specified in other properties
+        - dhcpBootNextServer (string): DHCP boot option to direct boot clients to the server to load the boot file from
+        - dhcpBootFilename (string): DHCP boot option for boot filename
         - dhcpOptions (array): The list of DHCP options that will be included in DHCP responses. Each object in the list should have "code", "type", and "value" properties.
         """
 
@@ -844,7 +903,7 @@ class ActionBatchAppliance(object):
         }
         resource = f'/networks/{networkId}/appliance/vlans'
 
-        body_params = ['id', 'name', 'subnet', 'applianceIp', 'groupPolicyId', 'templateVlanType', 'cidr', 'mask', 'ipv6', 'dhcpHandling', 'dhcpLeaseTime', 'mandatoryDhcp', 'dhcpBootOptionsEnabled', 'dhcpOptions', ]
+        body_params = ['id', 'name', 'subnet', 'applianceIp', 'groupPolicyId', 'templateVlanType', 'cidr', 'mask', 'ipv6', 'dhcpHandling', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'mandatoryDhcp', 'dhcpBootOptionsEnabled', 'dhcpBootNextServer', 'dhcpBootFilename', 'dhcpOptions', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,

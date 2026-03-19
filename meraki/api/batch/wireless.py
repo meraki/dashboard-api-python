@@ -564,6 +564,40 @@ class ActionBatchWireless(object):
 
 
 
+    def updateNetworkWirelessRadioRrm(self, networkId: str, **kwargs):
+        """
+        **Update the AutoRF settings for a wireless network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-radio-rrm
+
+        - networkId (string): Network ID
+        - busyHour (object): Busy Hour settings
+        - channel (object): Channel settings
+        - fra (object): FRA settings
+        - ai (object): AI settings
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'radio', 'rrm'],
+            'operation': 'updateNetworkWirelessRadioRrm'
+        }
+        resource = f'/networks/{networkId}/wireless/radio/rrm'
+
+        body_params = ['busyHour', 'channel', 'fra', 'ai', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
     def createNetworkWirelessRfProfile(self, networkId: str, name: str, bandSelectionType: str, **kwargs):
         """
         **Creates new RF profile for this network**
@@ -700,6 +734,7 @@ class ActionBatchWireless(object):
         - locationAnalyticsEnabled (boolean): Toggle for enabling or disabling location analytics for your network
         - upgradeStrategy (string): The default strategy that network devices will use to perform an upgrade. Requires firmware version MR 26.8 or higher.
         - ledLightsOn (boolean): Toggle for enabling or disabling LED lights on all APs in the network (making them run dark)
+        - multicastToUnicastConversion (object): Multicast-to-unicast conversion settings across the network
         - namedVlans (object): Named VLAN settings for wireless networks.
         """
 
@@ -715,7 +750,7 @@ class ActionBatchWireless(object):
         }
         resource = f'/networks/{networkId}/wireless/settings'
 
-        body_params = ['meshingEnabled', 'ipv6BridgeEnabled', 'locationAnalyticsEnabled', 'upgradeStrategy', 'ledLightsOn', 'namedVlans', ]
+        body_params = ['meshingEnabled', 'ipv6BridgeEnabled', 'locationAnalyticsEnabled', 'upgradeStrategy', 'ledLightsOn', 'multicastToUnicastConversion', 'namedVlans', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
@@ -1375,6 +1410,96 @@ class ActionBatchWireless(object):
             "resource": resource,
             "operation": "update",
             "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def createOrganizationWirelessDevicesProvisioningDeployment(self, organizationId: str, items: list, **kwargs):
+        """
+        **Create a zero touch deployment for a wireless access point**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-wireless-devices-provisioning-deployment
+
+        - organizationId (string): Organization ID
+        - items (array): List of zero touch deployments to create
+        - meta (object): Metadata relevant to the paginated dataset
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'devices', 'provisioning', 'deployments'],
+            'operation': 'createOrganizationWirelessDevicesProvisioningDeployment'
+        }
+        resource = f'/organizations/{organizationId}/wireless/devices/provisioning/deployments'
+
+        body_params = ['items', 'meta', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def updateOrganizationWirelessDevicesProvisioningDeployments(self, organizationId: str, items: list, **kwargs):
+        """
+        **Update a zero touch deployment**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-wireless-devices-provisioning-deployments
+
+        - organizationId (string): Organization ID
+        - items (array): List of zero touch deployments to create
+        - meta (object): Metadata relevant to the paginated dataset
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'devices', 'provisioning', 'deployments'],
+            'operation': 'updateOrganizationWirelessDevicesProvisioningDeployments'
+        }
+        resource = f'/organizations/{organizationId}/wireless/devices/provisioning/deployments'
+
+        body_params = ['items', 'meta', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
+    def deleteOrganizationWirelessDevicesProvisioningDeployment(self, organizationId: str, deploymentId: str):
+        """
+        **Delete a zero touch deployment**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-wireless-devices-provisioning-deployment
+
+        - organizationId (string): Organization ID
+        - deploymentId (string): Deployment ID
+        """
+
+        metadata = {
+            'tags': ['wireless', 'configure', 'devices', 'provisioning', 'deployments'],
+            'operation': 'deleteOrganizationWirelessDevicesProvisioningDeployment'
+        }
+        resource = f'/organizations/{organizationId}/wireless/devices/provisioning/deployments/{deploymentId}'
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
         }
         return action
         

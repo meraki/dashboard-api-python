@@ -999,6 +999,38 @@ class ActionBatchOrganizations(object):
 
 
 
+    def claimOrganizationInventoryOrders(self, organizationId: str, claimId: str, **kwargs):
+        """
+        **Claim an order by the secure unique order claim number, the order claim id**
+        https://developer.cisco.com/meraki/api-v1/#!claim-organization-inventory-orders
+
+        - organizationId (string): Organization ID
+        - claimId (string): The unique order claim id
+        - subscriptions (array): The individual subscriptions to claim
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'inventory', 'orders'],
+            'operation': 'claimOrganizationInventoryOrders'
+        }
+        resource = f'/organizations/{organizationId}/inventory/orders/claim'
+
+        body_params = ['claimId', 'subscriptions', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload
+        }
+        return action
+        
+
+
+
+
+
     def assignOrganizationLicensesSeats(self, organizationId: str, licenseId: str, networkId: str, seatCount: int):
         """
         **Assign SM seats to a network**

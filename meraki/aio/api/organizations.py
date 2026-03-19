@@ -1858,7 +1858,7 @@ class AsyncOrganizations:
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 365 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 365 days. The default is 365 days.
-        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 5000. Default is 5000.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100000. Default is 5000.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - networkId (string): Filters on the given network
@@ -2220,6 +2220,7 @@ class AsyncOrganizations:
         - duration (integer): Duration in seconds of packet capture
         - filterExpression (string): Filter expression for packet capture
         - interface (string): Interface of the device
+        - advanced (object): Advanced filters for IOSXE devices (supported for Campus Gateway devices only)
         """
 
         kwargs.update(locals())
@@ -2231,7 +2232,7 @@ class AsyncOrganizations:
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/devices/packetCapture/captures'
 
-        body_params = ['serials', 'name', 'outputType', 'destination', 'ports', 'notes', 'duration', 'filterExpression', 'interface', ]
+        body_params = ['serials', 'name', 'outputType', 'destination', 'ports', 'notes', 'duration', 'filterExpression', 'interface', 'advanced', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -2249,6 +2250,7 @@ class AsyncOrganizations:
         - notes (string): Reason for capture
         - duration (integer): Duration of the capture in seconds
         - filterExpression (string): Filter expression for the capture
+        - advanced (object): Advanced capture options (optional)
         """
 
         kwargs.update(locals())
@@ -2260,7 +2262,7 @@ class AsyncOrganizations:
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/devices/packetCapture/captures/bulkCreate'
 
-        body_params = ['devices', 'notes', 'duration', 'filterExpression', 'name', ]
+        body_params = ['devices', 'notes', 'duration', 'filterExpression', 'name', 'advanced', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -3080,6 +3082,44 @@ class AsyncOrganizations:
         
 
 
+    def getOrganizationIntegrationsDeployable(self, organizationId: str):
+        """
+        **Provides a list of integrations that can be enabled for an Organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-integrations-deployable
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'integrations', 'deployable'],
+            'operation': 'getOrganizationIntegrationsDeployable'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/integrations/deployable'
+
+        return self._session.get(metadata, resource)
+        
+
+
+    def getOrganizationIntegrationsDeployed(self, organizationId: str):
+        """
+        **Provides a list of integrations enabled for an Organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-integrations-deployed
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'integrations', 'deployed'],
+            'operation': 'getOrganizationIntegrationsDeployed'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/integrations/deployed'
+
+        return self._session.get(metadata, resource)
+        
+
+
     def getOrganizationIntegrationsXdrNetworks(self, organizationId: str, total_pages=1, direction='next', **kwargs):
         """
         **Returns the networks in the organization that have XDR enabled**
@@ -3214,6 +3254,7 @@ class AsyncOrganizations:
         - tags (array): Filter devices by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below).
         - tagsFilterType (string): To use with 'tags' parameter, to filter devices which contain ANY or ALL given tags. Accepted values are 'withAnyTags' or 'withAllTags', default is 'withAnyTags'.
         - productTypes (array): Filter devices by product type. Accepted values are appliance, camera, campusGateway, cellularGateway, secureConnect, sensor, switch, systemsManager, wireless, and wirelessController.
+        - eoxStatuses (array): Filter devices by EoX status. Accepted values are 'endOfSale', 'endOfSupport', 'nearEndOfSupport', or 'null'. Use 'null' to filter for devices with no EOX data. Supports multiple values for multi-select filtering.
         """
 
         kwargs.update(locals())
@@ -3232,16 +3273,35 @@ class AsyncOrganizations:
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/inventory/devices'
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'usedState', 'search', 'macs', 'networkIds', 'serials', 'models', 'orderNumbers', 'tags', 'tagsFilterType', 'productTypes', ]
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'usedState', 'search', 'macs', 'networkIds', 'serials', 'models', 'orderNumbers', 'tags', 'tagsFilterType', 'productTypes', 'eoxStatuses', ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['macs', 'networkIds', 'serials', 'models', 'orderNumbers', 'tags', 'productTypes', ]
+        array_params = ['macs', 'networkIds', 'serials', 'models', 'orderNumbers', 'tags', 'productTypes', 'eoxStatuses', ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
                 params[f'{k.strip()}[]'] = kwargs[f'{k}']
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+        
+
+
+    def getOrganizationInventoryDevicesEoxOverview(self, organizationId: str):
+        """
+        **Fetch the EOX summary for an organization, including counts of devices that are end-of-sale, end-of-support, and end-of-support-soon.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-inventory-devices-eox-overview
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'inventory', 'devices', 'eox'],
+            'operation': 'getOrganizationInventoryDevicesEoxOverview'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/inventory/devices/eox/overview'
+
+        return self._session.get(metadata, resource)
         
 
 
@@ -3451,6 +3511,57 @@ class AsyncOrganizations:
         resource = f'/organizations/{organizationId}/inventory/onboarding/cloudMonitoring/prepare'
 
         body_params = ['devices', 'options', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def claimOrganizationInventoryOrders(self, organizationId: str, claimId: str, **kwargs):
+        """
+        **Claim an order by the secure unique order claim number, the order claim id**
+        https://developer.cisco.com/meraki/api-v1/#!claim-organization-inventory-orders
+
+        - organizationId (string): Organization ID
+        - claimId (string): The unique order claim id
+        - subscriptions (array): The individual subscriptions to claim
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'inventory', 'orders'],
+            'operation': 'claimOrganizationInventoryOrders'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/inventory/orders/claim'
+
+        body_params = ['claimId', 'subscriptions', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def previewOrganizationInventoryOrders(self, organizationId: str, claimId: str):
+        """
+        **Preview the results and status of an order claim by the secure order id**
+        https://developer.cisco.com/meraki/api-v1/#!preview-organization-inventory-orders
+
+        - organizationId (string): Organization ID
+        - claimId (string): The unique order claim id
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'inventory', 'orders'],
+            'operation': 'previewOrganizationInventoryOrders'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/inventory/orders/preview'
+
+        body_params = ['claimId', ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
@@ -3846,6 +3957,69 @@ class AsyncOrganizations:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
+        
+
+
+    def createNetworkMove(self, organizationId: str, network: dict, organizations: dict, **kwargs):
+        """
+        **Move networks from one organization to another**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-move
+
+        - organizationId (string): Organization ID
+        - network (object): Network to be moved
+        - organizations (object): Organizations involved in the network move
+        - simulate (boolean): If true, simulates the network move and validates the operation without committing changes. The network will remain in the source organization.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'networks'],
+            'operation': 'createNetworkMove'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/networks/moves'
+
+        body_params = ['network', 'organizations', 'simulate', ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+        
+
+
+    def getNetworkMoves(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **Return a list of network move operations in the organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-moves
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 10 - 100. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - moveIds (array): Array of network move operation IDs to include. If not specified, all network moves will be returned.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'networks', 'moves'],
+            'operation': 'getNetworkMoves'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/networks/moves'
+
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'moveIds', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = ['moveIds', ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
         
 
 
@@ -4464,6 +4638,36 @@ class AsyncOrganizations:
         resource = f'/organizations/{organizationId}/samlRoles/{samlRoleId}'
 
         return self._session.delete(metadata, resource)
+        
+
+
+    def getOrganizationSaseNetworksEligible(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        """
+        **List of MX networks or templates that can be enrolled into Secure Access**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-sase-networks-eligible
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 5.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - search (string): If provided, filters results by network name
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'configure', 'sase', 'networks', 'eligible'],
+            'operation': 'getOrganizationSaseNetworksEligible'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/sase/networks/eligible'
+
+        query_params = ['perPage', 'startingAfter', 'endingBefore', 'search', ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
         
 
 
