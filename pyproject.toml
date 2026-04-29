@@ -1,25 +1,43 @@
 [project]
 name = "meraki"
 version = "2.2.0"
-description = "Meraki library for Python"
+description = "Cisco Meraki Dashboard API library"
 authors = [
-    {name = "Cisco Meraki",email = "api-feedback@meraki.net"}
+    {name = "Cisco Meraki", email = "api-feedback@meraki.net"}
 ]
 license = {text = "MIT License"}
 readme = "README.md"
 requires-python = ">=3.10"
+keywords = ["meraki", "dashboard", "cisco"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+]
 dependencies = [
-    "requests (>=2.32.2,<3.0.0)",
-    "aiohttp (>=3.11.18,<4.0.0)",
-    "jinja2 (==3.1.6)",
-    "pytest (>=8.3.5,<10.0.0)",
-    "setuptools (>=78.1.1,<79.0.0)"
+    "requests>=2.32.2,<3",
+    "aiohttp>=3.11.18,<4",
 ]
 
 [project.urls]
-homepage = "https://github.com/meraki/dashboard-api-python"
-repository = "https://github.com/meraki/dashboard-api-python"
+Homepage = "https://github.com/meraki/dashboard-api-python"
+Repository = "https://github.com/meraki/dashboard-api-python"
 
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0","setuptools>=78.1.1,<79.0.0","wheel>=0.46.2"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.sdist]
+include = ["meraki/"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["meraki"]
+
+[dependency-groups]
+dev = ["pytest>=8.3.5,<10", "flake8>=7.0,<8"]
+generator = ["jinja2==3.1.6"]
+
+[tool.uv]
+default-groups = ["dev"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

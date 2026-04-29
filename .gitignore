@@ -1,6 +1,10 @@
 .DS_Store
 # No PyCharm config files
 .idea/
+.vscode/
 venv/
+.venv/
 __pycache__
 /.pytest_cache/
+dist/
+*.egg-info/
