@@ -1,0 +1,74 @@
+{
+  "tags": [
+    {"name": "networks"}
+  ],
+  "paths": {
+    "/networks/{networkId}/clients": {
+      "get": {
+        "tags": ["networks", "configure", "clients"],
+        "operationId": "getNetworkClients",
+        "summary": "List the clients that have used this network in the timespan",
+        "description": "List the clients that have used this network in the timespan",
+        "parameters": [
+          {"name": "networkId", "in": "path", "type": "string", "required": true, "description": "Network ID"},
+          {"name": "perPage", "in": "query", "type": "integer", "required": false, "description": "The number of entries per page returned. Acceptable range is 3 - 5000. Default is 10."},
+          {"name": "startingAfter", "in": "query", "type": "string", "required": false, "description": "A token used by the server to indicate the start of the page."},
+          {"name": "endingBefore", "in": "query", "type": "string", "required": false, "description": "A token used by the server to indicate the end of the page."},
+          {"name": "t0", "in": "query", "type": "string", "required": false, "description": "The beginning of the timespan for the data."},
+          {"name": "timespan", "in": "query", "type": "number", "required": false, "description": "The timespan for which the information will be fetched."}
+        ]
+      }
+    },
+    "/networks/{networkId}/settings": {
+      "put": {
+        "tags": ["networks", "configure"],
+        "operationId": "updateNetworkSettings",
+        "summary": "Update the settings for a network",
+        "description": "Update the settings for a network",
+        "parameters": [
+          {"name": "networkId", "in": "path", "type": "string", "required": true, "description": "Network ID"},
+          {
+            "name": "updateNetworkSettings",
+            "in": "body",
+            "schema": {
+              "properties": {
+                "localStatusPageEnabled": {
+                  "type": "boolean",
+                  "description": "Enables / disables the local device status pages."
+                },
+                "securePort": {
+                  "type": "object",
+                  "description": "A hash of SecureConnect options."
+                }
+              },
+              "example": {
+                "localStatusPageEnabled": true
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/networks/{networkId}": {
+      "delete": {
+        "tags": ["networks", "configure"],
+        "operationId": "deleteNetwork",
+        "summary": "Delete a network",
+        "description": "Delete a network",
+        "parameters": [
+          {"name": "networkId", "in": "path", "type": "string", "required": true, "description": "Network ID"}
+        ]
+      }
+    }
+  },
+  "x-batchable-actions": [
+    {
+      "summary": "Delete a network",
+      "operation": "destroy"
+    },
+    {
+      "summary": "Update the settings for a network",
+      "operation": "update"
+    }
+  ]
+}

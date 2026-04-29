@@ -6,10 +6,14 @@ cloud-managed platform. Meraki generates the library based on dashboard API's Op
 the latest API releases, and provides the full source code for the library including the tools used to generate the
 library, if you are participating in the Early Access program or would like to contribute to the development of the
 library. Meraki welcomes constructive pull requests that maintain backwards compatibility with prior versions. The
-library requires Python 3.10+, receives support from the community, and you can install it
-via [PyPI](https://pypi.org/project/meraki/):
+library requires Python 3.10+, receives support from the community, and you can install it via
+[PyPI](https://pypi.org/project/meraki/):
 
     pip install --upgrade meraki
+
+Or with [uv](https://docs.astral.sh/uv/):
+
+    uv pip install --upgrade meraki
 
 If you participate
 in [our Early Access program](https://community.meraki.com/t5/Developers-APIs/UPDATED-Beta-testing-with-the-Meraki-Developer-Early-Access/m-p/145344#M5808)
@@ -187,3 +191,22 @@ Unless you are an ecosystem partner, this identifier is optional.
 1. If you are an ecosystem partner and you have questions about this requirement, please reach out to your ecosystem
    rep.
 2. If you have any questions about the formatting, please ask your question by opening an issue in this repo.
+
+## Development
+
+This project uses [uv](https://docs.astral.sh/uv/) for dependency management and builds with
+[Hatchling](https://hatch.pypa.io/).
+
+1. [Install uv](https://docs.astral.sh/uv/getting-started/installation/) if you haven't already.
+
+2. Install dev dependencies:
+
+       uv sync
+
+3. Run tests:
+
+       uv run pytest
+
+4. If you're working with the generator, install its additional dependencies:
+
+       uv sync --group generator

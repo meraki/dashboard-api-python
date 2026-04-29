@@ -1,4 +1,4 @@
-name: Lint Python library generator
+name: Test Python library generator
 
 on:
   push:
@@ -43,3 +43,23 @@ jobs:
       run: |
         uv run flake8 ./generator/generate_library.py --count --select=E9,F63,F7,F82 --ignore=F405,W391,W291,C901,E501,E303,W293 --show-source --statistics
         uv run flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v6
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v4
+      with:
+        enable-cache: true
+
+    - name: Set up Python
+      run: uv python install 3.13
+
+    - name: Install dependencies
+      run: uv sync --python 3.13 --group generator
+
+    - name: Test generator
+      run: uv run pytest tests/generator/ -v

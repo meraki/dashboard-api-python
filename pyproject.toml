@@ -7,7 +7,7 @@ authors = [
 ]
 license = {text = "MIT License"}
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 keywords = ["meraki", "dashboard", "cisco"]
 classifiers = [
     "License :: OSI Approved :: MIT License",
