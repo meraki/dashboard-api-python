@@ -420,7 +420,7 @@ class RestSession(object):
                 metadata["page"] += 1
                 nextlink = links["prev"]["url"]
             else:
-                break
+                total_pages = 1
 
             response.close()
 
