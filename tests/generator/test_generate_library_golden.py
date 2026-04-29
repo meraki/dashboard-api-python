@@ -110,6 +110,7 @@ class TestGoldenFiles:
             assert mocked.call_count > 0
             for call in mocked.call_args_list:
                 url = call[0][0]
-                assert "raw.githubusercontent.com" in url
+                from urllib.parse import urlparse
+                assert urlparse(url).hostname == "raw.githubusercontent.com"
         finally:
             os.chdir(original_cwd)
