@@ -30,11 +30,18 @@ jobs:
         run: rm -rf meraki
 
       - name: Regenerate Python Library
-        run: uv run python generator/generate_library.py -g true -v ${{ github.event.inputs.library_version }} -a ${{ github.event.inputs.api_version }} -o ${{ secrets.TEST_ORG_ID }} -k ${{ secrets.TEST_ORG_API_KEY }}
+        env:
+          LIBRARY_VERSION: ${{ github.event.inputs.library_version }}
+          API_VERSION: ${{ github.event.inputs.api_version }}
+          ORG_ID: ${{ secrets.TEST_ORG_ID }}
+          API_KEY: ${{ secrets.TEST_ORG_API_KEY }}
+        run: uv run python generator/generate_library.py -g true -v "$LIBRARY_VERSION" -a "$API_VERSION" -o "$ORG_ID" -k "$API_KEY"
 
       - name: Set new version
+        env:
+          LIBRARY_VERSION: ${{ github.event.inputs.library_version }}
         run: |
-          sed -i "s/^version = \".*\"/version = \"${{ github.event.inputs.library_version }}\"/" pyproject.toml
+          sed -i "s/^version = \".*\"/version = \"$LIBRARY_VERSION\"/" pyproject.toml
           uv lock
 
       - name: Commit changes to new branch
