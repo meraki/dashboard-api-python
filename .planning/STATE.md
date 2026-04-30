@@ -2,11 +2,11 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Deprecation Cycle
-status: defining-requirements
+status: planning
 last_updated: "2026-04-30"
 last_activity: 2026-04-30
 progress:
-  total_phases: 0
+  total_phases: 2
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -20,14 +20,18 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-30)
 
 **Core value:** Developers can interact with every Meraki Dashboard API endpoint through a well-typed, well-documented Python client that stays current with the live API spec.
-**Current focus:** Defining requirements for v1.1 Deprecation Cycle
+**Current focus:** Roadmap created for v1.1 Deprecation Cycle (phases 6-7)
 
 ## Current Position
 
-Phase: Not started (defining requirements)
+Phase: 6 (Generator Swap)
 Plan: —
-Status: Defining requirements
-Last activity: 2026-04-30 — Milestone v1.1 started
+Status: Ready for planning
+Last activity: 2026-04-30 — Roadmap created for v1.1
+
+```
+[░░░░░░░░░░░░░░░░░░░░] 0% (0/2 phases)
+```
 
 ## Accumulated Context
 

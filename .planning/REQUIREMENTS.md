@@ -31,15 +31,15 @@ None planned beyond this milestone.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DEP-01 | TBD | Pending |
-| DEP-02 | TBD | Pending |
-| DEP-03 | TBD | Pending |
-| DEP-04 | TBD | Pending |
+| DEP-01 | Phase 6 | Pending |
+| DEP-02 | Phase 6 | Pending |
+| DEP-03 | Phase 7 | Pending |
+| DEP-04 | Phase 7 | Pending |
 
 **Coverage:**
 - v1.1 requirements: 4 total
-- Mapped to phases: 0 (pending roadmap)
-- Unmapped: 4
+- Mapped to phases: 4
+- Unmapped: 0
 
 ---
-*Requirements defined: 2026-04-30*
+*Requirements updated: 2026-04-30 (traceability mapped to phases 6-7)*
