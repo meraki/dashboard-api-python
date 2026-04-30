@@ -171,7 +171,7 @@ class AsyncRestSession:
         else:
             response = None
             message = None
-            for _ in range(retries):
+            for _attempt in range(retries):
                 # Make sure that the response object gets closed during retries
                 if response:
                     response.release()
@@ -222,7 +222,10 @@ class AsyncRestSession:
                     if "Retry-After" in response.headers:
                         wait = int(response.headers["Retry-After"])
                     else:
-                        wait = random.randint(1, self._nginx_429_retry_wait_time)
+                        wait = min(
+                            (2**_attempt) * (1 + random.random()),
+                            self._nginx_429_retry_wait_time,
+                        )
                     if self._logger:
                         self._logger.warning(f"{tag}, {operation} > {abs_url} - {status} {reason}, retrying in {wait} seconds")
                     await asyncio.sleep(wait)

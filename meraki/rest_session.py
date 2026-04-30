@@ -290,7 +290,11 @@ class RestSession(object):
                             if "Retry-After" in response.headers:
                                 wait = int(response.headers["Retry-After"])
                             else:
-                                wait = random.randint(1, self._nginx_429_retry_wait_time)
+                                attempt = self._maximum_retries - retries
+                                wait = min(
+                                    (2**attempt) * (1 + random.random()),
+                                    self._nginx_429_retry_wait_time,
+                                )
                             if self._logger:
                                 self._logger.warning(f"{tag}, {operation} - {status} {reason}, retrying in {wait} seconds")
                             time.sleep(wait)

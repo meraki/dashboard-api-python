@@ -76,12 +76,6 @@
 - Cause: Retries are synchronous within the request method; no mechanism to queue retries or back off without blocking the semaphore holder.
 - Improvement path: Consider exponential backoff or jitter for retries. Use `asyncio.sleep()` with task scheduling to avoid blocking other requests waiting on `_concurrent_requests_semaphore`.
 
-**Rate Limit Retry Uses Random Delay:**
-- Problem: Line 293 in `rest_session.py` and equivalent in async use `random.randint(1, self._nginx_429_retry_wait_time)` for 429 retry delay. Multiple clients will hammer the API simultaneously after rate limit is hit.
-- Files: `meraki/rest_session.py:293`, `meraki/aio/rest_session.py` (similar)
-- Cause: No coordination between retries across instances or global backoff strategy.
-- Improvement path: Prefer Retry-After header when available (already done). Consider exponential backoff with jitter for repeated 429 hits. Document recommended retry strategy for multi-client deployments.
-
 ---
 
 ## Fragile Areas
