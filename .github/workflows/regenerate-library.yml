@@ -33,9 +33,7 @@ jobs:
         env:
           LIBRARY_VERSION: ${{ github.event.inputs.library_version }}
           API_VERSION: ${{ github.event.inputs.api_version }}
-          ORG_ID: ${{ secrets.TEST_ORG_ID }}
-          API_KEY: ${{ secrets.TEST_ORG_API_KEY }}
-        run: uv run python generator/generate_library.py -g true -v "$LIBRARY_VERSION" -a "$API_VERSION" -o "$ORG_ID" -k "$API_KEY"
+        run: uv run python generator/generate_library.py -g true -v "$LIBRARY_VERSION" -a "$API_VERSION"
 
       - name: Set new version
         env:
