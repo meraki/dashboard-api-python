@@ -5,8 +5,6 @@ class AsyncSwitch:
     def __init__(self, session):
         super().__init__()
         self._session = session
-        
-
 
     def getDeviceSwitchPorts(self, serial: str):
         """
@@ -17,15 +15,13 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'ports'],
-            'operation': 'getDeviceSwitchPorts'
+            "tags": ["switch", "configure", "ports"],
+            "operation": "getDeviceSwitchPorts",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/switch/ports'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/switch/ports"
 
         return self._session.get(metadata, resource)
-        
-
 
     def cycleDeviceSwitchPorts(self, serial: str, ports: list):
         """
@@ -39,18 +35,18 @@ class AsyncSwitch:
         kwargs = locals()
 
         metadata = {
-            'tags': ['switch', 'liveTools', 'ports'],
-            'operation': 'cycleDeviceSwitchPorts'
+            "tags": ["switch", "liveTools", "ports"],
+            "operation": "cycleDeviceSwitchPorts",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/switch/ports/cycle'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/switch/ports/cycle"
 
-        body_params = ['ports', ]
+        body_params = [
+            "ports",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getDeviceSwitchPortsStatuses(self, serial: str, **kwargs):
         """
@@ -65,18 +61,19 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'monitor', 'ports', 'statuses'],
-            'operation': 'getDeviceSwitchPortsStatuses'
+            "tags": ["switch", "monitor", "ports", "statuses"],
+            "operation": "getDeviceSwitchPortsStatuses",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/switch/ports/statuses'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/switch/ports/statuses"
 
-        query_params = ['t0', 'timespan', ]
+        query_params = [
+            "t0",
+            "timespan",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getDeviceSwitchPortsStatusesPackets(self, serial: str, **kwargs):
         """
@@ -91,18 +88,19 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'monitor', 'ports', 'statuses', 'packets'],
-            'operation': 'getDeviceSwitchPortsStatusesPackets'
+            "tags": ["switch", "monitor", "ports", "statuses", "packets"],
+            "operation": "getDeviceSwitchPortsStatusesPackets",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/switch/ports/statuses/packets'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/switch/ports/statuses/packets"
 
-        query_params = ['t0', 'timespan', ]
+        query_params = [
+            "t0",
+            "timespan",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getDeviceSwitchPort(self, serial: str, portId: str):
         """
@@ -114,16 +112,14 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'ports'],
-            'operation': 'getDeviceSwitchPort'
+            "tags": ["switch", "configure", "ports"],
+            "operation": "getDeviceSwitchPort",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        portId = urllib.parse.quote(str(portId), safe='')
-        resource = f'/devices/{serial}/switch/ports/{portId}'
+        serial = urllib.parse.quote(str(serial), safe="")
+        portId = urllib.parse.quote(str(portId), safe="")
+        resource = f"/devices/{serial}/switch/ports/{portId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateDeviceSwitchPort(self, serial: str, portId: str, **kwargs):
         """
@@ -166,33 +162,65 @@ class AsyncSwitch:
 
         kwargs.update(locals())
 
-        if 'type' in kwargs:
-            options = ['access', 'dad', 'routed', 'stack', 'svl', 'trunk']
-            assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
-        if 'stpGuard' in kwargs:
-            options = ['bpdu guard', 'disabled', 'loop guard', 'root guard']
-            assert kwargs['stpGuard'] in options, f'''"stpGuard" cannot be "{kwargs['stpGuard']}", & must be set to one of: {options}'''
-        if 'udld' in kwargs:
-            options = ['Alert only', 'Enforce']
-            assert kwargs['udld'] in options, f'''"udld" cannot be "{kwargs['udld']}", & must be set to one of: {options}'''
-        if 'accessPolicyType' in kwargs:
-            options = ['Custom access policy', 'MAC allow list', 'Open', 'Sticky MAC allow list']
-            assert kwargs['accessPolicyType'] in options, f'''"accessPolicyType" cannot be "{kwargs['accessPolicyType']}", & must be set to one of: {options}'''
+        if "type" in kwargs:
+            options = ["access", "dad", "routed", "stack", "svl", "trunk"]
+            assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
+        if "stpGuard" in kwargs:
+            options = ["bpdu guard", "disabled", "loop guard", "root guard"]
+            assert kwargs["stpGuard"] in options, (
+                f'''"stpGuard" cannot be "{kwargs["stpGuard"]}", & must be set to one of: {options}'''
+            )
+        if "udld" in kwargs:
+            options = ["Alert only", "Enforce"]
+            assert kwargs["udld"] in options, f'''"udld" cannot be "{kwargs["udld"]}", & must be set to one of: {options}'''
+        if "accessPolicyType" in kwargs:
+            options = ["Custom access policy", "MAC allow list", "Open", "Sticky MAC allow list"]
+            assert kwargs["accessPolicyType"] in options, (
+                f'''"accessPolicyType" cannot be "{kwargs["accessPolicyType"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['switch', 'configure', 'ports'],
-            'operation': 'updateDeviceSwitchPort'
+            "tags": ["switch", "configure", "ports"],
+            "operation": "updateDeviceSwitchPort",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        portId = urllib.parse.quote(str(portId), safe='')
-        resource = f'/devices/{serial}/switch/ports/{portId}'
+        serial = urllib.parse.quote(str(serial), safe="")
+        portId = urllib.parse.quote(str(portId), safe="")
+        resource = f"/devices/{serial}/switch/ports/{portId}"
 
-        body_params = ['name', 'tags', 'enabled', 'poeEnabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'stpPortFastTrunk', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'macWhitelistLimit', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', 'adaptivePolicyGroupId', 'peerSgtCapable', 'flexibleStackingEnabled', 'daiTrusted', 'profile', 'dot3az', 'highSpeed', ]
+        body_params = [
+            "name",
+            "tags",
+            "enabled",
+            "poeEnabled",
+            "type",
+            "vlan",
+            "voiceVlan",
+            "allowedVlans",
+            "isolationEnabled",
+            "rstpEnabled",
+            "stpGuard",
+            "stpPortFastTrunk",
+            "linkNegotiation",
+            "portScheduleId",
+            "udld",
+            "accessPolicyType",
+            "accessPolicyNumber",
+            "macAllowList",
+            "macWhitelistLimit",
+            "stickyMacAllowList",
+            "stickyMacAllowListLimit",
+            "stormControlEnabled",
+            "adaptivePolicyGroupId",
+            "peerSgtCapable",
+            "flexibleStackingEnabled",
+            "daiTrusted",
+            "profile",
+            "dot3az",
+            "highSpeed",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getDeviceSwitchRoutingInterfaces(self, serial: str, **kwargs):
         """
@@ -206,26 +234,29 @@ class AsyncSwitch:
 
         kwargs.update(locals())
 
-        if 'mode' in kwargs:
-            options = ['loopback', 'oob_management', 'routed', 'vlan']
-            assert kwargs['mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
-        if 'protocol' in kwargs:
-            options = ['ipv4', 'ipv6']
-            assert kwargs['protocol'] in options, f'''"protocol" cannot be "{kwargs['protocol']}", & must be set to one of: {options}'''
+        if "mode" in kwargs:
+            options = ["loopback", "oob_management", "routed", "vlan"]
+            assert kwargs["mode"] in options, f'''"mode" cannot be "{kwargs["mode"]}", & must be set to one of: {options}'''
+        if "protocol" in kwargs:
+            options = ["ipv4", "ipv6"]
+            assert kwargs["protocol"] in options, (
+                f'''"protocol" cannot be "{kwargs["protocol"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['switch', 'configure', 'routing', 'interfaces'],
-            'operation': 'getDeviceSwitchRoutingInterfaces'
+            "tags": ["switch", "configure", "routing", "interfaces"],
+            "operation": "getDeviceSwitchRoutingInterfaces",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/switch/routing/interfaces'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/switch/routing/interfaces"
 
-        query_params = ['mode', 'protocol', ]
+        query_params = [
+            "mode",
+            "protocol",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def createDeviceSwitchRoutingInterface(self, serial: str, name: str, **kwargs):
         """
@@ -234,10 +265,11 @@ class AsyncSwitch:
 
         - serial (string): Serial
         - name (string): A friendly name or description for the interface or VLAN (max length 128 characters).
-        - mode (string): L3 Interface mode, can be one of 'vlan', 'routed', 'loopback'. Default is 'vlan'. CS 17.18 or higher is required for 'routed' mode. 
+        - mode (string): L3 Interface mode, can be one of 'vlan', 'routed', 'loopback'. Default is 'vlan'. CS 17.18 or higher is required for 'routed' mode.
         - subnet (string): The network that this L3 interface is on, in CIDR notation (ex. 10.1.1.0/24).
         - switchPortId (string): Switch Port ID when in Routed mode (CS 17.18 or higher required)
         - interfaceIp (string): The IP address that will be used for Layer 3 routing on this VLAN or subnet. This cannot be the same         as the device management IP.
+        - mtu (integer): The interface MTU. Applies to native switch layer 3 interfaces, including VLAN and routed modes.
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
         - vlanId (integer): The VLAN this L3 interface is on. VLAN must be between 1 and 4094.
         - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a L3 interface. Required if this is the first IPv4 interface.
@@ -249,26 +281,40 @@ class AsyncSwitch:
 
         kwargs.update(locals())
 
-        if 'mode' in kwargs:
-            options = ['loopback', 'oob_management', 'routed', 'vlan']
-            assert kwargs['mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
-        if 'multicastRouting' in kwargs:
-            options = ['IGMP snooping querier', 'disabled', 'enabled']
-            assert kwargs['multicastRouting'] in options, f'''"multicastRouting" cannot be "{kwargs['multicastRouting']}", & must be set to one of: {options}'''
+        if "mode" in kwargs:
+            options = ["loopback", "oob_management", "routed", "vlan"]
+            assert kwargs["mode"] in options, f'''"mode" cannot be "{kwargs["mode"]}", & must be set to one of: {options}'''
+        if "multicastRouting" in kwargs:
+            options = ["IGMP snooping querier", "disabled", "enabled"]
+            assert kwargs["multicastRouting"] in options, (
+                f'''"multicastRouting" cannot be "{kwargs["multicastRouting"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['switch', 'configure', 'routing', 'interfaces'],
-            'operation': 'createDeviceSwitchRoutingInterface'
+            "tags": ["switch", "configure", "routing", "interfaces"],
+            "operation": "createDeviceSwitchRoutingInterface",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/switch/routing/interfaces'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/switch/routing/interfaces"
 
-        body_params = ['name', 'mode', 'subnet', 'switchPortId', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ipv6', 'vrf', 'loopback', ]
+        body_params = [
+            "name",
+            "mode",
+            "subnet",
+            "switchPortId",
+            "interfaceIp",
+            "mtu",
+            "multicastRouting",
+            "vlanId",
+            "defaultGateway",
+            "ospfSettings",
+            "ipv6",
+            "vrf",
+            "loopback",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getDeviceSwitchRoutingInterface(self, serial: str, interfaceId: str):
         """
@@ -280,16 +326,14 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'routing', 'interfaces'],
-            'operation': 'getDeviceSwitchRoutingInterface'
+            "tags": ["switch", "configure", "routing", "interfaces"],
+            "operation": "getDeviceSwitchRoutingInterface",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        interfaceId = urllib.parse.quote(str(interfaceId), safe='')
-        resource = f'/devices/{serial}/switch/routing/interfaces/{interfaceId}'
+        serial = urllib.parse.quote(str(serial), safe="")
+        interfaceId = urllib.parse.quote(str(interfaceId), safe="")
+        resource = f"/devices/{serial}/switch/routing/interfaces/{interfaceId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateDeviceSwitchRoutingInterface(self, serial: str, interfaceId: str, **kwargs):
         """
@@ -302,6 +346,7 @@ class AsyncSwitch:
         - subnet (string): The network that this L3 interface is on, in CIDR notation (ex. 10.1.1.0/24).
         - switchPortId (string): Switch Port ID when in Routed mode (CS 17.18 or higher required)
         - interfaceIp (string): The IP address that will be used for Layer 3 routing on this VLAN or subnet. This cannot be the same         as the device management IP.
+        - mtu (integer): The interface MTU. Applies to native switch layer 3 interfaces, including VLAN and routed modes.
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
         - vlanId (integer): The VLAN this L3 interface is on. VLAN must be between 1 and 4094.
         - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a L3 interface. Required if this is the first IPv4 interface.
@@ -313,24 +358,37 @@ class AsyncSwitch:
 
         kwargs.update(locals())
 
-        if 'multicastRouting' in kwargs:
-            options = ['IGMP snooping querier', 'disabled', 'enabled']
-            assert kwargs['multicastRouting'] in options, f'''"multicastRouting" cannot be "{kwargs['multicastRouting']}", & must be set to one of: {options}'''
+        if "multicastRouting" in kwargs:
+            options = ["IGMP snooping querier", "disabled", "enabled"]
+            assert kwargs["multicastRouting"] in options, (
+                f'''"multicastRouting" cannot be "{kwargs["multicastRouting"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['switch', 'configure', 'routing', 'interfaces'],
-            'operation': 'updateDeviceSwitchRoutingInterface'
+            "tags": ["switch", "configure", "routing", "interfaces"],
+            "operation": "updateDeviceSwitchRoutingInterface",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        interfaceId = urllib.parse.quote(str(interfaceId), safe='')
-        resource = f'/devices/{serial}/switch/routing/interfaces/{interfaceId}'
+        serial = urllib.parse.quote(str(serial), safe="")
+        interfaceId = urllib.parse.quote(str(interfaceId), safe="")
+        resource = f"/devices/{serial}/switch/routing/interfaces/{interfaceId}"
 
-        body_params = ['name', 'subnet', 'switchPortId', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ipv6', 'vrf', 'loopback', ]
+        body_params = [
+            "name",
+            "subnet",
+            "switchPortId",
+            "interfaceIp",
+            "mtu",
+            "multicastRouting",
+            "vlanId",
+            "defaultGateway",
+            "ospfSettings",
+            "ipv6",
+            "vrf",
+            "loopback",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteDeviceSwitchRoutingInterface(self, serial: str, interfaceId: str):
         """
@@ -342,16 +400,14 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'routing', 'interfaces'],
-            'operation': 'deleteDeviceSwitchRoutingInterface'
+            "tags": ["switch", "configure", "routing", "interfaces"],
+            "operation": "deleteDeviceSwitchRoutingInterface",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        interfaceId = urllib.parse.quote(str(interfaceId), safe='')
-        resource = f'/devices/{serial}/switch/routing/interfaces/{interfaceId}'
+        serial = urllib.parse.quote(str(serial), safe="")
+        interfaceId = urllib.parse.quote(str(interfaceId), safe="")
+        resource = f"/devices/{serial}/switch/routing/interfaces/{interfaceId}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def getDeviceSwitchRoutingInterfaceDhcp(self, serial: str, interfaceId: str):
         """
@@ -363,68 +419,82 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'routing', 'interfaces', 'dhcp'],
-            'operation': 'getDeviceSwitchRoutingInterfaceDhcp'
+            "tags": ["switch", "configure", "routing", "interfaces", "dhcp"],
+            "operation": "getDeviceSwitchRoutingInterfaceDhcp",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        interfaceId = urllib.parse.quote(str(interfaceId), safe='')
-        resource = f'/devices/{serial}/switch/routing/interfaces/{interfaceId}/dhcp'
+        serial = urllib.parse.quote(str(serial), safe="")
+        interfaceId = urllib.parse.quote(str(interfaceId), safe="")
+        resource = f"/devices/{serial}/switch/routing/interfaces/{interfaceId}/dhcp"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateDeviceSwitchRoutingInterfaceDhcp(self, serial: str, interfaceId: str, **kwargs):
         """
-        **Update a layer 3 interface DHCP configuration for a switch**
-        https://developer.cisco.com/meraki/api-v1/#!update-device-switch-routing-interface-dhcp
+         **Update a layer 3 interface DHCP configuration for a switch**
+         https://developer.cisco.com/meraki/api-v1/#!update-device-switch-routing-interface-dhcp
 
-        - serial (string): Serial
-        - interfaceId (string): Interface ID
-        - dhcpMode (string): The DHCP mode options for the switch interface
-       ('dhcpDisabled', 'dhcpRelay' or 'dhcpServer')
-        - dhcpRelayServerIps (array): The DHCP relay server IPs to which DHCP packets would get relayed for the switch interface
-        - dhcpLeaseTime (string): The DHCP lease time config for the dhcp server running on switch interface
-        ('30 minutes', '1 hour', '4 hours', '12 hours', '1 day' or '1 week')
-        - dnsNameserversOption (string): The DHCP name server option for the dhcp server running on the switch interface
-        ('googlePublicDns', 'openDns' or 'custom')
-        - dnsCustomNameservers (array): The DHCP name server IPs when DHCP name server option is
-        'custom'
-        - bootOptionsEnabled (boolean): Enable DHCP boot options to provide PXE boot options configs for the dhcp server running on the switch
-        interface
-        - bootNextServer (string): The PXE boot server IP for the DHCP server running on the switch interface
-        - bootFileName (string): The PXE boot server filename for the DHCP server running on the switch interface
-        - dhcpOptions (array): Array of DHCP options consisting of code, type and value for the DHCP server running on the switch interface
-        - reservedIpRanges (array): Array of DHCP reserved IP assignments for the DHCP server running on the switch interface
-        - fixedIpAssignments (array): Array of DHCP fixed IP assignments for the DHCP server running on the switch interface
+         - serial (string): Serial
+         - interfaceId (string): Interface ID
+         - dhcpMode (string): The DHCP mode options for the switch interface
+        ('dhcpDisabled', 'dhcpRelay' or 'dhcpServer')
+         - dhcpRelayServerIps (array): The DHCP relay server IPs to which DHCP packets would get relayed for the switch interface
+         - dhcpLeaseTime (string): The DHCP lease time config for the dhcp server running on switch interface
+         ('30 minutes', '1 hour', '4 hours', '12 hours', '1 day' or '1 week')
+         - dnsNameserversOption (string): The DHCP name server option for the dhcp server running on the switch interface
+         ('googlePublicDns', 'openDns' or 'custom')
+         - dnsCustomNameservers (array): The DHCP name server IPs when DHCP name server option is
+         'custom'
+         - bootOptionsEnabled (boolean): Enable DHCP boot options to provide PXE boot options configs for the dhcp server running on the switch
+         interface
+         - bootNextServer (string): The PXE boot server IP for the DHCP server running on the switch interface
+         - bootFileName (string): The PXE boot server filename for the DHCP server running on the switch interface
+         - dhcpOptions (array): Array of DHCP options consisting of code, type and value for the DHCP server running on the switch interface
+         - reservedIpRanges (array): Array of DHCP reserved IP assignments for the DHCP server running on the switch interface
+         - fixedIpAssignments (array): Array of DHCP fixed IP assignments for the DHCP server running on the switch interface
         """
 
         kwargs.update(locals())
 
-        if 'dhcpMode' in kwargs:
-            options = ['dhcpDisabled', 'dhcpRelay', 'dhcpServer']
-            assert kwargs['dhcpMode'] in options, f'''"dhcpMode" cannot be "{kwargs['dhcpMode']}", & must be set to one of: {options}'''
-        if 'dhcpLeaseTime' in kwargs:
-            options = ['1 day', '1 hour', '1 week', '12 hours', '30 minutes', '4 hours']
-            assert kwargs['dhcpLeaseTime'] in options, f'''"dhcpLeaseTime" cannot be "{kwargs['dhcpLeaseTime']}", & must be set to one of: {options}'''
-        if 'dnsNameserversOption' in kwargs:
-            options = ['custom', 'googlePublicDns', 'openDns']
-            assert kwargs['dnsNameserversOption'] in options, f'''"dnsNameserversOption" cannot be "{kwargs['dnsNameserversOption']}", & must be set to one of: {options}'''
+        if "dhcpMode" in kwargs:
+            options = ["dhcpDisabled", "dhcpRelay", "dhcpServer"]
+            assert kwargs["dhcpMode"] in options, (
+                f'''"dhcpMode" cannot be "{kwargs["dhcpMode"]}", & must be set to one of: {options}'''
+            )
+        if "dhcpLeaseTime" in kwargs:
+            options = ["1 day", "1 hour", "1 week", "12 hours", "30 minutes", "4 hours"]
+            assert kwargs["dhcpLeaseTime"] in options, (
+                f'''"dhcpLeaseTime" cannot be "{kwargs["dhcpLeaseTime"]}", & must be set to one of: {options}'''
+            )
+        if "dnsNameserversOption" in kwargs:
+            options = ["custom", "googlePublicDns", "openDns"]
+            assert kwargs["dnsNameserversOption"] in options, (
+                f'''"dnsNameserversOption" cannot be "{kwargs["dnsNameserversOption"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['switch', 'configure', 'routing', 'interfaces', 'dhcp'],
-            'operation': 'updateDeviceSwitchRoutingInterfaceDhcp'
+            "tags": ["switch", "configure", "routing", "interfaces", "dhcp"],
+            "operation": "updateDeviceSwitchRoutingInterfaceDhcp",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        interfaceId = urllib.parse.quote(str(interfaceId), safe='')
-        resource = f'/devices/{serial}/switch/routing/interfaces/{interfaceId}/dhcp'
+        serial = urllib.parse.quote(str(serial), safe="")
+        interfaceId = urllib.parse.quote(str(interfaceId), safe="")
+        resource = f"/devices/{serial}/switch/routing/interfaces/{interfaceId}/dhcp"
 
-        body_params = ['dhcpMode', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dnsNameserversOption', 'dnsCustomNameservers', 'bootOptionsEnabled', 'bootNextServer', 'bootFileName', 'dhcpOptions', 'reservedIpRanges', 'fixedIpAssignments', ]
+        body_params = [
+            "dhcpMode",
+            "dhcpRelayServerIps",
+            "dhcpLeaseTime",
+            "dnsNameserversOption",
+            "dnsCustomNameservers",
+            "bootOptionsEnabled",
+            "bootNextServer",
+            "bootFileName",
+            "dhcpOptions",
+            "reservedIpRanges",
+            "fixedIpAssignments",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getDeviceSwitchRoutingStaticRoutes(self, serial: str):
         """
@@ -435,15 +505,13 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'routing', 'staticRoutes'],
-            'operation': 'getDeviceSwitchRoutingStaticRoutes'
+            "tags": ["switch", "configure", "routing", "staticRoutes"],
+            "operation": "getDeviceSwitchRoutingStaticRoutes",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/switch/routing/staticRoutes'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/switch/routing/staticRoutes"
 
         return self._session.get(metadata, resource)
-        
-
 
     def createDeviceSwitchRoutingStaticRoute(self, serial: str, subnet: str, nextHopIp: str, **kwargs):
         """
@@ -462,18 +530,23 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'configure', 'routing', 'staticRoutes'],
-            'operation': 'createDeviceSwitchRoutingStaticRoute'
+            "tags": ["switch", "configure", "routing", "staticRoutes"],
+            "operation": "createDeviceSwitchRoutingStaticRoute",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/switch/routing/staticRoutes'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/switch/routing/staticRoutes"
 
-        body_params = ['name', 'subnet', 'nextHopIp', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', 'vrf', ]
+        body_params = [
+            "name",
+            "subnet",
+            "nextHopIp",
+            "advertiseViaOspfEnabled",
+            "preferOverOspfRoutesEnabled",
+            "vrf",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getDeviceSwitchRoutingStaticRoute(self, serial: str, staticRouteId: str):
         """
@@ -485,16 +558,14 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'routing', 'staticRoutes'],
-            'operation': 'getDeviceSwitchRoutingStaticRoute'
+            "tags": ["switch", "configure", "routing", "staticRoutes"],
+            "operation": "getDeviceSwitchRoutingStaticRoute",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        staticRouteId = urllib.parse.quote(str(staticRouteId), safe='')
-        resource = f'/devices/{serial}/switch/routing/staticRoutes/{staticRouteId}'
+        serial = urllib.parse.quote(str(serial), safe="")
+        staticRouteId = urllib.parse.quote(str(staticRouteId), safe="")
+        resource = f"/devices/{serial}/switch/routing/staticRoutes/{staticRouteId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateDeviceSwitchRoutingStaticRoute(self, serial: str, staticRouteId: str, **kwargs):
         """
@@ -515,19 +586,25 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'configure', 'routing', 'staticRoutes'],
-            'operation': 'updateDeviceSwitchRoutingStaticRoute'
+            "tags": ["switch", "configure", "routing", "staticRoutes"],
+            "operation": "updateDeviceSwitchRoutingStaticRoute",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        staticRouteId = urllib.parse.quote(str(staticRouteId), safe='')
-        resource = f'/devices/{serial}/switch/routing/staticRoutes/{staticRouteId}'
+        serial = urllib.parse.quote(str(serial), safe="")
+        staticRouteId = urllib.parse.quote(str(staticRouteId), safe="")
+        resource = f"/devices/{serial}/switch/routing/staticRoutes/{staticRouteId}"
 
-        body_params = ['name', 'subnet', 'nextHopIp', 'managementNextHop', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', 'vrf', ]
+        body_params = [
+            "name",
+            "subnet",
+            "nextHopIp",
+            "managementNextHop",
+            "advertiseViaOspfEnabled",
+            "preferOverOspfRoutesEnabled",
+            "vrf",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteDeviceSwitchRoutingStaticRoute(self, serial: str, staticRouteId: str):
         """
@@ -539,16 +616,14 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'routing', 'staticRoutes'],
-            'operation': 'deleteDeviceSwitchRoutingStaticRoute'
+            "tags": ["switch", "configure", "routing", "staticRoutes"],
+            "operation": "deleteDeviceSwitchRoutingStaticRoute",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        staticRouteId = urllib.parse.quote(str(staticRouteId), safe='')
-        resource = f'/devices/{serial}/switch/routing/staticRoutes/{staticRouteId}'
+        serial = urllib.parse.quote(str(serial), safe="")
+        staticRouteId = urllib.parse.quote(str(staticRouteId), safe="")
+        resource = f"/devices/{serial}/switch/routing/staticRoutes/{staticRouteId}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def getDeviceSwitchWarmSpare(self, serial: str):
         """
@@ -559,15 +634,13 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'warmSpare'],
-            'operation': 'getDeviceSwitchWarmSpare'
+            "tags": ["switch", "configure", "warmSpare"],
+            "operation": "getDeviceSwitchWarmSpare",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/switch/warmSpare'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/switch/warmSpare"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateDeviceSwitchWarmSpare(self, serial: str, enabled: bool, **kwargs):
         """
@@ -582,18 +655,19 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'configure', 'warmSpare'],
-            'operation': 'updateDeviceSwitchWarmSpare'
+            "tags": ["switch", "configure", "warmSpare"],
+            "operation": "updateDeviceSwitchWarmSpare",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/switch/warmSpare'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/switch/warmSpare"
 
-        body_params = ['enabled', 'spareSerial', ]
+        body_params = [
+            "enabled",
+            "spareSerial",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkSwitchAccessControlLists(self, networkId: str):
         """
@@ -604,15 +678,13 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'accessControlLists'],
-            'operation': 'getNetworkSwitchAccessControlLists'
+            "tags": ["switch", "configure", "accessControlLists"],
+            "operation": "getNetworkSwitchAccessControlLists",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/accessControlLists'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/accessControlLists"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkSwitchAccessControlLists(self, networkId: str, rules: list):
         """
@@ -626,18 +698,18 @@ class AsyncSwitch:
         kwargs = locals()
 
         metadata = {
-            'tags': ['switch', 'configure', 'accessControlLists'],
-            'operation': 'updateNetworkSwitchAccessControlLists'
+            "tags": ["switch", "configure", "accessControlLists"],
+            "operation": "updateNetworkSwitchAccessControlLists",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/accessControlLists'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/accessControlLists"
 
-        body_params = ['rules', ]
+        body_params = [
+            "rules",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkSwitchAccessPolicies(self, networkId: str):
         """
@@ -648,17 +720,17 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'accessPolicies'],
-            'operation': 'getNetworkSwitchAccessPolicies'
+            "tags": ["switch", "configure", "accessPolicies"],
+            "operation": "getNetworkSwitchAccessPolicies",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/accessPolicies'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/accessPolicies"
 
         return self._session.get(metadata, resource)
-        
 
-
-    def createNetworkSwitchAccessPolicy(self, networkId: str, name: str, radiusServers: list, radiusAccountingEnabled: bool, **kwargs):
+    def createNetworkSwitchAccessPolicy(
+        self, networkId: str, name: str, radiusServers: list, radiusAccountingEnabled: bool, **kwargs
+    ):
         """
         **Create an access policy for a switch network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-access-policy
@@ -687,26 +759,48 @@ class AsyncSwitch:
 
         kwargs.update(locals())
 
-        if 'hostMode' in kwargs:
-            options = ['Multi-Auth', 'Multi-Domain', 'Multi-Host', 'Single-Host']
-            assert kwargs['hostMode'] in options, f'''"hostMode" cannot be "{kwargs['hostMode']}", & must be set to one of: {options}'''
-        if 'accessPolicyType' in kwargs:
-            options = ['802.1x', 'Hybrid authentication', 'MAC authentication bypass']
-            assert kwargs['accessPolicyType'] in options, f'''"accessPolicyType" cannot be "{kwargs['accessPolicyType']}", & must be set to one of: {options}'''
+        if "hostMode" in kwargs:
+            options = ["Multi-Auth", "Multi-Domain", "Multi-Host", "Single-Host"]
+            assert kwargs["hostMode"] in options, (
+                f'''"hostMode" cannot be "{kwargs["hostMode"]}", & must be set to one of: {options}'''
+            )
+        if "accessPolicyType" in kwargs:
+            options = ["802.1x", "Hybrid authentication", "MAC authentication bypass"]
+            assert kwargs["accessPolicyType"] in options, (
+                f'''"accessPolicyType" cannot be "{kwargs["accessPolicyType"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['switch', 'configure', 'accessPolicies'],
-            'operation': 'createNetworkSwitchAccessPolicy'
+            "tags": ["switch", "configure", "accessPolicies"],
+            "operation": "createNetworkSwitchAccessPolicy",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/accessPolicies'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/accessPolicies"
 
-        body_params = ['name', 'radiusServers', 'radius', 'guestPortBouncing', 'radiusTestingEnabled', 'radiusCoaSupportEnabled', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusGroupAttribute', 'hostMode', 'accessPolicyType', 'increaseAccessSpeed', 'guestVlanId', 'dot1x', 'voiceVlanClients', 'urlRedirectWalledGardenEnabled', 'urlRedirectWalledGardenRanges', 'guestGroupPolicyId', 'guestSgtId', ]
+        body_params = [
+            "name",
+            "radiusServers",
+            "radius",
+            "guestPortBouncing",
+            "radiusTestingEnabled",
+            "radiusCoaSupportEnabled",
+            "radiusAccountingEnabled",
+            "radiusAccountingServers",
+            "radiusGroupAttribute",
+            "hostMode",
+            "accessPolicyType",
+            "increaseAccessSpeed",
+            "guestVlanId",
+            "dot1x",
+            "voiceVlanClients",
+            "urlRedirectWalledGardenEnabled",
+            "urlRedirectWalledGardenRanges",
+            "guestGroupPolicyId",
+            "guestSgtId",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getNetworkSwitchAccessPolicy(self, networkId: str, accessPolicyNumber: str):
         """
@@ -718,16 +812,14 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'accessPolicies'],
-            'operation': 'getNetworkSwitchAccessPolicy'
+            "tags": ["switch", "configure", "accessPolicies"],
+            "operation": "getNetworkSwitchAccessPolicy",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        accessPolicyNumber = urllib.parse.quote(str(accessPolicyNumber), safe='')
-        resource = f'/networks/{networkId}/switch/accessPolicies/{accessPolicyNumber}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        accessPolicyNumber = urllib.parse.quote(str(accessPolicyNumber), safe="")
+        resource = f"/networks/{networkId}/switch/accessPolicies/{accessPolicyNumber}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkSwitchAccessPolicy(self, networkId: str, accessPolicyNumber: str, **kwargs):
         """
@@ -759,27 +851,49 @@ class AsyncSwitch:
 
         kwargs.update(locals())
 
-        if 'hostMode' in kwargs:
-            options = ['Multi-Auth', 'Multi-Domain', 'Multi-Host', 'Single-Host']
-            assert kwargs['hostMode'] in options, f'''"hostMode" cannot be "{kwargs['hostMode']}", & must be set to one of: {options}'''
-        if 'accessPolicyType' in kwargs:
-            options = ['802.1x', 'Hybrid authentication', 'MAC authentication bypass']
-            assert kwargs['accessPolicyType'] in options, f'''"accessPolicyType" cannot be "{kwargs['accessPolicyType']}", & must be set to one of: {options}'''
+        if "hostMode" in kwargs:
+            options = ["Multi-Auth", "Multi-Domain", "Multi-Host", "Single-Host"]
+            assert kwargs["hostMode"] in options, (
+                f'''"hostMode" cannot be "{kwargs["hostMode"]}", & must be set to one of: {options}'''
+            )
+        if "accessPolicyType" in kwargs:
+            options = ["802.1x", "Hybrid authentication", "MAC authentication bypass"]
+            assert kwargs["accessPolicyType"] in options, (
+                f'''"accessPolicyType" cannot be "{kwargs["accessPolicyType"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['switch', 'configure', 'accessPolicies'],
-            'operation': 'updateNetworkSwitchAccessPolicy'
+            "tags": ["switch", "configure", "accessPolicies"],
+            "operation": "updateNetworkSwitchAccessPolicy",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        accessPolicyNumber = urllib.parse.quote(str(accessPolicyNumber), safe='')
-        resource = f'/networks/{networkId}/switch/accessPolicies/{accessPolicyNumber}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        accessPolicyNumber = urllib.parse.quote(str(accessPolicyNumber), safe="")
+        resource = f"/networks/{networkId}/switch/accessPolicies/{accessPolicyNumber}"
 
-        body_params = ['name', 'radiusServers', 'radius', 'guestPortBouncing', 'radiusTestingEnabled', 'radiusCoaSupportEnabled', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusGroupAttribute', 'hostMode', 'accessPolicyType', 'increaseAccessSpeed', 'guestVlanId', 'dot1x', 'voiceVlanClients', 'urlRedirectWalledGardenEnabled', 'urlRedirectWalledGardenRanges', 'guestGroupPolicyId', 'guestSgtId', ]
+        body_params = [
+            "name",
+            "radiusServers",
+            "radius",
+            "guestPortBouncing",
+            "radiusTestingEnabled",
+            "radiusCoaSupportEnabled",
+            "radiusAccountingEnabled",
+            "radiusAccountingServers",
+            "radiusGroupAttribute",
+            "hostMode",
+            "accessPolicyType",
+            "increaseAccessSpeed",
+            "guestVlanId",
+            "dot1x",
+            "voiceVlanClients",
+            "urlRedirectWalledGardenEnabled",
+            "urlRedirectWalledGardenRanges",
+            "guestGroupPolicyId",
+            "guestSgtId",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteNetworkSwitchAccessPolicy(self, networkId: str, accessPolicyNumber: str):
         """
@@ -791,16 +905,14 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'accessPolicies'],
-            'operation': 'deleteNetworkSwitchAccessPolicy'
+            "tags": ["switch", "configure", "accessPolicies"],
+            "operation": "deleteNetworkSwitchAccessPolicy",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        accessPolicyNumber = urllib.parse.quote(str(accessPolicyNumber), safe='')
-        resource = f'/networks/{networkId}/switch/accessPolicies/{accessPolicyNumber}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        accessPolicyNumber = urllib.parse.quote(str(accessPolicyNumber), safe="")
+        resource = f"/networks/{networkId}/switch/accessPolicies/{accessPolicyNumber}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def getNetworkSwitchAlternateManagementInterface(self, networkId: str):
         """
@@ -811,15 +923,13 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'alternateManagementInterface'],
-            'operation': 'getNetworkSwitchAlternateManagementInterface'
+            "tags": ["switch", "configure", "alternateManagementInterface"],
+            "operation": "getNetworkSwitchAlternateManagementInterface",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/alternateManagementInterface'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/alternateManagementInterface"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkSwitchAlternateManagementInterface(self, networkId: str, **kwargs):
         """
@@ -836,20 +946,23 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'configure', 'alternateManagementInterface'],
-            'operation': 'updateNetworkSwitchAlternateManagementInterface'
+            "tags": ["switch", "configure", "alternateManagementInterface"],
+            "operation": "updateNetworkSwitchAlternateManagementInterface",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/alternateManagementInterface'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/alternateManagementInterface"
 
-        body_params = ['enabled', 'vlanId', 'protocols', 'switches', ]
+        body_params = [
+            "enabled",
+            "vlanId",
+            "protocols",
+            "switches",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
 
-
-    def getNetworkSwitchDhcpV4ServersSeen(self, networkId: str, total_pages=1, direction='next', **kwargs):
+    def getNetworkSwitchDhcpV4ServersSeen(self, networkId: str, total_pages=1, direction="next", **kwargs):
         """
         **Return the network's DHCPv4 servers seen within the selected timeframe (default 1 day)**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-dhcp-v-4-servers-seen
@@ -867,18 +980,22 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'configure', 'dhcp', 'v4', 'servers', 'seen'],
-            'operation': 'getNetworkSwitchDhcpV4ServersSeen'
+            "tags": ["switch", "configure", "dhcp", "v4", "servers", "seen"],
+            "operation": "getNetworkSwitchDhcpV4ServersSeen",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/dhcp/v4/servers/seen'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/dhcp/v4/servers/seen"
 
-        query_params = ['t0', 'timespan', 'perPage', 'startingAfter', 'endingBefore', ]
+        query_params = [
+            "t0",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def getNetworkSwitchDhcpServerPolicy(self, networkId: str):
         """
@@ -889,15 +1006,13 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'dhcpServerPolicy'],
-            'operation': 'getNetworkSwitchDhcpServerPolicy'
+            "tags": ["switch", "configure", "dhcpServerPolicy"],
+            "operation": "getNetworkSwitchDhcpServerPolicy",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/dhcpServerPolicy'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/dhcpServerPolicy"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkSwitchDhcpServerPolicy(self, networkId: str, **kwargs):
         """
@@ -914,25 +1029,33 @@ class AsyncSwitch:
 
         kwargs.update(locals())
 
-        if 'defaultPolicy' in kwargs:
-            options = ['allow', 'block']
-            assert kwargs['defaultPolicy'] in options, f'''"defaultPolicy" cannot be "{kwargs['defaultPolicy']}", & must be set to one of: {options}'''
+        if "defaultPolicy" in kwargs:
+            options = ["allow", "block"]
+            assert kwargs["defaultPolicy"] in options, (
+                f'''"defaultPolicy" cannot be "{kwargs["defaultPolicy"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['switch', 'configure', 'dhcpServerPolicy'],
-            'operation': 'updateNetworkSwitchDhcpServerPolicy'
+            "tags": ["switch", "configure", "dhcpServerPolicy"],
+            "operation": "updateNetworkSwitchDhcpServerPolicy",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/dhcpServerPolicy'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/dhcpServerPolicy"
 
-        body_params = ['alerts', 'defaultPolicy', 'allowedServers', 'blockedServers', 'arpInspection', ]
+        body_params = [
+            "alerts",
+            "defaultPolicy",
+            "allowedServers",
+            "blockedServers",
+            "arpInspection",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
 
-
-    def getNetworkSwitchDhcpServerPolicyArpInspectionTrustedServers(self, networkId: str, total_pages=1, direction='next', **kwargs):
+    def getNetworkSwitchDhcpServerPolicyArpInspectionTrustedServers(
+        self, networkId: str, total_pages=1, direction="next", **kwargs
+    ):
         """
         **Return the list of servers trusted by Dynamic ARP Inspection on this network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-dhcp-server-policy-arp-inspection-trusted-servers
@@ -948,18 +1071,20 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'configure', 'dhcpServerPolicy', 'arpInspection', 'trustedServers'],
-            'operation': 'getNetworkSwitchDhcpServerPolicyArpInspectionTrustedServers'
+            "tags": ["switch", "configure", "dhcpServerPolicy", "arpInspection", "trustedServers"],
+            "operation": "getNetworkSwitchDhcpServerPolicyArpInspectionTrustedServers",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/trustedServers'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/trustedServers"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def createNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer(self, networkId: str, mac: str, vlan: int, ipv4: dict):
         """
@@ -975,18 +1100,20 @@ class AsyncSwitch:
         kwargs = locals()
 
         metadata = {
-            'tags': ['switch', 'configure', 'dhcpServerPolicy', 'arpInspection', 'trustedServers'],
-            'operation': 'createNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer'
+            "tags": ["switch", "configure", "dhcpServerPolicy", "arpInspection", "trustedServers"],
+            "operation": "createNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/trustedServers'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/trustedServers"
 
-        body_params = ['mac', 'vlan', 'ipv4', ]
+        body_params = [
+            "mac",
+            "vlan",
+            "ipv4",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def updateNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer(self, networkId: str, trustedServerId: str, **kwargs):
         """
@@ -1003,19 +1130,21 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'configure', 'dhcpServerPolicy', 'arpInspection', 'trustedServers'],
-            'operation': 'updateNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer'
+            "tags": ["switch", "configure", "dhcpServerPolicy", "arpInspection", "trustedServers"],
+            "operation": "updateNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        trustedServerId = urllib.parse.quote(str(trustedServerId), safe='')
-        resource = f'/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/trustedServers/{trustedServerId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        trustedServerId = urllib.parse.quote(str(trustedServerId), safe="")
+        resource = f"/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/trustedServers/{trustedServerId}"
 
-        body_params = ['mac', 'vlan', 'ipv4', ]
+        body_params = [
+            "mac",
+            "vlan",
+            "ipv4",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer(self, networkId: str, trustedServerId: str):
         """
@@ -1027,18 +1156,18 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'dhcpServerPolicy', 'arpInspection', 'trustedServers'],
-            'operation': 'deleteNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer'
+            "tags": ["switch", "configure", "dhcpServerPolicy", "arpInspection", "trustedServers"],
+            "operation": "deleteNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        trustedServerId = urllib.parse.quote(str(trustedServerId), safe='')
-        resource = f'/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/trustedServers/{trustedServerId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        trustedServerId = urllib.parse.quote(str(trustedServerId), safe="")
+        resource = f"/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/trustedServers/{trustedServerId}"
 
         return self._session.delete(metadata, resource)
-        
 
-
-    def getNetworkSwitchDhcpServerPolicyArpInspectionWarningsByDevice(self, networkId: str, total_pages=1, direction='next', **kwargs):
+    def getNetworkSwitchDhcpServerPolicyArpInspectionWarningsByDevice(
+        self, networkId: str, total_pages=1, direction="next", **kwargs
+    ):
         """
         **Return the devices that have a Dynamic ARP Inspection warning and their warnings**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-dhcp-server-policy-arp-inspection-warnings-by-device
@@ -1054,18 +1183,20 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'configure', 'dhcpServerPolicy', 'arpInspection', 'warnings', 'byDevice'],
-            'operation': 'getNetworkSwitchDhcpServerPolicyArpInspectionWarningsByDevice'
+            "tags": ["switch", "configure", "dhcpServerPolicy", "arpInspection", "warnings", "byDevice"],
+            "operation": "getNetworkSwitchDhcpServerPolicyArpInspectionWarningsByDevice",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/warnings/byDevice'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/warnings/byDevice"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def getNetworkSwitchDscpToCosMappings(self, networkId: str):
         """
@@ -1076,15 +1207,13 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'dscpToCosMappings'],
-            'operation': 'getNetworkSwitchDscpToCosMappings'
+            "tags": ["switch", "configure", "dscpToCosMappings"],
+            "operation": "getNetworkSwitchDscpToCosMappings",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/dscpToCosMappings'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/dscpToCosMappings"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkSwitchDscpToCosMappings(self, networkId: str, mappings: list):
         """
@@ -1098,18 +1227,18 @@ class AsyncSwitch:
         kwargs = locals()
 
         metadata = {
-            'tags': ['switch', 'configure', 'dscpToCosMappings'],
-            'operation': 'updateNetworkSwitchDscpToCosMappings'
+            "tags": ["switch", "configure", "dscpToCosMappings"],
+            "operation": "updateNetworkSwitchDscpToCosMappings",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/dscpToCosMappings'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/dscpToCosMappings"
 
-        body_params = ['mappings', ]
+        body_params = [
+            "mappings",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkSwitchLinkAggregations(self, networkId: str):
         """
@@ -1120,15 +1249,13 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'linkAggregations'],
-            'operation': 'getNetworkSwitchLinkAggregations'
+            "tags": ["switch", "configure", "linkAggregations"],
+            "operation": "getNetworkSwitchLinkAggregations",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/linkAggregations'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/linkAggregations"
 
         return self._session.get(metadata, resource)
-        
-
 
     def createNetworkSwitchLinkAggregation(self, networkId: str, **kwargs):
         """
@@ -1143,18 +1270,19 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'configure', 'linkAggregations'],
-            'operation': 'createNetworkSwitchLinkAggregation'
+            "tags": ["switch", "configure", "linkAggregations"],
+            "operation": "createNetworkSwitchLinkAggregation",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/linkAggregations'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/linkAggregations"
 
-        body_params = ['switchPorts', 'switchProfilePorts', ]
+        body_params = [
+            "switchPorts",
+            "switchProfilePorts",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def updateNetworkSwitchLinkAggregation(self, networkId: str, linkAggregationId: str, **kwargs):
         """
@@ -1170,19 +1298,20 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'configure', 'linkAggregations'],
-            'operation': 'updateNetworkSwitchLinkAggregation'
+            "tags": ["switch", "configure", "linkAggregations"],
+            "operation": "updateNetworkSwitchLinkAggregation",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        linkAggregationId = urllib.parse.quote(str(linkAggregationId), safe='')
-        resource = f'/networks/{networkId}/switch/linkAggregations/{linkAggregationId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        linkAggregationId = urllib.parse.quote(str(linkAggregationId), safe="")
+        resource = f"/networks/{networkId}/switch/linkAggregations/{linkAggregationId}"
 
-        body_params = ['switchPorts', 'switchProfilePorts', ]
+        body_params = [
+            "switchPorts",
+            "switchProfilePorts",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteNetworkSwitchLinkAggregation(self, networkId: str, linkAggregationId: str):
         """
@@ -1194,16 +1323,14 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'linkAggregations'],
-            'operation': 'deleteNetworkSwitchLinkAggregation'
+            "tags": ["switch", "configure", "linkAggregations"],
+            "operation": "deleteNetworkSwitchLinkAggregation",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        linkAggregationId = urllib.parse.quote(str(linkAggregationId), safe='')
-        resource = f'/networks/{networkId}/switch/linkAggregations/{linkAggregationId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        linkAggregationId = urllib.parse.quote(str(linkAggregationId), safe="")
+        resource = f"/networks/{networkId}/switch/linkAggregations/{linkAggregationId}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def getNetworkSwitchMtu(self, networkId: str):
         """
@@ -1214,15 +1341,13 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'mtu'],
-            'operation': 'getNetworkSwitchMtu'
+            "tags": ["switch", "configure", "mtu"],
+            "operation": "getNetworkSwitchMtu",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/mtu'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/mtu"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkSwitchMtu(self, networkId: str, **kwargs):
         """
@@ -1237,18 +1362,19 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'configure', 'mtu'],
-            'operation': 'updateNetworkSwitchMtu'
+            "tags": ["switch", "configure", "mtu"],
+            "operation": "updateNetworkSwitchMtu",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/mtu'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/mtu"
 
-        body_params = ['defaultMtuSize', 'overrides', ]
+        body_params = [
+            "defaultMtuSize",
+            "overrides",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkSwitchPortSchedules(self, networkId: str):
         """
@@ -1259,44 +1385,43 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'portSchedules'],
-            'operation': 'getNetworkSwitchPortSchedules'
+            "tags": ["switch", "configure", "portSchedules"],
+            "operation": "getNetworkSwitchPortSchedules",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/portSchedules'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/portSchedules"
 
         return self._session.get(metadata, resource)
-        
-
 
     def createNetworkSwitchPortSchedule(self, networkId: str, name: str, **kwargs):
         """
-        **Add a switch port schedule**
-        https://developer.cisco.com/meraki/api-v1/#!create-network-switch-port-schedule
+            **Add a switch port schedule**
+            https://developer.cisco.com/meraki/api-v1/#!create-network-switch-port-schedule
 
-        - networkId (string): Network ID
-        - name (string): The name for your port schedule. Required
-        - portSchedule (object):     The schedule for switch port scheduling. Schedules are applied to days of the week.
-    When it's empty, default schedule with all days of a week are configured.
-    Any unspecified day in the schedule is added as a default schedule configuration of the day.
+            - networkId (string): Network ID
+            - name (string): The name for your port schedule. Required
+            - portSchedule (object):     The schedule for switch port scheduling. Schedules are applied to days of the week.
+        When it's empty, default schedule with all days of a week are configured.
+        Any unspecified day in the schedule is added as a default schedule configuration of the day.
 
         """
 
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'configure', 'portSchedules'],
-            'operation': 'createNetworkSwitchPortSchedule'
+            "tags": ["switch", "configure", "portSchedules"],
+            "operation": "createNetworkSwitchPortSchedule",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/portSchedules'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/portSchedules"
 
-        body_params = ['name', 'portSchedule', ]
+        body_params = [
+            "name",
+            "portSchedule",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def deleteNetworkSwitchPortSchedule(self, networkId: str, portScheduleId: str):
         """
@@ -1308,47 +1433,46 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'portSchedules'],
-            'operation': 'deleteNetworkSwitchPortSchedule'
+            "tags": ["switch", "configure", "portSchedules"],
+            "operation": "deleteNetworkSwitchPortSchedule",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        portScheduleId = urllib.parse.quote(str(portScheduleId), safe='')
-        resource = f'/networks/{networkId}/switch/portSchedules/{portScheduleId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        portScheduleId = urllib.parse.quote(str(portScheduleId), safe="")
+        resource = f"/networks/{networkId}/switch/portSchedules/{portScheduleId}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def updateNetworkSwitchPortSchedule(self, networkId: str, portScheduleId: str, **kwargs):
         """
-        **Update a switch port schedule**
-        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-port-schedule
+            **Update a switch port schedule**
+            https://developer.cisco.com/meraki/api-v1/#!update-network-switch-port-schedule
 
-        - networkId (string): Network ID
-        - portScheduleId (string): Port schedule ID
-        - name (string): The name for your port schedule.
-        - portSchedule (object):     The schedule for switch port scheduling. Schedules are applied to days of the week.
-    When it's empty, default schedule with all days of a week are configured.
-    Any unspecified day in the schedule is added as a default schedule configuration of the day.
+            - networkId (string): Network ID
+            - portScheduleId (string): Port schedule ID
+            - name (string): The name for your port schedule.
+            - portSchedule (object):     The schedule for switch port scheduling. Schedules are applied to days of the week.
+        When it's empty, default schedule with all days of a week are configured.
+        Any unspecified day in the schedule is added as a default schedule configuration of the day.
 
         """
 
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'configure', 'portSchedules'],
-            'operation': 'updateNetworkSwitchPortSchedule'
+            "tags": ["switch", "configure", "portSchedules"],
+            "operation": "updateNetworkSwitchPortSchedule",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        portScheduleId = urllib.parse.quote(str(portScheduleId), safe='')
-        resource = f'/networks/{networkId}/switch/portSchedules/{portScheduleId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        portScheduleId = urllib.parse.quote(str(portScheduleId), safe="")
+        resource = f"/networks/{networkId}/switch/portSchedules/{portScheduleId}"
 
-        body_params = ['name', 'portSchedule', ]
+        body_params = [
+            "name",
+            "portSchedule",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkSwitchQosRules(self, networkId: str):
         """
@@ -1359,15 +1483,13 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'qosRules'],
-            'operation': 'getNetworkSwitchQosRules'
+            "tags": ["switch", "configure", "qosRules"],
+            "operation": "getNetworkSwitchQosRules",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/qosRules'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/qosRules"
 
         return self._session.get(metadata, resource)
-        
-
 
     def createNetworkSwitchQosRule(self, networkId: str, vlan: int, **kwargs):
         """
@@ -1386,23 +1508,31 @@ class AsyncSwitch:
 
         kwargs.update(locals())
 
-        if 'protocol' in kwargs:
-            options = ['ANY', 'TCP', 'UDP']
-            assert kwargs['protocol'] in options, f'''"protocol" cannot be "{kwargs['protocol']}", & must be set to one of: {options}'''
+        if "protocol" in kwargs:
+            options = ["ANY", "TCP", "UDP"]
+            assert kwargs["protocol"] in options, (
+                f'''"protocol" cannot be "{kwargs["protocol"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['switch', 'configure', 'qosRules'],
-            'operation': 'createNetworkSwitchQosRule'
+            "tags": ["switch", "configure", "qosRules"],
+            "operation": "createNetworkSwitchQosRule",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/qosRules'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/qosRules"
 
-        body_params = ['vlan', 'protocol', 'srcPort', 'srcPortRange', 'dstPort', 'dstPortRange', 'dscp', ]
+        body_params = [
+            "vlan",
+            "protocol",
+            "srcPort",
+            "srcPortRange",
+            "dstPort",
+            "dstPortRange",
+            "dscp",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getNetworkSwitchQosRulesOrder(self, networkId: str):
         """
@@ -1413,15 +1543,13 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'qosRules', 'order'],
-            'operation': 'getNetworkSwitchQosRulesOrder'
+            "tags": ["switch", "configure", "qosRules", "order"],
+            "operation": "getNetworkSwitchQosRulesOrder",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/qosRules/order'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/qosRules/order"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkSwitchQosRulesOrder(self, networkId: str, ruleIds: list):
         """
@@ -1435,18 +1563,18 @@ class AsyncSwitch:
         kwargs = locals()
 
         metadata = {
-            'tags': ['switch', 'configure', 'qosRules', 'order'],
-            'operation': 'updateNetworkSwitchQosRulesOrder'
+            "tags": ["switch", "configure", "qosRules", "order"],
+            "operation": "updateNetworkSwitchQosRulesOrder",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/qosRules/order'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/qosRules/order"
 
-        body_params = ['ruleIds', ]
+        body_params = [
+            "ruleIds",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkSwitchQosRule(self, networkId: str, qosRuleId: str):
         """
@@ -1458,16 +1586,14 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'qosRules'],
-            'operation': 'getNetworkSwitchQosRule'
+            "tags": ["switch", "configure", "qosRules"],
+            "operation": "getNetworkSwitchQosRule",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        qosRuleId = urllib.parse.quote(str(qosRuleId), safe='')
-        resource = f'/networks/{networkId}/switch/qosRules/{qosRuleId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        qosRuleId = urllib.parse.quote(str(qosRuleId), safe="")
+        resource = f"/networks/{networkId}/switch/qosRules/{qosRuleId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def deleteNetworkSwitchQosRule(self, networkId: str, qosRuleId: str):
         """
@@ -1479,16 +1605,14 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'qosRules'],
-            'operation': 'deleteNetworkSwitchQosRule'
+            "tags": ["switch", "configure", "qosRules"],
+            "operation": "deleteNetworkSwitchQosRule",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        qosRuleId = urllib.parse.quote(str(qosRuleId), safe='')
-        resource = f'/networks/{networkId}/switch/qosRules/{qosRuleId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        qosRuleId = urllib.parse.quote(str(qosRuleId), safe="")
+        resource = f"/networks/{networkId}/switch/qosRules/{qosRuleId}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def updateNetworkSwitchQosRule(self, networkId: str, qosRuleId: str, **kwargs):
         """
@@ -1508,24 +1632,32 @@ class AsyncSwitch:
 
         kwargs.update(locals())
 
-        if 'protocol' in kwargs:
-            options = ['ANY', 'TCP', 'UDP']
-            assert kwargs['protocol'] in options, f'''"protocol" cannot be "{kwargs['protocol']}", & must be set to one of: {options}'''
+        if "protocol" in kwargs:
+            options = ["ANY", "TCP", "UDP"]
+            assert kwargs["protocol"] in options, (
+                f'''"protocol" cannot be "{kwargs["protocol"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['switch', 'configure', 'qosRules'],
-            'operation': 'updateNetworkSwitchQosRule'
+            "tags": ["switch", "configure", "qosRules"],
+            "operation": "updateNetworkSwitchQosRule",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        qosRuleId = urllib.parse.quote(str(qosRuleId), safe='')
-        resource = f'/networks/{networkId}/switch/qosRules/{qosRuleId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        qosRuleId = urllib.parse.quote(str(qosRuleId), safe="")
+        resource = f"/networks/{networkId}/switch/qosRules/{qosRuleId}"
 
-        body_params = ['vlan', 'protocol', 'srcPort', 'srcPortRange', 'dstPort', 'dstPortRange', 'dscp', ]
+        body_params = [
+            "vlan",
+            "protocol",
+            "srcPort",
+            "srcPortRange",
+            "dstPort",
+            "dstPortRange",
+            "dscp",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkSwitchRoutingMulticast(self, networkId: str):
         """
@@ -1536,15 +1668,13 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'routing', 'multicast'],
-            'operation': 'getNetworkSwitchRoutingMulticast'
+            "tags": ["switch", "configure", "routing", "multicast"],
+            "operation": "getNetworkSwitchRoutingMulticast",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/routing/multicast'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/routing/multicast"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkSwitchRoutingMulticast(self, networkId: str, **kwargs):
         """
@@ -1559,18 +1689,19 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'configure', 'routing', 'multicast'],
-            'operation': 'updateNetworkSwitchRoutingMulticast'
+            "tags": ["switch", "configure", "routing", "multicast"],
+            "operation": "updateNetworkSwitchRoutingMulticast",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/routing/multicast'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/routing/multicast"
 
-        body_params = ['defaultSettings', 'overrides', ]
+        body_params = [
+            "defaultSettings",
+            "overrides",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkSwitchRoutingMulticastRendezvousPoints(self, networkId: str):
         """
@@ -1581,17 +1712,17 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'routing', 'multicast', 'rendezvousPoints'],
-            'operation': 'getNetworkSwitchRoutingMulticastRendezvousPoints'
+            "tags": ["switch", "configure", "routing", "multicast", "rendezvousPoints"],
+            "operation": "getNetworkSwitchRoutingMulticastRendezvousPoints",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/routing/multicast/rendezvousPoints'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/routing/multicast/rendezvousPoints"
 
         return self._session.get(metadata, resource)
-        
 
-
-    def createNetworkSwitchRoutingMulticastRendezvousPoint(self, networkId: str, interfaceIp: str, multicastGroup: str, **kwargs):
+    def createNetworkSwitchRoutingMulticastRendezvousPoint(
+        self, networkId: str, interfaceIp: str, multicastGroup: str, **kwargs
+    ):
         """
         **Create a multicast rendezvous point**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-routing-multicast-rendezvous-point
@@ -1605,18 +1736,20 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'configure', 'routing', 'multicast', 'rendezvousPoints'],
-            'operation': 'createNetworkSwitchRoutingMulticastRendezvousPoint'
+            "tags": ["switch", "configure", "routing", "multicast", "rendezvousPoints"],
+            "operation": "createNetworkSwitchRoutingMulticastRendezvousPoint",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/routing/multicast/rendezvousPoints'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/routing/multicast/rendezvousPoints"
 
-        body_params = ['interfaceIp', 'multicastGroup', 'vrf', ]
+        body_params = [
+            "interfaceIp",
+            "multicastGroup",
+            "vrf",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getNetworkSwitchRoutingMulticastRendezvousPoint(self, networkId: str, rendezvousPointId: str):
         """
@@ -1628,16 +1761,14 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'routing', 'multicast', 'rendezvousPoints'],
-            'operation': 'getNetworkSwitchRoutingMulticastRendezvousPoint'
+            "tags": ["switch", "configure", "routing", "multicast", "rendezvousPoints"],
+            "operation": "getNetworkSwitchRoutingMulticastRendezvousPoint",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        rendezvousPointId = urllib.parse.quote(str(rendezvousPointId), safe='')
-        resource = f'/networks/{networkId}/switch/routing/multicast/rendezvousPoints/{rendezvousPointId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        rendezvousPointId = urllib.parse.quote(str(rendezvousPointId), safe="")
+        resource = f"/networks/{networkId}/switch/routing/multicast/rendezvousPoints/{rendezvousPointId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def deleteNetworkSwitchRoutingMulticastRendezvousPoint(self, networkId: str, rendezvousPointId: str):
         """
@@ -1649,18 +1780,18 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'routing', 'multicast', 'rendezvousPoints'],
-            'operation': 'deleteNetworkSwitchRoutingMulticastRendezvousPoint'
+            "tags": ["switch", "configure", "routing", "multicast", "rendezvousPoints"],
+            "operation": "deleteNetworkSwitchRoutingMulticastRendezvousPoint",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        rendezvousPointId = urllib.parse.quote(str(rendezvousPointId), safe='')
-        resource = f'/networks/{networkId}/switch/routing/multicast/rendezvousPoints/{rendezvousPointId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        rendezvousPointId = urllib.parse.quote(str(rendezvousPointId), safe="")
+        resource = f"/networks/{networkId}/switch/routing/multicast/rendezvousPoints/{rendezvousPointId}"
 
         return self._session.delete(metadata, resource)
-        
 
-
-    def updateNetworkSwitchRoutingMulticastRendezvousPoint(self, networkId: str, rendezvousPointId: str, interfaceIp: str, multicastGroup: str, **kwargs):
+    def updateNetworkSwitchRoutingMulticastRendezvousPoint(
+        self, networkId: str, rendezvousPointId: str, interfaceIp: str, multicastGroup: str, **kwargs
+    ):
         """
         **Update a multicast rendezvous point**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-routing-multicast-rendezvous-point
@@ -1675,19 +1806,21 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'configure', 'routing', 'multicast', 'rendezvousPoints'],
-            'operation': 'updateNetworkSwitchRoutingMulticastRendezvousPoint'
+            "tags": ["switch", "configure", "routing", "multicast", "rendezvousPoints"],
+            "operation": "updateNetworkSwitchRoutingMulticastRendezvousPoint",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        rendezvousPointId = urllib.parse.quote(str(rendezvousPointId), safe='')
-        resource = f'/networks/{networkId}/switch/routing/multicast/rendezvousPoints/{rendezvousPointId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        rendezvousPointId = urllib.parse.quote(str(rendezvousPointId), safe="")
+        resource = f"/networks/{networkId}/switch/routing/multicast/rendezvousPoints/{rendezvousPointId}"
 
-        body_params = ['interfaceIp', 'multicastGroup', 'vrf', ]
+        body_params = [
+            "interfaceIp",
+            "multicastGroup",
+            "vrf",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkSwitchRoutingOspf(self, networkId: str, **kwargs):
         """
@@ -1701,18 +1834,18 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'configure', 'routing', 'ospf'],
-            'operation': 'getNetworkSwitchRoutingOspf'
+            "tags": ["switch", "configure", "routing", "ospf"],
+            "operation": "getNetworkSwitchRoutingOspf",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/routing/ospf'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/routing/ospf"
 
-        query_params = ['vrf', ]
+        query_params = [
+            "vrf",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def updateNetworkSwitchRoutingOspf(self, networkId: str, **kwargs):
         """
@@ -1733,18 +1866,24 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'configure', 'routing', 'ospf'],
-            'operation': 'updateNetworkSwitchRoutingOspf'
+            "tags": ["switch", "configure", "routing", "ospf"],
+            "operation": "updateNetworkSwitchRoutingOspf",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/routing/ospf'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/routing/ospf"
 
-        body_params = ['enabled', 'helloTimerInSeconds', 'deadTimerInSeconds', 'areas', 'v3', 'md5AuthenticationEnabled', 'md5AuthenticationKey', ]
+        body_params = [
+            "enabled",
+            "helloTimerInSeconds",
+            "deadTimerInSeconds",
+            "areas",
+            "v3",
+            "md5AuthenticationEnabled",
+            "md5AuthenticationKey",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkSwitchSettings(self, networkId: str):
         """
@@ -1755,15 +1894,13 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'settings'],
-            'operation': 'getNetworkSwitchSettings'
+            "tags": ["switch", "configure", "settings"],
+            "operation": "getNetworkSwitchSettings",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/settings'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/settings"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkSwitchSettings(self, networkId: str, **kwargs):
         """
@@ -1776,24 +1913,31 @@ class AsyncSwitch:
         - powerExceptions (array): Exceptions on a per switch basis to "useCombinedPower"
         - uplinkClientSampling (object): Uplink client sampling
         - macBlocklist (object): MAC blocklist
+        - portChannelFallback (boolean): Port channel fallback
         - uplinkSelection (object): Settings related to uplink selection on IOS-XE switches.
         """
 
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'configure', 'settings'],
-            'operation': 'updateNetworkSwitchSettings'
+            "tags": ["switch", "configure", "settings"],
+            "operation": "updateNetworkSwitchSettings",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/settings'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/settings"
 
-        body_params = ['vlan', 'useCombinedPower', 'powerExceptions', 'uplinkClientSampling', 'macBlocklist', 'uplinkSelection', ]
+        body_params = [
+            "vlan",
+            "useCombinedPower",
+            "powerExceptions",
+            "uplinkClientSampling",
+            "macBlocklist",
+            "portChannelFallback",
+            "uplinkSelection",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkSwitchStacks(self, networkId: str):
         """
@@ -1804,15 +1948,13 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'stacks'],
-            'operation': 'getNetworkSwitchStacks'
+            "tags": ["switch", "configure", "stacks"],
+            "operation": "getNetworkSwitchStacks",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/stacks'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/stacks"
 
         return self._session.get(metadata, resource)
-        
-
 
     def createNetworkSwitchStack(self, networkId: str, name: str, serials: list):
         """
@@ -1827,18 +1969,19 @@ class AsyncSwitch:
         kwargs = locals()
 
         metadata = {
-            'tags': ['switch', 'configure', 'stacks'],
-            'operation': 'createNetworkSwitchStack'
+            "tags": ["switch", "configure", "stacks"],
+            "operation": "createNetworkSwitchStack",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/stacks'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/stacks"
 
-        body_params = ['name', 'serials', ]
+        body_params = [
+            "name",
+            "serials",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getNetworkSwitchStack(self, networkId: str, switchStackId: str):
         """
@@ -1850,16 +1993,14 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'stacks'],
-            'operation': 'getNetworkSwitchStack'
+            "tags": ["switch", "configure", "stacks"],
+            "operation": "getNetworkSwitchStack",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        switchStackId = urllib.parse.quote(str(switchStackId), safe='')
-        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        switchStackId = urllib.parse.quote(str(switchStackId), safe="")
+        resource = f"/networks/{networkId}/switch/stacks/{switchStackId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def deleteNetworkSwitchStack(self, networkId: str, switchStackId: str):
         """
@@ -1871,16 +2012,14 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'stacks'],
-            'operation': 'deleteNetworkSwitchStack'
+            "tags": ["switch", "configure", "stacks"],
+            "operation": "deleteNetworkSwitchStack",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        switchStackId = urllib.parse.quote(str(switchStackId), safe='')
-        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        switchStackId = urllib.parse.quote(str(switchStackId), safe="")
+        resource = f"/networks/{networkId}/switch/stacks/{switchStackId}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def addNetworkSwitchStack(self, networkId: str, switchStackId: str, serial: str):
         """
@@ -1895,19 +2034,19 @@ class AsyncSwitch:
         kwargs = locals()
 
         metadata = {
-            'tags': ['switch', 'configure', 'stacks'],
-            'operation': 'addNetworkSwitchStack'
+            "tags": ["switch", "configure", "stacks"],
+            "operation": "addNetworkSwitchStack",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        switchStackId = urllib.parse.quote(str(switchStackId), safe='')
-        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/add'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        switchStackId = urllib.parse.quote(str(switchStackId), safe="")
+        resource = f"/networks/{networkId}/switch/stacks/{switchStackId}/add"
 
-        body_params = ['serial', ]
+        body_params = [
+            "serial",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def removeNetworkSwitchStack(self, networkId: str, switchStackId: str, serial: str):
         """
@@ -1922,19 +2061,19 @@ class AsyncSwitch:
         kwargs = locals()
 
         metadata = {
-            'tags': ['switch', 'configure', 'stacks'],
-            'operation': 'removeNetworkSwitchStack'
+            "tags": ["switch", "configure", "stacks"],
+            "operation": "removeNetworkSwitchStack",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        switchStackId = urllib.parse.quote(str(switchStackId), safe='')
-        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/remove'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        switchStackId = urllib.parse.quote(str(switchStackId), safe="")
+        resource = f"/networks/{networkId}/switch/stacks/{switchStackId}/remove"
 
-        body_params = ['serial', ]
+        body_params = [
+            "serial",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getNetworkSwitchStackRoutingInterfaces(self, networkId: str, switchStackId: str, **kwargs):
         """
@@ -1949,27 +2088,30 @@ class AsyncSwitch:
 
         kwargs.update(locals())
 
-        if 'mode' in kwargs:
-            options = ['loopback', 'oob_management', 'routed', 'vlan']
-            assert kwargs['mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
-        if 'protocol' in kwargs:
-            options = ['ipv4', 'ipv6']
-            assert kwargs['protocol'] in options, f'''"protocol" cannot be "{kwargs['protocol']}", & must be set to one of: {options}'''
+        if "mode" in kwargs:
+            options = ["loopback", "oob_management", "routed", "vlan"]
+            assert kwargs["mode"] in options, f'''"mode" cannot be "{kwargs["mode"]}", & must be set to one of: {options}'''
+        if "protocol" in kwargs:
+            options = ["ipv4", "ipv6"]
+            assert kwargs["protocol"] in options, (
+                f'''"protocol" cannot be "{kwargs["protocol"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['switch', 'configure', 'stacks', 'routing', 'interfaces'],
-            'operation': 'getNetworkSwitchStackRoutingInterfaces'
+            "tags": ["switch", "configure", "stacks", "routing", "interfaces"],
+            "operation": "getNetworkSwitchStackRoutingInterfaces",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        switchStackId = urllib.parse.quote(str(switchStackId), safe='')
-        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        switchStackId = urllib.parse.quote(str(switchStackId), safe="")
+        resource = f"/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces"
 
-        query_params = ['mode', 'protocol', ]
+        query_params = [
+            "mode",
+            "protocol",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def createNetworkSwitchStackRoutingInterface(self, networkId: str, switchStackId: str, name: str, **kwargs):
         """
@@ -1979,10 +2121,11 @@ class AsyncSwitch:
         - networkId (string): Network ID
         - switchStackId (string): Switch stack ID
         - name (string): A friendly name or description for the interface or VLAN (max length 128 characters).
-        - mode (string): L3 Interface mode, can be one of 'vlan', 'routed', 'loopback'. Default is 'vlan'. CS 17.18 or higher is required for 'routed' mode. 
+        - mode (string): L3 Interface mode, can be one of 'vlan', 'routed', 'loopback'. Default is 'vlan'. CS 17.18 or higher is required for 'routed' mode.
         - subnet (string): The network that this L3 interface is on, in CIDR notation (ex. 10.1.1.0/24).
         - switchPortId (string): Switch Port ID when in Routed mode (CS 17.18 or higher required)
         - interfaceIp (string): The IP address that will be used for Layer 3 routing on this VLAN or subnet. This cannot be the same         as the device management IP.
+        - mtu (integer): The interface MTU. Applies to native switch layer 3 interfaces, including VLAN and routed modes.
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
         - vlanId (integer): The VLAN this L3 interface is on. VLAN must be between 1 and 4094.
         - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a L3 interface. Required if this is the first IPv4 interface.
@@ -1994,27 +2137,41 @@ class AsyncSwitch:
 
         kwargs.update(locals())
 
-        if 'mode' in kwargs:
-            options = ['loopback', 'oob_management', 'routed', 'vlan']
-            assert kwargs['mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
-        if 'multicastRouting' in kwargs:
-            options = ['IGMP snooping querier', 'disabled', 'enabled']
-            assert kwargs['multicastRouting'] in options, f'''"multicastRouting" cannot be "{kwargs['multicastRouting']}", & must be set to one of: {options}'''
+        if "mode" in kwargs:
+            options = ["loopback", "oob_management", "routed", "vlan"]
+            assert kwargs["mode"] in options, f'''"mode" cannot be "{kwargs["mode"]}", & must be set to one of: {options}'''
+        if "multicastRouting" in kwargs:
+            options = ["IGMP snooping querier", "disabled", "enabled"]
+            assert kwargs["multicastRouting"] in options, (
+                f'''"multicastRouting" cannot be "{kwargs["multicastRouting"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['switch', 'configure', 'stacks', 'routing', 'interfaces'],
-            'operation': 'createNetworkSwitchStackRoutingInterface'
+            "tags": ["switch", "configure", "stacks", "routing", "interfaces"],
+            "operation": "createNetworkSwitchStackRoutingInterface",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        switchStackId = urllib.parse.quote(str(switchStackId), safe='')
-        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        switchStackId = urllib.parse.quote(str(switchStackId), safe="")
+        resource = f"/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces"
 
-        body_params = ['name', 'mode', 'subnet', 'switchPortId', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ipv6', 'vrf', 'loopback', ]
+        body_params = [
+            "name",
+            "mode",
+            "subnet",
+            "switchPortId",
+            "interfaceIp",
+            "mtu",
+            "multicastRouting",
+            "vlanId",
+            "defaultGateway",
+            "ospfSettings",
+            "ipv6",
+            "vrf",
+            "loopback",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getNetworkSwitchStackRoutingInterface(self, networkId: str, switchStackId: str, interfaceId: str):
         """
@@ -2027,17 +2184,15 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'stacks', 'routing', 'interfaces'],
-            'operation': 'getNetworkSwitchStackRoutingInterface'
+            "tags": ["switch", "configure", "stacks", "routing", "interfaces"],
+            "operation": "getNetworkSwitchStackRoutingInterface",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        switchStackId = urllib.parse.quote(str(switchStackId), safe='')
-        interfaceId = urllib.parse.quote(str(interfaceId), safe='')
-        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        switchStackId = urllib.parse.quote(str(switchStackId), safe="")
+        interfaceId = urllib.parse.quote(str(interfaceId), safe="")
+        resource = f"/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkSwitchStackRoutingInterface(self, networkId: str, switchStackId: str, interfaceId: str, **kwargs):
         """
@@ -2051,6 +2206,7 @@ class AsyncSwitch:
         - subnet (string): The network that this L3 interface is on, in CIDR notation (ex. 10.1.1.0/24).
         - switchPortId (string): Switch Port ID when in Routed mode (CS 17.18 or higher required)
         - interfaceIp (string): The IP address that will be used for Layer 3 routing on this VLAN or subnet. This cannot be the same         as the device management IP.
+        - mtu (integer): The interface MTU. Applies to native switch layer 3 interfaces, including VLAN and routed modes.
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
         - vlanId (integer): The VLAN this L3 interface is on. VLAN must be between 1 and 4094.
         - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a L3 interface. Required if this is the first IPv4 interface.
@@ -2062,25 +2218,38 @@ class AsyncSwitch:
 
         kwargs.update(locals())
 
-        if 'multicastRouting' in kwargs:
-            options = ['IGMP snooping querier', 'disabled', 'enabled']
-            assert kwargs['multicastRouting'] in options, f'''"multicastRouting" cannot be "{kwargs['multicastRouting']}", & must be set to one of: {options}'''
+        if "multicastRouting" in kwargs:
+            options = ["IGMP snooping querier", "disabled", "enabled"]
+            assert kwargs["multicastRouting"] in options, (
+                f'''"multicastRouting" cannot be "{kwargs["multicastRouting"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['switch', 'configure', 'stacks', 'routing', 'interfaces'],
-            'operation': 'updateNetworkSwitchStackRoutingInterface'
+            "tags": ["switch", "configure", "stacks", "routing", "interfaces"],
+            "operation": "updateNetworkSwitchStackRoutingInterface",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        switchStackId = urllib.parse.quote(str(switchStackId), safe='')
-        interfaceId = urllib.parse.quote(str(interfaceId), safe='')
-        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        switchStackId = urllib.parse.quote(str(switchStackId), safe="")
+        interfaceId = urllib.parse.quote(str(interfaceId), safe="")
+        resource = f"/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}"
 
-        body_params = ['name', 'subnet', 'switchPortId', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ipv6', 'vrf', 'loopback', ]
+        body_params = [
+            "name",
+            "subnet",
+            "switchPortId",
+            "interfaceIp",
+            "mtu",
+            "multicastRouting",
+            "vlanId",
+            "defaultGateway",
+            "ospfSettings",
+            "ipv6",
+            "vrf",
+            "loopback",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteNetworkSwitchStackRoutingInterface(self, networkId: str, switchStackId: str, interfaceId: str):
         """
@@ -2093,17 +2262,15 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'stacks', 'routing', 'interfaces'],
-            'operation': 'deleteNetworkSwitchStackRoutingInterface'
+            "tags": ["switch", "configure", "stacks", "routing", "interfaces"],
+            "operation": "deleteNetworkSwitchStackRoutingInterface",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        switchStackId = urllib.parse.quote(str(switchStackId), safe='')
-        interfaceId = urllib.parse.quote(str(interfaceId), safe='')
-        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        switchStackId = urllib.parse.quote(str(switchStackId), safe="")
+        interfaceId = urllib.parse.quote(str(interfaceId), safe="")
+        resource = f"/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def getNetworkSwitchStackRoutingInterfaceDhcp(self, networkId: str, switchStackId: str, interfaceId: str):
         """
@@ -2116,17 +2283,15 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'stacks', 'routing', 'interfaces', 'dhcp'],
-            'operation': 'getNetworkSwitchStackRoutingInterfaceDhcp'
+            "tags": ["switch", "configure", "stacks", "routing", "interfaces", "dhcp"],
+            "operation": "getNetworkSwitchStackRoutingInterfaceDhcp",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        switchStackId = urllib.parse.quote(str(switchStackId), safe='')
-        interfaceId = urllib.parse.quote(str(interfaceId), safe='')
-        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}/dhcp'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        switchStackId = urllib.parse.quote(str(switchStackId), safe="")
+        interfaceId = urllib.parse.quote(str(interfaceId), safe="")
+        resource = f"/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}/dhcp"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkSwitchStackRoutingInterfaceDhcp(self, networkId: str, switchStackId: str, interfaceId: str, **kwargs):
         """
@@ -2157,31 +2322,47 @@ class AsyncSwitch:
 
         kwargs.update(locals())
 
-        if 'dhcpMode' in kwargs:
-            options = ['dhcpDisabled', 'dhcpRelay', 'dhcpServer']
-            assert kwargs['dhcpMode'] in options, f'''"dhcpMode" cannot be "{kwargs['dhcpMode']}", & must be set to one of: {options}'''
-        if 'dhcpLeaseTime' in kwargs:
-            options = ['1 day', '1 hour', '1 week', '12 hours', '30 minutes', '4 hours']
-            assert kwargs['dhcpLeaseTime'] in options, f'''"dhcpLeaseTime" cannot be "{kwargs['dhcpLeaseTime']}", & must be set to one of: {options}'''
-        if 'dnsNameserversOption' in kwargs:
-            options = ['custom', 'googlePublicDns', 'openDns']
-            assert kwargs['dnsNameserversOption'] in options, f'''"dnsNameserversOption" cannot be "{kwargs['dnsNameserversOption']}", & must be set to one of: {options}'''
+        if "dhcpMode" in kwargs:
+            options = ["dhcpDisabled", "dhcpRelay", "dhcpServer"]
+            assert kwargs["dhcpMode"] in options, (
+                f'''"dhcpMode" cannot be "{kwargs["dhcpMode"]}", & must be set to one of: {options}'''
+            )
+        if "dhcpLeaseTime" in kwargs:
+            options = ["1 day", "1 hour", "1 week", "12 hours", "30 minutes", "4 hours"]
+            assert kwargs["dhcpLeaseTime"] in options, (
+                f'''"dhcpLeaseTime" cannot be "{kwargs["dhcpLeaseTime"]}", & must be set to one of: {options}'''
+            )
+        if "dnsNameserversOption" in kwargs:
+            options = ["custom", "googlePublicDns", "openDns"]
+            assert kwargs["dnsNameserversOption"] in options, (
+                f'''"dnsNameserversOption" cannot be "{kwargs["dnsNameserversOption"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['switch', 'configure', 'stacks', 'routing', 'interfaces', 'dhcp'],
-            'operation': 'updateNetworkSwitchStackRoutingInterfaceDhcp'
+            "tags": ["switch", "configure", "stacks", "routing", "interfaces", "dhcp"],
+            "operation": "updateNetworkSwitchStackRoutingInterfaceDhcp",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        switchStackId = urllib.parse.quote(str(switchStackId), safe='')
-        interfaceId = urllib.parse.quote(str(interfaceId), safe='')
-        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}/dhcp'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        switchStackId = urllib.parse.quote(str(switchStackId), safe="")
+        interfaceId = urllib.parse.quote(str(interfaceId), safe="")
+        resource = f"/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}/dhcp"
 
-        body_params = ['dhcpMode', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dnsNameserversOption', 'dnsCustomNameservers', 'bootOptionsEnabled', 'bootNextServer', 'bootFileName', 'dhcpOptions', 'reservedIpRanges', 'fixedIpAssignments', ]
+        body_params = [
+            "dhcpMode",
+            "dhcpRelayServerIps",
+            "dhcpLeaseTime",
+            "dnsNameserversOption",
+            "dnsCustomNameservers",
+            "bootOptionsEnabled",
+            "bootNextServer",
+            "bootFileName",
+            "dhcpOptions",
+            "reservedIpRanges",
+            "fixedIpAssignments",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkSwitchStackRoutingStaticRoutes(self, networkId: str, switchStackId: str):
         """
@@ -2193,18 +2374,18 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'stacks', 'routing', 'staticRoutes'],
-            'operation': 'getNetworkSwitchStackRoutingStaticRoutes'
+            "tags": ["switch", "configure", "stacks", "routing", "staticRoutes"],
+            "operation": "getNetworkSwitchStackRoutingStaticRoutes",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        switchStackId = urllib.parse.quote(str(switchStackId), safe='')
-        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        switchStackId = urllib.parse.quote(str(switchStackId), safe="")
+        resource = f"/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes"
 
         return self._session.get(metadata, resource)
-        
 
-
-    def createNetworkSwitchStackRoutingStaticRoute(self, networkId: str, switchStackId: str, subnet: str, nextHopIp: str, **kwargs):
+    def createNetworkSwitchStackRoutingStaticRoute(
+        self, networkId: str, switchStackId: str, subnet: str, nextHopIp: str, **kwargs
+    ):
         """
         **Create a layer 3 static route for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-stack-routing-static-route
@@ -2222,19 +2403,24 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'configure', 'stacks', 'routing', 'staticRoutes'],
-            'operation': 'createNetworkSwitchStackRoutingStaticRoute'
+            "tags": ["switch", "configure", "stacks", "routing", "staticRoutes"],
+            "operation": "createNetworkSwitchStackRoutingStaticRoute",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        switchStackId = urllib.parse.quote(str(switchStackId), safe='')
-        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        switchStackId = urllib.parse.quote(str(switchStackId), safe="")
+        resource = f"/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes"
 
-        body_params = ['name', 'subnet', 'nextHopIp', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', 'vrf', ]
+        body_params = [
+            "name",
+            "subnet",
+            "nextHopIp",
+            "advertiseViaOspfEnabled",
+            "preferOverOspfRoutesEnabled",
+            "vrf",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getNetworkSwitchStackRoutingStaticRoute(self, networkId: str, switchStackId: str, staticRouteId: str):
         """
@@ -2247,17 +2433,15 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'stacks', 'routing', 'staticRoutes'],
-            'operation': 'getNetworkSwitchStackRoutingStaticRoute'
+            "tags": ["switch", "configure", "stacks", "routing", "staticRoutes"],
+            "operation": "getNetworkSwitchStackRoutingStaticRoute",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        switchStackId = urllib.parse.quote(str(switchStackId), safe='')
-        staticRouteId = urllib.parse.quote(str(staticRouteId), safe='')
-        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes/{staticRouteId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        switchStackId = urllib.parse.quote(str(switchStackId), safe="")
+        staticRouteId = urllib.parse.quote(str(staticRouteId), safe="")
+        resource = f"/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes/{staticRouteId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkSwitchStackRoutingStaticRoute(self, networkId: str, switchStackId: str, staticRouteId: str, **kwargs):
         """
@@ -2279,20 +2463,26 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'configure', 'stacks', 'routing', 'staticRoutes'],
-            'operation': 'updateNetworkSwitchStackRoutingStaticRoute'
+            "tags": ["switch", "configure", "stacks", "routing", "staticRoutes"],
+            "operation": "updateNetworkSwitchStackRoutingStaticRoute",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        switchStackId = urllib.parse.quote(str(switchStackId), safe='')
-        staticRouteId = urllib.parse.quote(str(staticRouteId), safe='')
-        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes/{staticRouteId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        switchStackId = urllib.parse.quote(str(switchStackId), safe="")
+        staticRouteId = urllib.parse.quote(str(staticRouteId), safe="")
+        resource = f"/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes/{staticRouteId}"
 
-        body_params = ['name', 'subnet', 'nextHopIp', 'managementNextHop', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', 'vrf', ]
+        body_params = [
+            "name",
+            "subnet",
+            "nextHopIp",
+            "managementNextHop",
+            "advertiseViaOspfEnabled",
+            "preferOverOspfRoutesEnabled",
+            "vrf",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteNetworkSwitchStackRoutingStaticRoute(self, networkId: str, switchStackId: str, staticRouteId: str):
         """
@@ -2305,17 +2495,15 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'stacks', 'routing', 'staticRoutes'],
-            'operation': 'deleteNetworkSwitchStackRoutingStaticRoute'
+            "tags": ["switch", "configure", "stacks", "routing", "staticRoutes"],
+            "operation": "deleteNetworkSwitchStackRoutingStaticRoute",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        switchStackId = urllib.parse.quote(str(switchStackId), safe='')
-        staticRouteId = urllib.parse.quote(str(staticRouteId), safe='')
-        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes/{staticRouteId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        switchStackId = urllib.parse.quote(str(switchStackId), safe="")
+        staticRouteId = urllib.parse.quote(str(staticRouteId), safe="")
+        resource = f"/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes/{staticRouteId}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def getNetworkSwitchStormControl(self, networkId: str):
         """
@@ -2326,15 +2514,13 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'stormControl'],
-            'operation': 'getNetworkSwitchStormControl'
+            "tags": ["switch", "configure", "stormControl"],
+            "operation": "getNetworkSwitchStormControl",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/stormControl'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/stormControl"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkSwitchStormControl(self, networkId: str, **kwargs):
         """
@@ -2351,18 +2537,21 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'configure', 'stormControl'],
-            'operation': 'updateNetworkSwitchStormControl'
+            "tags": ["switch", "configure", "stormControl"],
+            "operation": "updateNetworkSwitchStormControl",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/stormControl'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/stormControl"
 
-        body_params = ['broadcastThreshold', 'multicastThreshold', 'unknownUnicastThreshold', 'treatTheseTrafficTypesAsOneThreshold', ]
+        body_params = [
+            "broadcastThreshold",
+            "multicastThreshold",
+            "unknownUnicastThreshold",
+            "treatTheseTrafficTypesAsOneThreshold",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkSwitchStp(self, networkId: str):
         """
@@ -2373,15 +2562,13 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'stp'],
-            'operation': 'getNetworkSwitchStp'
+            "tags": ["switch", "configure", "stp"],
+            "operation": "getNetworkSwitchStp",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/stp'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/stp"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkSwitchStp(self, networkId: str, **kwargs):
         """
@@ -2396,18 +2583,19 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'configure', 'stp'],
-            'operation': 'updateNetworkSwitchStp'
+            "tags": ["switch", "configure", "stp"],
+            "operation": "updateNetworkSwitchStp",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/switch/stp'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/stp"
 
-        body_params = ['rstpEnabled', 'stpBridgePriority', ]
+        body_params = [
+            "rstpEnabled",
+            "stpBridgePriority",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getOrganizationConfigTemplateSwitchProfiles(self, organizationId: str, configTemplateId: str):
         """
@@ -2419,16 +2607,14 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'configTemplates', 'profiles'],
-            'operation': 'getOrganizationConfigTemplateSwitchProfiles'
+            "tags": ["switch", "configure", "configTemplates", "profiles"],
+            "operation": "getOrganizationConfigTemplateSwitchProfiles",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        configTemplateId = urllib.parse.quote(str(configTemplateId), safe='')
-        resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        configTemplateId = urllib.parse.quote(str(configTemplateId), safe="")
+        resource = f"/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles"
 
         return self._session.get(metadata, resource)
-        
-
 
     def getOrganizationConfigTemplateSwitchProfilePorts(self, organizationId: str, configTemplateId: str, profileId: str):
         """
@@ -2441,19 +2627,19 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'configTemplates', 'profiles', 'ports'],
-            'operation': 'getOrganizationConfigTemplateSwitchProfilePorts'
+            "tags": ["switch", "configure", "configTemplates", "profiles", "ports"],
+            "operation": "getOrganizationConfigTemplateSwitchProfilePorts",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        configTemplateId = urllib.parse.quote(str(configTemplateId), safe='')
-        profileId = urllib.parse.quote(str(profileId), safe='')
-        resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles/{profileId}/ports'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        configTemplateId = urllib.parse.quote(str(configTemplateId), safe="")
+        profileId = urllib.parse.quote(str(profileId), safe="")
+        resource = f"/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles/{profileId}/ports"
 
         return self._session.get(metadata, resource)
-        
 
-
-    def getOrganizationConfigTemplateSwitchProfilePort(self, organizationId: str, configTemplateId: str, profileId: str, portId: str):
+    def getOrganizationConfigTemplateSwitchProfilePort(
+        self, organizationId: str, configTemplateId: str, profileId: str, portId: str
+    ):
         """
         **Return a switch template port**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-config-template-switch-profile-port
@@ -2465,20 +2651,22 @@ class AsyncSwitch:
         """
 
         metadata = {
-            'tags': ['switch', 'configure', 'configTemplates', 'profiles', 'ports'],
-            'operation': 'getOrganizationConfigTemplateSwitchProfilePort'
+            "tags": ["switch", "configure", "configTemplates", "profiles", "ports"],
+            "operation": "getOrganizationConfigTemplateSwitchProfilePort",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        configTemplateId = urllib.parse.quote(str(configTemplateId), safe='')
-        profileId = urllib.parse.quote(str(profileId), safe='')
-        portId = urllib.parse.quote(str(portId), safe='')
-        resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles/{profileId}/ports/{portId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        configTemplateId = urllib.parse.quote(str(configTemplateId), safe="")
+        profileId = urllib.parse.quote(str(profileId), safe="")
+        portId = urllib.parse.quote(str(portId), safe="")
+        resource = (
+            f"/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles/{profileId}/ports/{portId}"
+        )
 
         return self._session.get(metadata, resource)
-        
 
-
-    def updateOrganizationConfigTemplateSwitchProfilePort(self, organizationId: str, configTemplateId: str, profileId: str, portId: str, **kwargs):
+    def updateOrganizationConfigTemplateSwitchProfilePort(
+        self, organizationId: str, configTemplateId: str, profileId: str, portId: str, **kwargs
+    ):
         """
         **Update a switch template port**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-config-template-switch-profile-port
@@ -2519,35 +2707,67 @@ class AsyncSwitch:
 
         kwargs.update(locals())
 
-        if 'type' in kwargs:
-            options = ['access', 'dad', 'routed', 'stack', 'svl', 'trunk']
-            assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
-        if 'stpGuard' in kwargs:
-            options = ['bpdu guard', 'disabled', 'loop guard', 'root guard']
-            assert kwargs['stpGuard'] in options, f'''"stpGuard" cannot be "{kwargs['stpGuard']}", & must be set to one of: {options}'''
-        if 'udld' in kwargs:
-            options = ['Alert only', 'Enforce']
-            assert kwargs['udld'] in options, f'''"udld" cannot be "{kwargs['udld']}", & must be set to one of: {options}'''
-        if 'accessPolicyType' in kwargs:
-            options = ['Custom access policy', 'MAC allow list', 'Open', 'Sticky MAC allow list']
-            assert kwargs['accessPolicyType'] in options, f'''"accessPolicyType" cannot be "{kwargs['accessPolicyType']}", & must be set to one of: {options}'''
+        if "type" in kwargs:
+            options = ["access", "dad", "routed", "stack", "svl", "trunk"]
+            assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
+        if "stpGuard" in kwargs:
+            options = ["bpdu guard", "disabled", "loop guard", "root guard"]
+            assert kwargs["stpGuard"] in options, (
+                f'''"stpGuard" cannot be "{kwargs["stpGuard"]}", & must be set to one of: {options}'''
+            )
+        if "udld" in kwargs:
+            options = ["Alert only", "Enforce"]
+            assert kwargs["udld"] in options, f'''"udld" cannot be "{kwargs["udld"]}", & must be set to one of: {options}'''
+        if "accessPolicyType" in kwargs:
+            options = ["Custom access policy", "MAC allow list", "Open", "Sticky MAC allow list"]
+            assert kwargs["accessPolicyType"] in options, (
+                f'''"accessPolicyType" cannot be "{kwargs["accessPolicyType"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['switch', 'configure', 'configTemplates', 'profiles', 'ports'],
-            'operation': 'updateOrganizationConfigTemplateSwitchProfilePort'
+            "tags": ["switch", "configure", "configTemplates", "profiles", "ports"],
+            "operation": "updateOrganizationConfigTemplateSwitchProfilePort",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        configTemplateId = urllib.parse.quote(str(configTemplateId), safe='')
-        profileId = urllib.parse.quote(str(profileId), safe='')
-        portId = urllib.parse.quote(str(portId), safe='')
-        resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles/{profileId}/ports/{portId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        configTemplateId = urllib.parse.quote(str(configTemplateId), safe="")
+        profileId = urllib.parse.quote(str(profileId), safe="")
+        portId = urllib.parse.quote(str(portId), safe="")
+        resource = (
+            f"/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles/{profileId}/ports/{portId}"
+        )
 
-        body_params = ['name', 'tags', 'enabled', 'poeEnabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'stpPortFastTrunk', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'macWhitelistLimit', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', 'flexibleStackingEnabled', 'daiTrusted', 'profile', 'dot3az', 'highSpeed', ]
+        body_params = [
+            "name",
+            "tags",
+            "enabled",
+            "poeEnabled",
+            "type",
+            "vlan",
+            "voiceVlan",
+            "allowedVlans",
+            "isolationEnabled",
+            "rstpEnabled",
+            "stpGuard",
+            "stpPortFastTrunk",
+            "linkNegotiation",
+            "portScheduleId",
+            "udld",
+            "accessPolicyType",
+            "accessPolicyNumber",
+            "macAllowList",
+            "macWhitelistLimit",
+            "stickyMacAllowList",
+            "stickyMacAllowListLimit",
+            "stormControlEnabled",
+            "flexibleStackingEnabled",
+            "daiTrusted",
+            "profile",
+            "dot3az",
+            "highSpeed",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getOrganizationSummarySwitchPowerHistory(self, organizationId: str, **kwargs):
         """
@@ -2563,18 +2783,20 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'monitor', 'summary', 'power', 'history'],
-            'operation': 'getOrganizationSummarySwitchPowerHistory'
+            "tags": ["switch", "monitor", "summary", "power", "history"],
+            "operation": "getOrganizationSummarySwitchPowerHistory",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/summary/switch/power/history'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/summary/switch/power/history"
 
-        query_params = ['t0', 't1', 'timespan', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def cloneOrganizationSwitchDevices(self, organizationId: str, sourceSerial: str, targetSerials: list):
         """
@@ -2589,20 +2811,21 @@ class AsyncSwitch:
         kwargs = locals()
 
         metadata = {
-            'tags': ['switch', 'configure', 'devices'],
-            'operation': 'cloneOrganizationSwitchDevices'
+            "tags": ["switch", "configure", "devices"],
+            "operation": "cloneOrganizationSwitchDevices",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/switch/devices/clone'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/devices/clone"
 
-        body_params = ['sourceSerial', 'targetSerials', ]
+        body_params = [
+            "sourceSerial",
+            "targetSerials",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
 
-
-    def getOrganizationSwitchPortsBySwitch(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationSwitchPortsBySwitch(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **List the switchports in an organization by switch**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-ports-by-switch
@@ -2626,26 +2849,43 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'configure', 'ports', 'bySwitch'],
-            'operation': 'getOrganizationSwitchPortsBySwitch'
+            "tags": ["switch", "configure", "ports", "bySwitch"],
+            "operation": "getOrganizationSwitchPortsBySwitch",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/switch/ports/bySwitch'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/bySwitch"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'configurationUpdatedAfter', 'mac', 'macs', 'name', 'networkIds', 'portProfileIds', 'serial', 'serials', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "configurationUpdatedAfter",
+            "mac",
+            "macs",
+            "name",
+            "networkIds",
+            "portProfileIds",
+            "serial",
+            "serials",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['macs', 'networkIds', 'portProfileIds', 'serials', ]
+        array_params = [
+            "macs",
+            "networkIds",
+            "portProfileIds",
+            "serials",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationSwitchPortsClientsOverviewByDevice(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationSwitchPortsClientsOverviewByDevice(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
         """
         **List the number of clients for all switchports with at least one online client in an organization.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-ports-clients-overview-by-device
@@ -2671,24 +2911,41 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'monitor', 'ports', 'clients', 'overview', 'byDevice'],
-            'operation': 'getOrganizationSwitchPortsClientsOverviewByDevice'
+            "tags": ["switch", "monitor", "ports", "clients", "overview", "byDevice"],
+            "operation": "getOrganizationSwitchPortsClientsOverviewByDevice",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/switch/ports/clients/overview/byDevice'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/clients/overview/byDevice"
 
-        query_params = ['t0', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'configurationUpdatedAfter', 'mac', 'macs', 'name', 'networkIds', 'portProfileIds', 'serial', 'serials', ]
+        query_params = [
+            "t0",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "configurationUpdatedAfter",
+            "mac",
+            "macs",
+            "name",
+            "networkIds",
+            "portProfileIds",
+            "serial",
+            "serials",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['macs', 'networkIds', 'portProfileIds', 'serials', ]
+        array_params = [
+            "macs",
+            "networkIds",
+            "portProfileIds",
+            "serials",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def getOrganizationSwitchPortsOverview(self, organizationId: str, **kwargs):
         """
@@ -2704,20 +2961,22 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'monitor', 'ports', 'overview'],
-            'operation': 'getOrganizationSwitchPortsOverview'
+            "tags": ["switch", "monitor", "ports", "overview"],
+            "operation": "getOrganizationSwitchPortsOverview",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/switch/ports/overview'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/overview"
 
-        query_params = ['t0', 't1', 'timespan', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
 
-
-    def getOrganizationSwitchPortsStatusesBySwitch(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationSwitchPortsStatusesBySwitch(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **List the switchports in an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-ports-statuses-by-switch
@@ -2741,26 +3000,43 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'monitor', 'ports', 'statuses', 'bySwitch'],
-            'operation': 'getOrganizationSwitchPortsStatusesBySwitch'
+            "tags": ["switch", "monitor", "ports", "statuses", "bySwitch"],
+            "operation": "getOrganizationSwitchPortsStatusesBySwitch",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/switch/ports/statuses/bySwitch'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/statuses/bySwitch"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'configurationUpdatedAfter', 'mac', 'macs', 'name', 'networkIds', 'portProfileIds', 'serial', 'serials', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "configurationUpdatedAfter",
+            "mac",
+            "macs",
+            "name",
+            "networkIds",
+            "portProfileIds",
+            "serial",
+            "serials",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['macs', 'networkIds', 'portProfileIds', 'serials', ]
+        array_params = [
+            "macs",
+            "networkIds",
+            "portProfileIds",
+            "serials",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationSwitchPortsTopologyDiscoveryByDevice(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationSwitchPortsTopologyDiscoveryByDevice(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
         """
         **List most recently seen LLDP/CDP discovery and topology information per switch port in an organization.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-ports-topology-discovery-by-device
@@ -2786,26 +3062,45 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'monitor', 'ports', 'topology', 'discovery', 'byDevice'],
-            'operation': 'getOrganizationSwitchPortsTopologyDiscoveryByDevice'
+            "tags": ["switch", "monitor", "ports", "topology", "discovery", "byDevice"],
+            "operation": "getOrganizationSwitchPortsTopologyDiscoveryByDevice",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/switch/ports/topology/discovery/byDevice'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/topology/discovery/byDevice"
 
-        query_params = ['t0', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'configurationUpdatedAfter', 'mac', 'macs', 'name', 'networkIds', 'portProfileIds', 'serial', 'serials', ]
+        query_params = [
+            "t0",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "configurationUpdatedAfter",
+            "mac",
+            "macs",
+            "name",
+            "networkIds",
+            "portProfileIds",
+            "serial",
+            "serials",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['macs', 'networkIds', 'portProfileIds', 'serials', ]
+        array_params = [
+            "macs",
+            "networkIds",
+            "portProfileIds",
+            "serials",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationSwitchPortsUsageHistoryByDeviceByInterval(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationSwitchPortsUsageHistoryByDeviceByInterval(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
         """
         **List the historical usage and traffic data of switchports in an organization.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-ports-usage-history-by-device-by-interval
@@ -2833,20 +3128,40 @@ class AsyncSwitch:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['switch', 'monitor', 'ports', 'usage', 'history', 'byDevice', 'byInterval'],
-            'operation': 'getOrganizationSwitchPortsUsageHistoryByDeviceByInterval'
+            "tags": ["switch", "monitor", "ports", "usage", "history", "byDevice", "byInterval"],
+            "operation": "getOrganizationSwitchPortsUsageHistoryByDeviceByInterval",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/switch/ports/usage/history/byDevice/byInterval'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/usage/history/byDevice/byInterval"
 
-        query_params = ['t0', 't1', 'timespan', 'interval', 'perPage', 'startingAfter', 'endingBefore', 'configurationUpdatedAfter', 'mac', 'macs', 'name', 'networkIds', 'portProfileIds', 'serial', 'serials', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "interval",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "configurationUpdatedAfter",
+            "mac",
+            "macs",
+            "name",
+            "networkIds",
+            "portProfileIds",
+            "serial",
+            "serials",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['macs', 'networkIds', 'portProfileIds', 'serials', ]
+        array_params = [
+            "macs",
+            "networkIds",
+            "portProfileIds",
+            "serials",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        

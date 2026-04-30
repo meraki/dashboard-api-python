@@ -1,11 +1,6 @@
-import urllib
-
-
 class ActionBatchSensor(object):
     def __init__(self):
         super(ActionBatchSensor, self).__init__()
-        
-
 
     def createDeviceSensorCommand(self, serial: str, operation: str):
         """
@@ -18,29 +13,24 @@ class ActionBatchSensor(object):
 
         kwargs = locals()
 
-        if 'operation' in kwargs:
-            options = ['cycleDownstreamPower', 'disableDownstreamPower', 'enableDownstreamPower', 'refreshData']
-            assert kwargs['operation'] in options, f'''"operation" cannot be "{kwargs['operation']}", & must be set to one of: {options}'''
+        if "operation" in kwargs:
+            options = ["cycleDownstreamPower", "disableDownstreamPower", "enableDownstreamPower", "refreshData"]
+            assert kwargs["operation"] in options, (
+                f'''"operation" cannot be "{kwargs["operation"]}", & must be set to one of: {options}'''
+            )
 
-        metadata = {
-            'tags': ['sensor', 'configure', 'commands'],
-            'operation': 'createDeviceSensorCommand'
-        }
-        resource = f'/devices/{serial}/sensor/commands'
+        resource = f"/devices/{serial}/sensor/commands"
 
-        body_params = ['operation', ]
+        body_params = [
+            "operation",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "create",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateDeviceSensorRelationships(self, serial: str, **kwargs):
         """
@@ -53,25 +43,18 @@ class ActionBatchSensor(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['sensor', 'configure', 'relationships'],
-            'operation': 'updateDeviceSensorRelationships'
-        }
-        resource = f'/devices/{serial}/sensor/relationships'
+        resource = f"/devices/{serial}/sensor/relationships"
 
-        body_params = ['livestream', ]
+        body_params = [
+            "livestream",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def createNetworkSensorAlertsProfile(self, networkId: str, name: str, conditions: list, **kwargs):
         """
@@ -90,25 +73,24 @@ class ActionBatchSensor(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['sensor', 'configure', 'alerts', 'profiles'],
-            'operation': 'createNetworkSensorAlertsProfile'
-        }
-        resource = f'/networks/{networkId}/sensor/alerts/profiles'
+        resource = f"/networks/{networkId}/sensor/alerts/profiles"
 
-        body_params = ['name', 'schedule', 'conditions', 'recipients', 'serials', 'includeSensorUrl', 'message', ]
+        body_params = [
+            "name",
+            "schedule",
+            "conditions",
+            "recipients",
+            "serials",
+            "includeSensorUrl",
+            "message",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "create",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkSensorAlertsProfile(self, networkId: str, id: str, **kwargs):
         """
@@ -128,25 +110,24 @@ class ActionBatchSensor(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['sensor', 'configure', 'alerts', 'profiles'],
-            'operation': 'updateNetworkSensorAlertsProfile'
-        }
-        resource = f'/networks/{networkId}/sensor/alerts/profiles/{id}'
+        resource = f"/networks/{networkId}/sensor/alerts/profiles/{id}"
 
-        body_params = ['name', 'schedule', 'conditions', 'recipients', 'serials', 'includeSensorUrl', 'message', ]
+        body_params = [
+            "name",
+            "schedule",
+            "conditions",
+            "recipients",
+            "serials",
+            "includeSensorUrl",
+            "message",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def deleteNetworkSensorAlertsProfile(self, networkId: str, id: str):
         """
@@ -157,26 +138,17 @@ class ActionBatchSensor(object):
         - id (string): ID
         """
 
-        metadata = {
-            'tags': ['sensor', 'configure', 'alerts', 'profiles'],
-            'operation': 'deleteNetworkSensorAlertsProfile'
-        }
-        resource = f'/networks/{networkId}/sensor/alerts/profiles/{id}'
+        resource = f"/networks/{networkId}/sensor/alerts/profiles/{id}"
 
         action = {
             "resource": resource,
             "operation": "destroy",
         }
         return action
-        
-
-
-
-
 
     def updateNetworkSensorMqttBroker(self, networkId: str, mqttBrokerId: str, enabled: bool):
         """
-        **Update the sensor settings of an MQTT broker**
+        **Update the sensor settings of an MQTT broker. To update the broker itself, use /networks/{networkId}/mqttBrokers/{mqttBrokerId}.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-sensor-mqtt-broker
 
         - networkId (string): Network ID
@@ -186,21 +158,15 @@ class ActionBatchSensor(object):
 
         kwargs = locals()
 
-        metadata = {
-            'tags': ['sensor', 'configure', 'mqttBrokers'],
-            'operation': 'updateNetworkSensorMqttBroker'
-        }
-        resource = f'/networks/{networkId}/sensor/mqttBrokers/{mqttBrokerId}'
+        resource = f"/networks/{networkId}/sensor/mqttBrokers/{mqttBrokerId}"
 
-        body_params = ['enabled', ]
+        body_params = [
+            "enabled",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-

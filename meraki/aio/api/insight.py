@@ -5,8 +5,6 @@ class AsyncInsight:
     def __init__(self, session):
         super().__init__()
         self._session = session
-        
-
 
     def getNetworkInsightApplicationHealthByTime(self, networkId: str, applicationId: str, **kwargs):
         """
@@ -24,19 +22,22 @@ class AsyncInsight:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['insight', 'monitor', 'applications', 'healthByTime'],
-            'operation': 'getNetworkInsightApplicationHealthByTime'
+            "tags": ["insight", "monitor", "applications", "healthByTime"],
+            "operation": "getNetworkInsightApplicationHealthByTime",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        applicationId = urllib.parse.quote(str(applicationId), safe='')
-        resource = f'/networks/{networkId}/insight/applications/{applicationId}/healthByTime'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        applicationId = urllib.parse.quote(str(applicationId), safe="")
+        resource = f"/networks/{networkId}/insight/applications/{applicationId}/healthByTime"
 
-        query_params = ['t0', 't1', 'timespan', 'resolution', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "resolution",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getOrganizationInsightApplications(self, organizationId: str):
         """
@@ -47,15 +48,13 @@ class AsyncInsight:
         """
 
         metadata = {
-            'tags': ['insight', 'configure', 'applications'],
-            'operation': 'getOrganizationInsightApplications'
+            "tags": ["insight", "configure", "applications"],
+            "operation": "getOrganizationInsightApplications",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/insight/applications'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/insight/applications"
 
         return self._session.get(metadata, resource)
-        
-
 
     def getOrganizationInsightMonitoredMediaServers(self, organizationId: str):
         """
@@ -66,15 +65,13 @@ class AsyncInsight:
         """
 
         metadata = {
-            'tags': ['insight', 'configure', 'monitoredMediaServers'],
-            'operation': 'getOrganizationInsightMonitoredMediaServers'
+            "tags": ["insight", "configure", "monitoredMediaServers"],
+            "operation": "getOrganizationInsightMonitoredMediaServers",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/insight/monitoredMediaServers'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/insight/monitoredMediaServers"
 
         return self._session.get(metadata, resource)
-        
-
 
     def createOrganizationInsightMonitoredMediaServer(self, organizationId: str, name: str, address: str, **kwargs):
         """
@@ -90,18 +87,20 @@ class AsyncInsight:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['insight', 'configure', 'monitoredMediaServers'],
-            'operation': 'createOrganizationInsightMonitoredMediaServer'
+            "tags": ["insight", "configure", "monitoredMediaServers"],
+            "operation": "createOrganizationInsightMonitoredMediaServer",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/insight/monitoredMediaServers'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/insight/monitoredMediaServers"
 
-        body_params = ['name', 'address', 'bestEffortMonitoringEnabled', ]
+        body_params = [
+            "name",
+            "address",
+            "bestEffortMonitoringEnabled",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getOrganizationInsightMonitoredMediaServer(self, organizationId: str, monitoredMediaServerId: str):
         """
@@ -113,16 +112,14 @@ class AsyncInsight:
         """
 
         metadata = {
-            'tags': ['insight', 'configure', 'monitoredMediaServers'],
-            'operation': 'getOrganizationInsightMonitoredMediaServer'
+            "tags": ["insight", "configure", "monitoredMediaServers"],
+            "operation": "getOrganizationInsightMonitoredMediaServer",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        monitoredMediaServerId = urllib.parse.quote(str(monitoredMediaServerId), safe='')
-        resource = f'/organizations/{organizationId}/insight/monitoredMediaServers/{monitoredMediaServerId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        monitoredMediaServerId = urllib.parse.quote(str(monitoredMediaServerId), safe="")
+        resource = f"/organizations/{organizationId}/insight/monitoredMediaServers/{monitoredMediaServerId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateOrganizationInsightMonitoredMediaServer(self, organizationId: str, monitoredMediaServerId: str, **kwargs):
         """
@@ -139,19 +136,21 @@ class AsyncInsight:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['insight', 'configure', 'monitoredMediaServers'],
-            'operation': 'updateOrganizationInsightMonitoredMediaServer'
+            "tags": ["insight", "configure", "monitoredMediaServers"],
+            "operation": "updateOrganizationInsightMonitoredMediaServer",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        monitoredMediaServerId = urllib.parse.quote(str(monitoredMediaServerId), safe='')
-        resource = f'/organizations/{organizationId}/insight/monitoredMediaServers/{monitoredMediaServerId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        monitoredMediaServerId = urllib.parse.quote(str(monitoredMediaServerId), safe="")
+        resource = f"/organizations/{organizationId}/insight/monitoredMediaServers/{monitoredMediaServerId}"
 
-        body_params = ['name', 'address', 'bestEffortMonitoringEnabled', ]
+        body_params = [
+            "name",
+            "address",
+            "bestEffortMonitoringEnabled",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteOrganizationInsightMonitoredMediaServer(self, organizationId: str, monitoredMediaServerId: str):
         """
@@ -163,12 +162,11 @@ class AsyncInsight:
         """
 
         metadata = {
-            'tags': ['insight', 'configure', 'monitoredMediaServers'],
-            'operation': 'deleteOrganizationInsightMonitoredMediaServer'
+            "tags": ["insight", "configure", "monitoredMediaServers"],
+            "operation": "deleteOrganizationInsightMonitoredMediaServer",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        monitoredMediaServerId = urllib.parse.quote(str(monitoredMediaServerId), safe='')
-        resource = f'/organizations/{organizationId}/insight/monitoredMediaServers/{monitoredMediaServerId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        monitoredMediaServerId = urllib.parse.quote(str(monitoredMediaServerId), safe="")
+        resource = f"/organizations/{organizationId}/insight/monitoredMediaServers/{monitoredMediaServerId}"
 
         return self._session.delete(metadata, resource)
-        

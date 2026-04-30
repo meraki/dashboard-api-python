@@ -1,11 +1,6 @@
-import urllib
-
-
 class ActionBatchAppliance(object):
     def __init__(self):
         super(ActionBatchAppliance, self).__init__()
-        
-
 
     def updateDeviceApplianceRadioSettings(self, serial: str, **kwargs):
         """
@@ -20,29 +15,24 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'radio', 'settings'],
-            'operation': 'updateDeviceApplianceRadioSettings'
-        }
-        resource = f'/devices/{serial}/appliance/radio/settings'
+        resource = f"/devices/{serial}/appliance/radio/settings"
 
-        body_params = ['rfProfileId', 'twoFourGhzSettings', 'fiveGhzSettings', ]
+        body_params = [
+            "rfProfileId",
+            "twoFourGhzSettings",
+            "fiveGhzSettings",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateDeviceApplianceUplinksSettings(self, serial: str, interfaces: dict):
         """
-        **Update the uplink settings for an MX appliance**
+        **Update the uplink settings for a secure router or security appliance**
         https://developer.cisco.com/meraki/api-v1/#!update-device-appliance-uplinks-settings
 
         - serial (string): Serial
@@ -51,25 +41,18 @@ class ActionBatchAppliance(object):
 
         kwargs = locals()
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'uplinks', 'settings'],
-            'operation': 'updateDeviceApplianceUplinksSettings'
-        }
-        resource = f'/devices/{serial}/appliance/uplinks/settings'
+        resource = f"/devices/{serial}/appliance/uplinks/settings"
 
-        body_params = ['interfaces', ]
+        body_params = [
+            "interfaces",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def createDeviceApplianceVmxAuthenticationToken(self, serial: str):
         """
@@ -79,22 +62,13 @@ class ActionBatchAppliance(object):
         - serial (string): Serial
         """
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'vmx', 'authenticationToken'],
-            'operation': 'createDeviceApplianceVmxAuthenticationToken'
-        }
-        resource = f'/devices/{serial}/appliance/vmx/authenticationToken'
+        resource = f"/devices/{serial}/appliance/vmx/authenticationToken"
 
         action = {
             "resource": resource,
             "operation": "create",
         }
         return action
-        
-
-
-
-
 
     def updateNetworkApplianceConnectivityMonitoringDestinations(self, networkId: str, **kwargs):
         """
@@ -107,25 +81,68 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'connectivityMonitoringDestinations'],
-            'operation': 'updateNetworkApplianceConnectivityMonitoringDestinations'
-        }
-        resource = f'/networks/{networkId}/appliance/connectivityMonitoringDestinations'
+        resource = f"/networks/{networkId}/appliance/connectivityMonitoringDestinations"
 
-        body_params = ['destinations', ]
+        body_params = [
+            "destinations",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
 
+    def updateNetworkApplianceDevicesRedundancy(self, networkId: str, enabled: bool, **kwargs):
+        """
+        **Update MX warm spare settings**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-devices-redundancy
 
+        - networkId (string): Network ID
+        - enabled (boolean): Enable warm spare
+        - mode (string): HA mode (disabled|active-passive|active-active)
+        - designations (array): Ordered warm spare roles
+        - uplink (object): Uplink configuration
+        """
 
+        kwargs.update(locals())
 
+        if "mode" in kwargs:
+            options = ["active-active", "active-passive", "disabled"]
+            assert kwargs["mode"] in options, f'''"mode" cannot be "{kwargs["mode"]}", & must be set to one of: {options}'''
+
+        resource = f"/networks/{networkId}/appliance/devices/redundancy"
+
+        body_params = [
+            "enabled",
+            "mode",
+            "designations",
+            "uplink",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def createNetworkApplianceDevicesRedundancySwap(self, networkId: str):
+        """
+        **Swap MX primary and warm spare appliances**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-appliance-devices-redundancy-swap
+
+        - networkId (string): Network ID
+        """
+
+        resource = f"/networks/{networkId}/appliance/devices/redundancy/swap"
+
+        action = {
+            "resource": resource,
+            "operation": "swap",
+        }
+        return action
 
     def updateNetworkApplianceFirewallL7FirewallRules(self, networkId: str, **kwargs):
         """
@@ -133,30 +150,23 @@ class ActionBatchAppliance(object):
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-firewall-l-7-firewall-rules
 
         - networkId (string): Network ID
-        - rules (array): An ordered array of the MX L7 firewall rules
+        - rules (array): An ordered array of the MX L7 firewall rules. Each rule is an object with 'policy', 'type', and 'value'. The 'value' shape depends on 'type': object for application/applicationCategory, string for host/port/ipRange, and an array of 2-letter ISO 3166-1 alpha-2 country codes for allowedCountries/blockedCountries. For backward compatibility, request types also accept whitelistedCountries/blacklistedCountries.
         """
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'firewall', 'l7FirewallRules'],
-            'operation': 'updateNetworkApplianceFirewallL7FirewallRules'
-        }
-        resource = f'/networks/{networkId}/appliance/firewall/l7FirewallRules'
+        resource = f"/networks/{networkId}/appliance/firewall/l7FirewallRules"
 
-        body_params = ['rules', ]
+        body_params = [
+            "rules",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkApplianceFirewallMulticastForwarding(self, networkId: str, rules: list):
         """
@@ -169,25 +179,18 @@ class ActionBatchAppliance(object):
 
         kwargs = locals()
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'firewall', 'multicastForwarding'],
-            'operation': 'updateNetworkApplianceFirewallMulticastForwarding'
-        }
-        resource = f'/networks/{networkId}/appliance/firewall/multicastForwarding'
+        resource = f"/networks/{networkId}/appliance/firewall/multicastForwarding"
 
-        body_params = ['rules', ]
+        body_params = [
+            "rules",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkAppliancePort(self, networkId: str, portId: str, **kwargs):
         """
@@ -200,31 +203,29 @@ class ActionBatchAppliance(object):
         - dropUntaggedTraffic (boolean): Trunk port can Drop all Untagged traffic. When true, no VLAN is required. Access ports cannot have dropUntaggedTraffic set to true.
         - type (string): The type of the port: 'access' or 'trunk'.
         - vlan (integer): Native VLAN when the port is in Trunk mode. Access VLAN when the port is in Access mode.
-        - allowedVlans (string): Comma-delimited list of the VLAN ID's allowed on the port, or 'all' to permit all VLAN's on the port.
+        - allowedVlans (string): Comma-delimited list of VLAN IDs (e.g. '2,15') for all devices. Secure Routers also support VLAN ranges (e.g. '2-10,15'). Use 'all' to permit all VLANs on the port.
         - accessPolicy (string): The name of the policy. Only applicable to Access ports. Valid values are: 'open', '8021x-radius', 'mac-radius', 'hybris-radius' for MX64 or Z3 or any MX supporting the per port authentication feature. Otherwise, 'open' is the only valid value and 'open' is the default value if the field is missing.
         """
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'ports'],
-            'operation': 'updateNetworkAppliancePort'
-        }
-        resource = f'/networks/{networkId}/appliance/ports/{portId}'
+        resource = f"/networks/{networkId}/appliance/ports/{portId}"
 
-        body_params = ['enabled', 'dropUntaggedTraffic', 'type', 'vlan', 'allowedVlans', 'accessPolicy', ]
+        body_params = [
+            "enabled",
+            "dropUntaggedTraffic",
+            "type",
+            "vlan",
+            "allowedVlans",
+            "accessPolicy",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def createNetworkAppliancePrefixesDelegatedStatic(self, networkId: str, prefix: str, origin: dict, **kwargs):
         """
@@ -239,25 +240,20 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'prefixes', 'delegated', 'statics'],
-            'operation': 'createNetworkAppliancePrefixesDelegatedStatic'
-        }
-        resource = f'/networks/{networkId}/appliance/prefixes/delegated/statics'
+        resource = f"/networks/{networkId}/appliance/prefixes/delegated/statics"
 
-        body_params = ['prefix', 'origin', 'description', ]
+        body_params = [
+            "prefix",
+            "origin",
+            "description",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "create",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkAppliancePrefixesDelegatedStatic(self, networkId: str, staticDelegatedPrefixId: str, **kwargs):
         """
@@ -273,25 +269,20 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'prefixes', 'delegated', 'statics'],
-            'operation': 'updateNetworkAppliancePrefixesDelegatedStatic'
-        }
-        resource = f'/networks/{networkId}/appliance/prefixes/delegated/statics/{staticDelegatedPrefixId}'
+        resource = f"/networks/{networkId}/appliance/prefixes/delegated/statics/{staticDelegatedPrefixId}"
 
-        body_params = ['prefix', 'origin', 'description', ]
+        body_params = [
+            "prefix",
+            "origin",
+            "description",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def deleteNetworkAppliancePrefixesDelegatedStatic(self, networkId: str, staticDelegatedPrefixId: str):
         """
@@ -302,22 +293,13 @@ class ActionBatchAppliance(object):
         - staticDelegatedPrefixId (string): Static delegated prefix ID
         """
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'prefixes', 'delegated', 'statics'],
-            'operation': 'deleteNetworkAppliancePrefixesDelegatedStatic'
-        }
-        resource = f'/networks/{networkId}/appliance/prefixes/delegated/statics/{staticDelegatedPrefixId}'
+        resource = f"/networks/{networkId}/appliance/prefixes/delegated/statics/{staticDelegatedPrefixId}"
 
         action = {
             "resource": resource,
             "operation": "destroy",
         }
         return action
-        
-
-
-
-
 
     def createNetworkApplianceRfProfile(self, networkId: str, name: str, **kwargs):
         """
@@ -333,25 +315,21 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'rfProfiles'],
-            'operation': 'createNetworkApplianceRfProfile'
-        }
-        resource = f'/networks/{networkId}/appliance/rfProfiles'
+        resource = f"/networks/{networkId}/appliance/rfProfiles"
 
-        body_params = ['name', 'twoFourGhzSettings', 'fiveGhzSettings', 'perSsidSettings', ]
+        body_params = [
+            "name",
+            "twoFourGhzSettings",
+            "fiveGhzSettings",
+            "perSsidSettings",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "create",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkApplianceRfProfile(self, networkId: str, rfProfileId: str, **kwargs):
         """
@@ -368,25 +346,21 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'rfProfiles'],
-            'operation': 'updateNetworkApplianceRfProfile'
-        }
-        resource = f'/networks/{networkId}/appliance/rfProfiles/{rfProfileId}'
+        resource = f"/networks/{networkId}/appliance/rfProfiles/{rfProfileId}"
 
-        body_params = ['name', 'twoFourGhzSettings', 'fiveGhzSettings', 'perSsidSettings', ]
+        body_params = [
+            "name",
+            "twoFourGhzSettings",
+            "fiveGhzSettings",
+            "perSsidSettings",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def deleteNetworkApplianceRfProfile(self, networkId: str, rfProfileId: str):
         """
@@ -397,22 +371,13 @@ class ActionBatchAppliance(object):
         - rfProfileId (string): Rf profile ID
         """
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'rfProfiles'],
-            'operation': 'deleteNetworkApplianceRfProfile'
-        }
-        resource = f'/networks/{networkId}/appliance/rfProfiles/{rfProfileId}'
+        resource = f"/networks/{networkId}/appliance/rfProfiles/{rfProfileId}"
 
         action = {
             "resource": resource,
             "operation": "destroy",
         }
         return action
-        
-
-
-
-
 
     def updateNetworkApplianceSdwanInternetPolicies(self, networkId: str, **kwargs):
         """
@@ -425,25 +390,18 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'sdwan', 'internetPolicies'],
-            'operation': 'updateNetworkApplianceSdwanInternetPolicies'
-        }
-        resource = f'/networks/{networkId}/appliance/sdwan/internetPolicies'
+        resource = f"/networks/{networkId}/appliance/sdwan/internetPolicies"
 
-        body_params = ['wanTrafficUplinkPreferences', ]
+        body_params = [
+            "wanTrafficUplinkPreferences",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkApplianceSettings(self, networkId: str, **kwargs):
         """
@@ -458,32 +416,31 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        if 'clientTrackingMethod' in kwargs:
-            options = ['IP address', 'MAC address', 'Unique client identifier']
-            assert kwargs['clientTrackingMethod'] in options, f'''"clientTrackingMethod" cannot be "{kwargs['clientTrackingMethod']}", & must be set to one of: {options}'''
-        if 'deploymentMode' in kwargs:
-            options = ['passthrough', 'routed']
-            assert kwargs['deploymentMode'] in options, f'''"deploymentMode" cannot be "{kwargs['deploymentMode']}", & must be set to one of: {options}'''
+        if "clientTrackingMethod" in kwargs:
+            options = ["IP address", "MAC address", "Unique client identifier"]
+            assert kwargs["clientTrackingMethod"] in options, (
+                f'''"clientTrackingMethod" cannot be "{kwargs["clientTrackingMethod"]}", & must be set to one of: {options}'''
+            )
+        if "deploymentMode" in kwargs:
+            options = ["passthrough", "routed"]
+            assert kwargs["deploymentMode"] in options, (
+                f'''"deploymentMode" cannot be "{kwargs["deploymentMode"]}", & must be set to one of: {options}'''
+            )
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'settings'],
-            'operation': 'updateNetworkApplianceSettings'
-        }
-        resource = f'/networks/{networkId}/appliance/settings'
+        resource = f"/networks/{networkId}/appliance/settings"
 
-        body_params = ['clientTrackingMethod', 'deploymentMode', 'dynamicDns', ]
+        body_params = [
+            "clientTrackingMethod",
+            "deploymentMode",
+            "dynamicDns",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkApplianceSingleLan(self, networkId: str, **kwargs):
         """
@@ -499,25 +456,21 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'singleLan'],
-            'operation': 'updateNetworkApplianceSingleLan'
-        }
-        resource = f'/networks/{networkId}/appliance/singleLan'
+        resource = f"/networks/{networkId}/appliance/singleLan"
 
-        body_params = ['subnet', 'applianceIp', 'ipv6', 'mandatoryDhcp', ]
+        body_params = [
+            "subnet",
+            "applianceIp",
+            "ipv6",
+            "mandatoryDhcp",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkApplianceSsid(self, networkId: str, number: str, **kwargs):
         """
@@ -535,41 +488,50 @@ class ActionBatchAppliance(object):
         - encryptionMode (string): The psk encryption mode for the SSID ('wep' or 'wpa'). This param is only valid if the authMode is 'psk'.
         - wpaEncryptionMode (string): The types of WPA encryption. ('WPA1 and WPA2', 'WPA2 only', 'WPA3 Transition Mode' or 'WPA3 only'). This param is only valid if (1) the authMode is 'psk' & the encryptionMode is 'wpa' OR (2) the authMode is '8021x-meraki' OR (3) the authMode is '8021x-radius'
         - visible (boolean): Boolean indicating whether the MX should advertise or hide this SSID.
-        - dhcpEnforcedDeauthentication (object): DHCP Enforced Deauthentication enables the disassociation of wireless clients in addition to Mandatory DHCP. This param is only valid on firmware versions >= MX 17.0 where the associated LAN has Mandatory DHCP Enabled 
+        - dhcpEnforcedDeauthentication (object): DHCP Enforced Deauthentication enables the disassociation of wireless clients in addition to Mandatory DHCP. This param is only valid on firmware versions >= MX 17.0 where the associated LAN has Mandatory DHCP Enabled
         - dot11w (object): The current setting for Protected Management Frames (802.11w).
         """
 
         kwargs.update(locals())
 
-        if 'authMode' in kwargs:
-            options = ['8021x-meraki', '8021x-radius', 'open', 'psk']
-            assert kwargs['authMode'] in options, f'''"authMode" cannot be "{kwargs['authMode']}", & must be set to one of: {options}'''
-        if 'encryptionMode' in kwargs:
-            options = ['wep', 'wpa']
-            assert kwargs['encryptionMode'] in options, f'''"encryptionMode" cannot be "{kwargs['encryptionMode']}", & must be set to one of: {options}'''
-        if 'wpaEncryptionMode' in kwargs:
-            options = ['WPA1 and WPA2', 'WPA2 only', 'WPA3 Transition Mode', 'WPA3 only']
-            assert kwargs['wpaEncryptionMode'] in options, f'''"wpaEncryptionMode" cannot be "{kwargs['wpaEncryptionMode']}", & must be set to one of: {options}'''
+        if "authMode" in kwargs:
+            options = ["8021x-meraki", "8021x-radius", "open", "psk"]
+            assert kwargs["authMode"] in options, (
+                f'''"authMode" cannot be "{kwargs["authMode"]}", & must be set to one of: {options}'''
+            )
+        if "encryptionMode" in kwargs:
+            options = ["wep", "wpa"]
+            assert kwargs["encryptionMode"] in options, (
+                f'''"encryptionMode" cannot be "{kwargs["encryptionMode"]}", & must be set to one of: {options}'''
+            )
+        if "wpaEncryptionMode" in kwargs:
+            options = ["WPA1 and WPA2", "WPA2 only", "WPA3 Transition Mode", "WPA3 only"]
+            assert kwargs["wpaEncryptionMode"] in options, (
+                f'''"wpaEncryptionMode" cannot be "{kwargs["wpaEncryptionMode"]}", & must be set to one of: {options}'''
+            )
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'ssids'],
-            'operation': 'updateNetworkApplianceSsid'
-        }
-        resource = f'/networks/{networkId}/appliance/ssids/{number}'
+        resource = f"/networks/{networkId}/appliance/ssids/{number}"
 
-        body_params = ['name', 'enabled', 'defaultVlanId', 'authMode', 'psk', 'radiusServers', 'encryptionMode', 'wpaEncryptionMode', 'visible', 'dhcpEnforcedDeauthentication', 'dot11w', ]
+        body_params = [
+            "name",
+            "enabled",
+            "defaultVlanId",
+            "authMode",
+            "psk",
+            "radiusServers",
+            "encryptionMode",
+            "wpaEncryptionMode",
+            "visible",
+            "dhcpEnforcedDeauthentication",
+            "dot11w",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def createNetworkApplianceTrafficShapingCustomPerformanceClass(self, networkId: str, name: str, **kwargs):
         """
@@ -585,27 +547,25 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'trafficShaping', 'customPerformanceClasses'],
-            'operation': 'createNetworkApplianceTrafficShapingCustomPerformanceClass'
-        }
-        resource = f'/networks/{networkId}/appliance/trafficShaping/customPerformanceClasses'
+        resource = f"/networks/{networkId}/appliance/trafficShaping/customPerformanceClasses"
 
-        body_params = ['name', 'maxLatency', 'maxJitter', 'maxLossPercentage', ]
+        body_params = [
+            "name",
+            "maxLatency",
+            "maxJitter",
+            "maxLossPercentage",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "create",
-            "body": payload
+            "body": payload,
         }
         return action
-        
 
-
-
-
-
-    def updateNetworkApplianceTrafficShapingCustomPerformanceClass(self, networkId: str, customPerformanceClassId: str, **kwargs):
+    def updateNetworkApplianceTrafficShapingCustomPerformanceClass(
+        self, networkId: str, customPerformanceClassId: str, **kwargs
+    ):
         """
         **Update a custom performance class for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-traffic-shaping-custom-performance-class
@@ -620,25 +580,21 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'trafficShaping', 'customPerformanceClasses'],
-            'operation': 'updateNetworkApplianceTrafficShapingCustomPerformanceClass'
-        }
-        resource = f'/networks/{networkId}/appliance/trafficShaping/customPerformanceClasses/{customPerformanceClassId}'
+        resource = f"/networks/{networkId}/appliance/trafficShaping/customPerformanceClasses/{customPerformanceClassId}"
 
-        body_params = ['name', 'maxLatency', 'maxJitter', 'maxLossPercentage', ]
+        body_params = [
+            "name",
+            "maxLatency",
+            "maxJitter",
+            "maxLossPercentage",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def deleteNetworkApplianceTrafficShapingCustomPerformanceClass(self, networkId: str, customPerformanceClassId: str):
         """
@@ -649,57 +605,42 @@ class ActionBatchAppliance(object):
         - customPerformanceClassId (string): Custom performance class ID
         """
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'trafficShaping', 'customPerformanceClasses'],
-            'operation': 'deleteNetworkApplianceTrafficShapingCustomPerformanceClass'
-        }
-        resource = f'/networks/{networkId}/appliance/trafficShaping/customPerformanceClasses/{customPerformanceClassId}'
+        resource = f"/networks/{networkId}/appliance/trafficShaping/customPerformanceClasses/{customPerformanceClassId}"
 
         action = {
             "resource": resource,
             "operation": "destroy",
         }
         return action
-        
-
-
-
-
 
     def updateNetworkApplianceTrafficShapingRules(self, networkId: str, **kwargs):
         """
-        **Update the traffic shaping settings rules for an MX network**
-        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-traffic-shaping-rules
+            **Update the traffic shaping settings rules for an MX network**
+            https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-traffic-shaping-rules
 
-        - networkId (string): Network ID
-        - defaultRulesEnabled (boolean): Whether default traffic shaping rules are enabled (true) or disabled (false). There are 4 default rules, which can be seen on your network's traffic shaping page. Note that default rules count against the rule limit of 8.
-        - rules (array):     An array of traffic shaping rules. Rules are applied in the order that
-    they are specified in. An empty list (or null) means no rules. Note that
-    you are allowed a maximum of 8 rules.
+            - networkId (string): Network ID
+            - defaultRulesEnabled (boolean): Whether default traffic shaping rules are enabled (true) or disabled (false). There are 4 default rules, which can be seen on your network's traffic shaping page. Note that default rules count against the rule limit of 8.
+            - rules (array):     An array of traffic shaping rules. Rules are applied in the order that
+        they are specified in. An empty list (or null) means no rules. Note that
+        you are allowed a maximum of 8 rules.
 
         """
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'trafficShaping', 'rules'],
-            'operation': 'updateNetworkApplianceTrafficShapingRules'
-        }
-        resource = f'/networks/{networkId}/appliance/trafficShaping/rules'
+        resource = f"/networks/{networkId}/appliance/trafficShaping/rules"
 
-        body_params = ['defaultRulesEnabled', 'rules', ]
+        body_params = [
+            "defaultRulesEnabled",
+            "rules",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkApplianceTrafficShapingUplinkBandwidth(self, networkId: str, **kwargs):
         """
@@ -712,25 +653,18 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'trafficShaping', 'uplinkBandwidth'],
-            'operation': 'updateNetworkApplianceTrafficShapingUplinkBandwidth'
-        }
-        resource = f'/networks/{networkId}/appliance/trafficShaping/uplinkBandwidth'
+        resource = f"/networks/{networkId}/appliance/trafficShaping/uplinkBandwidth"
 
-        body_params = ['bandwidthLimits', ]
+        body_params = [
+            "bandwidthLimits",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkApplianceTrafficShapingUplinkSelection(self, networkId: str, **kwargs):
         """
@@ -748,29 +682,23 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        if 'defaultUplink' in kwargs:
-            options = ['wan1', 'wan2']
-            assert kwargs['defaultUplink'] in options, f'''"defaultUplink" cannot be "{kwargs['defaultUplink']}", & must be set to one of: {options}'''
+        resource = f"/networks/{networkId}/appliance/trafficShaping/uplinkSelection"
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'trafficShaping', 'uplinkSelection'],
-            'operation': 'updateNetworkApplianceTrafficShapingUplinkSelection'
-        }
-        resource = f'/networks/{networkId}/appliance/trafficShaping/uplinkSelection'
-
-        body_params = ['activeActiveAutoVpnEnabled', 'defaultUplink', 'loadBalancingEnabled', 'failoverAndFailback', 'wanTrafficUplinkPreferences', 'vpnTrafficUplinkPreferences', ]
+        body_params = [
+            "activeActiveAutoVpnEnabled",
+            "defaultUplink",
+            "loadBalancingEnabled",
+            "failoverAndFailback",
+            "wanTrafficUplinkPreferences",
+            "vpnTrafficUplinkPreferences",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkApplianceTrafficShapingVpnExclusions(self, networkId: str, **kwargs):
         """
@@ -784,25 +712,19 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'trafficShaping', 'vpnExclusions'],
-            'operation': 'updateNetworkApplianceTrafficShapingVpnExclusions'
-        }
-        resource = f'/networks/{networkId}/appliance/trafficShaping/vpnExclusions'
+        resource = f"/networks/{networkId}/appliance/trafficShaping/vpnExclusions"
 
-        body_params = ['custom', 'majorApplications', ]
+        body_params = [
+            "custom",
+            "majorApplications",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def connectNetworkApplianceUmbrellaAccount(self, networkId: str, api: dict):
         """
@@ -815,25 +737,18 @@ class ActionBatchAppliance(object):
 
         kwargs = locals()
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'umbrella', 'account'],
-            'operation': 'connectNetworkApplianceUmbrellaAccount'
-        }
-        resource = f'/networks/{networkId}/appliance/umbrella/account/connect'
+        resource = f"/networks/{networkId}/appliance/umbrella/account/connect"
 
-        body_params = ['api', ]
+        body_params = [
+            "api",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "create",
-            "body": payload
+            "operation": "action",
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def disconnectNetworkApplianceUmbrellaAccount(self, networkId: str):
         """
@@ -843,22 +758,37 @@ class ActionBatchAppliance(object):
         - networkId (string): Network ID
         """
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'umbrella', 'account'],
-            'operation': 'disconnectNetworkApplianceUmbrellaAccount'
-        }
-        resource = f'/networks/{networkId}/appliance/umbrella/account/disconnect'
+        resource = f"/networks/{networkId}/appliance/umbrella/account/disconnect"
 
         action = {
             "resource": resource,
-            "operation": "create",
+            "operation": "disconnect",
         }
         return action
-        
 
+    def updateNetworkApplianceUplinksNat(self, networkId: str, uplinks: list):
+        """
+        **Update uplink NAT settings of the specified network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-uplinks-nat
 
+        - networkId (string): Network ID
+        - uplinks (array): Per-uplink NAT exception configuration on the network.
+        """
 
+        kwargs = locals()
 
+        resource = f"/networks/{networkId}/appliance/uplinks/nat"
+
+        body_params = [
+            "uplinks",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "settings",
+            "body": payload,
+        }
+        return action
 
     def createNetworkApplianceVlan(self, networkId: str, id: str, name: str, **kwargs):
         """
@@ -883,39 +813,56 @@ class ActionBatchAppliance(object):
         - dhcpBootNextServer (string): DHCP boot option to direct boot clients to the server to load the boot file from
         - dhcpBootFilename (string): DHCP boot option for boot filename
         - dhcpOptions (array): The list of DHCP options that will be included in DHCP responses. Each object in the list should have "code", "type", and "value" properties.
+        - uplinks (array): Per-uplink NAT exception override configuration on the VLAN. Applicable only for networks that support NAT exceptions.
         """
 
         kwargs.update(locals())
 
-        if 'templateVlanType' in kwargs:
-            options = ['same', 'unique']
-            assert kwargs['templateVlanType'] in options, f'''"templateVlanType" cannot be "{kwargs['templateVlanType']}", & must be set to one of: {options}'''
-        if 'dhcpHandling' in kwargs:
-            options = ['Do not respond to DHCP requests', 'Relay DHCP to another server', 'Run a DHCP server']
-            assert kwargs['dhcpHandling'] in options, f'''"dhcpHandling" cannot be "{kwargs['dhcpHandling']}", & must be set to one of: {options}'''
-        if 'dhcpLeaseTime' in kwargs:
-            options = ['1 day', '1 hour', '1 week', '12 hours', '30 minutes', '4 hours']
-            assert kwargs['dhcpLeaseTime'] in options, f'''"dhcpLeaseTime" cannot be "{kwargs['dhcpLeaseTime']}", & must be set to one of: {options}'''
+        if "templateVlanType" in kwargs:
+            options = ["same", "unique"]
+            assert kwargs["templateVlanType"] in options, (
+                f'''"templateVlanType" cannot be "{kwargs["templateVlanType"]}", & must be set to one of: {options}'''
+            )
+        if "dhcpHandling" in kwargs:
+            options = ["Do not respond to DHCP requests", "Relay DHCP to another server", "Run a DHCP server"]
+            assert kwargs["dhcpHandling"] in options, (
+                f'''"dhcpHandling" cannot be "{kwargs["dhcpHandling"]}", & must be set to one of: {options}'''
+            )
+        if "dhcpLeaseTime" in kwargs:
+            options = ["1 day", "1 hour", "1 week", "12 hours", "30 minutes", "4 hours"]
+            assert kwargs["dhcpLeaseTime"] in options, (
+                f'''"dhcpLeaseTime" cannot be "{kwargs["dhcpLeaseTime"]}", & must be set to one of: {options}'''
+            )
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'vlans'],
-            'operation': 'createNetworkApplianceVlan'
-        }
-        resource = f'/networks/{networkId}/appliance/vlans'
+        resource = f"/networks/{networkId}/appliance/vlans"
 
-        body_params = ['id', 'name', 'subnet', 'applianceIp', 'groupPolicyId', 'templateVlanType', 'cidr', 'mask', 'ipv6', 'dhcpHandling', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'mandatoryDhcp', 'dhcpBootOptionsEnabled', 'dhcpBootNextServer', 'dhcpBootFilename', 'dhcpOptions', ]
+        body_params = [
+            "id",
+            "name",
+            "subnet",
+            "applianceIp",
+            "groupPolicyId",
+            "templateVlanType",
+            "cidr",
+            "mask",
+            "ipv6",
+            "dhcpHandling",
+            "dhcpRelayServerIps",
+            "dhcpLeaseTime",
+            "mandatoryDhcp",
+            "dhcpBootOptionsEnabled",
+            "dhcpBootNextServer",
+            "dhcpBootFilename",
+            "dhcpOptions",
+            "uplinks",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "create",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkApplianceVlansSettings(self, networkId: str, **kwargs):
         """
@@ -928,25 +875,18 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'vlans', 'settings'],
-            'operation': 'updateNetworkApplianceVlansSettings'
-        }
-        resource = f'/networks/{networkId}/appliance/vlans/settings'
+        resource = f"/networks/{networkId}/appliance/vlans/settings"
 
-        body_params = ['vlansEnabled', ]
+        body_params = [
+            "vlansEnabled",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkApplianceVlan(self, networkId: str, vlanId: str, **kwargs):
         """
@@ -975,39 +915,59 @@ class ActionBatchAppliance(object):
         - mask (integer): Mask used for the subnet of all bound to the template networks. Applicable only for template network.
         - ipv6 (object): IPv6 configuration on the VLAN
         - mandatoryDhcp (object): Mandatory DHCP will enforce that clients connecting to this VLAN must use the IP address assigned by the DHCP server. Clients who use a static IP address won't be able to associate. Only available on firmware versions 17.0 and above
+        - uplinks (array): Per-uplink NAT exception override configuration on the VLAN. Applicable only for networks that support NAT exceptions.
         """
 
         kwargs.update(locals())
 
-        if 'dhcpHandling' in kwargs:
-            options = ['Do not respond to DHCP requests', 'Relay DHCP to another server', 'Run a DHCP server']
-            assert kwargs['dhcpHandling'] in options, f'''"dhcpHandling" cannot be "{kwargs['dhcpHandling']}", & must be set to one of: {options}'''
-        if 'dhcpLeaseTime' in kwargs:
-            options = ['1 day', '1 hour', '1 week', '12 hours', '30 minutes', '4 hours']
-            assert kwargs['dhcpLeaseTime'] in options, f'''"dhcpLeaseTime" cannot be "{kwargs['dhcpLeaseTime']}", & must be set to one of: {options}'''
-        if 'templateVlanType' in kwargs:
-            options = ['same', 'unique']
-            assert kwargs['templateVlanType'] in options, f'''"templateVlanType" cannot be "{kwargs['templateVlanType']}", & must be set to one of: {options}'''
+        if "dhcpHandling" in kwargs:
+            options = ["Do not respond to DHCP requests", "Relay DHCP to another server", "Run a DHCP server"]
+            assert kwargs["dhcpHandling"] in options, (
+                f'''"dhcpHandling" cannot be "{kwargs["dhcpHandling"]}", & must be set to one of: {options}'''
+            )
+        if "dhcpLeaseTime" in kwargs:
+            options = ["1 day", "1 hour", "1 week", "12 hours", "30 minutes", "4 hours"]
+            assert kwargs["dhcpLeaseTime"] in options, (
+                f'''"dhcpLeaseTime" cannot be "{kwargs["dhcpLeaseTime"]}", & must be set to one of: {options}'''
+            )
+        if "templateVlanType" in kwargs:
+            options = ["same", "unique"]
+            assert kwargs["templateVlanType"] in options, (
+                f'''"templateVlanType" cannot be "{kwargs["templateVlanType"]}", & must be set to one of: {options}'''
+            )
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'vlans'],
-            'operation': 'updateNetworkApplianceVlan'
-        }
-        resource = f'/networks/{networkId}/appliance/vlans/{vlanId}'
+        resource = f"/networks/{networkId}/appliance/vlans/{vlanId}"
 
-        body_params = ['name', 'subnet', 'applianceIp', 'groupPolicyId', 'vpnNatSubnet', 'dhcpHandling', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dhcpBootOptionsEnabled', 'dhcpBootNextServer', 'dhcpBootFilename', 'fixedIpAssignments', 'reservedIpRanges', 'dnsNameservers', 'dhcpOptions', 'templateVlanType', 'cidr', 'mask', 'ipv6', 'mandatoryDhcp', ]
+        body_params = [
+            "name",
+            "subnet",
+            "applianceIp",
+            "groupPolicyId",
+            "vpnNatSubnet",
+            "dhcpHandling",
+            "dhcpRelayServerIps",
+            "dhcpLeaseTime",
+            "dhcpBootOptionsEnabled",
+            "dhcpBootNextServer",
+            "dhcpBootFilename",
+            "fixedIpAssignments",
+            "reservedIpRanges",
+            "dnsNameservers",
+            "dhcpOptions",
+            "templateVlanType",
+            "cidr",
+            "mask",
+            "ipv6",
+            "mandatoryDhcp",
+            "uplinks",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def deleteNetworkApplianceVlan(self, networkId: str, vlanId: str):
         """
@@ -1018,22 +978,13 @@ class ActionBatchAppliance(object):
         - vlanId (string): Vlan ID
         """
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'vlans'],
-            'operation': 'deleteNetworkApplianceVlan'
-        }
-        resource = f'/networks/{networkId}/appliance/vlans/{vlanId}'
+        resource = f"/networks/{networkId}/appliance/vlans/{vlanId}"
 
         action = {
             "resource": resource,
             "operation": "destroy",
         }
         return action
-        
-
-
-
-
 
     def updateNetworkApplianceVpnBgp(self, networkId: str, enabled: bool, **kwargs):
         """
@@ -1044,34 +995,32 @@ class ActionBatchAppliance(object):
         - enabled (boolean): Boolean value to enable or disable the BGP configuration. When BGP is enabled, the asNumber (ASN) will be autopopulated with the preconfigured ASN at other Hubs or a default value if there is no ASN configured.
         - asNumber (integer): An Autonomous System Number (ASN) is required if you are to run BGP and peer with another BGP Speaker outside of the Auto VPN domain. This ASN will be applied to the entire Auto VPN domain. The entire 4-byte ASN range is supported. So, the ASN must be an integer between 1 and 4294967295. When absent, this field is not updated. If no value exists then it defaults to 64512.
         - ibgpHoldTimer (integer): The iBGP holdtimer in seconds. The iBGP holdtimer must be an integer between 12 and 240. When absent, this field is not updated. If no value exists then it defaults to 240.
+        - routerId (string): The router ID of the appliance
         - neighbors (array): List of BGP neighbors. This list replaces the existing set of neighbors. When absent, this field is not updated.
         """
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'vpn', 'bgp'],
-            'operation': 'updateNetworkApplianceVpnBgp'
-        }
-        resource = f'/networks/{networkId}/appliance/vpn/bgp'
+        resource = f"/networks/{networkId}/appliance/vpn/bgp"
 
-        body_params = ['enabled', 'asNumber', 'ibgpHoldTimer', 'neighbors', ]
+        body_params = [
+            "enabled",
+            "asNumber",
+            "ibgpHoldTimer",
+            "routerId",
+            "neighbors",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "settings/update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkApplianceVpnSiteToSiteVpn(self, networkId: str, mode: str, **kwargs):
         """
-        **Update the site-to-site VPN settings of a network**
+        **Update the site-to-site VPN settings of a network. Only valid for MX networks in NAT mode.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-vpn-site-to-site-vpn
 
         - networkId (string): Network ID
@@ -1079,33 +1028,31 @@ class ActionBatchAppliance(object):
         - hubs (array): The list of VPN hubs, in order of preference. In spoke mode, at least 1 hub is required.
         - subnets (array): The list of subnets and their VPN presence.
         - subnet (object): Configuration of subnet features
+        - hostTranslations (array): The list of VPN host translations. Host translations are supported starting from MX firmware version 26.1.2
         """
 
         kwargs.update(locals())
 
-        if 'mode' in kwargs:
-            options = ['hub', 'none', 'spoke']
-            assert kwargs['mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
+        if "mode" in kwargs:
+            options = ["hub", "none", "spoke"]
+            assert kwargs["mode"] in options, f'''"mode" cannot be "{kwargs["mode"]}", & must be set to one of: {options}'''
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'vpn', 'siteToSiteVpn'],
-            'operation': 'updateNetworkApplianceVpnSiteToSiteVpn'
-        }
-        resource = f'/networks/{networkId}/appliance/vpn/siteToSiteVpn'
+        resource = f"/networks/{networkId}/appliance/vpn/siteToSiteVpn"
 
-        body_params = ['mode', 'hubs', 'subnets', 'subnet', ]
+        body_params = [
+            "mode",
+            "hubs",
+            "subnets",
+            "subnet",
+            "hostTranslations",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkApplianceWarmSpare(self, networkId: str, enabled: bool, **kwargs):
         """
@@ -1122,25 +1069,22 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'warmSpare'],
-            'operation': 'updateNetworkApplianceWarmSpare'
-        }
-        resource = f'/networks/{networkId}/appliance/warmSpare'
+        resource = f"/networks/{networkId}/appliance/warmSpare"
 
-        body_params = ['enabled', 'spareSerial', 'uplinkMode', 'virtualIp1', 'virtualIp2', ]
+        body_params = [
+            "enabled",
+            "spareSerial",
+            "uplinkMode",
+            "virtualIp1",
+            "virtualIp2",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def swapNetworkApplianceWarmSpare(self, networkId: str):
         """
@@ -1150,22 +1094,13 @@ class ActionBatchAppliance(object):
         - networkId (string): Network ID
         """
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'warmSpare'],
-            'operation': 'swapNetworkApplianceWarmSpare'
-        }
-        resource = f'/networks/{networkId}/appliance/warmSpare/swap'
+        resource = f"/networks/{networkId}/appliance/warmSpare/swap"
 
         action = {
             "resource": resource,
             "operation": "swap",
         }
         return action
-        
-
-
-
-
 
     def createOrganizationApplianceDnsLocalProfile(self, organizationId: str, name: str):
         """
@@ -1178,25 +1113,18 @@ class ActionBatchAppliance(object):
 
         kwargs = locals()
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'dns', 'local', 'profiles'],
-            'operation': 'createOrganizationApplianceDnsLocalProfile'
-        }
-        resource = f'/organizations/{organizationId}/appliance/dns/local/profiles'
+        resource = f"/organizations/{organizationId}/appliance/dns/local/profiles"
 
-        body_params = ['name', ]
+        body_params = [
+            "name",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "create",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def bulkOrganizationApplianceDnsLocalProfilesAssignmentsCreate(self, organizationId: str, items: list):
         """
@@ -1209,25 +1137,18 @@ class ActionBatchAppliance(object):
 
         kwargs = locals()
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'dns', 'local', 'profiles', 'assignments'],
-            'operation': 'bulkOrganizationApplianceDnsLocalProfilesAssignmentsCreate'
-        }
-        resource = f'/organizations/{organizationId}/appliance/dns/local/profiles/assignments/bulkCreate'
+        resource = f"/organizations/{organizationId}/appliance/dns/local/profiles/assignments/bulkCreate"
 
-        body_params = ['items', ]
+        body_params = [
+            "items",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "bulk_create",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def createOrganizationApplianceDnsLocalProfilesAssignmentsBulkDelete(self, organizationId: str, items: list):
         """
@@ -1240,25 +1161,18 @@ class ActionBatchAppliance(object):
 
         kwargs = locals()
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'dns', 'local', 'profiles', 'assignments', 'bulkDelete'],
-            'operation': 'createOrganizationApplianceDnsLocalProfilesAssignmentsBulkDelete'
-        }
-        resource = f'/organizations/{organizationId}/appliance/dns/local/profiles/assignments/bulkDelete'
+        resource = f"/organizations/{organizationId}/appliance/dns/local/profiles/assignments/bulkDelete"
 
-        body_params = ['items', ]
+        body_params = [
+            "items",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "bulk_delete",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateOrganizationApplianceDnsLocalProfile(self, organizationId: str, profileId: str, name: str):
         """
@@ -1272,25 +1186,18 @@ class ActionBatchAppliance(object):
 
         kwargs = locals()
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'dns', 'local', 'profiles'],
-            'operation': 'updateOrganizationApplianceDnsLocalProfile'
-        }
-        resource = f'/organizations/{organizationId}/appliance/dns/local/profiles/{profileId}'
+        resource = f"/organizations/{organizationId}/appliance/dns/local/profiles/{profileId}"
 
-        body_params = ['name', ]
+        body_params = [
+            "name",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def deleteOrganizationApplianceDnsLocalProfile(self, organizationId: str, profileId: str):
         """
@@ -1301,22 +1208,13 @@ class ActionBatchAppliance(object):
         - profileId (string): Profile ID
         """
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'dns', 'local', 'profiles'],
-            'operation': 'deleteOrganizationApplianceDnsLocalProfile'
-        }
-        resource = f'/organizations/{organizationId}/appliance/dns/local/profiles/{profileId}'
+        resource = f"/organizations/{organizationId}/appliance/dns/local/profiles/{profileId}"
 
         action = {
             "resource": resource,
             "operation": "destroy",
         }
         return action
-        
-
-
-
-
 
     def createOrganizationApplianceDnsLocalRecord(self, organizationId: str, hostname: str, address: str, profile: dict):
         """
@@ -1331,25 +1229,20 @@ class ActionBatchAppliance(object):
 
         kwargs = locals()
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'dns', 'local', 'records'],
-            'operation': 'createOrganizationApplianceDnsLocalRecord'
-        }
-        resource = f'/organizations/{organizationId}/appliance/dns/local/records'
+        resource = f"/organizations/{organizationId}/appliance/dns/local/records"
 
-        body_params = ['hostname', 'address', 'profile', ]
+        body_params = [
+            "hostname",
+            "address",
+            "profile",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "create",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateOrganizationApplianceDnsLocalRecord(self, organizationId: str, recordId: str, **kwargs):
         """
@@ -1365,25 +1258,20 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'dns', 'local', 'records'],
-            'operation': 'updateOrganizationApplianceDnsLocalRecord'
-        }
-        resource = f'/organizations/{organizationId}/appliance/dns/local/records/{recordId}'
+        resource = f"/organizations/{organizationId}/appliance/dns/local/records/{recordId}"
 
-        body_params = ['hostname', 'address', 'profile', ]
+        body_params = [
+            "hostname",
+            "address",
+            "profile",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def deleteOrganizationApplianceDnsLocalRecord(self, organizationId: str, recordId: str):
         """
@@ -1394,22 +1282,13 @@ class ActionBatchAppliance(object):
         - recordId (string): Record ID
         """
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'dns', 'local', 'records'],
-            'operation': 'deleteOrganizationApplianceDnsLocalRecord'
-        }
-        resource = f'/organizations/{organizationId}/appliance/dns/local/records/{recordId}'
+        resource = f"/organizations/{organizationId}/appliance/dns/local/records/{recordId}"
 
         action = {
             "resource": resource,
             "operation": "destroy",
         }
         return action
-        
-
-
-
-
 
     def createOrganizationApplianceDnsSplitProfile(self, organizationId: str, name: str, hostnames: list, nameservers: dict):
         """
@@ -1424,25 +1303,20 @@ class ActionBatchAppliance(object):
 
         kwargs = locals()
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'dns', 'split', 'profiles'],
-            'operation': 'createOrganizationApplianceDnsSplitProfile'
-        }
-        resource = f'/organizations/{organizationId}/appliance/dns/split/profiles'
+        resource = f"/organizations/{organizationId}/appliance/dns/split/profiles"
 
-        body_params = ['name', 'hostnames', 'nameservers', ]
+        body_params = [
+            "name",
+            "hostnames",
+            "nameservers",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "create",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def createOrganizationApplianceDnsSplitProfilesAssignmentsBulkCreate(self, organizationId: str, items: list):
         """
@@ -1455,25 +1329,18 @@ class ActionBatchAppliance(object):
 
         kwargs = locals()
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'dns', 'split', 'profiles', 'assignments', 'bulkCreate'],
-            'operation': 'createOrganizationApplianceDnsSplitProfilesAssignmentsBulkCreate'
-        }
-        resource = f'/organizations/{organizationId}/appliance/dns/split/profiles/assignments/bulkCreate'
+        resource = f"/organizations/{organizationId}/appliance/dns/split/profiles/assignments/bulkCreate"
 
-        body_params = ['items', ]
+        body_params = [
+            "items",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "bulk_create",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def createOrganizationApplianceDnsSplitProfilesAssignmentsBulkDelete(self, organizationId: str, items: list):
         """
@@ -1486,25 +1353,18 @@ class ActionBatchAppliance(object):
 
         kwargs = locals()
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'dns', 'split', 'profiles', 'assignments', 'bulkDelete'],
-            'operation': 'createOrganizationApplianceDnsSplitProfilesAssignmentsBulkDelete'
-        }
-        resource = f'/organizations/{organizationId}/appliance/dns/split/profiles/assignments/bulkDelete'
+        resource = f"/organizations/{organizationId}/appliance/dns/split/profiles/assignments/bulkDelete"
 
-        body_params = ['items', ]
+        body_params = [
+            "items",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "bulk_delete",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateOrganizationApplianceDnsSplitProfile(self, organizationId: str, profileId: str, **kwargs):
         """
@@ -1520,25 +1380,20 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'dns', 'split', 'profiles'],
-            'operation': 'updateOrganizationApplianceDnsSplitProfile'
-        }
-        resource = f'/organizations/{organizationId}/appliance/dns/split/profiles/{profileId}'
+        resource = f"/organizations/{organizationId}/appliance/dns/split/profiles/{profileId}"
 
-        body_params = ['name', 'hostnames', 'nameservers', ]
+        body_params = [
+            "name",
+            "hostnames",
+            "nameservers",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def deleteOrganizationApplianceDnsSplitProfile(self, organizationId: str, profileId: str):
         """
@@ -1549,22 +1404,13 @@ class ActionBatchAppliance(object):
         - profileId (string): Profile ID
         """
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'dns', 'split', 'profiles'],
-            'operation': 'deleteOrganizationApplianceDnsSplitProfile'
-        }
-        resource = f'/organizations/{organizationId}/appliance/dns/split/profiles/{profileId}'
+        resource = f"/organizations/{organizationId}/appliance/dns/split/profiles/{profileId}"
 
         action = {
             "resource": resource,
             "operation": "destroy",
         }
         return action
-        
-
-
-
-
 
     def updateOrganizationApplianceVpnSiteToSiteIpsecPeersSlas(self, organizationId: str, **kwargs):
         """
@@ -1577,52 +1423,94 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'vpn', 'siteToSite', 'ipsec', 'peers', 'slas'],
-            'operation': 'updateOrganizationApplianceVpnSiteToSiteIpsecPeersSlas'
-        }
-        resource = f'/organizations/{organizationId}/appliance/vpn/siteToSite/ipsec/peers/slas'
+        resource = f"/organizations/{organizationId}/appliance/vpn/siteToSite/ipsec/peers/slas"
 
-        body_params = ['items', ]
+        body_params = [
+            "items",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateOrganizationApplianceVpnThirdPartyVPNPeers(self, organizationId: str, peers: list):
         """
-        **Update the third party VPN peers for an organization**
-        https://developer.cisco.com/meraki/api-v1/#!update-organization-appliance-vpn-third-party-v-p-n-peers
+                **Update the third party VPN peers for an organization.
 
-        - organizationId (string): Organization ID
-        - peers (array): The list of VPN peers
+        Subnet overlap warning: Unlike the Dashboard UI, updateOrganizationApplianceVpnThirdPartyVPNPeers does not run the org-wide subnet-overlap validation before saving changes. Requests with overlapping VPN subnets will succeed through the API, but the resulting configuration may be blocked from further edits in Dashboard until the overlaps are resolved manually. Use this endpoint only when you've already confirmed the advertised subnets are unique across the organization.
+        **
+                https://developer.cisco.com/meraki/api-v1/#!update-organization-appliance-vpn-third-party-v-p-n-peers
+
+                - organizationId (string): Organization ID
+                - peers (array): The list of VPN peers
         """
 
         kwargs = locals()
 
-        metadata = {
-            'tags': ['appliance', 'configure', 'vpn', 'thirdPartyVPNPeers'],
-            'operation': 'updateOrganizationApplianceVpnThirdPartyVPNPeers'
-        }
-        resource = f'/organizations/{organizationId}/appliance/vpn/thirdPartyVPNPeers'
+        resource = f"/organizations/{organizationId}/appliance/vpn/thirdPartyVPNPeers"
 
-        body_params = ['peers', ]
+        body_params = [
+            "peers",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
 
+    def assignOrganizationPoliciesGlobalGroupPoliciesApplianceVlans(self, organizationId: str, policy: dict, vlans: list):
+        """
+        **Assign VLANs to a policy**
+        https://developer.cisco.com/meraki/api-v1/#!assign-organization-policies-global-group-policies-appliance-vlans
 
+        - organizationId (string): Organization ID
+        - policy (object): Policy to assign VLANs to
+        - vlans (array): VLANs to assign
+        """
 
+        kwargs = locals()
+
+        resource = f"/organizations/{organizationId}/policies/global/group/policies/appliance/vlans/assign"
+
+        body_params = [
+            "policy",
+            "vlans",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "assign",
+            "body": payload,
+        }
+        return action
+
+    def removeOrganizationPoliciesGlobalGroupPoliciesApplianceVlans(self, organizationId: str, policy: dict, vlans: list):
+        """
+        **Remove VLANs from a policy**
+        https://developer.cisco.com/meraki/api-v1/#!remove-organization-policies-global-group-policies-appliance-vlans
+
+        - organizationId (string): Organization ID
+        - policy (object): Policy to remove VLANs from
+        - vlans (array): VLANs to remove
+        """
+
+        kwargs = locals()
+
+        resource = f"/organizations/{organizationId}/policies/global/group/policies/appliance/vlans/remove"
+
+        body_params = [
+            "policy",
+            "vlans",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "remove",
+            "body": payload,
+        }
+        return action

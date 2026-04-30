@@ -5,8 +5,6 @@ class Camera(object):
     def __init__(self, session):
         super(Camera, self).__init__()
         self._session = session
-        
-
 
     def getDeviceCameraAnalyticsLive(self, serial: str):
         """
@@ -17,15 +15,13 @@ class Camera(object):
         """
 
         metadata = {
-            'tags': ['camera', 'monitor', 'analytics', 'live'],
-            'operation': 'getDeviceCameraAnalyticsLive'
+            "tags": ["camera", "monitor", "analytics", "live"],
+            "operation": "getDeviceCameraAnalyticsLive",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/camera/analytics/live'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/camera/analytics/live"
 
         return self._session.get(metadata, resource)
-        
-
 
     def getDeviceCameraAnalyticsOverview(self, serial: str, **kwargs):
         """
@@ -41,23 +37,28 @@ class Camera(object):
 
         kwargs.update(locals())
 
-        if 'objectType' in kwargs:
-            options = ['person', 'vehicle']
-            assert kwargs['objectType'] in options, f'''"objectType" cannot be "{kwargs['objectType']}", & must be set to one of: {options}'''
+        if "objectType" in kwargs:
+            options = ["person", "vehicle"]
+            assert kwargs["objectType"] in options, (
+                f'''"objectType" cannot be "{kwargs["objectType"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['camera', 'monitor', 'analytics', 'overview'],
-            'operation': 'getDeviceCameraAnalyticsOverview'
+            "tags": ["camera", "monitor", "analytics", "overview"],
+            "operation": "getDeviceCameraAnalyticsOverview",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/camera/analytics/overview'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/camera/analytics/overview"
 
-        query_params = ['t0', 't1', 'timespan', 'objectType', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "objectType",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getDeviceCameraAnalyticsRecent(self, serial: str, **kwargs):
         """
@@ -70,23 +71,25 @@ class Camera(object):
 
         kwargs.update(locals())
 
-        if 'objectType' in kwargs:
-            options = ['person', 'vehicle']
-            assert kwargs['objectType'] in options, f'''"objectType" cannot be "{kwargs['objectType']}", & must be set to one of: {options}'''
+        if "objectType" in kwargs:
+            options = ["person", "vehicle"]
+            assert kwargs["objectType"] in options, (
+                f'''"objectType" cannot be "{kwargs["objectType"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['camera', 'monitor', 'analytics', 'recent'],
-            'operation': 'getDeviceCameraAnalyticsRecent'
+            "tags": ["camera", "monitor", "analytics", "recent"],
+            "operation": "getDeviceCameraAnalyticsRecent",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/camera/analytics/recent'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/camera/analytics/recent"
 
-        query_params = ['objectType', ]
+        query_params = [
+            "objectType",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getDeviceCameraAnalyticsZones(self, serial: str):
         """
@@ -97,15 +100,13 @@ class Camera(object):
         """
 
         metadata = {
-            'tags': ['camera', 'monitor', 'analytics', 'zones'],
-            'operation': 'getDeviceCameraAnalyticsZones'
+            "tags": ["camera", "monitor", "analytics", "zones"],
+            "operation": "getDeviceCameraAnalyticsZones",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/camera/analytics/zones'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/camera/analytics/zones"
 
         return self._session.get(metadata, resource)
-        
-
 
     def getDeviceCameraAnalyticsZoneHistory(self, serial: str, zoneId: str, **kwargs):
         """
@@ -123,24 +124,59 @@ class Camera(object):
 
         kwargs.update(locals())
 
-        if 'objectType' in kwargs:
-            options = ['person', 'vehicle']
-            assert kwargs['objectType'] in options, f'''"objectType" cannot be "{kwargs['objectType']}", & must be set to one of: {options}'''
+        if "objectType" in kwargs:
+            options = ["person", "vehicle"]
+            assert kwargs["objectType"] in options, (
+                f'''"objectType" cannot be "{kwargs["objectType"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['camera', 'monitor', 'analytics', 'zones', 'history'],
-            'operation': 'getDeviceCameraAnalyticsZoneHistory'
+            "tags": ["camera", "monitor", "analytics", "zones", "history"],
+            "operation": "getDeviceCameraAnalyticsZoneHistory",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        zoneId = urllib.parse.quote(str(zoneId), safe='')
-        resource = f'/devices/{serial}/camera/analytics/zones/{zoneId}/history'
+        serial = urllib.parse.quote(str(serial), safe="")
+        zoneId = urllib.parse.quote(str(zoneId), safe="")
+        resource = f"/devices/{serial}/camera/analytics/zones/{zoneId}/history"
 
-        query_params = ['t0', 't1', 'timespan', 'resolution', 'objectType', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "resolution",
+            "objectType",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
 
+    def clipDeviceCamera(self, serial: str, startTimestamp: str, endTimestamp: str, **kwargs):
+        """
+        **Generate a video clip of up to 5 minutes long.**
+        https://developer.cisco.com/meraki/api-v1/#!clip-device-camera
+
+        - serial (string): Serial
+        - startTimestamp (string): The start time for the clip. The timestamp is expected to be in ISO 8601 format.
+        - endTimestamp (string): The end time for the clip. The timestamp is expected to be in ISO 8601 format.
+        - imagerId (integer): For multi-imager cameras, the imager ID to query. Defaults to '1' if omitted.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["camera", "monitor"],
+            "operation": "clipDeviceCamera",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/camera/clip"
+
+        query_params = [
+            "startTimestamp",
+            "endTimestamp",
+            "imagerId",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get(metadata, resource, params)
 
     def getDeviceCameraCustomAnalytics(self, serial: str):
         """
@@ -151,15 +187,13 @@ class Camera(object):
         """
 
         metadata = {
-            'tags': ['camera', 'configure', 'customAnalytics'],
-            'operation': 'getDeviceCameraCustomAnalytics'
+            "tags": ["camera", "configure", "customAnalytics"],
+            "operation": "getDeviceCameraCustomAnalytics",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/camera/customAnalytics'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/camera/customAnalytics"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateDeviceCameraCustomAnalytics(self, serial: str, **kwargs):
         """
@@ -175,18 +209,20 @@ class Camera(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['camera', 'configure', 'customAnalytics'],
-            'operation': 'updateDeviceCameraCustomAnalytics'
+            "tags": ["camera", "configure", "customAnalytics"],
+            "operation": "updateDeviceCameraCustomAnalytics",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/camera/customAnalytics'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/camera/customAnalytics"
 
-        body_params = ['enabled', 'artifactId', 'parameters', ]
+        body_params = [
+            "enabled",
+            "artifactId",
+            "parameters",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def generateDeviceCameraSnapshot(self, serial: str, **kwargs):
         """
@@ -201,18 +237,19 @@ class Camera(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['camera', 'monitor'],
-            'operation': 'generateDeviceCameraSnapshot'
+            "tags": ["camera", "monitor"],
+            "operation": "generateDeviceCameraSnapshot",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/camera/generateSnapshot'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/camera/generateSnapshot"
 
-        body_params = ['timestamp', 'fullframe', ]
+        body_params = [
+            "timestamp",
+            "fullframe",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getDeviceCameraQualityAndRetention(self, serial: str):
         """
@@ -223,15 +260,13 @@ class Camera(object):
         """
 
         metadata = {
-            'tags': ['camera', 'configure', 'qualityAndRetention'],
-            'operation': 'getDeviceCameraQualityAndRetention'
+            "tags": ["camera", "configure", "qualityAndRetention"],
+            "operation": "getDeviceCameraQualityAndRetention",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/camera/qualityAndRetention'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/camera/qualityAndRetention"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateDeviceCameraQualityAndRetention(self, serial: str, **kwargs):
         """
@@ -250,29 +285,41 @@ class Camera(object):
 
         kwargs.update(locals())
 
-        if 'quality' in kwargs:
-            options = ['Enhanced', 'High', 'Standard', 'Ultra']
-            assert kwargs['quality'] in options, f'''"quality" cannot be "{kwargs['quality']}", & must be set to one of: {options}'''
-        if 'resolution' in kwargs:
-            options = ['1080x1080', '1280x720', '1920x1080', '2112x2112', '2688x1512', '2880x2880', '3840x2160']
-            assert kwargs['resolution'] in options, f'''"resolution" cannot be "{kwargs['resolution']}", & must be set to one of: {options}'''
-        if 'motionDetectorVersion' in kwargs:
+        if "quality" in kwargs:
+            options = ["Enhanced", "High", "Standard", "Ultra"]
+            assert kwargs["quality"] in options, (
+                f'''"quality" cannot be "{kwargs["quality"]}", & must be set to one of: {options}'''
+            )
+        if "resolution" in kwargs:
+            options = ["1080x1080", "1280x720", "1920x1080", "2112x2112", "2688x1512", "2880x2880", "3840x2160"]
+            assert kwargs["resolution"] in options, (
+                f'''"resolution" cannot be "{kwargs["resolution"]}", & must be set to one of: {options}'''
+            )
+        if "motionDetectorVersion" in kwargs:
             options = [1, 2]
-            assert kwargs['motionDetectorVersion'] in options, f'''"motionDetectorVersion" cannot be "{kwargs['motionDetectorVersion']}", & must be set to one of: {options}'''
+            assert kwargs["motionDetectorVersion"] in options, (
+                f'''"motionDetectorVersion" cannot be "{kwargs["motionDetectorVersion"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['camera', 'configure', 'qualityAndRetention'],
-            'operation': 'updateDeviceCameraQualityAndRetention'
+            "tags": ["camera", "configure", "qualityAndRetention"],
+            "operation": "updateDeviceCameraQualityAndRetention",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/camera/qualityAndRetention'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/camera/qualityAndRetention"
 
-        body_params = ['profileId', 'motionBasedRetentionEnabled', 'audioRecordingEnabled', 'restrictedBandwidthModeEnabled', 'quality', 'resolution', 'motionDetectorVersion', ]
+        body_params = [
+            "profileId",
+            "motionBasedRetentionEnabled",
+            "audioRecordingEnabled",
+            "restrictedBandwidthModeEnabled",
+            "quality",
+            "resolution",
+            "motionDetectorVersion",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getDeviceCameraSense(self, serial: str):
         """
@@ -283,15 +330,13 @@ class Camera(object):
         """
 
         metadata = {
-            'tags': ['camera', 'configure', 'sense'],
-            'operation': 'getDeviceCameraSense'
+            "tags": ["camera", "configure", "sense"],
+            "operation": "getDeviceCameraSense",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/camera/sense'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/camera/sense"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateDeviceCameraSense(self, serial: str, **kwargs):
         """
@@ -308,18 +353,21 @@ class Camera(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['camera', 'configure', 'sense'],
-            'operation': 'updateDeviceCameraSense'
+            "tags": ["camera", "configure", "sense"],
+            "operation": "updateDeviceCameraSense",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/camera/sense'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/camera/sense"
 
-        body_params = ['senseEnabled', 'mqttBrokerId', 'audioDetection', 'detectionModelId', ]
+        body_params = [
+            "senseEnabled",
+            "mqttBrokerId",
+            "audioDetection",
+            "detectionModelId",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getDeviceCameraSenseObjectDetectionModels(self, serial: str):
         """
@@ -330,15 +378,13 @@ class Camera(object):
         """
 
         metadata = {
-            'tags': ['camera', 'configure', 'sense', 'objectDetectionModels'],
-            'operation': 'getDeviceCameraSenseObjectDetectionModels'
+            "tags": ["camera", "configure", "sense", "objectDetectionModels"],
+            "operation": "getDeviceCameraSenseObjectDetectionModels",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/camera/sense/objectDetectionModels'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/camera/sense/objectDetectionModels"
 
         return self._session.get(metadata, resource)
-        
-
 
     def getDeviceCameraVideoSettings(self, serial: str):
         """
@@ -349,15 +395,13 @@ class Camera(object):
         """
 
         metadata = {
-            'tags': ['camera', 'configure', 'video', 'settings'],
-            'operation': 'getDeviceCameraVideoSettings'
+            "tags": ["camera", "configure", "video", "settings"],
+            "operation": "getDeviceCameraVideoSettings",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/camera/video/settings'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/camera/video/settings"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateDeviceCameraVideoSettings(self, serial: str, **kwargs):
         """
@@ -371,18 +415,18 @@ class Camera(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['camera', 'configure', 'video', 'settings'],
-            'operation': 'updateDeviceCameraVideoSettings'
+            "tags": ["camera", "configure", "video", "settings"],
+            "operation": "updateDeviceCameraVideoSettings",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/camera/video/settings'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/camera/video/settings"
 
-        body_params = ['externalRtspEnabled', ]
+        body_params = [
+            "externalRtspEnabled",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getDeviceCameraVideoLink(self, serial: str, **kwargs):
         """
@@ -396,18 +440,18 @@ class Camera(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['camera', 'configure', 'videoLink'],
-            'operation': 'getDeviceCameraVideoLink'
+            "tags": ["camera", "configure", "videoLink"],
+            "operation": "getDeviceCameraVideoLink",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/camera/videoLink'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/camera/videoLink"
 
-        query_params = ['timestamp', ]
+        query_params = [
+            "timestamp",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getDeviceCameraWirelessProfiles(self, serial: str):
         """
@@ -418,15 +462,13 @@ class Camera(object):
         """
 
         metadata = {
-            'tags': ['camera', 'configure', 'wirelessProfiles'],
-            'operation': 'getDeviceCameraWirelessProfiles'
+            "tags": ["camera", "configure", "wirelessProfiles"],
+            "operation": "getDeviceCameraWirelessProfiles",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/camera/wirelessProfiles'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/camera/wirelessProfiles"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateDeviceCameraWirelessProfiles(self, serial: str, ids: dict):
         """
@@ -440,18 +482,18 @@ class Camera(object):
         kwargs = locals()
 
         metadata = {
-            'tags': ['camera', 'configure', 'wirelessProfiles'],
-            'operation': 'updateDeviceCameraWirelessProfiles'
+            "tags": ["camera", "configure", "wirelessProfiles"],
+            "operation": "updateDeviceCameraWirelessProfiles",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/camera/wirelessProfiles'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/camera/wirelessProfiles"
 
-        body_params = ['ids', ]
+        body_params = [
+            "ids",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkCameraQualityRetentionProfiles(self, networkId: str):
         """
@@ -462,15 +504,13 @@ class Camera(object):
         """
 
         metadata = {
-            'tags': ['camera', 'configure', 'qualityRetentionProfiles'],
-            'operation': 'getNetworkCameraQualityRetentionProfiles'
+            "tags": ["camera", "configure", "qualityRetentionProfiles"],
+            "operation": "getNetworkCameraQualityRetentionProfiles",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/camera/qualityRetentionProfiles'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/camera/qualityRetentionProfiles"
 
         return self._session.get(metadata, resource)
-        
-
 
     def createNetworkCameraQualityRetentionProfile(self, networkId: str, name: str, **kwargs):
         """
@@ -493,18 +533,27 @@ class Camera(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['camera', 'configure', 'qualityRetentionProfiles'],
-            'operation': 'createNetworkCameraQualityRetentionProfile'
+            "tags": ["camera", "configure", "qualityRetentionProfiles"],
+            "operation": "createNetworkCameraQualityRetentionProfile",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/camera/qualityRetentionProfiles'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/camera/qualityRetentionProfiles"
 
-        body_params = ['name', 'motionBasedRetentionEnabled', 'restrictedBandwidthModeEnabled', 'audioRecordingEnabled', 'cloudArchiveEnabled', 'motionDetectorVersion', 'smartRetention', 'scheduleId', 'maxRetentionDays', 'videoSettings', ]
+        body_params = [
+            "name",
+            "motionBasedRetentionEnabled",
+            "restrictedBandwidthModeEnabled",
+            "audioRecordingEnabled",
+            "cloudArchiveEnabled",
+            "motionDetectorVersion",
+            "smartRetention",
+            "scheduleId",
+            "maxRetentionDays",
+            "videoSettings",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str):
         """
@@ -516,16 +565,14 @@ class Camera(object):
         """
 
         metadata = {
-            'tags': ['camera', 'configure', 'qualityRetentionProfiles'],
-            'operation': 'getNetworkCameraQualityRetentionProfile'
+            "tags": ["camera", "configure", "qualityRetentionProfiles"],
+            "operation": "getNetworkCameraQualityRetentionProfile",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        qualityRetentionProfileId = urllib.parse.quote(str(qualityRetentionProfileId), safe='')
-        resource = f'/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        qualityRetentionProfileId = urllib.parse.quote(str(qualityRetentionProfileId), safe="")
+        resource = f"/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str, **kwargs):
         """
@@ -549,19 +596,28 @@ class Camera(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['camera', 'configure', 'qualityRetentionProfiles'],
-            'operation': 'updateNetworkCameraQualityRetentionProfile'
+            "tags": ["camera", "configure", "qualityRetentionProfiles"],
+            "operation": "updateNetworkCameraQualityRetentionProfile",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        qualityRetentionProfileId = urllib.parse.quote(str(qualityRetentionProfileId), safe='')
-        resource = f'/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        qualityRetentionProfileId = urllib.parse.quote(str(qualityRetentionProfileId), safe="")
+        resource = f"/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}"
 
-        body_params = ['name', 'motionBasedRetentionEnabled', 'restrictedBandwidthModeEnabled', 'audioRecordingEnabled', 'cloudArchiveEnabled', 'motionDetectorVersion', 'smartRetention', 'scheduleId', 'maxRetentionDays', 'videoSettings', ]
+        body_params = [
+            "name",
+            "motionBasedRetentionEnabled",
+            "restrictedBandwidthModeEnabled",
+            "audioRecordingEnabled",
+            "cloudArchiveEnabled",
+            "motionDetectorVersion",
+            "smartRetention",
+            "scheduleId",
+            "maxRetentionDays",
+            "videoSettings",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str):
         """
@@ -573,16 +629,14 @@ class Camera(object):
         """
 
         metadata = {
-            'tags': ['camera', 'configure', 'qualityRetentionProfiles'],
-            'operation': 'deleteNetworkCameraQualityRetentionProfile'
+            "tags": ["camera", "configure", "qualityRetentionProfiles"],
+            "operation": "deleteNetworkCameraQualityRetentionProfile",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        qualityRetentionProfileId = urllib.parse.quote(str(qualityRetentionProfileId), safe='')
-        resource = f'/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        qualityRetentionProfileId = urllib.parse.quote(str(qualityRetentionProfileId), safe="")
+        resource = f"/networks/{networkId}/camera/qualityRetentionProfiles/{qualityRetentionProfileId}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def getNetworkCameraSchedules(self, networkId: str):
         """
@@ -593,15 +647,13 @@ class Camera(object):
         """
 
         metadata = {
-            'tags': ['camera', 'configure', 'schedules'],
-            'operation': 'getNetworkCameraSchedules'
+            "tags": ["camera", "configure", "schedules"],
+            "operation": "getNetworkCameraSchedules",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/camera/schedules'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/camera/schedules"
 
         return self._session.get(metadata, resource)
-        
-
 
     def createNetworkCameraWirelessProfile(self, networkId: str, name: str, ssid: dict, **kwargs):
         """
@@ -617,18 +669,20 @@ class Camera(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['camera', 'configure', 'wirelessProfiles'],
-            'operation': 'createNetworkCameraWirelessProfile'
+            "tags": ["camera", "configure", "wirelessProfiles"],
+            "operation": "createNetworkCameraWirelessProfile",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/camera/wirelessProfiles'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/camera/wirelessProfiles"
 
-        body_params = ['name', 'ssid', 'identity', ]
+        body_params = [
+            "name",
+            "ssid",
+            "identity",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getNetworkCameraWirelessProfiles(self, networkId: str):
         """
@@ -639,15 +693,13 @@ class Camera(object):
         """
 
         metadata = {
-            'tags': ['camera', 'configure', 'wirelessProfiles'],
-            'operation': 'getNetworkCameraWirelessProfiles'
+            "tags": ["camera", "configure", "wirelessProfiles"],
+            "operation": "getNetworkCameraWirelessProfiles",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/camera/wirelessProfiles'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/camera/wirelessProfiles"
 
         return self._session.get(metadata, resource)
-        
-
 
     def getNetworkCameraWirelessProfile(self, networkId: str, wirelessProfileId: str):
         """
@@ -659,16 +711,14 @@ class Camera(object):
         """
 
         metadata = {
-            'tags': ['camera', 'configure', 'wirelessProfiles'],
-            'operation': 'getNetworkCameraWirelessProfile'
+            "tags": ["camera", "configure", "wirelessProfiles"],
+            "operation": "getNetworkCameraWirelessProfile",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        wirelessProfileId = urllib.parse.quote(str(wirelessProfileId), safe='')
-        resource = f'/networks/{networkId}/camera/wirelessProfiles/{wirelessProfileId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        wirelessProfileId = urllib.parse.quote(str(wirelessProfileId), safe="")
+        resource = f"/networks/{networkId}/camera/wirelessProfiles/{wirelessProfileId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkCameraWirelessProfile(self, networkId: str, wirelessProfileId: str, **kwargs):
         """
@@ -685,19 +735,21 @@ class Camera(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['camera', 'configure', 'wirelessProfiles'],
-            'operation': 'updateNetworkCameraWirelessProfile'
+            "tags": ["camera", "configure", "wirelessProfiles"],
+            "operation": "updateNetworkCameraWirelessProfile",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        wirelessProfileId = urllib.parse.quote(str(wirelessProfileId), safe='')
-        resource = f'/networks/{networkId}/camera/wirelessProfiles/{wirelessProfileId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        wirelessProfileId = urllib.parse.quote(str(wirelessProfileId), safe="")
+        resource = f"/networks/{networkId}/camera/wirelessProfiles/{wirelessProfileId}"
 
-        body_params = ['name', 'ssid', 'identity', ]
+        body_params = [
+            "name",
+            "ssid",
+            "identity",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteNetworkCameraWirelessProfile(self, networkId: str, wirelessProfileId: str):
         """
@@ -709,16 +761,14 @@ class Camera(object):
         """
 
         metadata = {
-            'tags': ['camera', 'configure', 'wirelessProfiles'],
-            'operation': 'deleteNetworkCameraWirelessProfile'
+            "tags": ["camera", "configure", "wirelessProfiles"],
+            "operation": "deleteNetworkCameraWirelessProfile",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        wirelessProfileId = urllib.parse.quote(str(wirelessProfileId), safe='')
-        resource = f'/networks/{networkId}/camera/wirelessProfiles/{wirelessProfileId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        wirelessProfileId = urllib.parse.quote(str(wirelessProfileId), safe="")
+        resource = f"/networks/{networkId}/camera/wirelessProfiles/{wirelessProfileId}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def getOrganizationCameraBoundariesAreasByDevice(self, organizationId: str, **kwargs):
         """
@@ -732,24 +782,26 @@ class Camera(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['camera', 'configure', 'boundaries', 'areas', 'byDevice'],
-            'operation': 'getOrganizationCameraBoundariesAreasByDevice'
+            "tags": ["camera", "configure", "boundaries", "areas", "byDevice"],
+            "operation": "getOrganizationCameraBoundariesAreasByDevice",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/camera/boundaries/areas/byDevice'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/camera/boundaries/areas/byDevice"
 
-        query_params = ['serials', ]
+        query_params = [
+            "serials",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['serials', ]
+        array_params = [
+            "serials",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getOrganizationCameraBoundariesLinesByDevice(self, organizationId: str, **kwargs):
         """
@@ -763,24 +815,26 @@ class Camera(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['camera', 'configure', 'boundaries', 'lines', 'byDevice'],
-            'operation': 'getOrganizationCameraBoundariesLinesByDevice'
+            "tags": ["camera", "configure", "boundaries", "lines", "byDevice"],
+            "operation": "getOrganizationCameraBoundariesLinesByDevice",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/camera/boundaries/lines/byDevice'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/camera/boundaries/lines/byDevice"
 
-        query_params = ['serials', ]
+        query_params = [
+            "serials",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['serials', ]
+        array_params = [
+            "serials",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getOrganizationCameraCustomAnalyticsArtifacts(self, organizationId: str):
         """
@@ -791,15 +845,13 @@ class Camera(object):
         """
 
         metadata = {
-            'tags': ['camera', 'configure', 'customAnalytics', 'artifacts'],
-            'operation': 'getOrganizationCameraCustomAnalyticsArtifacts'
+            "tags": ["camera", "configure", "customAnalytics", "artifacts"],
+            "operation": "getOrganizationCameraCustomAnalyticsArtifacts",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/camera/customAnalytics/artifacts'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/camera/customAnalytics/artifacts"
 
         return self._session.get(metadata, resource)
-        
-
 
     def createOrganizationCameraCustomAnalyticsArtifact(self, organizationId: str, **kwargs):
         """
@@ -813,18 +865,18 @@ class Camera(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['camera', 'configure', 'customAnalytics', 'artifacts'],
-            'operation': 'createOrganizationCameraCustomAnalyticsArtifact'
+            "tags": ["camera", "configure", "customAnalytics", "artifacts"],
+            "operation": "createOrganizationCameraCustomAnalyticsArtifact",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/camera/customAnalytics/artifacts'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/camera/customAnalytics/artifacts"
 
-        body_params = ['name', ]
+        body_params = [
+            "name",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getOrganizationCameraCustomAnalyticsArtifact(self, organizationId: str, artifactId: str):
         """
@@ -836,16 +888,14 @@ class Camera(object):
         """
 
         metadata = {
-            'tags': ['camera', 'configure', 'customAnalytics', 'artifacts'],
-            'operation': 'getOrganizationCameraCustomAnalyticsArtifact'
+            "tags": ["camera", "configure", "customAnalytics", "artifacts"],
+            "operation": "getOrganizationCameraCustomAnalyticsArtifact",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        artifactId = urllib.parse.quote(str(artifactId), safe='')
-        resource = f'/organizations/{organizationId}/camera/customAnalytics/artifacts/{artifactId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        artifactId = urllib.parse.quote(str(artifactId), safe="")
+        resource = f"/organizations/{organizationId}/camera/customAnalytics/artifacts/{artifactId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def deleteOrganizationCameraCustomAnalyticsArtifact(self, organizationId: str, artifactId: str):
         """
@@ -857,25 +907,24 @@ class Camera(object):
         """
 
         metadata = {
-            'tags': ['camera', 'configure', 'customAnalytics', 'artifacts'],
-            'operation': 'deleteOrganizationCameraCustomAnalyticsArtifact'
+            "tags": ["camera", "configure", "customAnalytics", "artifacts"],
+            "operation": "deleteOrganizationCameraCustomAnalyticsArtifact",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        artifactId = urllib.parse.quote(str(artifactId), safe='')
-        resource = f'/organizations/{organizationId}/camera/customAnalytics/artifacts/{artifactId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        artifactId = urllib.parse.quote(str(artifactId), safe="")
+        resource = f"/organizations/{organizationId}/camera/customAnalytics/artifacts/{artifactId}"
 
         return self._session.delete(metadata, resource)
-        
 
-
-    def getOrganizationCameraDetectionsHistoryByBoundaryByInterval(self, organizationId: str, boundaryIds: list, ranges: list, total_pages=1, direction='next', **kwargs):
+    def getOrganizationCameraDetectionsHistoryByBoundaryByInterval(
+        self, organizationId: str, boundaryIds: list, total_pages=1, direction="next", **kwargs
+    ):
         """
         **Returns analytics data for timespans**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-camera-detections-history-by-boundary-by-interval
 
         - organizationId (string): Organization ID
         - boundaryIds (array): A list of boundary ids. The returned cameras will be filtered to only include these ids.
-        - ranges (array): A list of time ranges with intervals
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - duration (integer): The minimum time, in seconds, that the person or car remains in the area to be counted. Defaults to boundary configuration or 60.
@@ -886,24 +935,30 @@ class Camera(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['camera', 'configure', 'detections', 'history', 'byBoundary', 'byInterval'],
-            'operation': 'getOrganizationCameraDetectionsHistoryByBoundaryByInterval'
+            "tags": ["camera", "configure", "detections", "history", "byBoundary", "byInterval"],
+            "operation": "getOrganizationCameraDetectionsHistoryByBoundaryByInterval",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/camera/detections/history/byBoundary/byInterval'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/camera/detections/history/byBoundary/byInterval"
 
-        query_params = ['boundaryIds', 'ranges', 'duration', 'perPage', 'boundaryTypes', ]
+        query_params = [
+            "boundaryIds",
+            "duration",
+            "perPage",
+            "boundaryTypes",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['boundaryIds', 'ranges', 'boundaryTypes', ]
+        array_params = [
+            "boundaryIds",
+            "boundaryTypes",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def getOrganizationCameraOnboardingStatuses(self, organizationId: str, **kwargs):
         """
@@ -918,24 +973,28 @@ class Camera(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['camera', 'configure', 'onboarding', 'statuses'],
-            'operation': 'getOrganizationCameraOnboardingStatuses'
+            "tags": ["camera", "configure", "onboarding", "statuses"],
+            "operation": "getOrganizationCameraOnboardingStatuses",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/camera/onboarding/statuses'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/camera/onboarding/statuses"
 
-        query_params = ['serials', 'networkIds', ]
+        query_params = [
+            "serials",
+            "networkIds",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['serials', 'networkIds', ]
+        array_params = [
+            "serials",
+            "networkIds",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def updateOrganizationCameraOnboardingStatuses(self, organizationId: str, **kwargs):
         """
@@ -950,18 +1009,19 @@ class Camera(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['camera', 'configure', 'onboarding', 'statuses'],
-            'operation': 'updateOrganizationCameraOnboardingStatuses'
+            "tags": ["camera", "configure", "onboarding", "statuses"],
+            "operation": "updateOrganizationCameraOnboardingStatuses",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/camera/onboarding/statuses'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/camera/onboarding/statuses"
 
-        body_params = ['serial', 'wirelessCredentialsSent', ]
+        body_params = [
+            "serial",
+            "wirelessCredentialsSent",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getOrganizationCameraPermissions(self, organizationId: str):
         """
@@ -972,15 +1032,13 @@ class Camera(object):
         """
 
         metadata = {
-            'tags': ['camera', 'configure', 'permissions'],
-            'operation': 'getOrganizationCameraPermissions'
+            "tags": ["camera", "configure", "permissions"],
+            "operation": "getOrganizationCameraPermissions",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/camera/permissions'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/camera/permissions"
 
         return self._session.get(metadata, resource)
-        
-
 
     def getOrganizationCameraPermission(self, organizationId: str, permissionScopeId: str):
         """
@@ -992,16 +1050,14 @@ class Camera(object):
         """
 
         metadata = {
-            'tags': ['camera', 'configure', 'permissions'],
-            'operation': 'getOrganizationCameraPermission'
+            "tags": ["camera", "configure", "permissions"],
+            "operation": "getOrganizationCameraPermission",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        permissionScopeId = urllib.parse.quote(str(permissionScopeId), safe='')
-        resource = f'/organizations/{organizationId}/camera/permissions/{permissionScopeId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        permissionScopeId = urllib.parse.quote(str(permissionScopeId), safe="")
+        resource = f"/organizations/{organizationId}/camera/permissions/{permissionScopeId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def getOrganizationCameraRoles(self, organizationId: str):
         """
@@ -1012,15 +1068,13 @@ class Camera(object):
         """
 
         metadata = {
-            'tags': ['camera', 'configure', 'roles'],
-            'operation': 'getOrganizationCameraRoles'
+            "tags": ["camera", "configure", "roles"],
+            "operation": "getOrganizationCameraRoles",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/camera/roles'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/camera/roles"
 
         return self._session.get(metadata, resource)
-        
-
 
     def createOrganizationCameraRole(self, organizationId: str, name: str, **kwargs):
         """
@@ -1037,18 +1091,21 @@ class Camera(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['camera', 'configure', 'roles'],
-            'operation': 'createOrganizationCameraRole'
+            "tags": ["camera", "configure", "roles"],
+            "operation": "createOrganizationCameraRole",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/camera/roles'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/camera/roles"
 
-        body_params = ['name', 'appliedOnDevices', 'appliedOnNetworks', 'appliedOrgWide', ]
+        body_params = [
+            "name",
+            "appliedOnDevices",
+            "appliedOnNetworks",
+            "appliedOrgWide",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getOrganizationCameraRole(self, organizationId: str, roleId: str):
         """
@@ -1060,16 +1117,14 @@ class Camera(object):
         """
 
         metadata = {
-            'tags': ['camera', 'configure', 'roles'],
-            'operation': 'getOrganizationCameraRole'
+            "tags": ["camera", "configure", "roles"],
+            "operation": "getOrganizationCameraRole",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        roleId = urllib.parse.quote(str(roleId), safe='')
-        resource = f'/organizations/{organizationId}/camera/roles/{roleId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        roleId = urllib.parse.quote(str(roleId), safe="")
+        resource = f"/organizations/{organizationId}/camera/roles/{roleId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def deleteOrganizationCameraRole(self, organizationId: str, roleId: str):
         """
@@ -1081,16 +1136,14 @@ class Camera(object):
         """
 
         metadata = {
-            'tags': ['camera', 'configure', 'roles'],
-            'operation': 'deleteOrganizationCameraRole'
+            "tags": ["camera", "configure", "roles"],
+            "operation": "deleteOrganizationCameraRole",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        roleId = urllib.parse.quote(str(roleId), safe='')
-        resource = f'/organizations/{organizationId}/camera/roles/{roleId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        roleId = urllib.parse.quote(str(roleId), safe="")
+        resource = f"/organizations/{organizationId}/camera/roles/{roleId}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def updateOrganizationCameraRole(self, organizationId: str, roleId: str, **kwargs):
         """
@@ -1108,15 +1161,19 @@ class Camera(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['camera', 'configure', 'roles'],
-            'operation': 'updateOrganizationCameraRole'
+            "tags": ["camera", "configure", "roles"],
+            "operation": "updateOrganizationCameraRole",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        roleId = urllib.parse.quote(str(roleId), safe='')
-        resource = f'/organizations/{organizationId}/camera/roles/{roleId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        roleId = urllib.parse.quote(str(roleId), safe="")
+        resource = f"/organizations/{organizationId}/camera/roles/{roleId}"
 
-        body_params = ['name', 'appliedOnDevices', 'appliedOnNetworks', 'appliedOrgWide', ]
+        body_params = [
+            "name",
+            "appliedOnDevices",
+            "appliedOnNetworks",
+            "appliedOrgWide",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
