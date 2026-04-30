@@ -14,6 +14,7 @@ Exit codes:
 """
 
 import argparse
+import contextlib
 import json
 import os
 import re
@@ -130,7 +131,10 @@ def run_v2_generator(spec: dict, output_dir: Path):
     original = os.getcwd()
     try:
         os.chdir(output_dir)
-        with patch("generate_library.requests.get", side_effect=mock_requests_get):
+        with (
+            patch("generate_library.requests.get", side_effect=mock_requests_get),
+            contextlib.redirect_stdout(open(os.devnull, "w")),
+        ):
             gen_v2.generate_library(spec, "0.0.0-diff", "v1", False)
     finally:
         os.chdir(original)
@@ -143,7 +147,10 @@ def run_v3_generator(spec: dict, output_dir: Path):
     original = os.getcwd()
     try:
         os.chdir(output_dir)
-        with patch("generate_library_v3.requests.get", side_effect=mock_requests_get):
+        with (
+            patch("generate_library_v3.requests.get", side_effect=mock_requests_get),
+            contextlib.redirect_stdout(open(os.devnull, "w")),
+        ):
             gen_v3.generate_library(spec, "0.0.0-diff", False)
     finally:
         os.chdir(original)
