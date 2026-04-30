@@ -3,24 +3,20 @@ name: Test Python library
 on:
   push:
     branches: ['main', 'release', 'dev_rest_session']
-    paths-ignore:
-      - '.github/**'
-      - 'examples/**'
-      - 'meraki/aio/**'
-      - 'notebooks/**'
-      - 'generator/**'
-      - 'README.md'
-      - 'LICENSE'
+    paths:
+      - 'meraki/**'
+      - 'tests/unit/**'
+      - 'tests/integration/**'
+      - 'pyproject.toml'
+      - 'uv.lock'
   pull_request:
     branches: ['main', 'release', 'dev_rest_session']
-    paths-ignore:
-      - '.github/**'
-      - 'examples/**'
-      - 'meraki/aio/**'
-      - 'notebooks/**'
-      - 'generator/**'
-      - 'README.md'
-      - 'LICENSE'
+    paths:
+      - 'meraki/**'
+      - 'tests/unit/**'
+      - 'tests/integration/**'
+      - 'pyproject.toml'
+      - 'uv.lock'
   workflow_dispatch:
 
 jobs:

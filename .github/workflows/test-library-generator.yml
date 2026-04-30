@@ -3,22 +3,18 @@ name: Test Python library generator
 on:
   push:
     branches: ['main', 'release']
-    paths-ignore:
-      - '.github/**'
-      - 'examples/**'
-      - 'meraki/aio/**'
-      - 'notebooks/**'
-      - 'README.md'
-      - 'LICENSE'
+    paths:
+      - 'generator/**'
+      - 'tests/generator/**'
+      - 'pyproject.toml'
+      - 'uv.lock'
   pull_request:
     branches: ['main', 'release']
-    paths-ignore:
-      - '.github/**'
-      - 'examples/**'
-      - 'meraki/aio/**'
-      - 'notebooks/**'
-      - 'README.md'
-      - 'LICENSE'
+    paths:
+      - 'generator/**'
+      - 'tests/generator/**'
+      - 'pyproject.toml'
+      - 'uv.lock'
   workflow_dispatch:
 
 jobs:
