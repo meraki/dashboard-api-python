@@ -25,9 +25,10 @@ Include the jinja2 files in same directory as this script, and install Python re
 pip[3] install requests
 
 === DESCRIPTION ===
-This script generates the Meraki Python library from an OpenAPI v3 specification using the modular v3 parser.
+This script generates the Meraki Python library from the OpenAPI v3 specification.
 
-=== USAGE === python[3] generate_library_v3.py [-o <org_id>] [-k <api_key>] [-v <version_number>] [-g <is_called_from_github_action>]
+=== USAGE ===
+python[3] generate_library_v3.py [-o <org_id>] [-k <api_key>] [-v <version_number>] [-a <api_version_number>] [-g <is_called_from_github_action>]
 
 API key can, and is recommended to, be set as an environment variable named MERAKI_DASHBOARD_API_KEY."""
 
@@ -549,10 +550,11 @@ def main(inputs):
     api_key = os.environ.get("MERAKI_DASHBOARD_API_KEY")
     org_id = None
     version_number = "custom"
+    api_version_number = "custom"
     is_github_action = False
 
     try:
-        opts, args = getopt.getopt(inputs, "ho:k:v:g:")
+        opts, args = getopt.getopt(inputs, "ho:k:v:a:g:")
     except getopt.GetoptError:
         print_help()
         sys.exit(2)
@@ -566,6 +568,8 @@ def main(inputs):
             api_key = arg
         elif opt == "-v":
             version_number = arg
+        elif opt == "-a":
+            api_version_number = arg
         elif opt == "-g":
             if arg.lower() == "true":
                 is_github_action = True
