@@ -33,6 +33,12 @@ class AsyncOrganizations:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizations: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def createOrganization(self, name: str, **kwargs):
@@ -57,6 +63,12 @@ class AsyncOrganizations:
             "management",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganization: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -103,6 +115,12 @@ class AsyncOrganizations:
             "api",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganization: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -152,6 +170,12 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationActionBatch: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def getOrganizationActionBatches(self, organizationId: str, **kwargs):
@@ -182,6 +206,12 @@ class AsyncOrganizations:
             "status",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationActionBatches: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
@@ -250,6 +280,12 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationActionBatch: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def getOrganizationAdaptivePolicyAcls(self, organizationId: str):
@@ -303,6 +339,12 @@ class AsyncOrganizations:
             "ipVersion",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationAdaptivePolicyAcl: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -361,6 +403,12 @@ class AsyncOrganizations:
             "ipVersion",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationAdaptivePolicyAcl: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -429,6 +477,14 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationAdaptivePolicyGroup: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
     def getOrganizationAdaptivePolicyGroup(self, organizationId: str, id: str):
@@ -480,6 +536,14 @@ class AsyncOrganizations:
             "policyObjects",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationAdaptivePolicyGroup: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -571,6 +635,14 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationAdaptivePolicyPolicy: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
     def getOrganizationAdaptivePolicyPolicy(self, organizationId: str, id: str):
@@ -628,6 +700,14 @@ class AsyncOrganizations:
             "lastEntryRule",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationAdaptivePolicyPolicy: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -690,6 +770,14 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationAdaptivePolicySettings: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.put(metadata, resource, payload)
 
     def getOrganizationAdmins(self, organizationId: str, **kwargs):
@@ -722,6 +810,12 @@ class AsyncOrganizations:
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationAdmins: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
@@ -769,6 +863,12 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationAdmin: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def updateOrganizationAdmin(self, organizationId: str, adminId: str, **kwargs):
@@ -807,6 +907,12 @@ class AsyncOrganizations:
             "networks",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationAdmin: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -892,6 +998,12 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationAlertsProfile: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def updateOrganizationAlertsProfile(self, organizationId: str, alertConfigId: str, **kwargs):
@@ -941,6 +1053,12 @@ class AsyncOrganizations:
             "description",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationAlertsProfile: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -1010,6 +1128,14 @@ class AsyncOrganizations:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApiRestProvisioningPipelinesJobs: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationApiRestProvisioningPipelinesJobsOverviewsByPipeline(self, organizationId: str, **kwargs):
@@ -1052,6 +1178,14 @@ class AsyncOrganizations:
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApiRestProvisioningPipelinesJobsOverviewsByPipeline: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get(metadata, resource, params)
 
@@ -1125,6 +1259,12 @@ class AsyncOrganizations:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationApiRequests: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationApiRequestsOverview(self, organizationId: str, **kwargs):
@@ -1153,6 +1293,12 @@ class AsyncOrganizations:
             "timespan",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationApiRequestsOverview: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
@@ -1210,6 +1356,14 @@ class AsyncOrganizations:
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApiRequestsOverviewResponseCodesByInterval: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get(metadata, resource, params)
 
@@ -1299,9 +1453,15 @@ class AsyncOrganizations:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationAssuranceAlerts: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def dismissOrganizationAssuranceAlerts(self, organizationId: str, alertIds: list):
+    def dismissOrganizationAssuranceAlerts(self, organizationId: str, alertIds: list, **kwargs):
         """
         **Dismiss health alerts**
         https://developer.cisco.com/meraki/api-v1/#!dismiss-organization-assurance-alerts
@@ -1323,6 +1483,12 @@ class AsyncOrganizations:
             "alertIds",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"dismissOrganizationAssuranceAlerts: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -1389,6 +1555,14 @@ class AsyncOrganizations:
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceAlertsOverview: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get(metadata, resource, params)
 
@@ -1470,6 +1644,14 @@ class AsyncOrganizations:
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceAlertsOverviewByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -1563,6 +1745,14 @@ class AsyncOrganizations:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceAlertsOverviewByType: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationAssuranceAlertsOverviewHistorical(
@@ -1622,9 +1812,17 @@ class AsyncOrganizations:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceAlertsOverviewHistorical: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
-    def restoreOrganizationAssuranceAlerts(self, organizationId: str, alertIds: list):
+    def restoreOrganizationAssuranceAlerts(self, organizationId: str, alertIds: list, **kwargs):
         """
         **Restore health alerts from dismissed**
         https://developer.cisco.com/meraki/api-v1/#!restore-organization-assurance-alerts
@@ -1646,6 +1844,12 @@ class AsyncOrganizations:
             "alertIds",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"restoreOrganizationAssuranceAlerts: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -1754,6 +1958,12 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationBrandingPolicy: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def getOrganizationBrandingPoliciesPriorities(self, organizationId: str):
@@ -1796,6 +2006,14 @@ class AsyncOrganizations:
             "brandingPolicyIds",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationBrandingPoliciesPriorities: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -1855,6 +2073,12 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationBrandingPolicy: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def deleteOrganizationBrandingPolicy(self, organizationId: str, brandingPolicyId: str):
@@ -1903,6 +2127,12 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"claimIntoOrganization: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def getOrganizationClientsBandwidthUsageHistory(self, organizationId: str, **kwargs):
@@ -1940,6 +2170,14 @@ class AsyncOrganizations:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationClientsBandwidthUsageHistory: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def getOrganizationClientsOverview(self, organizationId: str, **kwargs):
@@ -1968,6 +2206,12 @@ class AsyncOrganizations:
             "timespan",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationClientsOverview: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
@@ -2002,9 +2246,15 @@ class AsyncOrganizations:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationClientsSearch: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def cloneOrganization(self, organizationId: str, name: str):
+    def cloneOrganization(self, organizationId: str, name: str, **kwargs):
         """
         **Create a new organization by cloning the addressed organization**
         https://developer.cisco.com/meraki/api-v1/#!clone-organization
@@ -2026,6 +2276,12 @@ class AsyncOrganizations:
             "name",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"cloneOrganization: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -2072,6 +2328,12 @@ class AsyncOrganizations:
             "copyFromNetworkId",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationConfigTemplate: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -2120,6 +2382,12 @@ class AsyncOrganizations:
             "timeZone",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationConfigTemplate: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -2180,6 +2448,12 @@ class AsyncOrganizations:
             "adminId",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationConfigurationChanges: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -2261,6 +2535,12 @@ class AsyncOrganizations:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationDevices: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationDevicesAvailabilities(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -2322,6 +2602,12 @@ class AsyncOrganizations:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationDevicesAvailabilities: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationDevicesAvailabilitiesChangeHistory(
@@ -2379,6 +2665,14 @@ class AsyncOrganizations:
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesAvailabilitiesChangeHistory: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -2443,9 +2737,19 @@ class AsyncOrganizations:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesCellularDataDevices: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def createOrganizationDevicesCellularDataProfile(self, organizationId: str, name: str, description: str, rules: list):
+    def createOrganizationDevicesCellularDataProfile(
+        self, organizationId: str, name: str, description: str, rules: list, **kwargs
+    ):
         """
         **Add a cellular data management profile to this organization**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-devices-cellular-data-profile
@@ -2471,6 +2775,14 @@ class AsyncOrganizations:
             "rules",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationDevicesCellularDataProfile: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -2515,6 +2827,14 @@ class AsyncOrganizations:
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesCellularDataProfiles: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -2565,9 +2885,17 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationDevicesCellularDataProfile: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.put(metadata, resource, payload)
 
-    def createOrganizationDevicesControllerMigration(self, organizationId: str, serials: list, target: str):
+    def createOrganizationDevicesControllerMigration(self, organizationId: str, serials: list, target: str, **kwargs):
         """
         **Migrate devices to another controller or management mode**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-devices-controller-migration
@@ -2597,6 +2925,14 @@ class AsyncOrganizations:
             "target",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationDevicesControllerMigration: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -2650,9 +2986,17 @@ class AsyncOrganizations:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesControllerMigrations: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def bulkUpdateOrganizationDevicesDetails(self, organizationId: str, serials: list, details: list):
+    def bulkUpdateOrganizationDevicesDetails(self, organizationId: str, serials: list, details: list, **kwargs):
         """
         **Updating device details (currently only used for Catalyst devices)**
         https://developer.cisco.com/meraki/api-v1/#!bulk-update-organization-devices-details
@@ -2676,6 +3020,12 @@ class AsyncOrganizations:
             "details",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"bulkUpdateOrganizationDevicesDetails: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -2715,6 +3065,14 @@ class AsyncOrganizations:
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesOverviewByModel: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get(metadata, resource, params)
 
@@ -2795,6 +3153,14 @@ class AsyncOrganizations:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesPacketCaptureCaptures: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def createOrganizationDevicesPacketCaptureCapture(self, organizationId: str, serials: list, name: str, **kwargs):
@@ -2838,6 +3204,14 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationDevicesPacketCaptureCapture: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
     def bulkOrganizationDevicesPacketCaptureCapturesCreate(self, organizationId: str, devices: list, name: str, **kwargs):
@@ -2873,9 +3247,17 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"bulkOrganizationDevicesPacketCaptureCapturesCreate: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
-    def bulkOrganizationDevicesPacketCaptureCapturesDelete(self, organizationId: str, captureIds: list):
+    def bulkOrganizationDevicesPacketCaptureCapturesDelete(self, organizationId: str, captureIds: list, **kwargs):
         """
         **BulkDelete packet captures from cloud**
         https://developer.cisco.com/meraki/api-v1/#!bulk-organization-devices-packet-capture-captures-delete
@@ -2897,6 +3279,14 @@ class AsyncOrganizations:
             "captureIds",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"bulkOrganizationDevicesPacketCaptureCapturesDelete: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -2938,7 +3328,7 @@ class AsyncOrganizations:
 
         return self._session.post(metadata, resource)
 
-    def stopOrganizationDevicesPacketCaptureCapture(self, organizationId: str, captureId: str, serials: list):
+    def stopOrganizationDevicesPacketCaptureCapture(self, organizationId: str, captureId: str, serials: list, **kwargs):
         """
         **Stop a specific packet capture (not supported for Catalyst devices)**
         https://developer.cisco.com/meraki/api-v1/#!stop-organization-devices-packet-capture-capture
@@ -2962,6 +3352,14 @@ class AsyncOrganizations:
             "serials",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"stopOrganizationDevicesPacketCaptureCapture: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -3002,6 +3400,14 @@ class AsyncOrganizations:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesPacketCaptureSchedules: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def createOrganizationDevicesPacketCaptureSchedule(self, organizationId: str, devices: list, **kwargs):
@@ -3039,9 +3445,17 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationDevicesPacketCaptureSchedule: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
-    def reorderOrganizationDevicesPacketCaptureSchedules(self, organizationId: str, order: list):
+    def reorderOrganizationDevicesPacketCaptureSchedules(self, organizationId: str, order: list, **kwargs):
         """
         **Bulk update priorities of pcap schedules**
         https://developer.cisco.com/meraki/api-v1/#!reorder-organization-devices-packet-capture-schedules
@@ -3063,6 +3477,14 @@ class AsyncOrganizations:
             "order",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"reorderOrganizationDevicesPacketCaptureSchedules: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -3102,6 +3524,14 @@ class AsyncOrganizations:
             "schedule",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationDevicesPacketCaptureSchedule: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -3184,6 +3614,14 @@ class AsyncOrganizations:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesPowerModulesStatusesByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationDevicesProvisioningStatuses(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -3249,6 +3687,14 @@ class AsyncOrganizations:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesProvisioningStatuses: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationDevicesStatuses(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -3313,6 +3759,12 @@ class AsyncOrganizations:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationDevicesStatuses: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationDevicesStatusesOverview(self, organizationId: str, **kwargs):
@@ -3348,6 +3800,14 @@ class AsyncOrganizations:
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesStatusesOverview: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get(metadata, resource, params)
 
@@ -3405,6 +3865,14 @@ class AsyncOrganizations:
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesSystemMemoryUsageHistoryByInterval: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -3464,6 +3932,14 @@ class AsyncOrganizations:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesUplinksAddressesByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationDevicesUplinksLossAndLatency(self, organizationId: str, **kwargs):
@@ -3502,6 +3978,14 @@ class AsyncOrganizations:
             "ip",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesUplinksLossAndLatency: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get(metadata, resource, params)
 
@@ -3564,6 +4048,14 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationEarlyAccessFeaturesOptIn: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
     def getOrganizationEarlyAccessFeaturesOptIn(self, organizationId: str, optInId: str):
@@ -3609,6 +4101,14 @@ class AsyncOrganizations:
             "limitScopeToNetworks",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationEarlyAccessFeaturesOptIn: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -3673,6 +4173,12 @@ class AsyncOrganizations:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationFirmwareUpgrades: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationFirmwareUpgradesByDevice(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -3730,6 +4236,14 @@ class AsyncOrganizations:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationFirmwareUpgradesByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationFloorPlansAutoLocateDevices(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -3774,6 +4288,14 @@ class AsyncOrganizations:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationFloorPlansAutoLocateDevices: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationFloorPlansAutoLocateStatuses(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -3817,6 +4339,14 @@ class AsyncOrganizations:
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationFloorPlansAutoLocateStatuses: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -3893,9 +4423,17 @@ class AsyncOrganizations:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationIntegrationsXdrNetworks: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def disableOrganizationIntegrationsXdrNetworks(self, organizationId: str, networks: list):
+    def disableOrganizationIntegrationsXdrNetworks(self, organizationId: str, networks: list, **kwargs):
         """
         **Disable XDR on networks**
         https://developer.cisco.com/meraki/api-v1/#!disable-organization-integrations-xdr-networks
@@ -3918,9 +4456,17 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"disableOrganizationIntegrationsXdrNetworks: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
-    def enableOrganizationIntegrationsXdrNetworks(self, organizationId: str, networks: list):
+    def enableOrganizationIntegrationsXdrNetworks(self, organizationId: str, networks: list, **kwargs):
         """
         **Enable XDR on networks**
         https://developer.cisco.com/meraki/api-v1/#!enable-organization-integrations-xdr-networks
@@ -3942,6 +4488,14 @@ class AsyncOrganizations:
             "networks",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"enableOrganizationIntegrationsXdrNetworks: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -3971,6 +4525,12 @@ class AsyncOrganizations:
             "licenses",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"claimIntoOrganizationInventory: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -4051,6 +4611,12 @@ class AsyncOrganizations:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationInventoryDevices: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationInventoryDevicesEoxOverview(self, organizationId: str):
@@ -4070,7 +4636,7 @@ class AsyncOrganizations:
 
         return self._session.get(metadata, resource)
 
-    def createOrganizationInventoryDevicesSwapsBulk(self, organizationId: str, swaps: list):
+    def createOrganizationInventoryDevicesSwapsBulk(self, organizationId: str, swaps: list, **kwargs):
         """
         **Swap the devices identified by devices.old with a devices.new, then perform the :afterAction on the devices.old.**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-inventory-devices-swaps-bulk
@@ -4092,6 +4658,14 @@ class AsyncOrganizations:
             "swaps",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationInventoryDevicesSwapsBulk: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -4158,9 +4732,15 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"claimOrganizationInventoryOrders: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
-    def previewOrganizationInventoryOrders(self, organizationId: str, claimId: str):
+    def previewOrganizationInventoryOrders(self, organizationId: str, claimId: str, **kwargs):
         """
         **Preview the results and status of an order claim by the secure order id**
         https://developer.cisco.com/meraki/api-v1/#!preview-organization-inventory-orders
@@ -4182,6 +4762,12 @@ class AsyncOrganizations:
             "claimId",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"previewOrganizationInventoryOrders: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -4207,6 +4793,12 @@ class AsyncOrganizations:
             "serials",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"releaseFromOrganizationInventory: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -4249,9 +4841,15 @@ class AsyncOrganizations:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationLicenses: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def assignOrganizationLicensesSeats(self, organizationId: str, licenseId: str, networkId: str, seatCount: int):
+    def assignOrganizationLicensesSeats(self, organizationId: str, licenseId: str, networkId: str, seatCount: int, **kwargs):
         """
         **Assign SM seats to a network**
         https://developer.cisco.com/meraki/api-v1/#!assign-organization-licenses-seats
@@ -4278,9 +4876,15 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"assignOrganizationLicensesSeats: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
-    def moveOrganizationLicenses(self, organizationId: str, destOrganizationId: str, licenseIds: list):
+    def moveOrganizationLicenses(self, organizationId: str, destOrganizationId: str, licenseIds: list, **kwargs):
         """
         **Move licenses to another organization**
         https://developer.cisco.com/meraki/api-v1/#!move-organization-licenses
@@ -4305,9 +4909,17 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"moveOrganizationLicenses: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
-    def moveOrganizationLicensesSeats(self, organizationId: str, destOrganizationId: str, licenseId: str, seatCount: int):
+    def moveOrganizationLicensesSeats(
+        self, organizationId: str, destOrganizationId: str, licenseId: str, seatCount: int, **kwargs
+    ):
         """
         **Move SM seats to another organization**
         https://developer.cisco.com/meraki/api-v1/#!move-organization-licenses-seats
@@ -4334,6 +4946,12 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"moveOrganizationLicensesSeats: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def getOrganizationLicensesOverview(self, organizationId: str):
@@ -4353,7 +4971,7 @@ class AsyncOrganizations:
 
         return self._session.get(metadata, resource)
 
-    def renewOrganizationLicensesSeats(self, organizationId: str, licenseIdToRenew: str, unusedLicenseId: str):
+    def renewOrganizationLicensesSeats(self, organizationId: str, licenseIdToRenew: str, unusedLicenseId: str, **kwargs):
         """
         **Renew SM seats of a license**
         https://developer.cisco.com/meraki/api-v1/#!renew-organization-licenses-seats
@@ -4377,6 +4995,12 @@ class AsyncOrganizations:
             "unusedLicenseId",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"renewOrganizationLicensesSeats: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -4423,6 +5047,12 @@ class AsyncOrganizations:
             "deviceSerial",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationLicense: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -4492,6 +5122,12 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationLoginSecurity: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def getOrganizationNetworks(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -4548,6 +5184,12 @@ class AsyncOrganizations:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationNetworks: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def createOrganizationNetwork(self, organizationId: str, name: str, productTypes: list, **kwargs):
@@ -4583,6 +5225,12 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationNetwork: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def combineOrganizationNetworks(self, organizationId: str, name: str, networkIds: list, **kwargs):
@@ -4612,6 +5260,12 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"combineOrganizationNetworks: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def createNetworkMove(self, organizationId: str, network: dict, organizations: dict, **kwargs):
@@ -4640,6 +5294,12 @@ class AsyncOrganizations:
             "simulate",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkMove: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -4682,6 +5342,12 @@ class AsyncOrganizations:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkMoves: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationOpenapiSpec(self, organizationId: str, **kwargs):
@@ -4712,6 +5378,12 @@ class AsyncOrganizations:
             "version",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationOpenapiSpec: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
@@ -4761,6 +5433,14 @@ class AsyncOrganizations:
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationPoliciesAssignmentsByClient: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -4822,6 +5502,14 @@ class AsyncOrganizations:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationPoliciesGlobalFirewallRulesets: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def createOrganizationPoliciesGlobalFirewallRuleset(self, organizationId: str, name: str, **kwargs):
@@ -4848,6 +5536,14 @@ class AsyncOrganizations:
             "description",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationPoliciesGlobalFirewallRuleset: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -4896,6 +5592,14 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationPoliciesGlobalFirewallRulesetsRule: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
     def getOrganizationPoliciesGlobalFirewallRulesetsRules(
@@ -4941,6 +5645,14 @@ class AsyncOrganizations:
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationPoliciesGlobalFirewallRulesetsRules: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -5008,6 +5720,14 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationPoliciesGlobalFirewallRulesetsRule: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.put(metadata, resource, payload)
 
     def updateOrganizationPoliciesGlobalFirewallRuleset(self, organizationId: str, rulesetId: str, **kwargs):
@@ -5036,6 +5756,14 @@ class AsyncOrganizations:
             "description",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationPoliciesGlobalFirewallRuleset: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -5099,6 +5827,14 @@ class AsyncOrganizations:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationPoliciesGlobalGroupPolicies: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def createOrganizationPoliciesGlobalGroupPolicy(self, organizationId: str, name: str, **kwargs):
@@ -5126,10 +5862,18 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationPoliciesGlobalGroupPolicy: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
     def assignOrganizationPoliciesGlobalGroupPoliciesAdaptivePolicyGroups(
-        self, organizationId: str, policy: dict, adaptivePolicyGroups: list
+        self, organizationId: str, policy: dict, adaptivePolicyGroups: list, **kwargs
     ):
         """
         **Assign adaptive policy groups to a policy**
@@ -5154,6 +5898,14 @@ class AsyncOrganizations:
             "adaptivePolicyGroups",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"assignOrganizationPoliciesGlobalGroupPoliciesAdaptivePolicyGroups: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -5204,10 +5956,18 @@ class AsyncOrganizations:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationPoliciesGlobalGroupPoliciesAdaptivePolicyGroupsAssignments: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def removeOrganizationPoliciesGlobalGroupPoliciesAdaptivePolicyGroups(
-        self, organizationId: str, policy: dict, adaptivePolicyGroups: list
+        self, organizationId: str, policy: dict, adaptivePolicyGroups: list, **kwargs
     ):
         """
         **Remove adaptive policy groups from a policy**
@@ -5232,6 +5992,14 @@ class AsyncOrganizations:
             "adaptivePolicyGroups",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"removeOrganizationPoliciesGlobalGroupPoliciesAdaptivePolicyGroups: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -5282,6 +6050,14 @@ class AsyncOrganizations:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationPoliciesGlobalGroupPoliciesFirewallRulesetsAssignments: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def createOrganizationPoliciesGlobalGroupPoliciesFirewallRulesetsAssignment(
@@ -5312,6 +6088,14 @@ class AsyncOrganizations:
             "priority",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationPoliciesGlobalGroupPoliciesFirewallRulesetsAssignment: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -5347,6 +6131,14 @@ class AsyncOrganizations:
             "priority",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationPoliciesGlobalGroupPoliciesFirewallRulesetsAssignment: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -5398,6 +6190,14 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationPoliciesGlobalGroupPolicy: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.put(metadata, resource, payload)
 
     def deleteOrganizationPoliciesGlobalGroupPolicy(self, organizationId: str, policyId: str):
@@ -5448,6 +6248,12 @@ class AsyncOrganizations:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationPolicyObjects: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def createOrganizationPolicyObject(self, organizationId: str, name: str, category: str, type: str, **kwargs):
@@ -5487,6 +6293,12 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationPolicyObject: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def getOrganizationPolicyObjectsGroups(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -5518,6 +6330,12 @@ class AsyncOrganizations:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationPolicyObjectsGroups: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def createOrganizationPolicyObjectsGroup(self, organizationId: str, name: str, **kwargs):
@@ -5546,6 +6364,12 @@ class AsyncOrganizations:
             "objectIds",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationPolicyObjectsGroup: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -5594,6 +6418,12 @@ class AsyncOrganizations:
             "objectIds",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationPolicyObjectsGroup: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -5670,6 +6500,12 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationPolicyObject: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def deleteOrganizationPolicyObject(self, organizationId: str, policyObjectId: str):
@@ -5733,6 +6569,12 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationSaml: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def getOrganizationSamlIdps(self, organizationId: str):
@@ -5779,6 +6621,12 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationSamlIdp: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def updateOrganizationSamlIdp(self, organizationId: str, idpId: str, **kwargs):
@@ -5809,6 +6657,12 @@ class AsyncOrganizations:
             "sloLogoutUrl",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationSamlIdp: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -5896,6 +6750,12 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationSamlRole: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def getOrganizationSamlRole(self, organizationId: str, samlRoleId: str):
@@ -5947,6 +6807,12 @@ class AsyncOrganizations:
             "networks",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationSamlRole: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -6009,9 +6875,17 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"batchOrganizationSaseConnectorsDelete: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
-    def createOrganizationSaseIntegration(self, organizationId: str, api: dict):
+    def createOrganizationSaseIntegration(self, organizationId: str, api: dict, **kwargs):
         """
         **Create a new Secure Access integration**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-sase-integration
@@ -6033,6 +6907,12 @@ class AsyncOrganizations:
             "api",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationSaseIntegration: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -6105,6 +6985,12 @@ class AsyncOrganizations:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationSaseNetworksEligible: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationSaseRegions(self, organizationId: str):
@@ -6165,6 +7051,12 @@ class AsyncOrganizations:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationSaseSites: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def attachOrganizationSaseSites(self, organizationId: str, **kwargs):
@@ -6191,6 +7083,12 @@ class AsyncOrganizations:
             "callback",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"attachOrganizationSaseSites: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -6226,6 +7124,14 @@ class AsyncOrganizations:
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSaseSitesConnectivityHistoryBySite: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get(metadata, resource, params)
 
@@ -6293,6 +7199,12 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationSaseSite: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def getOrganizationSnmp(self, organizationId: str):
@@ -6357,6 +7269,12 @@ class AsyncOrganizations:
             "peerIps",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationSnmp: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -6440,6 +7358,12 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationSplashTheme: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def deleteOrganizationSplashTheme(self, organizationId: str, id: str):
@@ -6488,6 +7412,12 @@ class AsyncOrganizations:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationSplashThemeAsset: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def getOrganizationSummaryTopAppliancesByUtilization(self, organizationId: str, **kwargs):
@@ -6526,6 +7456,14 @@ class AsyncOrganizations:
             "timespan",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSummaryTopAppliancesByUtilization: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get(metadata, resource, params)
 
@@ -6568,6 +7506,14 @@ class AsyncOrganizations:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSummaryTopApplicationsByUsage: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def getOrganizationSummaryTopApplicationsCategoriesByUsage(self, organizationId: str, **kwargs):
@@ -6609,6 +7555,14 @@ class AsyncOrganizations:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSummaryTopApplicationsCategoriesByUsage: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def getOrganizationSummaryTopClientsByUsage(self, organizationId: str, **kwargs):
@@ -6647,6 +7601,14 @@ class AsyncOrganizations:
             "timespan",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSummaryTopClientsByUsage: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get(metadata, resource, params)
 
@@ -6687,6 +7649,14 @@ class AsyncOrganizations:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSummaryTopClientsManufacturersByUsage: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def getOrganizationSummaryTopDevicesByUsage(self, organizationId: str, **kwargs):
@@ -6726,6 +7696,14 @@ class AsyncOrganizations:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSummaryTopDevicesByUsage: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def getOrganizationSummaryTopDevicesModelsByUsage(self, organizationId: str, **kwargs):
@@ -6764,6 +7742,14 @@ class AsyncOrganizations:
             "timespan",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSummaryTopDevicesModelsByUsage: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get(metadata, resource, params)
 
@@ -6806,6 +7792,14 @@ class AsyncOrganizations:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSummaryTopNetworksByStatus: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationSummaryTopSsidsByUsage(self, organizationId: str, **kwargs):
@@ -6845,6 +7839,14 @@ class AsyncOrganizations:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSummaryTopSsidsByUsage: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def getOrganizationSummaryTopSwitchesByEnergyUsage(self, organizationId: str, **kwargs):
@@ -6883,6 +7885,14 @@ class AsyncOrganizations:
             "timespan",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSummaryTopSwitchesByEnergyUsage: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get(metadata, resource, params)
 
@@ -6931,6 +7941,12 @@ class AsyncOrganizations:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationUplinksStatuses: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationWebhooksAlertTypes(self, organizationId: str, **kwargs):
@@ -6961,6 +7977,12 @@ class AsyncOrganizations:
             "productType",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationWebhooksAlertTypes: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
@@ -7019,5 +8041,11 @@ class AsyncOrganizations:
             "url",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationWebhooksLogs: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)

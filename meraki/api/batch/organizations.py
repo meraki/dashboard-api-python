@@ -599,7 +599,9 @@ class ActionBatchOrganizations(object):
         }
         return action
 
-    def createOrganizationDevicesCellularDataProfile(self, organizationId: str, name: str, description: str, rules: list):
+    def createOrganizationDevicesCellularDataProfile(
+        self, organizationId: str, name: str, description: str, rules: list, **kwargs
+    ):
         """
         **Add a cellular data management profile to this organization. Creates a cellular data management profile in this organization and returns the created profile, including its rules and actions.**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-devices-cellular-data-profile
@@ -677,7 +679,7 @@ class ActionBatchOrganizations(object):
         }
         return action
 
-    def createOrganizationDevicesControllerMigration(self, organizationId: str, serials: list, target: str):
+    def createOrganizationDevicesControllerMigration(self, organizationId: str, serials: list, target: str, **kwargs):
         """
         **Migrate devices to another controller or management mode**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-devices-controller-migration
@@ -710,7 +712,7 @@ class ActionBatchOrganizations(object):
         }
         return action
 
-    def bulkUpdateOrganizationDevicesDetails(self, organizationId: str, serials: list, details: list):
+    def bulkUpdateOrganizationDevicesDetails(self, organizationId: str, serials: list, details: list, **kwargs):
         """
         **Updating device details (currently only used for Catalyst devices)**
         https://developer.cisco.com/meraki/api-v1/#!bulk-update-organization-devices-details
@@ -737,7 +739,7 @@ class ActionBatchOrganizations(object):
         }
         return action
 
-    def bulkOrganizationDevicesPacketCaptureCapturesDelete(self, organizationId: str, captureIds: list):
+    def bulkOrganizationDevicesPacketCaptureCapturesDelete(self, organizationId: str, captureIds: list, **kwargs):
         """
         **BulkDelete packet captures from cloud**
         https://developer.cisco.com/meraki/api-v1/#!bulk-organization-devices-packet-capture-captures-delete
@@ -751,9 +753,6 @@ class ActionBatchOrganizations(object):
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/devices/packetCapture/captures/bulkDelete"
 
-        body_params = [
-            "captureIds",
-        ]
         action = {
             "resource": resource,
             "operation": "destroy",
@@ -816,7 +815,7 @@ class ActionBatchOrganizations(object):
         }
         return action
 
-    def reorderOrganizationDevicesPacketCaptureSchedules(self, organizationId: str, order: list):
+    def reorderOrganizationDevicesPacketCaptureSchedules(self, organizationId: str, order: list, **kwargs):
         """
         **Bulk update priorities of pcap schedules**
         https://developer.cisco.com/meraki/api-v1/#!reorder-organization-devices-packet-capture-schedules
@@ -928,7 +927,7 @@ class ActionBatchOrganizations(object):
         }
         return action
 
-    def disableOrganizationIntegrationsXdrNetworks(self, organizationId: str, networks: list):
+    def disableOrganizationIntegrationsXdrNetworks(self, organizationId: str, networks: list, **kwargs):
         """
         **Disable XDR on networks**
         https://developer.cisco.com/meraki/api-v1/#!disable-organization-integrations-xdr-networks
@@ -953,7 +952,7 @@ class ActionBatchOrganizations(object):
         }
         return action
 
-    def enableOrganizationIntegrationsXdrNetworks(self, organizationId: str, networks: list):
+    def enableOrganizationIntegrationsXdrNetworks(self, organizationId: str, networks: list, **kwargs):
         """
         **Enable XDR on networks**
         https://developer.cisco.com/meraki/api-v1/#!enable-organization-integrations-xdr-networks
@@ -1005,7 +1004,7 @@ class ActionBatchOrganizations(object):
         }
         return action
 
-    def assignOrganizationLicensesSeats(self, organizationId: str, licenseId: str, networkId: str, seatCount: int):
+    def assignOrganizationLicensesSeats(self, organizationId: str, licenseId: str, networkId: str, seatCount: int, **kwargs):
         """
         **Assign SM seats to a network. This will increase the managed SM device limit of the network**
         https://developer.cisco.com/meraki/api-v1/#!assign-organization-licenses-seats
@@ -1034,7 +1033,7 @@ class ActionBatchOrganizations(object):
         }
         return action
 
-    def moveOrganizationLicenses(self, organizationId: str, destOrganizationId: str, licenseIds: list):
+    def moveOrganizationLicenses(self, organizationId: str, destOrganizationId: str, licenseIds: list, **kwargs):
         """
         **Move licenses to another organization. This will also move any devices that the licenses are assigned to**
         https://developer.cisco.com/meraki/api-v1/#!move-organization-licenses
@@ -1061,7 +1060,9 @@ class ActionBatchOrganizations(object):
         }
         return action
 
-    def moveOrganizationLicensesSeats(self, organizationId: str, destOrganizationId: str, licenseId: str, seatCount: int):
+    def moveOrganizationLicensesSeats(
+        self, organizationId: str, destOrganizationId: str, licenseId: str, seatCount: int, **kwargs
+    ):
         """
         **Move SM seats to another organization**
         https://developer.cisco.com/meraki/api-v1/#!move-organization-licenses-seats
@@ -1090,7 +1091,7 @@ class ActionBatchOrganizations(object):
         }
         return action
 
-    def renewOrganizationLicensesSeats(self, organizationId: str, licenseIdToRenew: str, unusedLicenseId: str):
+    def renewOrganizationLicensesSeats(self, organizationId: str, licenseIdToRenew: str, unusedLicenseId: str, **kwargs):
         """
         **Renew SM seats of a license. This will extend the license expiration date of managed SM devices covered by this license**
         https://developer.cisco.com/meraki/api-v1/#!renew-organization-licenses-seats
@@ -1475,7 +1476,7 @@ class ActionBatchOrganizations(object):
         return action
 
     def assignOrganizationPoliciesGlobalGroupPoliciesAdaptivePolicyGroups(
-        self, organizationId: str, policy: dict, adaptivePolicyGroups: list
+        self, organizationId: str, policy: dict, adaptivePolicyGroups: list, **kwargs
     ):
         """
         **Assign adaptive policy groups to a policy**
@@ -1504,7 +1505,7 @@ class ActionBatchOrganizations(object):
         return action
 
     def removeOrganizationPoliciesGlobalGroupPoliciesAdaptivePolicyGroups(
-        self, organizationId: str, policy: dict, adaptivePolicyGroups: list
+        self, organizationId: str, policy: dict, adaptivePolicyGroups: list, **kwargs
     ):
         """
         **Remove adaptive policy groups from a policy**
@@ -1943,7 +1944,7 @@ class ActionBatchOrganizations(object):
         }
         return action
 
-    def createOrganizationSaseIntegration(self, organizationId: str, api: dict):
+    def createOrganizationSaseIntegration(self, organizationId: str, api: dict, **kwargs):
         """
         **Create a new Secure Access integration**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-sase-integration

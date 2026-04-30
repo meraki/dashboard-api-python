@@ -5,7 +5,7 @@ class ActionBatchSensor(object):
     def __init__(self):
         super(ActionBatchSensor, self).__init__()
 
-    def createDeviceSensorCommand(self, serial: str, operation: str):
+    def createDeviceSensorCommand(self, serial: str, operation: str, **kwargs):
         """
         **Sends a command to a sensor**
         https://developer.cisco.com/meraki/api-v1/#!create-device-sensor-command
@@ -156,7 +156,7 @@ class ActionBatchSensor(object):
         }
         return action
 
-    def updateNetworkSensorMqttBroker(self, networkId: str, mqttBrokerId: str, enabled: bool):
+    def updateNetworkSensorMqttBroker(self, networkId: str, mqttBrokerId: str, enabled: bool, **kwargs):
         """
         **Update the sensor settings of an MQTT broker. To update the broker itself, use /networks/{networkId}/mqttBrokers/{mqttBrokerId}.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-sensor-mqtt-broker

@@ -111,7 +111,7 @@ class ActionBatchSm(object):
         }
         return action
 
-    def updateOrganizationSmSentryPoliciesAssignments(self, organizationId: str, items: list):
+    def updateOrganizationSmSentryPoliciesAssignments(self, organizationId: str, items: list, **kwargs):
         """
         **Update an Organizations Sentry Policies using the provided list. Sentry Policies are ordered in descending order of priority (i.e. highest priority at the bottom, this is opposite the Dashboard UI). Policies not present in the request will be deleted.**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-sm-sentry-policies-assignments

@@ -62,6 +62,12 @@ class AsyncDevices:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateDevice: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def blinkDeviceLeds(self, serial: str, **kwargs):
@@ -90,6 +96,12 @@ class AsyncDevices:
             "duty",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"blinkDeviceLeds: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -137,6 +149,12 @@ class AsyncDevices:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateDeviceCellularSims: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def getDeviceClients(self, serial: str, **kwargs):
@@ -164,6 +182,12 @@ class AsyncDevices:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getDeviceClients: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get(metadata, resource, params)
 
     def createDeviceLiveToolsArpTable(self, serial: str, **kwargs):
@@ -188,6 +212,12 @@ class AsyncDevices:
             "callback",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createDeviceLiveToolsArpTable: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -235,6 +265,12 @@ class AsyncDevices:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createDeviceLiveToolsCableTest: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def getDeviceLiveToolsCableTest(self, serial: str, id: str):
@@ -281,6 +317,12 @@ class AsyncDevices:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createDeviceLiveToolsLedsBlink: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def getDeviceLiveToolsLedsBlink(self, serial: str, ledsBlinkId: str):
@@ -325,6 +367,12 @@ class AsyncDevices:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createDeviceLiveToolsMacTable: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def getDeviceLiveToolsMacTable(self, serial: str, macTableId: str):
@@ -368,6 +416,14 @@ class AsyncDevices:
             "callback",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createDeviceLiveToolsMulticastRouting: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -417,6 +473,12 @@ class AsyncDevices:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createDeviceLiveToolsPing: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def getDeviceLiveToolsPing(self, serial: str, id: str):
@@ -462,6 +524,12 @@ class AsyncDevices:
             "callback",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createDeviceLiveToolsPingDevice: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -509,6 +577,12 @@ class AsyncDevices:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createDeviceLiveToolsPortsCycle: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def getDeviceLiveToolsPortsCycle(self, serial: str, id: str):
@@ -552,6 +626,12 @@ class AsyncDevices:
             "callback",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createDeviceLiveToolsThroughputTest: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -600,6 +680,12 @@ class AsyncDevices:
             "callback",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createDeviceLiveToolsWakeOnLan: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -678,6 +764,12 @@ class AsyncDevices:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getDeviceLossAndLatencyHistory: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get(metadata, resource, params)
 
     def getDeviceManagementInterface(self, serial: str):
@@ -721,6 +813,12 @@ class AsyncDevices:
             "wan2",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateDeviceManagementInterface: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 

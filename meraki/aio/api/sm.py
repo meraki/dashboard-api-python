@@ -6,7 +6,7 @@ class AsyncSm:
         super().__init__()
         self._session = session
 
-    def createNetworkSmBypassActivationLockAttempt(self, networkId: str, ids: list):
+    def createNetworkSmBypassActivationLockAttempt(self, networkId: str, ids: list, **kwargs):
         """
         **Bypass activation lock attempt**
         https://developer.cisco.com/meraki/api-v1/#!create-network-sm-bypass-activation-lock-attempt
@@ -28,6 +28,14 @@ class AsyncSm:
             "ids",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createNetworkSmBypassActivationLockAttempt: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -113,6 +121,12 @@ class AsyncSm:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkSmDevices: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def checkinNetworkSmDevices(self, networkId: str, **kwargs):
@@ -144,6 +158,12 @@ class AsyncSm:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"checkinNetworkSmDevices: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def updateNetworkSmDevicesFields(self, networkId: str, deviceFields: dict, **kwargs):
@@ -174,6 +194,12 @@ class AsyncSm:
             "deviceFields",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSmDevicesFields: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -207,6 +233,12 @@ class AsyncSm:
             "pin",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"lockNetworkSmDevices: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -243,6 +275,12 @@ class AsyncSm:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"modifyNetworkSmDevicesTags: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def moveNetworkSmDevices(self, networkId: str, newNetwork: str, **kwargs):
@@ -275,6 +313,12 @@ class AsyncSm:
             "newNetwork",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"moveNetworkSmDevices: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -315,6 +359,12 @@ class AsyncSm:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"rebootNetworkSmDevices: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def shutdownNetworkSmDevices(self, networkId: str, **kwargs):
@@ -346,6 +396,12 @@ class AsyncSm:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"shutdownNetworkSmDevices: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def wipeNetworkSmDevices(self, networkId: str, **kwargs):
@@ -376,6 +432,12 @@ class AsyncSm:
             "pin",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"wipeNetworkSmDevices: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -448,6 +510,12 @@ class AsyncSm:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkSmDeviceConnectivity: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getNetworkSmDeviceDesktopLogs(self, networkId: str, deviceId: str, total_pages=1, direction="next", **kwargs):
@@ -481,6 +549,12 @@ class AsyncSm:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkSmDeviceDesktopLogs: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getNetworkSmDeviceDeviceCommandLogs(self, networkId: str, deviceId: str, total_pages=1, direction="next", **kwargs):
@@ -513,6 +587,12 @@ class AsyncSm:
             "endingBefore",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkSmDeviceDeviceCommandLogs: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -561,6 +641,12 @@ class AsyncSm:
             "force",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"installNetworkSmDeviceApps: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -613,6 +699,12 @@ class AsyncSm:
             "endingBefore",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkSmDevicePerformanceHistory: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -711,7 +803,7 @@ class AsyncSm:
 
         return self._session.post(metadata, resource)
 
-    def uninstallNetworkSmDeviceApps(self, networkId: str, deviceId: str, appIds: list):
+    def uninstallNetworkSmDeviceApps(self, networkId: str, deviceId: str, appIds: list, **kwargs):
         """
         **Uninstall applications on a device**
         https://developer.cisco.com/meraki/api-v1/#!uninstall-network-sm-device-apps
@@ -735,6 +827,12 @@ class AsyncSm:
             "appIds",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"uninstallNetworkSmDeviceApps: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -788,6 +886,12 @@ class AsyncSm:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkSmProfiles: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get(metadata, resource, params)
 
     def getNetworkSmTargetGroups(self, networkId: str, **kwargs):
@@ -812,6 +916,12 @@ class AsyncSm:
             "withDetails",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkSmTargetGroups: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
@@ -840,6 +950,12 @@ class AsyncSm:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkSmTargetGroup: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def getNetworkSmTargetGroup(self, networkId: str, targetGroupId: str, **kwargs):
@@ -866,6 +982,12 @@ class AsyncSm:
             "withDetails",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkSmTargetGroup: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
@@ -895,6 +1017,12 @@ class AsyncSm:
             "scope",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSmTargetGroup: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -946,6 +1074,12 @@ class AsyncSm:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkSmTrustedAccessConfigs: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getNetworkSmUserAccessDevices(self, networkId: str, total_pages=1, direction="next", **kwargs):
@@ -976,6 +1110,12 @@ class AsyncSm:
             "endingBefore",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkSmUserAccessDevices: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -1037,6 +1177,12 @@ class AsyncSm:
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkSmUsers: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
@@ -1107,6 +1253,12 @@ class AsyncSm:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationSmAdminsRoles: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def createOrganizationSmAdminsRole(self, organizationId: str, name: str, **kwargs):
@@ -1139,6 +1291,12 @@ class AsyncSm:
             "tags",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationSmAdminsRole: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -1194,6 +1352,12 @@ class AsyncSm:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationSmAdminsRole: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def deleteOrganizationSmAdminsRole(self, organizationId: str, roleId: str):
@@ -1232,7 +1396,7 @@ class AsyncSm:
 
         return self._session.get(metadata, resource)
 
-    def updateOrganizationSmSentryPoliciesAssignments(self, organizationId: str, items: list):
+    def updateOrganizationSmSentryPoliciesAssignments(self, organizationId: str, items: list, **kwargs):
         """
         **Update an Organizations Sentry Policies using the provided list**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-sm-sentry-policies-assignments
@@ -1254,6 +1418,14 @@ class AsyncSm:
             "items",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationSmSentryPoliciesAssignments: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -1297,6 +1469,14 @@ class AsyncSm:
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSmSentryPoliciesAssignmentsByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 

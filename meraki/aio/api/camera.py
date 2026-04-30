@@ -58,6 +58,12 @@ class AsyncCamera:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getDeviceCameraAnalyticsOverview: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get(metadata, resource, params)
 
     def getDeviceCameraAnalyticsRecent(self, serial: str, **kwargs):
@@ -88,6 +94,12 @@ class AsyncCamera:
             "objectType",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getDeviceCameraAnalyticsRecent: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
@@ -147,6 +159,12 @@ class AsyncCamera:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getDeviceCameraAnalyticsZoneHistory: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get(metadata, resource, params)
 
     def clipDeviceCamera(self, serial: str, startTimestamp: str, endTimestamp: str, **kwargs):
@@ -175,6 +193,12 @@ class AsyncCamera:
             "imagerId",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"clipDeviceCamera: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
@@ -222,6 +246,12 @@ class AsyncCamera:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateDeviceCameraCustomAnalytics: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def generateDeviceCameraSnapshot(self, serial: str, **kwargs):
@@ -248,6 +278,12 @@ class AsyncCamera:
             "fullframe",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"generateDeviceCameraSnapshot: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -319,6 +355,14 @@ class AsyncCamera:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateDeviceCameraQualityAndRetention: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.put(metadata, resource, payload)
 
     def getDeviceCameraSense(self, serial: str):
@@ -366,6 +410,12 @@ class AsyncCamera:
             "detectionModelId",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateDeviceCameraSense: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -426,6 +476,12 @@ class AsyncCamera:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateDeviceCameraVideoSettings: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def getDeviceCameraVideoLink(self, serial: str, **kwargs):
@@ -451,6 +507,12 @@ class AsyncCamera:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getDeviceCameraVideoLink: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get(metadata, resource, params)
 
     def getDeviceCameraWirelessProfiles(self, serial: str):
@@ -470,7 +532,7 @@ class AsyncCamera:
 
         return self._session.get(metadata, resource)
 
-    def updateDeviceCameraWirelessProfiles(self, serial: str, ids: dict):
+    def updateDeviceCameraWirelessProfiles(self, serial: str, ids: dict, **kwargs):
         """
         **Assign wireless profiles to the given camera**
         https://developer.cisco.com/meraki/api-v1/#!update-device-camera-wireless-profiles
@@ -492,6 +554,12 @@ class AsyncCamera:
             "ids",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateDeviceCameraWirelessProfiles: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -552,6 +620,14 @@ class AsyncCamera:
             "videoSettings",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createNetworkCameraQualityRetentionProfile: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -617,6 +693,14 @@ class AsyncCamera:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkCameraQualityRetentionProfile: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.put(metadata, resource, payload)
 
     def deleteNetworkCameraQualityRetentionProfile(self, networkId: str, qualityRetentionProfileId: str):
@@ -681,6 +765,12 @@ class AsyncCamera:
             "identity",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkCameraWirelessProfile: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -749,6 +839,12 @@ class AsyncCamera:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkCameraWirelessProfile: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def deleteNetworkCameraWirelessProfile(self, networkId: str, wirelessProfileId: str):
@@ -801,6 +897,14 @@ class AsyncCamera:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationCameraBoundariesAreasByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def getOrganizationCameraBoundariesLinesByDevice(self, organizationId: str, **kwargs):
@@ -833,6 +937,14 @@ class AsyncCamera:
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationCameraBoundariesLinesByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get(metadata, resource, params)
 
@@ -876,6 +988,14 @@ class AsyncCamera:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationCameraCustomAnalyticsArtifact: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
     def getOrganizationCameraCustomAnalyticsArtifact(self, organizationId: str, artifactId: str):
@@ -917,7 +1037,7 @@ class AsyncCamera:
         return self._session.delete(metadata, resource)
 
     def getOrganizationCameraDetectionsHistoryByBoundaryByInterval(
-        self, organizationId: str, boundaryIds: list, total_pages=1, direction="next", **kwargs
+        self, organizationId: str, boundaryIds: list, ranges: list, total_pages=1, direction="next", **kwargs
     ):
         """
         **Returns analytics data for timespans**
@@ -925,6 +1045,7 @@ class AsyncCamera:
 
         - organizationId (string): Organization ID
         - boundaryIds (array): A list of boundary ids. The returned cameras will be filtered to only include these ids.
+        - ranges (array): A list of time ranges with intervals
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - duration (integer): The minimum time, in seconds, that the person or car remains in the area to be counted. Defaults to boundary configuration or 60.
@@ -943,6 +1064,7 @@ class AsyncCamera:
 
         query_params = [
             "boundaryIds",
+            "ranges",
             "duration",
             "perPage",
             "boundaryTypes",
@@ -951,12 +1073,21 @@ class AsyncCamera:
 
         array_params = [
             "boundaryIds",
+            "ranges",
             "boundaryTypes",
         ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationCameraDetectionsHistoryByBoundaryByInterval: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -994,6 +1125,14 @@ class AsyncCamera:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationCameraOnboardingStatuses: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def updateOrganizationCameraOnboardingStatuses(self, organizationId: str, **kwargs):
@@ -1020,6 +1159,14 @@ class AsyncCamera:
             "wirelessCredentialsSent",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationCameraOnboardingStatuses: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -1105,6 +1252,12 @@ class AsyncCamera:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationCameraRole: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def getOrganizationCameraRole(self, organizationId: str, roleId: str):
@@ -1175,5 +1328,11 @@ class AsyncCamera:
             "appliedOrgWide",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationCameraRole: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)

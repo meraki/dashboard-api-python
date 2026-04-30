@@ -34,7 +34,7 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def updateDeviceApplianceUplinksSettings(self, serial: str, interfaces: dict):
+    def updateDeviceApplianceUplinksSettings(self, serial: str, interfaces: dict, **kwargs):
         """
         **Update the uplink settings for a secure router or security appliance**
         https://developer.cisco.com/meraki/api-v1/#!update-device-appliance-uplinks-settings
@@ -178,7 +178,7 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def updateNetworkApplianceFirewallMulticastForwarding(self, networkId: str, rules: list):
+    def updateNetworkApplianceFirewallMulticastForwarding(self, networkId: str, rules: list, **kwargs):
         """
         **Update static multicast forward rules for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-firewall-multicast-forwarding
@@ -763,7 +763,7 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def connectNetworkApplianceUmbrellaAccount(self, networkId: str, api: dict):
+    def connectNetworkApplianceUmbrellaAccount(self, networkId: str, api: dict, **kwargs):
         """
         **Connect a Cisco Umbrella account to this network**
         https://developer.cisco.com/meraki/api-v1/#!connect-network-appliance-umbrella-account
@@ -805,7 +805,7 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def updateNetworkApplianceUplinksNat(self, networkId: str, uplinks: list):
+    def updateNetworkApplianceUplinksNat(self, networkId: str, uplinks: list, **kwargs):
         """
         **Update uplink NAT settings of the specified network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-uplinks-nat
@@ -1152,7 +1152,7 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def createOrganizationApplianceDnsLocalProfile(self, organizationId: str, name: str):
+    def createOrganizationApplianceDnsLocalProfile(self, organizationId: str, name: str, **kwargs):
         """
         **Create a new local DNS profile**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-appliance-dns-local-profile
@@ -1177,7 +1177,7 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def bulkOrganizationApplianceDnsLocalProfilesAssignmentsCreate(self, organizationId: str, items: list):
+    def bulkOrganizationApplianceDnsLocalProfilesAssignmentsCreate(self, organizationId: str, items: list, **kwargs):
         """
         **Assign the local DNS profile to networks in the organization**
         https://developer.cisco.com/meraki/api-v1/#!bulk-organization-appliance-dns-local-profiles-assignments-create
@@ -1202,7 +1202,7 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def createOrganizationApplianceDnsLocalProfilesAssignmentsBulkDelete(self, organizationId: str, items: list):
+    def createOrganizationApplianceDnsLocalProfilesAssignmentsBulkDelete(self, organizationId: str, items: list, **kwargs):
         """
         **Unassign the local DNS profile to networks in the organization**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-appliance-dns-local-profiles-assignments-bulk-delete
@@ -1227,7 +1227,7 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def updateOrganizationApplianceDnsLocalProfile(self, organizationId: str, profileId: str, name: str):
+    def updateOrganizationApplianceDnsLocalProfile(self, organizationId: str, profileId: str, name: str, **kwargs):
         """
         **Update a local DNS profile**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-appliance-dns-local-profile
@@ -1273,7 +1273,9 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def createOrganizationApplianceDnsLocalRecord(self, organizationId: str, hostname: str, address: str, profile: dict):
+    def createOrganizationApplianceDnsLocalRecord(
+        self, organizationId: str, hostname: str, address: str, profile: dict, **kwargs
+    ):
         """
         **Create a new local DNS record**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-appliance-dns-local-record
@@ -1352,7 +1354,9 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def createOrganizationApplianceDnsSplitProfile(self, organizationId: str, name: str, hostnames: list, nameservers: dict):
+    def createOrganizationApplianceDnsSplitProfile(
+        self, organizationId: str, name: str, hostnames: list, nameservers: dict, **kwargs
+    ):
         """
         **Create a new split DNS profile**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-appliance-dns-split-profile
@@ -1381,7 +1385,7 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def createOrganizationApplianceDnsSplitProfilesAssignmentsBulkCreate(self, organizationId: str, items: list):
+    def createOrganizationApplianceDnsSplitProfilesAssignmentsBulkCreate(self, organizationId: str, items: list, **kwargs):
         """
         **Assign the split DNS profile to networks in the organization**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-appliance-dns-split-profiles-assignments-bulk-create
@@ -1406,7 +1410,7 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def createOrganizationApplianceDnsSplitProfilesAssignmentsBulkDelete(self, organizationId: str, items: list):
+    def createOrganizationApplianceDnsSplitProfilesAssignmentsBulkDelete(self, organizationId: str, items: list, **kwargs):
         """
         **Unassign the split DNS profile to networks in the organization**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-appliance-dns-split-profiles-assignments-bulk-delete
@@ -1506,7 +1510,7 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def updateOrganizationApplianceVpnThirdPartyVPNPeers(self, organizationId: str, peers: list):
+    def updateOrganizationApplianceVpnThirdPartyVPNPeers(self, organizationId: str, peers: list, **kwargs):
         """
                 **Update the third party VPN peers for an organization.
 
@@ -1534,7 +1538,9 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def assignOrganizationPoliciesGlobalGroupPoliciesApplianceVlans(self, organizationId: str, policy: dict, vlans: list):
+    def assignOrganizationPoliciesGlobalGroupPoliciesApplianceVlans(
+        self, organizationId: str, policy: dict, vlans: list, **kwargs
+    ):
         """
         **Assign VLANs to a policy**
         https://developer.cisco.com/meraki/api-v1/#!assign-organization-policies-global-group-policies-appliance-vlans
@@ -1561,7 +1567,9 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def removeOrganizationPoliciesGlobalGroupPoliciesApplianceVlans(self, organizationId: str, policy: dict, vlans: list):
+    def removeOrganizationPoliciesGlobalGroupPoliciesApplianceVlans(
+        self, organizationId: str, policy: dict, vlans: list, **kwargs
+    ):
         """
         **Remove VLANs from a policy**
         https://developer.cisco.com/meraki/api-v1/#!remove-organization-policies-global-group-policies-appliance-vlans

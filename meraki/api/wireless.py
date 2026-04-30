@@ -29,6 +29,14 @@ class Wireless(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateDeviceWirelessAlternateManagementInterfaceIpv6: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.put(metadata, resource, payload)
 
     def getDeviceWirelessBluetoothSettings(self, serial: str):
@@ -78,6 +86,14 @@ class Wireless(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateDeviceWirelessBluetoothSettings: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.put(metadata, resource, payload)
 
     def getDeviceWirelessConnectionStats(self, serial: str, **kwargs):
@@ -119,6 +135,12 @@ class Wireless(object):
             "apTag",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getDeviceWirelessConnectionStats: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
@@ -163,6 +185,14 @@ class Wireless(object):
             "enabled",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateDeviceWirelessElectronicShelfLabel: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -210,6 +240,12 @@ class Wireless(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getDeviceWirelessLatencyStats: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get(metadata, resource, params)
 
     def getDeviceWirelessRadioSettings(self, serial: str):
@@ -255,6 +291,12 @@ class Wireless(object):
             "fiveGhzSettings",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateDeviceWirelessRadioSettings: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -336,9 +378,15 @@ class Wireless(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkWirelessAirMarshal: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get(metadata, resource, params)
 
-    def createNetworkWirelessAirMarshalRule(self, networkId: str, type: str, match: dict):
+    def createNetworkWirelessAirMarshalRule(self, networkId: str, type: str, match: dict, **kwargs):
         """
         **Creates a new rule**
         https://developer.cisco.com/meraki/api-v1/#!create-network-wireless-air-marshal-rule
@@ -366,6 +414,12 @@ class Wireless(object):
             "match",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkWirelessAirMarshalRule: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -400,6 +454,12 @@ class Wireless(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkWirelessAirMarshalRule: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def deleteNetworkWirelessAirMarshalRule(self, networkId: str, ruleId: str):
@@ -421,7 +481,7 @@ class Wireless(object):
 
         return self._session.delete(metadata, resource)
 
-    def updateNetworkWirelessAirMarshalSettings(self, networkId: str, defaultPolicy: str):
+    def updateNetworkWirelessAirMarshalSettings(self, networkId: str, defaultPolicy: str, **kwargs):
         """
         **Updates Air Marshal settings.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-air-marshal-settings
@@ -449,6 +509,14 @@ class Wireless(object):
             "defaultPolicy",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkWirelessAirMarshalSettings: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -498,6 +566,14 @@ class Wireless(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkWirelessAlternateManagementInterface: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.put(metadata, resource, payload)
 
     def getNetworkWirelessBilling(self, networkId: str):
@@ -541,6 +617,12 @@ class Wireless(object):
             "plans",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkWirelessBilling: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -600,6 +682,14 @@ class Wireless(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkWirelessBluetoothSettings: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.put(metadata, resource, payload)
 
     def getNetworkWirelessChannelUtilizationHistory(self, networkId: str, **kwargs):
@@ -644,6 +734,14 @@ class Wireless(object):
             "band",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getNetworkWirelessChannelUtilizationHistory: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get(metadata, resource, params)
 
@@ -692,6 +790,12 @@ class Wireless(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkWirelessClientCountHistory: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get(metadata, resource, params)
 
     def getNetworkWirelessClientsConnectionStats(self, networkId: str, **kwargs):
@@ -733,6 +837,14 @@ class Wireless(object):
             "apTag",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getNetworkWirelessClientsConnectionStats: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get(metadata, resource, params)
 
@@ -780,6 +892,14 @@ class Wireless(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getNetworkWirelessClientsLatencyStats: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def getNetworkWirelessClientConnectionStats(self, networkId: str, clientId: str, **kwargs):
@@ -823,6 +943,14 @@ class Wireless(object):
             "apTag",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getNetworkWirelessClientConnectionStats: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get(metadata, resource, params)
 
@@ -900,6 +1028,14 @@ class Wireless(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getNetworkWirelessClientConnectivityEvents: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getNetworkWirelessClientLatencyHistory(self, networkId: str, clientId: str, **kwargs):
@@ -932,6 +1068,14 @@ class Wireless(object):
             "resolution",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getNetworkWirelessClientLatencyHistory: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get(metadata, resource, params)
 
@@ -981,6 +1125,12 @@ class Wireless(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkWirelessClientLatencyStats: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get(metadata, resource, params)
 
     def getNetworkWirelessConnectionStats(self, networkId: str, **kwargs):
@@ -1022,6 +1172,12 @@ class Wireless(object):
             "apTag",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkWirelessConnectionStats: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
@@ -1070,6 +1226,12 @@ class Wireless(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkWirelessDataRateHistory: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get(metadata, resource, params)
 
     def getNetworkWirelessDevicesConnectionStats(self, networkId: str, **kwargs):
@@ -1111,6 +1273,14 @@ class Wireless(object):
             "apTag",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getNetworkWirelessDevicesConnectionStats: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get(metadata, resource, params)
 
@@ -1157,6 +1327,14 @@ class Wireless(object):
             "fields",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getNetworkWirelessDevicesLatencyStats: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get(metadata, resource, params)
 
@@ -1207,6 +1385,14 @@ class Wireless(object):
             "mode",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkWirelessElectronicShelfLabel: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -1271,9 +1457,17 @@ class Wireless(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createNetworkWirelessEthernetPortsProfile: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
-    def assignNetworkWirelessEthernetPortsProfiles(self, networkId: str, serials: list, profileId: str):
+    def assignNetworkWirelessEthernetPortsProfiles(self, networkId: str, serials: list, profileId: str, **kwargs):
         """
         **Assign AP port profile to list of APs**
         https://developer.cisco.com/meraki/api-v1/#!assign-network-wireless-ethernet-ports-profiles
@@ -1298,9 +1492,17 @@ class Wireless(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"assignNetworkWirelessEthernetPortsProfiles: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
-    def setNetworkWirelessEthernetPortsProfilesDefault(self, networkId: str, profileId: str):
+    def setNetworkWirelessEthernetPortsProfilesDefault(self, networkId: str, profileId: str, **kwargs):
         """
         **Set the AP port profile to be default for this network**
         https://developer.cisco.com/meraki/api-v1/#!set-network-wireless-ethernet-ports-profiles-default
@@ -1322,6 +1524,14 @@ class Wireless(object):
             "profileId",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"setNetworkWirelessEthernetPortsProfilesDefault: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -1372,6 +1582,14 @@ class Wireless(object):
             "usbPorts",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkWirelessEthernetPortsProfile: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -1438,6 +1656,12 @@ class Wireless(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkWirelessFailedConnections: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get(metadata, resource, params)
 
     def getNetworkWirelessLatencyHistory(self, networkId: str, **kwargs):
@@ -1492,6 +1716,12 @@ class Wireless(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkWirelessLatencyHistory: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get(metadata, resource, params)
 
     def getNetworkWirelessLatencyStats(self, networkId: str, **kwargs):
@@ -1538,6 +1768,12 @@ class Wireless(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkWirelessLatencyStats: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get(metadata, resource, params)
 
     def updateNetworkWirelessLocationScanning(self, networkId: str, **kwargs):
@@ -1564,6 +1800,14 @@ class Wireless(object):
             "api",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkWirelessLocationScanning: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -1596,6 +1840,12 @@ class Wireless(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkWirelessMeshStatuses: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def updateNetworkWirelessRadioRrm(self, networkId: str, **kwargs):
@@ -1627,6 +1877,12 @@ class Wireless(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkWirelessRadioRrm: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def getNetworkWirelessRfProfiles(self, networkId: str, **kwargs):
@@ -1651,6 +1907,12 @@ class Wireless(object):
             "includeTemplateProfiles",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkWirelessRfProfiles: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
@@ -1707,6 +1969,12 @@ class Wireless(object):
             "flexRadios",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkWirelessRfProfile: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -1769,6 +2037,12 @@ class Wireless(object):
             "flexRadios",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkWirelessRfProfile: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -1870,6 +2144,12 @@ class Wireless(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkWirelessSettings: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def getNetworkWirelessSignalQualityHistory(self, networkId: str, **kwargs):
@@ -1916,6 +2196,14 @@ class Wireless(object):
             "ssid",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getNetworkWirelessSignalQualityHistory: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get(metadata, resource, params)
 
@@ -2180,6 +2468,12 @@ class Wireless(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkWirelessSsid: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def getNetworkWirelessSsidBonjourForwarding(self, networkId: str, number: str):
@@ -2230,6 +2524,14 @@ class Wireless(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkWirelessSsidBonjourForwarding: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.put(metadata, resource, payload)
 
     def getNetworkWirelessSsidDeviceTypeGroupPolicies(self, networkId: str, number: str):
@@ -2277,6 +2579,14 @@ class Wireless(object):
             "deviceTypePolicies",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkWirelessSsidDeviceTypeGroupPolicies: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -2330,6 +2640,12 @@ class Wireless(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkWirelessSsidEapOverride: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def getNetworkWirelessSsidFirewallL3FirewallRules(self, networkId: str, number: str):
@@ -2378,6 +2694,14 @@ class Wireless(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkWirelessSsidFirewallL3FirewallRules: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.put(metadata, resource, payload)
 
     def getNetworkWirelessSsidFirewallL7FirewallRules(self, networkId: str, number: str):
@@ -2423,6 +2747,14 @@ class Wireless(object):
             "rules",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkWirelessSsidFirewallL7FirewallRules: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -2499,6 +2831,12 @@ class Wireless(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkWirelessSsidHotspot20: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def getNetworkWirelessSsidIdentityPsks(self, networkId: str, number: str):
@@ -2550,6 +2888,12 @@ class Wireless(object):
             "expiresAt",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkWirelessSsidIdentityPsk: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -2607,6 +2951,12 @@ class Wireless(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkWirelessSsidIdentityPsk: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def deleteNetworkWirelessSsidIdentityPsk(self, networkId: str, number: str, identityPskId: str):
@@ -2657,6 +3007,12 @@ class Wireless(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkWirelessSsidOpenRoaming: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def getNetworkWirelessSsidSchedules(self, networkId: str, number: str):
@@ -2706,6 +3062,12 @@ class Wireless(object):
             "rangesInSeconds",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkWirelessSsidSchedules: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -2796,6 +3158,14 @@ class Wireless(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkWirelessSsidSplashSettings: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.put(metadata, resource, payload)
 
     def updateNetworkWirelessSsidTrafficShapingRules(self, networkId: str, number: str, **kwargs):
@@ -2829,6 +3199,14 @@ class Wireless(object):
             "rules",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkWirelessSsidTrafficShapingRules: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -2899,6 +3277,12 @@ class Wireless(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkWirelessSsidVpn: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def getNetworkWirelessUsageHistory(self, networkId: str, **kwargs):
@@ -2946,6 +3330,12 @@ class Wireless(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkWirelessUsageHistory: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get(metadata, resource, params)
 
     def updateNetworkWirelessZigbee(self, networkId: str, **kwargs):
@@ -2976,6 +3366,12 @@ class Wireless(object):
             "defaults",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkWirelessZigbee: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -3017,6 +3413,14 @@ class Wireless(object):
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessAirMarshalRules: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -3060,6 +3464,14 @@ class Wireless(object):
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessAirMarshalSettingsByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -3107,6 +3519,14 @@ class Wireless(object):
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessClientsOverviewByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -3162,6 +3582,14 @@ class Wireless(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessDevicesChannelUtilizationByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationWirelessDevicesChannelUtilizationByNetwork(
@@ -3215,6 +3643,14 @@ class Wireless(object):
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessDevicesChannelUtilizationByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -3270,6 +3706,14 @@ class Wireless(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessDevicesChannelUtilizationHistoryByDeviceByInterval: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationWirelessDevicesChannelUtilizationHistoryByNetworkByInterval(
@@ -3324,6 +3768,14 @@ class Wireless(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessDevicesChannelUtilizationHistoryByNetworkByInterval: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationWirelessDevicesEthernetStatuses(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -3364,6 +3816,14 @@ class Wireless(object):
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessDevicesEthernetStatuses: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -3421,6 +3881,14 @@ class Wireless(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessDevicesPacketLossByClient: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationWirelessDevicesPacketLossByDevice(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -3476,6 +3944,14 @@ class Wireless(object):
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessDevicesPacketLossByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -3535,6 +4011,14 @@ class Wireless(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessDevicesPacketLossByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationWirelessDevicesPowerModeHistory(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -3584,6 +4068,14 @@ class Wireless(object):
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessDevicesPowerModeHistory: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -3642,6 +4134,14 @@ class Wireless(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessDevicesProvisioningDeployments: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def createOrganizationWirelessDevicesProvisioningDeployment(self, organizationId: str, items: list, **kwargs):
@@ -3669,6 +4169,14 @@ class Wireless(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationWirelessDevicesProvisioningDeployment: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
     def updateOrganizationWirelessDevicesProvisioningDeployments(self, organizationId: str, items: list, **kwargs):
@@ -3695,6 +4203,14 @@ class Wireless(object):
             "meta",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationWirelessDevicesProvisioningDeployments: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -3748,6 +4264,14 @@ class Wireless(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessDevicesRadsecCertificatesAuthorities: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def updateOrganizationWirelessDevicesRadsecCertificatesAuthorities(self, organizationId: str, **kwargs):
@@ -3774,6 +4298,14 @@ class Wireless(object):
             "certificateAuthorityId",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationWirelessDevicesRadsecCertificatesAuthorities: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -3825,6 +4357,14 @@ class Wireless(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessDevicesRadsecCertificatesAuthoritiesCrls: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def getOrganizationWirelessDevicesRadsecCertificatesAuthoritiesCrlsDeltas(self, organizationId: str, **kwargs):
@@ -3857,6 +4397,14 @@ class Wireless(object):
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessDevicesRadsecCertificatesAuthoritiesCrlsDeltas: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get(metadata, resource, params)
 
@@ -3910,6 +4458,14 @@ class Wireless(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessDevicesSystemCpuLoadHistory: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationWirelessDevicesWirelessControllersByDevice(
@@ -3959,6 +4515,14 @@ class Wireless(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessDevicesWirelessControllersByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationWirelessLocationScanningByNetwork(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -3999,6 +4563,14 @@ class Wireless(object):
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessLocationScanningByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -4041,10 +4613,18 @@ class Wireless(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessLocationScanningReceivers: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def createOrganizationWirelessLocationScanningReceiver(
-        self, organizationId: str, network: dict, url: str, version: str, radio: dict, sharedSecret: str
+        self, organizationId: str, network: dict, url: str, version: str, radio: dict, sharedSecret: str, **kwargs
     ):
         """
         **Add new receiver for scanning API**
@@ -4076,6 +4656,14 @@ class Wireless(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationWirelessLocationScanningReceiver: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
     def updateOrganizationWirelessLocationScanningReceiver(self, organizationId: str, receiverId: str, **kwargs):
@@ -4106,6 +4694,14 @@ class Wireless(object):
             "radio",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationWirelessLocationScanningReceiver: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -4167,6 +4763,12 @@ class Wireless(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationWirelessMqttSettings: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def updateOrganizationWirelessMqttSettings(self, organizationId: str, network: dict, mqtt: dict, **kwargs):
@@ -4198,9 +4800,17 @@ class Wireless(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationWirelessMqttSettings: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.put(metadata, resource, payload)
 
-    def recalculateOrganizationWirelessRadioAutoRfChannels(self, organizationId: str, networkIds: list):
+    def recalculateOrganizationWirelessRadioAutoRfChannels(self, organizationId: str, networkIds: list, **kwargs):
         """
         **Recalculates automatically assigned channels for every AP within specified the specified network(s)**
         https://developer.cisco.com/meraki/api-v1/#!recalculate-organization-wireless-radio-auto-rf-channels
@@ -4222,6 +4832,14 @@ class Wireless(object):
             "networkIds",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"recalculateOrganizationWirelessRadioAutoRfChannels: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -4271,6 +4889,14 @@ class Wireless(object):
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessRadioRrmByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -4335,6 +4961,14 @@ class Wireless(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessRfProfilesAssignmentsByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationWirelessSsidsFirewallIsolationAllowlistEntries(
@@ -4381,6 +5015,14 @@ class Wireless(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessSsidsFirewallIsolationAllowlistEntries: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def createOrganizationWirelessSsidsFirewallIsolationAllowlistEntry(
@@ -4413,6 +5055,14 @@ class Wireless(object):
             "network",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationWirelessSsidsFirewallIsolationAllowlistEntry: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -4462,6 +5112,14 @@ class Wireless(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationWirelessSsidsFirewallIsolationAllowlistEntry: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.put(metadata, resource, payload)
 
     def getOrganizationWirelessSsidsOpenRoamingByNetwork(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -4504,6 +5162,14 @@ class Wireless(object):
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessSsidsOpenRoamingByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -4554,6 +5220,14 @@ class Wireless(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessSsidsStatusesByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationWirelessZigbeeByNetwork(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -4594,6 +5268,14 @@ class Wireless(object):
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessZigbeeByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -4640,6 +5322,12 @@ class Wireless(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationWirelessZigbeeDevices: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def updateOrganizationWirelessZigbeeDevice(self, organizationId: str, id: str, enrolled: bool, **kwargs):
@@ -4669,6 +5357,14 @@ class Wireless(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationWirelessZigbeeDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.put(metadata, resource, payload)
 
     def createOrganizationWirelessZigbeeDisenrollment(self, organizationId: str, **kwargs):
@@ -4693,6 +5389,14 @@ class Wireless(object):
             "doorLockIds",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationWirelessZigbeeDisenrollment: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -4756,6 +5460,14 @@ class Wireless(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessZigbeeDoorLocks: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def updateOrganizationWirelessZigbeeDoorLock(self, organizationId: str, doorLockId: str, **kwargs):
@@ -4782,5 +5494,13 @@ class Wireless(object):
             "name",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationWirelessZigbeeDoorLock: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)

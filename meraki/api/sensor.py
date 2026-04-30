@@ -59,9 +59,15 @@ class Sensor(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getDeviceSensorCommands: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def createDeviceSensorCommand(self, serial: str, operation: str):
+    def createDeviceSensorCommand(self, serial: str, operation: str, **kwargs):
         """
         **Sends a command to a sensor**
         https://developer.cisco.com/meraki/api-v1/#!create-device-sensor-command
@@ -89,6 +95,12 @@ class Sensor(object):
             "operation",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createDeviceSensorCommand: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -151,6 +163,12 @@ class Sensor(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateDeviceSensorRelationships: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def getNetworkSensorAlertsCurrentOverviewByMetric(self, networkId: str):
@@ -198,6 +216,14 @@ class Sensor(object):
             "interval",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getNetworkSensorAlertsOverviewByMetric: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get(metadata, resource, params)
 
@@ -252,6 +278,12 @@ class Sensor(object):
             "message",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkSensorAlertsProfile: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -311,6 +343,12 @@ class Sensor(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSensorAlertsProfile: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def deleteNetworkSensorAlertsProfile(self, networkId: str, id: str):
@@ -368,7 +406,7 @@ class Sensor(object):
 
         return self._session.get(metadata, resource)
 
-    def updateNetworkSensorMqttBroker(self, networkId: str, mqttBrokerId: str, enabled: bool):
+    def updateNetworkSensorMqttBroker(self, networkId: str, mqttBrokerId: str, enabled: bool, **kwargs):
         """
         **Update the sensor settings of an MQTT broker**
         https://developer.cisco.com/meraki/api-v1/#!update-network-sensor-mqtt-broker
@@ -392,6 +430,12 @@ class Sensor(object):
             "enabled",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSensorMqttBroker: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -451,6 +495,14 @@ class Sensor(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSensorGatewaysConnectionsLatest: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationSensorReadingsHistory(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -504,6 +556,12 @@ class Sensor(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationSensorReadingsHistory: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationSensorReadingsLatest(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -550,5 +608,11 @@ class Sensor(object):
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationSensorReadingsLatest: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
