@@ -1,0 +1,121 @@
+{
+  "openapi": "3.0.1",
+  "info": {"title": "Synthetic Meraki v3", "version": "1.0.0"},
+  "components": {
+    "schemas": {
+      "Network": {
+        "type": "object",
+        "properties": {
+          "id": {"type": "string"},
+          "name": {"type": "string", "description": "Network name"}
+        }
+      },
+      "Circular": {
+        "$ref": "#/components/schemas/Circular"
+      },
+      "DeviceStatus": {
+        "type": "object",
+        "properties": {
+          "serial": {"type": "string"},
+          "status": {"type": "string", "enum": ["online", "offline", "dormant"]}
+        }
+      }
+    }
+  },
+  "paths": {
+    "/networks/{networkId}": {
+      "get": {
+        "tags": ["networks", "configure"],
+        "operationId": "getNetwork",
+        "parameters": [
+          {"name": "networkId", "in": "path", "required": true, "schema": {"type": "string"}}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      },
+      "put": {
+        "tags": ["networks", "configure"],
+        "operationId": "updateNetwork",
+        "parameters": [
+          {"name": "networkId", "in": "path", "required": true, "schema": {"type": "string"}}
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {"type": "string", "description": "Network name"},
+                  "tags": {"type": "array", "items": {"type": "string"}, "description": "Network tags"},
+                  "timeZone": {"type": "string", "description": "Timezone", "nullable": true},
+                  "notes": {"type": "string", "description": "Notes for the network"}
+                },
+                "required": ["name"]
+              }
+            }
+          }
+        },
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/networks/{networkId}/firmware": {
+      "post": {
+        "tags": ["networks", "configure"],
+        "operationId": "createNetworkFirmwareUpgrade",
+        "parameters": [
+          {"name": "networkId", "in": "path", "required": true, "schema": {"type": "string"}}
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Network"
+              }
+            }
+          }
+        },
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/networks/{networkId}/upload": {
+      "post": {
+        "tags": ["networks", "configure"],
+        "operationId": "uploadNetworkFile",
+        "parameters": [
+          {"name": "networkId", "in": "path", "required": true, "schema": {"type": "string"}}
+        ],
+        "requestBody": {
+          "content": {
+            "application/octet-stream": {
+              "schema": {"type": "string", "format": "binary"}
+            }
+          }
+        },
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/networks/{networkId}/floorPlans": {
+      "post": {
+        "tags": ["networks", "configure"],
+        "operationId": "createNetworkFloorPlan",
+        "parameters": [
+          {"name": "networkId", "in": "path", "required": true, "schema": {"type": "string"}}
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {"type": "string", "description": "Floor plan name"},
+                  "imageContents": {"type": "string", "format": "binary", "description": "Image file"}
+                },
+                "required": ["name", "imageContents"]
+              }
+            }
+          }
+        },
+        "responses": {"200": {"description": "OK"}}
+      }
+    }
+  }
+}
