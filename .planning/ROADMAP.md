@@ -60,7 +60,7 @@ Plans:
 **Plans**: 2 plans
 Plans:
 - [x] 03-01-PLAN.md: Core v3 generator module (sync/async/batch generation, explicit params, batch action matching)
-- [ ] 03-02-PLAN.md: CLI entry point with v3 spec fetch and integration tests
+- [x] 03-02-PLAN.md: CLI entry point with v3 spec fetch and integration tests
 
 ### Phase 4: Type Stubs
 **Goal**: Generator produces .pyi type stubs via Jinja2 for static analysis
