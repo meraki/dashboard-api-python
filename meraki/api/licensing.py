@@ -5,8 +5,6 @@ class Licensing(object):
     def __init__(self, session):
         super(Licensing, self).__init__()
         self._session = session
-        
-
 
     def getAdministeredLicensingSubscriptionEntitlements(self, **kwargs):
         """
@@ -19,25 +17,29 @@ class Licensing(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['licensing', 'configure', 'subscription', 'entitlements'],
-            'operation': 'getAdministeredLicensingSubscriptionEntitlements'
+            "tags": ["licensing", "configure", "subscription", "entitlements"],
+            "operation": "getAdministeredLicensingSubscriptionEntitlements",
         }
-        resource = f'/administered/licensing/subscription/entitlements'
+        resource = "/administered/licensing/subscription/entitlements"
 
-        query_params = ['skus', ]
+        query_params = [
+            "skus",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['skus', ]
+        array_params = [
+            "skus",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get(metadata, resource, params)
-        
 
-
-    def getAdministeredLicensingSubscriptionSubscriptions(self, organizationIds: list, total_pages=1, direction='next', **kwargs):
+    def getAdministeredLicensingSubscriptionSubscriptions(
+        self, organizationIds: list, total_pages=1, direction="next", **kwargs
+    ):
         """
         **List available subscriptions**
         https://developer.cisco.com/meraki/api-v1/#!get-administered-licensing-subscription-subscriptions
@@ -49,34 +51,50 @@ class Licensing(object):
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - subscriptionIds (array): List of subscription ids to fetch
+        - startDate (string): Filter subscriptions by start date, ISO 8601 format. To filter with a range of dates, use 'startDate[<option>]=?' in the request. Accepted options include lt, gt, lte, gte.
+        - endDate (string): Filter subscriptions by end date, ISO 8601 format. To filter with a range of dates, use 'endDate[<option>]=?' in the request. Accepted options include lt, gt, lte, gte.
         - statuses (array): List of statuses that returned subscriptions can have
         - productTypes (array): List of product types that returned subscriptions need to have entitlements for.
         - skus (array): List of SKUs that returned subscriptions need to have entitlements for.
         - name (string): Search for subscription name
-        - startDate (string): Filter subscriptions by start date, ISO 8601 format. To filter with a range of dates, use 'startDate[<option>]=?' in the request. Accepted options include lt, gt, lte, gte.
-        - endDate (string): Filter subscriptions by end date, ISO 8601 format. To filter with a range of dates, use 'endDate[<option>]=?' in the request. Accepted options include lt, gt, lte, gte.
         """
 
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['licensing', 'configure', 'subscription', 'subscriptions'],
-            'operation': 'getAdministeredLicensingSubscriptionSubscriptions'
+            "tags": ["licensing", "configure", "subscription", "subscriptions"],
+            "operation": "getAdministeredLicensingSubscriptionSubscriptions",
         }
-        resource = f'/administered/licensing/subscription/subscriptions'
+        resource = "/administered/licensing/subscription/subscriptions"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'subscriptionIds', 'organizationIds', 'statuses', 'productTypes', 'skus', 'name', 'startDate', 'endDate', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "subscriptionIds",
+            "organizationIds",
+            "startDate",
+            "endDate",
+            "statuses",
+            "productTypes",
+            "skus",
+            "name",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['subscriptionIds', 'organizationIds', 'statuses', 'productTypes', 'skus', ]
+        array_params = [
+            "subscriptionIds",
+            "organizationIds",
+            "statuses",
+            "productTypes",
+            "skus",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def claimAdministeredLicensingSubscriptionSubscriptions(self, claimKey: str, organizationId: str, **kwargs):
         """
@@ -93,17 +111,20 @@ class Licensing(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['licensing', 'configure', 'subscription', 'subscriptions'],
-            'operation': 'claimAdministeredLicensingSubscriptionSubscriptions'
+            "tags": ["licensing", "configure", "subscription", "subscriptions"],
+            "operation": "claimAdministeredLicensingSubscriptionSubscriptions",
         }
-        resource = f'/administered/licensing/subscription/subscriptions/claim'
+        resource = "/administered/licensing/subscription/subscriptions/claim"
 
-        body_params = ['claimKey', 'organizationId', 'name', 'description', ]
+        body_params = [
+            "claimKey",
+            "organizationId",
+            "name",
+            "description",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def validateAdministeredLicensingSubscriptionSubscriptionsClaimKey(self, claimKey: str):
         """
@@ -116,17 +137,17 @@ class Licensing(object):
         kwargs = locals()
 
         metadata = {
-            'tags': ['licensing', 'configure', 'subscription', 'subscriptions', 'claimKey'],
-            'operation': 'validateAdministeredLicensingSubscriptionSubscriptionsClaimKey'
+            "tags": ["licensing", "configure", "subscription", "subscriptions", "claimKey"],
+            "operation": "validateAdministeredLicensingSubscriptionSubscriptionsClaimKey",
         }
-        resource = f'/administered/licensing/subscription/subscriptions/claimKey/validate'
+        resource = "/administered/licensing/subscription/subscriptions/claimKey/validate"
 
-        body_params = ['claimKey', ]
+        body_params = [
+            "claimKey",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getAdministeredLicensingSubscriptionSubscriptionsComplianceStatuses(self, organizationIds: list, **kwargs):
         """
@@ -140,23 +161,27 @@ class Licensing(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['licensing', 'configure', 'subscription', 'subscriptions', 'compliance', 'statuses'],
-            'operation': 'getAdministeredLicensingSubscriptionSubscriptionsComplianceStatuses'
+            "tags": ["licensing", "configure", "subscription", "subscriptions", "compliance", "statuses"],
+            "operation": "getAdministeredLicensingSubscriptionSubscriptionsComplianceStatuses",
         }
-        resource = f'/administered/licensing/subscription/subscriptions/compliance/statuses'
+        resource = "/administered/licensing/subscription/subscriptions/compliance/statuses"
 
-        query_params = ['organizationIds', 'subscriptionIds', ]
+        query_params = [
+            "organizationIds",
+            "subscriptionIds",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['organizationIds', 'subscriptionIds', ]
+        array_params = [
+            "organizationIds",
+            "subscriptionIds",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def bindAdministeredLicensingSubscriptionSubscription(self, subscriptionId: str, **kwargs):
         """
@@ -171,20 +196,20 @@ class Licensing(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['licensing', 'configure', 'subscription', 'subscriptions'],
-            'operation': 'bindAdministeredLicensingSubscriptionSubscription'
+            "tags": ["licensing", "configure", "subscription", "subscriptions"],
+            "operation": "bindAdministeredLicensingSubscriptionSubscription",
         }
-        subscriptionId = urllib.parse.quote(str(subscriptionId), safe='')
-        resource = f'/administered/licensing/subscription/subscriptions/{subscriptionId}/bind'
+        subscriptionId = urllib.parse.quote(str(subscriptionId), safe="")
+        resource = f"/administered/licensing/subscription/subscriptions/{subscriptionId}/bind"
 
-        body_params = ['networkIds', ]
+        body_params = [
+            "networkIds",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
 
-
-    def getOrganizationLicensingCotermLicenses(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationLicensingCotermLicenses(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **List the licenses in a coterm organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-licensing-coterm-licenses
@@ -202,18 +227,22 @@ class Licensing(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['licensing', 'configure', 'coterm', 'licenses'],
-            'operation': 'getOrganizationLicensingCotermLicenses'
+            "tags": ["licensing", "configure", "coterm", "licenses"],
+            "operation": "getOrganizationLicensingCotermLicenses",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/licensing/coterm/licenses'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/licensing/coterm/licenses"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'invalidated', 'expired', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "invalidated",
+            "expired",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def moveOrganizationLicensingCotermLicenses(self, organizationId: str, destination: dict, licenses: list):
         """
@@ -228,14 +257,16 @@ class Licensing(object):
         kwargs = locals()
 
         metadata = {
-            'tags': ['licensing', 'configure', 'coterm', 'licenses'],
-            'operation': 'moveOrganizationLicensingCotermLicenses'
+            "tags": ["licensing", "configure", "coterm", "licenses"],
+            "operation": "moveOrganizationLicensingCotermLicenses",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/licensing/coterm/licenses/move'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/licensing/coterm/licenses/move"
 
-        body_params = ['destination', 'licenses', ]
+        body_params = [
+            "destination",
+            "licenses",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        

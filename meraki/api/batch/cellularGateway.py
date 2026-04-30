@@ -4,8 +4,6 @@ import urllib
 class ActionBatchCellularGateway(object):
     def __init__(self):
         super(ActionBatchCellularGateway, self).__init__()
-        
-
 
     def updateDeviceCellularGatewayLan(self, serial: str, **kwargs):
         """
@@ -19,25 +17,20 @@ class ActionBatchCellularGateway(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['cellularGateway', 'configure', 'lan'],
-            'operation': 'updateDeviceCellularGatewayLan'
-        }
-        resource = f'/devices/{serial}/cellularGateway/lan'
+        serial = urllib.parse.quote(serial, safe="")
+        resource = f"/devices/{serial}/cellularGateway/lan"
 
-        body_params = ['reservedIpRanges', 'fixedIpAssignments', ]
+        body_params = [
+            "reservedIpRanges",
+            "fixedIpAssignments",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateDeviceCellularGatewayPortForwardingRules(self, serial: str, **kwargs):
         """
@@ -50,25 +43,19 @@ class ActionBatchCellularGateway(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['cellularGateway', 'configure', 'portForwardingRules'],
-            'operation': 'updateDeviceCellularGatewayPortForwardingRules'
-        }
-        resource = f'/devices/{serial}/cellularGateway/portForwardingRules'
+        serial = urllib.parse.quote(serial, safe="")
+        resource = f"/devices/{serial}/cellularGateway/portForwardingRules"
 
-        body_params = ['rules', ]
+        body_params = [
+            "rules",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkCellularGatewayConnectivityMonitoringDestinations(self, networkId: str, **kwargs):
         """
@@ -81,25 +68,19 @@ class ActionBatchCellularGateway(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['cellularGateway', 'configure', 'connectivityMonitoringDestinations'],
-            'operation': 'updateNetworkCellularGatewayConnectivityMonitoringDestinations'
-        }
-        resource = f'/networks/{networkId}/cellularGateway/connectivityMonitoringDestinations'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/cellularGateway/connectivityMonitoringDestinations"
 
-        body_params = ['destinations', ]
+        body_params = [
+            "destinations",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkCellularGatewayDhcp(self, networkId: str, **kwargs):
         """
@@ -114,25 +95,21 @@ class ActionBatchCellularGateway(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['cellularGateway', 'configure', 'dhcp'],
-            'operation': 'updateNetworkCellularGatewayDhcp'
-        }
-        resource = f'/networks/{networkId}/cellularGateway/dhcp'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/cellularGateway/dhcp"
 
-        body_params = ['dhcpLeaseTime', 'dnsNameservers', 'dnsCustomNameservers', ]
+        body_params = [
+            "dhcpLeaseTime",
+            "dnsNameservers",
+            "dnsCustomNameservers",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkCellularGatewaySubnetPool(self, networkId: str, **kwargs):
         """
@@ -146,25 +123,20 @@ class ActionBatchCellularGateway(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['cellularGateway', 'configure', 'subnetPool'],
-            'operation': 'updateNetworkCellularGatewaySubnetPool'
-        }
-        resource = f'/networks/{networkId}/cellularGateway/subnetPool'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/cellularGateway/subnetPool"
 
-        body_params = ['mask', 'cidr', ]
+        body_params = [
+            "mask",
+            "cidr",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkCellularGatewayUplink(self, networkId: str, **kwargs):
         """
@@ -177,25 +149,19 @@ class ActionBatchCellularGateway(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['cellularGateway', 'configure', 'uplink'],
-            'operation': 'updateNetworkCellularGatewayUplink'
-        }
-        resource = f'/networks/{networkId}/cellularGateway/uplink'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/cellularGateway/uplink"
 
-        body_params = ['bandwidthLimits', ]
+        body_params = [
+            "bandwidthLimits",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateOrganizationCellularGatewayEsimsInventory(self, organizationId: str, id: str, **kwargs):
         """
@@ -209,27 +175,24 @@ class ActionBatchCellularGateway(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['cellularGateway', 'configure', 'esims', 'inventory'],
-            'operation': 'updateOrganizationCellularGatewayEsimsInventory'
-        }
-        resource = f'/organizations/{organizationId}/cellularGateway/esims/inventory/{id}'
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        id = urllib.parse.quote(id, safe="")
+        resource = f"/organizations/{organizationId}/cellularGateway/esims/inventory/{id}"
 
-        body_params = ['status', ]
+        body_params = [
+            "status",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
 
-
-
-
-
-    def createOrganizationCellularGatewayEsimsServiceProvidersAccount(self, organizationId: str, accountId: str, apiKey: str, serviceProvider: dict, title: str, username: str):
+    def createOrganizationCellularGatewayEsimsServiceProvidersAccount(
+        self, organizationId: str, accountId: str, apiKey: str, serviceProvider: dict, title: str, username: str
+    ):
         """
         **Add a service provider account.**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-cellular-gateway-esims-service-providers-account
@@ -244,25 +207,23 @@ class ActionBatchCellularGateway(object):
 
         kwargs = locals()
 
-        metadata = {
-            'tags': ['cellularGateway', 'configure', 'esims', 'serviceProviders', 'accounts'],
-            'operation': 'createOrganizationCellularGatewayEsimsServiceProvidersAccount'
-        }
-        resource = f'/organizations/{organizationId}/cellularGateway/esims/serviceProviders/accounts'
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/cellularGateway/esims/serviceProviders/accounts"
 
-        body_params = ['accountId', 'apiKey', 'serviceProvider', 'title', 'username', ]
+        body_params = [
+            "accountId",
+            "apiKey",
+            "serviceProvider",
+            "title",
+            "username",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "create",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateOrganizationCellularGatewayEsimsServiceProvidersAccount(self, organizationId: str, accountId: str, **kwargs):
         """
@@ -277,25 +238,21 @@ class ActionBatchCellularGateway(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['cellularGateway', 'configure', 'esims', 'serviceProviders', 'accounts'],
-            'operation': 'updateOrganizationCellularGatewayEsimsServiceProvidersAccount'
-        }
-        resource = f'/organizations/{organizationId}/cellularGateway/esims/serviceProviders/accounts/{accountId}'
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        accountId = urllib.parse.quote(accountId, safe="")
+        resource = f"/organizations/{organizationId}/cellularGateway/esims/serviceProviders/accounts/{accountId}"
 
-        body_params = ['title', 'apiKey', ]
+        body_params = [
+            "title",
+            "apiKey",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def deleteOrganizationCellularGatewayEsimsServiceProvidersAccount(self, organizationId: str, accountId: str):
         """
@@ -306,22 +263,15 @@ class ActionBatchCellularGateway(object):
         - accountId (string): Account ID
         """
 
-        metadata = {
-            'tags': ['cellularGateway', 'configure', 'esims', 'serviceProviders', 'accounts'],
-            'operation': 'deleteOrganizationCellularGatewayEsimsServiceProvidersAccount'
-        }
-        resource = f'/organizations/{organizationId}/cellularGateway/esims/serviceProviders/accounts/{accountId}'
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        accountId = urllib.parse.quote(accountId, safe="")
+        resource = f"/organizations/{organizationId}/cellularGateway/esims/serviceProviders/accounts/{accountId}"
 
         action = {
             "resource": resource,
             "operation": "destroy",
         }
         return action
-        
-
-
-
-
 
     def createOrganizationCellularGatewayEsimsSwap(self, organizationId: str, swaps: list):
         """
@@ -334,25 +284,19 @@ class ActionBatchCellularGateway(object):
 
         kwargs = locals()
 
-        metadata = {
-            'tags': ['cellularGateway', 'configure', 'esims', 'swap'],
-            'operation': 'createOrganizationCellularGatewayEsimsSwap'
-        }
-        resource = f'/organizations/{organizationId}/cellularGateway/esims/swap'
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/cellularGateway/esims/swap"
 
-        body_params = ['swaps', ]
+        body_params = [
+            "swaps",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "swap",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateOrganizationCellularGatewayEsimsSwap(self, id: str, organizationId: str):
         """
@@ -363,18 +307,12 @@ class ActionBatchCellularGateway(object):
         - organizationId (string): Organization ID
         """
 
-        metadata = {
-            'tags': ['cellularGateway', 'configure', 'esims', 'swap'],
-            'operation': 'updateOrganizationCellularGatewayEsimsSwap'
-        }
-        resource = f'/organizations/{organizationId}/cellularGateway/esims/swap/{id}'
+        id = urllib.parse.quote(id, safe="")
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/cellularGateway/esims/swap/{id}"
 
         action = {
             "resource": resource,
             "operation": "status",
         }
         return action
-        
-
-
-

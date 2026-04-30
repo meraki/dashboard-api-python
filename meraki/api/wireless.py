@@ -5,8 +5,6 @@ class Wireless(object):
     def __init__(self, session):
         super(Wireless, self).__init__()
         self._session = session
-        
-
 
     def updateDeviceWirelessAlternateManagementInterfaceIpv6(self, serial: str, **kwargs):
         """
@@ -20,18 +18,18 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'alternateManagementInterface', 'ipv6'],
-            'operation': 'updateDeviceWirelessAlternateManagementInterfaceIpv6'
+            "tags": ["wireless", "configure", "alternateManagementInterface", "ipv6"],
+            "operation": "updateDeviceWirelessAlternateManagementInterfaceIpv6",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/wireless/alternateManagementInterface/ipv6'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/wireless/alternateManagementInterface/ipv6"
 
-        body_params = ['addresses', ]
+        body_params = [
+            "addresses",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getDeviceWirelessBluetoothSettings(self, serial: str):
         """
@@ -42,15 +40,13 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'bluetooth', 'settings'],
-            'operation': 'getDeviceWirelessBluetoothSettings'
+            "tags": ["wireless", "configure", "bluetooth", "settings"],
+            "operation": "getDeviceWirelessBluetoothSettings",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/wireless/bluetooth/settings'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/wireless/bluetooth/settings"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateDeviceWirelessBluetoothSettings(self, serial: str, **kwargs):
         """
@@ -69,18 +65,20 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'bluetooth', 'settings'],
-            'operation': 'updateDeviceWirelessBluetoothSettings'
+            "tags": ["wireless", "configure", "bluetooth", "settings"],
+            "operation": "updateDeviceWirelessBluetoothSettings",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/wireless/bluetooth/settings'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/wireless/bluetooth/settings"
 
-        body_params = ['uuid', 'major', 'minor', ]
+        body_params = [
+            "uuid",
+            "major",
+            "minor",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getDeviceWirelessConnectionStats(self, serial: str, **kwargs):
         """
@@ -93,32 +91,36 @@ class Wireless(object):
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
         - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
-        - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
         """
 
         kwargs.update(locals())
 
-        if 'band' in kwargs:
-            options = ['2.4', '5', '6']
-            assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
-        if 'ssid' in kwargs:
+        if "band" in kwargs:
+            options = ["2.4", "5", "6"]
+            assert kwargs["band"] in options, f'''"band" cannot be "{kwargs["band"]}", & must be set to one of: {options}'''
+        if "ssid" in kwargs:
             options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-            assert kwargs['ssid'] in options, f'''"ssid" cannot be "{kwargs['ssid']}", & must be set to one of: {options}'''
+            assert kwargs["ssid"] in options, f'''"ssid" cannot be "{kwargs["ssid"]}", & must be set to one of: {options}'''
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'connectionStats'],
-            'operation': 'getDeviceWirelessConnectionStats'
+            "tags": ["wireless", "monitor", "connectionStats"],
+            "operation": "getDeviceWirelessConnectionStats",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/wireless/connectionStats'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/wireless/connectionStats"
 
-        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "band",
+            "ssid",
+            "apTag",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getDeviceWirelessElectronicShelfLabel(self, serial: str):
         """
@@ -129,15 +131,13 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'electronicShelfLabel'],
-            'operation': 'getDeviceWirelessElectronicShelfLabel'
+            "tags": ["wireless", "configure", "electronicShelfLabel"],
+            "operation": "getDeviceWirelessElectronicShelfLabel",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/wireless/electronicShelfLabel'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/wireless/electronicShelfLabel"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateDeviceWirelessElectronicShelfLabel(self, serial: str, **kwargs):
         """
@@ -152,18 +152,19 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'electronicShelfLabel'],
-            'operation': 'updateDeviceWirelessElectronicShelfLabel'
+            "tags": ["wireless", "configure", "electronicShelfLabel"],
+            "operation": "updateDeviceWirelessElectronicShelfLabel",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/wireless/electronicShelfLabel'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/wireless/electronicShelfLabel"
 
-        body_params = ['channel', 'enabled', ]
+        body_params = [
+            "channel",
+            "enabled",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getDeviceWirelessLatencyStats(self, serial: str, **kwargs):
         """
@@ -183,26 +184,33 @@ class Wireless(object):
 
         kwargs.update(locals())
 
-        if 'band' in kwargs:
-            options = ['2.4', '5', '6']
-            assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
-        if 'ssid' in kwargs:
+        if "band" in kwargs:
+            options = ["2.4", "5", "6"]
+            assert kwargs["band"] in options, f'''"band" cannot be "{kwargs["band"]}", & must be set to one of: {options}'''
+        if "ssid" in kwargs:
             options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-            assert kwargs['ssid'] in options, f'''"ssid" cannot be "{kwargs['ssid']}", & must be set to one of: {options}'''
+            assert kwargs["ssid"] in options, f'''"ssid" cannot be "{kwargs["ssid"]}", & must be set to one of: {options}'''
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'latencyStats'],
-            'operation': 'getDeviceWirelessLatencyStats'
+            "tags": ["wireless", "monitor", "latencyStats"],
+            "operation": "getDeviceWirelessLatencyStats",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/wireless/latencyStats'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/wireless/latencyStats"
 
-        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'apTag', 'vlan', 'fields', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "band",
+            "ssid",
+            "apTag",
+            "vlan",
+            "fields",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getDeviceWirelessRadioSettings(self, serial: str):
         """
@@ -213,19 +221,17 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'radio', 'settings'],
-            'operation': 'getDeviceWirelessRadioSettings'
+            "tags": ["wireless", "configure", "radio", "settings"],
+            "operation": "getDeviceWirelessRadioSettings",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/wireless/radio/settings'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/wireless/radio/settings"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateDeviceWirelessRadioSettings(self, serial: str, **kwargs):
         """
-        **Update the radio settings overrides of a device, which take precedence over RF profiles.**
+        **Update 2.4 GHz and 5 GHz radio settings (channel, channel width, power) that override RF profiles**
         https://developer.cisco.com/meraki/api-v1/#!update-device-wireless-radio-settings
 
         - serial (string): Serial
@@ -237,18 +243,20 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'radio', 'settings'],
-            'operation': 'updateDeviceWirelessRadioSettings'
+            "tags": ["wireless", "configure", "radio", "settings"],
+            "operation": "updateDeviceWirelessRadioSettings",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/wireless/radio/settings'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/wireless/radio/settings"
 
-        body_params = ['rfProfileId', 'twoFourGhzSettings', 'fiveGhzSettings', ]
+        body_params = [
+            "rfProfileId",
+            "twoFourGhzSettings",
+            "fiveGhzSettings",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getDeviceWirelessStatus(self, serial: str):
         """
@@ -259,15 +267,13 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'status'],
-            'operation': 'getDeviceWirelessStatus'
+            "tags": ["wireless", "monitor", "status"],
+            "operation": "getDeviceWirelessStatus",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/wireless/status'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/wireless/status"
 
         return self._session.get(metadata, resource)
-        
-
 
     def createDeviceWirelessZigbeeEnrollment(self, serial: str):
         """
@@ -278,15 +284,13 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'zigbee', 'enrollments'],
-            'operation': 'createDeviceWirelessZigbeeEnrollment'
+            "tags": ["wireless", "configure", "zigbee", "enrollments"],
+            "operation": "createDeviceWirelessZigbeeEnrollment",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/wireless/zigbee/enrollments'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/wireless/zigbee/enrollments"
 
         return self._session.post(metadata, resource)
-        
-
 
     def getDeviceWirelessZigbeeEnrollment(self, serial: str, enrollmentId: str):
         """
@@ -298,16 +302,14 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'zigbee', 'enrollments'],
-            'operation': 'getDeviceWirelessZigbeeEnrollment'
+            "tags": ["wireless", "configure", "zigbee", "enrollments"],
+            "operation": "getDeviceWirelessZigbeeEnrollment",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        enrollmentId = urllib.parse.quote(str(enrollmentId), safe='')
-        resource = f'/devices/{serial}/wireless/zigbee/enrollments/{enrollmentId}'
+        serial = urllib.parse.quote(str(serial), safe="")
+        enrollmentId = urllib.parse.quote(str(enrollmentId), safe="")
+        resource = f"/devices/{serial}/wireless/zigbee/enrollments/{enrollmentId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def getNetworkWirelessAirMarshal(self, networkId: str, **kwargs):
         """
@@ -322,18 +324,19 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'airMarshal'],
-            'operation': 'getNetworkWirelessAirMarshal'
+            "tags": ["wireless", "monitor", "airMarshal"],
+            "operation": "getNetworkWirelessAirMarshal",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/airMarshal'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/airMarshal"
 
-        query_params = ['t0', 'timespan', ]
+        query_params = [
+            "t0",
+            "timespan",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def createNetworkWirelessAirMarshalRule(self, networkId: str, type: str, match: dict):
         """
@@ -347,23 +350,24 @@ class Wireless(object):
 
         kwargs = locals()
 
-        if 'type' in kwargs:
-            options = ['alert', 'allow', 'block']
-            assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
+        if "type" in kwargs:
+            options = ["alert", "allow", "block"]
+            assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
 
         metadata = {
-            'tags': ['wireless', 'configure', 'airMarshal', 'rules'],
-            'operation': 'createNetworkWirelessAirMarshalRule'
+            "tags": ["wireless", "configure", "airMarshal", "rules"],
+            "operation": "createNetworkWirelessAirMarshalRule",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/airMarshal/rules'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/airMarshal/rules"
 
-        body_params = ['type', 'match', ]
+        body_params = [
+            "type",
+            "match",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def updateNetworkWirelessAirMarshalRule(self, networkId: str, ruleId: str, **kwargs):
         """
@@ -378,24 +382,25 @@ class Wireless(object):
 
         kwargs.update(locals())
 
-        if 'type' in kwargs:
-            options = ['alert', 'allow', 'block']
-            assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
+        if "type" in kwargs:
+            options = ["alert", "allow", "block"]
+            assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
 
         metadata = {
-            'tags': ['wireless', 'configure', 'airMarshal', 'rules'],
-            'operation': 'updateNetworkWirelessAirMarshalRule'
+            "tags": ["wireless", "configure", "airMarshal", "rules"],
+            "operation": "updateNetworkWirelessAirMarshalRule",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        ruleId = urllib.parse.quote(str(ruleId), safe='')
-        resource = f'/networks/{networkId}/wireless/airMarshal/rules/{ruleId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        ruleId = urllib.parse.quote(str(ruleId), safe="")
+        resource = f"/networks/{networkId}/wireless/airMarshal/rules/{ruleId}"
 
-        body_params = ['type', 'match', ]
+        body_params = [
+            "type",
+            "match",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteNetworkWirelessAirMarshalRule(self, networkId: str, ruleId: str):
         """
@@ -407,16 +412,14 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'airMarshal', 'rules'],
-            'operation': 'deleteNetworkWirelessAirMarshalRule'
+            "tags": ["wireless", "configure", "airMarshal", "rules"],
+            "operation": "deleteNetworkWirelessAirMarshalRule",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        ruleId = urllib.parse.quote(str(ruleId), safe='')
-        resource = f'/networks/{networkId}/wireless/airMarshal/rules/{ruleId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        ruleId = urllib.parse.quote(str(ruleId), safe="")
+        resource = f"/networks/{networkId}/wireless/airMarshal/rules/{ruleId}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def updateNetworkWirelessAirMarshalSettings(self, networkId: str, defaultPolicy: str):
         """
@@ -429,23 +432,25 @@ class Wireless(object):
 
         kwargs = locals()
 
-        if 'defaultPolicy' in kwargs:
-            options = ['allow', 'block']
-            assert kwargs['defaultPolicy'] in options, f'''"defaultPolicy" cannot be "{kwargs['defaultPolicy']}", & must be set to one of: {options}'''
+        if "defaultPolicy" in kwargs:
+            options = ["allow", "block"]
+            assert kwargs["defaultPolicy"] in options, (
+                f'''"defaultPolicy" cannot be "{kwargs["defaultPolicy"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['wireless', 'configure', 'airMarshal', 'settings'],
-            'operation': 'updateNetworkWirelessAirMarshalSettings'
+            "tags": ["wireless", "configure", "airMarshal", "settings"],
+            "operation": "updateNetworkWirelessAirMarshalSettings",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/airMarshal/settings'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/airMarshal/settings"
 
-        body_params = ['defaultPolicy', ]
+        body_params = [
+            "defaultPolicy",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkWirelessAlternateManagementInterface(self, networkId: str):
         """
@@ -456,15 +461,13 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'alternateManagementInterface'],
-            'operation': 'getNetworkWirelessAlternateManagementInterface'
+            "tags": ["wireless", "configure", "alternateManagementInterface"],
+            "operation": "getNetworkWirelessAlternateManagementInterface",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/alternateManagementInterface'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/alternateManagementInterface"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkWirelessAlternateManagementInterface(self, networkId: str, **kwargs):
         """
@@ -481,18 +484,21 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'alternateManagementInterface'],
-            'operation': 'updateNetworkWirelessAlternateManagementInterface'
+            "tags": ["wireless", "configure", "alternateManagementInterface"],
+            "operation": "updateNetworkWirelessAlternateManagementInterface",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/alternateManagementInterface'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/alternateManagementInterface"
 
-        body_params = ['enabled', 'vlanId', 'protocols', 'accessPoints', ]
+        body_params = [
+            "enabled",
+            "vlanId",
+            "protocols",
+            "accessPoints",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkWirelessBilling(self, networkId: str):
         """
@@ -503,15 +509,13 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'billing'],
-            'operation': 'getNetworkWirelessBilling'
+            "tags": ["wireless", "configure", "billing"],
+            "operation": "getNetworkWirelessBilling",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/billing'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/billing"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkWirelessBilling(self, networkId: str, **kwargs):
         """
@@ -526,18 +530,19 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'billing'],
-            'operation': 'updateNetworkWirelessBilling'
+            "tags": ["wireless", "configure", "billing"],
+            "operation": "updateNetworkWirelessBilling",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/billing'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/billing"
 
-        body_params = ['currency', 'plans', ]
+        body_params = [
+            "currency",
+            "plans",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkWirelessBluetoothSettings(self, networkId: str):
         """
@@ -548,15 +553,13 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'bluetooth', 'settings'],
-            'operation': 'getNetworkWirelessBluetoothSettings'
+            "tags": ["wireless", "configure", "bluetooth", "settings"],
+            "operation": "getNetworkWirelessBluetoothSettings",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/bluetooth/settings'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/bluetooth/settings"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkWirelessBluetoothSettings(self, networkId: str, **kwargs):
         """
@@ -574,23 +577,30 @@ class Wireless(object):
 
         kwargs.update(locals())
 
-        if 'majorMinorAssignmentMode' in kwargs:
-            options = ['Non-unique', 'Unique']
-            assert kwargs['majorMinorAssignmentMode'] in options, f'''"majorMinorAssignmentMode" cannot be "{kwargs['majorMinorAssignmentMode']}", & must be set to one of: {options}'''
+        if "majorMinorAssignmentMode" in kwargs:
+            options = ["Non-unique", "Unique"]
+            assert kwargs["majorMinorAssignmentMode"] in options, (
+                f'''"majorMinorAssignmentMode" cannot be "{kwargs["majorMinorAssignmentMode"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['wireless', 'configure', 'bluetooth', 'settings'],
-            'operation': 'updateNetworkWirelessBluetoothSettings'
+            "tags": ["wireless", "configure", "bluetooth", "settings"],
+            "operation": "updateNetworkWirelessBluetoothSettings",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/bluetooth/settings'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/bluetooth/settings"
 
-        body_params = ['scanningEnabled', 'advertisingEnabled', 'uuid', 'majorMinorAssignmentMode', 'major', 'minor', ]
+        body_params = [
+            "scanningEnabled",
+            "advertisingEnabled",
+            "uuid",
+            "majorMinorAssignmentMode",
+            "major",
+            "minor",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkWirelessChannelUtilizationHistory(self, networkId: str, **kwargs):
         """
@@ -611,23 +621,31 @@ class Wireless(object):
 
         kwargs.update(locals())
 
-        if 'band' in kwargs:
-            options = ['2.4', '5', '6']
-            assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
+        if "band" in kwargs:
+            options = ["2.4", "5", "6"]
+            assert kwargs["band"] in options, f'''"band" cannot be "{kwargs["band"]}", & must be set to one of: {options}'''
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'channelUtilizationHistory'],
-            'operation': 'getNetworkWirelessChannelUtilizationHistory'
+            "tags": ["wireless", "monitor", "channelUtilizationHistory"],
+            "operation": "getNetworkWirelessChannelUtilizationHistory",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/channelUtilizationHistory'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/channelUtilizationHistory"
 
-        query_params = ['t0', 't1', 'timespan', 'resolution', 'autoResolution', 'clientId', 'deviceSerial', 'apTag', 'band', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "resolution",
+            "autoResolution",
+            "clientId",
+            "deviceSerial",
+            "apTag",
+            "band",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getNetworkWirelessClientCountHistory(self, networkId: str, **kwargs):
         """
@@ -649,23 +667,32 @@ class Wireless(object):
 
         kwargs.update(locals())
 
-        if 'band' in kwargs:
-            options = ['2.4', '5', '6']
-            assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
+        if "band" in kwargs:
+            options = ["2.4", "5", "6"]
+            assert kwargs["band"] in options, f'''"band" cannot be "{kwargs["band"]}", & must be set to one of: {options}'''
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'clientCountHistory'],
-            'operation': 'getNetworkWirelessClientCountHistory'
+            "tags": ["wireless", "monitor", "clientCountHistory"],
+            "operation": "getNetworkWirelessClientCountHistory",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/clientCountHistory'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/clientCountHistory"
 
-        query_params = ['t0', 't1', 'timespan', 'resolution', 'autoResolution', 'clientId', 'deviceSerial', 'apTag', 'band', 'ssid', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "resolution",
+            "autoResolution",
+            "clientId",
+            "deviceSerial",
+            "apTag",
+            "band",
+            "ssid",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getNetworkWirelessClientsConnectionStats(self, networkId: str, **kwargs):
         """
@@ -678,32 +705,36 @@ class Wireless(object):
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
         - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
-        - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
         """
 
         kwargs.update(locals())
 
-        if 'band' in kwargs:
-            options = ['2.4', '5', '6']
-            assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
-        if 'ssid' in kwargs:
+        if "band" in kwargs:
+            options = ["2.4", "5", "6"]
+            assert kwargs["band"] in options, f'''"band" cannot be "{kwargs["band"]}", & must be set to one of: {options}'''
+        if "ssid" in kwargs:
             options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-            assert kwargs['ssid'] in options, f'''"ssid" cannot be "{kwargs['ssid']}", & must be set to one of: {options}'''
+            assert kwargs["ssid"] in options, f'''"ssid" cannot be "{kwargs["ssid"]}", & must be set to one of: {options}'''
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'clients', 'connectionStats'],
-            'operation': 'getNetworkWirelessClientsConnectionStats'
+            "tags": ["wireless", "monitor", "clients", "connectionStats"],
+            "operation": "getNetworkWirelessClientsConnectionStats",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/clients/connectionStats'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/clients/connectionStats"
 
-        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "band",
+            "ssid",
+            "apTag",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getNetworkWirelessClientsLatencyStats(self, networkId: str, **kwargs):
         """
@@ -723,26 +754,33 @@ class Wireless(object):
 
         kwargs.update(locals())
 
-        if 'band' in kwargs:
-            options = ['2.4', '5', '6']
-            assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
-        if 'ssid' in kwargs:
+        if "band" in kwargs:
+            options = ["2.4", "5", "6"]
+            assert kwargs["band"] in options, f'''"band" cannot be "{kwargs["band"]}", & must be set to one of: {options}'''
+        if "ssid" in kwargs:
             options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-            assert kwargs['ssid'] in options, f'''"ssid" cannot be "{kwargs['ssid']}", & must be set to one of: {options}'''
+            assert kwargs["ssid"] in options, f'''"ssid" cannot be "{kwargs["ssid"]}", & must be set to one of: {options}'''
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'clients', 'latencyStats'],
-            'operation': 'getNetworkWirelessClientsLatencyStats'
+            "tags": ["wireless", "monitor", "clients", "latencyStats"],
+            "operation": "getNetworkWirelessClientsLatencyStats",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/clients/latencyStats'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/clients/latencyStats"
 
-        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'apTag', 'vlan', 'fields', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "band",
+            "ssid",
+            "apTag",
+            "vlan",
+            "fields",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getNetworkWirelessClientConnectionStats(self, networkId: str, clientId: str, **kwargs):
         """
@@ -756,35 +794,41 @@ class Wireless(object):
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
         - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
-        - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
         """
 
         kwargs.update(locals())
 
-        if 'band' in kwargs:
-            options = ['2.4', '5', '6']
-            assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
-        if 'ssid' in kwargs:
+        if "band" in kwargs:
+            options = ["2.4", "5", "6"]
+            assert kwargs["band"] in options, f'''"band" cannot be "{kwargs["band"]}", & must be set to one of: {options}'''
+        if "ssid" in kwargs:
             options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-            assert kwargs['ssid'] in options, f'''"ssid" cannot be "{kwargs['ssid']}", & must be set to one of: {options}'''
+            assert kwargs["ssid"] in options, f'''"ssid" cannot be "{kwargs["ssid"]}", & must be set to one of: {options}'''
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'clients', 'connectionStats'],
-            'operation': 'getNetworkWirelessClientConnectionStats'
+            "tags": ["wireless", "monitor", "clients", "connectionStats"],
+            "operation": "getNetworkWirelessClientConnectionStats",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        clientId = urllib.parse.quote(str(clientId), safe='')
-        resource = f'/networks/{networkId}/wireless/clients/{clientId}/connectionStats'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        clientId = urllib.parse.quote(str(clientId), safe="")
+        resource = f"/networks/{networkId}/wireless/clients/{clientId}/connectionStats"
 
-        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "band",
+            "ssid",
+            "apTag",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
 
-
-    def getNetworkWirelessClientConnectivityEvents(self, networkId: str, clientId: str, total_pages=1, direction='next', **kwargs):
+    def getNetworkWirelessClientConnectivityEvents(
+        self, networkId: str, clientId: str, total_pages=1, direction="next", **kwargs
+    ):
         """
         **List the wireless connectivity events for a client within a network in the timespan.**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-client-connectivity-events
@@ -809,36 +853,54 @@ class Wireless(object):
 
         kwargs.update(locals())
 
-        if 'sortOrder' in kwargs:
-            options = ['ascending', 'descending']
-            assert kwargs['sortOrder'] in options, f'''"sortOrder" cannot be "{kwargs['sortOrder']}", & must be set to one of: {options}'''
-        if 'band' in kwargs:
-            options = ['2.4', '5', '6']
-            assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
-        if 'ssidNumber' in kwargs:
+        if "sortOrder" in kwargs:
+            options = ["ascending", "descending"]
+            assert kwargs["sortOrder"] in options, (
+                f'''"sortOrder" cannot be "{kwargs["sortOrder"]}", & must be set to one of: {options}'''
+            )
+        if "band" in kwargs:
+            options = ["2.4", "5", "6"]
+            assert kwargs["band"] in options, f'''"band" cannot be "{kwargs["band"]}", & must be set to one of: {options}'''
+        if "ssidNumber" in kwargs:
             options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-            assert kwargs['ssidNumber'] in options, f'''"ssidNumber" cannot be "{kwargs['ssidNumber']}", & must be set to one of: {options}'''
+            assert kwargs["ssidNumber"] in options, (
+                f'''"ssidNumber" cannot be "{kwargs["ssidNumber"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'clients', 'connectivityEvents'],
-            'operation': 'getNetworkWirelessClientConnectivityEvents'
+            "tags": ["wireless", "monitor", "clients", "connectivityEvents"],
+            "operation": "getNetworkWirelessClientConnectivityEvents",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        clientId = urllib.parse.quote(str(clientId), safe='')
-        resource = f'/networks/{networkId}/wireless/clients/{clientId}/connectivityEvents'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        clientId = urllib.parse.quote(str(clientId), safe="")
+        resource = f"/networks/{networkId}/wireless/clients/{clientId}/connectivityEvents"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'sortOrder', 't0', 't1', 'timespan', 'types', 'band', 'ssidNumber', 'includedSeverities', 'deviceSerial', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "sortOrder",
+            "t0",
+            "t1",
+            "timespan",
+            "types",
+            "band",
+            "ssidNumber",
+            "includedSeverities",
+            "deviceSerial",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['types', 'includedSeverities', ]
+        array_params = [
+            "types",
+            "includedSeverities",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def getNetworkWirelessClientLatencyHistory(self, networkId: str, clientId: str, **kwargs):
         """
@@ -856,19 +918,22 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'clients', 'latencyHistory'],
-            'operation': 'getNetworkWirelessClientLatencyHistory'
+            "tags": ["wireless", "monitor", "clients", "latencyHistory"],
+            "operation": "getNetworkWirelessClientLatencyHistory",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        clientId = urllib.parse.quote(str(clientId), safe='')
-        resource = f'/networks/{networkId}/wireless/clients/{clientId}/latencyHistory'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        clientId = urllib.parse.quote(str(clientId), safe="")
+        resource = f"/networks/{networkId}/wireless/clients/{clientId}/latencyHistory"
 
-        query_params = ['t0', 't1', 'timespan', 'resolution', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "resolution",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getNetworkWirelessClientLatencyStats(self, networkId: str, clientId: str, **kwargs):
         """
@@ -889,27 +954,34 @@ class Wireless(object):
 
         kwargs.update(locals())
 
-        if 'band' in kwargs:
-            options = ['2.4', '5', '6']
-            assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
-        if 'ssid' in kwargs:
+        if "band" in kwargs:
+            options = ["2.4", "5", "6"]
+            assert kwargs["band"] in options, f'''"band" cannot be "{kwargs["band"]}", & must be set to one of: {options}'''
+        if "ssid" in kwargs:
             options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-            assert kwargs['ssid'] in options, f'''"ssid" cannot be "{kwargs['ssid']}", & must be set to one of: {options}'''
+            assert kwargs["ssid"] in options, f'''"ssid" cannot be "{kwargs["ssid"]}", & must be set to one of: {options}'''
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'clients', 'latencyStats'],
-            'operation': 'getNetworkWirelessClientLatencyStats'
+            "tags": ["wireless", "monitor", "clients", "latencyStats"],
+            "operation": "getNetworkWirelessClientLatencyStats",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        clientId = urllib.parse.quote(str(clientId), safe='')
-        resource = f'/networks/{networkId}/wireless/clients/{clientId}/latencyStats'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        clientId = urllib.parse.quote(str(clientId), safe="")
+        resource = f"/networks/{networkId}/wireless/clients/{clientId}/latencyStats"
 
-        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'apTag', 'vlan', 'fields', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "band",
+            "ssid",
+            "apTag",
+            "vlan",
+            "fields",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getNetworkWirelessConnectionStats(self, networkId: str, **kwargs):
         """
@@ -922,32 +994,36 @@ class Wireless(object):
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
         - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
-        - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
         """
 
         kwargs.update(locals())
 
-        if 'band' in kwargs:
-            options = ['2.4', '5', '6']
-            assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
-        if 'ssid' in kwargs:
+        if "band" in kwargs:
+            options = ["2.4", "5", "6"]
+            assert kwargs["band"] in options, f'''"band" cannot be "{kwargs["band"]}", & must be set to one of: {options}'''
+        if "ssid" in kwargs:
             options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-            assert kwargs['ssid'] in options, f'''"ssid" cannot be "{kwargs['ssid']}", & must be set to one of: {options}'''
+            assert kwargs["ssid"] in options, f'''"ssid" cannot be "{kwargs["ssid"]}", & must be set to one of: {options}'''
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'connectionStats'],
-            'operation': 'getNetworkWirelessConnectionStats'
+            "tags": ["wireless", "monitor", "connectionStats"],
+            "operation": "getNetworkWirelessConnectionStats",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/connectionStats'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/connectionStats"
 
-        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "band",
+            "ssid",
+            "apTag",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getNetworkWirelessDataRateHistory(self, networkId: str, **kwargs):
         """
@@ -969,23 +1045,32 @@ class Wireless(object):
 
         kwargs.update(locals())
 
-        if 'band' in kwargs:
-            options = ['2.4', '5', '6']
-            assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
+        if "band" in kwargs:
+            options = ["2.4", "5", "6"]
+            assert kwargs["band"] in options, f'''"band" cannot be "{kwargs["band"]}", & must be set to one of: {options}'''
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'dataRateHistory'],
-            'operation': 'getNetworkWirelessDataRateHistory'
+            "tags": ["wireless", "monitor", "dataRateHistory"],
+            "operation": "getNetworkWirelessDataRateHistory",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/dataRateHistory'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/dataRateHistory"
 
-        query_params = ['t0', 't1', 'timespan', 'resolution', 'autoResolution', 'clientId', 'deviceSerial', 'apTag', 'band', 'ssid', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "resolution",
+            "autoResolution",
+            "clientId",
+            "deviceSerial",
+            "apTag",
+            "band",
+            "ssid",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getNetworkWirelessDevicesConnectionStats(self, networkId: str, **kwargs):
         """
@@ -998,32 +1083,36 @@ class Wireless(object):
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
         - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
-        - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
         """
 
         kwargs.update(locals())
 
-        if 'band' in kwargs:
-            options = ['2.4', '5', '6']
-            assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
-        if 'ssid' in kwargs:
+        if "band" in kwargs:
+            options = ["2.4", "5", "6"]
+            assert kwargs["band"] in options, f'''"band" cannot be "{kwargs["band"]}", & must be set to one of: {options}'''
+        if "ssid" in kwargs:
             options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-            assert kwargs['ssid'] in options, f'''"ssid" cannot be "{kwargs['ssid']}", & must be set to one of: {options}'''
+            assert kwargs["ssid"] in options, f'''"ssid" cannot be "{kwargs["ssid"]}", & must be set to one of: {options}'''
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'devices', 'connectionStats'],
-            'operation': 'getNetworkWirelessDevicesConnectionStats'
+            "tags": ["wireless", "monitor", "devices", "connectionStats"],
+            "operation": "getNetworkWirelessDevicesConnectionStats",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/devices/connectionStats'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/devices/connectionStats"
 
-        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "band",
+            "ssid",
+            "apTag",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getNetworkWirelessDevicesLatencyStats(self, networkId: str, **kwargs):
         """
@@ -1043,26 +1132,33 @@ class Wireless(object):
 
         kwargs.update(locals())
 
-        if 'band' in kwargs:
-            options = ['2.4', '5', '6']
-            assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
-        if 'ssid' in kwargs:
+        if "band" in kwargs:
+            options = ["2.4", "5", "6"]
+            assert kwargs["band"] in options, f'''"band" cannot be "{kwargs["band"]}", & must be set to one of: {options}'''
+        if "ssid" in kwargs:
             options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-            assert kwargs['ssid'] in options, f'''"ssid" cannot be "{kwargs['ssid']}", & must be set to one of: {options}'''
+            assert kwargs["ssid"] in options, f'''"ssid" cannot be "{kwargs["ssid"]}", & must be set to one of: {options}'''
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'devices', 'latencyStats'],
-            'operation': 'getNetworkWirelessDevicesLatencyStats'
+            "tags": ["wireless", "monitor", "devices", "latencyStats"],
+            "operation": "getNetworkWirelessDevicesLatencyStats",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/devices/latencyStats'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/devices/latencyStats"
 
-        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'apTag', 'vlan', 'fields', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "band",
+            "ssid",
+            "apTag",
+            "vlan",
+            "fields",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getNetworkWirelessElectronicShelfLabel(self, networkId: str):
         """
@@ -1073,15 +1169,13 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'electronicShelfLabel'],
-            'operation': 'getNetworkWirelessElectronicShelfLabel'
+            "tags": ["wireless", "configure", "electronicShelfLabel"],
+            "operation": "getNetworkWirelessElectronicShelfLabel",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/electronicShelfLabel'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/electronicShelfLabel"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkWirelessElectronicShelfLabel(self, networkId: str, **kwargs):
         """
@@ -1096,23 +1190,25 @@ class Wireless(object):
 
         kwargs.update(locals())
 
-        if 'mode' in kwargs:
-            options = ['Bluetooth', 'high frequency']
-            assert kwargs['mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
+        if "mode" in kwargs:
+            options = ["Bluetooth", "high frequency"]
+            assert kwargs["mode"] in options, f'''"mode" cannot be "{kwargs["mode"]}", & must be set to one of: {options}'''
 
         metadata = {
-            'tags': ['wireless', 'configure', 'electronicShelfLabel'],
-            'operation': 'updateNetworkWirelessElectronicShelfLabel'
+            "tags": ["wireless", "configure", "electronicShelfLabel"],
+            "operation": "updateNetworkWirelessElectronicShelfLabel",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/electronicShelfLabel'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/electronicShelfLabel"
 
-        body_params = ['hostname', 'enabled', 'mode', ]
+        body_params = [
+            "hostname",
+            "enabled",
+            "mode",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkWirelessElectronicShelfLabelConfiguredDevices(self, networkId: str):
         """
@@ -1123,15 +1219,13 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'electronicShelfLabel', 'configuredDevices'],
-            'operation': 'getNetworkWirelessElectronicShelfLabelConfiguredDevices'
+            "tags": ["wireless", "configure", "electronicShelfLabel", "configuredDevices"],
+            "operation": "getNetworkWirelessElectronicShelfLabelConfiguredDevices",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/electronicShelfLabel/configuredDevices'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/electronicShelfLabel/configuredDevices"
 
         return self._session.get(metadata, resource)
-        
-
 
     def getNetworkWirelessEthernetPortsProfiles(self, networkId: str):
         """
@@ -1142,15 +1236,13 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ethernet', 'ports', 'profiles'],
-            'operation': 'getNetworkWirelessEthernetPortsProfiles'
+            "tags": ["wireless", "configure", "ethernet", "ports", "profiles"],
+            "operation": "getNetworkWirelessEthernetPortsProfiles",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/ethernet/ports/profiles'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/ethernet/ports/profiles"
 
         return self._session.get(metadata, resource)
-        
-
 
     def createNetworkWirelessEthernetPortsProfile(self, networkId: str, name: str, ports: list, **kwargs):
         """
@@ -1166,18 +1258,20 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ethernet', 'ports', 'profiles'],
-            'operation': 'createNetworkWirelessEthernetPortsProfile'
+            "tags": ["wireless", "configure", "ethernet", "ports", "profiles"],
+            "operation": "createNetworkWirelessEthernetPortsProfile",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/ethernet/ports/profiles'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/ethernet/ports/profiles"
 
-        body_params = ['name', 'ports', 'usbPorts', ]
+        body_params = [
+            "name",
+            "ports",
+            "usbPorts",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def assignNetworkWirelessEthernetPortsProfiles(self, networkId: str, serials: list, profileId: str):
         """
@@ -1192,18 +1286,19 @@ class Wireless(object):
         kwargs = locals()
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ethernet', 'ports', 'profiles'],
-            'operation': 'assignNetworkWirelessEthernetPortsProfiles'
+            "tags": ["wireless", "configure", "ethernet", "ports", "profiles"],
+            "operation": "assignNetworkWirelessEthernetPortsProfiles",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/ethernet/ports/profiles/assign'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/ethernet/ports/profiles/assign"
 
-        body_params = ['serials', 'profileId', ]
+        body_params = [
+            "serials",
+            "profileId",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def setNetworkWirelessEthernetPortsProfilesDefault(self, networkId: str, profileId: str):
         """
@@ -1217,18 +1312,18 @@ class Wireless(object):
         kwargs = locals()
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ethernet', 'ports', 'profiles'],
-            'operation': 'setNetworkWirelessEthernetPortsProfilesDefault'
+            "tags": ["wireless", "configure", "ethernet", "ports", "profiles"],
+            "operation": "setNetworkWirelessEthernetPortsProfilesDefault",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/ethernet/ports/profiles/setDefault'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/ethernet/ports/profiles/setDefault"
 
-        body_params = ['profileId', ]
+        body_params = [
+            "profileId",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getNetworkWirelessEthernetPortsProfile(self, networkId: str, profileId: str):
         """
@@ -1240,16 +1335,14 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ethernet', 'ports', 'profiles'],
-            'operation': 'getNetworkWirelessEthernetPortsProfile'
+            "tags": ["wireless", "configure", "ethernet", "ports", "profiles"],
+            "operation": "getNetworkWirelessEthernetPortsProfile",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        profileId = urllib.parse.quote(str(profileId), safe='')
-        resource = f'/networks/{networkId}/wireless/ethernet/ports/profiles/{profileId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        profileId = urllib.parse.quote(str(profileId), safe="")
+        resource = f"/networks/{networkId}/wireless/ethernet/ports/profiles/{profileId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkWirelessEthernetPortsProfile(self, networkId: str, profileId: str, **kwargs):
         """
@@ -1266,19 +1359,21 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ethernet', 'ports', 'profiles'],
-            'operation': 'updateNetworkWirelessEthernetPortsProfile'
+            "tags": ["wireless", "configure", "ethernet", "ports", "profiles"],
+            "operation": "updateNetworkWirelessEthernetPortsProfile",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        profileId = urllib.parse.quote(str(profileId), safe='')
-        resource = f'/networks/{networkId}/wireless/ethernet/ports/profiles/{profileId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        profileId = urllib.parse.quote(str(profileId), safe="")
+        resource = f"/networks/{networkId}/wireless/ethernet/ports/profiles/{profileId}"
 
-        body_params = ['name', 'ports', 'usbPorts', ]
+        body_params = [
+            "name",
+            "ports",
+            "usbPorts",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteNetworkWirelessEthernetPortsProfile(self, networkId: str, profileId: str):
         """
@@ -1290,16 +1385,14 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ethernet', 'ports', 'profiles'],
-            'operation': 'deleteNetworkWirelessEthernetPortsProfile'
+            "tags": ["wireless", "configure", "ethernet", "ports", "profiles"],
+            "operation": "deleteNetworkWirelessEthernetPortsProfile",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        profileId = urllib.parse.quote(str(profileId), safe='')
-        resource = f'/networks/{networkId}/wireless/ethernet/ports/profiles/{profileId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        profileId = urllib.parse.quote(str(profileId), safe="")
+        resource = f"/networks/{networkId}/wireless/ethernet/ports/profiles/{profileId}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def getNetworkWirelessFailedConnections(self, networkId: str, **kwargs):
         """
@@ -1312,7 +1405,6 @@ class Wireless(object):
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days.
         - band (string): Filter results by band (either '2.4', '5' or '6'). Note that data prior to February 2020 will not have band information.
         - ssid (integer): Filter results by SSID
-        - vlan (integer): Filter results by VLAN
         - apTag (string): Filter results by AP Tag
         - serial (string): Filter by AP
         - clientId (string): Filter by client MAC
@@ -1320,26 +1412,33 @@ class Wireless(object):
 
         kwargs.update(locals())
 
-        if 'band' in kwargs:
-            options = ['2.4', '5', '6']
-            assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
-        if 'ssid' in kwargs:
+        if "band" in kwargs:
+            options = ["2.4", "5", "6"]
+            assert kwargs["band"] in options, f'''"band" cannot be "{kwargs["band"]}", & must be set to one of: {options}'''
+        if "ssid" in kwargs:
             options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-            assert kwargs['ssid'] in options, f'''"ssid" cannot be "{kwargs['ssid']}", & must be set to one of: {options}'''
+            assert kwargs["ssid"] in options, f'''"ssid" cannot be "{kwargs["ssid"]}", & must be set to one of: {options}'''
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'failedConnections'],
-            'operation': 'getNetworkWirelessFailedConnections'
+            "tags": ["wireless", "monitor", "failedConnections"],
+            "operation": "getNetworkWirelessFailedConnections",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/failedConnections'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/failedConnections"
 
-        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'vlan', 'apTag', 'serial', 'clientId', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "band",
+            "ssid",
+            "apTag",
+            "serial",
+            "clientId",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getNetworkWirelessLatencyHistory(self, networkId: str, **kwargs):
         """
@@ -1362,26 +1461,38 @@ class Wireless(object):
 
         kwargs.update(locals())
 
-        if 'band' in kwargs:
-            options = ['2.4', '5', '6']
-            assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
-        if 'accessCategory' in kwargs:
-            options = ['backgroundTraffic', 'bestEffortTraffic', 'videoTraffic', 'voiceTraffic']
-            assert kwargs['accessCategory'] in options, f'''"accessCategory" cannot be "{kwargs['accessCategory']}", & must be set to one of: {options}'''
+        if "band" in kwargs:
+            options = ["2.4", "5", "6"]
+            assert kwargs["band"] in options, f'''"band" cannot be "{kwargs["band"]}", & must be set to one of: {options}'''
+        if "accessCategory" in kwargs:
+            options = ["backgroundTraffic", "bestEffortTraffic", "videoTraffic", "voiceTraffic"]
+            assert kwargs["accessCategory"] in options, (
+                f'''"accessCategory" cannot be "{kwargs["accessCategory"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'latencyHistory'],
-            'operation': 'getNetworkWirelessLatencyHistory'
+            "tags": ["wireless", "monitor", "latencyHistory"],
+            "operation": "getNetworkWirelessLatencyHistory",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/latencyHistory'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/latencyHistory"
 
-        query_params = ['t0', 't1', 'timespan', 'resolution', 'autoResolution', 'clientId', 'deviceSerial', 'apTag', 'band', 'ssid', 'accessCategory', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "resolution",
+            "autoResolution",
+            "clientId",
+            "deviceSerial",
+            "apTag",
+            "band",
+            "ssid",
+            "accessCategory",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getNetworkWirelessLatencyStats(self, networkId: str, **kwargs):
         """
@@ -1401,26 +1512,33 @@ class Wireless(object):
 
         kwargs.update(locals())
 
-        if 'band' in kwargs:
-            options = ['2.4', '5', '6']
-            assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
-        if 'ssid' in kwargs:
+        if "band" in kwargs:
+            options = ["2.4", "5", "6"]
+            assert kwargs["band"] in options, f'''"band" cannot be "{kwargs["band"]}", & must be set to one of: {options}'''
+        if "ssid" in kwargs:
             options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-            assert kwargs['ssid'] in options, f'''"ssid" cannot be "{kwargs['ssid']}", & must be set to one of: {options}'''
+            assert kwargs["ssid"] in options, f'''"ssid" cannot be "{kwargs["ssid"]}", & must be set to one of: {options}'''
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'latencyStats'],
-            'operation': 'getNetworkWirelessLatencyStats'
+            "tags": ["wireless", "monitor", "latencyStats"],
+            "operation": "getNetworkWirelessLatencyStats",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/latencyStats'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/latencyStats"
 
-        query_params = ['t0', 't1', 'timespan', 'band', 'ssid', 'apTag', 'vlan', 'fields', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "band",
+            "ssid",
+            "apTag",
+            "vlan",
+            "fields",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def updateNetworkWirelessLocationScanning(self, networkId: str, **kwargs):
         """
@@ -1435,20 +1553,21 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'location', 'scanning'],
-            'operation': 'updateNetworkWirelessLocationScanning'
+            "tags": ["wireless", "configure", "location", "scanning"],
+            "operation": "updateNetworkWirelessLocationScanning",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/location/scanning'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/location/scanning"
 
-        body_params = ['enabled', 'api', ]
+        body_params = [
+            "enabled",
+            "api",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
 
-
-    def getNetworkWirelessMeshStatuses(self, networkId: str, total_pages=1, direction='next', **kwargs):
+    def getNetworkWirelessMeshStatuses(self, networkId: str, total_pages=1, direction="next", **kwargs):
         """
         **List wireless mesh statuses for repeaters**
         https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-mesh-statuses
@@ -1464,18 +1583,20 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'meshStatuses'],
-            'operation': 'getNetworkWirelessMeshStatuses'
+            "tags": ["wireless", "monitor", "meshStatuses"],
+            "operation": "getNetworkWirelessMeshStatuses",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/meshStatuses'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/meshStatuses"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def updateNetworkWirelessRadioRrm(self, networkId: str, **kwargs):
         """
@@ -1492,18 +1613,21 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'radio', 'rrm'],
-            'operation': 'updateNetworkWirelessRadioRrm'
+            "tags": ["wireless", "configure", "radio", "rrm"],
+            "operation": "updateNetworkWirelessRadioRrm",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/radio/rrm'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/radio/rrm"
 
-        body_params = ['busyHour', 'channel', 'fra', 'ai', ]
+        body_params = [
+            "busyHour",
+            "channel",
+            "fra",
+            "ai",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkWirelessRfProfiles(self, networkId: str, **kwargs):
         """
@@ -1517,18 +1641,18 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'rfProfiles'],
-            'operation': 'getNetworkWirelessRfProfiles'
+            "tags": ["wireless", "configure", "rfProfiles"],
+            "operation": "getNetworkWirelessRfProfiles",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/rfProfiles'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/rfProfiles"
 
-        query_params = ['includeTemplateProfiles', ]
+        query_params = [
+            "includeTemplateProfiles",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def createNetworkWirelessRfProfile(self, networkId: str, name: str, bandSelectionType: str, **kwargs):
         """
@@ -1551,26 +1675,40 @@ class Wireless(object):
 
         kwargs.update(locals())
 
-        if 'minBitrateType' in kwargs:
-            options = ['band', 'ssid']
-            assert kwargs['minBitrateType'] in options, f'''"minBitrateType" cannot be "{kwargs['minBitrateType']}", & must be set to one of: {options}'''
-        if 'bandSelectionType' in kwargs:
-            options = ['ap', 'ssid']
-            assert kwargs['bandSelectionType'] in options, f'''"bandSelectionType" cannot be "{kwargs['bandSelectionType']}", & must be set to one of: {options}'''
+        if "minBitrateType" in kwargs:
+            options = ["band", "ssid"]
+            assert kwargs["minBitrateType"] in options, (
+                f'''"minBitrateType" cannot be "{kwargs["minBitrateType"]}", & must be set to one of: {options}'''
+            )
+        if "bandSelectionType" in kwargs:
+            options = ["ap", "ssid"]
+            assert kwargs["bandSelectionType"] in options, (
+                f'''"bandSelectionType" cannot be "{kwargs["bandSelectionType"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['wireless', 'configure', 'rfProfiles'],
-            'operation': 'createNetworkWirelessRfProfile'
+            "tags": ["wireless", "configure", "rfProfiles"],
+            "operation": "createNetworkWirelessRfProfile",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/rfProfiles'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/rfProfiles"
 
-        body_params = ['name', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', 'sixGhzSettings', 'transmission', 'perSsidSettings', 'flexRadios', ]
+        body_params = [
+            "name",
+            "clientBalancingEnabled",
+            "minBitrateType",
+            "bandSelectionType",
+            "apBandSettings",
+            "twoFourGhzSettings",
+            "fiveGhzSettings",
+            "sixGhzSettings",
+            "transmission",
+            "perSsidSettings",
+            "flexRadios",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def updateNetworkWirelessRfProfile(self, networkId: str, rfProfileId: str, **kwargs):
         """
@@ -1580,8 +1718,8 @@ class Wireless(object):
         - networkId (string): Network ID
         - rfProfileId (string): Rf profile ID
         - name (string): The name of the new profile. Must be unique.
-        - isIndoorDefault (boolean): Set this profile as the default indoor rf profile. If the profile ID is one of 'indoor' or 'outdoor',   then a new profile will be created from the respective ID and set as the default
-        - isOutdoorDefault (boolean): Set this profile as the default outdoor rf profile. If the profile ID is one of 'indoor' or 'outdoor',   then a new profile will be created from the respective ID and set as the default
+        - isIndoorDefault (boolean): Set this profile as the default indoor rf profile. If the profile ID is one of 'indoor' or 'outdoor', then a new profile will be created from the respective ID and set as the default
+        - isOutdoorDefault (boolean): Set this profile as the default outdoor rf profile. If the profile ID is one of 'indoor' or 'outdoor', then a new profile will be created from the respective ID and set as the default
         - clientBalancingEnabled (boolean): Steers client to best available access point. Can be either true or false.
         - minBitrateType (string): Minimum bitrate can be set to either 'band' or 'ssid'.
         - bandSelectionType (string): Band selection can be set to either 'ssid' or 'ap'.
@@ -1596,27 +1734,43 @@ class Wireless(object):
 
         kwargs.update(locals())
 
-        if 'minBitrateType' in kwargs:
-            options = ['band', 'ssid']
-            assert kwargs['minBitrateType'] in options, f'''"minBitrateType" cannot be "{kwargs['minBitrateType']}", & must be set to one of: {options}'''
-        if 'bandSelectionType' in kwargs:
-            options = ['ap', 'ssid']
-            assert kwargs['bandSelectionType'] in options, f'''"bandSelectionType" cannot be "{kwargs['bandSelectionType']}", & must be set to one of: {options}'''
+        if "minBitrateType" in kwargs:
+            options = ["band", "ssid"]
+            assert kwargs["minBitrateType"] in options, (
+                f'''"minBitrateType" cannot be "{kwargs["minBitrateType"]}", & must be set to one of: {options}'''
+            )
+        if "bandSelectionType" in kwargs:
+            options = ["ap", "ssid"]
+            assert kwargs["bandSelectionType"] in options, (
+                f'''"bandSelectionType" cannot be "{kwargs["bandSelectionType"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['wireless', 'configure', 'rfProfiles'],
-            'operation': 'updateNetworkWirelessRfProfile'
+            "tags": ["wireless", "configure", "rfProfiles"],
+            "operation": "updateNetworkWirelessRfProfile",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        rfProfileId = urllib.parse.quote(str(rfProfileId), safe='')
-        resource = f'/networks/{networkId}/wireless/rfProfiles/{rfProfileId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        rfProfileId = urllib.parse.quote(str(rfProfileId), safe="")
+        resource = f"/networks/{networkId}/wireless/rfProfiles/{rfProfileId}"
 
-        body_params = ['name', 'isIndoorDefault', 'isOutdoorDefault', 'clientBalancingEnabled', 'minBitrateType', 'bandSelectionType', 'apBandSettings', 'twoFourGhzSettings', 'fiveGhzSettings', 'sixGhzSettings', 'transmission', 'perSsidSettings', 'flexRadios', ]
+        body_params = [
+            "name",
+            "isIndoorDefault",
+            "isOutdoorDefault",
+            "clientBalancingEnabled",
+            "minBitrateType",
+            "bandSelectionType",
+            "apBandSettings",
+            "twoFourGhzSettings",
+            "fiveGhzSettings",
+            "sixGhzSettings",
+            "transmission",
+            "perSsidSettings",
+            "flexRadios",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteNetworkWirelessRfProfile(self, networkId: str, rfProfileId: str):
         """
@@ -1628,16 +1782,14 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'rfProfiles'],
-            'operation': 'deleteNetworkWirelessRfProfile'
+            "tags": ["wireless", "configure", "rfProfiles"],
+            "operation": "deleteNetworkWirelessRfProfile",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        rfProfileId = urllib.parse.quote(str(rfProfileId), safe='')
-        resource = f'/networks/{networkId}/wireless/rfProfiles/{rfProfileId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        rfProfileId = urllib.parse.quote(str(rfProfileId), safe="")
+        resource = f"/networks/{networkId}/wireless/rfProfiles/{rfProfileId}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def getNetworkWirelessRfProfile(self, networkId: str, rfProfileId: str):
         """
@@ -1649,16 +1801,14 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'rfProfiles'],
-            'operation': 'getNetworkWirelessRfProfile'
+            "tags": ["wireless", "configure", "rfProfiles"],
+            "operation": "getNetworkWirelessRfProfile",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        rfProfileId = urllib.parse.quote(str(rfProfileId), safe='')
-        resource = f'/networks/{networkId}/wireless/rfProfiles/{rfProfileId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        rfProfileId = urllib.parse.quote(str(rfProfileId), safe="")
+        resource = f"/networks/{networkId}/wireless/rfProfiles/{rfProfileId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def getNetworkWirelessSettings(self, networkId: str):
         """
@@ -1669,15 +1819,13 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'settings'],
-            'operation': 'getNetworkWirelessSettings'
+            "tags": ["wireless", "configure", "settings"],
+            "operation": "getNetworkWirelessSettings",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/settings'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/settings"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkWirelessSettings(self, networkId: str, **kwargs):
         """
@@ -1689,6 +1837,7 @@ class Wireless(object):
         - ipv6BridgeEnabled (boolean): Toggle for enabling or disabling IPv6 bridging in a network (Note: if enabled, SSIDs must also be configured to use bridge mode)
         - locationAnalyticsEnabled (boolean): Toggle for enabling or disabling location analytics for your network
         - upgradeStrategy (string): The default strategy that network devices will use to perform an upgrade. Requires firmware version MR 26.8 or higher.
+        - upgrade (object): Upgrade settings for the network
         - ledLightsOn (boolean): Toggle for enabling or disabling LED lights on all APs in the network (making them run dark)
         - multicastToUnicastConversion (object): Multicast-to-unicast conversion settings across the network
         - namedVlans (object): Named VLAN settings for wireless networks.
@@ -1696,23 +1845,32 @@ class Wireless(object):
 
         kwargs.update(locals())
 
-        if 'upgradeStrategy' in kwargs:
-            options = ['minimizeClientDowntime', 'minimizeUpgradeTime']
-            assert kwargs['upgradeStrategy'] in options, f'''"upgradeStrategy" cannot be "{kwargs['upgradeStrategy']}", & must be set to one of: {options}'''
+        if "upgradeStrategy" in kwargs:
+            options = ["minimizeClientDowntime", "minimizeUpgradeTime"]
+            assert kwargs["upgradeStrategy"] in options, (
+                f'''"upgradeStrategy" cannot be "{kwargs["upgradeStrategy"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['wireless', 'configure', 'settings'],
-            'operation': 'updateNetworkWirelessSettings'
+            "tags": ["wireless", "configure", "settings"],
+            "operation": "updateNetworkWirelessSettings",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/settings'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/settings"
 
-        body_params = ['meshingEnabled', 'ipv6BridgeEnabled', 'locationAnalyticsEnabled', 'upgradeStrategy', 'ledLightsOn', 'multicastToUnicastConversion', 'namedVlans', ]
+        body_params = [
+            "meshingEnabled",
+            "ipv6BridgeEnabled",
+            "locationAnalyticsEnabled",
+            "upgradeStrategy",
+            "upgrade",
+            "ledLightsOn",
+            "multicastToUnicastConversion",
+            "namedVlans",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkWirelessSignalQualityHistory(self, networkId: str, **kwargs):
         """
@@ -1734,23 +1892,32 @@ class Wireless(object):
 
         kwargs.update(locals())
 
-        if 'band' in kwargs:
-            options = ['2.4', '5', '6']
-            assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
+        if "band" in kwargs:
+            options = ["2.4", "5", "6"]
+            assert kwargs["band"] in options, f'''"band" cannot be "{kwargs["band"]}", & must be set to one of: {options}'''
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'signalQualityHistory'],
-            'operation': 'getNetworkWirelessSignalQualityHistory'
+            "tags": ["wireless", "monitor", "signalQualityHistory"],
+            "operation": "getNetworkWirelessSignalQualityHistory",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/signalQualityHistory'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/signalQualityHistory"
 
-        query_params = ['t0', 't1', 'timespan', 'resolution', 'autoResolution', 'clientId', 'deviceSerial', 'apTag', 'band', 'ssid', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "resolution",
+            "autoResolution",
+            "clientId",
+            "deviceSerial",
+            "apTag",
+            "band",
+            "ssid",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getNetworkWirelessSsids(self, networkId: str):
         """
@@ -1761,15 +1928,13 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids'],
-            'operation': 'getNetworkWirelessSsids'
+            "tags": ["wireless", "configure", "ssids"],
+            "operation": "getNetworkWirelessSsids",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/ssids'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids"
 
         return self._session.get(metadata, resource)
-        
-
 
     def getNetworkWirelessSsid(self, networkId: str, number: str):
         """
@@ -1781,16 +1946,14 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids'],
-            'operation': 'getNetworkWirelessSsid'
+            "tags": ["wireless", "configure", "ssids"],
+            "operation": "getNetworkWirelessSsid",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        number = urllib.parse.quote(str(number), safe='')
-        resource = f'/networks/{networkId}/wireless/ssids/{number}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkWirelessSsid(self, networkId: str, number: str, **kwargs):
         """
@@ -1801,8 +1964,9 @@ class Wireless(object):
         - number (string): Number
         - name (string): The name of the SSID
         - enabled (boolean): Whether or not the SSID is enabled
-        - authMode (string): The association control method for the SSID ('open', 'open-enhanced', 'psk', 'open-with-radius', 'open-with-nac', '8021x-meraki', '8021x-nac', '8021x-radius', '8021x-google', '8021x-entra', '8021x-localradius', 'ipsk-with-radius', 'ipsk-without-radius', 'ipsk-with-nac' or 'ipsk-with-radius-easy-psk')
+        - authMode (string): The association control method for the SSID ('open', 'open-enhanced', 'psk', 'open-with-radius', 'open-enhanced-with-radius', 'open-with-nac', '8021x-meraki', '8021x-nac', '8021x-radius', '8021x-google', '8021x-entra', '8021x-localradius', 'ipsk-with-radius', 'ipsk-without-radius', 'ipsk-with-nac' or 'ipsk-with-radius-easy-psk')
         - enterpriseAdminAccess (string): Whether or not an SSID is accessible by 'enterprise' administrators ('access disabled' or 'access enabled')
+        - ssidAdminAccessible (boolean): SSID Administrator access status
         - encryptionMode (string): The psk encryption mode for the SSID ('wep' or 'wpa'). This param is only valid if the authMode is 'psk'
         - psk (string): The passkey for the SSID. This param is only valid if the authMode is 'psk'
         - wpaEncryptionMode (string): The types of WPA encryption. ('WPA1 only', 'WPA1 and WPA2', 'WPA2 only', 'WPA3 Transition Mode', 'WPA3 only' or 'WPA3 192-bit Security')
@@ -1866,45 +2030,157 @@ class Wireless(object):
 
         kwargs.update(locals())
 
-        if 'authMode' in kwargs:
-            options = ['8021x-entra', '8021x-google', '8021x-localradius', '8021x-meraki', '8021x-nac', '8021x-radius', 'ipsk-with-nac', 'ipsk-with-radius', 'ipsk-with-radius-easy-psk', 'ipsk-without-radius', 'open', 'open-enhanced', 'open-with-nac', 'open-with-radius', 'psk']
-            assert kwargs['authMode'] in options, f'''"authMode" cannot be "{kwargs['authMode']}", & must be set to one of: {options}'''
-        if 'enterpriseAdminAccess' in kwargs:
-            options = ['access disabled', 'access enabled']
-            assert kwargs['enterpriseAdminAccess'] in options, f'''"enterpriseAdminAccess" cannot be "{kwargs['enterpriseAdminAccess']}", & must be set to one of: {options}'''
-        if 'encryptionMode' in kwargs:
-            options = ['open', 'wep', 'wpa', 'wpa-eap']
-            assert kwargs['encryptionMode'] in options, f'''"encryptionMode" cannot be "{kwargs['encryptionMode']}", & must be set to one of: {options}'''
-        if 'wpaEncryptionMode' in kwargs:
-            options = ['WPA1 and WPA2', 'WPA1 only', 'WPA2 only', 'WPA3 192-bit Security', 'WPA3 Transition Mode', 'WPA3 only']
-            assert kwargs['wpaEncryptionMode'] in options, f'''"wpaEncryptionMode" cannot be "{kwargs['wpaEncryptionMode']}", & must be set to one of: {options}'''
-        if 'splashPage' in kwargs:
-            options = ['Billing', 'Cisco ISE', 'Click-through splash page', 'Facebook Wi-Fi', 'Google Apps domain', 'Google OAuth', 'Microsoft Entra ID', 'None', 'Password-protected with Active Directory', 'Password-protected with LDAP', 'Password-protected with Meraki RADIUS', 'Password-protected with custom RADIUS', 'SMS authentication', 'Sponsored guest', 'Systems Manager Sentry']
-            assert kwargs['splashPage'] in options, f'''"splashPage" cannot be "{kwargs['splashPage']}", & must be set to one of: {options}'''
-        if 'radiusFailoverPolicy' in kwargs:
-            options = ['Allow access', 'Deny access']
-            assert kwargs['radiusFailoverPolicy'] in options, f'''"radiusFailoverPolicy" cannot be "{kwargs['radiusFailoverPolicy']}", & must be set to one of: {options}'''
-        if 'radiusLoadBalancingPolicy' in kwargs:
-            options = ['Round robin', 'Strict priority order']
-            assert kwargs['radiusLoadBalancingPolicy'] in options, f'''"radiusLoadBalancingPolicy" cannot be "{kwargs['radiusLoadBalancingPolicy']}", & must be set to one of: {options}'''
-        if 'radiusAttributeForGroupPolicies' in kwargs:
-            options = ['Airespace-ACL-Name', 'Aruba-User-Role', 'Filter-Id', 'Reply-Message']
-            assert kwargs['radiusAttributeForGroupPolicies'] in options, f'''"radiusAttributeForGroupPolicies" cannot be "{kwargs['radiusAttributeForGroupPolicies']}", & must be set to one of: {options}'''
+        if "authMode" in kwargs:
+            options = [
+                "8021x-entra",
+                "8021x-google",
+                "8021x-localradius",
+                "8021x-meraki",
+                "8021x-nac",
+                "8021x-radius",
+                "ipsk-with-nac",
+                "ipsk-with-radius",
+                "ipsk-with-radius-easy-psk",
+                "ipsk-without-radius",
+                "open",
+                "open-enhanced",
+                "open-enhanced-with-radius",
+                "open-with-nac",
+                "open-with-radius",
+                "psk",
+            ]
+            assert kwargs["authMode"] in options, (
+                f'''"authMode" cannot be "{kwargs["authMode"]}", & must be set to one of: {options}'''
+            )
+        if "enterpriseAdminAccess" in kwargs:
+            options = ["access disabled", "access enabled"]
+            assert kwargs["enterpriseAdminAccess"] in options, (
+                f'''"enterpriseAdminAccess" cannot be "{kwargs["enterpriseAdminAccess"]}", & must be set to one of: {options}'''
+            )
+        if "encryptionMode" in kwargs:
+            options = ["open", "wep", "wpa", "wpa-eap"]
+            assert kwargs["encryptionMode"] in options, (
+                f'''"encryptionMode" cannot be "{kwargs["encryptionMode"]}", & must be set to one of: {options}'''
+            )
+        if "wpaEncryptionMode" in kwargs:
+            options = ["WPA1 and WPA2", "WPA1 only", "WPA2 only", "WPA3 192-bit Security", "WPA3 Transition Mode", "WPA3 only"]
+            assert kwargs["wpaEncryptionMode"] in options, (
+                f'''"wpaEncryptionMode" cannot be "{kwargs["wpaEncryptionMode"]}", & must be set to one of: {options}'''
+            )
+        if "splashPage" in kwargs:
+            options = [
+                "Billing",
+                "Cisco ISE",
+                "Click-through splash page",
+                "Facebook Wi-Fi",
+                "Google Apps domain",
+                "Google OAuth",
+                "Microsoft Entra ID",
+                "None",
+                "Password-protected with Active Directory",
+                "Password-protected with LDAP",
+                "Password-protected with Meraki RADIUS",
+                "Password-protected with custom RADIUS",
+                "SMS authentication",
+                "Sponsored guest",
+                "Systems Manager Sentry",
+            ]
+            assert kwargs["splashPage"] in options, (
+                f'''"splashPage" cannot be "{kwargs["splashPage"]}", & must be set to one of: {options}'''
+            )
+        if "radiusFailoverPolicy" in kwargs:
+            options = ["Allow access", "Deny access"]
+            assert kwargs["radiusFailoverPolicy"] in options, (
+                f'''"radiusFailoverPolicy" cannot be "{kwargs["radiusFailoverPolicy"]}", & must be set to one of: {options}'''
+            )
+        if "radiusLoadBalancingPolicy" in kwargs:
+            options = ["Round robin", "Strict priority order"]
+            assert kwargs["radiusLoadBalancingPolicy"] in options, (
+                f'''"radiusLoadBalancingPolicy" cannot be "{kwargs["radiusLoadBalancingPolicy"]}", & must be set to one of: {options}'''
+            )
+        if "radiusAttributeForGroupPolicies" in kwargs:
+            options = ["Airespace-ACL-Name", "Aruba-User-Role", "Filter-Id", "Reply-Message"]
+            assert kwargs["radiusAttributeForGroupPolicies"] in options, (
+                f'''"radiusAttributeForGroupPolicies" cannot be "{kwargs["radiusAttributeForGroupPolicies"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids'],
-            'operation': 'updateNetworkWirelessSsid'
+            "tags": ["wireless", "configure", "ssids"],
+            "operation": "updateNetworkWirelessSsid",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        number = urllib.parse.quote(str(number), safe='')
-        resource = f'/networks/{networkId}/wireless/ssids/{number}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}"
 
-        body_params = ['name', 'enabled', 'authMode', 'enterpriseAdminAccess', 'encryptionMode', 'psk', 'wpaEncryptionMode', 'dot11w', 'dot11r', 'splashPage', 'splashGuestSponsorDomains', 'oauth', 'localRadius', 'ldap', 'activeDirectory', 'radiusServers', 'radiusProxyEnabled', 'radiusTestingEnabled', 'radiusCalledStationId', 'radiusAuthenticationNasId', 'radiusServerTimeout', 'radiusServerAttemptsLimit', 'radiusFallbackEnabled', 'radiusRadsec', 'radiusCoaEnabled', 'radiusFailoverPolicy', 'radiusLoadBalancingPolicy', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusAccountingInterimInterval', 'radiusAttributeForGroupPolicies', 'ipAssignmentMode', 'useVlanTagging', 'concentratorNetworkId', 'secondaryConcentratorNetworkId', 'disassociateClientsOnVpnFailover', 'vlanId', 'defaultVlanId', 'apTagsAndVlanIds', 'walledGardenEnabled', 'walledGardenRanges', 'gre', 'radiusOverride', 'radiusGuestVlanEnabled', 'radiusGuestVlanId', 'minBitrate', 'bandSelection', 'perClientBandwidthLimitUp', 'perClientBandwidthLimitDown', 'perSsidBandwidthLimitUp', 'perSsidBandwidthLimitDown', 'lanIsolationEnabled', 'visible', 'availableOnAllAps', 'availabilityTags', 'adaptivePolicyGroupId', 'mandatoryDhcpEnabled', 'adultContentFilteringEnabled', 'dnsRewrite', 'speedBurst', 'namedVlans', 'localAuthFallback', 'radiusAccountingStartDelay', ]
+        body_params = [
+            "name",
+            "enabled",
+            "authMode",
+            "enterpriseAdminAccess",
+            "ssidAdminAccessible",
+            "encryptionMode",
+            "psk",
+            "wpaEncryptionMode",
+            "dot11w",
+            "dot11r",
+            "splashPage",
+            "splashGuestSponsorDomains",
+            "oauth",
+            "localRadius",
+            "ldap",
+            "activeDirectory",
+            "radiusServers",
+            "radiusProxyEnabled",
+            "radiusTestingEnabled",
+            "radiusCalledStationId",
+            "radiusAuthenticationNasId",
+            "radiusServerTimeout",
+            "radiusServerAttemptsLimit",
+            "radiusFallbackEnabled",
+            "radiusRadsec",
+            "radiusCoaEnabled",
+            "radiusFailoverPolicy",
+            "radiusLoadBalancingPolicy",
+            "radiusAccountingEnabled",
+            "radiusAccountingServers",
+            "radiusAccountingInterimInterval",
+            "radiusAttributeForGroupPolicies",
+            "ipAssignmentMode",
+            "useVlanTagging",
+            "concentratorNetworkId",
+            "secondaryConcentratorNetworkId",
+            "disassociateClientsOnVpnFailover",
+            "vlanId",
+            "defaultVlanId",
+            "apTagsAndVlanIds",
+            "walledGardenEnabled",
+            "walledGardenRanges",
+            "gre",
+            "radiusOverride",
+            "radiusGuestVlanEnabled",
+            "radiusGuestVlanId",
+            "minBitrate",
+            "bandSelection",
+            "perClientBandwidthLimitUp",
+            "perClientBandwidthLimitDown",
+            "perSsidBandwidthLimitUp",
+            "perSsidBandwidthLimitDown",
+            "lanIsolationEnabled",
+            "visible",
+            "availableOnAllAps",
+            "availabilityTags",
+            "adaptivePolicyGroupId",
+            "mandatoryDhcpEnabled",
+            "adultContentFilteringEnabled",
+            "dnsRewrite",
+            "speedBurst",
+            "namedVlans",
+            "localAuthFallback",
+            "radiusAccountingStartDelay",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkWirelessSsidBonjourForwarding(self, networkId: str, number: str):
         """
@@ -1916,16 +2192,14 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'bonjourForwarding'],
-            'operation': 'getNetworkWirelessSsidBonjourForwarding'
+            "tags": ["wireless", "configure", "ssids", "bonjourForwarding"],
+            "operation": "getNetworkWirelessSsidBonjourForwarding",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        number = urllib.parse.quote(str(number), safe='')
-        resource = f'/networks/{networkId}/wireless/ssids/{number}/bonjourForwarding'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/bonjourForwarding"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkWirelessSsidBonjourForwarding(self, networkId: str, number: str, **kwargs):
         """
@@ -1942,19 +2216,21 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'bonjourForwarding'],
-            'operation': 'updateNetworkWirelessSsidBonjourForwarding'
+            "tags": ["wireless", "configure", "ssids", "bonjourForwarding"],
+            "operation": "updateNetworkWirelessSsidBonjourForwarding",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        number = urllib.parse.quote(str(number), safe='')
-        resource = f'/networks/{networkId}/wireless/ssids/{number}/bonjourForwarding'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/bonjourForwarding"
 
-        body_params = ['enabled', 'rules', 'exception', ]
+        body_params = [
+            "enabled",
+            "rules",
+            "exception",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkWirelessSsidDeviceTypeGroupPolicies(self, networkId: str, number: str):
         """
@@ -1966,16 +2242,14 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'deviceTypeGroupPolicies'],
-            'operation': 'getNetworkWirelessSsidDeviceTypeGroupPolicies'
+            "tags": ["wireless", "configure", "ssids", "deviceTypeGroupPolicies"],
+            "operation": "getNetworkWirelessSsidDeviceTypeGroupPolicies",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        number = urllib.parse.quote(str(number), safe='')
-        resource = f'/networks/{networkId}/wireless/ssids/{number}/deviceTypeGroupPolicies'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/deviceTypeGroupPolicies"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkWirelessSsidDeviceTypeGroupPolicies(self, networkId: str, number: str, **kwargs):
         """
@@ -1991,19 +2265,20 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'deviceTypeGroupPolicies'],
-            'operation': 'updateNetworkWirelessSsidDeviceTypeGroupPolicies'
+            "tags": ["wireless", "configure", "ssids", "deviceTypeGroupPolicies"],
+            "operation": "updateNetworkWirelessSsidDeviceTypeGroupPolicies",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        number = urllib.parse.quote(str(number), safe='')
-        resource = f'/networks/{networkId}/wireless/ssids/{number}/deviceTypeGroupPolicies'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/deviceTypeGroupPolicies"
 
-        body_params = ['enabled', 'deviceTypePolicies', ]
+        body_params = [
+            "enabled",
+            "deviceTypePolicies",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkWirelessSsidEapOverride(self, networkId: str, number: str):
         """
@@ -2015,16 +2290,14 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'eapOverride'],
-            'operation': 'getNetworkWirelessSsidEapOverride'
+            "tags": ["wireless", "configure", "ssids", "eapOverride"],
+            "operation": "getNetworkWirelessSsidEapOverride",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        number = urllib.parse.quote(str(number), safe='')
-        resource = f'/networks/{networkId}/wireless/ssids/{number}/eapOverride'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/eapOverride"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkWirelessSsidEapOverride(self, networkId: str, number: str, **kwargs):
         """
@@ -2042,19 +2315,22 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'eapOverride'],
-            'operation': 'updateNetworkWirelessSsidEapOverride'
+            "tags": ["wireless", "configure", "ssids", "eapOverride"],
+            "operation": "updateNetworkWirelessSsidEapOverride",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        number = urllib.parse.quote(str(number), safe='')
-        resource = f'/networks/{networkId}/wireless/ssids/{number}/eapOverride'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/eapOverride"
 
-        body_params = ['timeout', 'identity', 'maxRetries', 'eapolKey', ]
+        body_params = [
+            "timeout",
+            "identity",
+            "maxRetries",
+            "eapolKey",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkWirelessSsidFirewallL3FirewallRules(self, networkId: str, number: str):
         """
@@ -2066,16 +2342,14 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'firewall', 'l3FirewallRules'],
-            'operation': 'getNetworkWirelessSsidFirewallL3FirewallRules'
+            "tags": ["wireless", "configure", "ssids", "firewall", "l3FirewallRules"],
+            "operation": "getNetworkWirelessSsidFirewallL3FirewallRules",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        number = urllib.parse.quote(str(number), safe='')
-        resource = f'/networks/{networkId}/wireless/ssids/{number}/firewall/l3FirewallRules'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/firewall/l3FirewallRules"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkWirelessSsidFirewallL3FirewallRules(self, networkId: str, number: str, **kwargs):
         """
@@ -2091,19 +2365,20 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'firewall', 'l3FirewallRules'],
-            'operation': 'updateNetworkWirelessSsidFirewallL3FirewallRules'
+            "tags": ["wireless", "configure", "ssids", "firewall", "l3FirewallRules"],
+            "operation": "updateNetworkWirelessSsidFirewallL3FirewallRules",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        number = urllib.parse.quote(str(number), safe='')
-        resource = f'/networks/{networkId}/wireless/ssids/{number}/firewall/l3FirewallRules'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/firewall/l3FirewallRules"
 
-        body_params = ['rules', 'allowLanAccess', ]
+        body_params = [
+            "rules",
+            "allowLanAccess",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkWirelessSsidFirewallL7FirewallRules(self, networkId: str, number: str):
         """
@@ -2115,16 +2390,14 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'firewall', 'l7FirewallRules'],
-            'operation': 'getNetworkWirelessSsidFirewallL7FirewallRules'
+            "tags": ["wireless", "configure", "ssids", "firewall", "l7FirewallRules"],
+            "operation": "getNetworkWirelessSsidFirewallL7FirewallRules",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        number = urllib.parse.quote(str(number), safe='')
-        resource = f'/networks/{networkId}/wireless/ssids/{number}/firewall/l7FirewallRules'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/firewall/l7FirewallRules"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkWirelessSsidFirewallL7FirewallRules(self, networkId: str, number: str, **kwargs):
         """
@@ -2139,19 +2412,19 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'firewall', 'l7FirewallRules'],
-            'operation': 'updateNetworkWirelessSsidFirewallL7FirewallRules'
+            "tags": ["wireless", "configure", "ssids", "firewall", "l7FirewallRules"],
+            "operation": "updateNetworkWirelessSsidFirewallL7FirewallRules",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        number = urllib.parse.quote(str(number), safe='')
-        resource = f'/networks/{networkId}/wireless/ssids/{number}/firewall/l7FirewallRules'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/firewall/l7FirewallRules"
 
-        body_params = ['rules', ]
+        body_params = [
+            "rules",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkWirelessSsidHotspot20(self, networkId: str, number: str):
         """
@@ -2163,16 +2436,14 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'hotspot20'],
-            'operation': 'getNetworkWirelessSsidHotspot20'
+            "tags": ["wireless", "configure", "ssids", "hotspot20"],
+            "operation": "getNetworkWirelessSsidHotspot20",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        number = urllib.parse.quote(str(number), safe='')
-        resource = f'/networks/{networkId}/wireless/ssids/{number}/hotspot20'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/hotspot20"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkWirelessSsidHotspot20(self, networkId: str, number: str, **kwargs):
         """
@@ -2193,24 +2464,42 @@ class Wireless(object):
 
         kwargs.update(locals())
 
-        if 'networkAccessType' in kwargs:
-            options = ['Chargeable public network', 'Emergency services only network', 'Free public network', 'Personal device network', 'Private network', 'Private network with guest access', 'Test or experimental', 'Wildcard']
-            assert kwargs['networkAccessType'] in options, f'''"networkAccessType" cannot be "{kwargs['networkAccessType']}", & must be set to one of: {options}'''
+        if "networkAccessType" in kwargs:
+            options = [
+                "Chargeable public network",
+                "Emergency services only network",
+                "Free public network",
+                "Personal device network",
+                "Private network",
+                "Private network with guest access",
+                "Test or experimental",
+                "Wildcard",
+            ]
+            assert kwargs["networkAccessType"] in options, (
+                f'''"networkAccessType" cannot be "{kwargs["networkAccessType"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'hotspot20'],
-            'operation': 'updateNetworkWirelessSsidHotspot20'
+            "tags": ["wireless", "configure", "ssids", "hotspot20"],
+            "operation": "updateNetworkWirelessSsidHotspot20",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        number = urllib.parse.quote(str(number), safe='')
-        resource = f'/networks/{networkId}/wireless/ssids/{number}/hotspot20'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/hotspot20"
 
-        body_params = ['enabled', 'operator', 'venue', 'networkAccessType', 'domains', 'roamConsortOis', 'mccMncs', 'naiRealms', ]
+        body_params = [
+            "enabled",
+            "operator",
+            "venue",
+            "networkAccessType",
+            "domains",
+            "roamConsortOis",
+            "mccMncs",
+            "naiRealms",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkWirelessSsidIdentityPsks(self, networkId: str, number: str):
         """
@@ -2222,16 +2511,14 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'identityPsks'],
-            'operation': 'getNetworkWirelessSsidIdentityPsks'
+            "tags": ["wireless", "configure", "ssids", "identityPsks"],
+            "operation": "getNetworkWirelessSsidIdentityPsks",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        number = urllib.parse.quote(str(number), safe='')
-        resource = f'/networks/{networkId}/wireless/ssids/{number}/identityPsks'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/identityPsks"
 
         return self._session.get(metadata, resource)
-        
-
 
     def createNetworkWirelessSsidIdentityPsk(self, networkId: str, number: str, name: str, groupPolicyId: str, **kwargs):
         """
@@ -2249,19 +2536,22 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'identityPsks'],
-            'operation': 'createNetworkWirelessSsidIdentityPsk'
+            "tags": ["wireless", "configure", "ssids", "identityPsks"],
+            "operation": "createNetworkWirelessSsidIdentityPsk",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        number = urllib.parse.quote(str(number), safe='')
-        resource = f'/networks/{networkId}/wireless/ssids/{number}/identityPsks'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/identityPsks"
 
-        body_params = ['name', 'passphrase', 'groupPolicyId', 'expiresAt', ]
+        body_params = [
+            "name",
+            "passphrase",
+            "groupPolicyId",
+            "expiresAt",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getNetworkWirelessSsidIdentityPsk(self, networkId: str, number: str, identityPskId: str):
         """
@@ -2274,17 +2564,15 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'identityPsks'],
-            'operation': 'getNetworkWirelessSsidIdentityPsk'
+            "tags": ["wireless", "configure", "ssids", "identityPsks"],
+            "operation": "getNetworkWirelessSsidIdentityPsk",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        number = urllib.parse.quote(str(number), safe='')
-        identityPskId = urllib.parse.quote(str(identityPskId), safe='')
-        resource = f'/networks/{networkId}/wireless/ssids/{number}/identityPsks/{identityPskId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        identityPskId = urllib.parse.quote(str(identityPskId), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/identityPsks/{identityPskId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkWirelessSsidIdentityPsk(self, networkId: str, number: str, identityPskId: str, **kwargs):
         """
@@ -2303,20 +2591,23 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'identityPsks'],
-            'operation': 'updateNetworkWirelessSsidIdentityPsk'
+            "tags": ["wireless", "configure", "ssids", "identityPsks"],
+            "operation": "updateNetworkWirelessSsidIdentityPsk",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        number = urllib.parse.quote(str(number), safe='')
-        identityPskId = urllib.parse.quote(str(identityPskId), safe='')
-        resource = f'/networks/{networkId}/wireless/ssids/{number}/identityPsks/{identityPskId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        identityPskId = urllib.parse.quote(str(identityPskId), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/identityPsks/{identityPskId}"
 
-        body_params = ['name', 'passphrase', 'groupPolicyId', 'expiresAt', ]
+        body_params = [
+            "name",
+            "passphrase",
+            "groupPolicyId",
+            "expiresAt",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteNetworkWirelessSsidIdentityPsk(self, networkId: str, number: str, identityPskId: str):
         """
@@ -2329,17 +2620,15 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'identityPsks'],
-            'operation': 'deleteNetworkWirelessSsidIdentityPsk'
+            "tags": ["wireless", "configure", "ssids", "identityPsks"],
+            "operation": "deleteNetworkWirelessSsidIdentityPsk",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        number = urllib.parse.quote(str(number), safe='')
-        identityPskId = urllib.parse.quote(str(identityPskId), safe='')
-        resource = f'/networks/{networkId}/wireless/ssids/{number}/identityPsks/{identityPskId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        identityPskId = urllib.parse.quote(str(identityPskId), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/identityPsks/{identityPskId}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def updateNetworkWirelessSsidOpenRoaming(self, networkId: str, number: str, **kwargs):
         """
@@ -2355,19 +2644,20 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'openRoaming'],
-            'operation': 'updateNetworkWirelessSsidOpenRoaming'
+            "tags": ["wireless", "configure", "ssids", "openRoaming"],
+            "operation": "updateNetworkWirelessSsidOpenRoaming",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        number = urllib.parse.quote(str(number), safe='')
-        resource = f'/networks/{networkId}/wireless/ssids/{number}/openRoaming'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/openRoaming"
 
-        body_params = ['enabled', 'tenantId', ]
+        body_params = [
+            "enabled",
+            "tenantId",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkWirelessSsidSchedules(self, networkId: str, number: str):
         """
@@ -2379,16 +2669,14 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'schedules'],
-            'operation': 'getNetworkWirelessSsidSchedules'
+            "tags": ["wireless", "configure", "ssids", "schedules"],
+            "operation": "getNetworkWirelessSsidSchedules",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        number = urllib.parse.quote(str(number), safe='')
-        resource = f'/networks/{networkId}/wireless/ssids/{number}/schedules'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/schedules"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkWirelessSsidSchedules(self, networkId: str, number: str, **kwargs):
         """
@@ -2405,19 +2693,21 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'schedules'],
-            'operation': 'updateNetworkWirelessSsidSchedules'
+            "tags": ["wireless", "configure", "ssids", "schedules"],
+            "operation": "updateNetworkWirelessSsidSchedules",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        number = urllib.parse.quote(str(number), safe='')
-        resource = f'/networks/{networkId}/wireless/ssids/{number}/schedules'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/schedules"
 
-        body_params = ['enabled', 'ranges', 'rangesInSeconds', ]
+        body_params = [
+            "enabled",
+            "ranges",
+            "rangesInSeconds",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkWirelessSsidSplashSettings(self, networkId: str, number: str):
         """
@@ -2429,16 +2719,14 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'splash', 'settings'],
-            'operation': 'getNetworkWirelessSsidSplashSettings'
+            "tags": ["wireless", "configure", "ssids", "splash", "settings"],
+            "operation": "getNetworkWirelessSsidSplashSettings",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        number = urllib.parse.quote(str(number), safe='')
-        resource = f'/networks/{networkId}/wireless/ssids/{number}/splash/settings'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/splash/settings"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkWirelessSsidSplashSettings(self, networkId: str, number: str, **kwargs):
         """
@@ -2468,59 +2756,81 @@ class Wireless(object):
 
         kwargs.update(locals())
 
-        if 'splashTimeout' in kwargs:
+        if "splashTimeout" in kwargs:
             options = [30, 60, 120, 240, 480, 720, 1080, 1440, 2880, 5760, 7200, 10080, 20160, 43200, 86400, 129600]
-            assert kwargs['splashTimeout'] in options, f'''"splashTimeout" cannot be "{kwargs['splashTimeout']}", & must be set to one of: {options}'''
-        if 'controllerDisconnectionBehavior' in kwargs:
-            options = ['default', 'open', 'restricted']
-            assert kwargs['controllerDisconnectionBehavior'] in options, f'''"controllerDisconnectionBehavior" cannot be "{kwargs['controllerDisconnectionBehavior']}", & must be set to one of: {options}'''
+            assert kwargs["splashTimeout"] in options, (
+                f'''"splashTimeout" cannot be "{kwargs["splashTimeout"]}", & must be set to one of: {options}'''
+            )
+        if "controllerDisconnectionBehavior" in kwargs:
+            options = ["default", "open", "restricted"]
+            assert kwargs["controllerDisconnectionBehavior"] in options, (
+                f'''"controllerDisconnectionBehavior" cannot be "{kwargs["controllerDisconnectionBehavior"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'splash', 'settings'],
-            'operation': 'updateNetworkWirelessSsidSplashSettings'
+            "tags": ["wireless", "configure", "ssids", "splash", "settings"],
+            "operation": "updateNetworkWirelessSsidSplashSettings",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        number = urllib.parse.quote(str(number), safe='')
-        resource = f'/networks/{networkId}/wireless/ssids/{number}/splash/settings'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/splash/settings"
 
-        body_params = ['splashUrl', 'useSplashUrl', 'splashTimeout', 'redirectUrl', 'useRedirectUrl', 'welcomeMessage', 'themeId', 'splashLogo', 'splashImage', 'splashPrepaidFront', 'blockAllTrafficBeforeSignOn', 'controllerDisconnectionBehavior', 'allowSimultaneousLogins', 'guestSponsorship', 'billing', 'sentryEnrollment', 'selfRegistration', ]
+        body_params = [
+            "splashUrl",
+            "useSplashUrl",
+            "splashTimeout",
+            "redirectUrl",
+            "useRedirectUrl",
+            "welcomeMessage",
+            "themeId",
+            "splashLogo",
+            "splashImage",
+            "splashPrepaidFront",
+            "blockAllTrafficBeforeSignOn",
+            "controllerDisconnectionBehavior",
+            "allowSimultaneousLogins",
+            "guestSponsorship",
+            "billing",
+            "sentryEnrollment",
+            "selfRegistration",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def updateNetworkWirelessSsidTrafficShapingRules(self, networkId: str, number: str, **kwargs):
         """
-        **Update the traffic shaping rules for an SSID on an MR network.**
-        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-traffic-shaping-rules
+            **Update the traffic shaping rules for an SSID on an MR network.**
+            https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-traffic-shaping-rules
 
-        - networkId (string): Network ID
-        - number (string): Number
-        - trafficShapingEnabled (boolean): Whether traffic shaping rules are applied to clients on your SSID.
-        - defaultRulesEnabled (boolean): Whether default traffic shaping rules are enabled (true) or disabled (false). There are 4 default rules, which can be seen on your network's traffic shaping page. Note that default rules count against the rule limit of 8.
-        - rules (array):     An array of traffic shaping rules. Rules are applied in the order that
-    they are specified in. An empty list (or null) means no rules. Note that
-    you are allowed a maximum of 8 rules.
+            - networkId (string): Network ID
+            - number (string): Number
+            - trafficShapingEnabled (boolean): Whether traffic shaping rules are applied to clients on your SSID.
+            - defaultRulesEnabled (boolean): Whether default traffic shaping rules are enabled (true) or disabled (false). There are 4 default rules, which can be seen on your network's traffic shaping page. Note that default rules count against the rule limit of 8.
+            - rules (array):     An array of traffic shaping rules. Rules are applied in the order that
+        they are specified in. An empty list (or null) means no rules. Note that
+        you are allowed a maximum of 8 rules.
 
         """
 
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'trafficShaping', 'rules'],
-            'operation': 'updateNetworkWirelessSsidTrafficShapingRules'
+            "tags": ["wireless", "configure", "ssids", "trafficShaping", "rules"],
+            "operation": "updateNetworkWirelessSsidTrafficShapingRules",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        number = urllib.parse.quote(str(number), safe='')
-        resource = f'/networks/{networkId}/wireless/ssids/{number}/trafficShaping/rules'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/trafficShaping/rules"
 
-        body_params = ['trafficShapingEnabled', 'defaultRulesEnabled', 'rules', ]
+        body_params = [
+            "trafficShapingEnabled",
+            "defaultRulesEnabled",
+            "rules",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkWirelessSsidTrafficShapingRules(self, networkId: str, number: str):
         """
@@ -2532,16 +2842,14 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'trafficShaping', 'rules'],
-            'operation': 'getNetworkWirelessSsidTrafficShapingRules'
+            "tags": ["wireless", "configure", "ssids", "trafficShaping", "rules"],
+            "operation": "getNetworkWirelessSsidTrafficShapingRules",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        number = urllib.parse.quote(str(number), safe='')
-        resource = f'/networks/{networkId}/wireless/ssids/{number}/trafficShaping/rules'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/trafficShaping/rules"
 
         return self._session.get(metadata, resource)
-        
-
 
     def getNetworkWirelessSsidVpn(self, networkId: str, number: str):
         """
@@ -2553,16 +2861,14 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'vpn'],
-            'operation': 'getNetworkWirelessSsidVpn'
+            "tags": ["wireless", "configure", "ssids", "vpn"],
+            "operation": "getNetworkWirelessSsidVpn",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        number = urllib.parse.quote(str(number), safe='')
-        resource = f'/networks/{networkId}/wireless/ssids/{number}/vpn'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/vpn"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkWirelessSsidVpn(self, networkId: str, number: str, **kwargs):
         """
@@ -2579,19 +2885,21 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'vpn'],
-            'operation': 'updateNetworkWirelessSsidVpn'
+            "tags": ["wireless", "configure", "ssids", "vpn"],
+            "operation": "updateNetworkWirelessSsidVpn",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        number = urllib.parse.quote(str(number), safe='')
-        resource = f'/networks/{networkId}/wireless/ssids/{number}/vpn'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/vpn"
 
-        body_params = ['concentrator', 'splitTunnel', 'failover', ]
+        body_params = [
+            "concentrator",
+            "splitTunnel",
+            "failover",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkWirelessUsageHistory(self, networkId: str, **kwargs):
         """
@@ -2613,23 +2921,32 @@ class Wireless(object):
 
         kwargs.update(locals())
 
-        if 'band' in kwargs:
-            options = ['2.4', '5', '6']
-            assert kwargs['band'] in options, f'''"band" cannot be "{kwargs['band']}", & must be set to one of: {options}'''
+        if "band" in kwargs:
+            options = ["2.4", "5", "6"]
+            assert kwargs["band"] in options, f'''"band" cannot be "{kwargs["band"]}", & must be set to one of: {options}'''
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'usageHistory'],
-            'operation': 'getNetworkWirelessUsageHistory'
+            "tags": ["wireless", "monitor", "usageHistory"],
+            "operation": "getNetworkWirelessUsageHistory",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/usageHistory'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/usageHistory"
 
-        query_params = ['t0', 't1', 'timespan', 'resolution', 'autoResolution', 'clientId', 'deviceSerial', 'apTag', 'band', 'ssid', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "resolution",
+            "autoResolution",
+            "clientId",
+            "deviceSerial",
+            "apTag",
+            "band",
+            "ssid",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def updateNetworkWirelessZigbee(self, networkId: str, **kwargs):
         """
@@ -2646,20 +2963,23 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'zigbee'],
-            'operation': 'updateNetworkWirelessZigbee'
+            "tags": ["wireless", "configure", "zigbee"],
+            "operation": "updateNetworkWirelessZigbee",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/wireless/zigbee'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/zigbee"
 
-        body_params = ['enabled', 'iotController', 'lockManagement', 'defaults', ]
+        body_params = [
+            "enabled",
+            "iotController",
+            "lockManagement",
+            "defaults",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
 
-
-    def getOrganizationWirelessAirMarshalRules(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationWirelessAirMarshalRules(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Returns the current Air Marshal rules for this organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-air-marshal-rules
@@ -2676,26 +2996,33 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'airMarshal', 'rules'],
-            'operation': 'getOrganizationWirelessAirMarshalRules'
+            "tags": ["wireless", "configure", "airMarshal", "rules"],
+            "operation": "getOrganizationWirelessAirMarshalRules",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/airMarshal/rules'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/airMarshal/rules"
 
-        query_params = ['networkIds', 'perPage', 'startingAfter', 'endingBefore', ]
+        query_params = [
+            "networkIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', ]
+        array_params = [
+            "networkIds",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationWirelessAirMarshalSettingsByNetwork(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationWirelessAirMarshalSettingsByNetwork(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
         """
         **Returns the current Air Marshal settings for this network**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-air-marshal-settings-by-network
@@ -2712,26 +3039,31 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'airMarshal', 'settings', 'byNetwork'],
-            'operation': 'getOrganizationWirelessAirMarshalSettingsByNetwork'
+            "tags": ["wireless", "configure", "airMarshal", "settings", "byNetwork"],
+            "operation": "getOrganizationWirelessAirMarshalSettingsByNetwork",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/airMarshal/settings/byNetwork'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/airMarshal/settings/byNetwork"
 
-        query_params = ['networkIds', 'perPage', 'startingAfter', 'endingBefore', ]
+        query_params = [
+            "networkIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', ]
+        array_params = [
+            "networkIds",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationWirelessClientsOverviewByDevice(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationWirelessClientsOverviewByDevice(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **List access point client count at the moment in an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-clients-overview-by-device
@@ -2750,26 +3082,37 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'clients', 'overview', 'byDevice'],
-            'operation': 'getOrganizationWirelessClientsOverviewByDevice'
+            "tags": ["wireless", "monitor", "clients", "overview", "byDevice"],
+            "operation": "getOrganizationWirelessClientsOverviewByDevice",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/clients/overview/byDevice'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/clients/overview/byDevice"
 
-        query_params = ['networkIds', 'serials', 'campusGatewayClusterIds', 'perPage', 'startingAfter', 'endingBefore', ]
+        query_params = [
+            "networkIds",
+            "serials",
+            "campusGatewayClusterIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', 'serials', 'campusGatewayClusterIds', ]
+        array_params = [
+            "networkIds",
+            "serials",
+            "campusGatewayClusterIds",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationWirelessDevicesChannelUtilizationByDevice(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationWirelessDevicesChannelUtilizationByDevice(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
         """
         **Get average channel utilization for all bands in a network, split by AP**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-channel-utilization-by-device
@@ -2791,26 +3134,39 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'devices', 'channelUtilization', 'byDevice'],
-            'operation': 'getOrganizationWirelessDevicesChannelUtilizationByDevice'
+            "tags": ["wireless", "monitor", "devices", "channelUtilization", "byDevice"],
+            "operation": "getOrganizationWirelessDevicesChannelUtilizationByDevice",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/devices/channelUtilization/byDevice'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/channelUtilization/byDevice"
 
-        query_params = ['networkIds', 'serials', 'perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', 'interval', ]
+        query_params = [
+            "networkIds",
+            "serials",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "t0",
+            "t1",
+            "timespan",
+            "interval",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', 'serials', ]
+        array_params = [
+            "networkIds",
+            "serials",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationWirelessDevicesChannelUtilizationByNetwork(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationWirelessDevicesChannelUtilizationByNetwork(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
         """
         **Get average channel utilization across all bands for all networks in the organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-channel-utilization-by-network
@@ -2832,26 +3188,39 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'devices', 'channelUtilization', 'byNetwork'],
-            'operation': 'getOrganizationWirelessDevicesChannelUtilizationByNetwork'
+            "tags": ["wireless", "monitor", "devices", "channelUtilization", "byNetwork"],
+            "operation": "getOrganizationWirelessDevicesChannelUtilizationByNetwork",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/devices/channelUtilization/byNetwork'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/channelUtilization/byNetwork"
 
-        query_params = ['networkIds', 'serials', 'perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', 'interval', ]
+        query_params = [
+            "networkIds",
+            "serials",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "t0",
+            "t1",
+            "timespan",
+            "interval",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', 'serials', ]
+        array_params = [
+            "networkIds",
+            "serials",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationWirelessDevicesChannelUtilizationHistoryByDeviceByInterval(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationWirelessDevicesChannelUtilizationHistoryByDeviceByInterval(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
         """
         **Get a time-series of average channel utilization for all bands, segmented by device.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-channel-utilization-history-by-device-by-interval
@@ -2873,26 +3242,39 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'devices', 'channelUtilization', 'history', 'byDevice', 'byInterval'],
-            'operation': 'getOrganizationWirelessDevicesChannelUtilizationHistoryByDeviceByInterval'
+            "tags": ["wireless", "monitor", "devices", "channelUtilization", "history", "byDevice", "byInterval"],
+            "operation": "getOrganizationWirelessDevicesChannelUtilizationHistoryByDeviceByInterval",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/devices/channelUtilization/history/byDevice/byInterval'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/channelUtilization/history/byDevice/byInterval"
 
-        query_params = ['networkIds', 'serials', 'perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', 'interval', ]
+        query_params = [
+            "networkIds",
+            "serials",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "t0",
+            "t1",
+            "timespan",
+            "interval",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', 'serials', ]
+        array_params = [
+            "networkIds",
+            "serials",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationWirelessDevicesChannelUtilizationHistoryByNetworkByInterval(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationWirelessDevicesChannelUtilizationHistoryByNetworkByInterval(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
         """
         **Get a time-series of average channel utilization for all bands**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-channel-utilization-history-by-network-by-interval
@@ -2914,26 +3296,37 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'devices', 'channelUtilization', 'history', 'byNetwork', 'byInterval'],
-            'operation': 'getOrganizationWirelessDevicesChannelUtilizationHistoryByNetworkByInterval'
+            "tags": ["wireless", "monitor", "devices", "channelUtilization", "history", "byNetwork", "byInterval"],
+            "operation": "getOrganizationWirelessDevicesChannelUtilizationHistoryByNetworkByInterval",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/devices/channelUtilization/history/byNetwork/byInterval'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/channelUtilization/history/byNetwork/byInterval"
 
-        query_params = ['networkIds', 'serials', 'perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', 'interval', ]
+        query_params = [
+            "networkIds",
+            "serials",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "t0",
+            "t1",
+            "timespan",
+            "interval",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', 'serials', ]
+        array_params = [
+            "networkIds",
+            "serials",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationWirelessDevicesEthernetStatuses(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationWirelessDevicesEthernetStatuses(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **List the most recent Ethernet link speed, duplex, aggregation and power mode and status information for wireless devices.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-ethernet-statuses
@@ -2950,26 +3343,31 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'devices', 'ethernet', 'statuses'],
-            'operation': 'getOrganizationWirelessDevicesEthernetStatuses'
+            "tags": ["wireless", "monitor", "devices", "ethernet", "statuses"],
+            "operation": "getOrganizationWirelessDevicesEthernetStatuses",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/devices/ethernet/statuses'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/ethernet/statuses"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', ]
+        array_params = [
+            "networkIds",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationWirelessDevicesPacketLossByClient(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationWirelessDevicesPacketLossByClient(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Get average packet loss for the given timespan for all clients in the organization.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-packet-loss-by-client
@@ -2992,26 +3390,40 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'devices', 'packetLoss', 'byClient'],
-            'operation': 'getOrganizationWirelessDevicesPacketLossByClient'
+            "tags": ["wireless", "monitor", "devices", "packetLoss", "byClient"],
+            "operation": "getOrganizationWirelessDevicesPacketLossByClient",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/devices/packetLoss/byClient'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/packetLoss/byClient"
 
-        query_params = ['networkIds', 'ssids', 'bands', 'macs', 'perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', ]
+        query_params = [
+            "networkIds",
+            "ssids",
+            "bands",
+            "macs",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "t0",
+            "t1",
+            "timespan",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', 'ssids', 'bands', 'macs', ]
+        array_params = [
+            "networkIds",
+            "ssids",
+            "bands",
+            "macs",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationWirelessDevicesPacketLossByDevice(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationWirelessDevicesPacketLossByDevice(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Get average packet loss for the given timespan for all devices in the organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-packet-loss-by-device
@@ -3034,26 +3446,42 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'devices', 'packetLoss', 'byDevice'],
-            'operation': 'getOrganizationWirelessDevicesPacketLossByDevice'
+            "tags": ["wireless", "monitor", "devices", "packetLoss", "byDevice"],
+            "operation": "getOrganizationWirelessDevicesPacketLossByDevice",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/devices/packetLoss/byDevice'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/packetLoss/byDevice"
 
-        query_params = ['networkIds', 'serials', 'ssids', 'bands', 'perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', ]
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssids",
+            "bands",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "t0",
+            "t1",
+            "timespan",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', 'serials', 'ssids', 'bands', ]
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssids",
+            "bands",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationWirelessDevicesPacketLossByNetwork(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationWirelessDevicesPacketLossByNetwork(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
         """
         **Get average packet loss for the given timespan for all networks in the organization.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-packet-loss-by-network
@@ -3076,26 +3504,40 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'devices', 'packetLoss', 'byNetwork'],
-            'operation': 'getOrganizationWirelessDevicesPacketLossByNetwork'
+            "tags": ["wireless", "monitor", "devices", "packetLoss", "byNetwork"],
+            "operation": "getOrganizationWirelessDevicesPacketLossByNetwork",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/devices/packetLoss/byNetwork'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/packetLoss/byNetwork"
 
-        query_params = ['networkIds', 'serials', 'ssids', 'bands', 'perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', ]
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssids",
+            "bands",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "t0",
+            "t1",
+            "timespan",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', 'serials', 'ssids', 'bands', ]
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssids",
+            "bands",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationWirelessDevicesPowerModeHistory(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationWirelessDevicesPowerModeHistory(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Return a record of power mode changes for wireless devices in the organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-power-mode-history
@@ -3116,26 +3558,38 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'devices', 'power', 'mode', 'history'],
-            'operation': 'getOrganizationWirelessDevicesPowerModeHistory'
+            "tags": ["wireless", "monitor", "devices", "power", "mode", "history"],
+            "operation": "getOrganizationWirelessDevicesPowerModeHistory",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/devices/power/mode/history'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/power/mode/history"
 
-        query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'networkIds', 'serials', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "serials",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', 'serials', ]
+        array_params = [
+            "networkIds",
+            "serials",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationWirelessDevicesProvisioningDeployments(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationWirelessDevicesProvisioningDeployments(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
         """
         **List the zero touch deployments for wireless access points in an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-provisioning-deployments
@@ -3154,29 +3608,41 @@ class Wireless(object):
 
         kwargs.update(locals())
 
-        if 'sortBy' in kwargs:
-            options = ['afterAction', 'createdAt', 'deploymentId', 'name', 'status']
-            assert kwargs['sortBy'] in options, f'''"sortBy" cannot be "{kwargs['sortBy']}", & must be set to one of: {options}'''
-        if 'sortOrder' in kwargs:
-            options = ['asc', 'desc']
-            assert kwargs['sortOrder'] in options, f'''"sortOrder" cannot be "{kwargs['sortOrder']}", & must be set to one of: {options}'''
-        if 'deploymentType' in kwargs:
-            options = ['deploy', 'replace']
-            assert kwargs['deploymentType'] in options, f'''"deploymentType" cannot be "{kwargs['deploymentType']}", & must be set to one of: {options}'''
+        if "sortBy" in kwargs:
+            options = ["afterAction", "createdAt", "deploymentId", "name", "status"]
+            assert kwargs["sortBy"] in options, (
+                f'''"sortBy" cannot be "{kwargs["sortBy"]}", & must be set to one of: {options}'''
+            )
+        if "sortOrder" in kwargs:
+            options = ["asc", "desc"]
+            assert kwargs["sortOrder"] in options, (
+                f'''"sortOrder" cannot be "{kwargs["sortOrder"]}", & must be set to one of: {options}'''
+            )
+        if "deploymentType" in kwargs:
+            options = ["deploy", "replace"]
+            assert kwargs["deploymentType"] in options, (
+                f'''"deploymentType" cannot be "{kwargs["deploymentType"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['wireless', 'configure', 'devices', 'provisioning', 'deployments'],
-            'operation': 'getOrganizationWirelessDevicesProvisioningDeployments'
+            "tags": ["wireless", "configure", "devices", "provisioning", "deployments"],
+            "operation": "getOrganizationWirelessDevicesProvisioningDeployments",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/devices/provisioning/deployments'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/provisioning/deployments"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'search', 'sortBy', 'sortOrder', 'deploymentType', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "search",
+            "sortBy",
+            "sortOrder",
+            "deploymentType",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def createOrganizationWirelessDevicesProvisioningDeployment(self, organizationId: str, items: list, **kwargs):
         """
@@ -3191,18 +3657,19 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'devices', 'provisioning', 'deployments'],
-            'operation': 'createOrganizationWirelessDevicesProvisioningDeployment'
+            "tags": ["wireless", "configure", "devices", "provisioning", "deployments"],
+            "operation": "createOrganizationWirelessDevicesProvisioningDeployment",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/devices/provisioning/deployments'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/provisioning/deployments"
 
-        body_params = ['items', 'meta', ]
+        body_params = [
+            "items",
+            "meta",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def updateOrganizationWirelessDevicesProvisioningDeployments(self, organizationId: str, items: list, **kwargs):
         """
@@ -3217,18 +3684,19 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'devices', 'provisioning', 'deployments'],
-            'operation': 'updateOrganizationWirelessDevicesProvisioningDeployments'
+            "tags": ["wireless", "configure", "devices", "provisioning", "deployments"],
+            "operation": "updateOrganizationWirelessDevicesProvisioningDeployments",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/devices/provisioning/deployments'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/provisioning/deployments"
 
-        body_params = ['items', 'meta', ]
+        body_params = [
+            "items",
+            "meta",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteOrganizationWirelessDevicesProvisioningDeployment(self, organizationId: str, deploymentId: str):
         """
@@ -3240,16 +3708,14 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'devices', 'provisioning', 'deployments'],
-            'operation': 'deleteOrganizationWirelessDevicesProvisioningDeployment'
+            "tags": ["wireless", "configure", "devices", "provisioning", "deployments"],
+            "operation": "deleteOrganizationWirelessDevicesProvisioningDeployment",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        deploymentId = urllib.parse.quote(str(deploymentId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/devices/provisioning/deployments/{deploymentId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        deploymentId = urllib.parse.quote(str(deploymentId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/provisioning/deployments/{deploymentId}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def getOrganizationWirelessDevicesRadsecCertificatesAuthorities(self, organizationId: str, **kwargs):
         """
@@ -3263,24 +3729,26 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'devices', 'radsec', 'certificates', 'authorities'],
-            'operation': 'getOrganizationWirelessDevicesRadsecCertificatesAuthorities'
+            "tags": ["wireless", "configure", "devices", "radsec", "certificates", "authorities"],
+            "operation": "getOrganizationWirelessDevicesRadsecCertificatesAuthorities",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/devices/radsec/certificates/authorities'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/radsec/certificates/authorities"
 
-        query_params = ['certificateAuthorityIds', ]
+        query_params = [
+            "certificateAuthorityIds",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['certificateAuthorityIds', ]
+        array_params = [
+            "certificateAuthorityIds",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def updateOrganizationWirelessDevicesRadsecCertificatesAuthorities(self, organizationId: str, **kwargs):
         """
@@ -3295,18 +3763,19 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'devices', 'radsec', 'certificates', 'authorities'],
-            'operation': 'updateOrganizationWirelessDevicesRadsecCertificatesAuthorities'
+            "tags": ["wireless", "configure", "devices", "radsec", "certificates", "authorities"],
+            "operation": "updateOrganizationWirelessDevicesRadsecCertificatesAuthorities",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/devices/radsec/certificates/authorities'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/radsec/certificates/authorities"
 
-        body_params = ['status', 'certificateAuthorityId', ]
+        body_params = [
+            "status",
+            "certificateAuthorityId",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def createOrganizationWirelessDevicesRadsecCertificatesAuthority(self, organizationId: str):
         """
@@ -3317,15 +3786,13 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'devices', 'radsec', 'certificates', 'authorities'],
-            'operation': 'createOrganizationWirelessDevicesRadsecCertificatesAuthority'
+            "tags": ["wireless", "configure", "devices", "radsec", "certificates", "authorities"],
+            "operation": "createOrganizationWirelessDevicesRadsecCertificatesAuthority",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/devices/radsec/certificates/authorities'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/radsec/certificates/authorities"
 
         return self._session.post(metadata, resource)
-        
-
 
     def getOrganizationWirelessDevicesRadsecCertificatesAuthoritiesCrls(self, organizationId: str, **kwargs):
         """
@@ -3339,24 +3806,26 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'devices', 'radsec', 'certificates', 'authorities', 'crls'],
-            'operation': 'getOrganizationWirelessDevicesRadsecCertificatesAuthoritiesCrls'
+            "tags": ["wireless", "configure", "devices", "radsec", "certificates", "authorities", "crls"],
+            "operation": "getOrganizationWirelessDevicesRadsecCertificatesAuthoritiesCrls",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/devices/radsec/certificates/authorities/crls'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/radsec/certificates/authorities/crls"
 
-        query_params = ['certificateAuthorityIds', ]
+        query_params = [
+            "certificateAuthorityIds",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['certificateAuthorityIds', ]
+        array_params = [
+            "certificateAuthorityIds",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getOrganizationWirelessDevicesRadsecCertificatesAuthoritiesCrlsDeltas(self, organizationId: str, **kwargs):
         """
@@ -3370,26 +3839,30 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'devices', 'radsec', 'certificates', 'authorities', 'crls', 'deltas'],
-            'operation': 'getOrganizationWirelessDevicesRadsecCertificatesAuthoritiesCrlsDeltas'
+            "tags": ["wireless", "configure", "devices", "radsec", "certificates", "authorities", "crls", "deltas"],
+            "operation": "getOrganizationWirelessDevicesRadsecCertificatesAuthoritiesCrlsDeltas",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/devices/radsec/certificates/authorities/crls/deltas'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/radsec/certificates/authorities/crls/deltas"
 
-        query_params = ['certificateAuthorityIds', ]
+        query_params = [
+            "certificateAuthorityIds",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['certificateAuthorityIds', ]
+        array_params = [
+            "certificateAuthorityIds",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get(metadata, resource, params)
-        
 
-
-    def getOrganizationWirelessDevicesSystemCpuLoadHistory(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationWirelessDevicesSystemCpuLoadHistory(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
         """
         **Return the CPU Load history for a list of wireless devices in the organization.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-system-cpu-load-history
@@ -3410,26 +3883,38 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'devices', 'system', 'cpu', 'load', 'history'],
-            'operation': 'getOrganizationWirelessDevicesSystemCpuLoadHistory'
+            "tags": ["wireless", "monitor", "devices", "system", "cpu", "load", "history"],
+            "operation": "getOrganizationWirelessDevicesSystemCpuLoadHistory",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/devices/system/cpu/load/history'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/system/cpu/load/history"
 
-        query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'networkIds', 'serials', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "serials",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', 'serials', ]
+        array_params = [
+            "networkIds",
+            "serials",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationWirelessDevicesWirelessControllersByDevice(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationWirelessDevicesWirelessControllersByDevice(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
         """
         **List of Catalyst access points information**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-wireless-controllers-by-device
@@ -3448,26 +3933,35 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'devices', 'wirelessControllers', 'byDevice'],
-            'operation': 'getOrganizationWirelessDevicesWirelessControllersByDevice'
+            "tags": ["wireless", "monitor", "devices", "wirelessControllers", "byDevice"],
+            "operation": "getOrganizationWirelessDevicesWirelessControllersByDevice",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/devices/wirelessControllers/byDevice'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/wirelessControllers/byDevice"
 
-        query_params = ['networkIds', 'serials', 'controllerSerials', 'perPage', 'startingAfter', 'endingBefore', ]
+        query_params = [
+            "networkIds",
+            "serials",
+            "controllerSerials",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', 'serials', 'controllerSerials', ]
+        array_params = [
+            "networkIds",
+            "serials",
+            "controllerSerials",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationWirelessLocationScanningByNetwork(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationWirelessLocationScanningByNetwork(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Return scanning API settings**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-location-scanning-by-network
@@ -3484,26 +3978,31 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'location', 'scanning', 'byNetwork'],
-            'operation': 'getOrganizationWirelessLocationScanningByNetwork'
+            "tags": ["wireless", "configure", "location", "scanning", "byNetwork"],
+            "operation": "getOrganizationWirelessLocationScanningByNetwork",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/location/scanning/byNetwork'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/location/scanning/byNetwork"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', ]
+        array_params = [
+            "networkIds",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationWirelessLocationScanningReceivers(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationWirelessLocationScanningReceivers(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Return scanning API receivers**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-location-scanning-receivers
@@ -3520,26 +4019,33 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'location', 'scanning', 'receivers'],
-            'operation': 'getOrganizationWirelessLocationScanningReceivers'
+            "tags": ["wireless", "configure", "location", "scanning", "receivers"],
+            "operation": "getOrganizationWirelessLocationScanningReceivers",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/location/scanning/receivers'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/location/scanning/receivers"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', ]
+        array_params = [
+            "networkIds",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def createOrganizationWirelessLocationScanningReceiver(self, organizationId: str, network: dict, url: str, version: str, radio: dict, sharedSecret: str):
+    def createOrganizationWirelessLocationScanningReceiver(
+        self, organizationId: str, network: dict, url: str, version: str, radio: dict, sharedSecret: str
+    ):
         """
         **Add new receiver for scanning API**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-wireless-location-scanning-receiver
@@ -3555,18 +4061,22 @@ class Wireless(object):
         kwargs = locals()
 
         metadata = {
-            'tags': ['wireless', 'configure', 'location', 'scanning', 'receivers'],
-            'operation': 'createOrganizationWirelessLocationScanningReceiver'
+            "tags": ["wireless", "configure", "location", "scanning", "receivers"],
+            "operation": "createOrganizationWirelessLocationScanningReceiver",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/location/scanning/receivers'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/location/scanning/receivers"
 
-        body_params = ['network', 'url', 'version', 'radio', 'sharedSecret', ]
+        body_params = [
+            "network",
+            "url",
+            "version",
+            "radio",
+            "sharedSecret",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def updateOrganizationWirelessLocationScanningReceiver(self, organizationId: str, receiverId: str, **kwargs):
         """
@@ -3583,19 +4093,21 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'location', 'scanning', 'receivers'],
-            'operation': 'updateOrganizationWirelessLocationScanningReceiver'
+            "tags": ["wireless", "configure", "location", "scanning", "receivers"],
+            "operation": "updateOrganizationWirelessLocationScanningReceiver",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        receiverId = urllib.parse.quote(str(receiverId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/location/scanning/receivers/{receiverId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        receiverId = urllib.parse.quote(str(receiverId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/location/scanning/receivers/{receiverId}"
 
-        body_params = ['url', 'version', 'radio', ]
+        body_params = [
+            "url",
+            "version",
+            "radio",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteOrganizationWirelessLocationScanningReceiver(self, organizationId: str, receiverId: str):
         """
@@ -3607,18 +4119,16 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'location', 'scanning', 'receivers'],
-            'operation': 'deleteOrganizationWirelessLocationScanningReceiver'
+            "tags": ["wireless", "configure", "location", "scanning", "receivers"],
+            "operation": "deleteOrganizationWirelessLocationScanningReceiver",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        receiverId = urllib.parse.quote(str(receiverId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/location/scanning/receivers/{receiverId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        receiverId = urllib.parse.quote(str(receiverId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/location/scanning/receivers/{receiverId}"
 
         return self._session.delete(metadata, resource)
-        
 
-
-    def getOrganizationWirelessMqttSettings(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationWirelessMqttSettings(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Return MQTT Settings for networks**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-mqtt-settings
@@ -3635,24 +4145,29 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'mqtt', 'settings'],
-            'operation': 'getOrganizationWirelessMqttSettings'
+            "tags": ["wireless", "configure", "mqtt", "settings"],
+            "operation": "getOrganizationWirelessMqttSettings",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/mqtt/settings'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/mqtt/settings"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', ]
+        array_params = [
+            "networkIds",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def updateOrganizationWirelessMqttSettings(self, organizationId: str, network: dict, mqtt: dict, **kwargs):
         """
@@ -3669,18 +4184,21 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'mqtt', 'settings'],
-            'operation': 'updateOrganizationWirelessMqttSettings'
+            "tags": ["wireless", "configure", "mqtt", "settings"],
+            "operation": "updateOrganizationWirelessMqttSettings",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/mqtt/settings'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/mqtt/settings"
 
-        body_params = ['network', 'mqtt', 'ble', 'wifi', ]
+        body_params = [
+            "network",
+            "mqtt",
+            "ble",
+            "wifi",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def recalculateOrganizationWirelessRadioAutoRfChannels(self, organizationId: str, networkIds: list):
         """
@@ -3694,20 +4212,20 @@ class Wireless(object):
         kwargs = locals()
 
         metadata = {
-            'tags': ['wireless', 'configure', 'radio', 'autoRf', 'channels'],
-            'operation': 'recalculateOrganizationWirelessRadioAutoRfChannels'
+            "tags": ["wireless", "configure", "radio", "autoRf", "channels"],
+            "operation": "recalculateOrganizationWirelessRadioAutoRfChannels",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/radio/autoRf/channels/recalculate'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/radio/autoRf/channels/recalculate"
 
-        body_params = ['networkIds', ]
+        body_params = [
+            "networkIds",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
 
-
-    def getOrganizationWirelessRadioRrmByNetwork(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationWirelessRadioRrmByNetwork(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **List the AutoRF settings of an organization by network**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-radio-rrm-by-network
@@ -3724,31 +4242,41 @@ class Wireless(object):
 
         kwargs.update(locals())
 
-        if 'sortOrder' in kwargs:
-            options = ['ascending', 'descending']
-            assert kwargs['sortOrder'] in options, f'''"sortOrder" cannot be "{kwargs['sortOrder']}", & must be set to one of: {options}'''
+        if "sortOrder" in kwargs:
+            options = ["ascending", "descending"]
+            assert kwargs["sortOrder"] in options, (
+                f'''"sortOrder" cannot be "{kwargs["sortOrder"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['wireless', 'configure', 'radio', 'rrm', 'byNetwork'],
-            'operation': 'getOrganizationWirelessRadioRrmByNetwork'
+            "tags": ["wireless", "configure", "radio", "rrm", "byNetwork"],
+            "operation": "getOrganizationWirelessRadioRrmByNetwork",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/radio/rrm/byNetwork'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/radio/rrm/byNetwork"
 
-        query_params = ['networkIds', 'startingAfter', 'endingBefore', 'perPage', 'sortOrder', ]
+        query_params = [
+            "networkIds",
+            "startingAfter",
+            "endingBefore",
+            "perPage",
+            "sortOrder",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', ]
+        array_params = [
+            "networkIds",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationWirelessRfProfilesAssignmentsByDevice(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationWirelessRfProfilesAssignmentsByDevice(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
         """
         **List the RF profiles of an organization by device**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-rf-profiles-assignments-by-device
@@ -3773,26 +4301,45 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'rfProfiles', 'assignments', 'byDevice'],
-            'operation': 'getOrganizationWirelessRfProfilesAssignmentsByDevice'
+            "tags": ["wireless", "configure", "rfProfiles", "assignments", "byDevice"],
+            "operation": "getOrganizationWirelessRfProfilesAssignmentsByDevice",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/rfProfiles/assignments/byDevice'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/rfProfiles/assignments/byDevice"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'productTypes', 'name', 'mac', 'serial', 'model', 'macs', 'serials', 'models', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "productTypes",
+            "name",
+            "mac",
+            "serial",
+            "model",
+            "macs",
+            "serials",
+            "models",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', 'productTypes', 'macs', 'serials', 'models', ]
+        array_params = [
+            "networkIds",
+            "productTypes",
+            "macs",
+            "serials",
+            "models",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationWirelessSsidsFirewallIsolationAllowlistEntries(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationWirelessSsidsFirewallIsolationAllowlistEntries(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
         """
         **List the L2 isolation allow list MAC entry in an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-ssids-firewall-isolation-allowlist-entries
@@ -3810,26 +4357,35 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'firewall', 'isolation', 'allowlist', 'entries'],
-            'operation': 'getOrganizationWirelessSsidsFirewallIsolationAllowlistEntries'
+            "tags": ["wireless", "configure", "ssids", "firewall", "isolation", "allowlist", "entries"],
+            "operation": "getOrganizationWirelessSsidsFirewallIsolationAllowlistEntries",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/ssids/firewall/isolation/allowlist/entries'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/firewall/isolation/allowlist/entries"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'ssids', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "ssids",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', 'ssids', ]
+        array_params = [
+            "networkIds",
+            "ssids",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def createOrganizationWirelessSsidsFirewallIsolationAllowlistEntry(self, organizationId: str, client: dict, ssid: dict, network: dict, **kwargs):
+    def createOrganizationWirelessSsidsFirewallIsolationAllowlistEntry(
+        self, organizationId: str, client: dict, ssid: dict, network: dict, **kwargs
+    ):
         """
         **Create isolation allow list MAC entry for this organization**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-wireless-ssids-firewall-isolation-allowlist-entry
@@ -3844,18 +4400,21 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'firewall', 'isolation', 'allowlist', 'entries'],
-            'operation': 'createOrganizationWirelessSsidsFirewallIsolationAllowlistEntry'
+            "tags": ["wireless", "configure", "ssids", "firewall", "isolation", "allowlist", "entries"],
+            "operation": "createOrganizationWirelessSsidsFirewallIsolationAllowlistEntry",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/ssids/firewall/isolation/allowlist/entries'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/firewall/isolation/allowlist/entries"
 
-        body_params = ['description', 'client', 'ssid', 'network', ]
+        body_params = [
+            "description",
+            "client",
+            "ssid",
+            "network",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def deleteOrganizationWirelessSsidsFirewallIsolationAllowlistEntry(self, organizationId: str, entryId: str):
         """
@@ -3867,16 +4426,14 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'firewall', 'isolation', 'allowlist', 'entries'],
-            'operation': 'deleteOrganizationWirelessSsidsFirewallIsolationAllowlistEntry'
+            "tags": ["wireless", "configure", "ssids", "firewall", "isolation", "allowlist", "entries"],
+            "operation": "deleteOrganizationWirelessSsidsFirewallIsolationAllowlistEntry",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        entryId = urllib.parse.quote(str(entryId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/ssids/firewall/isolation/allowlist/entries/{entryId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        entryId = urllib.parse.quote(str(entryId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/firewall/isolation/allowlist/entries/{entryId}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def updateOrganizationWirelessSsidsFirewallIsolationAllowlistEntry(self, organizationId: str, entryId: str, **kwargs):
         """
@@ -3892,21 +4449,22 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'firewall', 'isolation', 'allowlist', 'entries'],
-            'operation': 'updateOrganizationWirelessSsidsFirewallIsolationAllowlistEntry'
+            "tags": ["wireless", "configure", "ssids", "firewall", "isolation", "allowlist", "entries"],
+            "operation": "updateOrganizationWirelessSsidsFirewallIsolationAllowlistEntry",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        entryId = urllib.parse.quote(str(entryId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/ssids/firewall/isolation/allowlist/entries/{entryId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        entryId = urllib.parse.quote(str(entryId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/firewall/isolation/allowlist/entries/{entryId}"
 
-        body_params = ['description', 'client', ]
+        body_params = [
+            "description",
+            "client",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
 
-
-    def getOrganizationWirelessSsidsOpenRoamingByNetwork(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationWirelessSsidsOpenRoamingByNetwork(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Returns an array of objects, each containing SSID OpenRoaming configs for the corresponding network**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-ssids-open-roaming-by-network
@@ -3924,26 +4482,32 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'ssids', 'openRoaming', 'byNetwork'],
-            'operation': 'getOrganizationWirelessSsidsOpenRoamingByNetwork'
+            "tags": ["wireless", "configure", "ssids", "openRoaming", "byNetwork"],
+            "operation": "getOrganizationWirelessSsidsOpenRoamingByNetwork",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/ssids/openRoaming/byNetwork'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/openRoaming/byNetwork"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'includeDisabledSsids', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "includeDisabledSsids",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', ]
+        array_params = [
+            "networkIds",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationWirelessSsidsStatusesByDevice(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationWirelessSsidsStatusesByDevice(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **List status information of all BSSIDs in your organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-ssids-statuses-by-device
@@ -3963,26 +4527,36 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'monitor', 'ssids', 'statuses', 'byDevice'],
-            'operation': 'getOrganizationWirelessSsidsStatusesByDevice'
+            "tags": ["wireless", "monitor", "ssids", "statuses", "byDevice"],
+            "operation": "getOrganizationWirelessSsidsStatusesByDevice",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/ssids/statuses/byDevice'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/statuses/byDevice"
 
-        query_params = ['networkIds', 'serials', 'bssids', 'hideDisabled', 'perPage', 'startingAfter', 'endingBefore', ]
+        query_params = [
+            "networkIds",
+            "serials",
+            "bssids",
+            "hideDisabled",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', 'serials', 'bssids', ]
+        array_params = [
+            "networkIds",
+            "serials",
+            "bssids",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationWirelessZigbeeByNetwork(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationWirelessZigbeeByNetwork(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Return list of Zigbee configs**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-zigbee-by-network
@@ -3999,26 +4573,31 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'zigbee', 'byNetwork'],
-            'operation': 'getOrganizationWirelessZigbeeByNetwork'
+            "tags": ["wireless", "configure", "zigbee", "byNetwork"],
+            "operation": "getOrganizationWirelessZigbeeByNetwork",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/zigbee/byNetwork'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/zigbee/byNetwork"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', ]
+        array_params = [
+            "networkIds",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationWirelessZigbeeDevices(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationWirelessZigbeeDevices(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **List the Zigbee wireless devices for an organization or the supplied network(s)**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-zigbee-devices
@@ -4037,24 +4616,31 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'zigbee', 'devices'],
-            'operation': 'getOrganizationWirelessZigbeeDevices'
+            "tags": ["wireless", "configure", "zigbee", "devices"],
+            "operation": "getOrganizationWirelessZigbeeDevices",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/zigbee/devices'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/zigbee/devices"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'isEnrolled', 'search', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "isEnrolled",
+            "search",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', ]
+        array_params = [
+            "networkIds",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def updateOrganizationWirelessZigbeeDevice(self, organizationId: str, id: str, enrolled: bool, **kwargs):
         """
@@ -4070,19 +4656,20 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'zigbee', 'devices'],
-            'operation': 'updateOrganizationWirelessZigbeeDevice'
+            "tags": ["wireless", "configure", "zigbee", "devices"],
+            "operation": "updateOrganizationWirelessZigbeeDevice",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        id = urllib.parse.quote(str(id), safe='')
-        resource = f'/organizations/{organizationId}/wireless/zigbee/devices/{id}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/wireless/zigbee/devices/{id}"
 
-        body_params = ['enrolled', 'channel', ]
+        body_params = [
+            "enrolled",
+            "channel",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def createOrganizationWirelessZigbeeDisenrollment(self, organizationId: str, **kwargs):
         """
@@ -4096,18 +4683,18 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'zigbee', 'disenrollments'],
-            'operation': 'createOrganizationWirelessZigbeeDisenrollment'
+            "tags": ["wireless", "configure", "zigbee", "disenrollments"],
+            "operation": "createOrganizationWirelessZigbeeDisenrollment",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/zigbee/disenrollments'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/zigbee/disenrollments"
 
-        body_params = ['doorLockIds', ]
+        body_params = [
+            "doorLockIds",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getOrganizationWirelessZigbeeDisenrollment(self, organizationId: str, disenrollmentId: str):
         """
@@ -4119,18 +4706,16 @@ class Wireless(object):
         """
 
         metadata = {
-            'tags': ['wireless', 'configure', 'zigbee', 'disenrollments'],
-            'operation': 'getOrganizationWirelessZigbeeDisenrollment'
+            "tags": ["wireless", "configure", "zigbee", "disenrollments"],
+            "operation": "getOrganizationWirelessZigbeeDisenrollment",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        disenrollmentId = urllib.parse.quote(str(disenrollmentId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/zigbee/disenrollments/{disenrollmentId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        disenrollmentId = urllib.parse.quote(str(disenrollmentId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/zigbee/disenrollments/{disenrollmentId}"
 
         return self._session.get(metadata, resource)
-        
 
-
-    def getOrganizationWirelessZigbeeDoorLocks(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationWirelessZigbeeDoorLocks(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Return the list of door locks for a network**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-zigbee-door-locks
@@ -4148,24 +4733,30 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'zigbee', 'doorLocks'],
-            'operation': 'getOrganizationWirelessZigbeeDoorLocks'
+            "tags": ["wireless", "configure", "zigbee", "doorLocks"],
+            "operation": "getOrganizationWirelessZigbeeDoorLocks",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/zigbee/doorLocks'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/zigbee/doorLocks"
 
-        query_params = ['networkIds', 'serial', 'perPage', 'startingAfter', 'endingBefore', ]
+        query_params = [
+            "networkIds",
+            "serial",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', ]
+        array_params = [
+            "networkIds",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def updateOrganizationWirelessZigbeeDoorLock(self, organizationId: str, doorLockId: str, **kwargs):
         """
@@ -4180,15 +4771,16 @@ class Wireless(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['wireless', 'configure', 'zigbee', 'doorLocks'],
-            'operation': 'updateOrganizationWirelessZigbeeDoorLock'
+            "tags": ["wireless", "configure", "zigbee", "doorLocks"],
+            "operation": "updateOrganizationWirelessZigbeeDoorLock",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        doorLockId = urllib.parse.quote(str(doorLockId), safe='')
-        resource = f'/organizations/{organizationId}/wireless/zigbee/doorLocks/{doorLockId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        doorLockId = urllib.parse.quote(str(doorLockId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/zigbee/doorLocks/{doorLockId}"
 
-        body_params = ['name', ]
+        body_params = [
+            "name",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        

@@ -5,8 +5,6 @@ class Administered(object):
     def __init__(self, session):
         super(Administered, self).__init__()
         self._session = session
-        
-
 
     def getAdministeredIdentitiesMe(self):
         """
@@ -16,14 +14,12 @@ class Administered(object):
         """
 
         metadata = {
-            'tags': ['administered', 'monitor', 'identities', 'me'],
-            'operation': 'getAdministeredIdentitiesMe'
+            "tags": ["administered", "monitor", "identities", "me"],
+            "operation": "getAdministeredIdentitiesMe",
         }
-        resource = f'/administered/identities/me'
+        resource = "/administered/identities/me"
 
         return self._session.get(metadata, resource)
-        
-
 
     def getAdministeredIdentitiesMeApiKeys(self):
         """
@@ -33,14 +29,12 @@ class Administered(object):
         """
 
         metadata = {
-            'tags': ['administered', 'configure', 'identities', 'me', 'api', 'keys'],
-            'operation': 'getAdministeredIdentitiesMeApiKeys'
+            "tags": ["administered", "configure", "identities", "me", "api", "keys"],
+            "operation": "getAdministeredIdentitiesMeApiKeys",
         }
-        resource = f'/administered/identities/me/api/keys'
+        resource = "/administered/identities/me/api/keys"
 
         return self._session.get(metadata, resource)
-        
-
 
     def generateAdministeredIdentitiesMeApiKeys(self):
         """
@@ -50,14 +44,12 @@ class Administered(object):
         """
 
         metadata = {
-            'tags': ['administered', 'configure', 'identities', 'me', 'api', 'keys'],
-            'operation': 'generateAdministeredIdentitiesMeApiKeys'
+            "tags": ["administered", "configure", "identities", "me", "api", "keys"],
+            "operation": "generateAdministeredIdentitiesMeApiKeys",
         }
-        resource = f'/administered/identities/me/api/keys/generate'
+        resource = "/administered/identities/me/api/keys/generate"
 
         return self._session.post(metadata, resource)
-        
-
 
     def revokeAdministeredIdentitiesMeApiKeys(self, suffix: str):
         """
@@ -68,11 +60,10 @@ class Administered(object):
         """
 
         metadata = {
-            'tags': ['administered', 'configure', 'identities', 'me', 'api', 'keys'],
-            'operation': 'revokeAdministeredIdentitiesMeApiKeys'
+            "tags": ["administered", "configure", "identities", "me", "api", "keys"],
+            "operation": "revokeAdministeredIdentitiesMeApiKeys",
         }
-        suffix = urllib.parse.quote(str(suffix), safe='')
-        resource = f'/administered/identities/me/api/keys/{suffix}/revoke'
+        suffix = urllib.parse.quote(str(suffix), safe="")
+        resource = f"/administered/identities/me/api/keys/{suffix}/revoke"
 
         return self._session.post(metadata, resource)
-        

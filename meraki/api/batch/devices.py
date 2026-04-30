@@ -4,8 +4,6 @@ import urllib
 class ActionBatchDevices(object):
     def __init__(self):
         super(ActionBatchDevices, self).__init__()
-        
-
 
     def updateDevice(self, serial: str, **kwargs):
         """
@@ -26,29 +24,31 @@ class ActionBatchDevices(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['devices', 'configure'],
-            'operation': 'updateDevice'
-        }
-        resource = f'/devices/{serial}'
+        serial = urllib.parse.quote(serial, safe="")
+        resource = f"/devices/{serial}"
 
-        body_params = ['name', 'tags', 'lat', 'lng', 'address', 'notes', 'moveMapMarker', 'switchProfileId', 'floorPlanId', ]
+        body_params = [
+            "name",
+            "tags",
+            "lat",
+            "lng",
+            "address",
+            "notes",
+            "moveMapMarker",
+            "switchProfileId",
+            "floorPlanId",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def createDeviceLiveToolsLedsBlink(self, serial: str, duration: int, **kwargs):
         """
-        **Enqueue a job to blink LEDs on a device**
+        **Enqueue a job to blink LEDs on a device. This endpoint has a rate limit of one request every 10 seconds.**
         https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-leds-blink
 
         - serial (string): Serial
@@ -58,29 +58,24 @@ class ActionBatchDevices(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['devices', 'liveTools', 'leds', 'blink'],
-            'operation': 'createDeviceLiveToolsLedsBlink'
-        }
-        resource = f'/devices/{serial}/liveTools/leds/blink'
+        serial = urllib.parse.quote(serial, safe="")
+        resource = f"/devices/{serial}/liveTools/leds/blink"
 
-        body_params = ['duration', 'callback', ]
+        body_params = [
+            "duration",
+            "callback",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "blink",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def createDeviceLiveToolsThroughputTest(self, serial: str, **kwargs):
         """
-        **Enqueue a job to test a device throughput, the test will run for 10 secs to test throughput**
+        **Enqueue a job to test a device throughput, the test will run for 10 secs to test throughput. This endpoint has a rate limit of one request every five seconds per device.**
         https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-throughput-test
 
         - serial (string): Serial
@@ -89,25 +84,19 @@ class ActionBatchDevices(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['devices', 'liveTools', 'throughputTest'],
-            'operation': 'createDeviceLiveToolsThroughputTest'
-        }
-        resource = f'/devices/{serial}/liveTools/throughputTest'
+        serial = urllib.parse.quote(serial, safe="")
+        resource = f"/devices/{serial}/liveTools/throughputTest"
 
-        body_params = ['callback', ]
+        body_params = [
+            "callback",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "test",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateDeviceManagementInterface(self, serial: str, **kwargs):
         """
@@ -121,21 +110,17 @@ class ActionBatchDevices(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['devices', 'configure', 'managementInterface'],
-            'operation': 'updateDeviceManagementInterface'
-        }
-        resource = f'/devices/{serial}/managementInterface'
+        serial = urllib.parse.quote(serial, safe="")
+        resource = f"/devices/{serial}/managementInterface"
 
-        body_params = ['wan1', 'wan2', ]
+        body_params = [
+            "wan1",
+            "wan2",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-

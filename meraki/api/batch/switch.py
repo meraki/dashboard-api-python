@@ -4,8 +4,6 @@ import urllib
 class ActionBatchSwitch(object):
     def __init__(self):
         super(ActionBatchSwitch, self).__init__()
-        
-
 
     def cycleDeviceSwitchPorts(self, serial: str, ports: list):
         """
@@ -18,25 +16,19 @@ class ActionBatchSwitch(object):
 
         kwargs = locals()
 
-        metadata = {
-            'tags': ['switch', 'liveTools', 'ports'],
-            'operation': 'cycleDeviceSwitchPorts'
-        }
-        resource = f'/devices/{serial}/switch/ports/cycle'
+        serial = urllib.parse.quote(serial, safe="")
+        resource = f"/devices/{serial}/switch/ports/cycle"
 
-        body_params = ['ports', ]
+        body_params = [
+            "ports",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "cycle",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateDeviceSwitchPort(self, serial: str, portId: str, **kwargs):
         """
@@ -79,38 +71,65 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        if 'type' in kwargs:
-            options = ['access', 'dad', 'routed', 'stack', 'svl', 'trunk']
-            assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
-        if 'stpGuard' in kwargs:
-            options = ['bpdu guard', 'disabled', 'loop guard', 'root guard']
-            assert kwargs['stpGuard'] in options, f'''"stpGuard" cannot be "{kwargs['stpGuard']}", & must be set to one of: {options}'''
-        if 'udld' in kwargs:
-            options = ['Alert only', 'Enforce']
-            assert kwargs['udld'] in options, f'''"udld" cannot be "{kwargs['udld']}", & must be set to one of: {options}'''
-        if 'accessPolicyType' in kwargs:
-            options = ['Custom access policy', 'MAC allow list', 'Open', 'Sticky MAC allow list']
-            assert kwargs['accessPolicyType'] in options, f'''"accessPolicyType" cannot be "{kwargs['accessPolicyType']}", & must be set to one of: {options}'''
+        if "type" in kwargs:
+            options = ["access", "dad", "routed", "stack", "svl", "trunk"]
+            assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
+        if "stpGuard" in kwargs:
+            options = ["bpdu guard", "disabled", "loop guard", "root guard"]
+            assert kwargs["stpGuard"] in options, (
+                f'''"stpGuard" cannot be "{kwargs["stpGuard"]}", & must be set to one of: {options}'''
+            )
+        if "udld" in kwargs:
+            options = ["Alert only", "Enforce"]
+            assert kwargs["udld"] in options, f'''"udld" cannot be "{kwargs["udld"]}", & must be set to one of: {options}'''
+        if "accessPolicyType" in kwargs:
+            options = ["Custom access policy", "MAC allow list", "Open", "Sticky MAC allow list"]
+            assert kwargs["accessPolicyType"] in options, (
+                f'''"accessPolicyType" cannot be "{kwargs["accessPolicyType"]}", & must be set to one of: {options}'''
+            )
 
-        metadata = {
-            'tags': ['switch', 'configure', 'ports'],
-            'operation': 'updateDeviceSwitchPort'
-        }
-        resource = f'/devices/{serial}/switch/ports/{portId}'
+        serial = urllib.parse.quote(serial, safe="")
+        portId = urllib.parse.quote(portId, safe="")
+        resource = f"/devices/{serial}/switch/ports/{portId}"
 
-        body_params = ['name', 'tags', 'enabled', 'poeEnabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'stpPortFastTrunk', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'macWhitelistLimit', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', 'adaptivePolicyGroupId', 'peerSgtCapable', 'flexibleStackingEnabled', 'daiTrusted', 'profile', 'dot3az', 'highSpeed', ]
+        body_params = [
+            "name",
+            "tags",
+            "enabled",
+            "poeEnabled",
+            "type",
+            "vlan",
+            "voiceVlan",
+            "allowedVlans",
+            "isolationEnabled",
+            "rstpEnabled",
+            "stpGuard",
+            "stpPortFastTrunk",
+            "linkNegotiation",
+            "portScheduleId",
+            "udld",
+            "accessPolicyType",
+            "accessPolicyNumber",
+            "macAllowList",
+            "macWhitelistLimit",
+            "stickyMacAllowList",
+            "stickyMacAllowListLimit",
+            "stormControlEnabled",
+            "adaptivePolicyGroupId",
+            "peerSgtCapable",
+            "flexibleStackingEnabled",
+            "daiTrusted",
+            "profile",
+            "dot3az",
+            "highSpeed",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def createDeviceSwitchRoutingInterface(self, serial: str, name: str, **kwargs):
         """
@@ -119,10 +138,11 @@ class ActionBatchSwitch(object):
 
         - serial (string): Serial
         - name (string): A friendly name or description for the interface or VLAN (max length 128 characters).
-        - mode (string): L3 Interface mode, can be one of 'vlan', 'routed', 'loopback'. Default is 'vlan'. CS 17.18 or higher is required for 'routed' mode. 
+        - mode (string): L3 Interface mode, can be one of 'vlan', 'routed', 'loopback'. Default is 'vlan'. CS 17.18 or higher is required for 'routed' mode.
         - subnet (string): The network that this L3 interface is on, in CIDR notation (ex. 10.1.1.0/24).
         - switchPortId (string): Switch Port ID when in Routed mode (CS 17.18 or higher required)
         - interfaceIp (string): The IP address that will be used for Layer 3 routing on this VLAN or subnet. This cannot be the same         as the device management IP.
+        - mtu (integer): The interface MTU. Applies to native switch layer 3 interfaces, including VLAN and routed modes.
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
         - vlanId (integer): The VLAN this L3 interface is on. VLAN must be between 1 and 4094.
         - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a L3 interface. Required if this is the first IPv4 interface.
@@ -134,32 +154,40 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        if 'mode' in kwargs:
-            options = ['loopback', 'oob_management', 'routed', 'vlan']
-            assert kwargs['mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
-        if 'multicastRouting' in kwargs:
-            options = ['IGMP snooping querier', 'disabled', 'enabled']
-            assert kwargs['multicastRouting'] in options, f'''"multicastRouting" cannot be "{kwargs['multicastRouting']}", & must be set to one of: {options}'''
+        if "mode" in kwargs:
+            options = ["loopback", "oob_management", "routed", "vlan"]
+            assert kwargs["mode"] in options, f'''"mode" cannot be "{kwargs["mode"]}", & must be set to one of: {options}'''
+        if "multicastRouting" in kwargs:
+            options = ["IGMP snooping querier", "disabled", "enabled"]
+            assert kwargs["multicastRouting"] in options, (
+                f'''"multicastRouting" cannot be "{kwargs["multicastRouting"]}", & must be set to one of: {options}'''
+            )
 
-        metadata = {
-            'tags': ['switch', 'configure', 'routing', 'interfaces'],
-            'operation': 'createDeviceSwitchRoutingInterface'
-        }
-        resource = f'/devices/{serial}/switch/routing/interfaces'
+        serial = urllib.parse.quote(serial, safe="")
+        resource = f"/devices/{serial}/switch/routing/interfaces"
 
-        body_params = ['name', 'mode', 'subnet', 'switchPortId', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ipv6', 'vrf', 'loopback', ]
+        body_params = [
+            "name",
+            "mode",
+            "subnet",
+            "switchPortId",
+            "interfaceIp",
+            "mtu",
+            "multicastRouting",
+            "vlanId",
+            "defaultGateway",
+            "ospfSettings",
+            "ipv6",
+            "vrf",
+            "loopback",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "create",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateDeviceSwitchRoutingInterface(self, serial: str, interfaceId: str, **kwargs):
         """
@@ -172,6 +200,7 @@ class ActionBatchSwitch(object):
         - subnet (string): The network that this L3 interface is on, in CIDR notation (ex. 10.1.1.0/24).
         - switchPortId (string): Switch Port ID when in Routed mode (CS 17.18 or higher required)
         - interfaceIp (string): The IP address that will be used for Layer 3 routing on this VLAN or subnet. This cannot be the same         as the device management IP.
+        - mtu (integer): The interface MTU. Applies to native switch layer 3 interfaces, including VLAN and routed modes.
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
         - vlanId (integer): The VLAN this L3 interface is on. VLAN must be between 1 and 4094.
         - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a L3 interface. Required if this is the first IPv4 interface.
@@ -183,29 +212,37 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        if 'multicastRouting' in kwargs:
-            options = ['IGMP snooping querier', 'disabled', 'enabled']
-            assert kwargs['multicastRouting'] in options, f'''"multicastRouting" cannot be "{kwargs['multicastRouting']}", & must be set to one of: {options}'''
+        if "multicastRouting" in kwargs:
+            options = ["IGMP snooping querier", "disabled", "enabled"]
+            assert kwargs["multicastRouting"] in options, (
+                f'''"multicastRouting" cannot be "{kwargs["multicastRouting"]}", & must be set to one of: {options}'''
+            )
 
-        metadata = {
-            'tags': ['switch', 'configure', 'routing', 'interfaces'],
-            'operation': 'updateDeviceSwitchRoutingInterface'
-        }
-        resource = f'/devices/{serial}/switch/routing/interfaces/{interfaceId}'
+        serial = urllib.parse.quote(serial, safe="")
+        interfaceId = urllib.parse.quote(interfaceId, safe="")
+        resource = f"/devices/{serial}/switch/routing/interfaces/{interfaceId}"
 
-        body_params = ['name', 'subnet', 'switchPortId', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ipv6', 'vrf', 'loopback', ]
+        body_params = [
+            "name",
+            "subnet",
+            "switchPortId",
+            "interfaceIp",
+            "mtu",
+            "multicastRouting",
+            "vlanId",
+            "defaultGateway",
+            "ospfSettings",
+            "ipv6",
+            "vrf",
+            "loopback",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def deleteDeviceSwitchRoutingInterface(self, serial: str, interfaceId: str):
         """
@@ -216,79 +253,83 @@ class ActionBatchSwitch(object):
         - interfaceId (string): Interface ID
         """
 
-        metadata = {
-            'tags': ['switch', 'configure', 'routing', 'interfaces'],
-            'operation': 'deleteDeviceSwitchRoutingInterface'
-        }
-        resource = f'/devices/{serial}/switch/routing/interfaces/{interfaceId}'
+        serial = urllib.parse.quote(serial, safe="")
+        interfaceId = urllib.parse.quote(interfaceId, safe="")
+        resource = f"/devices/{serial}/switch/routing/interfaces/{interfaceId}"
 
         action = {
             "resource": resource,
             "operation": "destroy",
         }
         return action
-        
-
-
-
-
 
     def updateDeviceSwitchRoutingInterfaceDhcp(self, serial: str, interfaceId: str, **kwargs):
         """
-        **Update a layer 3 interface DHCP configuration for a switch**
-        https://developer.cisco.com/meraki/api-v1/#!update-device-switch-routing-interface-dhcp
+         **Update a layer 3 interface DHCP configuration for a switch**
+         https://developer.cisco.com/meraki/api-v1/#!update-device-switch-routing-interface-dhcp
 
-        - serial (string): Serial
-        - interfaceId (string): Interface ID
-        - dhcpMode (string): The DHCP mode options for the switch interface
-       ('dhcpDisabled', 'dhcpRelay' or 'dhcpServer')
-        - dhcpRelayServerIps (array): The DHCP relay server IPs to which DHCP packets would get relayed for the switch interface
-        - dhcpLeaseTime (string): The DHCP lease time config for the dhcp server running on switch interface
-        ('30 minutes', '1 hour', '4 hours', '12 hours', '1 day' or '1 week')
-        - dnsNameserversOption (string): The DHCP name server option for the dhcp server running on the switch interface
-        ('googlePublicDns', 'openDns' or 'custom')
-        - dnsCustomNameservers (array): The DHCP name server IPs when DHCP name server option is
-        'custom'
-        - bootOptionsEnabled (boolean): Enable DHCP boot options to provide PXE boot options configs for the dhcp server running on the switch
-        interface
-        - bootNextServer (string): The PXE boot server IP for the DHCP server running on the switch interface
-        - bootFileName (string): The PXE boot server filename for the DHCP server running on the switch interface
-        - dhcpOptions (array): Array of DHCP options consisting of code, type and value for the DHCP server running on the switch interface
-        - reservedIpRanges (array): Array of DHCP reserved IP assignments for the DHCP server running on the switch interface
-        - fixedIpAssignments (array): Array of DHCP fixed IP assignments for the DHCP server running on the switch interface
+         - serial (string): Serial
+         - interfaceId (string): Interface ID
+         - dhcpMode (string): The DHCP mode options for the switch interface
+        ('dhcpDisabled', 'dhcpRelay' or 'dhcpServer')
+         - dhcpRelayServerIps (array): The DHCP relay server IPs to which DHCP packets would get relayed for the switch interface
+         - dhcpLeaseTime (string): The DHCP lease time config for the dhcp server running on switch interface
+         ('30 minutes', '1 hour', '4 hours', '12 hours', '1 day' or '1 week')
+         - dnsNameserversOption (string): The DHCP name server option for the dhcp server running on the switch interface
+         ('googlePublicDns', 'openDns' or 'custom')
+         - dnsCustomNameservers (array): The DHCP name server IPs when DHCP name server option is
+         'custom'
+         - bootOptionsEnabled (boolean): Enable DHCP boot options to provide PXE boot options configs for the dhcp server running on the switch
+         interface
+         - bootNextServer (string): The PXE boot server IP for the DHCP server running on the switch interface
+         - bootFileName (string): The PXE boot server filename for the DHCP server running on the switch interface
+         - dhcpOptions (array): Array of DHCP options consisting of code, type and value for the DHCP server running on the switch interface
+         - reservedIpRanges (array): Array of DHCP reserved IP assignments for the DHCP server running on the switch interface
+         - fixedIpAssignments (array): Array of DHCP fixed IP assignments for the DHCP server running on the switch interface
         """
 
         kwargs.update(locals())
 
-        if 'dhcpMode' in kwargs:
-            options = ['dhcpDisabled', 'dhcpRelay', 'dhcpServer']
-            assert kwargs['dhcpMode'] in options, f'''"dhcpMode" cannot be "{kwargs['dhcpMode']}", & must be set to one of: {options}'''
-        if 'dhcpLeaseTime' in kwargs:
-            options = ['1 day', '1 hour', '1 week', '12 hours', '30 minutes', '4 hours']
-            assert kwargs['dhcpLeaseTime'] in options, f'''"dhcpLeaseTime" cannot be "{kwargs['dhcpLeaseTime']}", & must be set to one of: {options}'''
-        if 'dnsNameserversOption' in kwargs:
-            options = ['custom', 'googlePublicDns', 'openDns']
-            assert kwargs['dnsNameserversOption'] in options, f'''"dnsNameserversOption" cannot be "{kwargs['dnsNameserversOption']}", & must be set to one of: {options}'''
+        if "dhcpMode" in kwargs:
+            options = ["dhcpDisabled", "dhcpRelay", "dhcpServer"]
+            assert kwargs["dhcpMode"] in options, (
+                f'''"dhcpMode" cannot be "{kwargs["dhcpMode"]}", & must be set to one of: {options}'''
+            )
+        if "dhcpLeaseTime" in kwargs:
+            options = ["1 day", "1 hour", "1 week", "12 hours", "30 minutes", "4 hours"]
+            assert kwargs["dhcpLeaseTime"] in options, (
+                f'''"dhcpLeaseTime" cannot be "{kwargs["dhcpLeaseTime"]}", & must be set to one of: {options}'''
+            )
+        if "dnsNameserversOption" in kwargs:
+            options = ["custom", "googlePublicDns", "openDns"]
+            assert kwargs["dnsNameserversOption"] in options, (
+                f'''"dnsNameserversOption" cannot be "{kwargs["dnsNameserversOption"]}", & must be set to one of: {options}'''
+            )
 
-        metadata = {
-            'tags': ['switch', 'configure', 'routing', 'interfaces', 'dhcp'],
-            'operation': 'updateDeviceSwitchRoutingInterfaceDhcp'
-        }
-        resource = f'/devices/{serial}/switch/routing/interfaces/{interfaceId}/dhcp'
+        serial = urllib.parse.quote(serial, safe="")
+        interfaceId = urllib.parse.quote(interfaceId, safe="")
+        resource = f"/devices/{serial}/switch/routing/interfaces/{interfaceId}/dhcp"
 
-        body_params = ['dhcpMode', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dnsNameserversOption', 'dnsCustomNameservers', 'bootOptionsEnabled', 'bootNextServer', 'bootFileName', 'dhcpOptions', 'reservedIpRanges', 'fixedIpAssignments', ]
+        body_params = [
+            "dhcpMode",
+            "dhcpRelayServerIps",
+            "dhcpLeaseTime",
+            "dnsNameserversOption",
+            "dnsCustomNameservers",
+            "bootOptionsEnabled",
+            "bootNextServer",
+            "bootFileName",
+            "dhcpOptions",
+            "reservedIpRanges",
+            "fixedIpAssignments",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def createDeviceSwitchRoutingStaticRoute(self, serial: str, subnet: str, nextHopIp: str, **kwargs):
         """
@@ -306,25 +347,24 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['switch', 'configure', 'routing', 'staticRoutes'],
-            'operation': 'createDeviceSwitchRoutingStaticRoute'
-        }
-        resource = f'/devices/{serial}/switch/routing/staticRoutes'
+        serial = urllib.parse.quote(serial, safe="")
+        resource = f"/devices/{serial}/switch/routing/staticRoutes"
 
-        body_params = ['name', 'subnet', 'nextHopIp', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', 'vrf', ]
+        body_params = [
+            "name",
+            "subnet",
+            "nextHopIp",
+            "advertiseViaOspfEnabled",
+            "preferOverOspfRoutesEnabled",
+            "vrf",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "create",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateDeviceSwitchRoutingStaticRoute(self, serial: str, staticRouteId: str, **kwargs):
         """
@@ -344,25 +384,26 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['switch', 'configure', 'routing', 'staticRoutes'],
-            'operation': 'updateDeviceSwitchRoutingStaticRoute'
-        }
-        resource = f'/devices/{serial}/switch/routing/staticRoutes/{staticRouteId}'
+        serial = urllib.parse.quote(serial, safe="")
+        staticRouteId = urllib.parse.quote(staticRouteId, safe="")
+        resource = f"/devices/{serial}/switch/routing/staticRoutes/{staticRouteId}"
 
-        body_params = ['name', 'subnet', 'nextHopIp', 'managementNextHop', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', 'vrf', ]
+        body_params = [
+            "name",
+            "subnet",
+            "nextHopIp",
+            "managementNextHop",
+            "advertiseViaOspfEnabled",
+            "preferOverOspfRoutesEnabled",
+            "vrf",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def deleteDeviceSwitchRoutingStaticRoute(self, serial: str, staticRouteId: str):
         """
@@ -373,26 +414,19 @@ class ActionBatchSwitch(object):
         - staticRouteId (string): Static route ID
         """
 
-        metadata = {
-            'tags': ['switch', 'configure', 'routing', 'staticRoutes'],
-            'operation': 'deleteDeviceSwitchRoutingStaticRoute'
-        }
-        resource = f'/devices/{serial}/switch/routing/staticRoutes/{staticRouteId}'
+        serial = urllib.parse.quote(serial, safe="")
+        staticRouteId = urllib.parse.quote(staticRouteId, safe="")
+        resource = f"/devices/{serial}/switch/routing/staticRoutes/{staticRouteId}"
 
         action = {
             "resource": resource,
             "operation": "destroy",
         }
         return action
-        
-
-
-
-
 
     def updateDeviceSwitchWarmSpare(self, serial: str, enabled: bool, **kwargs):
         """
-        **Update warm spare configuration for a switch**
+        **Update warm spare configuration for a switch. The spare will use the same L3 configuration as the primary. Note that this will irreversibly destroy any existing L3 configuration on the spare.**
         https://developer.cisco.com/meraki/api-v1/#!update-device-switch-warm-spare
 
         - serial (string): Serial
@@ -402,29 +436,26 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['switch', 'configure', 'warmSpare'],
-            'operation': 'updateDeviceSwitchWarmSpare'
-        }
-        resource = f'/devices/{serial}/switch/warmSpare'
+        serial = urllib.parse.quote(serial, safe="")
+        resource = f"/devices/{serial}/switch/warmSpare"
 
-        body_params = ['enabled', 'spareSerial', ]
+        body_params = [
+            "enabled",
+            "spareSerial",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
 
-
-
-
-
-    def createNetworkSwitchAccessPolicy(self, networkId: str, name: str, radiusServers: list, radiusAccountingEnabled: bool, **kwargs):
+    def createNetworkSwitchAccessPolicy(
+        self, networkId: str, name: str, radiusServers: list, radiusAccountingEnabled: bool, **kwargs
+    ):
         """
-        **Create an access policy for a switch network**
+        **Create an access policy for a switch network. If you would like to enable Meraki Authentication, set radiusServers to empty array.**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-access-policy
 
         - networkId (string): Network ID
@@ -451,36 +482,52 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        if 'hostMode' in kwargs:
-            options = ['Multi-Auth', 'Multi-Domain', 'Multi-Host', 'Single-Host']
-            assert kwargs['hostMode'] in options, f'''"hostMode" cannot be "{kwargs['hostMode']}", & must be set to one of: {options}'''
-        if 'accessPolicyType' in kwargs:
-            options = ['802.1x', 'Hybrid authentication', 'MAC authentication bypass']
-            assert kwargs['accessPolicyType'] in options, f'''"accessPolicyType" cannot be "{kwargs['accessPolicyType']}", & must be set to one of: {options}'''
+        if "hostMode" in kwargs:
+            options = ["Multi-Auth", "Multi-Domain", "Multi-Host", "Single-Host"]
+            assert kwargs["hostMode"] in options, (
+                f'''"hostMode" cannot be "{kwargs["hostMode"]}", & must be set to one of: {options}'''
+            )
+        if "accessPolicyType" in kwargs:
+            options = ["802.1x", "Hybrid authentication", "MAC authentication bypass"]
+            assert kwargs["accessPolicyType"] in options, (
+                f'''"accessPolicyType" cannot be "{kwargs["accessPolicyType"]}", & must be set to one of: {options}'''
+            )
 
-        metadata = {
-            'tags': ['switch', 'configure', 'accessPolicies'],
-            'operation': 'createNetworkSwitchAccessPolicy'
-        }
-        resource = f'/networks/{networkId}/switch/accessPolicies'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/switch/accessPolicies"
 
-        body_params = ['name', 'radiusServers', 'radius', 'guestPortBouncing', 'radiusTestingEnabled', 'radiusCoaSupportEnabled', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusGroupAttribute', 'hostMode', 'accessPolicyType', 'increaseAccessSpeed', 'guestVlanId', 'dot1x', 'voiceVlanClients', 'urlRedirectWalledGardenEnabled', 'urlRedirectWalledGardenRanges', 'guestGroupPolicyId', 'guestSgtId', ]
+        body_params = [
+            "name",
+            "radiusServers",
+            "radius",
+            "guestPortBouncing",
+            "radiusTestingEnabled",
+            "radiusCoaSupportEnabled",
+            "radiusAccountingEnabled",
+            "radiusAccountingServers",
+            "radiusGroupAttribute",
+            "hostMode",
+            "accessPolicyType",
+            "increaseAccessSpeed",
+            "guestVlanId",
+            "dot1x",
+            "voiceVlanClients",
+            "urlRedirectWalledGardenEnabled",
+            "urlRedirectWalledGardenRanges",
+            "guestGroupPolicyId",
+            "guestSgtId",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "create",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkSwitchAccessPolicy(self, networkId: str, accessPolicyNumber: str, **kwargs):
         """
-        **Update an access policy for a switch network**
+        **Update an access policy for a switch network. If you would like to enable Meraki Authentication, set radiusServers to empty array.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-access-policy
 
         - networkId (string): Network ID
@@ -508,32 +555,49 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        if 'hostMode' in kwargs:
-            options = ['Multi-Auth', 'Multi-Domain', 'Multi-Host', 'Single-Host']
-            assert kwargs['hostMode'] in options, f'''"hostMode" cannot be "{kwargs['hostMode']}", & must be set to one of: {options}'''
-        if 'accessPolicyType' in kwargs:
-            options = ['802.1x', 'Hybrid authentication', 'MAC authentication bypass']
-            assert kwargs['accessPolicyType'] in options, f'''"accessPolicyType" cannot be "{kwargs['accessPolicyType']}", & must be set to one of: {options}'''
+        if "hostMode" in kwargs:
+            options = ["Multi-Auth", "Multi-Domain", "Multi-Host", "Single-Host"]
+            assert kwargs["hostMode"] in options, (
+                f'''"hostMode" cannot be "{kwargs["hostMode"]}", & must be set to one of: {options}'''
+            )
+        if "accessPolicyType" in kwargs:
+            options = ["802.1x", "Hybrid authentication", "MAC authentication bypass"]
+            assert kwargs["accessPolicyType"] in options, (
+                f'''"accessPolicyType" cannot be "{kwargs["accessPolicyType"]}", & must be set to one of: {options}'''
+            )
 
-        metadata = {
-            'tags': ['switch', 'configure', 'accessPolicies'],
-            'operation': 'updateNetworkSwitchAccessPolicy'
-        }
-        resource = f'/networks/{networkId}/switch/accessPolicies/{accessPolicyNumber}'
+        networkId = urllib.parse.quote(networkId, safe="")
+        accessPolicyNumber = urllib.parse.quote(accessPolicyNumber, safe="")
+        resource = f"/networks/{networkId}/switch/accessPolicies/{accessPolicyNumber}"
 
-        body_params = ['name', 'radiusServers', 'radius', 'guestPortBouncing', 'radiusTestingEnabled', 'radiusCoaSupportEnabled', 'radiusAccountingEnabled', 'radiusAccountingServers', 'radiusGroupAttribute', 'hostMode', 'accessPolicyType', 'increaseAccessSpeed', 'guestVlanId', 'dot1x', 'voiceVlanClients', 'urlRedirectWalledGardenEnabled', 'urlRedirectWalledGardenRanges', 'guestGroupPolicyId', 'guestSgtId', ]
+        body_params = [
+            "name",
+            "radiusServers",
+            "radius",
+            "guestPortBouncing",
+            "radiusTestingEnabled",
+            "radiusCoaSupportEnabled",
+            "radiusAccountingEnabled",
+            "radiusAccountingServers",
+            "radiusGroupAttribute",
+            "hostMode",
+            "accessPolicyType",
+            "increaseAccessSpeed",
+            "guestVlanId",
+            "dot1x",
+            "voiceVlanClients",
+            "urlRedirectWalledGardenEnabled",
+            "urlRedirectWalledGardenRanges",
+            "guestGroupPolicyId",
+            "guestSgtId",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def deleteNetworkSwitchAccessPolicy(self, networkId: str, accessPolicyNumber: str):
         """
@@ -544,22 +608,15 @@ class ActionBatchSwitch(object):
         - accessPolicyNumber (string): Access policy number
         """
 
-        metadata = {
-            'tags': ['switch', 'configure', 'accessPolicies'],
-            'operation': 'deleteNetworkSwitchAccessPolicy'
-        }
-        resource = f'/networks/{networkId}/switch/accessPolicies/{accessPolicyNumber}'
+        networkId = urllib.parse.quote(networkId, safe="")
+        accessPolicyNumber = urllib.parse.quote(accessPolicyNumber, safe="")
+        resource = f"/networks/{networkId}/switch/accessPolicies/{accessPolicyNumber}"
 
         action = {
             "resource": resource,
             "operation": "destroy",
         }
         return action
-        
-
-
-
-
 
     def updateNetworkSwitchAlternateManagementInterface(self, networkId: str, **kwargs):
         """
@@ -575,29 +632,26 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['switch', 'configure', 'alternateManagementInterface'],
-            'operation': 'updateNetworkSwitchAlternateManagementInterface'
-        }
-        resource = f'/networks/{networkId}/switch/alternateManagementInterface'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/switch/alternateManagementInterface"
 
-        body_params = ['enabled', 'vlanId', 'protocols', 'switches', ]
+        body_params = [
+            "enabled",
+            "vlanId",
+            "protocols",
+            "switches",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkSwitchDhcpServerPolicy(self, networkId: str, **kwargs):
         """
-        **Update the DHCP server settings**
+        **Update the DHCP server settings. Blocked/allowed servers are only applied when default policy is allow/block, respectively**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-dhcp-server-policy
 
         - networkId (string): Network ID
@@ -610,29 +664,29 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        if 'defaultPolicy' in kwargs:
-            options = ['allow', 'block']
-            assert kwargs['defaultPolicy'] in options, f'''"defaultPolicy" cannot be "{kwargs['defaultPolicy']}", & must be set to one of: {options}'''
+        if "defaultPolicy" in kwargs:
+            options = ["allow", "block"]
+            assert kwargs["defaultPolicy"] in options, (
+                f'''"defaultPolicy" cannot be "{kwargs["defaultPolicy"]}", & must be set to one of: {options}'''
+            )
 
-        metadata = {
-            'tags': ['switch', 'configure', 'dhcpServerPolicy'],
-            'operation': 'updateNetworkSwitchDhcpServerPolicy'
-        }
-        resource = f'/networks/{networkId}/switch/dhcpServerPolicy'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/switch/dhcpServerPolicy"
 
-        body_params = ['alerts', 'defaultPolicy', 'allowedServers', 'blockedServers', 'arpInspection', ]
+        body_params = [
+            "alerts",
+            "defaultPolicy",
+            "allowedServers",
+            "blockedServers",
+            "arpInspection",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def createNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer(self, networkId: str, mac: str, vlan: int, ipv4: dict):
         """
@@ -647,25 +701,21 @@ class ActionBatchSwitch(object):
 
         kwargs = locals()
 
-        metadata = {
-            'tags': ['switch', 'configure', 'dhcpServerPolicy', 'arpInspection', 'trustedServers'],
-            'operation': 'createNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer'
-        }
-        resource = f'/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/trustedServers'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/trustedServers"
 
-        body_params = ['mac', 'vlan', 'ipv4', ]
+        body_params = [
+            "mac",
+            "vlan",
+            "ipv4",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "create",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer(self, networkId: str, trustedServerId: str, **kwargs):
         """
@@ -681,25 +731,22 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['switch', 'configure', 'dhcpServerPolicy', 'arpInspection', 'trustedServers'],
-            'operation': 'updateNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer'
-        }
-        resource = f'/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/trustedServers/{trustedServerId}'
+        networkId = urllib.parse.quote(networkId, safe="")
+        trustedServerId = urllib.parse.quote(trustedServerId, safe="")
+        resource = f"/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/trustedServers/{trustedServerId}"
 
-        body_params = ['mac', 'vlan', 'ipv4', ]
+        body_params = [
+            "mac",
+            "vlan",
+            "ipv4",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def deleteNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer(self, networkId: str, trustedServerId: str):
         """
@@ -710,22 +757,15 @@ class ActionBatchSwitch(object):
         - trustedServerId (string): Trusted server ID
         """
 
-        metadata = {
-            'tags': ['switch', 'configure', 'dhcpServerPolicy', 'arpInspection', 'trustedServers'],
-            'operation': 'deleteNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer'
-        }
-        resource = f'/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/trustedServers/{trustedServerId}'
+        networkId = urllib.parse.quote(networkId, safe="")
+        trustedServerId = urllib.parse.quote(trustedServerId, safe="")
+        resource = f"/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/trustedServers/{trustedServerId}"
 
         action = {
             "resource": resource,
             "operation": "destroy",
         }
         return action
-        
-
-
-
-
 
     def updateNetworkSwitchDscpToCosMappings(self, networkId: str, mappings: list):
         """
@@ -738,25 +778,19 @@ class ActionBatchSwitch(object):
 
         kwargs = locals()
 
-        metadata = {
-            'tags': ['switch', 'configure', 'dscpToCosMappings'],
-            'operation': 'updateNetworkSwitchDscpToCosMappings'
-        }
-        resource = f'/networks/{networkId}/switch/dscpToCosMappings'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/switch/dscpToCosMappings"
 
-        body_params = ['mappings', ]
+        body_params = [
+            "mappings",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def createNetworkSwitchLinkAggregation(self, networkId: str, **kwargs):
         """
@@ -770,25 +804,20 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['switch', 'configure', 'linkAggregations'],
-            'operation': 'createNetworkSwitchLinkAggregation'
-        }
-        resource = f'/networks/{networkId}/switch/linkAggregations'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/switch/linkAggregations"
 
-        body_params = ['switchPorts', 'switchProfilePorts', ]
+        body_params = [
+            "switchPorts",
+            "switchProfilePorts",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "create",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkSwitchLinkAggregation(self, networkId: str, linkAggregationId: str, **kwargs):
         """
@@ -803,25 +832,21 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['switch', 'configure', 'linkAggregations'],
-            'operation': 'updateNetworkSwitchLinkAggregation'
-        }
-        resource = f'/networks/{networkId}/switch/linkAggregations/{linkAggregationId}'
+        networkId = urllib.parse.quote(networkId, safe="")
+        linkAggregationId = urllib.parse.quote(linkAggregationId, safe="")
+        resource = f"/networks/{networkId}/switch/linkAggregations/{linkAggregationId}"
 
-        body_params = ['switchPorts', 'switchProfilePorts', ]
+        body_params = [
+            "switchPorts",
+            "switchProfilePorts",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def deleteNetworkSwitchLinkAggregation(self, networkId: str, linkAggregationId: str):
         """
@@ -832,22 +857,15 @@ class ActionBatchSwitch(object):
         - linkAggregationId (string): Link aggregation ID
         """
 
-        metadata = {
-            'tags': ['switch', 'configure', 'linkAggregations'],
-            'operation': 'deleteNetworkSwitchLinkAggregation'
-        }
-        resource = f'/networks/{networkId}/switch/linkAggregations/{linkAggregationId}'
+        networkId = urllib.parse.quote(networkId, safe="")
+        linkAggregationId = urllib.parse.quote(linkAggregationId, safe="")
+        resource = f"/networks/{networkId}/switch/linkAggregations/{linkAggregationId}"
 
         action = {
             "resource": resource,
             "operation": "destroy",
         }
         return action
-        
-
-
-
-
 
     def updateNetworkSwitchMtu(self, networkId: str, **kwargs):
         """
@@ -861,61 +879,52 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['switch', 'configure', 'mtu'],
-            'operation': 'updateNetworkSwitchMtu'
-        }
-        resource = f'/networks/{networkId}/switch/mtu'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/switch/mtu"
 
-        body_params = ['defaultMtuSize', 'overrides', ]
+        body_params = [
+            "defaultMtuSize",
+            "overrides",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkSwitchPortSchedule(self, networkId: str, portScheduleId: str, **kwargs):
         """
-        **Update a switch port schedule**
-        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-port-schedule
+            **Update a switch port schedule**
+            https://developer.cisco.com/meraki/api-v1/#!update-network-switch-port-schedule
 
-        - networkId (string): Network ID
-        - portScheduleId (string): Port schedule ID
-        - name (string): The name for your port schedule.
-        - portSchedule (object):     The schedule for switch port scheduling. Schedules are applied to days of the week.
-    When it's empty, default schedule with all days of a week are configured.
-    Any unspecified day in the schedule is added as a default schedule configuration of the day.
+            - networkId (string): Network ID
+            - portScheduleId (string): Port schedule ID
+            - name (string): The name for your port schedule.
+            - portSchedule (object):     The schedule for switch port scheduling. Schedules are applied to days of the week.
+        When it's empty, default schedule with all days of a week are configured.
+        Any unspecified day in the schedule is added as a default schedule configuration of the day.
 
         """
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['switch', 'configure', 'portSchedules'],
-            'operation': 'updateNetworkSwitchPortSchedule'
-        }
-        resource = f'/networks/{networkId}/switch/portSchedules/{portScheduleId}'
+        networkId = urllib.parse.quote(networkId, safe="")
+        portScheduleId = urllib.parse.quote(portScheduleId, safe="")
+        resource = f"/networks/{networkId}/switch/portSchedules/{portScheduleId}"
 
-        body_params = ['name', 'portSchedule', ]
+        body_params = [
+            "name",
+            "portSchedule",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def createNetworkSwitchQosRule(self, networkId: str, vlan: int, **kwargs):
         """
@@ -934,29 +943,31 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        if 'protocol' in kwargs:
-            options = ['ANY', 'TCP', 'UDP']
-            assert kwargs['protocol'] in options, f'''"protocol" cannot be "{kwargs['protocol']}", & must be set to one of: {options}'''
+        if "protocol" in kwargs:
+            options = ["ANY", "TCP", "UDP"]
+            assert kwargs["protocol"] in options, (
+                f'''"protocol" cannot be "{kwargs["protocol"]}", & must be set to one of: {options}'''
+            )
 
-        metadata = {
-            'tags': ['switch', 'configure', 'qosRules'],
-            'operation': 'createNetworkSwitchQosRule'
-        }
-        resource = f'/networks/{networkId}/switch/qosRules'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/switch/qosRules"
 
-        body_params = ['vlan', 'protocol', 'srcPort', 'srcPortRange', 'dstPort', 'dstPortRange', 'dscp', ]
+        body_params = [
+            "vlan",
+            "protocol",
+            "srcPort",
+            "srcPortRange",
+            "dstPort",
+            "dstPortRange",
+            "dscp",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "create",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkSwitchQosRulesOrder(self, networkId: str, ruleIds: list):
         """
@@ -969,25 +980,19 @@ class ActionBatchSwitch(object):
 
         kwargs = locals()
 
-        metadata = {
-            'tags': ['switch', 'configure', 'qosRules', 'order'],
-            'operation': 'updateNetworkSwitchQosRulesOrder'
-        }
-        resource = f'/networks/{networkId}/switch/qosRules/order'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/switch/qosRules/order"
 
-        body_params = ['ruleIds', ]
+        body_params = [
+            "ruleIds",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "update",
-            "body": payload
+            "operation": "update_order",
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def deleteNetworkSwitchQosRule(self, networkId: str, qosRuleId: str):
         """
@@ -998,22 +1003,15 @@ class ActionBatchSwitch(object):
         - qosRuleId (string): Qos rule ID
         """
 
-        metadata = {
-            'tags': ['switch', 'configure', 'qosRules'],
-            'operation': 'deleteNetworkSwitchQosRule'
-        }
-        resource = f'/networks/{networkId}/switch/qosRules/{qosRuleId}'
+        networkId = urllib.parse.quote(networkId, safe="")
+        qosRuleId = urllib.parse.quote(qosRuleId, safe="")
+        resource = f"/networks/{networkId}/switch/qosRules/{qosRuleId}"
 
         action = {
             "resource": resource,
             "operation": "destroy",
         }
         return action
-        
-
-
-
-
 
     def updateNetworkSwitchQosRule(self, networkId: str, qosRuleId: str, **kwargs):
         """
@@ -1033,29 +1031,32 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        if 'protocol' in kwargs:
-            options = ['ANY', 'TCP', 'UDP']
-            assert kwargs['protocol'] in options, f'''"protocol" cannot be "{kwargs['protocol']}", & must be set to one of: {options}'''
+        if "protocol" in kwargs:
+            options = ["ANY", "TCP", "UDP"]
+            assert kwargs["protocol"] in options, (
+                f'''"protocol" cannot be "{kwargs["protocol"]}", & must be set to one of: {options}'''
+            )
 
-        metadata = {
-            'tags': ['switch', 'configure', 'qosRules'],
-            'operation': 'updateNetworkSwitchQosRule'
-        }
-        resource = f'/networks/{networkId}/switch/qosRules/{qosRuleId}'
+        networkId = urllib.parse.quote(networkId, safe="")
+        qosRuleId = urllib.parse.quote(qosRuleId, safe="")
+        resource = f"/networks/{networkId}/switch/qosRules/{qosRuleId}"
 
-        body_params = ['vlan', 'protocol', 'srcPort', 'srcPortRange', 'dstPort', 'dstPortRange', 'dscp', ]
+        body_params = [
+            "vlan",
+            "protocol",
+            "srcPort",
+            "srcPortRange",
+            "dstPort",
+            "dstPortRange",
+            "dscp",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkSwitchRoutingMulticast(self, networkId: str, **kwargs):
         """
@@ -1069,27 +1070,24 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['switch', 'configure', 'routing', 'multicast'],
-            'operation': 'updateNetworkSwitchRoutingMulticast'
-        }
-        resource = f'/networks/{networkId}/switch/routing/multicast'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/switch/routing/multicast"
 
-        body_params = ['defaultSettings', 'overrides', ]
+        body_params = [
+            "defaultSettings",
+            "overrides",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
 
-
-
-
-
-    def createNetworkSwitchRoutingMulticastRendezvousPoint(self, networkId: str, interfaceIp: str, multicastGroup: str, **kwargs):
+    def createNetworkSwitchRoutingMulticastRendezvousPoint(
+        self, networkId: str, interfaceIp: str, multicastGroup: str, **kwargs
+    ):
         """
         **Create a multicast rendezvous point**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-routing-multicast-rendezvous-point
@@ -1102,25 +1100,21 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['switch', 'configure', 'routing', 'multicast', 'rendezvousPoints'],
-            'operation': 'createNetworkSwitchRoutingMulticastRendezvousPoint'
-        }
-        resource = f'/networks/{networkId}/switch/routing/multicast/rendezvousPoints'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/switch/routing/multicast/rendezvousPoints"
 
-        body_params = ['interfaceIp', 'multicastGroup', 'vrf', ]
+        body_params = [
+            "interfaceIp",
+            "multicastGroup",
+            "vrf",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "create",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def deleteNetworkSwitchRoutingMulticastRendezvousPoint(self, networkId: str, rendezvousPointId: str):
         """
@@ -1131,24 +1125,19 @@ class ActionBatchSwitch(object):
         - rendezvousPointId (string): Rendezvous point ID
         """
 
-        metadata = {
-            'tags': ['switch', 'configure', 'routing', 'multicast', 'rendezvousPoints'],
-            'operation': 'deleteNetworkSwitchRoutingMulticastRendezvousPoint'
-        }
-        resource = f'/networks/{networkId}/switch/routing/multicast/rendezvousPoints/{rendezvousPointId}'
+        networkId = urllib.parse.quote(networkId, safe="")
+        rendezvousPointId = urllib.parse.quote(rendezvousPointId, safe="")
+        resource = f"/networks/{networkId}/switch/routing/multicast/rendezvousPoints/{rendezvousPointId}"
 
         action = {
             "resource": resource,
             "operation": "destroy",
         }
         return action
-        
 
-
-
-
-
-    def updateNetworkSwitchRoutingMulticastRendezvousPoint(self, networkId: str, rendezvousPointId: str, interfaceIp: str, multicastGroup: str, **kwargs):
+    def updateNetworkSwitchRoutingMulticastRendezvousPoint(
+        self, networkId: str, rendezvousPointId: str, interfaceIp: str, multicastGroup: str, **kwargs
+    ):
         """
         **Update a multicast rendezvous point**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-routing-multicast-rendezvous-point
@@ -1162,25 +1151,22 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['switch', 'configure', 'routing', 'multicast', 'rendezvousPoints'],
-            'operation': 'updateNetworkSwitchRoutingMulticastRendezvousPoint'
-        }
-        resource = f'/networks/{networkId}/switch/routing/multicast/rendezvousPoints/{rendezvousPointId}'
+        networkId = urllib.parse.quote(networkId, safe="")
+        rendezvousPointId = urllib.parse.quote(rendezvousPointId, safe="")
+        resource = f"/networks/{networkId}/switch/routing/multicast/rendezvousPoints/{rendezvousPointId}"
 
-        body_params = ['interfaceIp', 'multicastGroup', 'vrf', ]
+        body_params = [
+            "interfaceIp",
+            "multicastGroup",
+            "vrf",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkSwitchRoutingOspf(self, networkId: str, **kwargs):
         """
@@ -1200,25 +1186,25 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['switch', 'configure', 'routing', 'ospf'],
-            'operation': 'updateNetworkSwitchRoutingOspf'
-        }
-        resource = f'/networks/{networkId}/switch/routing/ospf'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/switch/routing/ospf"
 
-        body_params = ['enabled', 'helloTimerInSeconds', 'deadTimerInSeconds', 'areas', 'v3', 'md5AuthenticationEnabled', 'md5AuthenticationKey', ]
+        body_params = [
+            "enabled",
+            "helloTimerInSeconds",
+            "deadTimerInSeconds",
+            "areas",
+            "v3",
+            "md5AuthenticationEnabled",
+            "md5AuthenticationKey",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkSwitchSettings(self, networkId: str, **kwargs):
         """
@@ -1231,30 +1217,31 @@ class ActionBatchSwitch(object):
         - powerExceptions (array): Exceptions on a per switch basis to "useCombinedPower"
         - uplinkClientSampling (object): Uplink client sampling
         - macBlocklist (object): MAC blocklist
+        - portChannelFallback (boolean): Port channel fallback
         - uplinkSelection (object): Settings related to uplink selection on IOS-XE switches.
         """
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['switch', 'configure', 'settings'],
-            'operation': 'updateNetworkSwitchSettings'
-        }
-        resource = f'/networks/{networkId}/switch/settings'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/switch/settings"
 
-        body_params = ['vlan', 'useCombinedPower', 'powerExceptions', 'uplinkClientSampling', 'macBlocklist', 'uplinkSelection', ]
+        body_params = [
+            "vlan",
+            "useCombinedPower",
+            "powerExceptions",
+            "uplinkClientSampling",
+            "macBlocklist",
+            "portChannelFallback",
+            "uplinkSelection",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "settings/actions/update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def createNetworkSwitchStackRoutingInterface(self, networkId: str, switchStackId: str, name: str, **kwargs):
         """
@@ -1264,10 +1251,11 @@ class ActionBatchSwitch(object):
         - networkId (string): Network ID
         - switchStackId (string): Switch stack ID
         - name (string): A friendly name or description for the interface or VLAN (max length 128 characters).
-        - mode (string): L3 Interface mode, can be one of 'vlan', 'routed', 'loopback'. Default is 'vlan'. CS 17.18 or higher is required for 'routed' mode. 
+        - mode (string): L3 Interface mode, can be one of 'vlan', 'routed', 'loopback'. Default is 'vlan'. CS 17.18 or higher is required for 'routed' mode.
         - subnet (string): The network that this L3 interface is on, in CIDR notation (ex. 10.1.1.0/24).
         - switchPortId (string): Switch Port ID when in Routed mode (CS 17.18 or higher required)
         - interfaceIp (string): The IP address that will be used for Layer 3 routing on this VLAN or subnet. This cannot be the same         as the device management IP.
+        - mtu (integer): The interface MTU. Applies to native switch layer 3 interfaces, including VLAN and routed modes.
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
         - vlanId (integer): The VLAN this L3 interface is on. VLAN must be between 1 and 4094.
         - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a L3 interface. Required if this is the first IPv4 interface.
@@ -1279,32 +1267,41 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        if 'mode' in kwargs:
-            options = ['loopback', 'oob_management', 'routed', 'vlan']
-            assert kwargs['mode'] in options, f'''"mode" cannot be "{kwargs['mode']}", & must be set to one of: {options}'''
-        if 'multicastRouting' in kwargs:
-            options = ['IGMP snooping querier', 'disabled', 'enabled']
-            assert kwargs['multicastRouting'] in options, f'''"multicastRouting" cannot be "{kwargs['multicastRouting']}", & must be set to one of: {options}'''
+        if "mode" in kwargs:
+            options = ["loopback", "oob_management", "routed", "vlan"]
+            assert kwargs["mode"] in options, f'''"mode" cannot be "{kwargs["mode"]}", & must be set to one of: {options}'''
+        if "multicastRouting" in kwargs:
+            options = ["IGMP snooping querier", "disabled", "enabled"]
+            assert kwargs["multicastRouting"] in options, (
+                f'''"multicastRouting" cannot be "{kwargs["multicastRouting"]}", & must be set to one of: {options}'''
+            )
 
-        metadata = {
-            'tags': ['switch', 'configure', 'stacks', 'routing', 'interfaces'],
-            'operation': 'createNetworkSwitchStackRoutingInterface'
-        }
-        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces'
+        networkId = urllib.parse.quote(networkId, safe="")
+        switchStackId = urllib.parse.quote(switchStackId, safe="")
+        resource = f"/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces"
 
-        body_params = ['name', 'mode', 'subnet', 'switchPortId', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ipv6', 'vrf', 'loopback', ]
+        body_params = [
+            "name",
+            "mode",
+            "subnet",
+            "switchPortId",
+            "interfaceIp",
+            "mtu",
+            "multicastRouting",
+            "vlanId",
+            "defaultGateway",
+            "ospfSettings",
+            "ipv6",
+            "vrf",
+            "loopback",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "create",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkSwitchStackRoutingInterface(self, networkId: str, switchStackId: str, interfaceId: str, **kwargs):
         """
@@ -1318,6 +1315,7 @@ class ActionBatchSwitch(object):
         - subnet (string): The network that this L3 interface is on, in CIDR notation (ex. 10.1.1.0/24).
         - switchPortId (string): Switch Port ID when in Routed mode (CS 17.18 or higher required)
         - interfaceIp (string): The IP address that will be used for Layer 3 routing on this VLAN or subnet. This cannot be the same         as the device management IP.
+        - mtu (integer): The interface MTU. Applies to native switch layer 3 interfaces, including VLAN and routed modes.
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
         - vlanId (integer): The VLAN this L3 interface is on. VLAN must be between 1 and 4094.
         - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a L3 interface. Required if this is the first IPv4 interface.
@@ -1329,29 +1327,38 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        if 'multicastRouting' in kwargs:
-            options = ['IGMP snooping querier', 'disabled', 'enabled']
-            assert kwargs['multicastRouting'] in options, f'''"multicastRouting" cannot be "{kwargs['multicastRouting']}", & must be set to one of: {options}'''
+        if "multicastRouting" in kwargs:
+            options = ["IGMP snooping querier", "disabled", "enabled"]
+            assert kwargs["multicastRouting"] in options, (
+                f'''"multicastRouting" cannot be "{kwargs["multicastRouting"]}", & must be set to one of: {options}'''
+            )
 
-        metadata = {
-            'tags': ['switch', 'configure', 'stacks', 'routing', 'interfaces'],
-            'operation': 'updateNetworkSwitchStackRoutingInterface'
-        }
-        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}'
+        networkId = urllib.parse.quote(networkId, safe="")
+        switchStackId = urllib.parse.quote(switchStackId, safe="")
+        interfaceId = urllib.parse.quote(interfaceId, safe="")
+        resource = f"/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}"
 
-        body_params = ['name', 'subnet', 'switchPortId', 'interfaceIp', 'multicastRouting', 'vlanId', 'defaultGateway', 'ospfSettings', 'ipv6', 'vrf', 'loopback', ]
+        body_params = [
+            "name",
+            "subnet",
+            "switchPortId",
+            "interfaceIp",
+            "mtu",
+            "multicastRouting",
+            "vlanId",
+            "defaultGateway",
+            "ospfSettings",
+            "ipv6",
+            "vrf",
+            "loopback",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def deleteNetworkSwitchStackRoutingInterface(self, networkId: str, switchStackId: str, interfaceId: str):
         """
@@ -1363,22 +1370,16 @@ class ActionBatchSwitch(object):
         - interfaceId (string): Interface ID
         """
 
-        metadata = {
-            'tags': ['switch', 'configure', 'stacks', 'routing', 'interfaces'],
-            'operation': 'deleteNetworkSwitchStackRoutingInterface'
-        }
-        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}'
+        networkId = urllib.parse.quote(networkId, safe="")
+        switchStackId = urllib.parse.quote(switchStackId, safe="")
+        interfaceId = urllib.parse.quote(interfaceId, safe="")
+        resource = f"/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}"
 
         action = {
             "resource": resource,
             "operation": "destroy",
         }
         return action
-        
-
-
-
-
 
     def updateNetworkSwitchStackRoutingInterfaceDhcp(self, networkId: str, switchStackId: str, interfaceId: str, **kwargs):
         """
@@ -1409,37 +1410,51 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        if 'dhcpMode' in kwargs:
-            options = ['dhcpDisabled', 'dhcpRelay', 'dhcpServer']
-            assert kwargs['dhcpMode'] in options, f'''"dhcpMode" cannot be "{kwargs['dhcpMode']}", & must be set to one of: {options}'''
-        if 'dhcpLeaseTime' in kwargs:
-            options = ['1 day', '1 hour', '1 week', '12 hours', '30 minutes', '4 hours']
-            assert kwargs['dhcpLeaseTime'] in options, f'''"dhcpLeaseTime" cannot be "{kwargs['dhcpLeaseTime']}", & must be set to one of: {options}'''
-        if 'dnsNameserversOption' in kwargs:
-            options = ['custom', 'googlePublicDns', 'openDns']
-            assert kwargs['dnsNameserversOption'] in options, f'''"dnsNameserversOption" cannot be "{kwargs['dnsNameserversOption']}", & must be set to one of: {options}'''
+        if "dhcpMode" in kwargs:
+            options = ["dhcpDisabled", "dhcpRelay", "dhcpServer"]
+            assert kwargs["dhcpMode"] in options, (
+                f'''"dhcpMode" cannot be "{kwargs["dhcpMode"]}", & must be set to one of: {options}'''
+            )
+        if "dhcpLeaseTime" in kwargs:
+            options = ["1 day", "1 hour", "1 week", "12 hours", "30 minutes", "4 hours"]
+            assert kwargs["dhcpLeaseTime"] in options, (
+                f'''"dhcpLeaseTime" cannot be "{kwargs["dhcpLeaseTime"]}", & must be set to one of: {options}'''
+            )
+        if "dnsNameserversOption" in kwargs:
+            options = ["custom", "googlePublicDns", "openDns"]
+            assert kwargs["dnsNameserversOption"] in options, (
+                f'''"dnsNameserversOption" cannot be "{kwargs["dnsNameserversOption"]}", & must be set to one of: {options}'''
+            )
 
-        metadata = {
-            'tags': ['switch', 'configure', 'stacks', 'routing', 'interfaces', 'dhcp'],
-            'operation': 'updateNetworkSwitchStackRoutingInterfaceDhcp'
-        }
-        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}/dhcp'
+        networkId = urllib.parse.quote(networkId, safe="")
+        switchStackId = urllib.parse.quote(switchStackId, safe="")
+        interfaceId = urllib.parse.quote(interfaceId, safe="")
+        resource = f"/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}/dhcp"
 
-        body_params = ['dhcpMode', 'dhcpRelayServerIps', 'dhcpLeaseTime', 'dnsNameserversOption', 'dnsCustomNameservers', 'bootOptionsEnabled', 'bootNextServer', 'bootFileName', 'dhcpOptions', 'reservedIpRanges', 'fixedIpAssignments', ]
+        body_params = [
+            "dhcpMode",
+            "dhcpRelayServerIps",
+            "dhcpLeaseTime",
+            "dnsNameserversOption",
+            "dnsCustomNameservers",
+            "bootOptionsEnabled",
+            "bootNextServer",
+            "bootFileName",
+            "dhcpOptions",
+            "reservedIpRanges",
+            "fixedIpAssignments",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
 
-
-
-
-
-    def createNetworkSwitchStackRoutingStaticRoute(self, networkId: str, switchStackId: str, subnet: str, nextHopIp: str, **kwargs):
+    def createNetworkSwitchStackRoutingStaticRoute(
+        self, networkId: str, switchStackId: str, subnet: str, nextHopIp: str, **kwargs
+    ):
         """
         **Create a layer 3 static route for a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-stack-routing-static-route
@@ -1456,25 +1471,25 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['switch', 'configure', 'stacks', 'routing', 'staticRoutes'],
-            'operation': 'createNetworkSwitchStackRoutingStaticRoute'
-        }
-        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes'
+        networkId = urllib.parse.quote(networkId, safe="")
+        switchStackId = urllib.parse.quote(switchStackId, safe="")
+        resource = f"/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes"
 
-        body_params = ['name', 'subnet', 'nextHopIp', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', 'vrf', ]
+        body_params = [
+            "name",
+            "subnet",
+            "nextHopIp",
+            "advertiseViaOspfEnabled",
+            "preferOverOspfRoutesEnabled",
+            "vrf",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "create",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkSwitchStackRoutingStaticRoute(self, networkId: str, switchStackId: str, staticRouteId: str, **kwargs):
         """
@@ -1495,25 +1510,27 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['switch', 'configure', 'stacks', 'routing', 'staticRoutes'],
-            'operation': 'updateNetworkSwitchStackRoutingStaticRoute'
-        }
-        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes/{staticRouteId}'
+        networkId = urllib.parse.quote(networkId, safe="")
+        switchStackId = urllib.parse.quote(switchStackId, safe="")
+        staticRouteId = urllib.parse.quote(staticRouteId, safe="")
+        resource = f"/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes/{staticRouteId}"
 
-        body_params = ['name', 'subnet', 'nextHopIp', 'managementNextHop', 'advertiseViaOspfEnabled', 'preferOverOspfRoutesEnabled', 'vrf', ]
+        body_params = [
+            "name",
+            "subnet",
+            "nextHopIp",
+            "managementNextHop",
+            "advertiseViaOspfEnabled",
+            "preferOverOspfRoutesEnabled",
+            "vrf",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def deleteNetworkSwitchStackRoutingStaticRoute(self, networkId: str, switchStackId: str, staticRouteId: str):
         """
@@ -1525,22 +1542,16 @@ class ActionBatchSwitch(object):
         - staticRouteId (string): Static route ID
         """
 
-        metadata = {
-            'tags': ['switch', 'configure', 'stacks', 'routing', 'staticRoutes'],
-            'operation': 'deleteNetworkSwitchStackRoutingStaticRoute'
-        }
-        resource = f'/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes/{staticRouteId}'
+        networkId = urllib.parse.quote(networkId, safe="")
+        switchStackId = urllib.parse.quote(switchStackId, safe="")
+        staticRouteId = urllib.parse.quote(staticRouteId, safe="")
+        resource = f"/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes/{staticRouteId}"
 
         action = {
             "resource": resource,
             "operation": "destroy",
         }
         return action
-        
-
-
-
-
 
     def updateNetworkSwitchStormControl(self, networkId: str, **kwargs):
         """
@@ -1556,25 +1567,22 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['switch', 'configure', 'stormControl'],
-            'operation': 'updateNetworkSwitchStormControl'
-        }
-        resource = f'/networks/{networkId}/switch/stormControl'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/switch/stormControl"
 
-        body_params = ['broadcastThreshold', 'multicastThreshold', 'unknownUnicastThreshold', 'treatTheseTrafficTypesAsOneThreshold', ]
+        body_params = [
+            "broadcastThreshold",
+            "multicastThreshold",
+            "unknownUnicastThreshold",
+            "treatTheseTrafficTypesAsOneThreshold",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkSwitchStp(self, networkId: str, **kwargs):
         """
@@ -1588,27 +1596,24 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['switch', 'configure', 'stp'],
-            'operation': 'updateNetworkSwitchStp'
-        }
-        resource = f'/networks/{networkId}/switch/stp'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/switch/stp"
 
-        body_params = ['rstpEnabled', 'stpBridgePriority', ]
+        body_params = [
+            "rstpEnabled",
+            "stpBridgePriority",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
 
-
-
-
-
-    def updateOrganizationConfigTemplateSwitchProfilePort(self, organizationId: str, configTemplateId: str, profileId: str, portId: str, **kwargs):
+    def updateOrganizationConfigTemplateSwitchProfilePort(
+        self, organizationId: str, configTemplateId: str, profileId: str, portId: str, **kwargs
+    ):
         """
         **Update a switch template port**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-config-template-switch-profile-port
@@ -1649,42 +1654,71 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        if 'type' in kwargs:
-            options = ['access', 'dad', 'routed', 'stack', 'svl', 'trunk']
-            assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
-        if 'stpGuard' in kwargs:
-            options = ['bpdu guard', 'disabled', 'loop guard', 'root guard']
-            assert kwargs['stpGuard'] in options, f'''"stpGuard" cannot be "{kwargs['stpGuard']}", & must be set to one of: {options}'''
-        if 'udld' in kwargs:
-            options = ['Alert only', 'Enforce']
-            assert kwargs['udld'] in options, f'''"udld" cannot be "{kwargs['udld']}", & must be set to one of: {options}'''
-        if 'accessPolicyType' in kwargs:
-            options = ['Custom access policy', 'MAC allow list', 'Open', 'Sticky MAC allow list']
-            assert kwargs['accessPolicyType'] in options, f'''"accessPolicyType" cannot be "{kwargs['accessPolicyType']}", & must be set to one of: {options}'''
+        if "type" in kwargs:
+            options = ["access", "dad", "routed", "stack", "svl", "trunk"]
+            assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
+        if "stpGuard" in kwargs:
+            options = ["bpdu guard", "disabled", "loop guard", "root guard"]
+            assert kwargs["stpGuard"] in options, (
+                f'''"stpGuard" cannot be "{kwargs["stpGuard"]}", & must be set to one of: {options}'''
+            )
+        if "udld" in kwargs:
+            options = ["Alert only", "Enforce"]
+            assert kwargs["udld"] in options, f'''"udld" cannot be "{kwargs["udld"]}", & must be set to one of: {options}'''
+        if "accessPolicyType" in kwargs:
+            options = ["Custom access policy", "MAC allow list", "Open", "Sticky MAC allow list"]
+            assert kwargs["accessPolicyType"] in options, (
+                f'''"accessPolicyType" cannot be "{kwargs["accessPolicyType"]}", & must be set to one of: {options}'''
+            )
 
-        metadata = {
-            'tags': ['switch', 'configure', 'configTemplates', 'profiles', 'ports'],
-            'operation': 'updateOrganizationConfigTemplateSwitchProfilePort'
-        }
-        resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles/{profileId}/ports/{portId}'
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        configTemplateId = urllib.parse.quote(configTemplateId, safe="")
+        profileId = urllib.parse.quote(profileId, safe="")
+        portId = urllib.parse.quote(portId, safe="")
+        resource = (
+            f"/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles/{profileId}/ports/{portId}"
+        )
 
-        body_params = ['name', 'tags', 'enabled', 'poeEnabled', 'type', 'vlan', 'voiceVlan', 'allowedVlans', 'isolationEnabled', 'rstpEnabled', 'stpGuard', 'stpPortFastTrunk', 'linkNegotiation', 'portScheduleId', 'udld', 'accessPolicyType', 'accessPolicyNumber', 'macAllowList', 'macWhitelistLimit', 'stickyMacAllowList', 'stickyMacAllowListLimit', 'stormControlEnabled', 'flexibleStackingEnabled', 'daiTrusted', 'profile', 'dot3az', 'highSpeed', ]
+        body_params = [
+            "name",
+            "tags",
+            "enabled",
+            "poeEnabled",
+            "type",
+            "vlan",
+            "voiceVlan",
+            "allowedVlans",
+            "isolationEnabled",
+            "rstpEnabled",
+            "stpGuard",
+            "stpPortFastTrunk",
+            "linkNegotiation",
+            "portScheduleId",
+            "udld",
+            "accessPolicyType",
+            "accessPolicyNumber",
+            "macAllowList",
+            "macWhitelistLimit",
+            "stickyMacAllowList",
+            "stickyMacAllowListLimit",
+            "stormControlEnabled",
+            "flexibleStackingEnabled",
+            "daiTrusted",
+            "profile",
+            "dot3az",
+            "highSpeed",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def cloneOrganizationSwitchDevices(self, organizationId: str, sourceSerial: str, targetSerials: list):
         """
-        **Clone port-level and some switch-level configuration settings from a source switch to one or more target switches**
+        **Clone port-level and some switch-level configuration settings from a source switch to one or more target switches. Cloned settings include: Aggregation Groups, Power Settings, Multicast Settings, MTU Configuration, STP Bridge priority, Port Mirroring**
         https://developer.cisco.com/meraki/api-v1/#!clone-organization-switch-devices
 
         - organizationId (string): Organization ID
@@ -1694,21 +1728,17 @@ class ActionBatchSwitch(object):
 
         kwargs = locals()
 
-        metadata = {
-            'tags': ['switch', 'configure', 'devices'],
-            'operation': 'cloneOrganizationSwitchDevices'
-        }
-        resource = f'/organizations/{organizationId}/switch/devices/clone'
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/switch/devices/clone"
 
-        body_params = ['sourceSerial', 'targetSerials', ]
+        body_params = [
+            "sourceSerial",
+            "targetSerials",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "clone",
-            "body": payload
+            "operation": "settings/actions/clone",
+            "body": payload,
         }
         return action
-        
-
-
-
