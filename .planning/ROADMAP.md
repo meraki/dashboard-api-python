@@ -43,8 +43,10 @@ Plans:
   2. Generator adds | None to type annotations for nullable: true parameters
   3. Generator documents oneOf query params as "string or object" (not generic "object")
   4. Golden-file test with synthetic v3 fixture validates parser output format
-**Plans**: TBD
-**UI hint**: yes
+**Plans**: 2 plans
+Plans:
+- [ ] 02-01-PLAN.md: TDD parse_params_v3 with path inheritance, nullable, oneOf, style/explode
+- [ ] 02-02-PLAN.md: Golden-file snapshot test for output contract validation
 
 ### Phase 3: Generation Integration
 **Goal**: v3 generator produces sync, async, and batch modules from OASv3 spec
@@ -55,7 +57,7 @@ Plans:
   2. Generated methods use explicit param construction (not kwargs.update(locals()))
   3. Generator handles x-batchable-actions for batch class generation (298 batch endpoints)
   4. CLI accepts same args as v2 and fetches v3 spec with ?version=3 param
-**Plans**: TBD
+**Plans**: 2 plans
 
 ### Phase 4: Type Stubs
 **Goal**: Generator produces .pyi type stubs via Jinja2 for static analysis
@@ -65,7 +67,7 @@ Plans:
   1. Generator creates .pyi files with full method signatures when --stubs flag passed
   2. Package includes py.typed marker for PEP 561 compliance
   3. Type stubs reflect nullable (str | None) and oneOf (Union[str, dict]) semantics
-**Plans**: TBD
+**Plans**: 2 plans
 
 ### Phase 5: Testing & CI
 **Goal**: Comprehensive test suite and CI drift detection validate v3 generator correctness
@@ -75,7 +77,7 @@ Plans:
   1. Synthetic v3 fixture exercises all v3-specific features ($ref with cycles, requestBody, oneOf, nullable, multipart, path-level params)
   2. Golden-file tests validate v3 generator output for sync, async, and batch modules (semantic correctness, not byte-for-byte v2 match)
   3. CI workflow runs semantic diff of v2 vs v3 generator output on live spec (params, types, structure, not text diff)
-**Plans**: TBD
+**Plans**: 2 plans
 
 ## Progress
 
