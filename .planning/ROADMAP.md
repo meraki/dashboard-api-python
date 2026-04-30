@@ -37,7 +37,7 @@
 **Plans**: 1 plan
 
 Plans:
-- [ ] 06-01-PLAN.md — Swap generator files, add deprecation warning, update test imports
+- [x] 06-01-PLAN.md — Swap generator files, add deprecation warning, update test imports
 
 ### Phase 7: Legacy Cleanup
 **Goal**: Abandoned v3 attempt removed, all imports and CI workflows updated
