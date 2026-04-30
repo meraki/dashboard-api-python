@@ -23,7 +23,7 @@ class Switch(object):
 
         return self._session.get(metadata, resource)
 
-    def cycleDeviceSwitchPorts(self, serial: str, ports: list):
+    def cycleDeviceSwitchPorts(self, serial: str, ports: list, **kwargs):
         """
         **Cycle a set of switch ports**
         https://developer.cisco.com/meraki/api-v1/#!cycle-device-switch-ports
@@ -31,8 +31,6 @@ class Switch(object):
         - serial (string): Serial
         - ports (array): List of switch ports
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["switch", "liveTools", "ports"],
@@ -46,6 +44,12 @@ class Switch(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"cycleDeviceSwitchPorts: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def getDeviceSwitchPortsStatuses(self, serial: str, **kwargs):
@@ -57,8 +61,6 @@ class Switch(object):
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["switch", "monitor", "ports", "statuses"],
@@ -73,6 +75,12 @@ class Switch(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getDeviceSwitchPortsStatuses: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get(metadata, resource, params)
 
     def getDeviceSwitchPortsStatusesPackets(self, serial: str, **kwargs):
@@ -84,8 +92,6 @@ class Switch(object):
         - t0 (string): The beginning of the timespan for the data. The value is used only to determine the elapsed duration between t0 and the time of the request; the API snaps that duration to the nearest preset window (5 minutes, 15 minutes, 1 hour, or 1 day).
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify t0. The value must be in seconds and be less than or equal to 86400 seconds (1 day). The default is 1 day.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["switch", "monitor", "ports", "statuses", "packets"],
@@ -99,6 +105,12 @@ class Switch(object):
             "timespan",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getDeviceSwitchPortsStatusesPackets: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
@@ -160,8 +172,6 @@ class Switch(object):
         - highSpeed (object): High speed port enablement settings for C9500-32QC
         """
 
-        kwargs.update(locals())
-
         if "type" in kwargs:
             options = ["access", "dad", "routed", "stack", "svl", "trunk"]
             assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
@@ -220,6 +230,12 @@ class Switch(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateDeviceSwitchPort: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def getDeviceSwitchRoutingInterfaces(self, serial: str, **kwargs):
@@ -231,8 +247,6 @@ class Switch(object):
         - mode (string): Optional parameter to filter L3 interfaces by mode.
         - protocol (string): Optional parameter to filter L3 interfaces by protocol.
         """
-
-        kwargs.update(locals())
 
         if "mode" in kwargs:
             options = ["loopback", "oob_management", "routed", "vlan"]
@@ -256,6 +270,12 @@ class Switch(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getDeviceSwitchRoutingInterfaces: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get(metadata, resource, params)
 
     def createDeviceSwitchRoutingInterface(self, serial: str, name: str, **kwargs):
@@ -278,8 +298,6 @@ class Switch(object):
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
         - loopback (object): The loopback settings of the interface.
         """
-
-        kwargs.update(locals())
 
         if "mode" in kwargs:
             options = ["loopback", "oob_management", "routed", "vlan"]
@@ -313,6 +331,12 @@ class Switch(object):
             "loopback",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createDeviceSwitchRoutingInterface: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -356,8 +380,6 @@ class Switch(object):
         - loopback (object): The loopback settings of the interface.
         """
 
-        kwargs.update(locals())
-
         if "multicastRouting" in kwargs:
             options = ["IGMP snooping querier", "disabled", "enabled"]
             assert kwargs["multicastRouting"] in options, (
@@ -387,6 +409,12 @@ class Switch(object):
             "loopback",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateDeviceSwitchRoutingInterface: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -453,8 +481,6 @@ class Switch(object):
          - fixedIpAssignments (array): Array of DHCP fixed IP assignments for the DHCP server running on the switch interface
         """
 
-        kwargs.update(locals())
-
         if "dhcpMode" in kwargs:
             options = ["dhcpDisabled", "dhcpRelay", "dhcpServer"]
             assert kwargs["dhcpMode"] in options, (
@@ -494,6 +520,14 @@ class Switch(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateDeviceSwitchRoutingInterfaceDhcp: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.put(metadata, resource, payload)
 
     def getDeviceSwitchRoutingStaticRoutes(self, serial: str):
@@ -527,8 +561,6 @@ class Switch(object):
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["switch", "configure", "routing", "staticRoutes"],
             "operation": "createDeviceSwitchRoutingStaticRoute",
@@ -545,6 +577,12 @@ class Switch(object):
             "vrf",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createDeviceSwitchRoutingStaticRoute: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -583,8 +621,6 @@ class Switch(object):
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["switch", "configure", "routing", "staticRoutes"],
             "operation": "updateDeviceSwitchRoutingStaticRoute",
@@ -603,6 +639,12 @@ class Switch(object):
             "vrf",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateDeviceSwitchRoutingStaticRoute: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -652,8 +694,6 @@ class Switch(object):
         - spareSerial (string): Serial number of the warm spare switch
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["switch", "configure", "warmSpare"],
             "operation": "updateDeviceSwitchWarmSpare",
@@ -666,6 +706,12 @@ class Switch(object):
             "spareSerial",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateDeviceSwitchWarmSpare: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -686,7 +732,7 @@ class Switch(object):
 
         return self._session.get(metadata, resource)
 
-    def updateNetworkSwitchAccessControlLists(self, networkId: str, rules: list):
+    def updateNetworkSwitchAccessControlLists(self, networkId: str, rules: list, **kwargs):
         """
         **Update the access control lists for a MS network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-access-control-lists
@@ -694,8 +740,6 @@ class Switch(object):
         - networkId (string): Network ID
         - rules (array): An ordered array of the access control list rules (not including the default rule). An empty array will clear the rules.
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["switch", "configure", "accessControlLists"],
@@ -708,6 +752,14 @@ class Switch(object):
             "rules",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkSwitchAccessControlLists: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -757,8 +809,6 @@ class Switch(object):
         - guestSgtId (integer): Security Group Tag ID for guest group policy
         """
 
-        kwargs.update(locals())
-
         if "hostMode" in kwargs:
             options = ["Multi-Auth", "Multi-Domain", "Multi-Host", "Single-Host"]
             assert kwargs["hostMode"] in options, (
@@ -799,6 +849,12 @@ class Switch(object):
             "guestSgtId",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkSwitchAccessPolicy: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -849,8 +905,6 @@ class Switch(object):
         - guestSgtId (integer): Security Group Tag ID for guest group policy
         """
 
-        kwargs.update(locals())
-
         if "hostMode" in kwargs:
             options = ["Multi-Auth", "Multi-Domain", "Multi-Host", "Single-Host"]
             assert kwargs["hostMode"] in options, (
@@ -892,6 +946,12 @@ class Switch(object):
             "guestSgtId",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSwitchAccessPolicy: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -943,8 +1003,6 @@ class Switch(object):
         - switches (array): Array of switch serial number and IP assignment. If parameter is present, it cannot have empty body. Note: switches parameter is not applicable for template networks, in other words, do not put 'switches' in the body when updating template networks. Also, an empty 'switches' array will remove all previous assignments
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["switch", "configure", "alternateManagementInterface"],
             "operation": "updateNetworkSwitchAlternateManagementInterface",
@@ -959,6 +1017,14 @@ class Switch(object):
             "switches",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkSwitchAlternateManagementInterface: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -977,8 +1043,6 @@ class Switch(object):
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["switch", "configure", "dhcp", "v4", "servers", "seen"],
             "operation": "getNetworkSwitchDhcpV4ServersSeen",
@@ -994,6 +1058,12 @@ class Switch(object):
             "endingBefore",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkSwitchDhcpV4ServersSeen: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -1027,8 +1097,6 @@ class Switch(object):
         - arpInspection (object): Dynamic ARP Inspection settings
         """
 
-        kwargs.update(locals())
-
         if "defaultPolicy" in kwargs:
             options = ["allow", "block"]
             assert kwargs["defaultPolicy"] in options, (
@@ -1051,6 +1119,12 @@ class Switch(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSwitchDhcpServerPolicy: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def getNetworkSwitchDhcpServerPolicyArpInspectionTrustedServers(
@@ -1068,8 +1142,6 @@ class Switch(object):
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["switch", "configure", "dhcpServerPolicy", "arpInspection", "trustedServers"],
             "operation": "getNetworkSwitchDhcpServerPolicyArpInspectionTrustedServers",
@@ -1084,9 +1156,19 @@ class Switch(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getNetworkSwitchDhcpServerPolicyArpInspectionTrustedServers: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def createNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer(self, networkId: str, mac: str, vlan: int, ipv4: dict):
+    def createNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer(
+        self, networkId: str, mac: str, vlan: int, ipv4: dict, **kwargs
+    ):
         """
         **Add a server to be trusted by Dynamic ARP Inspection on this network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-dhcp-server-policy-arp-inspection-trusted-server
@@ -1096,8 +1178,6 @@ class Switch(object):
         - vlan (integer): The VLAN of the trusted server being added. It must be between 1 and 4094
         - ipv4 (object): The IPv4 attributes of the trusted server being added
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["switch", "configure", "dhcpServerPolicy", "arpInspection", "trustedServers"],
@@ -1113,6 +1193,14 @@ class Switch(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
     def updateNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer(self, networkId: str, trustedServerId: str, **kwargs):
@@ -1126,8 +1214,6 @@ class Switch(object):
         - vlan (integer): The updated VLAN of the trusted server. It must be between 1 and 4094
         - ipv4 (object): The updated IPv4 attributes of the trusted server
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["switch", "configure", "dhcpServerPolicy", "arpInspection", "trustedServers"],
@@ -1143,6 +1229,14 @@ class Switch(object):
             "ipv4",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -1180,8 +1274,6 @@ class Switch(object):
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["switch", "configure", "dhcpServerPolicy", "arpInspection", "warnings", "byDevice"],
             "operation": "getNetworkSwitchDhcpServerPolicyArpInspectionWarningsByDevice",
@@ -1195,6 +1287,14 @@ class Switch(object):
             "endingBefore",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getNetworkSwitchDhcpServerPolicyArpInspectionWarningsByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -1215,7 +1315,7 @@ class Switch(object):
 
         return self._session.get(metadata, resource)
 
-    def updateNetworkSwitchDscpToCosMappings(self, networkId: str, mappings: list):
+    def updateNetworkSwitchDscpToCosMappings(self, networkId: str, mappings: list, **kwargs):
         """
         **Update the DSCP to CoS mappings**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-dscp-to-cos-mappings
@@ -1223,8 +1323,6 @@ class Switch(object):
         - networkId (string): Network ID
         - mappings (array): An array of DSCP to CoS mappings. An empty array will reset the mappings to default.
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["switch", "configure", "dscpToCosMappings"],
@@ -1237,6 +1335,12 @@ class Switch(object):
             "mappings",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSwitchDscpToCosMappings: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -1267,8 +1371,6 @@ class Switch(object):
         - switchProfilePorts (array): Array of switch profile ports for creating aggregation group. Minimum 2 and maximum 8 ports are supported.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["switch", "configure", "linkAggregations"],
             "operation": "createNetworkSwitchLinkAggregation",
@@ -1281,6 +1383,12 @@ class Switch(object):
             "switchProfilePorts",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkSwitchLinkAggregation: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -1295,8 +1403,6 @@ class Switch(object):
         - switchProfilePorts (array): Array of switch profile ports for updating aggregation group. Minimum 2 and maximum 8 ports are supported.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["switch", "configure", "linkAggregations"],
             "operation": "updateNetworkSwitchLinkAggregation",
@@ -1310,6 +1416,12 @@ class Switch(object):
             "switchProfilePorts",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSwitchLinkAggregation: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -1359,8 +1471,6 @@ class Switch(object):
         - overrides (array): Override MTU size for individual switches or switch templates. An empty array will clear overrides.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["switch", "configure", "mtu"],
             "operation": "updateNetworkSwitchMtu",
@@ -1373,6 +1483,12 @@ class Switch(object):
             "overrides",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSwitchMtu: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -1406,8 +1522,6 @@ class Switch(object):
 
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["switch", "configure", "portSchedules"],
             "operation": "createNetworkSwitchPortSchedule",
@@ -1420,6 +1534,12 @@ class Switch(object):
             "portSchedule",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkSwitchPortSchedule: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -1456,8 +1576,6 @@ class Switch(object):
 
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["switch", "configure", "portSchedules"],
             "operation": "updateNetworkSwitchPortSchedule",
@@ -1471,6 +1589,12 @@ class Switch(object):
             "portSchedule",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSwitchPortSchedule: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -1506,8 +1630,6 @@ class Switch(object):
         - dscp (integer): DSCP tag for the incoming packet. Set this to -1 to trust incoming DSCP. Default value is 0
         """
 
-        kwargs.update(locals())
-
         if "protocol" in kwargs:
             options = ["ANY", "TCP", "UDP"]
             assert kwargs["protocol"] in options, (
@@ -1532,6 +1654,12 @@ class Switch(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkSwitchQosRule: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def getNetworkSwitchQosRulesOrder(self, networkId: str):
@@ -1551,7 +1679,7 @@ class Switch(object):
 
         return self._session.get(metadata, resource)
 
-    def updateNetworkSwitchQosRulesOrder(self, networkId: str, ruleIds: list):
+    def updateNetworkSwitchQosRulesOrder(self, networkId: str, ruleIds: list, **kwargs):
         """
         **Update the order in which the rules should be processed by the switch**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-qos-rules-order
@@ -1559,8 +1687,6 @@ class Switch(object):
         - networkId (string): Network ID
         - ruleIds (array): A list of quality of service rule IDs arranged in order in which they should be processed by the switch.
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["switch", "configure", "qosRules", "order"],
@@ -1573,6 +1699,12 @@ class Switch(object):
             "ruleIds",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSwitchQosRulesOrder: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -1630,8 +1762,6 @@ class Switch(object):
         - dscp (integer): DSCP tag that should be assigned to incoming packet. Set this to -1 to trust incoming DSCP. Default value is 0
         """
 
-        kwargs.update(locals())
-
         if "protocol" in kwargs:
             options = ["ANY", "TCP", "UDP"]
             assert kwargs["protocol"] in options, (
@@ -1656,6 +1786,12 @@ class Switch(object):
             "dscp",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSwitchQosRule: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -1686,8 +1822,6 @@ class Switch(object):
         - overrides (array): Array of paired switches/stacks/profiles and corresponding multicast settings. An empty array will clear the multicast settings.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["switch", "configure", "routing", "multicast"],
             "operation": "updateNetworkSwitchRoutingMulticast",
@@ -1700,6 +1834,12 @@ class Switch(object):
             "overrides",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSwitchRoutingMulticast: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -1733,8 +1873,6 @@ class Switch(object):
         - vrf (object): The VRF with PIM enabled L3 interface
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["switch", "configure", "routing", "multicast", "rendezvousPoints"],
             "operation": "createNetworkSwitchRoutingMulticastRendezvousPoint",
@@ -1748,6 +1886,14 @@ class Switch(object):
             "vrf",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createNetworkSwitchRoutingMulticastRendezvousPoint: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -1803,8 +1949,6 @@ class Switch(object):
         - vrf (object): The VRF with PIM enabled L3 interface
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["switch", "configure", "routing", "multicast", "rendezvousPoints"],
             "operation": "updateNetworkSwitchRoutingMulticastRendezvousPoint",
@@ -1820,6 +1964,14 @@ class Switch(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkSwitchRoutingMulticastRendezvousPoint: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.put(metadata, resource, payload)
 
     def getNetworkSwitchRoutingOspf(self, networkId: str, **kwargs):
@@ -1830,8 +1982,6 @@ class Switch(object):
         - networkId (string): Network ID
         - vrf (string): The VRF to return the OSPF routing configuration for. When not provided, the default VRF is used. Included on networks with IOS XE 17.18 or higher
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["switch", "configure", "routing", "ospf"],
@@ -1844,6 +1994,12 @@ class Switch(object):
             "vrf",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkSwitchRoutingOspf: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
@@ -1863,8 +2019,6 @@ class Switch(object):
         - md5AuthenticationKey (object): MD5 authentication credentials. This param is only relevant if md5AuthenticationEnabled is true
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["switch", "configure", "routing", "ospf"],
             "operation": "updateNetworkSwitchRoutingOspf",
@@ -1882,6 +2036,12 @@ class Switch(object):
             "md5AuthenticationKey",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSwitchRoutingOspf: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -1917,8 +2077,6 @@ class Switch(object):
         - uplinkSelection (object): Settings related to uplink selection on IOS-XE switches.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["switch", "configure", "settings"],
             "operation": "updateNetworkSwitchSettings",
@@ -1936,6 +2094,12 @@ class Switch(object):
             "uplinkSelection",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSwitchSettings: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -1956,7 +2120,7 @@ class Switch(object):
 
         return self._session.get(metadata, resource)
 
-    def createNetworkSwitchStack(self, networkId: str, name: str, serials: list):
+    def createNetworkSwitchStack(self, networkId: str, name: str, serials: list, **kwargs):
         """
         **Create a switch stack**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-stack
@@ -1965,8 +2129,6 @@ class Switch(object):
         - name (string): The name of the new stack
         - serials (array): An array of switch serials to be added into the new stack
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["switch", "configure", "stacks"],
@@ -1980,6 +2142,12 @@ class Switch(object):
             "serials",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkSwitchStack: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -2021,7 +2189,7 @@ class Switch(object):
 
         return self._session.delete(metadata, resource)
 
-    def addNetworkSwitchStack(self, networkId: str, switchStackId: str, serial: str):
+    def addNetworkSwitchStack(self, networkId: str, switchStackId: str, serial: str, **kwargs):
         """
         **Add a switch to a stack**
         https://developer.cisco.com/meraki/api-v1/#!add-network-switch-stack
@@ -2030,8 +2198,6 @@ class Switch(object):
         - switchStackId (string): Switch stack ID
         - serial (string): The serial of the switch to be added
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["switch", "configure", "stacks"],
@@ -2046,9 +2212,15 @@ class Switch(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"addNetworkSwitchStack: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
-    def removeNetworkSwitchStack(self, networkId: str, switchStackId: str, serial: str):
+    def removeNetworkSwitchStack(self, networkId: str, switchStackId: str, serial: str, **kwargs):
         """
         **Remove a switch from a stack**
         https://developer.cisco.com/meraki/api-v1/#!remove-network-switch-stack
@@ -2057,8 +2229,6 @@ class Switch(object):
         - switchStackId (string): Switch stack ID
         - serial (string): The serial of the switch to be removed
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["switch", "configure", "stacks"],
@@ -2073,6 +2243,12 @@ class Switch(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"removeNetworkSwitchStack: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def getNetworkSwitchStackRoutingInterfaces(self, networkId: str, switchStackId: str, **kwargs):
@@ -2085,8 +2261,6 @@ class Switch(object):
         - mode (string): Optional parameter to filter L3 interfaces by mode.
         - protocol (string): Optional parameter to filter L3 interfaces by protocol.
         """
-
-        kwargs.update(locals())
 
         if "mode" in kwargs:
             options = ["loopback", "oob_management", "routed", "vlan"]
@@ -2111,6 +2285,14 @@ class Switch(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getNetworkSwitchStackRoutingInterfaces: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def createNetworkSwitchStackRoutingInterface(self, networkId: str, switchStackId: str, name: str, **kwargs):
@@ -2134,8 +2316,6 @@ class Switch(object):
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
         - loopback (object): The loopback settings of the interface.
         """
-
-        kwargs.update(locals())
 
         if "mode" in kwargs:
             options = ["loopback", "oob_management", "routed", "vlan"]
@@ -2170,6 +2350,14 @@ class Switch(object):
             "loopback",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createNetworkSwitchStackRoutingInterface: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -2216,8 +2404,6 @@ class Switch(object):
         - loopback (object): The loopback settings of the interface.
         """
 
-        kwargs.update(locals())
-
         if "multicastRouting" in kwargs:
             options = ["IGMP snooping querier", "disabled", "enabled"]
             assert kwargs["multicastRouting"] in options, (
@@ -2248,6 +2434,14 @@ class Switch(object):
             "loopback",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkSwitchStackRoutingInterface: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -2320,8 +2514,6 @@ class Switch(object):
         - fixedIpAssignments (array): Array of DHCP fixed IP assignments for the DHCP server running on the switch stack interface
         """
 
-        kwargs.update(locals())
-
         if "dhcpMode" in kwargs:
             options = ["dhcpDisabled", "dhcpRelay", "dhcpServer"]
             assert kwargs["dhcpMode"] in options, (
@@ -2362,6 +2554,14 @@ class Switch(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkSwitchStackRoutingInterfaceDhcp: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.put(metadata, resource, payload)
 
     def getNetworkSwitchStackRoutingStaticRoutes(self, networkId: str, switchStackId: str):
@@ -2400,8 +2600,6 @@ class Switch(object):
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["switch", "configure", "stacks", "routing", "staticRoutes"],
             "operation": "createNetworkSwitchStackRoutingStaticRoute",
@@ -2419,6 +2617,14 @@ class Switch(object):
             "vrf",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createNetworkSwitchStackRoutingStaticRoute: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -2460,8 +2666,6 @@ class Switch(object):
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["switch", "configure", "stacks", "routing", "staticRoutes"],
             "operation": "updateNetworkSwitchStackRoutingStaticRoute",
@@ -2481,6 +2685,14 @@ class Switch(object):
             "vrf",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkSwitchStackRoutingStaticRoute: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -2534,8 +2746,6 @@ class Switch(object):
         - treatTheseTrafficTypesAsOneThreshold (array): Grouped traffic types
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["switch", "configure", "stormControl"],
             "operation": "updateNetworkSwitchStormControl",
@@ -2550,6 +2760,12 @@ class Switch(object):
             "treatTheseTrafficTypesAsOneThreshold",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSwitchStormControl: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -2580,8 +2796,6 @@ class Switch(object):
         - stpBridgePriority (array): STP bridge priority for switches/stacks or switch templates. An empty array will clear the STP bridge priority settings.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["switch", "configure", "stp"],
             "operation": "updateNetworkSwitchStp",
@@ -2594,6 +2808,12 @@ class Switch(object):
             "stpBridgePriority",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSwitchStp: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -2705,8 +2925,6 @@ class Switch(object):
         - highSpeed (object): High speed port enablement settings for C9500-32QC
         """
 
-        kwargs.update(locals())
-
         if "type" in kwargs:
             options = ["access", "dad", "routed", "stack", "svl", "trunk"]
             assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
@@ -2767,6 +2985,14 @@ class Switch(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationConfigTemplateSwitchProfilePort: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.put(metadata, resource, payload)
 
     def getOrganizationSummarySwitchPowerHistory(self, organizationId: str, **kwargs):
@@ -2779,8 +3005,6 @@ class Switch(object):
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 186 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 186 days. The default is 1 day.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["switch", "monitor", "summary", "power", "history"],
@@ -2796,9 +3020,17 @@ class Switch(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSummarySwitchPowerHistory: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
-    def cloneOrganizationSwitchDevices(self, organizationId: str, sourceSerial: str, targetSerials: list):
+    def cloneOrganizationSwitchDevices(self, organizationId: str, sourceSerial: str, targetSerials: list, **kwargs):
         """
         **Clone port-level and some switch-level configuration settings from a source switch to one or more target switches**
         https://developer.cisco.com/meraki/api-v1/#!clone-organization-switch-devices
@@ -2807,8 +3039,6 @@ class Switch(object):
         - sourceSerial (string): Serial number of the source switch (must be on a network not bound to a template)
         - targetSerials (array): Array of serial numbers of one or more target switches (must be on a network not bound to a template)
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["switch", "configure", "devices"],
@@ -2822,6 +3052,12 @@ class Switch(object):
             "targetSerials",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"cloneOrganizationSwitchDevices: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -2845,8 +3081,6 @@ class Switch(object):
         - serial (string): Optional parameter to filter items to switches with serial number that contains the search term or are an exact match.
         - serials (array): Optional parameter to filter items to switches that have one of the provided serials.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["switch", "configure", "ports", "bySwitch"],
@@ -2881,6 +3115,12 @@ class Switch(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationSwitchPortsBySwitch: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationSwitchPortsClientsOverviewByDevice(
@@ -2907,8 +3147,6 @@ class Switch(object):
         - serial (string): Optional parameter to filter items to switches with serial number that contains the search term or are an exact match.
         - serials (array): Optional parameter to filter items to switches that have one of the provided serials.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["switch", "monitor", "ports", "clients", "overview", "byDevice"],
@@ -2945,6 +3183,14 @@ class Switch(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchPortsClientsOverviewByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationSwitchPortsOverview(self, organizationId: str, **kwargs):
@@ -2957,8 +3203,6 @@ class Switch(object):
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 186 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 12 hours and be less than or equal to 186 days. The default is 1 day.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["switch", "monitor", "ports", "overview"],
@@ -2973,6 +3217,12 @@ class Switch(object):
             "timespan",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationSwitchPortsOverview: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
@@ -2996,8 +3246,6 @@ class Switch(object):
         - serial (string): Optional parameter to filter items to switches with serial number that contains the search term or are an exact match.
         - serials (array): Optional parameter to filter items to switches that have one of the provided serials.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["switch", "monitor", "ports", "statuses", "bySwitch"],
@@ -3032,6 +3280,14 @@ class Switch(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchPortsStatusesBySwitch: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationSwitchPortsTopologyDiscoveryByDevice(
@@ -3058,8 +3314,6 @@ class Switch(object):
         - serial (string): Optional parameter to filter items to switches with serial number that contains the search term or are an exact match.
         - serials (array): Optional parameter to filter items to switches that have one of the provided serials.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["switch", "monitor", "ports", "topology", "discovery", "byDevice"],
@@ -3096,6 +3350,14 @@ class Switch(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchPortsTopologyDiscoveryByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationSwitchPortsUsageHistoryByDeviceByInterval(
@@ -3124,8 +3386,6 @@ class Switch(object):
         - serial (string): Optional parameter to filter items to switches with serial number that contains the search term or are an exact match.
         - serials (array): Optional parameter to filter items to switches that have one of the provided serials.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["switch", "monitor", "ports", "usage", "history", "byDevice", "byInterval"],
@@ -3163,5 +3423,13 @@ class Switch(object):
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchPortsUsageHistoryByDeviceByInterval: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)

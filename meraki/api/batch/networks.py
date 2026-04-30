@@ -18,8 +18,6 @@ class ActionBatchNetworks(object):
         - notes (string): Add any notes or additional information about this network here.
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}"
 
@@ -65,8 +63,6 @@ class ActionBatchNetworks(object):
         - autoBind (boolean): Optional boolean indicating whether the network's switches should automatically bind to profiles of the same model. Defaults to false if left unspecified. This option only affects switch networks and switch templates. Auto-bind is not valid unless the switch template has at least one profile and has at most one profile per switch model.
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/bind"
 
@@ -94,8 +90,6 @@ class ActionBatchNetworks(object):
         - policiesBySecurityAppliance (object): An object, describing what the policy-connection association is for the security appliance. (Only relevant if the security appliance is actually within the network)
         - policiesBySsid (object): An object, describing the policy-connection associations for each active SSID within the network. Keys should be the number of enabled SSIDs, mapping to an object describing the client's policy
         """
-
-        kwargs.update(locals())
 
         if "devicePolicy" in kwargs:
             options = ["Allowed", "Blocked", "Group policy", "Normal", "Per connection"]
@@ -132,8 +126,6 @@ class ActionBatchNetworks(object):
         - detailsByDevice (array): Optional details for claimed devices (currently only used for Catalyst devices)
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/devices/claim"
 
@@ -149,7 +141,7 @@ class ActionBatchNetworks(object):
         }
         return action
 
-    def vmxNetworkDevicesClaim(self, networkId: str, size: str):
+    def vmxNetworkDevicesClaim(self, networkId: str, size: str, **kwargs):
         """
         **Claim a vMX into a network**
         https://developer.cisco.com/meraki/api-v1/#!vmx-network-devices-claim
@@ -157,8 +149,6 @@ class ActionBatchNetworks(object):
         - networkId (string): Network ID
         - size (string): The size of the vMX you claim. It can be one of: small, medium, large, xlarge, 100
         """
-
-        kwargs = locals()
 
         if "size" in kwargs:
             options = ["100", "large", "medium", "small", "xlarge"]
@@ -178,7 +168,7 @@ class ActionBatchNetworks(object):
         }
         return action
 
-    def removeNetworkDevices(self, networkId: str, serial: str):
+    def removeNetworkDevices(self, networkId: str, serial: str, **kwargs):
         """
         **Remove a single device**
         https://developer.cisco.com/meraki/api-v1/#!remove-network-devices
@@ -186,8 +176,6 @@ class ActionBatchNetworks(object):
         - networkId (string): Network ID
         - serial (string): The serial of a device
         """
-
-        kwargs = locals()
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/devices/remove"
@@ -213,8 +201,6 @@ class ActionBatchNetworks(object):
         - timezone (string): The timezone for the network
         - products (object): Contains information about the network to update
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/firmwareUpgrades"
@@ -244,8 +230,6 @@ class ActionBatchNetworks(object):
         - toVersion (object): Version to downgrade to (if the network has firmware flexibility)
         - predownload (object): Predownload settings for the firmware upgrade
         """
-
-        kwargs.update(locals())
 
         if "product" in kwargs:
             options = [
@@ -292,8 +276,6 @@ class ActionBatchNetworks(object):
         - assignedDevices (object): The devices and Switch Stacks assigned to the Group
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/firmwareUpgrades/staged/groups"
 
@@ -330,7 +312,7 @@ class ActionBatchNetworks(object):
         }
         return action
 
-    def batchNetworkFloorPlansAutoLocateJobs(self, networkId: str, jobs: list):
+    def batchNetworkFloorPlansAutoLocateJobs(self, networkId: str, jobs: list, **kwargs):
         """
         **Schedule auto locate jobs for one or more floor plans in a network**
         https://developer.cisco.com/meraki/api-v1/#!batch-network-floor-plans-auto-locate-jobs
@@ -338,8 +320,6 @@ class ActionBatchNetworks(object):
         - networkId (string): Network ID
         - jobs (array): The list of auto locate jobs to be scheduled. Up to 100 jobs can be provided in a request.
         """
-
-        kwargs = locals()
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/floorPlans/autoLocate/jobs/batch"
@@ -384,8 +364,6 @@ class ActionBatchNetworks(object):
         - devices (array): The list of devices to publish positions for
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         jobId = urllib.parse.quote(jobId, safe="")
         resource = f"/networks/{networkId}/floorPlans/autoLocate/jobs/{jobId}/publish"
@@ -411,8 +389,6 @@ class ActionBatchNetworks(object):
         - devices (array): The list of devices to update anchor positions for
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         jobId = urllib.parse.quote(jobId, safe="")
         resource = f"/networks/{networkId}/floorPlans/autoLocate/jobs/{jobId}/recalculate"
@@ -428,7 +404,7 @@ class ActionBatchNetworks(object):
         }
         return action
 
-    def batchNetworkFloorPlansDevicesUpdate(self, networkId: str, assignments: list):
+    def batchNetworkFloorPlansDevicesUpdate(self, networkId: str, assignments: list, **kwargs):
         """
         **Update floorplan assignments for a batch of devices**
         https://developer.cisco.com/meraki/api-v1/#!batch-network-floor-plans-devices-update
@@ -436,8 +412,6 @@ class ActionBatchNetworks(object):
         - networkId (string): Network ID
         - assignments (array): List of floorplan assignments to update. Up to 100 floor plan assignments can be provided in a request.
         """
-
-        kwargs = locals()
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/floorPlans/devices/batchUpdate"
@@ -469,8 +443,6 @@ class ActionBatchNetworks(object):
         - floorNumber (number): The floor number of the floors within the building
         - imageContents (string): The file contents (a base 64 encoded string) of your new image. Supported formats are PNG, GIF, and JPG. Note that all images are saved as PNG files, regardless of the format they are uploaded in. If you upload a new image, and you do NOT specify any new geolocation fields ('center, 'topLeftCorner', etc), the floor plan will be recentered with no rotation in order to maintain the aspect ratio of your new image.
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         floorPlanId = urllib.parse.quote(floorPlanId, safe="")
@@ -532,8 +504,6 @@ class ActionBatchNetworks(object):
         - bonjourForwarding (object): The Bonjour settings for your group policy. Only valid if your network has a wireless configuration.
         """
 
-        kwargs.update(locals())
-
         if "splashAuthSettings" in kwargs:
             options = ["bypass", "network default"]
             assert kwargs["splashAuthSettings"] in options, (
@@ -581,8 +551,6 @@ class ActionBatchNetworks(object):
         - bonjourForwarding (object): The Bonjour settings for your group policy. Only valid if your network has a wireless configuration.
         """
 
-        kwargs.update(locals())
-
         if "splashAuthSettings" in kwargs:
             options = ["bypass", "network default"]
             assert kwargs["splashAuthSettings"] in options, (
@@ -621,8 +589,6 @@ class ActionBatchNetworks(object):
         - force (boolean): If true, the system deletes the GP even if there are active clients using the GP. After deletion, active clients that were assigned to that Group Policy will be left without any policy applied. Default is false.
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         groupPolicyId = urllib.parse.quote(groupPolicyId, safe="")
         resource = f"/networks/{networkId}/groupPolicies/{groupPolicyId}"
@@ -647,8 +613,6 @@ class ActionBatchNetworks(object):
         - emailPasswordToUser (boolean): Whether or not Meraki should email the password to user. Default is false.
         - isAdmin (boolean): Whether or not the user is a Dashboard administrator.
         """
-
-        kwargs.update(locals())
 
         if "accountType" in kwargs:
             options = ["802.1X", "Client VPN", "Guest"]
@@ -686,8 +650,6 @@ class ActionBatchNetworks(object):
         - delete (boolean): If the ID supplied is for a splash guest or client VPN user, and that user is not authorized for any other networks in the organization, then also delete the user. 802.1X RADIUS users are always deleted regardless of this optional attribute.
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         merakiAuthUserId = urllib.parse.quote(merakiAuthUserId, safe="")
         resource = f"/networks/{networkId}/merakiAuthUsers/{merakiAuthUserId}"
@@ -710,8 +672,6 @@ class ActionBatchNetworks(object):
         - emailPasswordToUser (boolean): Whether or not Meraki should email the password to user. Default is false.
         - authorizations (array): Authorization zones and expiration dates for the user.
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         merakiAuthUserId = urllib.parse.quote(merakiAuthUserId, safe="")
@@ -744,8 +704,6 @@ class ActionBatchNetworks(object):
         - authentication (object): Authentication settings of the MQTT broker
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/mqttBrokers"
 
@@ -777,8 +735,6 @@ class ActionBatchNetworks(object):
         - security (object): Security settings of the MQTT broker.
         - authentication (object): Authentication settings of the MQTT broker
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         mqttBrokerId = urllib.parse.quote(mqttBrokerId, safe="")
@@ -831,8 +787,6 @@ class ActionBatchNetworks(object):
         - namedVlans (object): A hash of Named VLANs options applied to the Network.
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/settings"
 
@@ -877,8 +831,6 @@ class ActionBatchNetworks(object):
         - retainConfigs (boolean): Optional boolean to retain all the current configs given by the template.
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/unbind"
 
@@ -893,7 +845,7 @@ class ActionBatchNetworks(object):
         }
         return action
 
-    def createNetworkVlanProfile(self, networkId: str, name: str, vlanNames: list, vlanGroups: list, iname: str):
+    def createNetworkVlanProfile(self, networkId: str, name: str, vlanNames: list, vlanGroups: list, iname: str, **kwargs):
         """
         **Create a VLAN profile for a network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-vlan-profile
@@ -904,8 +856,6 @@ class ActionBatchNetworks(object):
         - vlanGroups (array): An array of VLAN groups
         - iname (string): IName of the profile
         """
-
-        kwargs = locals()
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/vlanProfiles"
@@ -955,8 +905,6 @@ class ActionBatchNetworks(object):
         - bodyFile (string): A Base64 encoded file containing liquid template used for the body of the webhook message. Either `body` or `bodyFile` must be specified.
         - headersFile (string): A Base64 encoded file containing the liquid template used with the webhook headers.
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/webhooks/payloadTemplates"
@@ -1008,8 +956,6 @@ class ActionBatchNetworks(object):
         - bodyFile (string): A file containing liquid template used for the body of the webhook message.
         - headersFile (string): A file containing the liquid template used with the webhook headers.
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         payloadTemplateId = urllib.parse.quote(payloadTemplateId, safe="")

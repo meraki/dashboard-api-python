@@ -5,7 +5,7 @@ class ActionBatchSwitch(object):
     def __init__(self):
         super(ActionBatchSwitch, self).__init__()
 
-    def cycleDeviceSwitchPorts(self, serial: str, ports: list):
+    def cycleDeviceSwitchPorts(self, serial: str, ports: list, **kwargs):
         """
         **Cycle a set of switch ports**
         https://developer.cisco.com/meraki/api-v1/#!cycle-device-switch-ports
@@ -13,8 +13,6 @@ class ActionBatchSwitch(object):
         - serial (string): Serial
         - ports (array): List of switch ports
         """
-
-        kwargs = locals()
 
         serial = urllib.parse.quote(serial, safe="")
         resource = f"/devices/{serial}/switch/ports/cycle"
@@ -68,8 +66,6 @@ class ActionBatchSwitch(object):
         - dot3az (object): dot3az settings for the port
         - highSpeed (object): High speed port enablement settings for C9500-32QC
         """
-
-        kwargs.update(locals())
 
         if "type" in kwargs:
             options = ["access", "dad", "routed", "stack", "svl", "trunk"]
@@ -152,8 +148,6 @@ class ActionBatchSwitch(object):
         - loopback (object): The loopback settings of the interface.
         """
 
-        kwargs.update(locals())
-
         if "mode" in kwargs:
             options = ["loopback", "oob_management", "routed", "vlan"]
             assert kwargs["mode"] in options, f'''"mode" cannot be "{kwargs["mode"]}", & must be set to one of: {options}'''
@@ -209,8 +203,6 @@ class ActionBatchSwitch(object):
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
         - loopback (object): The loopback settings of the interface.
         """
-
-        kwargs.update(locals())
 
         if "multicastRouting" in kwargs:
             options = ["IGMP snooping querier", "disabled", "enabled"]
@@ -288,8 +280,6 @@ class ActionBatchSwitch(object):
          - fixedIpAssignments (array): Array of DHCP fixed IP assignments for the DHCP server running on the switch interface
         """
 
-        kwargs.update(locals())
-
         if "dhcpMode" in kwargs:
             options = ["dhcpDisabled", "dhcpRelay", "dhcpServer"]
             assert kwargs["dhcpMode"] in options, (
@@ -345,8 +335,6 @@ class ActionBatchSwitch(object):
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
         """
 
-        kwargs.update(locals())
-
         serial = urllib.parse.quote(serial, safe="")
         resource = f"/devices/{serial}/switch/routing/staticRoutes"
 
@@ -381,8 +369,6 @@ class ActionBatchSwitch(object):
         - preferOverOspfRoutesEnabled (boolean): Option to prefer static route over OSPF routes
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
         """
-
-        kwargs.update(locals())
 
         serial = urllib.parse.quote(serial, safe="")
         staticRouteId = urllib.parse.quote(staticRouteId, safe="")
@@ -434,8 +420,6 @@ class ActionBatchSwitch(object):
         - spareSerial (string): Serial number of the warm spare switch
         """
 
-        kwargs.update(locals())
-
         serial = urllib.parse.quote(serial, safe="")
         resource = f"/devices/{serial}/switch/warmSpare"
 
@@ -479,8 +463,6 @@ class ActionBatchSwitch(object):
         - guestGroupPolicyId (string): Group policy Number for guest group policy
         - guestSgtId (integer): Security Group Tag ID for guest group policy
         """
-
-        kwargs.update(locals())
 
         if "hostMode" in kwargs:
             options = ["Multi-Auth", "Multi-Domain", "Multi-Host", "Single-Host"]
@@ -552,8 +534,6 @@ class ActionBatchSwitch(object):
         - guestGroupPolicyId (string): Group policy Number for guest group policy
         - guestSgtId (integer): Security Group Tag ID for guest group policy
         """
-
-        kwargs.update(locals())
 
         if "hostMode" in kwargs:
             options = ["Multi-Auth", "Multi-Domain", "Multi-Host", "Single-Host"]
@@ -630,8 +610,6 @@ class ActionBatchSwitch(object):
         - switches (array): Array of switch serial number and IP assignment. If parameter is present, it cannot have empty body. Note: switches parameter is not applicable for template networks, in other words, do not put 'switches' in the body when updating template networks. Also, an empty 'switches' array will remove all previous assignments
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/switch/alternateManagementInterface"
 
@@ -662,8 +640,6 @@ class ActionBatchSwitch(object):
         - arpInspection (object): Dynamic ARP Inspection settings
         """
 
-        kwargs.update(locals())
-
         if "defaultPolicy" in kwargs:
             options = ["allow", "block"]
             assert kwargs["defaultPolicy"] in options, (
@@ -688,7 +664,9 @@ class ActionBatchSwitch(object):
         }
         return action
 
-    def createNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer(self, networkId: str, mac: str, vlan: int, ipv4: dict):
+    def createNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer(
+        self, networkId: str, mac: str, vlan: int, ipv4: dict, **kwargs
+    ):
         """
         **Add a server to be trusted by Dynamic ARP Inspection on this network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-dhcp-server-policy-arp-inspection-trusted-server
@@ -698,8 +676,6 @@ class ActionBatchSwitch(object):
         - vlan (integer): The VLAN of the trusted server being added. It must be between 1 and 4094
         - ipv4 (object): The IPv4 attributes of the trusted server being added
         """
-
-        kwargs = locals()
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/trustedServers"
@@ -728,8 +704,6 @@ class ActionBatchSwitch(object):
         - vlan (integer): The updated VLAN of the trusted server. It must be between 1 and 4094
         - ipv4 (object): The updated IPv4 attributes of the trusted server
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         trustedServerId = urllib.parse.quote(trustedServerId, safe="")
@@ -767,7 +741,7 @@ class ActionBatchSwitch(object):
         }
         return action
 
-    def updateNetworkSwitchDscpToCosMappings(self, networkId: str, mappings: list):
+    def updateNetworkSwitchDscpToCosMappings(self, networkId: str, mappings: list, **kwargs):
         """
         **Update the DSCP to CoS mappings**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-dscp-to-cos-mappings
@@ -775,8 +749,6 @@ class ActionBatchSwitch(object):
         - networkId (string): Network ID
         - mappings (array): An array of DSCP to CoS mappings. An empty array will reset the mappings to default.
         """
-
-        kwargs = locals()
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/switch/dscpToCosMappings"
@@ -801,8 +773,6 @@ class ActionBatchSwitch(object):
         - switchPorts (array): Array of switch or stack ports for creating aggregation group. Minimum 2 and maximum 8 ports are supported.
         - switchProfilePorts (array): Array of switch profile ports for creating aggregation group. Minimum 2 and maximum 8 ports are supported.
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/switch/linkAggregations"
@@ -829,8 +799,6 @@ class ActionBatchSwitch(object):
         - switchPorts (array): Array of switch or stack ports for updating aggregation group. Minimum 2 and maximum 8 ports are supported.
         - switchProfilePorts (array): Array of switch profile ports for updating aggregation group. Minimum 2 and maximum 8 ports are supported.
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         linkAggregationId = urllib.parse.quote(linkAggregationId, safe="")
@@ -877,8 +845,6 @@ class ActionBatchSwitch(object):
         - overrides (array): Override MTU size for individual switches or switch templates. An empty array will clear overrides.
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/switch/mtu"
 
@@ -907,8 +873,6 @@ class ActionBatchSwitch(object):
         Any unspecified day in the schedule is added as a default schedule configuration of the day.
 
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         portScheduleId = urllib.parse.quote(portScheduleId, safe="")
@@ -941,8 +905,6 @@ class ActionBatchSwitch(object):
         - dscp (integer): DSCP tag for the incoming packet. Set this to -1 to trust incoming DSCP. Default value is 0
         """
 
-        kwargs.update(locals())
-
         if "protocol" in kwargs:
             options = ["ANY", "TCP", "UDP"]
             assert kwargs["protocol"] in options, (
@@ -969,7 +931,7 @@ class ActionBatchSwitch(object):
         }
         return action
 
-    def updateNetworkSwitchQosRulesOrder(self, networkId: str, ruleIds: list):
+    def updateNetworkSwitchQosRulesOrder(self, networkId: str, ruleIds: list, **kwargs):
         """
         **Update the order in which the rules should be processed by the switch**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-qos-rules-order
@@ -977,8 +939,6 @@ class ActionBatchSwitch(object):
         - networkId (string): Network ID
         - ruleIds (array): A list of quality of service rule IDs arranged in order in which they should be processed by the switch.
         """
-
-        kwargs = locals()
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/switch/qosRules/order"
@@ -1029,8 +989,6 @@ class ActionBatchSwitch(object):
         - dscp (integer): DSCP tag that should be assigned to incoming packet. Set this to -1 to trust incoming DSCP. Default value is 0
         """
 
-        kwargs.update(locals())
-
         if "protocol" in kwargs:
             options = ["ANY", "TCP", "UDP"]
             assert kwargs["protocol"] in options, (
@@ -1068,8 +1026,6 @@ class ActionBatchSwitch(object):
         - overrides (array): Array of paired switches/stacks/profiles and corresponding multicast settings. An empty array will clear the multicast settings.
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/switch/routing/multicast"
 
@@ -1097,8 +1053,6 @@ class ActionBatchSwitch(object):
         - multicastGroup (string): 'Any', or the IP address of a multicast group
         - vrf (object): The VRF with PIM enabled L3 interface
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/switch/routing/multicast/rendezvousPoints"
@@ -1149,8 +1103,6 @@ class ActionBatchSwitch(object):
         - vrf (object): The VRF with PIM enabled L3 interface
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         rendezvousPointId = urllib.parse.quote(rendezvousPointId, safe="")
         resource = f"/networks/{networkId}/switch/routing/multicast/rendezvousPoints/{rendezvousPointId}"
@@ -1183,8 +1135,6 @@ class ActionBatchSwitch(object):
         - md5AuthenticationEnabled (boolean): Boolean value to enable or disable MD5 authentication. MD5 authentication is disabled by default.
         - md5AuthenticationKey (object): MD5 authentication credentials. This param is only relevant if md5AuthenticationEnabled is true
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/switch/routing/ospf"
@@ -1220,8 +1170,6 @@ class ActionBatchSwitch(object):
         - portChannelFallback (boolean): Port channel fallback
         - uplinkSelection (object): Settings related to uplink selection on IOS-XE switches.
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/switch/settings"
@@ -1264,8 +1212,6 @@ class ActionBatchSwitch(object):
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
         - loopback (object): The loopback settings of the interface.
         """
-
-        kwargs.update(locals())
 
         if "mode" in kwargs:
             options = ["loopback", "oob_management", "routed", "vlan"]
@@ -1324,8 +1270,6 @@ class ActionBatchSwitch(object):
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
         - loopback (object): The loopback settings of the interface.
         """
-
-        kwargs.update(locals())
 
         if "multicastRouting" in kwargs:
             options = ["IGMP snooping querier", "disabled", "enabled"]
@@ -1408,8 +1352,6 @@ class ActionBatchSwitch(object):
         - fixedIpAssignments (array): Array of DHCP fixed IP assignments for the DHCP server running on the switch stack interface
         """
 
-        kwargs.update(locals())
-
         if "dhcpMode" in kwargs:
             options = ["dhcpDisabled", "dhcpRelay", "dhcpServer"]
             assert kwargs["dhcpMode"] in options, (
@@ -1469,8 +1411,6 @@ class ActionBatchSwitch(object):
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         switchStackId = urllib.parse.quote(switchStackId, safe="")
         resource = f"/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes"
@@ -1507,8 +1447,6 @@ class ActionBatchSwitch(object):
         - preferOverOspfRoutesEnabled (boolean): Option to prefer static route over OSPF routes
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         switchStackId = urllib.parse.quote(switchStackId, safe="")
@@ -1565,8 +1503,6 @@ class ActionBatchSwitch(object):
         - treatTheseTrafficTypesAsOneThreshold (array): Grouped traffic types
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/switch/stormControl"
 
@@ -1593,8 +1529,6 @@ class ActionBatchSwitch(object):
         - rstpEnabled (boolean): The spanning tree protocol status in network
         - stpBridgePriority (array): STP bridge priority for switches/stacks or switch templates. An empty array will clear the STP bridge priority settings.
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/switch/stp"
@@ -1651,8 +1585,6 @@ class ActionBatchSwitch(object):
         - dot3az (object): dot3az settings for the port
         - highSpeed (object): High speed port enablement settings for C9500-32QC
         """
-
-        kwargs.update(locals())
 
         if "type" in kwargs:
             options = ["access", "dad", "routed", "stack", "svl", "trunk"]
@@ -1716,7 +1648,7 @@ class ActionBatchSwitch(object):
         }
         return action
 
-    def cloneOrganizationSwitchDevices(self, organizationId: str, sourceSerial: str, targetSerials: list):
+    def cloneOrganizationSwitchDevices(self, organizationId: str, sourceSerial: str, targetSerials: list, **kwargs):
         """
         **Clone port-level and some switch-level configuration settings from a source switch to one or more target switches. Cloned settings include: Aggregation Groups, Power Settings, Multicast Settings, MTU Configuration, STP Bridge priority, Port Mirroring**
         https://developer.cisco.com/meraki/api-v1/#!clone-organization-switch-devices
@@ -1725,8 +1657,6 @@ class ActionBatchSwitch(object):
         - sourceSerial (string): Serial number of the source switch (must be on a network not bound to a template)
         - targetSerials (array): Array of serial numbers of one or more target switches (must be on a network not bound to a template)
         """
-
-        kwargs = locals()
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/switch/devices/clone"

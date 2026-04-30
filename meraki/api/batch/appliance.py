@@ -16,8 +16,6 @@ class ActionBatchAppliance(object):
         - fiveGhzSettings (object): Manual radio settings for 5 GHz.
         """
 
-        kwargs.update(locals())
-
         serial = urllib.parse.quote(serial, safe="")
         resource = f"/devices/{serial}/appliance/radio/settings"
 
@@ -34,7 +32,7 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def updateDeviceApplianceUplinksSettings(self, serial: str, interfaces: dict):
+    def updateDeviceApplianceUplinksSettings(self, serial: str, interfaces: dict, **kwargs):
         """
         **Update the uplink settings for a secure router or security appliance**
         https://developer.cisco.com/meraki/api-v1/#!update-device-appliance-uplinks-settings
@@ -42,8 +40,6 @@ class ActionBatchAppliance(object):
         - serial (string): Serial
         - interfaces (object): Interface settings.
         """
-
-        kwargs = locals()
 
         serial = urllib.parse.quote(serial, safe="")
         resource = f"/devices/{serial}/appliance/uplinks/settings"
@@ -85,8 +81,6 @@ class ActionBatchAppliance(object):
         - destinations (array): The list of connectivity monitoring destinations
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/appliance/connectivityMonitoringDestinations"
 
@@ -112,8 +106,6 @@ class ActionBatchAppliance(object):
         - designations (array): Ordered warm spare roles
         - uplink (object): Uplink configuration
         """
-
-        kwargs.update(locals())
 
         if "mode" in kwargs:
             options = ["active-active", "active-passive", "disabled"]
@@ -162,8 +154,6 @@ class ActionBatchAppliance(object):
         - rules (array): An ordered array of the MX L7 firewall rules. Each rule is an object with 'policy', 'type', and 'value'. The 'value' shape depends on 'type': object for application/applicationCategory, string for host/port/ipRange, and an array of 2-letter ISO 3166-1 alpha-2 country codes for allowedCountries/blockedCountries. For backward compatibility, request types also accept whitelistedCountries/blacklistedCountries.
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/appliance/firewall/l7FirewallRules"
 
@@ -178,7 +168,7 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def updateNetworkApplianceFirewallMulticastForwarding(self, networkId: str, rules: list):
+    def updateNetworkApplianceFirewallMulticastForwarding(self, networkId: str, rules: list, **kwargs):
         """
         **Update static multicast forward rules for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-firewall-multicast-forwarding
@@ -186,8 +176,6 @@ class ActionBatchAppliance(object):
         - networkId (string): Network ID
         - rules (array): Static multicast forwarding rules. Pass an empty array to clear all rules.
         """
-
-        kwargs = locals()
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/appliance/firewall/multicastForwarding"
@@ -217,8 +205,6 @@ class ActionBatchAppliance(object):
         - allowedVlans (string): Comma-delimited list of VLAN IDs (e.g. '2,15') for all devices. Secure Routers also support VLAN ranges (e.g. '2-10,15'). Use 'all' to permit all VLANs on the port.
         - accessPolicy (string): The name of the policy. Only applicable to Access ports. Valid values are: 'open', '8021x-radius', 'mac-radius', 'hybris-radius' for MX64 or Z3 or any MX supporting the per port authentication feature. Otherwise, 'open' is the only valid value and 'open' is the default value if the field is missing.
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         portId = urllib.parse.quote(portId, safe="")
@@ -251,8 +237,6 @@ class ActionBatchAppliance(object):
         - description (string): A name or description for the prefix
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/appliance/prefixes/delegated/statics"
 
@@ -280,8 +264,6 @@ class ActionBatchAppliance(object):
         - origin (object): The origin of the prefix
         - description (string): A name or description for the prefix
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         staticDelegatedPrefixId = urllib.parse.quote(staticDelegatedPrefixId, safe="")
@@ -331,8 +313,6 @@ class ActionBatchAppliance(object):
         - perSsidSettings (object): Per-SSID radio settings by number.
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/appliance/rfProfiles"
 
@@ -362,8 +342,6 @@ class ActionBatchAppliance(object):
         - fiveGhzSettings (object): Settings related to 5Ghz band
         - perSsidSettings (object): Per-SSID radio settings by number.
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         rfProfileId = urllib.parse.quote(rfProfileId, safe="")
@@ -411,8 +389,6 @@ class ActionBatchAppliance(object):
         - wanTrafficUplinkPreferences (array): policies with respective traffic filters for an MX network
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/appliance/sdwan/internetPolicies"
 
@@ -437,8 +413,6 @@ class ActionBatchAppliance(object):
         - deploymentMode (string): Deployment mode of a network
         - dynamicDns (object): Dynamic DNS settings for a network
         """
-
-        kwargs.update(locals())
 
         if "clientTrackingMethod" in kwargs:
             options = ["IP address", "MAC address", "Unique client identifier"]
@@ -479,8 +453,6 @@ class ActionBatchAppliance(object):
         - mandatoryDhcp (object): Mandatory DHCP will enforce that clients connecting to this LAN must use the IP address assigned by the DHCP server. Clients who use a static IP address won't be able to associate. Only available on firmware versions 17.0 and above
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/appliance/singleLan"
 
@@ -517,8 +489,6 @@ class ActionBatchAppliance(object):
         - dhcpEnforcedDeauthentication (object): DHCP Enforced Deauthentication enables the disassociation of wireless clients in addition to Mandatory DHCP. This param is only valid on firmware versions >= MX 17.0 where the associated LAN has Mandatory DHCP Enabled
         - dot11w (object): The current setting for Protected Management Frames (802.11w).
         """
-
-        kwargs.update(locals())
 
         if "authMode" in kwargs:
             options = ["8021x-meraki", "8021x-radius", "open", "psk"]
@@ -573,8 +543,6 @@ class ActionBatchAppliance(object):
         - maxLossPercentage (integer): Maximum percentage of packet loss
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/appliance/trafficShaping/customPerformanceClasses"
 
@@ -606,8 +574,6 @@ class ActionBatchAppliance(object):
         - maxJitter (integer): Maximum jitter in milliseconds
         - maxLossPercentage (integer): Maximum percentage of packet loss
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         customPerformanceClassId = urllib.parse.quote(customPerformanceClassId, safe="")
@@ -659,8 +625,6 @@ class ActionBatchAppliance(object):
 
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/appliance/trafficShaping/rules"
 
@@ -684,8 +648,6 @@ class ActionBatchAppliance(object):
         - networkId (string): Network ID
         - bandwidthLimits (object): A mapping of uplinks to their bandwidth settings (be sure to check which uplinks are supported for your network)
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/appliance/trafficShaping/uplinkBandwidth"
@@ -714,8 +676,6 @@ class ActionBatchAppliance(object):
         - wanTrafficUplinkPreferences (array): Array of uplink preference rules for WAN traffic
         - vpnTrafficUplinkPreferences (array): Array of uplink preference rules for VPN traffic
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/appliance/trafficShaping/uplinkSelection"
@@ -746,8 +706,6 @@ class ActionBatchAppliance(object):
         - majorApplications (array): Major Application based VPN exclusion rules. Pass an empty array to clear existing rules.
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/appliance/trafficShaping/vpnExclusions"
 
@@ -763,7 +721,7 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def connectNetworkApplianceUmbrellaAccount(self, networkId: str, api: dict):
+    def connectNetworkApplianceUmbrellaAccount(self, networkId: str, api: dict, **kwargs):
         """
         **Connect a Cisco Umbrella account to this network**
         https://developer.cisco.com/meraki/api-v1/#!connect-network-appliance-umbrella-account
@@ -771,8 +729,6 @@ class ActionBatchAppliance(object):
         - networkId (string): Network ID
         - api (object): Umbrella API credentials
         """
-
-        kwargs = locals()
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/appliance/umbrella/account/connect"
@@ -805,7 +761,7 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def updateNetworkApplianceUplinksNat(self, networkId: str, uplinks: list):
+    def updateNetworkApplianceUplinksNat(self, networkId: str, uplinks: list, **kwargs):
         """
         **Update uplink NAT settings of the specified network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-uplinks-nat
@@ -813,8 +769,6 @@ class ActionBatchAppliance(object):
         - networkId (string): Network ID
         - uplinks (array): Per-uplink NAT exception configuration on the network.
         """
-
-        kwargs = locals()
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/appliance/uplinks/nat"
@@ -855,8 +809,6 @@ class ActionBatchAppliance(object):
         - dhcpOptions (array): The list of DHCP options that will be included in DHCP responses. Each object in the list should have "code", "type", and "value" properties.
         - uplinks (array): Per-uplink NAT exception override configuration on the VLAN. Applicable only for networks that support NAT exceptions.
         """
-
-        kwargs.update(locals())
 
         if "templateVlanType" in kwargs:
             options = ["same", "unique"]
@@ -914,8 +866,6 @@ class ActionBatchAppliance(object):
         - vlansEnabled (boolean): Boolean indicating whether to enable (true) or disable (false) VLANs for the network
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/appliance/vlans/settings"
 
@@ -959,8 +909,6 @@ class ActionBatchAppliance(object):
         - mandatoryDhcp (object): Mandatory DHCP will enforce that clients connecting to this VLAN must use the IP address assigned by the DHCP server. Clients who use a static IP address won't be able to associate. Only available on firmware versions 17.0 and above
         - uplinks (array): Per-uplink NAT exception override configuration on the VLAN. Applicable only for networks that support NAT exceptions.
         """
-
-        kwargs.update(locals())
 
         if "dhcpHandling" in kwargs:
             options = ["Do not respond to DHCP requests", "Relay DHCP to another server", "Run a DHCP server"]
@@ -1045,8 +993,6 @@ class ActionBatchAppliance(object):
         - neighbors (array): List of BGP neighbors. This list replaces the existing set of neighbors. When absent, this field is not updated.
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/appliance/vpn/bgp"
 
@@ -1077,8 +1023,6 @@ class ActionBatchAppliance(object):
         - subnet (object): Configuration of subnet features
         - hostTranslations (array): The list of VPN host translations. Host translations are supported starting from MX firmware version 26.1.2
         """
-
-        kwargs.update(locals())
 
         if "mode" in kwargs:
             options = ["hub", "none", "spoke"]
@@ -1115,8 +1059,6 @@ class ActionBatchAppliance(object):
         - virtualIp2 (string): The WAN 2 shared IP
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/appliance/warmSpare"
 
@@ -1152,7 +1094,7 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def createOrganizationApplianceDnsLocalProfile(self, organizationId: str, name: str):
+    def createOrganizationApplianceDnsLocalProfile(self, organizationId: str, name: str, **kwargs):
         """
         **Create a new local DNS profile**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-appliance-dns-local-profile
@@ -1160,8 +1102,6 @@ class ActionBatchAppliance(object):
         - organizationId (string): Organization ID
         - name (string): Name of profile
         """
-
-        kwargs = locals()
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/appliance/dns/local/profiles"
@@ -1177,7 +1117,7 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def bulkOrganizationApplianceDnsLocalProfilesAssignmentsCreate(self, organizationId: str, items: list):
+    def bulkOrganizationApplianceDnsLocalProfilesAssignmentsCreate(self, organizationId: str, items: list, **kwargs):
         """
         **Assign the local DNS profile to networks in the organization**
         https://developer.cisco.com/meraki/api-v1/#!bulk-organization-appliance-dns-local-profiles-assignments-create
@@ -1185,8 +1125,6 @@ class ActionBatchAppliance(object):
         - organizationId (string): Organization ID
         - items (array): List containing the network ID and Profile ID
         """
-
-        kwargs = locals()
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/appliance/dns/local/profiles/assignments/bulkCreate"
@@ -1202,7 +1140,7 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def createOrganizationApplianceDnsLocalProfilesAssignmentsBulkDelete(self, organizationId: str, items: list):
+    def createOrganizationApplianceDnsLocalProfilesAssignmentsBulkDelete(self, organizationId: str, items: list, **kwargs):
         """
         **Unassign the local DNS profile to networks in the organization**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-appliance-dns-local-profiles-assignments-bulk-delete
@@ -1210,8 +1148,6 @@ class ActionBatchAppliance(object):
         - organizationId (string): Organization ID
         - items (array): List containing the assignment ID
         """
-
-        kwargs = locals()
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/appliance/dns/local/profiles/assignments/bulkDelete"
@@ -1227,7 +1163,7 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def updateOrganizationApplianceDnsLocalProfile(self, organizationId: str, profileId: str, name: str):
+    def updateOrganizationApplianceDnsLocalProfile(self, organizationId: str, profileId: str, name: str, **kwargs):
         """
         **Update a local DNS profile**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-appliance-dns-local-profile
@@ -1236,8 +1172,6 @@ class ActionBatchAppliance(object):
         - profileId (string): Profile ID
         - name (string): Name of profile
         """
-
-        kwargs = locals()
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         profileId = urllib.parse.quote(profileId, safe="")
@@ -1273,7 +1207,9 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def createOrganizationApplianceDnsLocalRecord(self, organizationId: str, hostname: str, address: str, profile: dict):
+    def createOrganizationApplianceDnsLocalRecord(
+        self, organizationId: str, hostname: str, address: str, profile: dict, **kwargs
+    ):
         """
         **Create a new local DNS record**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-appliance-dns-local-record
@@ -1283,8 +1219,6 @@ class ActionBatchAppliance(object):
         - address (string): IP for the DNS record
         - profile (object): The profile the DNS record is associated with
         """
-
-        kwargs = locals()
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/appliance/dns/local/records"
@@ -1313,8 +1247,6 @@ class ActionBatchAppliance(object):
         - address (string): IP for the DNS record
         - profile (object): The profile the DNS record is associated with
         """
-
-        kwargs.update(locals())
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         recordId = urllib.parse.quote(recordId, safe="")
@@ -1352,7 +1284,9 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def createOrganizationApplianceDnsSplitProfile(self, organizationId: str, name: str, hostnames: list, nameservers: dict):
+    def createOrganizationApplianceDnsSplitProfile(
+        self, organizationId: str, name: str, hostnames: list, nameservers: dict, **kwargs
+    ):
         """
         **Create a new split DNS profile**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-appliance-dns-split-profile
@@ -1362,8 +1296,6 @@ class ActionBatchAppliance(object):
         - hostnames (array): The hostname patterns to match for redirection. For more information on Split DNS hostname pattern formatting, please consult the Split DNS KB.
         - nameservers (object): Contains the nameserver information for redirection.
         """
-
-        kwargs = locals()
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/appliance/dns/split/profiles"
@@ -1381,7 +1313,7 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def createOrganizationApplianceDnsSplitProfilesAssignmentsBulkCreate(self, organizationId: str, items: list):
+    def createOrganizationApplianceDnsSplitProfilesAssignmentsBulkCreate(self, organizationId: str, items: list, **kwargs):
         """
         **Assign the split DNS profile to networks in the organization**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-appliance-dns-split-profiles-assignments-bulk-create
@@ -1389,8 +1321,6 @@ class ActionBatchAppliance(object):
         - organizationId (string): Organization ID
         - items (array): List containing the network ID and Profile ID
         """
-
-        kwargs = locals()
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/appliance/dns/split/profiles/assignments/bulkCreate"
@@ -1406,7 +1336,7 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def createOrganizationApplianceDnsSplitProfilesAssignmentsBulkDelete(self, organizationId: str, items: list):
+    def createOrganizationApplianceDnsSplitProfilesAssignmentsBulkDelete(self, organizationId: str, items: list, **kwargs):
         """
         **Unassign the split DNS profile to networks in the organization**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-appliance-dns-split-profiles-assignments-bulk-delete
@@ -1414,8 +1344,6 @@ class ActionBatchAppliance(object):
         - organizationId (string): Organization ID
         - items (array): List containing the assignment ID
         """
-
-        kwargs = locals()
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/appliance/dns/split/profiles/assignments/bulkDelete"
@@ -1442,8 +1370,6 @@ class ActionBatchAppliance(object):
         - hostnames (array): The hostname patterns to match for redirection. For more information on Split DNS hostname pattern formatting, please consult the Split DNS KB.
         - nameservers (object): Contains the nameserver information for redirection.
         """
-
-        kwargs.update(locals())
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         profileId = urllib.parse.quote(profileId, safe="")
@@ -1490,8 +1416,6 @@ class ActionBatchAppliance(object):
         - items (array): List of IPsec SLA policies
         """
 
-        kwargs.update(locals())
-
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/appliance/vpn/siteToSite/ipsec/peers/slas"
 
@@ -1506,7 +1430,7 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def updateOrganizationApplianceVpnThirdPartyVPNPeers(self, organizationId: str, peers: list):
+    def updateOrganizationApplianceVpnThirdPartyVPNPeers(self, organizationId: str, peers: list, **kwargs):
         """
                 **Update the third party VPN peers for an organization.
 
@@ -1517,8 +1441,6 @@ class ActionBatchAppliance(object):
                 - organizationId (string): Organization ID
                 - peers (array): The list of VPN peers
         """
-
-        kwargs = locals()
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/appliance/vpn/thirdPartyVPNPeers"
@@ -1534,7 +1456,9 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def assignOrganizationPoliciesGlobalGroupPoliciesApplianceVlans(self, organizationId: str, policy: dict, vlans: list):
+    def assignOrganizationPoliciesGlobalGroupPoliciesApplianceVlans(
+        self, organizationId: str, policy: dict, vlans: list, **kwargs
+    ):
         """
         **Assign VLANs to a policy**
         https://developer.cisco.com/meraki/api-v1/#!assign-organization-policies-global-group-policies-appliance-vlans
@@ -1543,8 +1467,6 @@ class ActionBatchAppliance(object):
         - policy (object): Policy to assign VLANs to
         - vlans (array): VLANs to assign
         """
-
-        kwargs = locals()
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/policies/global/group/policies/appliance/vlans/assign"
@@ -1561,7 +1483,9 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def removeOrganizationPoliciesGlobalGroupPoliciesApplianceVlans(self, organizationId: str, policy: dict, vlans: list):
+    def removeOrganizationPoliciesGlobalGroupPoliciesApplianceVlans(
+        self, organizationId: str, policy: dict, vlans: list, **kwargs
+    ):
         """
         **Remove VLANs from a policy**
         https://developer.cisco.com/meraki/api-v1/#!remove-organization-policies-global-group-policies-appliance-vlans
@@ -1570,8 +1494,6 @@ class ActionBatchAppliance(object):
         - policy (object): Policy to remove VLANs from
         - vlans (array): VLANs to remove
         """
-
-        kwargs = locals()
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/policies/global/group/policies/appliance/vlans/remove"

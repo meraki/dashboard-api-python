@@ -6,7 +6,7 @@ class AsyncSm:
         super().__init__()
         self._session = session
 
-    def createNetworkSmBypassActivationLockAttempt(self, networkId: str, ids: list):
+    def createNetworkSmBypassActivationLockAttempt(self, networkId: str, ids: list, **kwargs):
         """
         **Bypass activation lock attempt**
         https://developer.cisco.com/meraki/api-v1/#!create-network-sm-bypass-activation-lock-attempt
@@ -14,8 +14,6 @@ class AsyncSm:
         - networkId (string): Network ID
         - ids (array): The ids of the devices to attempt activation lock bypass.
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["sm", "configure", "bypassActivationLockAttempts"],
@@ -28,6 +26,14 @@ class AsyncSm:
             "ids",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createNetworkSmBypassActivationLockAttempt: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -76,8 +82,6 @@ class AsyncSm:
             - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["sm", "configure", "devices"],
             "operation": "getNetworkSmDevices",
@@ -113,6 +117,12 @@ class AsyncSm:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkSmDevices: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def checkinNetworkSmDevices(self, networkId: str, **kwargs):
@@ -126,8 +136,6 @@ class AsyncSm:
         - serials (array): The serials of the devices to be checked-in.
         - scope (array): The scope (one of all, none, withAny, withAll, withoutAny, or withoutAll) and a set of tags of the devices to be checked-in.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["sm", "configure", "devices"],
@@ -144,6 +152,12 @@ class AsyncSm:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"checkinNetworkSmDevices: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def updateNetworkSmDevicesFields(self, networkId: str, deviceFields: dict, **kwargs):
@@ -157,8 +171,6 @@ class AsyncSm:
         - id (string): The id of the device to be modified.
         - serial (string): The serial of the device to be modified.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["sm", "configure", "devices", "fields"],
@@ -175,6 +187,12 @@ class AsyncSm:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSmDevicesFields: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def lockNetworkSmDevices(self, networkId: str, **kwargs):
@@ -189,8 +207,6 @@ class AsyncSm:
         - scope (array): The scope (one of all, none, withAny, withAll, withoutAny, or withoutAll) and a set of tags of the devices to be locked.
         - pin (integer): The pin number for locking macOS devices (a six digit number). Required only for macOS devices.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["sm", "configure", "devices"],
@@ -208,6 +224,12 @@ class AsyncSm:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"lockNetworkSmDevices: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def modifyNetworkSmDevicesTags(self, networkId: str, tags: list, updateAction: str, **kwargs):
@@ -223,8 +245,6 @@ class AsyncSm:
         - serials (array): The serials of the devices to be modified.
         - scope (array): The scope (one of all, none, withAny, withAll, withoutAny, or withoutAll) and a set of tags of the devices to be modified.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["sm", "configure", "devices"],
@@ -243,6 +263,12 @@ class AsyncSm:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"modifyNetworkSmDevicesTags: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def moveNetworkSmDevices(self, networkId: str, newNetwork: str, **kwargs):
@@ -257,8 +283,6 @@ class AsyncSm:
         - serials (array): The serials of the devices to be moved.
         - scope (array): The scope (one of all, none, withAny, withAll, withoutAny, or withoutAll) and a set of tags of the devices to be moved.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["sm", "configure", "devices"],
@@ -275,6 +299,12 @@ class AsyncSm:
             "newNetwork",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"moveNetworkSmDevices: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -293,8 +323,6 @@ class AsyncSm:
         - rebuildKernelCache (boolean): Whether or not to rebuild the kernel cache when rebooting the endpoint. Available for macOS 11+
         - requestRequiresNetworkTether (boolean): Whether or not the request requires network tethering. Available for macOS and supervised iOS or tvOS
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["sm", "configure", "devices"],
@@ -315,6 +343,12 @@ class AsyncSm:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"rebootNetworkSmDevices: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def shutdownNetworkSmDevices(self, networkId: str, **kwargs):
@@ -328,8 +362,6 @@ class AsyncSm:
         - serials (array): The serials of the endpoints to be shutdown.
         - scope (array): The scope (one of all, none, withAny, withAll, withoutAny, or withoutAll) and a set of tags of the endpoints to be shutdown.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["sm", "configure", "devices"],
@@ -346,6 +378,12 @@ class AsyncSm:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"shutdownNetworkSmDevices: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def wipeNetworkSmDevices(self, networkId: str, **kwargs):
@@ -359,8 +397,6 @@ class AsyncSm:
         - serial (string): The serial of the device to be wiped.
         - pin (integer): The pin number (a six digit value) for wiping a macOS device. Required only for macOS devices.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["sm", "configure", "devices"],
@@ -376,6 +412,12 @@ class AsyncSm:
             "pin",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"wipeNetworkSmDevices: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -431,8 +473,6 @@ class AsyncSm:
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["sm", "monitor", "devices", "connectivity"],
             "operation": "getNetworkSmDeviceConnectivity",
@@ -447,6 +487,12 @@ class AsyncSm:
             "endingBefore",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkSmDeviceConnectivity: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -464,8 +510,6 @@ class AsyncSm:
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["sm", "monitor", "devices", "desktopLogs"],
             "operation": "getNetworkSmDeviceDesktopLogs",
@@ -480,6 +524,12 @@ class AsyncSm:
             "endingBefore",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkSmDeviceDesktopLogs: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -497,8 +547,6 @@ class AsyncSm:
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["sm", "monitor", "devices", "deviceCommandLogs"],
             "operation": "getNetworkSmDeviceDeviceCommandLogs",
@@ -513,6 +561,12 @@ class AsyncSm:
             "endingBefore",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkSmDeviceDeviceCommandLogs: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -546,8 +600,6 @@ class AsyncSm:
         - force (boolean): By default, installation of an app which is believed to already be present on the device will be skipped. If you'd like to force the installation of the app, set this parameter to true.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["sm", "configure", "devices"],
             "operation": "installNetworkSmDeviceApps",
@@ -561,6 +613,12 @@ class AsyncSm:
             "force",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"installNetworkSmDeviceApps: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -597,8 +655,6 @@ class AsyncSm:
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["sm", "monitor", "devices", "performanceHistory"],
             "operation": "getNetworkSmDevicePerformanceHistory",
@@ -613,6 +669,12 @@ class AsyncSm:
             "endingBefore",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkSmDevicePerformanceHistory: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -711,7 +773,7 @@ class AsyncSm:
 
         return self._session.post(metadata, resource)
 
-    def uninstallNetworkSmDeviceApps(self, networkId: str, deviceId: str, appIds: list):
+    def uninstallNetworkSmDeviceApps(self, networkId: str, deviceId: str, appIds: list, **kwargs):
         """
         **Uninstall applications on a device**
         https://developer.cisco.com/meraki/api-v1/#!uninstall-network-sm-device-apps
@@ -720,8 +782,6 @@ class AsyncSm:
         - deviceId (string): Device ID
         - appIds (array): ids of applications to be uninstalled
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["sm", "configure", "devices"],
@@ -735,6 +795,12 @@ class AsyncSm:
             "appIds",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"uninstallNetworkSmDeviceApps: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -766,8 +832,6 @@ class AsyncSm:
         - payloadTypes (array): Filter by payload types
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["sm", "configure", "profiles"],
             "operation": "getNetworkSmProfiles",
@@ -788,6 +852,12 @@ class AsyncSm:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkSmProfiles: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get(metadata, resource, params)
 
     def getNetworkSmTargetGroups(self, networkId: str, **kwargs):
@@ -798,8 +868,6 @@ class AsyncSm:
         - networkId (string): Network ID
         - withDetails (boolean): Boolean indicating if the the ids of the devices or users scoped by the target group should be included in the response
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["sm", "configure", "targetGroups"],
@@ -813,6 +881,12 @@ class AsyncSm:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkSmTargetGroups: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get(metadata, resource, params)
 
     def createNetworkSmTargetGroup(self, networkId: str, **kwargs):
@@ -824,8 +898,6 @@ class AsyncSm:
         - name (string): The name of this target group
         - scope (string): The scope and tag options of the target group. Comma separated values beginning with one of withAny, withAll, withoutAny, withoutAll, all, none, followed by tags. Default to none if empty.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["sm", "configure", "targetGroups"],
@@ -840,6 +912,12 @@ class AsyncSm:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkSmTargetGroup: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def getNetworkSmTargetGroup(self, networkId: str, targetGroupId: str, **kwargs):
@@ -851,8 +929,6 @@ class AsyncSm:
         - targetGroupId (string): Target group ID
         - withDetails (boolean): Boolean indicating if the the ids of the devices or users scoped by the target group should be included in the response
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["sm", "configure", "targetGroups"],
@@ -867,6 +943,12 @@ class AsyncSm:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkSmTargetGroup: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get(metadata, resource, params)
 
     def updateNetworkSmTargetGroup(self, networkId: str, targetGroupId: str, **kwargs):
@@ -879,8 +961,6 @@ class AsyncSm:
         - name (string): The name of this target group
         - scope (string): The scope and tag options of the target group. Comma separated values beginning with one of withAny, withAll, withoutAny, withoutAll, all, none, followed by tags. Default to none if empty.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["sm", "configure", "targetGroups"],
@@ -895,6 +975,12 @@ class AsyncSm:
             "scope",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSmTargetGroup: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -930,8 +1016,6 @@ class AsyncSm:
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["sm", "configure", "trustedAccessConfigs"],
             "operation": "getNetworkSmTrustedAccessConfigs",
@@ -945,6 +1029,12 @@ class AsyncSm:
             "endingBefore",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkSmTrustedAccessConfigs: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -961,8 +1051,6 @@ class AsyncSm:
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["sm", "configure", "userAccessDevices"],
             "operation": "getNetworkSmUserAccessDevices",
@@ -976,6 +1064,12 @@ class AsyncSm:
             "endingBefore",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkSmUserAccessDevices: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -1010,8 +1104,6 @@ class AsyncSm:
         - scope (array): Specifiy a scope (one of all, none, withAny, withAll, withoutAny, withoutAll) and a set of tags.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["sm", "configure"],
             "operation": "getNetworkSmUsers",
@@ -1037,6 +1129,12 @@ class AsyncSm:
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkSmUsers: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
@@ -1091,8 +1189,6 @@ class AsyncSm:
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["sm", "configure", "admins", "roles"],
             "operation": "getOrganizationSmAdminsRoles",
@@ -1107,6 +1203,12 @@ class AsyncSm:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationSmAdminsRoles: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def createOrganizationSmAdminsRole(self, organizationId: str, name: str, **kwargs):
@@ -1119,8 +1221,6 @@ class AsyncSm:
         - scope (string): The scope of the Limited Access Role
         - tags (array): The tags of the Limited Access Role
         """
-
-        kwargs.update(locals())
 
         if "scope" in kwargs:
             options = ["all_tags", "some", "without_all_tags", "without_some"]
@@ -1139,6 +1239,12 @@ class AsyncSm:
             "tags",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationSmAdminsRole: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -1173,8 +1279,6 @@ class AsyncSm:
         - tags (array): The tags of the Limited Access Role
         """
 
-        kwargs.update(locals())
-
         if "scope" in kwargs:
             options = ["all_tags", "some", "without_all_tags", "without_some"]
             assert kwargs["scope"] in options, f'''"scope" cannot be "{kwargs["scope"]}", & must be set to one of: {options}'''
@@ -1193,6 +1297,12 @@ class AsyncSm:
             "tags",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationSmAdminsRole: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -1232,7 +1342,7 @@ class AsyncSm:
 
         return self._session.get(metadata, resource)
 
-    def updateOrganizationSmSentryPoliciesAssignments(self, organizationId: str, items: list):
+    def updateOrganizationSmSentryPoliciesAssignments(self, organizationId: str, items: list, **kwargs):
         """
         **Update an Organizations Sentry Policies using the provided list**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-sm-sentry-policies-assignments
@@ -1240,8 +1350,6 @@ class AsyncSm:
         - organizationId (string): Organization ID
         - items (array): Sentry Group Policies for the Organization keyed by Network Id
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["sm", "configure", "sentry", "policies", "assignments"],
@@ -1254,6 +1362,14 @@ class AsyncSm:
             "items",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationSmSentryPoliciesAssignments: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -1272,8 +1388,6 @@ class AsyncSm:
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - networkIds (array): Optional parameter to filter Sentry Policies by Network Id
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["sm", "configure", "sentry", "policies", "assignments", "byNetwork"],
@@ -1297,6 +1411,14 @@ class AsyncSm:
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSmSentryPoliciesAssignmentsByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 

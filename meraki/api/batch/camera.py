@@ -16,8 +16,6 @@ class ActionBatchCamera(object):
         - parameters (array): Parameters for the custom analytics workload
         """
 
-        kwargs.update(locals())
-
         serial = urllib.parse.quote(serial, safe="")
         resource = f"/devices/{serial}/camera/customAnalytics"
 
@@ -48,8 +46,6 @@ class ActionBatchCamera(object):
         - resolution (string): Resolution of the camera. Can be one of '1280x720', '1920x1080', '1080x1080', '2112x2112', '2880x2880', '2688x1512' or '3840x2160'.Not all resolutions are supported by every camera model.
         - motionDetectorVersion (integer): The version of the motion detector that will be used by the camera. Only applies to Gen 2 cameras. Defaults to v2.
         """
-
-        kwargs.update(locals())
 
         if "quality" in kwargs:
             options = ["Enhanced", "High", "Standard", "Ultra"]
@@ -99,8 +95,6 @@ class ActionBatchCamera(object):
         - detectionModelId (string): The ID of the object detection model
         """
 
-        kwargs.update(locals())
-
         serial = urllib.parse.quote(serial, safe="")
         resource = f"/devices/{serial}/camera/sense"
 
@@ -127,8 +121,6 @@ class ActionBatchCamera(object):
         - externalRtspEnabled (boolean): Boolean indicating if external rtsp stream is exposed
         """
 
-        kwargs.update(locals())
-
         serial = urllib.parse.quote(serial, safe="")
         resource = f"/devices/{serial}/camera/video/settings"
 
@@ -143,7 +135,7 @@ class ActionBatchCamera(object):
         }
         return action
 
-    def updateDeviceCameraWirelessProfiles(self, serial: str, ids: dict):
+    def updateDeviceCameraWirelessProfiles(self, serial: str, ids: dict, **kwargs):
         """
         **Assign wireless profiles to the given camera. Incremental updates are not supported, all profile assignment need to be supplied at once.**
         https://developer.cisco.com/meraki/api-v1/#!update-device-camera-wireless-profiles
@@ -151,8 +143,6 @@ class ActionBatchCamera(object):
         - serial (string): Serial
         - ids (object): The ids of the wireless profile to assign to the given camera
         """
-
-        kwargs = locals()
 
         serial = urllib.parse.quote(serial, safe="")
         resource = f"/devices/{serial}/camera/wirelessProfiles"

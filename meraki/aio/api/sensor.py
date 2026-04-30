@@ -24,8 +24,6 @@ class AsyncSensor:
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 30 days. The default is 30 days.
         """
 
-        kwargs.update(locals())
-
         if "sortOrder" in kwargs:
             options = ["ascending", "descending"]
             assert kwargs["sortOrder"] in options, (
@@ -59,9 +57,15 @@ class AsyncSensor:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getDeviceSensorCommands: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def createDeviceSensorCommand(self, serial: str, operation: str):
+    def createDeviceSensorCommand(self, serial: str, operation: str, **kwargs):
         """
         **Sends a command to a sensor**
         https://developer.cisco.com/meraki/api-v1/#!create-device-sensor-command
@@ -69,8 +73,6 @@ class AsyncSensor:
         - serial (string): Serial
         - operation (string): Operation to run on the sensor. 'enableDownstreamPower', 'disableDownstreamPower', and 'cycleDownstreamPower' turn power on/off to the device that is connected downstream of an MT40 power monitor. 'refreshData' causes an MT15 or MT40 device to upload its latest readings so that they are immediately available in the Dashboard API.
         """
-
-        kwargs = locals()
 
         if "operation" in kwargs:
             options = ["cycleDownstreamPower", "disableDownstreamPower", "enableDownstreamPower", "refreshData"]
@@ -89,6 +91,12 @@ class AsyncSensor:
             "operation",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createDeviceSensorCommand: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -137,8 +145,6 @@ class AsyncSensor:
         - livestream (object): A role defined between an MT sensor and an MV camera that adds the camera's livestream to the sensor's details page. Snapshots from the camera will also appear in alert notifications that the sensor triggers.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["sensor", "configure", "relationships"],
             "operation": "updateDeviceSensorRelationships",
@@ -150,6 +156,12 @@ class AsyncSensor:
             "livestream",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateDeviceSensorRelationships: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -182,8 +194,6 @@ class AsyncSensor:
         - interval (integer): The time interval in seconds for returned data. The valid intervals are: 900, 3600, 86400, 604800, 2629746. The default is 604800. Interval is calculated if time params are provided.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["sensor", "monitor", "alerts", "overview", "byMetric"],
             "operation": "getNetworkSensorAlertsOverviewByMetric",
@@ -198,6 +208,14 @@ class AsyncSensor:
             "interval",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getNetworkSensorAlertsOverviewByMetric: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get(metadata, resource, params)
 
@@ -233,8 +251,6 @@ class AsyncSensor:
         - message (string): A custom message that will appear in email and text message alerts.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["sensor", "configure", "alerts", "profiles"],
             "operation": "createNetworkSensorAlertsProfile",
@@ -252,6 +268,12 @@ class AsyncSensor:
             "message",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkSensorAlertsProfile: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -290,8 +312,6 @@ class AsyncSensor:
         - message (string): A custom message that will appear in email and text message alerts.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["sensor", "configure", "alerts", "profiles"],
             "operation": "updateNetworkSensorAlertsProfile",
@@ -310,6 +330,12 @@ class AsyncSensor:
             "message",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSensorAlertsProfile: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -368,7 +394,7 @@ class AsyncSensor:
 
         return self._session.get(metadata, resource)
 
-    def updateNetworkSensorMqttBroker(self, networkId: str, mqttBrokerId: str, enabled: bool):
+    def updateNetworkSensorMqttBroker(self, networkId: str, mqttBrokerId: str, enabled: bool, **kwargs):
         """
         **Update the sensor settings of an MQTT broker**
         https://developer.cisco.com/meraki/api-v1/#!update-network-sensor-mqtt-broker
@@ -377,8 +403,6 @@ class AsyncSensor:
         - mqttBrokerId (string): Mqtt broker ID
         - enabled (boolean): Set to true to enable MQTT broker for sensor network
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["sensor", "configure", "mqttBrokers"],
@@ -392,6 +416,12 @@ class AsyncSensor:
             "enabled",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSensorMqttBroker: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -426,8 +456,6 @@ class AsyncSensor:
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["sensor", "monitor", "gateways", "connections", "latest"],
             "operation": "getOrganizationSensorGatewaysConnectionsLatest",
@@ -451,6 +479,14 @@ class AsyncSensor:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSensorGatewaysConnectionsLatest: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationSensorReadingsHistory(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -471,8 +507,6 @@ class AsyncSensor:
         - serials (array): Optional parameter to filter readings by sensor.
         - metrics (array): Types of sensor readings to retrieve. If no metrics are supplied, all available types of readings will be retrieved.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["sensor", "monitor", "readings", "history"],
@@ -504,6 +538,12 @@ class AsyncSensor:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationSensorReadingsHistory: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationSensorReadingsLatest(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -521,8 +561,6 @@ class AsyncSensor:
         - serials (array): Optional parameter to filter readings by sensor.
         - metrics (array): Types of sensor readings to retrieve. If no metrics are supplied, all available types of readings will be retrieved.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["sensor", "monitor", "readings", "latest"],
@@ -550,5 +588,11 @@ class AsyncSensor:
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationSensorReadingsLatest: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)

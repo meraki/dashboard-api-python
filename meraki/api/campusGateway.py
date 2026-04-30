@@ -23,8 +23,6 @@ class CampusGateway(object):
         - notes (string): Notes about cluster with max size of 511 characters allowed
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["campusGateway", "configure", "clusters"],
             "operation": "createNetworkCampusGatewayCluster",
@@ -43,6 +41,12 @@ class CampusGateway(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkCampusGatewayCluster: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def updateNetworkCampusGatewayCluster(self, networkId: str, clusterId: str, **kwargs):
@@ -60,8 +64,6 @@ class CampusGateway(object):
         - devices (array): Devices in the cluster
         - notes (string): Notes about cluster with max size of 511 characters allowed
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["campusGateway", "configure", "clusters"],
@@ -82,6 +84,12 @@ class CampusGateway(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkCampusGatewayCluster: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def getOrganizationCampusGatewayClusters(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -97,8 +105,6 @@ class CampusGateway(object):
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["campusGateway", "configure", "clusters"],
@@ -123,6 +129,12 @@ class CampusGateway(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationCampusGatewayClusters: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationCampusGatewayDevicesUplinksLocalOverridesByDevice(
@@ -140,8 +152,6 @@ class CampusGateway(object):
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["campusGateway", "configure", "devices", "uplinks", "localOverrides", "byDevice"],
@@ -165,5 +175,13 @@ class CampusGateway(object):
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationCampusGatewayDevicesUplinksLocalOverridesByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)

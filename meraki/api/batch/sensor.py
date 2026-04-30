@@ -5,7 +5,7 @@ class ActionBatchSensor(object):
     def __init__(self):
         super(ActionBatchSensor, self).__init__()
 
-    def createDeviceSensorCommand(self, serial: str, operation: str):
+    def createDeviceSensorCommand(self, serial: str, operation: str, **kwargs):
         """
         **Sends a command to a sensor**
         https://developer.cisco.com/meraki/api-v1/#!create-device-sensor-command
@@ -13,8 +13,6 @@ class ActionBatchSensor(object):
         - serial (string): Serial
         - operation (string): Operation to run on the sensor. 'enableDownstreamPower', 'disableDownstreamPower', and 'cycleDownstreamPower' turn power on/off to the device that is connected downstream of an MT40 power monitor. 'refreshData' causes an MT15 or MT40 device to upload its latest readings so that they are immediately available in the Dashboard API.
         """
-
-        kwargs = locals()
 
         if "operation" in kwargs:
             options = ["cycleDownstreamPower", "disableDownstreamPower", "enableDownstreamPower", "refreshData"]
@@ -45,8 +43,6 @@ class ActionBatchSensor(object):
         - livestream (object): A role defined between an MT sensor and an MV camera that adds the camera's livestream to the sensor's details page. Snapshots from the camera will also appear in alert notifications that the sensor triggers.
         """
 
-        kwargs.update(locals())
-
         serial = urllib.parse.quote(serial, safe="")
         resource = f"/devices/{serial}/sensor/relationships"
 
@@ -75,8 +71,6 @@ class ActionBatchSensor(object):
         - includeSensorUrl (boolean): Include dashboard link to sensor in messages (default: true).
         - message (string): A custom message that will appear in email and text message alerts.
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/sensor/alerts/profiles"
@@ -113,8 +107,6 @@ class ActionBatchSensor(object):
         - includeSensorUrl (boolean): Include dashboard link to sensor in messages (default: true).
         - message (string): A custom message that will appear in email and text message alerts.
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         id = urllib.parse.quote(id, safe="")
@@ -156,7 +148,7 @@ class ActionBatchSensor(object):
         }
         return action
 
-    def updateNetworkSensorMqttBroker(self, networkId: str, mqttBrokerId: str, enabled: bool):
+    def updateNetworkSensorMqttBroker(self, networkId: str, mqttBrokerId: str, enabled: bool, **kwargs):
         """
         **Update the sensor settings of an MQTT broker. To update the broker itself, use /networks/{networkId}/mqttBrokers/{mqttBrokerId}.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-sensor-mqtt-broker
@@ -165,8 +157,6 @@ class ActionBatchSensor(object):
         - mqttBrokerId (string): Mqtt broker ID
         - enabled (boolean): Set to true to enable MQTT broker for sensor network
         """
-
-        kwargs = locals()
 
         networkId = urllib.parse.quote(networkId, safe="")
         mqttBrokerId = urllib.parse.quote(mqttBrokerId, safe="")

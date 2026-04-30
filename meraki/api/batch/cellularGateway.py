@@ -15,8 +15,6 @@ class ActionBatchCellularGateway(object):
         - fixedIpAssignments (array): list of all fixed IP assignments for a single MG
         """
 
-        kwargs.update(locals())
-
         serial = urllib.parse.quote(serial, safe="")
         resource = f"/devices/{serial}/cellularGateway/lan"
 
@@ -41,8 +39,6 @@ class ActionBatchCellularGateway(object):
         - rules (array): An array of port forwarding params
         """
 
-        kwargs.update(locals())
-
         serial = urllib.parse.quote(serial, safe="")
         resource = f"/devices/{serial}/cellularGateway/portForwardingRules"
 
@@ -65,8 +61,6 @@ class ActionBatchCellularGateway(object):
         - networkId (string): Network ID
         - destinations (array): The list of connectivity monitoring destinations
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/cellularGateway/connectivityMonitoringDestinations"
@@ -92,8 +86,6 @@ class ActionBatchCellularGateway(object):
         - dnsNameservers (string): DNS name servers mode for all MG of the network. Possible values are: 'upstream_dns', 'google_dns', 'opendns', 'custom'.
         - dnsCustomNameservers (array): list of fixed IPs representing the the DNS Name servers when the mode is 'custom'
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/cellularGateway/dhcp"
@@ -121,8 +113,6 @@ class ActionBatchCellularGateway(object):
         - cidr (string): CIDR of the pool of subnets. Each MG in this network will automatically pick a subnet from this pool.
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/cellularGateway/subnetPool"
 
@@ -146,8 +136,6 @@ class ActionBatchCellularGateway(object):
         - networkId (string): Network ID
         - bandwidthLimits (object): The bandwidth settings for the 'cellular' uplink
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/cellularGateway/uplink"
@@ -173,8 +161,6 @@ class ActionBatchCellularGateway(object):
         - status (string): Status the eSIM will be updated to
         """
 
-        kwargs.update(locals())
-
         organizationId = urllib.parse.quote(organizationId, safe="")
         id = urllib.parse.quote(id, safe="")
         resource = f"/organizations/{organizationId}/cellularGateway/esims/inventory/{id}"
@@ -191,7 +177,7 @@ class ActionBatchCellularGateway(object):
         return action
 
     def createOrganizationCellularGatewayEsimsServiceProvidersAccount(
-        self, organizationId: str, accountId: str, apiKey: str, serviceProvider: dict, title: str, username: str
+        self, organizationId: str, accountId: str, apiKey: str, serviceProvider: dict, title: str, username: str, **kwargs
     ):
         """
         **Add a service provider account.**
@@ -204,8 +190,6 @@ class ActionBatchCellularGateway(object):
         - title (string): Service provider account name
         - username (string): Service provider account username
         """
-
-        kwargs = locals()
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/cellularGateway/esims/serviceProviders/accounts"
@@ -235,8 +219,6 @@ class ActionBatchCellularGateway(object):
         - title (string): Service provider account name used on the Meraki UI
         - apiKey (string): Service provider account API key
         """
-
-        kwargs.update(locals())
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         accountId = urllib.parse.quote(accountId, safe="")
@@ -273,7 +255,7 @@ class ActionBatchCellularGateway(object):
         }
         return action
 
-    def createOrganizationCellularGatewayEsimsSwap(self, organizationId: str, swaps: list):
+    def createOrganizationCellularGatewayEsimsSwap(self, organizationId: str, swaps: list, **kwargs):
         """
         **Swap which profile an eSIM uses.**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-cellular-gateway-esims-swap
@@ -281,8 +263,6 @@ class ActionBatchCellularGateway(object):
         - organizationId (string): Organization ID
         - swaps (array): Each object represents a swap for one eSIM
         """
-
-        kwargs = locals()
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/cellularGateway/esims/swap"

@@ -17,8 +17,6 @@ class ActionBatchOrganizations(object):
         - description (string): Description of the adaptive policy ACL
         """
 
-        kwargs.update(locals())
-
         if "ipVersion" in kwargs:
             options = ["any", "ipv4", "ipv6"]
             assert kwargs["ipVersion"] in options, (
@@ -54,8 +52,6 @@ class ActionBatchOrganizations(object):
         - rules (array): An ordered array of the adaptive policy ACL rules. An empty array will clear the rules.
         - ipVersion (string): IP version of adpative policy ACL. One of: 'any', 'ipv4' or 'ipv6'
         """
-
-        kwargs.update(locals())
 
         if "ipVersion" in kwargs:
             options = ["any", "ipv4", "ipv6"]
@@ -112,8 +108,6 @@ class ActionBatchOrganizations(object):
         - policyObjects (array): The policy objects that belong to this group; traffic from addresses specified by these policy objects will be tagged with this group's SGT value if no other tagging scheme is being used (each requires one unique attribute) (default: [])
         """
 
-        kwargs.update(locals())
-
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/adaptivePolicy/groups"
 
@@ -143,8 +137,6 @@ class ActionBatchOrganizations(object):
         - description (string): Description of the group
         - policyObjects (array): The policy objects that belong to this group; traffic from addresses specified by these policy objects will be tagged with this group's SGT value if no other tagging scheme is being used (each requires one unique attribute)
         """
-
-        kwargs.update(locals())
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         id = urllib.parse.quote(id, safe="")
@@ -195,8 +187,6 @@ class ActionBatchOrganizations(object):
         - lastEntryRule (string): The rule to apply if there is no matching ACL (default: "default")
         """
 
-        kwargs.update(locals())
-
         if "lastEntryRule" in kwargs:
             options = ["allow", "default", "deny"]
             assert kwargs["lastEntryRule"] in options, (
@@ -232,8 +222,6 @@ class ActionBatchOrganizations(object):
         - acls (array): An ordered array of adaptive policy ACLs (each requires one unique attribute) that apply to this policy
         - lastEntryRule (string): The rule to apply if there is no matching ACL
         """
-
-        kwargs.update(locals())
 
         if "lastEntryRule" in kwargs:
             options = ["allow", "default", "deny"]
@@ -287,8 +275,6 @@ class ActionBatchOrganizations(object):
         - enabledNetworks (array): List of network IDs with adaptive policy enabled
         """
 
-        kwargs.update(locals())
-
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/adaptivePolicy/settings"
 
@@ -317,8 +303,6 @@ class ActionBatchOrganizations(object):
         - networkTags (array): Networks with these tags will be monitored for the alert
         - description (string): User supplied description of the alert
         """
-
-        kwargs.update(locals())
 
         if "type" in kwargs:
             options = [
@@ -365,8 +349,6 @@ class ActionBatchOrganizations(object):
         - networkTags (array): Networks with these tags will be monitored for the alert
         - description (string): User supplied description of the alert
         """
-
-        kwargs.update(locals())
 
         if "type" in kwargs:
             options = [
@@ -437,8 +419,6 @@ class ActionBatchOrganizations(object):
                - customLogo (object): Properties describing the custom logo attached to the branding policy.
         """
 
-        kwargs.update(locals())
-
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/brandingPolicies"
 
@@ -466,8 +446,6 @@ class ActionBatchOrganizations(object):
         - brandingPolicyIds (array):       An ordered list of branding policy IDs that determines the priority order of how to apply the policies
 
         """
-
-        kwargs.update(locals())
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/brandingPolicies/priorities"
@@ -500,8 +478,6 @@ class ActionBatchOrganizations(object):
 
           - customLogo (object): Properties describing the custom logo attached to the branding policy.
         """
-
-        kwargs.update(locals())
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         brandingPolicyId = urllib.parse.quote(brandingPolicyId, safe="")
@@ -552,8 +528,6 @@ class ActionBatchOrganizations(object):
         - copyFromNetworkId (string): The ID of the network or config template to copy configuration from
         """
 
-        kwargs.update(locals())
-
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/configTemplates"
 
@@ -581,8 +555,6 @@ class ActionBatchOrganizations(object):
         - timeZone (string): The timezone of the configuration template. For a list of allowed timezones, please see the 'TZ' column in the table in <a target='_blank' href='https://en.wikipedia.org/wiki/List_of_tz_database_time_zones'>this article.</a>
         """
 
-        kwargs.update(locals())
-
         organizationId = urllib.parse.quote(organizationId, safe="")
         configTemplateId = urllib.parse.quote(configTemplateId, safe="")
         resource = f"/organizations/{organizationId}/configTemplates/{configTemplateId}"
@@ -599,7 +571,9 @@ class ActionBatchOrganizations(object):
         }
         return action
 
-    def createOrganizationDevicesCellularDataProfile(self, organizationId: str, name: str, description: str, rules: list):
+    def createOrganizationDevicesCellularDataProfile(
+        self, organizationId: str, name: str, description: str, rules: list, **kwargs
+    ):
         """
         **Add a cellular data management profile to this organization. Creates a cellular data management profile in this organization and returns the created profile, including its rules and actions.**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-devices-cellular-data-profile
@@ -609,8 +583,6 @@ class ActionBatchOrganizations(object):
         - description (string): Description of the profile to be added.
         - rules (array): The rules associated with this profile. At least one rule and no more than two rules may be defined for a profile.
         """
-
-        kwargs = locals()
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/devices/cellular/data/profiles"
@@ -658,8 +630,6 @@ class ActionBatchOrganizations(object):
         - description (string): New description of the profile.
         """
 
-        kwargs.update(locals())
-
         organizationId = urllib.parse.quote(organizationId, safe="")
         profileId = urllib.parse.quote(profileId, safe="")
         resource = f"/organizations/{organizationId}/devices/cellular/data/profiles/{profileId}"
@@ -677,7 +647,7 @@ class ActionBatchOrganizations(object):
         }
         return action
 
-    def createOrganizationDevicesControllerMigration(self, organizationId: str, serials: list, target: str):
+    def createOrganizationDevicesControllerMigration(self, organizationId: str, serials: list, target: str, **kwargs):
         """
         **Migrate devices to another controller or management mode**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-devices-controller-migration
@@ -686,8 +656,6 @@ class ActionBatchOrganizations(object):
         - serials (array): A list of Meraki Serials to migrate
         - target (string): The controller or management mode to which the devices will be migrated
         """
-
-        kwargs = locals()
 
         if "target" in kwargs:
             options = ["wirelessController"]
@@ -710,7 +678,7 @@ class ActionBatchOrganizations(object):
         }
         return action
 
-    def bulkUpdateOrganizationDevicesDetails(self, organizationId: str, serials: list, details: list):
+    def bulkUpdateOrganizationDevicesDetails(self, organizationId: str, serials: list, details: list, **kwargs):
         """
         **Updating device details (currently only used for Catalyst devices)**
         https://developer.cisco.com/meraki/api-v1/#!bulk-update-organization-devices-details
@@ -719,8 +687,6 @@ class ActionBatchOrganizations(object):
         - serials (array): A list of serials of devices to update
         - details (array): An array of details
         """
-
-        kwargs = locals()
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/devices/details/bulkUpdate"
@@ -737,7 +703,7 @@ class ActionBatchOrganizations(object):
         }
         return action
 
-    def bulkOrganizationDevicesPacketCaptureCapturesDelete(self, organizationId: str, captureIds: list):
+    def bulkOrganizationDevicesPacketCaptureCapturesDelete(self, organizationId: str, captureIds: list, **kwargs):
         """
         **BulkDelete packet captures from cloud**
         https://developer.cisco.com/meraki/api-v1/#!bulk-organization-devices-packet-capture-captures-delete
@@ -746,14 +712,9 @@ class ActionBatchOrganizations(object):
         - captureIds (array): Delete the packet captures of the specified capture ids
         """
 
-        kwargs = locals()
-
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/devices/packetCapture/captures/bulkDelete"
 
-        body_params = [
-            "captureIds",
-        ]
         action = {
             "resource": resource,
             "operation": "destroy",
@@ -794,8 +755,6 @@ class ActionBatchOrganizations(object):
         - schedule (object): Schedule details
         """
 
-        kwargs.update(locals())
-
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/devices/packetCapture/schedules"
 
@@ -816,7 +775,7 @@ class ActionBatchOrganizations(object):
         }
         return action
 
-    def reorderOrganizationDevicesPacketCaptureSchedules(self, organizationId: str, order: list):
+    def reorderOrganizationDevicesPacketCaptureSchedules(self, organizationId: str, order: list, **kwargs):
         """
         **Bulk update priorities of pcap schedules**
         https://developer.cisco.com/meraki/api-v1/#!reorder-organization-devices-packet-capture-schedules
@@ -824,8 +783,6 @@ class ActionBatchOrganizations(object):
         - organizationId (string): Organization ID
         - order (array): Array of schedule IDs and their priorities to reorder.
         """
-
-        kwargs = locals()
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/devices/packetCapture/schedules/reorder"
@@ -857,8 +814,6 @@ class ActionBatchOrganizations(object):
         - schedule (object): Schedule details
         """
 
-        kwargs.update(locals())
-
         organizationId = urllib.parse.quote(organizationId, safe="")
         scheduleId = urllib.parse.quote(scheduleId, safe="")
         resource = f"/organizations/{organizationId}/devices/packetCapture/schedules/{scheduleId}"
@@ -889,8 +844,6 @@ class ActionBatchOrganizations(object):
         - scheduleId (string): Delete the capture schedules of the specified capture schedule id
         """
 
-        kwargs = locals()
-
         organizationId = urllib.parse.quote(organizationId, safe="")
         scheduleId = urllib.parse.quote(scheduleId, safe="")
         resource = f"/organizations/{organizationId}/devices/packetCapture/schedules/{scheduleId}"
@@ -911,8 +864,6 @@ class ActionBatchOrganizations(object):
         - limitScopeToNetworks (array): A list of network IDs to apply the opt-in to
         """
 
-        kwargs.update(locals())
-
         organizationId = urllib.parse.quote(organizationId, safe="")
         optInId = urllib.parse.quote(optInId, safe="")
         resource = f"/organizations/{organizationId}/earlyAccess/features/optIns/{optInId}"
@@ -928,7 +879,7 @@ class ActionBatchOrganizations(object):
         }
         return action
 
-    def disableOrganizationIntegrationsXdrNetworks(self, organizationId: str, networks: list):
+    def disableOrganizationIntegrationsXdrNetworks(self, organizationId: str, networks: list, **kwargs):
         """
         **Disable XDR on networks**
         https://developer.cisco.com/meraki/api-v1/#!disable-organization-integrations-xdr-networks
@@ -936,8 +887,6 @@ class ActionBatchOrganizations(object):
         - organizationId (string): Organization ID
         - networks (array): List containing the network ID and the product type to disable XDR on
         """
-
-        kwargs = locals()
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/integrations/xdr/networks/disable"
@@ -953,7 +902,7 @@ class ActionBatchOrganizations(object):
         }
         return action
 
-    def enableOrganizationIntegrationsXdrNetworks(self, organizationId: str, networks: list):
+    def enableOrganizationIntegrationsXdrNetworks(self, organizationId: str, networks: list, **kwargs):
         """
         **Enable XDR on networks**
         https://developer.cisco.com/meraki/api-v1/#!enable-organization-integrations-xdr-networks
@@ -961,8 +910,6 @@ class ActionBatchOrganizations(object):
         - organizationId (string): Organization ID
         - networks (array): List containing the network ID and the product type to enable XDR on
         """
-
-        kwargs = locals()
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/integrations/xdr/networks/enable"
@@ -988,8 +935,6 @@ class ActionBatchOrganizations(object):
         - subscriptions (array): The individual subscriptions to claim
         """
 
-        kwargs.update(locals())
-
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/inventory/orders/claim"
 
@@ -1005,7 +950,7 @@ class ActionBatchOrganizations(object):
         }
         return action
 
-    def assignOrganizationLicensesSeats(self, organizationId: str, licenseId: str, networkId: str, seatCount: int):
+    def assignOrganizationLicensesSeats(self, organizationId: str, licenseId: str, networkId: str, seatCount: int, **kwargs):
         """
         **Assign SM seats to a network. This will increase the managed SM device limit of the network**
         https://developer.cisco.com/meraki/api-v1/#!assign-organization-licenses-seats
@@ -1015,8 +960,6 @@ class ActionBatchOrganizations(object):
         - networkId (string): The ID of the SM network to assign the seats to
         - seatCount (integer): The number of seats to assign to the SM network. Must be less than or equal to the total number of seats of the license
         """
-
-        kwargs = locals()
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/licenses/assignSeats"
@@ -1034,7 +977,7 @@ class ActionBatchOrganizations(object):
         }
         return action
 
-    def moveOrganizationLicenses(self, organizationId: str, destOrganizationId: str, licenseIds: list):
+    def moveOrganizationLicenses(self, organizationId: str, destOrganizationId: str, licenseIds: list, **kwargs):
         """
         **Move licenses to another organization. This will also move any devices that the licenses are assigned to**
         https://developer.cisco.com/meraki/api-v1/#!move-organization-licenses
@@ -1043,8 +986,6 @@ class ActionBatchOrganizations(object):
         - destOrganizationId (string): The ID of the organization to move the licenses to
         - licenseIds (array): A list of IDs of licenses to move to the new organization
         """
-
-        kwargs = locals()
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/licenses/move"
@@ -1061,7 +1002,9 @@ class ActionBatchOrganizations(object):
         }
         return action
 
-    def moveOrganizationLicensesSeats(self, organizationId: str, destOrganizationId: str, licenseId: str, seatCount: int):
+    def moveOrganizationLicensesSeats(
+        self, organizationId: str, destOrganizationId: str, licenseId: str, seatCount: int, **kwargs
+    ):
         """
         **Move SM seats to another organization**
         https://developer.cisco.com/meraki/api-v1/#!move-organization-licenses-seats
@@ -1071,8 +1014,6 @@ class ActionBatchOrganizations(object):
         - licenseId (string): The ID of the SM license to move the seats from
         - seatCount (integer): The number of seats to move to the new organization. Must be less than or equal to the total number of seats of the license
         """
-
-        kwargs = locals()
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/licenses/moveSeats"
@@ -1090,7 +1031,7 @@ class ActionBatchOrganizations(object):
         }
         return action
 
-    def renewOrganizationLicensesSeats(self, organizationId: str, licenseIdToRenew: str, unusedLicenseId: str):
+    def renewOrganizationLicensesSeats(self, organizationId: str, licenseIdToRenew: str, unusedLicenseId: str, **kwargs):
         """
         **Renew SM seats of a license. This will extend the license expiration date of managed SM devices covered by this license**
         https://developer.cisco.com/meraki/api-v1/#!renew-organization-licenses-seats
@@ -1099,8 +1040,6 @@ class ActionBatchOrganizations(object):
         - licenseIdToRenew (string): The ID of the SM license to renew. This license must already be assigned to an SM network
         - unusedLicenseId (string): The SM license to use to renew the seats on 'licenseIdToRenew'. This license must have at least as many seats available as there are seats on 'licenseIdToRenew'
         """
-
-        kwargs = locals()
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/licenses/renewSeats"
@@ -1126,8 +1065,6 @@ class ActionBatchOrganizations(object):
         - licenseId (string): License ID
         - deviceSerial (string): The serial number of the device to assign this license to. Set this to  null to unassign the license. If a different license is already active on the device, this parameter will control queueing/dequeuing this license.
         """
-
-        kwargs.update(locals())
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         licenseId = urllib.parse.quote(licenseId, safe="")
@@ -1165,8 +1102,6 @@ class ActionBatchOrganizations(object):
         - loginIpRanges (array): List of acceptable IP ranges. Entries can be single IP addresses, IP address ranges, and CIDR subnets.
         - apiAuthentication (object): Details for indicating whether organization will restrict access to API (but not Dashboard) to certain IP addresses.
         """
-
-        kwargs.update(locals())
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/loginSecurity"
@@ -1209,8 +1144,6 @@ class ActionBatchOrganizations(object):
         - notes (string): Add any notes or additional information about this network here.
         """
 
-        kwargs.update(locals())
-
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/networks"
 
@@ -1241,8 +1174,6 @@ class ActionBatchOrganizations(object):
         - enrollmentString (string): A unique identifier which can be used for device enrollment or easy access through the Meraki SM Registration page or the Self Service Portal. Please note that changing this field may cause existing bookmarks to break. All networks that are part of this combined network will have their enrollment string appended by '-network_type'. If left empty, all exisitng enrollment strings will be deleted.
         """
 
-        kwargs.update(locals())
-
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/networks/combine"
 
@@ -1268,8 +1199,6 @@ class ActionBatchOrganizations(object):
         - name (string): Name of the firewall ruleset
         - description (string): Description of the firewall ruleset
         """
-
-        kwargs.update(locals())
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/policies/global/firewall/rulesets"
@@ -1303,8 +1232,6 @@ class ActionBatchOrganizations(object):
         - priority (integer): Rule priority (lower numbers = higher priority)
         - description (string): Description of the firewall rule
         """
-
-        kwargs.update(locals())
 
         if "policy" in kwargs:
             options = ["allow", "deny"]
@@ -1369,8 +1296,6 @@ class ActionBatchOrganizations(object):
         - destinations (object): Destination traffic criteria. Each source or destination bloc is capped separately per rule at 100 total segment values. The count is segments_values_count: the sum of all values across every segment type in that bloc. Ports use a separate cap of 100.
         """
 
-        kwargs.update(locals())
-
         if "policy" in kwargs:
             options = ["allow", "deny"]
             assert kwargs["policy"] in options, (
@@ -1409,8 +1334,6 @@ class ActionBatchOrganizations(object):
         - name (string): Name of the firewall ruleset
         - description (string): Description of the firewall ruleset
         """
-
-        kwargs.update(locals())
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         rulesetId = urllib.parse.quote(rulesetId, safe="")
@@ -1457,8 +1380,6 @@ class ActionBatchOrganizations(object):
         - description (string): Description of the policy
         """
 
-        kwargs.update(locals())
-
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/policies/global/group/policies"
 
@@ -1475,7 +1396,7 @@ class ActionBatchOrganizations(object):
         return action
 
     def assignOrganizationPoliciesGlobalGroupPoliciesAdaptivePolicyGroups(
-        self, organizationId: str, policy: dict, adaptivePolicyGroups: list
+        self, organizationId: str, policy: dict, adaptivePolicyGroups: list, **kwargs
     ):
         """
         **Assign adaptive policy groups to a policy**
@@ -1485,8 +1406,6 @@ class ActionBatchOrganizations(object):
         - policy (object): Policy to assign adaptive policy groups to
         - adaptivePolicyGroups (array): Adaptive policy groups to assign
         """
-
-        kwargs = locals()
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/policies/global/group/policies/adaptivePolicyGroups/assign"
@@ -1504,7 +1423,7 @@ class ActionBatchOrganizations(object):
         return action
 
     def removeOrganizationPoliciesGlobalGroupPoliciesAdaptivePolicyGroups(
-        self, organizationId: str, policy: dict, adaptivePolicyGroups: list
+        self, organizationId: str, policy: dict, adaptivePolicyGroups: list, **kwargs
     ):
         """
         **Remove adaptive policy groups from a policy**
@@ -1514,8 +1433,6 @@ class ActionBatchOrganizations(object):
         - policy (object): Policy to remove adaptive policy groups from
         - adaptivePolicyGroups (array): Adaptive policy groups to remove
         """
-
-        kwargs = locals()
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/policies/global/group/policies/adaptivePolicyGroups/remove"
@@ -1544,8 +1461,6 @@ class ActionBatchOrganizations(object):
         - policyId (string): ID of the policy to assign the ruleset to
         - priority (integer): Priority of the ruleset assignment (lower numbers = higher priority)
         """
-
-        kwargs.update(locals())
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/policies/global/group/policies/firewall/rulesets/assignments"
@@ -1576,8 +1491,6 @@ class ActionBatchOrganizations(object):
         - policyId (string): ID of the policy to assign the ruleset to
         - priority (integer): Priority of the ruleset assignment (lower numbers = higher priority)
         """
-
-        kwargs.update(locals())
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         assignmentId = urllib.parse.quote(assignmentId, safe="")
@@ -1630,8 +1543,6 @@ class ActionBatchOrganizations(object):
         - description (string): Description of the policy
         """
 
-        kwargs.update(locals())
-
         organizationId = urllib.parse.quote(organizationId, safe="")
         policyId = urllib.parse.quote(policyId, safe="")
         resource = f"/organizations/{organizationId}/policies/global/group/policies/{policyId}"
@@ -1683,8 +1594,6 @@ class ActionBatchOrganizations(object):
         - groupIds (array): The IDs of policy object groups the policy object belongs to
         """
 
-        kwargs.update(locals())
-
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/policyObjects"
 
@@ -1717,8 +1626,6 @@ class ActionBatchOrganizations(object):
         - objectIds (array): A list of Policy Object ID's that this NetworkObjectGroup should be associated to (note: these ID's will replace the existing associated Policy Objects)
         """
 
-        kwargs.update(locals())
-
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/policyObjects/groups"
 
@@ -1745,8 +1652,6 @@ class ActionBatchOrganizations(object):
         - name (string): A name for the group of network addresses, unique within the organization (alphanumeric, space, dash, or underscore characters only)
         - objectIds (array): A list of Policy Object ID's that this NetworkObjectGroup should be associated to (note: these ID's will replace the existing associated Policy Objects)
         """
-
-        kwargs.update(locals())
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         policyObjectGroupId = urllib.parse.quote(policyObjectGroupId, safe="")
@@ -1798,8 +1703,6 @@ class ActionBatchOrganizations(object):
         - groupIds (array): The IDs of policy object groups the policy object belongs to
         """
 
-        kwargs.update(locals())
-
         organizationId = urllib.parse.quote(organizationId, safe="")
         policyObjectId = urllib.parse.quote(policyObjectId, safe="")
         resource = f"/organizations/{organizationId}/policyObjects/{policyObjectId}"
@@ -1850,8 +1753,6 @@ class ActionBatchOrganizations(object):
         - sloLogoutUrl (string): Dashboard will redirect users to this URL when they sign out.
         """
 
-        kwargs.update(locals())
-
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/saml/idps"
 
@@ -1879,8 +1780,6 @@ class ActionBatchOrganizations(object):
         - ssoLoginUrl (string): Dashboard will redirect users to this URL to log in again when their sessions expire.
         - sloLogoutUrl (string): Dashboard will redirect users to this URL when they sign out.
         """
-
-        kwargs.update(locals())
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         idpId = urllib.parse.quote(idpId, safe="")
@@ -1927,8 +1826,6 @@ class ActionBatchOrganizations(object):
         - items (array): List of connectors to delete (maximum 20 items)
         """
 
-        kwargs.update(locals())
-
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/sase/connectors/batchDelete"
 
@@ -1943,7 +1840,7 @@ class ActionBatchOrganizations(object):
         }
         return action
 
-    def createOrganizationSaseIntegration(self, organizationId: str, api: dict):
+    def createOrganizationSaseIntegration(self, organizationId: str, api: dict, **kwargs):
         """
         **Create a new Secure Access integration**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-sase-integration
@@ -1951,8 +1848,6 @@ class ActionBatchOrganizations(object):
         - organizationId (string): Organization ID
         - api (object): API credentials
         """
-
-        kwargs = locals()
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/sase/integrations"
@@ -1997,8 +1892,6 @@ class ActionBatchOrganizations(object):
         - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
 
-        kwargs.update(locals())
-
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/sase/sites/attach"
 
@@ -2024,8 +1917,6 @@ class ActionBatchOrganizations(object):
         - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
 
-        kwargs.update(locals())
-
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/sase/sites/detach"
 
@@ -2044,8 +1935,6 @@ class ActionBatchOrganizations(object):
         - siteId (string): Site ID of the site to update
         - routing (object): Routing configuration for the site
         """
-
-        kwargs.update(locals())
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         siteId = urllib.parse.quote(siteId, safe="")
@@ -2092,8 +1981,6 @@ class ActionBatchOrganizations(object):
         - baseTheme (string): base theme id
         """
 
-        kwargs.update(locals())
-
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/splash/themes"
 
@@ -2138,8 +2025,6 @@ class ActionBatchOrganizations(object):
         - name (string): File name. Will overwrite files with same name.
         - content (string): a file containing the asset content
         """
-
-        kwargs.update(locals())
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         themeIdentifier = urllib.parse.quote(themeIdentifier, safe="")

@@ -35,8 +35,6 @@ class ActionBatchSm(object):
         - tags (array): The tags of the Limited Access Role
         """
 
-        kwargs.update(locals())
-
         if "scope" in kwargs:
             options = ["all_tags", "some", "without_all_tags", "without_some"]
             assert kwargs["scope"] in options, f'''"scope" cannot be "{kwargs["scope"]}", & must be set to one of: {options}'''
@@ -68,8 +66,6 @@ class ActionBatchSm(object):
         - scope (string): The scope of the Limited Access Role
         - tags (array): The tags of the Limited Access Role
         """
-
-        kwargs.update(locals())
 
         if "scope" in kwargs:
             options = ["all_tags", "some", "without_all_tags", "without_some"]
@@ -111,7 +107,7 @@ class ActionBatchSm(object):
         }
         return action
 
-    def updateOrganizationSmSentryPoliciesAssignments(self, organizationId: str, items: list):
+    def updateOrganizationSmSentryPoliciesAssignments(self, organizationId: str, items: list, **kwargs):
         """
         **Update an Organizations Sentry Policies using the provided list. Sentry Policies are ordered in descending order of priority (i.e. highest priority at the bottom, this is opposite the Dashboard UI). Policies not present in the request will be deleted.**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-sm-sentry-policies-assignments
@@ -119,8 +115,6 @@ class ActionBatchSm(object):
         - organizationId (string): Organization ID
         - items (array): Sentry Group Policies for the Organization keyed by Network Id
         """
-
-        kwargs = locals()
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/sm/sentry/policies/assignments"

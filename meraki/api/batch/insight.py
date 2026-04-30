@@ -16,8 +16,6 @@ class ActionBatchInsight(object):
         - bestEffortMonitoringEnabled (boolean): Indicates that if the media server doesn't respond to ICMP pings, the nearest hop will be used in its stead.
         """
 
-        kwargs.update(locals())
-
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/insight/monitoredMediaServers"
 
@@ -45,8 +43,6 @@ class ActionBatchInsight(object):
         - address (string): The IP address (IPv4 only) or hostname of the media server to monitor
         - bestEffortMonitoringEnabled (boolean): Indicates that if the media server doesn't respond to ICMP pings, the nearest hop will be used in its stead.
         """
-
-        kwargs.update(locals())
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         monitoredMediaServerId = urllib.parse.quote(monitoredMediaServerId, safe="")

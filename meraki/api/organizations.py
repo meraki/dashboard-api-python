@@ -18,8 +18,6 @@ class Organizations(object):
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure"],
             "operation": "getOrganizations",
@@ -33,6 +31,12 @@ class Organizations(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizations: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def createOrganization(self, name: str, **kwargs):
@@ -43,8 +47,6 @@ class Organizations(object):
         - name (string): The name of the organization
         - management (object): Information about the organization's management system
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure"],
@@ -57,6 +59,12 @@ class Organizations(object):
             "management",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganization: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -88,8 +96,6 @@ class Organizations(object):
         - api (object): API-specific settings
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure"],
             "operation": "updateOrganization",
@@ -103,6 +109,12 @@ class Organizations(object):
             "api",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganization: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -135,8 +147,6 @@ class Organizations(object):
         - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "actionBatches"],
             "operation": "createOrganizationActionBatch",
@@ -152,6 +162,12 @@ class Organizations(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationActionBatch: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def getOrganizationActionBatches(self, organizationId: str, **kwargs):
@@ -162,8 +178,6 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - status (string): Filter batches by status. Valid types are pending, completed, and failed.
         """
-
-        kwargs.update(locals())
 
         if "status" in kwargs:
             options = ["completed", "failed", "pending"]
@@ -182,6 +196,12 @@ class Organizations(object):
             "status",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationActionBatches: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
@@ -234,8 +254,6 @@ class Organizations(object):
         - synchronous (boolean): Set to true to force the batch to run synchronous. There can be at most 20 actions in synchronous batch.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "actionBatches"],
             "operation": "updateOrganizationActionBatch",
@@ -249,6 +267,12 @@ class Organizations(object):
             "synchronous",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationActionBatch: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -281,8 +305,6 @@ class Organizations(object):
         - description (string): Description of the adaptive policy ACL
         """
 
-        kwargs.update(locals())
-
         if "ipVersion" in kwargs:
             options = ["any", "ipv4", "ipv6"]
             assert kwargs["ipVersion"] in options, (
@@ -303,6 +325,12 @@ class Organizations(object):
             "ipVersion",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationAdaptivePolicyAcl: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -338,8 +366,6 @@ class Organizations(object):
         - ipVersion (string): IP version of adpative policy ACL. One of: 'any', 'ipv4' or 'ipv6'
         """
 
-        kwargs.update(locals())
-
         if "ipVersion" in kwargs:
             options = ["any", "ipv4", "ipv6"]
             assert kwargs["ipVersion"] in options, (
@@ -361,6 +387,12 @@ class Organizations(object):
             "ipVersion",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationAdaptivePolicyAcl: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -412,8 +444,6 @@ class Organizations(object):
         - policyObjects (array): The policy objects that belong to this group; traffic from addresses specified by these policy objects will be tagged with this group's SGT value if no other tagging scheme is being used (each requires one unique attribute) (default: [])
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "adaptivePolicy", "groups"],
             "operation": "createOrganizationAdaptivePolicyGroup",
@@ -428,6 +458,14 @@ class Organizations(object):
             "policyObjects",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationAdaptivePolicyGroup: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -463,8 +501,6 @@ class Organizations(object):
         - policyObjects (array): The policy objects that belong to this group; traffic from addresses specified by these policy objects will be tagged with this group's SGT value if no other tagging scheme is being used (each requires one unique attribute)
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "adaptivePolicy", "groups"],
             "operation": "updateOrganizationAdaptivePolicyGroup",
@@ -480,6 +516,14 @@ class Organizations(object):
             "policyObjects",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationAdaptivePolicyGroup: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -548,8 +592,6 @@ class Organizations(object):
         - lastEntryRule (string): The rule to apply if there is no matching ACL (default: "default")
         """
 
-        kwargs.update(locals())
-
         if "lastEntryRule" in kwargs:
             options = ["allow", "default", "deny"]
             assert kwargs["lastEntryRule"] in options, (
@@ -570,6 +612,14 @@ class Organizations(object):
             "lastEntryRule",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationAdaptivePolicyPolicy: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -605,8 +655,6 @@ class Organizations(object):
         - lastEntryRule (string): The rule to apply if there is no matching ACL
         """
 
-        kwargs.update(locals())
-
         if "lastEntryRule" in kwargs:
             options = ["allow", "default", "deny"]
             assert kwargs["lastEntryRule"] in options, (
@@ -628,6 +676,14 @@ class Organizations(object):
             "lastEntryRule",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationAdaptivePolicyPolicy: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -676,8 +732,6 @@ class Organizations(object):
         - enabledNetworks (array): List of network IDs with adaptive policy enabled
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "adaptivePolicy", "settings"],
             "operation": "updateOrganizationAdaptivePolicySettings",
@@ -690,6 +744,14 @@ class Organizations(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationAdaptivePolicySettings: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.put(metadata, resource, payload)
 
     def getOrganizationAdmins(self, organizationId: str, **kwargs):
@@ -700,8 +762,6 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - networkIds (array): Optional parameter to filter the result set by the included set of network IDs
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "admins"],
@@ -723,6 +783,12 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationAdmins: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get(metadata, resource, params)
 
     def createOrganizationAdmin(self, organizationId: str, email: str, name: str, orgAccess: str, **kwargs):
@@ -738,8 +804,6 @@ class Organizations(object):
         - networks (array): The list of networks that the dashboard administrator has privileges on
         - authenticationMethod (string): No longer used as of Cisco SecureX end-of-life. Can be one of 'Email'. The default is Email authentication.
         """
-
-        kwargs.update(locals())
 
         if "orgAccess" in kwargs:
             options = ["enterprise", "full", "none", "read-only"]
@@ -769,6 +833,12 @@ class Organizations(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationAdmin: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def updateOrganizationAdmin(self, organizationId: str, adminId: str, **kwargs):
@@ -783,8 +853,6 @@ class Organizations(object):
         - tags (array): The list of tags that the dashboard administrator has privileges on
         - networks (array): The list of networks that the dashboard administrator has privileges on
         """
-
-        kwargs.update(locals())
 
         if "orgAccess" in kwargs:
             options = ["enterprise", "full", "none", "read-only"]
@@ -807,6 +875,12 @@ class Organizations(object):
             "networks",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationAdmin: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -861,8 +935,6 @@ class Organizations(object):
         - description (string): User supplied description of the alert
         """
 
-        kwargs.update(locals())
-
         if "type" in kwargs:
             options = [
                 "appOutage",
@@ -892,6 +964,12 @@ class Organizations(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationAlertsProfile: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def updateOrganizationAlertsProfile(self, organizationId: str, alertConfigId: str, **kwargs):
@@ -908,8 +986,6 @@ class Organizations(object):
         - networkTags (array): Networks with these tags will be monitored for the alert
         - description (string): User supplied description of the alert
         """
-
-        kwargs.update(locals())
 
         if "type" in kwargs:
             options = [
@@ -941,6 +1017,12 @@ class Organizations(object):
             "description",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationAlertsProfile: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -978,8 +1060,6 @@ class Organizations(object):
         - status (string): If provided, filters jobs by status
         """
 
-        kwargs.update(locals())
-
         if "status" in kwargs:
             options = ["complete", "deferred", "failed", "new", "ready", "running", "scheduled"]
             assert kwargs["status"] in options, (
@@ -1010,6 +1090,14 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApiRestProvisioningPipelinesJobs: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationApiRestProvisioningPipelinesJobsOverviewsByPipeline(self, organizationId: str, **kwargs):
@@ -1020,8 +1108,6 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - pipelineIds (array): Pipeline IDs to retrieve overviews for
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": [
@@ -1053,6 +1139,14 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApiRestProvisioningPipelinesJobsOverviewsByPipeline: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def getOrganizationApiRequests(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -1078,8 +1172,6 @@ class Organizations(object):
         - version (integer): Filter the results by the API version of the API request
         - operationIds (array): Filter the results by one or more operation IDs for the API request
         """
-
-        kwargs.update(locals())
 
         if "method" in kwargs:
             options = ["DELETE", "GET", "POST", "PUT"]
@@ -1125,6 +1217,12 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationApiRequests: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationApiRequestsOverview(self, organizationId: str, **kwargs):
@@ -1137,8 +1235,6 @@ class Organizations(object):
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 31 days.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "monitor", "apiRequests", "overview"],
@@ -1153,6 +1249,12 @@ class Organizations(object):
             "timespan",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationApiRequestsOverview: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
@@ -1172,8 +1274,6 @@ class Organizations(object):
         - adminIds (array): Filter by admin ID of user that made the API request
         - userAgent (string): Filter by user agent string for API request. This will filter by a complete or partial match.
         """
-
-        kwargs.update(locals())
 
         if "version" in kwargs:
             options = [0, 1]
@@ -1211,6 +1311,14 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApiRequestsOverviewResponseCodesByInterval: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def getOrganizationAssuranceAlerts(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -1240,8 +1348,6 @@ class Organizations(object):
         - resolved (boolean): Optional parameter to filter by resolved alerts defaults to false
         - suppressAlertsForOfflineNodes (boolean): When set to true the api will only return connectivity alerts for a given device if that device is in an offline state. This only applies to devices. This is ignored when resolved is true. Example:  If a Switch has a VLan Mismatch and is Unreachable. only the Unreachable alert will be returned. Defaults to false.
         """
-
-        kwargs.update(locals())
 
         if "sortOrder" in kwargs:
             options = ["ascending", "descending"]
@@ -1299,9 +1405,15 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationAssuranceAlerts: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def dismissOrganizationAssuranceAlerts(self, organizationId: str, alertIds: list):
+    def dismissOrganizationAssuranceAlerts(self, organizationId: str, alertIds: list, **kwargs):
         """
         **Dismiss health alerts**
         https://developer.cisco.com/meraki/api-v1/#!dismiss-organization-assurance-alerts
@@ -1309,8 +1421,6 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - alertIds (array): Array of alert IDs to dismiss
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["organizations", "monitor", "alerts"],
@@ -1323,6 +1433,12 @@ class Organizations(object):
             "alertIds",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"dismissOrganizationAssuranceAlerts: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -1346,8 +1462,6 @@ class Organizations(object):
         - resolved (boolean): Optional parameter to filter by resolved alerts defaults to false
         - suppressAlertsForOfflineNodes (boolean): When set to true the api will only return connectivity alerts for a given device if that device is in an offline state. This only applies to devices. This is ignored when resolved is true. Example:  If a Switch has a VLan Mismatch and is Unreachable. only the Unreachable alert will be returned. Defaults to false.
         """
-
-        kwargs.update(locals())
 
         if "category" in kwargs:
             options = ["configuration", "connectivity", "device_health", "experience_metrics", "insights"]
@@ -1390,6 +1504,14 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceAlertsOverview: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def getOrganizationAssuranceAlertsOverviewByNetwork(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -1418,8 +1540,6 @@ class Organizations(object):
         - resolved (boolean): Optional parameter to filter by resolved alerts defaults to false
         - suppressAlertsForOfflineNodes (boolean): When set to true the api will only return connectivity alerts for a given device if that device is in an offline state. This only applies to devices. This is ignored when resolved is true. Example:  If a Switch has a VLan Mismatch and is Unreachable. only the Unreachable alert will be returned. Defaults to false.
         """
-
-        kwargs.update(locals())
 
         if "sortOrder" in kwargs:
             options = ["ascending", "descending"]
@@ -1471,6 +1591,14 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceAlertsOverviewByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationAssuranceAlertsOverviewByType(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -1502,8 +1630,6 @@ class Organizations(object):
         - includeNetworks (boolean): Include affected networks for each alert type in the response.
         - suppressAlertsForOfflineNodes (boolean): When set to true the api will only return connectivity alerts for a given device if that device is in an offline state. This only applies to devices. This is ignored when resolved is true. Example:  If a Switch has a VLan Mismatch and is Unreachable. only the Unreachable alert will be returned. Defaults to false.
         """
-
-        kwargs.update(locals())
 
         if "sortOrder" in kwargs:
             options = ["ascending", "descending"]
@@ -1563,6 +1689,14 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceAlertsOverviewByType: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationAssuranceAlertsOverviewHistorical(
@@ -1583,8 +1717,6 @@ class Organizations(object):
         - serials (array): Optional parameter to filter by primary device serial
         - deviceTypes (array): Optional parameter to filter by device types
         """
-
-        kwargs.update(locals())
 
         if "category" in kwargs:
             options = ["configuration", "connectivity", "device_health", "experience_metrics", "insights"]
@@ -1622,9 +1754,17 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceAlertsOverviewHistorical: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
-    def restoreOrganizationAssuranceAlerts(self, organizationId: str, alertIds: list):
+    def restoreOrganizationAssuranceAlerts(self, organizationId: str, alertIds: list, **kwargs):
         """
         **Restore health alerts from dismissed**
         https://developer.cisco.com/meraki/api-v1/#!restore-organization-assurance-alerts
@@ -1632,8 +1772,6 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - alertIds (array): Array of alert IDs to restore
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["organizations", "monitor", "alerts"],
@@ -1646,6 +1784,12 @@ class Organizations(object):
             "alertIds",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"restoreOrganizationAssuranceAlerts: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -1736,8 +1880,6 @@ class Organizations(object):
                - customLogo (object): Properties describing the custom logo attached to the branding policy.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "brandingPolicies"],
             "operation": "createOrganizationBrandingPolicy",
@@ -1753,6 +1895,12 @@ class Organizations(object):
             "customLogo",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationBrandingPolicy: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -1783,8 +1931,6 @@ class Organizations(object):
 
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "brandingPolicies", "priorities"],
             "operation": "updateOrganizationBrandingPoliciesPriorities",
@@ -1796,6 +1942,14 @@ class Organizations(object):
             "brandingPolicyIds",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationBrandingPoliciesPriorities: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -1836,8 +1990,6 @@ class Organizations(object):
           - customLogo (object): Properties describing the custom logo attached to the branding policy.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "brandingPolicies"],
             "operation": "updateOrganizationBrandingPolicy",
@@ -1854,6 +2006,12 @@ class Organizations(object):
             "customLogo",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationBrandingPolicy: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -1887,8 +2045,6 @@ class Organizations(object):
         - licenses (array): The licenses that should be claimed
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure"],
             "operation": "claimIntoOrganization",
@@ -1902,6 +2058,12 @@ class Organizations(object):
             "licenses",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"claimIntoOrganization: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -1919,8 +2081,6 @@ class Organizations(object):
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 186 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 186 days. The default is 1 day.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "monitor", "clients", "bandwidthUsageHistory"],
@@ -1940,6 +2100,14 @@ class Organizations(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationClientsBandwidthUsageHistory: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def getOrganizationClientsOverview(self, organizationId: str, **kwargs):
@@ -1952,8 +2120,6 @@ class Organizations(object):
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "monitor", "clients", "overview"],
@@ -1968,6 +2134,12 @@ class Organizations(object):
             "timespan",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationClientsOverview: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
@@ -1985,8 +2157,6 @@ class Organizations(object):
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "clients", "search"],
             "operation": "getOrganizationClientsSearch",
@@ -2002,9 +2172,15 @@ class Organizations(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationClientsSearch: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def cloneOrganization(self, organizationId: str, name: str):
+    def cloneOrganization(self, organizationId: str, name: str, **kwargs):
         """
         **Create a new organization by cloning the addressed organization**
         https://developer.cisco.com/meraki/api-v1/#!clone-organization
@@ -2012,8 +2188,6 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - name (string): The name of the new organization
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["organizations", "configure"],
@@ -2026,6 +2200,12 @@ class Organizations(object):
             "name",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"cloneOrganization: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -2057,8 +2237,6 @@ class Organizations(object):
         - copyFromNetworkId (string): The ID of the network or config template to copy configuration from
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "configTemplates"],
             "operation": "createOrganizationConfigTemplate",
@@ -2072,6 +2250,12 @@ class Organizations(object):
             "copyFromNetworkId",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationConfigTemplate: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -2105,8 +2289,6 @@ class Organizations(object):
         - timeZone (string): The timezone of the configuration template. For a list of allowed timezones, please see the 'TZ' column in the table in <a target='_blank' href='https://en.wikipedia.org/wiki/List_of_tz_database_time_zones'>this article.</a>
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "configTemplates"],
             "operation": "updateOrganizationConfigTemplate",
@@ -2120,6 +2302,12 @@ class Organizations(object):
             "timeZone",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationConfigTemplate: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -2160,8 +2348,6 @@ class Organizations(object):
         - adminId (string): Filters on the given Admin
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "monitor", "configurationChanges"],
             "operation": "getOrganizationConfigurationChanges",
@@ -2180,6 +2366,12 @@ class Organizations(object):
             "adminId",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationConfigurationChanges: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -2209,8 +2401,6 @@ class Organizations(object):
         - sensorAlertProfileIds (array): Optional parameter to filter devices by the alert profiles that are bound to them. Only applies to sensor devices.
         - models (array): Optional parameter to filter devices by one or more models. All returned devices will have a model that is an exact match.
         """
-
-        kwargs.update(locals())
 
         if "tagsFilterType" in kwargs:
             options = ["withAllTags", "withAnyTags"]
@@ -2261,6 +2451,12 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationDevices: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationDevicesAvailabilities(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -2281,8 +2477,6 @@ class Organizations(object):
         - tagsFilterType (string): An optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return devices which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
         - statuses (array): Optional parameter to filter device availabilities by device status. This filter uses multiple exact matches.
         """
-
-        kwargs.update(locals())
 
         if "tagsFilterType" in kwargs:
             options = ["withAllTags", "withAnyTags"]
@@ -2322,6 +2516,12 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationDevicesAvailabilities: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationDevicesAvailabilitiesChangeHistory(
@@ -2345,8 +2545,6 @@ class Organizations(object):
         - networkIds (array): Optional parameter to filter device availabilities history by network IDs
         - statuses (array): Optional parameter to filter device availabilities history by device statuses
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "monitor", "devices", "availabilities", "changeHistory"],
@@ -2380,6 +2578,14 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesAvailabilitiesChangeHistory: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationDevicesCellularDataDevices(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -2403,8 +2609,6 @@ class Organizations(object):
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "monitor", "devices", "cellular", "data"],
@@ -2443,9 +2647,19 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesCellularDataDevices: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def createOrganizationDevicesCellularDataProfile(self, organizationId: str, name: str, description: str, rules: list):
+    def createOrganizationDevicesCellularDataProfile(
+        self, organizationId: str, name: str, description: str, rules: list, **kwargs
+    ):
         """
         **Add a cellular data management profile to this organization**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-devices-cellular-data-profile
@@ -2455,8 +2669,6 @@ class Organizations(object):
         - description (string): Description of the profile to be added.
         - rules (array): The rules associated with this profile. At least one rule and no more than two rules may be defined for a profile.
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["organizations", "configure", "devices", "cellular", "data", "profiles"],
@@ -2471,6 +2683,14 @@ class Organizations(object):
             "rules",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationDevicesCellularDataProfile: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -2488,8 +2708,6 @@ class Organizations(object):
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "devices", "cellular", "data", "profiles"],
@@ -2515,6 +2733,14 @@ class Organizations(object):
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesCellularDataProfiles: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -2548,8 +2774,6 @@ class Organizations(object):
         - description (string): New description of the profile.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "devices", "cellular", "data", "profiles"],
             "operation": "updateOrganizationDevicesCellularDataProfile",
@@ -2565,9 +2789,17 @@ class Organizations(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationDevicesCellularDataProfile: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.put(metadata, resource, payload)
 
-    def createOrganizationDevicesControllerMigration(self, organizationId: str, serials: list, target: str):
+    def createOrganizationDevicesControllerMigration(self, organizationId: str, serials: list, target: str, **kwargs):
         """
         **Migrate devices to another controller or management mode**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-devices-controller-migration
@@ -2576,8 +2808,6 @@ class Organizations(object):
         - serials (array): A list of Meraki Serials to migrate
         - target (string): The controller or management mode to which the devices will be migrated
         """
-
-        kwargs = locals()
 
         if "target" in kwargs:
             options = ["wirelessController"]
@@ -2598,6 +2828,14 @@ class Organizations(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationDevicesControllerMigration: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
     def getOrganizationDevicesControllerMigrations(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -2615,8 +2853,6 @@ class Organizations(object):
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
-
-        kwargs.update(locals())
 
         if "target" in kwargs:
             options = ["wirelessController"]
@@ -2650,9 +2886,17 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesControllerMigrations: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def bulkUpdateOrganizationDevicesDetails(self, organizationId: str, serials: list, details: list):
+    def bulkUpdateOrganizationDevicesDetails(self, organizationId: str, serials: list, details: list, **kwargs):
         """
         **Updating device details (currently only used for Catalyst devices)**
         https://developer.cisco.com/meraki/api-v1/#!bulk-update-organization-devices-details
@@ -2661,8 +2905,6 @@ class Organizations(object):
         - serials (array): A list of serials of devices to update
         - details (array): An array of details
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["organizations", "configure", "devices", "details", "bulkUpdate"],
@@ -2677,6 +2919,12 @@ class Organizations(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"bulkUpdateOrganizationDevicesDetails: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def getOrganizationDevicesOverviewByModel(self, organizationId: str, **kwargs):
@@ -2689,8 +2937,6 @@ class Organizations(object):
         - networkIds (array): Optional parameter to filter devices by networkId.
         - productTypes (array): Optional parameter to filter device by device product types. This filter uses multiple exact matches.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "devices", "overview", "byModel"],
@@ -2715,6 +2961,14 @@ class Organizations(object):
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesOverviewByModel: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get(metadata, resource, params)
 
@@ -2744,8 +2998,6 @@ class Organizations(object):
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - sortOrder (string): Sorted order of entries. Order options are 'ascending' and 'descending'. Default is 'descending'.
         """
-
-        kwargs.update(locals())
 
         if "sortOrder" in kwargs:
             options = ["ascending", "descending"]
@@ -2795,6 +3047,14 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesPacketCaptureCaptures: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def createOrganizationDevicesPacketCaptureCapture(self, organizationId: str, serials: list, name: str, **kwargs):
@@ -2814,8 +3074,6 @@ class Organizations(object):
         - interface (string): Interface of the device
         - advanced (object): Advanced filters for IOSXE devices (supported for Campus Gateway devices only)
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "devices", "packetCapture", "captures"],
@@ -2838,6 +3096,14 @@ class Organizations(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationDevicesPacketCaptureCapture: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
     def bulkOrganizationDevicesPacketCaptureCapturesCreate(self, organizationId: str, devices: list, name: str, **kwargs):
@@ -2853,8 +3119,6 @@ class Organizations(object):
         - filterExpression (string): Filter expression for the capture
         - advanced (object): Advanced capture options (optional)
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "devices", "packetCapture", "captures"],
@@ -2873,9 +3137,17 @@ class Organizations(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"bulkOrganizationDevicesPacketCaptureCapturesCreate: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
-    def bulkOrganizationDevicesPacketCaptureCapturesDelete(self, organizationId: str, captureIds: list):
+    def bulkOrganizationDevicesPacketCaptureCapturesDelete(self, organizationId: str, captureIds: list, **kwargs):
         """
         **BulkDelete packet captures from cloud**
         https://developer.cisco.com/meraki/api-v1/#!bulk-organization-devices-packet-capture-captures-delete
@@ -2883,8 +3155,6 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - captureIds (array): Delete the packet captures of the specified capture ids
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["organizations", "configure", "devices", "packetCapture", "captures"],
@@ -2897,6 +3167,14 @@ class Organizations(object):
             "captureIds",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"bulkOrganizationDevicesPacketCaptureCapturesDelete: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -2938,7 +3216,7 @@ class Organizations(object):
 
         return self._session.post(metadata, resource)
 
-    def stopOrganizationDevicesPacketCaptureCapture(self, organizationId: str, captureId: str, serials: list):
+    def stopOrganizationDevicesPacketCaptureCapture(self, organizationId: str, captureId: str, serials: list, **kwargs):
         """
         **Stop a specific packet capture (not supported for Catalyst devices)**
         https://developer.cisco.com/meraki/api-v1/#!stop-organization-devices-packet-capture-capture
@@ -2947,8 +3225,6 @@ class Organizations(object):
         - captureId (string): Capture ID
         - serials (array): The serial(s) of the device(s) to stop the capture on
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["organizations", "configure", "devices", "packetCapture", "captures"],
@@ -2963,6 +3239,14 @@ class Organizations(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"stopOrganizationDevicesPacketCaptureCapture: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
     def getOrganizationDevicesPacketCaptureSchedules(self, organizationId: str, **kwargs):
@@ -2975,8 +3259,6 @@ class Organizations(object):
         - networkIds (array): Return the scheduled packet captures of the specified network(s)
         - deviceIds (array): Return the scheduled packet captures of the specified device(s)
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "devices", "packetCapture", "schedules"],
@@ -3002,6 +3284,14 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesPacketCaptureSchedules: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def createOrganizationDevicesPacketCaptureSchedule(self, organizationId: str, devices: list, **kwargs):
@@ -3018,8 +3308,6 @@ class Organizations(object):
         - enabled (boolean): Enable or disable the schedule
         - schedule (object): Schedule details
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "devices", "packetCapture", "schedules"],
@@ -3039,9 +3327,17 @@ class Organizations(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationDevicesPacketCaptureSchedule: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
-    def reorderOrganizationDevicesPacketCaptureSchedules(self, organizationId: str, order: list):
+    def reorderOrganizationDevicesPacketCaptureSchedules(self, organizationId: str, order: list, **kwargs):
         """
         **Bulk update priorities of pcap schedules**
         https://developer.cisco.com/meraki/api-v1/#!reorder-organization-devices-packet-capture-schedules
@@ -3049,8 +3345,6 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - order (array): Array of schedule IDs and their priorities to reorder.
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["organizations", "configure", "devices", "packetCapture", "schedules"],
@@ -3063,6 +3357,14 @@ class Organizations(object):
             "order",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"reorderOrganizationDevicesPacketCaptureSchedules: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -3081,8 +3383,6 @@ class Organizations(object):
         - enabled (boolean): Enable or disable the schedule
         - schedule (object): Schedule details
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "devices", "packetCapture", "schedules"],
@@ -3103,6 +3403,14 @@ class Organizations(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationDevicesPacketCaptureSchedule: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.put(metadata, resource, payload)
 
     def deleteOrganizationDevicesPacketCaptureSchedule(self, organizationId: str, scheduleId: str):
@@ -3113,8 +3421,6 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - scheduleId (string): Delete the capture schedules of the specified capture schedule id
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["organizations", "configure", "devices", "packetCapture", "schedules"],
@@ -3145,8 +3451,6 @@ class Organizations(object):
         - tags (array): An optional parameter to filter devices by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below). This filter uses multiple exact matches.
         - tagsFilterType (string): An optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return devices which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
         """
-
-        kwargs.update(locals())
 
         if "tagsFilterType" in kwargs:
             options = ["withAllTags", "withAnyTags"]
@@ -3184,6 +3488,14 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesPowerModulesStatusesByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationDevicesProvisioningStatuses(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -3204,8 +3516,6 @@ class Organizations(object):
         - tags (array): An optional parameter to filter devices by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below). This filter uses multiple exact matches.
         - tagsFilterType (string): An optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return devices which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
         """
-
-        kwargs.update(locals())
 
         if "status" in kwargs:
             options = ["complete", "incomplete", "unprovisioned"]
@@ -3249,6 +3559,14 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesProvisioningStatuses: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationDevicesStatuses(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -3270,8 +3588,6 @@ class Organizations(object):
         - tags (array): An optional parameter to filter devices by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below).
         - tagsFilterType (string): An optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return devices which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
         """
-
-        kwargs.update(locals())
 
         if "tagsFilterType" in kwargs:
             options = ["withAllTags", "withAnyTags"]
@@ -3313,6 +3629,12 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationDevicesStatuses: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationDevicesStatusesOverview(self, organizationId: str, **kwargs):
@@ -3324,8 +3646,6 @@ class Organizations(object):
         - productTypes (array): An optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, wirelessController, campusGateway, and secureConnect.
         - networkIds (array): An optional parameter to filter device statuses by network.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "monitor", "devices", "statuses", "overview"],
@@ -3348,6 +3668,14 @@ class Organizations(object):
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesStatusesOverview: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get(metadata, resource, params)
 
@@ -3372,8 +3700,6 @@ class Organizations(object):
         - serials (array): Optional parameter to filter device availabilities history by device serial numbers
         - productTypes (array): Optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, wirelessController, campusGateway, and secureConnect.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "monitor", "devices", "system", "memory", "usage", "history", "byInterval"],
@@ -3406,6 +3732,14 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesSystemMemoryUsageHistoryByInterval: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationDevicesUplinksAddressesByDevice(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -3425,8 +3759,6 @@ class Organizations(object):
         - tags (array): An optional parameter to filter devices by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below). This filter uses multiple exact matches.
         - tagsFilterType (string): An optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return devices which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
         """
-
-        kwargs.update(locals())
 
         if "tagsFilterType" in kwargs:
             options = ["withAllTags", "withAnyTags"]
@@ -3464,6 +3796,14 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesUplinksAddressesByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationDevicesUplinksLossAndLatency(self, organizationId: str, **kwargs):
@@ -3478,8 +3818,6 @@ class Organizations(object):
         - uplink (string): Optional filter for a specific WAN uplink. Valid uplinks are wan1, wan2, wan3, cellular. Default will return all uplinks.
         - ip (string): Optional filter for a specific destination IP. Default will return all destination IPs.
         """
-
-        kwargs.update(locals())
 
         if "uplink" in kwargs:
             options = ["cellular", "wan1", "wan2", "wan3"]
@@ -3502,6 +3840,14 @@ class Organizations(object):
             "ip",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesUplinksLossAndLatency: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get(metadata, resource, params)
 
@@ -3549,8 +3895,6 @@ class Organizations(object):
         - limitScopeToNetworks (array): A list of network IDs to apply the opt-in to
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "earlyAccess", "features", "optIns"],
             "operation": "createOrganizationEarlyAccessFeaturesOptIn",
@@ -3563,6 +3907,14 @@ class Organizations(object):
             "limitScopeToNetworks",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationEarlyAccessFeaturesOptIn: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -3595,8 +3947,6 @@ class Organizations(object):
         - limitScopeToNetworks (array): A list of network IDs to apply the opt-in to
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "earlyAccess", "features", "optIns"],
             "operation": "updateOrganizationEarlyAccessFeaturesOptIn",
@@ -3609,6 +3959,14 @@ class Organizations(object):
             "limitScopeToNetworks",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationEarlyAccessFeaturesOptIn: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -3646,8 +4004,6 @@ class Organizations(object):
         - productTypes (array): Optional parameter to filter the upgrade by product type.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "firmware", "upgrades"],
             "operation": "getOrganizationFirmwareUpgrades",
@@ -3673,6 +4029,12 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationFirmwareUpgrades: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationFirmwareUpgradesByDevice(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -3694,8 +4056,6 @@ class Organizations(object):
         - currentUpgradesOnly (boolean): Optional parameter to filter to only current or pending upgrade statuses.
         - limitPerDevice (integer): Optional parameter to limit the number of upgrade statuses returned per device. If omitted, a value of 5 is used.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "firmware", "upgrades", "byDevice"],
@@ -3730,6 +4090,14 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationFirmwareUpgradesByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationFloorPlansAutoLocateDevices(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -3746,8 +4114,6 @@ class Organizations(object):
         - networkIds (array): Optional parameter to filter devices by one or more network IDs
         - floorPlanIds (array): Optional parameter to filter devices by one or more floorplan IDs
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "floorPlans", "autoLocate", "devices"],
@@ -3774,6 +4140,14 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationFloorPlansAutoLocateDevices: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationFloorPlansAutoLocateStatuses(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -3790,8 +4164,6 @@ class Organizations(object):
         - networkIds (array): Optional parameter to filter floorplans by one or more network IDs
         - floorPlanIds (array): Optional parameter to filter floorplans by one or more floorplan IDs
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "floorPlans", "autoLocate", "statuses"],
@@ -3817,6 +4189,14 @@ class Organizations(object):
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationFloorPlansAutoLocateStatuses: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -3868,8 +4248,6 @@ class Organizations(object):
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "integrations", "xdr", "networks"],
             "operation": "getOrganizationIntegrationsXdrNetworks",
@@ -3893,9 +4271,17 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationIntegrationsXdrNetworks: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def disableOrganizationIntegrationsXdrNetworks(self, organizationId: str, networks: list):
+    def disableOrganizationIntegrationsXdrNetworks(self, organizationId: str, networks: list, **kwargs):
         """
         **Disable XDR on networks**
         https://developer.cisco.com/meraki/api-v1/#!disable-organization-integrations-xdr-networks
@@ -3903,8 +4289,6 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - networks (array): List containing the network ID and the product type to disable XDR on
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["organizations", "configure", "integrations", "xdr", "networks"],
@@ -3918,9 +4302,17 @@ class Organizations(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"disableOrganizationIntegrationsXdrNetworks: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
-    def enableOrganizationIntegrationsXdrNetworks(self, organizationId: str, networks: list):
+    def enableOrganizationIntegrationsXdrNetworks(self, organizationId: str, networks: list, **kwargs):
         """
         **Enable XDR on networks**
         https://developer.cisco.com/meraki/api-v1/#!enable-organization-integrations-xdr-networks
@@ -3928,8 +4320,6 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - networks (array): List containing the network ID and the product type to enable XDR on
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["organizations", "configure", "integrations", "xdr", "networks"],
@@ -3942,6 +4332,14 @@ class Organizations(object):
             "networks",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"enableOrganizationIntegrationsXdrNetworks: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -3956,8 +4354,6 @@ class Organizations(object):
         - licenses (array): The licenses that should be claimed
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "inventory"],
             "operation": "claimIntoOrganizationInventory",
@@ -3971,6 +4367,12 @@ class Organizations(object):
             "licenses",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"claimIntoOrganizationInventory: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -3997,8 +4399,6 @@ class Organizations(object):
         - productTypes (array): Filter devices by product type. Accepted values are appliance, camera, campusGateway, cellularGateway, secureConnect, sensor, switch, systemsManager, wireless, and wirelessController.
         - eoxStatuses (array): Filter devices by EoX status. Accepted values are 'endOfSale', 'endOfSupport', 'nearEndOfSupport', or 'null'. Use 'null' to filter for devices with no EOX data. Supports multiple values for multi-select filtering.
         """
-
-        kwargs.update(locals())
 
         if "usedState" in kwargs:
             options = ["unused", "used"]
@@ -4051,6 +4451,12 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationInventoryDevices: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationInventoryDevicesEoxOverview(self, organizationId: str):
@@ -4070,7 +4476,7 @@ class Organizations(object):
 
         return self._session.get(metadata, resource)
 
-    def createOrganizationInventoryDevicesSwapsBulk(self, organizationId: str, swaps: list):
+    def createOrganizationInventoryDevicesSwapsBulk(self, organizationId: str, swaps: list, **kwargs):
         """
         **Swap the devices identified by devices.old with a devices.new, then perform the :afterAction on the devices.old.**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-inventory-devices-swaps-bulk
@@ -4078,8 +4484,6 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - swaps (array): List of replacments to perform
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["organizations", "configure", "inventory", "devices", "swaps", "bulk"],
@@ -4092,6 +4496,14 @@ class Organizations(object):
             "swaps",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationInventoryDevicesSwapsBulk: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -4143,8 +4555,6 @@ class Organizations(object):
         - subscriptions (array): The individual subscriptions to claim
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "inventory", "orders"],
             "operation": "claimOrganizationInventoryOrders",
@@ -4158,9 +4568,15 @@ class Organizations(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"claimOrganizationInventoryOrders: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
-    def previewOrganizationInventoryOrders(self, organizationId: str, claimId: str):
+    def previewOrganizationInventoryOrders(self, organizationId: str, claimId: str, **kwargs):
         """
         **Preview the results and status of an order claim by the secure order id**
         https://developer.cisco.com/meraki/api-v1/#!preview-organization-inventory-orders
@@ -4168,8 +4584,6 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - claimId (string): The unique order claim id
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["organizations", "configure", "inventory", "orders"],
@@ -4183,6 +4597,12 @@ class Organizations(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"previewOrganizationInventoryOrders: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def releaseFromOrganizationInventory(self, organizationId: str, **kwargs):
@@ -4193,8 +4613,6 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - serials (array): Serials of the devices that should be released
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "inventory"],
@@ -4207,6 +4625,12 @@ class Organizations(object):
             "serials",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"releaseFromOrganizationInventory: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -4225,8 +4649,6 @@ class Organizations(object):
         - networkId (string): Filter the licenses to those assigned in a particular network
         - state (string): Filter the licenses to those in a particular state. Can be one of 'active', 'expired', 'expiring', 'recentlyQueued', 'unused' or 'unusedActive'
         """
-
-        kwargs.update(locals())
 
         if "state" in kwargs:
             options = ["active", "expired", "expiring", "recentlyQueued", "unused", "unusedActive"]
@@ -4249,9 +4671,15 @@ class Organizations(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationLicenses: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def assignOrganizationLicensesSeats(self, organizationId: str, licenseId: str, networkId: str, seatCount: int):
+    def assignOrganizationLicensesSeats(self, organizationId: str, licenseId: str, networkId: str, seatCount: int, **kwargs):
         """
         **Assign SM seats to a network**
         https://developer.cisco.com/meraki/api-v1/#!assign-organization-licenses-seats
@@ -4261,8 +4689,6 @@ class Organizations(object):
         - networkId (string): The ID of the SM network to assign the seats to
         - seatCount (integer): The number of seats to assign to the SM network. Must be less than or equal to the total number of seats of the license
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["organizations", "configure", "licenses"],
@@ -4278,9 +4704,15 @@ class Organizations(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"assignOrganizationLicensesSeats: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
-    def moveOrganizationLicenses(self, organizationId: str, destOrganizationId: str, licenseIds: list):
+    def moveOrganizationLicenses(self, organizationId: str, destOrganizationId: str, licenseIds: list, **kwargs):
         """
         **Move licenses to another organization**
         https://developer.cisco.com/meraki/api-v1/#!move-organization-licenses
@@ -4289,8 +4721,6 @@ class Organizations(object):
         - destOrganizationId (string): The ID of the organization to move the licenses to
         - licenseIds (array): A list of IDs of licenses to move to the new organization
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["organizations", "configure", "licenses"],
@@ -4305,9 +4735,17 @@ class Organizations(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"moveOrganizationLicenses: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
-    def moveOrganizationLicensesSeats(self, organizationId: str, destOrganizationId: str, licenseId: str, seatCount: int):
+    def moveOrganizationLicensesSeats(
+        self, organizationId: str, destOrganizationId: str, licenseId: str, seatCount: int, **kwargs
+    ):
         """
         **Move SM seats to another organization**
         https://developer.cisco.com/meraki/api-v1/#!move-organization-licenses-seats
@@ -4317,8 +4755,6 @@ class Organizations(object):
         - licenseId (string): The ID of the SM license to move the seats from
         - seatCount (integer): The number of seats to move to the new organization. Must be less than or equal to the total number of seats of the license
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["organizations", "configure", "licenses"],
@@ -4333,6 +4769,12 @@ class Organizations(object):
             "seatCount",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"moveOrganizationLicensesSeats: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -4353,7 +4795,7 @@ class Organizations(object):
 
         return self._session.get(metadata, resource)
 
-    def renewOrganizationLicensesSeats(self, organizationId: str, licenseIdToRenew: str, unusedLicenseId: str):
+    def renewOrganizationLicensesSeats(self, organizationId: str, licenseIdToRenew: str, unusedLicenseId: str, **kwargs):
         """
         **Renew SM seats of a license**
         https://developer.cisco.com/meraki/api-v1/#!renew-organization-licenses-seats
@@ -4362,8 +4804,6 @@ class Organizations(object):
         - licenseIdToRenew (string): The ID of the SM license to renew. This license must already be assigned to an SM network
         - unusedLicenseId (string): The SM license to use to renew the seats on 'licenseIdToRenew'. This license must have at least as many seats available as there are seats on 'licenseIdToRenew'
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["organizations", "configure", "licenses"],
@@ -4377,6 +4817,12 @@ class Organizations(object):
             "unusedLicenseId",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"renewOrganizationLicensesSeats: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -4409,8 +4855,6 @@ class Organizations(object):
         - deviceSerial (string): The serial number of the device to assign this license to. Set this to  null to unassign the license. If a different license is already active on the device, this parameter will control queueing/dequeuing this license.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "licenses"],
             "operation": "updateOrganizationLicense",
@@ -4423,6 +4867,12 @@ class Organizations(object):
             "deviceSerial",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationLicense: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -4465,8 +4915,6 @@ class Organizations(object):
         - apiAuthentication (object): Details for indicating whether organization will restrict access to API (but not Dashboard) to certain IP addresses.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "loginSecurity"],
             "operation": "updateOrganizationLoginSecurity",
@@ -4492,6 +4940,12 @@ class Organizations(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationLoginSecurity: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def getOrganizationNetworks(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -4511,8 +4965,6 @@ class Organizations(object):
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
-
-        kwargs.update(locals())
 
         if "tagsFilterType" in kwargs:
             options = ["withAllTags", "withAnyTags"]
@@ -4548,6 +5000,12 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationNetworks: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def createOrganizationNetwork(self, organizationId: str, name: str, productTypes: list, **kwargs):
@@ -4563,8 +5021,6 @@ class Organizations(object):
         - copyFromNetworkId (string): The ID of the network to copy configuration from. Other provided parameters will override the copied configuration, except type which must match this network's type exactly.
         - notes (string): Add any notes or additional information about this network here.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "networks"],
@@ -4583,6 +5039,12 @@ class Organizations(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationNetwork: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def combineOrganizationNetworks(self, organizationId: str, name: str, networkIds: list, **kwargs):
@@ -4595,8 +5057,6 @@ class Organizations(object):
         - networkIds (array): A list of the network IDs that will be combined. If an ID of a combined network is included in this list, the other networks in the list will be grouped into that network
         - enrollmentString (string): A unique identifier which can be used for device enrollment or easy access through the Meraki SM Registration page or the Self Service Portal. Please note that changing this field may cause existing bookmarks to break. All networks that are part of this combined network will have their enrollment string appended by '-network_type'. If left empty, all exisitng enrollment strings will be deleted.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "networks"],
@@ -4612,6 +5072,12 @@ class Organizations(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"combineOrganizationNetworks: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def createNetworkMove(self, organizationId: str, network: dict, organizations: dict, **kwargs):
@@ -4624,8 +5090,6 @@ class Organizations(object):
         - organizations (object): Organizations involved in the network move
         - simulate (boolean): If true, simulates the network move and validates the operation without committing changes. The network will remain in the source organization.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "networks"],
@@ -4640,6 +5104,12 @@ class Organizations(object):
             "simulate",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkMove: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -4656,8 +5126,6 @@ class Organizations(object):
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - moveIds (array): Array of network move operation IDs to include. If not specified, all network moves will be returned.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "networks", "moves"],
@@ -4682,6 +5150,12 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkMoves: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationOpenapiSpec(self, organizationId: str, **kwargs):
@@ -4692,8 +5166,6 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - version (integer): OpenAPI Specification version to return. Default is 2
         """
-
-        kwargs.update(locals())
 
         if "version" in kwargs:
             options = [2, 3]
@@ -4712,6 +5184,12 @@ class Organizations(object):
             "version",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationOpenapiSpec: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
@@ -4733,8 +5211,6 @@ class Organizations(object):
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
         - includeUndetectedClients (boolean): Include provisioned clients that have not associated to the network. Default: false
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "policies", "assignments", "byClient"],
@@ -4761,6 +5237,14 @@ class Organizations(object):
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationPoliciesAssignmentsByClient: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -4796,8 +5280,6 @@ class Organizations(object):
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "policies", "global", "firewall", "rulesets"],
             "operation": "getOrganizationPoliciesGlobalFirewallRulesets",
@@ -4822,6 +5304,14 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationPoliciesGlobalFirewallRulesets: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def createOrganizationPoliciesGlobalFirewallRuleset(self, organizationId: str, name: str, **kwargs):
@@ -4833,8 +5323,6 @@ class Organizations(object):
         - name (string): Name of the firewall ruleset
         - description (string): Description of the firewall ruleset
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "policies", "global", "firewall", "rulesets"],
@@ -4848,6 +5336,14 @@ class Organizations(object):
             "description",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationPoliciesGlobalFirewallRuleset: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -4868,8 +5364,6 @@ class Organizations(object):
         - priority (integer): Rule priority (lower numbers = higher priority)
         - description (string): Description of the firewall rule
         """
-
-        kwargs.update(locals())
 
         if "policy" in kwargs:
             options = ["allow", "deny"]
@@ -4896,6 +5390,14 @@ class Organizations(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationPoliciesGlobalFirewallRulesetsRule: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
     def getOrganizationPoliciesGlobalFirewallRulesetsRules(
@@ -4914,8 +5416,6 @@ class Organizations(object):
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "policies", "global", "firewall", "rulesets", "rules"],
@@ -4941,6 +5441,14 @@ class Organizations(object):
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationPoliciesGlobalFirewallRulesetsRules: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -4980,8 +5488,6 @@ class Organizations(object):
         - destinations (object): Destination traffic criteria. Each source or destination bloc is capped separately per rule at 100 total segment values. The count is segments_values_count: the sum of all values across every segment type in that bloc. Ports use a separate cap of 100.
         """
 
-        kwargs.update(locals())
-
         if "policy" in kwargs:
             options = ["allow", "deny"]
             assert kwargs["policy"] in options, (
@@ -5008,6 +5514,14 @@ class Organizations(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationPoliciesGlobalFirewallRulesetsRule: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.put(metadata, resource, payload)
 
     def updateOrganizationPoliciesGlobalFirewallRuleset(self, organizationId: str, rulesetId: str, **kwargs):
@@ -5020,8 +5534,6 @@ class Organizations(object):
         - name (string): Name of the firewall ruleset
         - description (string): Description of the firewall ruleset
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "policies", "global", "firewall", "rulesets"],
@@ -5036,6 +5548,14 @@ class Organizations(object):
             "description",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationPoliciesGlobalFirewallRuleset: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -5073,8 +5593,6 @@ class Organizations(object):
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "policies", "global", "group"],
             "operation": "getOrganizationPoliciesGlobalGroupPolicies",
@@ -5099,6 +5617,14 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationPoliciesGlobalGroupPolicies: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def createOrganizationPoliciesGlobalGroupPolicy(self, organizationId: str, name: str, **kwargs):
@@ -5110,8 +5636,6 @@ class Organizations(object):
         - name (string): Name of the policy
         - description (string): Description of the policy
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "policies", "global", "group"],
@@ -5126,10 +5650,18 @@ class Organizations(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationPoliciesGlobalGroupPolicy: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
     def assignOrganizationPoliciesGlobalGroupPoliciesAdaptivePolicyGroups(
-        self, organizationId: str, policy: dict, adaptivePolicyGroups: list
+        self, organizationId: str, policy: dict, adaptivePolicyGroups: list, **kwargs
     ):
         """
         **Assign adaptive policy groups to a policy**
@@ -5139,8 +5671,6 @@ class Organizations(object):
         - policy (object): Policy to assign adaptive policy groups to
         - adaptivePolicyGroups (array): Adaptive policy groups to assign
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["organizations", "configure", "policies", "global", "group", "adaptivePolicyGroups"],
@@ -5154,6 +5684,14 @@ class Organizations(object):
             "adaptivePolicyGroups",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"assignOrganizationPoliciesGlobalGroupPoliciesAdaptivePolicyGroups: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -5174,8 +5712,6 @@ class Organizations(object):
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "policies", "global", "group", "adaptivePolicyGroups", "assignments"],
@@ -5204,10 +5740,18 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationPoliciesGlobalGroupPoliciesAdaptivePolicyGroupsAssignments: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def removeOrganizationPoliciesGlobalGroupPoliciesAdaptivePolicyGroups(
-        self, organizationId: str, policy: dict, adaptivePolicyGroups: list
+        self, organizationId: str, policy: dict, adaptivePolicyGroups: list, **kwargs
     ):
         """
         **Remove adaptive policy groups from a policy**
@@ -5217,8 +5761,6 @@ class Organizations(object):
         - policy (object): Policy to remove adaptive policy groups from
         - adaptivePolicyGroups (array): Adaptive policy groups to remove
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["organizations", "configure", "policies", "global", "group", "adaptivePolicyGroups"],
@@ -5232,6 +5774,14 @@ class Organizations(object):
             "adaptivePolicyGroups",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"removeOrganizationPoliciesGlobalGroupPoliciesAdaptivePolicyGroups: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -5252,8 +5802,6 @@ class Organizations(object):
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "policies", "global", "group", "firewall", "rulesets", "assignments"],
@@ -5282,6 +5830,14 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationPoliciesGlobalGroupPoliciesFirewallRulesetsAssignments: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def createOrganizationPoliciesGlobalGroupPoliciesFirewallRulesetsAssignment(
@@ -5297,8 +5853,6 @@ class Organizations(object):
         - priority (integer): Priority of the ruleset assignment (lower numbers = higher priority)
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "policies", "global", "group", "firewall", "rulesets", "assignments"],
             "operation": "createOrganizationPoliciesGlobalGroupPoliciesFirewallRulesetsAssignment",
@@ -5312,6 +5866,14 @@ class Organizations(object):
             "priority",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationPoliciesGlobalGroupPoliciesFirewallRulesetsAssignment: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -5329,8 +5891,6 @@ class Organizations(object):
         - priority (integer): Priority of the ruleset assignment (lower numbers = higher priority)
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "policies", "global", "group", "firewall", "rulesets", "assignments"],
             "operation": "updateOrganizationPoliciesGlobalGroupPoliciesFirewallRulesetsAssignment",
@@ -5347,6 +5907,14 @@ class Organizations(object):
             "priority",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationPoliciesGlobalGroupPoliciesFirewallRulesetsAssignment: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -5382,8 +5950,6 @@ class Organizations(object):
         - description (string): Description of the policy
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "policies", "global", "group"],
             "operation": "updateOrganizationPoliciesGlobalGroupPolicy",
@@ -5397,6 +5963,14 @@ class Organizations(object):
             "description",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationPoliciesGlobalGroupPolicy: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -5432,8 +6006,6 @@ class Organizations(object):
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "policyObjects"],
             "operation": "getOrganizationPolicyObjects",
@@ -5447,6 +6019,12 @@ class Organizations(object):
             "endingBefore",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationPolicyObjects: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -5465,8 +6043,6 @@ class Organizations(object):
         - ip (string): IP Address of a policy object (e.g. "1.2.3.4")
         - groupIds (array): The IDs of policy object groups the policy object belongs to
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "policyObjects"],
@@ -5487,6 +6063,12 @@ class Organizations(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationPolicyObject: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def getOrganizationPolicyObjectsGroups(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -5502,8 +6084,6 @@ class Organizations(object):
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "policyObjects", "groups"],
             "operation": "getOrganizationPolicyObjectsGroups",
@@ -5518,6 +6098,12 @@ class Organizations(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationPolicyObjectsGroups: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def createOrganizationPolicyObjectsGroup(self, organizationId: str, name: str, **kwargs):
@@ -5530,8 +6116,6 @@ class Organizations(object):
         - category (string): Category of a policy object group (one of: NetworkObjectGroup, GeoLocationGroup, PortObjectGroup, ApplicationGroup)
         - objectIds (array): A list of Policy Object ID's that this NetworkObjectGroup should be associated to (note: these ID's will replace the existing associated Policy Objects)
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "policyObjects", "groups"],
@@ -5546,6 +6130,12 @@ class Organizations(object):
             "objectIds",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationPolicyObjectsGroup: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -5579,8 +6169,6 @@ class Organizations(object):
         - objectIds (array): A list of Policy Object ID's that this NetworkObjectGroup should be associated to (note: these ID's will replace the existing associated Policy Objects)
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "policyObjects", "groups"],
             "operation": "updateOrganizationPolicyObjectsGroup",
@@ -5594,6 +6182,12 @@ class Organizations(object):
             "objectIds",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationPolicyObjectsGroup: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -5650,8 +6244,6 @@ class Organizations(object):
         - groupIds (array): The IDs of policy object groups the policy object belongs to
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "policyObjects"],
             "operation": "updateOrganizationPolicyObject",
@@ -5669,6 +6261,12 @@ class Organizations(object):
             "groupIds",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationPolicyObject: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -5718,8 +6316,6 @@ class Organizations(object):
         - spInitiated (object): SP-Initiated SSO settings
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "saml"],
             "operation": "updateOrganizationSaml",
@@ -5732,6 +6328,12 @@ class Organizations(object):
             "spInitiated",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationSaml: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -5763,8 +6365,6 @@ class Organizations(object):
         - sloLogoutUrl (string): Dashboard will redirect users to this URL when they sign out.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "saml", "idps"],
             "operation": "createOrganizationSamlIdp",
@@ -5778,6 +6378,12 @@ class Organizations(object):
             "sloLogoutUrl",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationSamlIdp: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -5793,8 +6399,6 @@ class Organizations(object):
         - sloLogoutUrl (string): Dashboard will redirect users to this URL when they sign out.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "saml", "idps"],
             "operation": "updateOrganizationSamlIdp",
@@ -5809,6 +6413,12 @@ class Organizations(object):
             "sloLogoutUrl",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationSamlIdp: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -5879,8 +6489,6 @@ class Organizations(object):
         - networks (array): The list of networks that the SAML administrator has privileges on
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "samlRoles"],
             "operation": "createOrganizationSamlRole",
@@ -5895,6 +6503,12 @@ class Organizations(object):
             "networks",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationSamlRole: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -5930,8 +6544,6 @@ class Organizations(object):
         - networks (array): The list of networks that the SAML administrator has privileges on
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "samlRoles"],
             "operation": "updateOrganizationSamlRole",
@@ -5947,6 +6559,12 @@ class Organizations(object):
             "networks",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationSamlRole: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -5995,8 +6613,6 @@ class Organizations(object):
         - items (array): List of connectors to delete (maximum 20 items)
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "sase", "connectors"],
             "operation": "batchOrganizationSaseConnectorsDelete",
@@ -6009,9 +6625,17 @@ class Organizations(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"batchOrganizationSaseConnectorsDelete: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
-    def createOrganizationSaseIntegration(self, organizationId: str, api: dict):
+    def createOrganizationSaseIntegration(self, organizationId: str, api: dict, **kwargs):
         """
         **Create a new Secure Access integration**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-sase-integration
@@ -6019,8 +6643,6 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - api (object): API credentials
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["organizations", "configure", "sase", "integrations"],
@@ -6033,6 +6655,12 @@ class Organizations(object):
             "api",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationSaseIntegration: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -6088,8 +6716,6 @@ class Organizations(object):
         - search (string): If provided, filters results by network name
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "sase", "networks", "eligible"],
             "operation": "getOrganizationSaseNetworksEligible",
@@ -6104,6 +6730,12 @@ class Organizations(object):
             "search",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationSaseNetworksEligible: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -6140,8 +6772,6 @@ class Organizations(object):
         - siteId (string): If provided, returns only the site matching this ID
         """
 
-        kwargs.update(locals())
-
         if "status" in kwargs:
             options = ["bad NAT", "bad tunnel", "dormant", "good", "many bad tunnels", "no registry", "offline"]
             assert kwargs["status"] in options, (
@@ -6165,6 +6795,12 @@ class Organizations(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationSaseSites: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def attachOrganizationSaseSites(self, organizationId: str, **kwargs):
@@ -6176,8 +6812,6 @@ class Organizations(object):
         - items (array): List of Meraki SD-WAN sites with the associated regions to be attached.
         - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "configure", "sase", "sites"],
@@ -6192,6 +6826,12 @@ class Organizations(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"attachOrganizationSaseSites: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def getOrganizationSaseSitesConnectivityHistoryBySite(self, organizationId: str, **kwargs):
@@ -6203,8 +6843,6 @@ class Organizations(object):
         - siteIds (array): Array of site IDs to fetch connectivity status data (maximum 100 values)
         - timespan (string): Timespan for the status data (e.g., '-2hours')
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "monitor", "sase", "sites", "connectivity", "history", "bySite"],
@@ -6226,6 +6864,14 @@ class Organizations(object):
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSaseSitesConnectivityHistoryBySite: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get(metadata, resource, params)
 
@@ -6256,8 +6902,6 @@ class Organizations(object):
         - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "sase", "sites"],
             "operation": "detachOrganizationSaseSites",
@@ -6277,8 +6921,6 @@ class Organizations(object):
         - routing (object): Routing configuration for the site
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "sase", "sites"],
             "operation": "updateOrganizationSaseSite",
@@ -6292,6 +6934,12 @@ class Organizations(object):
             "routing",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationSaseSite: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -6327,8 +6975,6 @@ class Organizations(object):
         - peerIps (array): The list of IPv4 addresses that are allowed to access the SNMP server.
         """
 
-        kwargs.update(locals())
-
         if "v3AuthMode" in kwargs:
             options = ["MD5", "SHA"]
             assert kwargs["v3AuthMode"] in options, (
@@ -6357,6 +7003,12 @@ class Organizations(object):
             "peerIps",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationSnmp: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -6425,8 +7077,6 @@ class Organizations(object):
         - baseTheme (string): base theme id
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "splash", "themes"],
             "operation": "createOrganizationSplashTheme",
@@ -6439,6 +7089,12 @@ class Organizations(object):
             "baseTheme",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationSplashTheme: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -6472,8 +7128,6 @@ class Organizations(object):
         - content (string): a file containing the asset content
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "configure", "splash", "themes", "assets"],
             "operation": "createOrganizationSplashThemeAsset",
@@ -6487,6 +7141,12 @@ class Organizations(object):
             "content",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationSplashThemeAsset: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -6505,8 +7165,6 @@ class Organizations(object):
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 186 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 25 minutes and be less than or equal to 186 days. The default is 1 day.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "monitor", "summary", "top", "appliances", "byUtilization"],
@@ -6527,6 +7185,14 @@ class Organizations(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSummaryTopAppliancesByUtilization: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def getOrganizationSummaryTopApplicationsByUsage(self, organizationId: str, **kwargs):
@@ -6545,8 +7211,6 @@ class Organizations(object):
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 186 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 25 minutes and be less than or equal to 186 days. The default is 1 day.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "monitor", "summary", "top", "applications", "byUsage"],
@@ -6568,6 +7232,14 @@ class Organizations(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSummaryTopApplicationsByUsage: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def getOrganizationSummaryTopApplicationsCategoriesByUsage(self, organizationId: str, **kwargs):
@@ -6586,8 +7258,6 @@ class Organizations(object):
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 186 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 25 minutes and be less than or equal to 186 days. The default is 1 day.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "monitor", "summary", "top", "applications", "categories", "byUsage"],
@@ -6609,6 +7279,14 @@ class Organizations(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSummaryTopApplicationsCategoriesByUsage: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def getOrganizationSummaryTopClientsByUsage(self, organizationId: str, **kwargs):
@@ -6626,8 +7304,6 @@ class Organizations(object):
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 186 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 8 hours and be less than or equal to 186 days. The default is 1 day.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "monitor", "summary", "top", "clients", "byUsage"],
@@ -6648,6 +7324,14 @@ class Organizations(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSummaryTopClientsByUsage: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def getOrganizationSummaryTopClientsManufacturersByUsage(self, organizationId: str, **kwargs):
@@ -6665,8 +7349,6 @@ class Organizations(object):
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 186 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 186 days. The default is 1 day.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "monitor", "summary", "top", "clients", "manufacturers", "byUsage"],
@@ -6687,6 +7369,14 @@ class Organizations(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSummaryTopClientsManufacturersByUsage: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def getOrganizationSummaryTopDevicesByUsage(self, organizationId: str, **kwargs):
@@ -6704,8 +7394,6 @@ class Organizations(object):
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 186 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 8 hours and be less than or equal to 186 days. The default is 1 day.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "monitor", "summary", "top", "devices", "byUsage"],
@@ -6726,6 +7414,14 @@ class Organizations(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSummaryTopDevicesByUsage: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def getOrganizationSummaryTopDevicesModelsByUsage(self, organizationId: str, **kwargs):
@@ -6743,8 +7439,6 @@ class Organizations(object):
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 186 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 8 hours and be less than or equal to 186 days. The default is 1 day.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "monitor", "summary", "top", "devices", "models", "byUsage"],
@@ -6764,6 +7458,14 @@ class Organizations(object):
             "timespan",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSummaryTopDevicesModelsByUsage: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get(metadata, resource, params)
 
@@ -6785,8 +7487,6 @@ class Organizations(object):
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "monitor", "summary", "top", "networks", "byStatus"],
             "operation": "getOrganizationSummaryTopNetworksByStatus",
@@ -6806,6 +7506,14 @@ class Organizations(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSummaryTopNetworksByStatus: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationSummaryTopSsidsByUsage(self, organizationId: str, **kwargs):
@@ -6823,8 +7531,6 @@ class Organizations(object):
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 186 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 8 hours and be less than or equal to 186 days. The default is 1 day.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "monitor", "summary", "top", "ssids", "byUsage"],
@@ -6845,6 +7551,14 @@ class Organizations(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSummaryTopSsidsByUsage: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def getOrganizationSummaryTopSwitchesByEnergyUsage(self, organizationId: str, **kwargs):
@@ -6862,8 +7576,6 @@ class Organizations(object):
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 186 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 25 minutes and be less than or equal to 186 days. The default is 1 day.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "monitor", "summary", "top", "switches", "byEnergyUsage"],
@@ -6884,6 +7596,14 @@ class Organizations(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSummaryTopSwitchesByEnergyUsage: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def getOrganizationUplinksStatuses(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -6901,8 +7621,6 @@ class Organizations(object):
         - serials (array): A list of serial numbers. The returned devices will be filtered to only include these serials.
         - iccids (array): A list of ICCIDs. The returned devices will be filtered to only include these ICCIDs.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["organizations", "monitor", "uplinks", "statuses"],
@@ -6931,6 +7649,12 @@ class Organizations(object):
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationUplinksStatuses: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationWebhooksAlertTypes(self, organizationId: str, **kwargs):
@@ -6941,8 +7665,6 @@ class Organizations(object):
         - organizationId (string): Organization ID
         - productType (string): Filter sample alerts to a specific product type
         """
-
-        kwargs.update(locals())
 
         if "productType" in kwargs:
             options = ["appliance", "camera", "cellularGateway", "platform", "sensor", "sm", "switch", "wireless"]
@@ -6961,6 +7683,12 @@ class Organizations(object):
             "productType",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationWebhooksAlertTypes: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
@@ -7000,8 +7728,6 @@ class Organizations(object):
         - url (string): The URL the webhook was sent to
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["organizations", "monitor", "webhooks", "logs"],
             "operation": "getOrganizationWebhooksLogs",
@@ -7019,5 +7745,11 @@ class Organizations(object):
             "url",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationWebhooksLogs: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)

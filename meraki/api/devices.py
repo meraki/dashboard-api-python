@@ -40,8 +40,6 @@ class Devices(object):
         - floorPlanId (string): The floor plan to associate to this device. null disassociates the device from the floorplan.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["devices", "configure"],
             "operation": "updateDevice",
@@ -62,6 +60,12 @@ class Devices(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateDevice: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def blinkDeviceLeds(self, serial: str, **kwargs):
@@ -74,8 +78,6 @@ class Devices(object):
         - period (integer): The period in milliseconds. Must be between 100 and 1000. Default is 160 milliseconds
         - duty (integer): The duty cycle as the percent active. Must be between 10 and 90. Default is 50.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["devices", "liveTools"],
@@ -90,6 +92,12 @@ class Devices(object):
             "duty",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"blinkDeviceLeds: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -121,8 +129,6 @@ class Devices(object):
         - simFailover (object): SIM Failover settings.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["devices", "configure", "cellular", "sims"],
             "operation": "updateDeviceCellularSims",
@@ -137,6 +143,12 @@ class Devices(object):
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateDeviceCellularSims: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def getDeviceClients(self, serial: str, **kwargs):
@@ -148,8 +160,6 @@ class Devices(object):
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["devices", "monitor", "clients"],
@@ -164,6 +174,12 @@ class Devices(object):
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getDeviceClients: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get(metadata, resource, params)
 
     def createDeviceLiveToolsArpTable(self, serial: str, **kwargs):
@@ -174,8 +190,6 @@ class Devices(object):
         - serial (string): Serial
         - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["devices", "liveTools", "arpTable"],
@@ -188,6 +202,12 @@ class Devices(object):
             "callback",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createDeviceLiveToolsArpTable: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -220,8 +240,6 @@ class Devices(object):
         - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["devices", "liveTools", "cableTest"],
             "operation": "createDeviceLiveToolsCableTest",
@@ -234,6 +252,12 @@ class Devices(object):
             "callback",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createDeviceLiveToolsCableTest: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -266,8 +290,6 @@ class Devices(object):
         - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["devices", "liveTools", "leds", "blink"],
             "operation": "createDeviceLiveToolsLedsBlink",
@@ -280,6 +302,12 @@ class Devices(object):
             "callback",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createDeviceLiveToolsLedsBlink: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -311,8 +339,6 @@ class Devices(object):
         - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["devices", "liveTools", "macTable"],
             "operation": "createDeviceLiveToolsMacTable",
@@ -324,6 +350,12 @@ class Devices(object):
             "callback",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createDeviceLiveToolsMacTable: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -355,8 +387,6 @@ class Devices(object):
         - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["devices", "liveTools", "multicastRouting"],
             "operation": "createDeviceLiveToolsMulticastRouting",
@@ -368,6 +398,14 @@ class Devices(object):
             "callback",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createDeviceLiveToolsMulticastRouting: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -401,8 +439,6 @@ class Devices(object):
         - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["devices", "liveTools", "ping"],
             "operation": "createDeviceLiveToolsPing",
@@ -416,6 +452,12 @@ class Devices(object):
             "callback",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createDeviceLiveToolsPing: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -448,8 +490,6 @@ class Devices(object):
         - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["devices", "liveTools", "pingDevice"],
             "operation": "createDeviceLiveToolsPingDevice",
@@ -462,6 +502,12 @@ class Devices(object):
             "callback",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createDeviceLiveToolsPingDevice: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -494,8 +540,6 @@ class Devices(object):
         - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["devices", "liveTools", "ports", "cycle"],
             "operation": "createDeviceLiveToolsPortsCycle",
@@ -508,6 +552,12 @@ class Devices(object):
             "callback",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createDeviceLiveToolsPortsCycle: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -539,8 +589,6 @@ class Devices(object):
         - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["devices", "liveTools", "throughputTest"],
             "operation": "createDeviceLiveToolsThroughputTest",
@@ -552,6 +600,12 @@ class Devices(object):
             "callback",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createDeviceLiveToolsThroughputTest: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -585,8 +639,6 @@ class Devices(object):
         - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["devices", "liveTools", "wakeOnLan"],
             "operation": "createDeviceLiveToolsWakeOnLan",
@@ -600,6 +652,12 @@ class Devices(object):
             "callback",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createDeviceLiveToolsWakeOnLan: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -653,8 +711,6 @@ class Devices(object):
         - uplink (string): The WAN uplink used to obtain the requested stats. Valid uplinks are wan1, wan2, wan3, cellular, wan4. The default is wan1.
         """
 
-        kwargs.update(locals())
-
         if "uplink" in kwargs:
             options = ["cellular", "wan1", "wan2", "wan3", "wan4"]
             assert kwargs["uplink"] in options, (
@@ -677,6 +733,12 @@ class Devices(object):
             "ip",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getDeviceLossAndLatencyHistory: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
@@ -707,8 +769,6 @@ class Devices(object):
         - wan2 (object): WAN 2 settings (only for MX devices)
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["devices", "configure", "managementInterface"],
             "operation": "updateDeviceManagementInterface",
@@ -721,6 +781,12 @@ class Devices(object):
             "wan2",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateDeviceManagementInterface: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 

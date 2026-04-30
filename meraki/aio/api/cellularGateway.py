@@ -33,8 +33,6 @@ class AsyncCellularGateway:
         - fixedIpAssignments (array): list of all fixed IP assignments for a single MG
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["cellularGateway", "configure", "lan"],
             "operation": "updateDeviceCellularGatewayLan",
@@ -47,6 +45,12 @@ class AsyncCellularGateway:
             "fixedIpAssignments",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateDeviceCellularGatewayLan: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -76,8 +80,6 @@ class AsyncCellularGateway:
         - rules (array): An array of port forwarding params
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["cellularGateway", "configure", "portForwardingRules"],
             "operation": "updateDeviceCellularGatewayPortForwardingRules",
@@ -89,6 +91,14 @@ class AsyncCellularGateway:
             "rules",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateDeviceCellularGatewayPortForwardingRules: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -118,8 +128,6 @@ class AsyncCellularGateway:
         - destinations (array): The list of connectivity monitoring destinations
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["cellularGateway", "configure", "connectivityMonitoringDestinations"],
             "operation": "updateNetworkCellularGatewayConnectivityMonitoringDestinations",
@@ -131,6 +139,14 @@ class AsyncCellularGateway:
             "destinations",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkCellularGatewayConnectivityMonitoringDestinations: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -162,8 +178,6 @@ class AsyncCellularGateway:
         - dnsCustomNameservers (array): list of fixed IPs representing the the DNS Name servers when the mode is 'custom'
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["cellularGateway", "configure", "dhcp"],
             "operation": "updateNetworkCellularGatewayDhcp",
@@ -177,6 +191,12 @@ class AsyncCellularGateway:
             "dnsCustomNameservers",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkCellularGatewayDhcp: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -207,8 +227,6 @@ class AsyncCellularGateway:
         - cidr (string): CIDR of the pool of subnets. Each MG in this network will automatically pick a subnet from this pool.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["cellularGateway", "configure", "subnetPool"],
             "operation": "updateNetworkCellularGatewaySubnetPool",
@@ -221,6 +239,14 @@ class AsyncCellularGateway:
             "cidr",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkCellularGatewaySubnetPool: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -250,8 +276,6 @@ class AsyncCellularGateway:
         - bandwidthLimits (object): The bandwidth settings for the 'cellular' uplink
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["cellularGateway", "configure", "uplink"],
             "operation": "updateNetworkCellularGatewayUplink",
@@ -264,6 +288,12 @@ class AsyncCellularGateway:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkCellularGatewayUplink: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def getOrganizationCellularGatewayEsimsInventory(self, organizationId: str, **kwargs):
@@ -274,8 +304,6 @@ class AsyncCellularGateway:
         - organizationId (string): Organization ID
         - eids (array): Optional parameter to filter the results by EID.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["cellularGateway", "configure", "esims", "inventory"],
@@ -297,6 +325,14 @@ class AsyncCellularGateway:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationCellularGatewayEsimsInventory: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def updateOrganizationCellularGatewayEsimsInventory(self, organizationId: str, id: str, **kwargs):
@@ -308,8 +344,6 @@ class AsyncCellularGateway:
         - id (string): ID
         - status (string): Status the eSIM will be updated to
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["cellularGateway", "configure", "esims", "inventory"],
@@ -323,6 +357,14 @@ class AsyncCellularGateway:
             "status",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationCellularGatewayEsimsInventory: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -352,8 +394,6 @@ class AsyncCellularGateway:
         - accountIds (array): Optional parameter to filter the results by service provider account IDs.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["cellularGateway", "configure", "esims", "serviceProviders", "accounts"],
             "operation": "getOrganizationCellularGatewayEsimsServiceProvidersAccounts",
@@ -374,10 +414,18 @@ class AsyncCellularGateway:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationCellularGatewayEsimsServiceProvidersAccounts: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def createOrganizationCellularGatewayEsimsServiceProvidersAccount(
-        self, organizationId: str, accountId: str, apiKey: str, serviceProvider: dict, title: str, username: str
+        self, organizationId: str, accountId: str, apiKey: str, serviceProvider: dict, title: str, username: str, **kwargs
     ):
         """
         **Add a service provider account.**
@@ -390,8 +438,6 @@ class AsyncCellularGateway:
         - title (string): Service provider account name
         - username (string): Service provider account username
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["cellularGateway", "configure", "esims", "serviceProviders", "accounts"],
@@ -409,10 +455,18 @@ class AsyncCellularGateway:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationCellularGatewayEsimsServiceProvidersAccount: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
     def getOrganizationCellularGatewayEsimsServiceProvidersAccountsCommunicationPlans(
-        self, organizationId: str, accountIds: list
+        self, organizationId: str, accountIds: list, **kwargs
     ):
         """
         **The communication plans available for a given provider.**
@@ -421,8 +475,6 @@ class AsyncCellularGateway:
         - organizationId (string): Organization ID
         - accountIds (array): Account IDs that communication plans will be fetched for
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["cellularGateway", "configure", "esims", "serviceProviders", "accounts", "communicationPlans"],
@@ -444,9 +496,19 @@ class AsyncCellularGateway:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationCellularGatewayEsimsServiceProvidersAccountsCommunicationPlans: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
-    def getOrganizationCellularGatewayEsimsServiceProvidersAccountsRatePlans(self, organizationId: str, accountIds: list):
+    def getOrganizationCellularGatewayEsimsServiceProvidersAccountsRatePlans(
+        self, organizationId: str, accountIds: list, **kwargs
+    ):
         """
         **The rate plans available for a given provider.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-cellular-gateway-esims-service-providers-accounts-rate-plans
@@ -454,8 +516,6 @@ class AsyncCellularGateway:
         - organizationId (string): Organization ID
         - accountIds (array): Account IDs that rate plans will be fetched for
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["cellularGateway", "configure", "esims", "serviceProviders", "accounts", "ratePlans"],
@@ -477,6 +537,14 @@ class AsyncCellularGateway:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationCellularGatewayEsimsServiceProvidersAccountsRatePlans: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def updateOrganizationCellularGatewayEsimsServiceProvidersAccount(self, organizationId: str, accountId: str, **kwargs):
@@ -489,8 +557,6 @@ class AsyncCellularGateway:
         - title (string): Service provider account name used on the Meraki UI
         - apiKey (string): Service provider account API key
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["cellularGateway", "configure", "esims", "serviceProviders", "accounts"],
@@ -505,6 +571,14 @@ class AsyncCellularGateway:
             "apiKey",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationCellularGatewayEsimsServiceProvidersAccount: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -527,7 +601,7 @@ class AsyncCellularGateway:
 
         return self._session.delete(metadata, resource)
 
-    def createOrganizationCellularGatewayEsimsSwap(self, organizationId: str, swaps: list):
+    def createOrganizationCellularGatewayEsimsSwap(self, organizationId: str, swaps: list, **kwargs):
         """
         **Swap which profile an eSIM uses.**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-cellular-gateway-esims-swap
@@ -535,8 +609,6 @@ class AsyncCellularGateway:
         - organizationId (string): Organization ID
         - swaps (array): Each object represents a swap for one eSIM
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["cellularGateway", "configure", "esims", "swap"],
@@ -549,6 +621,14 @@ class AsyncCellularGateway:
             "swaps",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationCellularGatewayEsimsSwap: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -587,8 +667,6 @@ class AsyncCellularGateway:
         - iccids (array): A list of ICCIDs. The returned devices will be filtered to only include these ICCIDs.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["cellularGateway", "monitor", "uplink", "statuses"],
             "operation": "getOrganizationCellularGatewayUplinkStatuses",
@@ -615,5 +693,13 @@ class AsyncCellularGateway:
             if k.strip() in array_params:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationCellularGatewayUplinkStatuses: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)

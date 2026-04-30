@@ -22,8 +22,6 @@ class ActionBatchCampusGateway(object):
         - notes (string): Notes about cluster with max size of 511 characters allowed
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/campusGateway/clusters"
 
@@ -59,8 +57,6 @@ class ActionBatchCampusGateway(object):
         - devices (array): Devices in the cluster
         - notes (string): Notes about cluster with max size of 511 characters allowed
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         clusterId = urllib.parse.quote(clusterId, safe="")

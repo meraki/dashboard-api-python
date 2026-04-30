@@ -36,8 +36,6 @@ class AsyncNetworks:
         - notes (string): Add any notes or additional information about this network here.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["networks", "configure"],
             "operation": "updateNetwork",
@@ -53,6 +51,12 @@ class AsyncNetworks:
             "notes",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetwork: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -86,8 +90,6 @@ class AsyncNetworks:
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["networks", "monitor", "alerts", "history"],
             "operation": "getNetworkAlertsHistory",
@@ -101,6 +103,12 @@ class AsyncNetworks:
             "endingBefore",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkAlertsHistory: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -132,8 +140,6 @@ class AsyncNetworks:
         - muting (object): Mute alerts under certain conditions
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["networks", "configure", "alerts", "settings"],
             "operation": "updateNetworkAlertsSettings",
@@ -148,6 +154,12 @@ class AsyncNetworks:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkAlertsSettings: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def bindNetwork(self, networkId: str, configTemplateId: str, **kwargs):
@@ -159,8 +171,6 @@ class AsyncNetworks:
         - configTemplateId (string): The ID of the template to which the network should be bound.
         - autoBind (boolean): Optional boolean indicating whether the network's switches should automatically bind to profiles of the same model. Defaults to false if left unspecified. This option only affects switch networks and switch templates. Auto-bind is not valid unless the switch template has at least one profile and has at most one profile per switch model.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["networks", "configure"],
@@ -174,6 +184,12 @@ class AsyncNetworks:
             "autoBind",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"bindNetwork: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -193,8 +209,6 @@ class AsyncNetworks:
         - includeConnectivityHistory (boolean): Include the connectivity history for this client
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["networks", "monitor", "bluetoothClients"],
             "operation": "getNetworkBluetoothClients",
@@ -212,6 +226,12 @@ class AsyncNetworks:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkBluetoothClients: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getNetworkBluetoothClient(self, networkId: str, bluetoothClientId: str, **kwargs):
@@ -224,8 +244,6 @@ class AsyncNetworks:
         - includeConnectivityHistory (boolean): Include the connectivity history for this client
         - connectivityHistoryTimespan (integer): The timespan, in seconds, for the connectivityHistory data. By default 1 day, 86400, will be used.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["networks", "monitor", "bluetoothClients"],
@@ -240,6 +258,12 @@ class AsyncNetworks:
             "connectivityHistoryTimespan",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkBluetoothClient: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
@@ -268,8 +292,6 @@ class AsyncNetworks:
         - namedVlan (string): Filters clients based on the partial or full match for the named VLAN field.
         - recentDeviceConnections (array): Filters clients based on recent connection type. Can be one of 'Wired' or 'Wireless'.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["networks", "monitor", "clients"],
@@ -307,6 +329,12 @@ class AsyncNetworks:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkClients: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getNetworkClientsApplicationUsage(self, networkId: str, clients: str, total_pages=1, direction="next", **kwargs):
@@ -326,8 +354,6 @@ class AsyncNetworks:
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
         """
-
-        kwargs.update(locals())
 
         if "ssidNumber" in kwargs:
             options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
@@ -354,6 +380,12 @@ class AsyncNetworks:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkClientsApplicationUsage: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getNetworkClientsBandwidthUsageHistory(self, networkId: str, total_pages=1, direction="next", **kwargs):
@@ -372,8 +404,6 @@ class AsyncNetworks:
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["networks", "monitor", "clients", "bandwidthUsageHistory"],
             "operation": "getNetworkClientsBandwidthUsageHistory",
@@ -391,6 +421,14 @@ class AsyncNetworks:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getNetworkClientsBandwidthUsageHistory: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getNetworkClientsOverview(self, networkId: str, **kwargs):
@@ -404,8 +442,6 @@ class AsyncNetworks:
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
         - resolution (integer): The time resolution in seconds for returned data. The valid resolutions are: 7200, 86400, 604800, 2629746. The default is 604800.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["networks", "monitor", "clients", "overview"],
@@ -422,6 +458,12 @@ class AsyncNetworks:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkClientsOverview: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get(metadata, resource, params)
 
     def provisionNetworkClients(self, networkId: str, clients: list, devicePolicy: str, **kwargs):
@@ -436,8 +478,6 @@ class AsyncNetworks:
         - policiesBySecurityAppliance (object): An object, describing what the policy-connection association is for the security appliance. (Only relevant if the security appliance is actually within the network)
         - policiesBySsid (object): An object, describing the policy-connection associations for each active SSID within the network. Keys should be the number of enabled SSIDs, mapping to an object describing the client's policy
         """
-
-        kwargs.update(locals())
 
         if "devicePolicy" in kwargs:
             options = ["Allowed", "Blocked", "Group policy", "Normal", "Per connection"]
@@ -461,6 +501,12 @@ class AsyncNetworks:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"provisionNetworkClients: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def getNetworkClientsUsageHistories(self, networkId: str, clients: str, total_pages=1, direction="next", **kwargs):
@@ -480,8 +526,6 @@ class AsyncNetworks:
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
         """
-
-        kwargs.update(locals())
 
         if "ssidNumber" in kwargs:
             options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
@@ -507,6 +551,12 @@ class AsyncNetworks:
             "timespan",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkClientsUsageHistories: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -559,8 +609,6 @@ class AsyncNetworks:
         - groupPolicyId (string): [Optional] If 'devicePolicy' is set to 'Group policy' this param is used to specify the group policy ID.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["networks", "configure", "clients", "policy"],
             "operation": "updateNetworkClientPolicy",
@@ -574,6 +622,12 @@ class AsyncNetworks:
             "groupPolicyId",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkClientPolicy: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -596,7 +650,7 @@ class AsyncNetworks:
 
         return self._session.get(metadata, resource)
 
-    def updateNetworkClientSplashAuthorizationStatus(self, networkId: str, clientId: str, ssids: dict):
+    def updateNetworkClientSplashAuthorizationStatus(self, networkId: str, clientId: str, ssids: dict, **kwargs):
         """
         **Update a client's splash authorization**
         https://developer.cisco.com/meraki/api-v1/#!update-network-client-splash-authorization-status
@@ -605,8 +659,6 @@ class AsyncNetworks:
         - clientId (string): Client ID
         - ssids (object): The target SSIDs. Each SSID must be enabled and must have Click-through splash enabled. For each SSID where isAuthorized is true, the expiration time will automatically be set according to the SSID's splash frequency. Not all networks support configuring all SSIDs
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["networks", "configure", "clients", "splashAuthorizationStatus"],
@@ -620,6 +672,14 @@ class AsyncNetworks:
             "ssids",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkClientSplashAuthorizationStatus: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -637,8 +697,6 @@ class AsyncNetworks:
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["networks", "monitor", "clients", "trafficHistory"],
             "operation": "getNetworkClientTrafficHistory",
@@ -653,6 +711,12 @@ class AsyncNetworks:
             "endingBefore",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkClientTrafficHistory: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -703,8 +767,6 @@ class AsyncNetworks:
         - detailsByDevice (array): Optional details for claimed devices (currently only used for Catalyst devices)
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["networks", "configure", "devices"],
             "operation": "claimNetworkDevices",
@@ -718,9 +780,15 @@ class AsyncNetworks:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"claimNetworkDevices: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
-    def vmxNetworkDevicesClaim(self, networkId: str, size: str):
+    def vmxNetworkDevicesClaim(self, networkId: str, size: str, **kwargs):
         """
         **Claim a vMX into a network**
         https://developer.cisco.com/meraki/api-v1/#!vmx-network-devices-claim
@@ -728,8 +796,6 @@ class AsyncNetworks:
         - networkId (string): Network ID
         - size (string): The size of the vMX you claim. It can be one of: small, medium, large, xlarge, 100
         """
-
-        kwargs = locals()
 
         if "size" in kwargs:
             options = ["100", "large", "medium", "small", "xlarge"]
@@ -747,9 +813,15 @@ class AsyncNetworks:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"vmxNetworkDevicesClaim: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
-    def removeNetworkDevices(self, networkId: str, serial: str):
+    def removeNetworkDevices(self, networkId: str, serial: str, **kwargs):
         """
         **Remove a single device**
         https://developer.cisco.com/meraki/api-v1/#!remove-network-devices
@@ -757,8 +829,6 @@ class AsyncNetworks:
         - networkId (string): Network ID
         - serial (string): The serial of a device
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["networks", "configure", "devices"],
@@ -771,6 +841,12 @@ class AsyncNetworks:
             "serial",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"removeNetworkDevices: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -801,8 +877,6 @@ class AsyncNetworks:
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
-
-        kwargs.update(locals())
 
         if "productType" in kwargs:
             options = [
@@ -857,6 +931,12 @@ class AsyncNetworks:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkEvents: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction, event_log_end_time)
 
     def getNetworkEventsEventTypes(self, networkId: str):
@@ -904,8 +984,6 @@ class AsyncNetworks:
         - products (object): Contains information about the network to update
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["networks", "configure", "firmwareUpgrades"],
             "operation": "updateNetworkFirmwareUpgrades",
@@ -919,6 +997,12 @@ class AsyncNetworks:
             "products",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkFirmwareUpgrades: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -934,8 +1018,6 @@ class AsyncNetworks:
         - toVersion (object): Version to downgrade to (if the network has firmware flexibility)
         - predownload (object): Predownload settings for the firmware upgrade
         """
-
-        kwargs.update(locals())
 
         if "product" in kwargs:
             options = [
@@ -968,6 +1050,14 @@ class AsyncNetworks:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createNetworkFirmwareUpgradesRollback: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
     def getNetworkFirmwareUpgradesStagedEvents(self, networkId: str):
@@ -997,8 +1087,6 @@ class AsyncNetworks:
         - products (object): Contains firmware upgrade version information
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["networks", "configure", "firmwareUpgrades", "staged", "events"],
             "operation": "createNetworkFirmwareUpgradesStagedEvent",
@@ -1012,9 +1100,17 @@ class AsyncNetworks:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createNetworkFirmwareUpgradesStagedEvent: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
-    def updateNetworkFirmwareUpgradesStagedEvents(self, networkId: str, stages: list):
+    def updateNetworkFirmwareUpgradesStagedEvents(self, networkId: str, stages: list, **kwargs):
         """
         **Update the Staged Upgrade Event for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-firmware-upgrades-staged-events
@@ -1022,8 +1118,6 @@ class AsyncNetworks:
         - networkId (string): Network ID
         - stages (array): All firmware upgrade stages in the network with their start time.
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["networks", "configure", "firmwareUpgrades", "staged", "events"],
@@ -1036,6 +1130,14 @@ class AsyncNetworks:
             "stages",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkFirmwareUpgradesStagedEvents: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -1066,8 +1168,6 @@ class AsyncNetworks:
         - reasons (array): The reason for rolling back the staged upgrade
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["networks", "configure", "firmwareUpgrades", "staged", "events"],
             "operation": "rollbacksNetworkFirmwareUpgradesStagedEvents",
@@ -1080,6 +1180,14 @@ class AsyncNetworks:
             "reasons",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"rollbacksNetworkFirmwareUpgradesStagedEvents: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -1112,8 +1220,6 @@ class AsyncNetworks:
         - assignedDevices (object): The devices and Switch Stacks assigned to the Group
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["networks", "configure", "firmwareUpgrades", "staged", "groups"],
             "operation": "createNetworkFirmwareUpgradesStagedGroup",
@@ -1128,6 +1234,14 @@ class AsyncNetworks:
             "assignedDevices",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createNetworkFirmwareUpgradesStagedGroup: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -1163,8 +1277,6 @@ class AsyncNetworks:
         - assignedDevices (object): The devices and Switch Stacks assigned to the Group
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["networks", "configure", "firmwareUpgrades", "staged", "groups"],
             "operation": "updateNetworkFirmwareUpgradesStagedGroup",
@@ -1180,6 +1292,14 @@ class AsyncNetworks:
             "assignedDevices",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkFirmwareUpgradesStagedGroup: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -1228,8 +1348,6 @@ class AsyncNetworks:
         - _json (array): Array of Staged Upgrade Groups
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["networks", "configure", "firmwareUpgrades", "staged", "stages"],
             "operation": "updateNetworkFirmwareUpgradesStagedStages",
@@ -1241,6 +1359,14 @@ class AsyncNetworks:
             "_json",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkFirmwareUpgradesStagedStages: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -1277,8 +1403,6 @@ class AsyncNetworks:
         - floorNumber (number): The floor number of the floors within the building
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["networks", "configure", "floorPlans"],
             "operation": "createNetworkFloorPlan",
@@ -1298,9 +1422,15 @@ class AsyncNetworks:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkFloorPlan: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
-    def batchNetworkFloorPlansAutoLocateJobs(self, networkId: str, jobs: list):
+    def batchNetworkFloorPlansAutoLocateJobs(self, networkId: str, jobs: list, **kwargs):
         """
         **Schedule auto locate jobs for one or more floor plans in a network**
         https://developer.cisco.com/meraki/api-v1/#!batch-network-floor-plans-auto-locate-jobs
@@ -1308,8 +1438,6 @@ class AsyncNetworks:
         - networkId (string): Network ID
         - jobs (array): The list of auto locate jobs to be scheduled. Up to 100 jobs can be provided in a request.
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["networks", "configure", "floorPlans", "autoLocate", "jobs"],
@@ -1322,6 +1450,12 @@ class AsyncNetworks:
             "jobs",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"batchNetworkFloorPlansAutoLocateJobs: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -1354,8 +1488,6 @@ class AsyncNetworks:
         - devices (array): The list of devices to publish positions for
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["networks", "configure", "floorPlans", "autoLocate", "jobs"],
             "operation": "publishNetworkFloorPlansAutoLocateJob",
@@ -1369,6 +1501,14 @@ class AsyncNetworks:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"publishNetworkFloorPlansAutoLocateJob: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
     def recalculateNetworkFloorPlansAutoLocateJob(self, networkId: str, jobId: str, **kwargs):
@@ -1380,8 +1520,6 @@ class AsyncNetworks:
         - jobId (string): Job ID
         - devices (array): The list of devices to update anchor positions for
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["networks", "configure", "floorPlans", "autoLocate", "jobs"],
@@ -1396,9 +1534,17 @@ class AsyncNetworks:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"recalculateNetworkFloorPlansAutoLocateJob: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
-    def batchNetworkFloorPlansDevicesUpdate(self, networkId: str, assignments: list):
+    def batchNetworkFloorPlansDevicesUpdate(self, networkId: str, assignments: list, **kwargs):
         """
         **Update floorplan assignments for a batch of devices**
         https://developer.cisco.com/meraki/api-v1/#!batch-network-floor-plans-devices-update
@@ -1406,8 +1552,6 @@ class AsyncNetworks:
         - networkId (string): Network ID
         - assignments (array): List of floorplan assignments to update. Up to 100 floor plan assignments can be provided in a request.
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["networks", "configure", "floorPlans", "devices"],
@@ -1420,6 +1564,12 @@ class AsyncNetworks:
             "assignments",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"batchNetworkFloorPlansDevicesUpdate: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -1459,8 +1609,6 @@ class AsyncNetworks:
         - imageContents (string): The file contents (a base 64 encoded string) of your new image. Supported formats are PNG, GIF, and JPG. Note that all images are saved as PNG files, regardless of the format they are uploaded in. If you upload a new image, and you do NOT specify any new geolocation fields ('center, 'topLeftCorner', etc), the floor plan will be recentered with no rotation in order to maintain the aspect ratio of your new image.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["networks", "configure", "floorPlans"],
             "operation": "updateNetworkFloorPlan",
@@ -1480,6 +1628,12 @@ class AsyncNetworks:
             "imageContents",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkFloorPlan: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -1538,8 +1692,6 @@ class AsyncNetworks:
         - bonjourForwarding (object): The Bonjour settings for your group policy. Only valid if your network has a wireless configuration.
         """
 
-        kwargs.update(locals())
-
         if "splashAuthSettings" in kwargs:
             options = ["bypass", "network default"]
             assert kwargs["splashAuthSettings"] in options, (
@@ -1564,6 +1716,12 @@ class AsyncNetworks:
             "bonjourForwarding",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkGroupPolicy: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -1606,8 +1764,6 @@ class AsyncNetworks:
         - bonjourForwarding (object): The Bonjour settings for your group policy. Only valid if your network has a wireless configuration.
         """
 
-        kwargs.update(locals())
-
         if "splashAuthSettings" in kwargs:
             options = ["bypass", "network default"]
             assert kwargs["splashAuthSettings"] in options, (
@@ -1634,6 +1790,12 @@ class AsyncNetworks:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkGroupPolicy: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def deleteNetworkGroupPolicy(self, networkId: str, groupPolicyId: str, **kwargs):
@@ -1645,8 +1807,6 @@ class AsyncNetworks:
         - groupPolicyId (string): Group policy ID
         - force (boolean): If true, the system deletes the GP even if there are active clients using the GP. After deletion, active clients that were assigned to that Group Policy will be left without any policy applied. Default is false.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["networks", "configure", "groupPolicies"],
@@ -1660,6 +1820,12 @@ class AsyncNetworks:
             "force",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"deleteNetworkGroupPolicy: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.delete(metadata, resource, params)
 
@@ -1712,8 +1878,6 @@ class AsyncNetworks:
         - isAdmin (boolean): Whether or not the user is a Dashboard administrator.
         """
 
-        kwargs.update(locals())
-
         if "accountType" in kwargs:
             options = ["802.1X", "Client VPN", "Guest"]
             assert kwargs["accountType"] in options, (
@@ -1737,6 +1901,12 @@ class AsyncNetworks:
             "authorizations",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkMerakiAuthUser: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -1769,8 +1939,6 @@ class AsyncNetworks:
         - delete (boolean): If the ID supplied is for a splash guest or client VPN user, and that user is not authorized for any other networks in the organization, then also delete the user. 802.1X RADIUS users are always deleted regardless of this optional attribute.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["networks", "configure", "merakiAuthUsers"],
             "operation": "deleteNetworkMerakiAuthUser",
@@ -1783,6 +1951,12 @@ class AsyncNetworks:
             "delete",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"deleteNetworkMerakiAuthUser: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.delete(metadata, resource, params)
 
@@ -1799,8 +1973,6 @@ class AsyncNetworks:
         - authorizations (array): Authorization zones and expiration dates for the user.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["networks", "configure", "merakiAuthUsers"],
             "operation": "updateNetworkMerakiAuthUser",
@@ -1816,6 +1988,12 @@ class AsyncNetworks:
             "authorizations",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkMerakiAuthUser: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -1849,8 +2027,6 @@ class AsyncNetworks:
         - authentication (object): Authentication settings of the MQTT broker
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["networks", "configure", "mqttBrokers"],
             "operation": "createNetworkMqttBroker",
@@ -1866,6 +2042,12 @@ class AsyncNetworks:
             "authentication",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkMqttBroker: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -1902,8 +2084,6 @@ class AsyncNetworks:
         - authentication (object): Authentication settings of the MQTT broker
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["networks", "configure", "mqttBrokers"],
             "operation": "updateNetworkMqttBroker",
@@ -1920,6 +2100,12 @@ class AsyncNetworks:
             "authentication",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkMqttBroker: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -1972,8 +2158,6 @@ class AsyncNetworks:
         - etaDstPort (integer): The port that the Encrypted Traffic Analytics collector will be listening on.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["networks", "configure", "netflow"],
             "operation": "updateNetworkNetflow",
@@ -1989,6 +2173,12 @@ class AsyncNetworks:
             "etaDstPort",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkNetflow: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -2009,8 +2199,6 @@ class AsyncNetworks:
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["networks", "monitor", "networkHealth", "channelUtilization"],
             "operation": "getNetworkNetworkHealthChannelUtilization",
@@ -2029,6 +2217,14 @@ class AsyncNetworks:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getNetworkNetworkHealthChannelUtilization: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getNetworkPiiPiiKeys(self, networkId: str, **kwargs):
@@ -2044,8 +2240,6 @@ class AsyncNetworks:
         - imei (string): The IMEI of a Systems Manager device
         - bluetoothMac (string): The MAC of a Bluetooth client
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["networks", "configure", "pii", "piiKeys"],
@@ -2063,6 +2257,12 @@ class AsyncNetworks:
             "bluetoothMac",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkPiiPiiKeys: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
@@ -2098,8 +2298,6 @@ class AsyncNetworks:
         - smUserId (string): The sm_user_id of a Systems Manager user. The only way to "restrict processing" or "delete" a Systems Manager user. Must include "user" in the dataset for a "delete" request to destroy the user.
         """
 
-        kwargs.update(locals())
-
         if "type" in kwargs:
             options = ["delete", "restrict processing"]
             assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
@@ -2121,6 +2319,12 @@ class AsyncNetworks:
             "smUserId",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkPiiRequest: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -2176,8 +2380,6 @@ class AsyncNetworks:
         - bluetoothMac (string): The MAC of a Bluetooth client
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["networks", "configure", "pii", "smDevicesForKey"],
             "operation": "getNetworkPiiSmDevicesForKey",
@@ -2195,6 +2397,12 @@ class AsyncNetworks:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkPiiSmDevicesForKey: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get(metadata, resource, params)
 
     def getNetworkPiiSmOwnersForKey(self, networkId: str, **kwargs):
@@ -2210,8 +2418,6 @@ class AsyncNetworks:
         - imei (string): The IMEI of a Systems Manager device
         - bluetoothMac (string): The MAC of a Bluetooth client
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["networks", "configure", "pii", "smOwnersForKey"],
@@ -2230,6 +2436,12 @@ class AsyncNetworks:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkPiiSmOwnersForKey: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get(metadata, resource, params)
 
     def getNetworkPoliciesByClient(self, networkId: str, total_pages=1, direction="next", **kwargs):
@@ -2247,8 +2459,6 @@ class AsyncNetworks:
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["networks", "configure", "policies", "byClient"],
             "operation": "getNetworkPoliciesByClient",
@@ -2264,6 +2474,12 @@ class AsyncNetworks:
             "timespan",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkPoliciesByClient: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -2297,8 +2513,6 @@ class AsyncNetworks:
         - namedVlans (object): A hash of Named VLANs options applied to the Network.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["networks", "configure", "settings"],
             "operation": "updateNetworkSettings",
@@ -2314,6 +2528,12 @@ class AsyncNetworks:
             "namedVlans",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSettings: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -2345,8 +2565,6 @@ class AsyncNetworks:
         - users (array): The list of SNMP users. Only relevant if 'access' is set to 'users'.
         """
 
-        kwargs.update(locals())
-
         if "access" in kwargs:
             options = ["community", "none", "users"]
             assert kwargs["access"] in options, (
@@ -2367,6 +2585,12 @@ class AsyncNetworks:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSnmp: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def getNetworkSplashLoginAttempts(self, networkId: str, **kwargs):
@@ -2379,8 +2603,6 @@ class AsyncNetworks:
         - loginIdentifier (string): The username, email, or phone number used during login
         - timespan (integer): The timespan, in seconds, for the login attempts. The period will be from [timespan] seconds ago until now. The maximum timespan is 3 months
         """
-
-        kwargs.update(locals())
 
         if "ssidNumber" in kwargs:
             options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
@@ -2401,6 +2623,12 @@ class AsyncNetworks:
             "timespan",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkSplashLoginAttempts: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
@@ -2438,7 +2666,7 @@ class AsyncNetworks:
 
         return self._session.get(metadata, resource)
 
-    def updateNetworkSyslogServers(self, networkId: str, servers: list):
+    def updateNetworkSyslogServers(self, networkId: str, servers: list, **kwargs):
         """
         **Update the syslog servers for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-syslog-servers
@@ -2446,8 +2674,6 @@ class AsyncNetworks:
         - networkId (string): Network ID
         - servers (array): A list of the syslog servers for this network
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["networks", "configure", "syslogServers"],
@@ -2460,6 +2686,12 @@ class AsyncNetworks:
             "servers",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSyslogServers: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -2491,8 +2723,6 @@ class AsyncNetworks:
         - deviceType (string): Filter the data by device type: 'combined', 'wireless', 'switch' or 'appliance'. Defaults to 'combined'. When using 'combined', for each rule the data will come from the device type with the most usage.
         """
 
-        kwargs.update(locals())
-
         if "deviceType" in kwargs:
             options = ["appliance", "combined", "switch", "wireless"]
             assert kwargs["deviceType"] in options, (
@@ -2512,6 +2742,12 @@ class AsyncNetworks:
             "deviceType",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkTraffic: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
@@ -2544,8 +2780,6 @@ class AsyncNetworks:
             - customPieChartItems (array): The list of items that make up the custom pie chart for traffic reporting.
         """
 
-        kwargs.update(locals())
-
         if "mode" in kwargs:
             options = ["basic", "detailed", "disabled"]
             assert kwargs["mode"] in options, f'''"mode" cannot be "{kwargs["mode"]}", & must be set to one of: {options}'''
@@ -2562,6 +2796,12 @@ class AsyncNetworks:
             "customPieChartItems",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkTrafficAnalysis: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -2608,8 +2848,6 @@ class AsyncNetworks:
         - retainConfigs (boolean): Optional boolean to retain all the current configs given by the template.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["networks", "configure"],
             "operation": "unbindNetwork",
@@ -2621,6 +2859,12 @@ class AsyncNetworks:
             "retainConfigs",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"unbindNetwork: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -2641,7 +2885,7 @@ class AsyncNetworks:
 
         return self._session.get(metadata, resource)
 
-    def createNetworkVlanProfile(self, networkId: str, name: str, vlanNames: list, vlanGroups: list, iname: str):
+    def createNetworkVlanProfile(self, networkId: str, name: str, vlanNames: list, vlanGroups: list, iname: str, **kwargs):
         """
         **Create a VLAN profile for a network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-vlan-profile
@@ -2652,8 +2896,6 @@ class AsyncNetworks:
         - vlanGroups (array): An array of VLAN groups
         - iname (string): IName of the profile
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["networks", "configure", "vlanProfiles"],
@@ -2669,6 +2911,12 @@ class AsyncNetworks:
             "iname",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkVlanProfile: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -2687,8 +2935,6 @@ class AsyncNetworks:
         - productTypes (array): Optional parameter to filter devices by product types.
         - stackIds (array): Optional parameter to filter devices by Switch Stack ids.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["networks", "configure", "vlanProfiles", "assignments", "byDevice"],
@@ -2717,6 +2963,14 @@ class AsyncNetworks:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getNetworkVlanProfilesAssignmentsByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def reassignNetworkVlanProfilesAssignments(self, networkId: str, serials: list, stackIds: list, **kwargs):
@@ -2729,8 +2983,6 @@ class AsyncNetworks:
         - stackIds (array): Array of Switch Stack IDs
         - vlanProfile (object): The VLAN Profile
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["networks", "configure", "vlanProfiles", "assignments"],
@@ -2745,6 +2997,14 @@ class AsyncNetworks:
             "stackIds",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"reassignNetworkVlanProfilesAssignments: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -2767,7 +3027,7 @@ class AsyncNetworks:
 
         return self._session.get(metadata, resource)
 
-    def updateNetworkVlanProfile(self, networkId: str, iname: str, name: str, vlanNames: list, vlanGroups: list):
+    def updateNetworkVlanProfile(self, networkId: str, iname: str, name: str, vlanNames: list, vlanGroups: list, **kwargs):
         """
         **Update an existing VLAN profile of a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-vlan-profile
@@ -2778,8 +3038,6 @@ class AsyncNetworks:
         - vlanNames (array): An array of named VLANs
         - vlanGroups (array): An array of VLAN groups
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["networks", "configure", "vlanProfiles"],
@@ -2795,6 +3053,12 @@ class AsyncNetworks:
             "vlanGroups",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkVlanProfile: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -2846,8 +3110,6 @@ class AsyncNetworks:
         - payloadTemplate (object): The payload template to use when posting data to the HTTP server.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["networks", "configure", "webhooks", "httpServers"],
             "operation": "createNetworkWebhooksHttpServer",
@@ -2862,6 +3124,12 @@ class AsyncNetworks:
             "payloadTemplate",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkWebhooksHttpServer: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -2896,8 +3164,6 @@ class AsyncNetworks:
         - payloadTemplate (object): The payload template to use when posting data to the HTTP server.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["networks", "configure", "webhooks", "httpServers"],
             "operation": "updateNetworkWebhooksHttpServer",
@@ -2912,6 +3178,12 @@ class AsyncNetworks:
             "payloadTemplate",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkWebhooksHttpServer: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -2964,8 +3236,6 @@ class AsyncNetworks:
         - headersFile (string): A Base64 encoded file containing the liquid template used with the webhook headers.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["networks", "configure", "webhooks", "payloadTemplates"],
             "operation": "createNetworkWebhooksPayloadTemplate",
@@ -2981,6 +3251,12 @@ class AsyncNetworks:
             "headersFile",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkWebhooksPayloadTemplate: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -3036,8 +3312,6 @@ class AsyncNetworks:
         - headersFile (string): A file containing the liquid template used with the webhook headers.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["networks", "configure", "webhooks", "payloadTemplates"],
             "operation": "updateNetworkWebhooksPayloadTemplate",
@@ -3055,6 +3329,12 @@ class AsyncNetworks:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkWebhooksPayloadTemplate: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def createNetworkWebhooksWebhookTest(self, networkId: str, url: str, **kwargs):
@@ -3069,8 +3349,6 @@ class AsyncNetworks:
         - payloadTemplateName (string): The name of the payload template.
         - alertTypeId (string): The type of alert which the test webhook will send. Optional. Defaults to power_supply_down.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["networks", "configure", "webhooks", "webhookTests"],
@@ -3087,6 +3365,12 @@ class AsyncNetworks:
             "alertTypeId",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkWebhooksWebhookTest: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 

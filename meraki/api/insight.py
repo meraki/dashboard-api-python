@@ -19,8 +19,6 @@ class Insight(object):
         - resolution (integer): The time resolution in seconds for returned data. The valid resolutions are: 60, 300, 3600, 86400. The default is 300.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["insight", "monitor", "applications", "healthByTime"],
             "operation": "getNetworkInsightApplicationHealthByTime",
@@ -36,6 +34,14 @@ class Insight(object):
             "resolution",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getNetworkInsightApplicationHealthByTime: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get(metadata, resource, params)
 
@@ -84,8 +90,6 @@ class Insight(object):
         - bestEffortMonitoringEnabled (boolean): Indicates that if the media server doesn't respond to ICMP pings, the nearest hop will be used in its stead.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["insight", "configure", "monitoredMediaServers"],
             "operation": "createOrganizationInsightMonitoredMediaServer",
@@ -99,6 +103,14 @@ class Insight(object):
             "bestEffortMonitoringEnabled",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationInsightMonitoredMediaServer: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -133,8 +145,6 @@ class Insight(object):
         - bestEffortMonitoringEnabled (boolean): Indicates that if the media server doesn't respond to ICMP pings, the nearest hop will be used in its stead.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["insight", "configure", "monitoredMediaServers"],
             "operation": "updateOrganizationInsightMonitoredMediaServer",
@@ -149,6 +159,14 @@ class Insight(object):
             "bestEffortMonitoringEnabled",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationInsightMonitoredMediaServer: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 

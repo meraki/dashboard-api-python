@@ -22,8 +22,6 @@ class ActionBatchDevices(object):
         - floorPlanId (string): The floor plan to associate to this device. null disassociates the device from the floorplan.
         """
 
-        kwargs.update(locals())
-
         serial = urllib.parse.quote(serial, safe="")
         resource = f"/devices/{serial}"
 
@@ -56,8 +54,6 @@ class ActionBatchDevices(object):
         - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
 
-        kwargs.update(locals())
-
         serial = urllib.parse.quote(serial, safe="")
         resource = f"/devices/{serial}/liveTools/leds/blink"
 
@@ -82,8 +78,6 @@ class ActionBatchDevices(object):
         - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
 
-        kwargs.update(locals())
-
         serial = urllib.parse.quote(serial, safe="")
         resource = f"/devices/{serial}/liveTools/throughputTest"
 
@@ -107,8 +101,6 @@ class ActionBatchDevices(object):
         - wan1 (object): WAN 1 settings
         - wan2 (object): WAN 2 settings (only for MX devices)
         """
-
-        kwargs.update(locals())
 
         serial = urllib.parse.quote(serial, safe="")
         resource = f"/devices/{serial}/managementInterface"

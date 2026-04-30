@@ -34,8 +34,6 @@ class AsyncAppliance:
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 30 minutes and be less than or equal to 14 days. The default is 30 minutes.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "monitor", "performance"],
             "operation": "getDeviceAppliancePerformance",
@@ -49,6 +47,12 @@ class AsyncAppliance:
             "timespan",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getDeviceAppliancePerformance: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
 
@@ -114,8 +118,6 @@ class AsyncAppliance:
         - fiveGhzSettings (object): Manual radio settings for 5 GHz.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "radio", "settings"],
             "operation": "updateDeviceApplianceRadioSettings",
@@ -129,6 +131,12 @@ class AsyncAppliance:
             "fiveGhzSettings",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateDeviceApplianceRadioSettings: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -149,7 +157,7 @@ class AsyncAppliance:
 
         return self._session.get(metadata, resource)
 
-    def updateDeviceApplianceUplinksSettings(self, serial: str, interfaces: dict):
+    def updateDeviceApplianceUplinksSettings(self, serial: str, interfaces: dict, **kwargs):
         """
         **Update the uplink settings for a secure router or security appliance**
         https://developer.cisco.com/meraki/api-v1/#!update-device-appliance-uplinks-settings
@@ -157,8 +165,6 @@ class AsyncAppliance:
         - serial (string): Serial
         - interfaces (object): Interface settings.
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["appliance", "configure", "uplinks", "settings"],
@@ -171,6 +177,12 @@ class AsyncAppliance:
             "interfaces",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateDeviceApplianceUplinksSettings: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -211,8 +223,6 @@ class AsyncAppliance:
         - sortOrder (string): Sorted order of security events based on event detection time. Order options are 'ascending' or 'descending'. Default is ascending order.
         """
 
-        kwargs.update(locals())
-
         if "sortOrder" in kwargs:
             options = ["ascending", "descending"]
             assert kwargs["sortOrder"] in options, (
@@ -237,6 +247,14 @@ class AsyncAppliance:
             "sortOrder",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getNetworkApplianceClientSecurityEvents: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -266,8 +284,6 @@ class AsyncAppliance:
         - destinations (array): The list of connectivity monitoring destinations
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "connectivityMonitoringDestinations"],
             "operation": "updateNetworkApplianceConnectivityMonitoringDestinations",
@@ -279,6 +295,14 @@ class AsyncAppliance:
             "destinations",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkApplianceConnectivityMonitoringDestinations: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -311,8 +335,6 @@ class AsyncAppliance:
         - urlCategoryListSize (string): URL category list size which is either 'topSites' or 'fullList'
         """
 
-        kwargs.update(locals())
-
         if "urlCategoryListSize" in kwargs:
             options = ["fullList", "topSites"]
             assert kwargs["urlCategoryListSize"] in options, (
@@ -333,6 +355,14 @@ class AsyncAppliance:
             "urlCategoryListSize",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkApplianceContentFiltering: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -365,8 +395,6 @@ class AsyncAppliance:
         - uplink (object): Uplink configuration
         """
 
-        kwargs.update(locals())
-
         if "mode" in kwargs:
             options = ["active-active", "active-passive", "disabled"]
             assert kwargs["mode"] in options, f'''"mode" cannot be "{kwargs["mode"]}", & must be set to one of: {options}'''
@@ -385,6 +413,14 @@ class AsyncAppliance:
             "uplink",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkApplianceDevicesRedundancy: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -431,8 +467,6 @@ class AsyncAppliance:
         - rules (array): An ordered array of the firewall rules (not including the default rule)
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "firewall", "cellularFirewallRules"],
             "operation": "updateNetworkApplianceFirewallCellularFirewallRules",
@@ -444,6 +478,14 @@ class AsyncAppliance:
             "rules",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkApplianceFirewallCellularFirewallRules: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -494,8 +536,6 @@ class AsyncAppliance:
         - allowedIps (array): An array of allowed CIDRs that can access the service. This field is required if "access" is set to "restricted". Otherwise this field is ignored
         """
 
-        kwargs.update(locals())
-
         if "access" in kwargs:
             options = ["blocked", "restricted", "unrestricted"]
             assert kwargs["access"] in options, (
@@ -515,6 +555,14 @@ class AsyncAppliance:
             "allowedIps",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkApplianceFirewallFirewalledService: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -544,8 +592,6 @@ class AsyncAppliance:
         - rules (array): An ordered array of the firewall rules (not including the default rule)
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "firewall", "inboundCellularFirewallRules"],
             "operation": "updateNetworkApplianceFirewallInboundCellularFirewallRules",
@@ -557,6 +603,14 @@ class AsyncAppliance:
             "rules",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkApplianceFirewallInboundCellularFirewallRules: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -587,8 +641,6 @@ class AsyncAppliance:
         - syslogDefaultRule (boolean): Log the special default rule (boolean value - enable only if you've configured a syslog server) (optional)
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "firewall", "inboundFirewallRules"],
             "operation": "updateNetworkApplianceFirewallInboundFirewallRules",
@@ -601,6 +653,14 @@ class AsyncAppliance:
             "syslogDefaultRule",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkApplianceFirewallInboundFirewallRules: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -631,8 +691,6 @@ class AsyncAppliance:
         - syslogDefaultRule (boolean): Log the special default rule (boolean value - enable only if you've configured a syslog server) (optional)
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "firewall", "l3FirewallRules"],
             "operation": "updateNetworkApplianceFirewallL3FirewallRules",
@@ -645,6 +703,14 @@ class AsyncAppliance:
             "syslogDefaultRule",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkApplianceFirewallL3FirewallRules: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -674,8 +740,6 @@ class AsyncAppliance:
         - rules (array): An ordered array of the MX L7 firewall rules. Each rule is an object with 'policy', 'type', and 'value'. The 'value' shape depends on 'type': object for application/applicationCategory, string for host/port/ipRange, and an array of 2-letter ISO 3166-1 alpha-2 country codes for allowedCountries/blockedCountries. For backward compatibility, request types also accept whitelistedCountries/blacklistedCountries.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "firewall", "l7FirewallRules"],
             "operation": "updateNetworkApplianceFirewallL7FirewallRules",
@@ -687,6 +751,14 @@ class AsyncAppliance:
             "rules",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkApplianceFirewallL7FirewallRules: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -707,7 +779,7 @@ class AsyncAppliance:
 
         return self._session.get(metadata, resource)
 
-    def updateNetworkApplianceFirewallMulticastForwarding(self, networkId: str, rules: list):
+    def updateNetworkApplianceFirewallMulticastForwarding(self, networkId: str, rules: list, **kwargs):
         """
         **Update static multicast forward rules for a network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-firewall-multicast-forwarding
@@ -715,8 +787,6 @@ class AsyncAppliance:
         - networkId (string): Network ID
         - rules (array): Static multicast forwarding rules. Pass an empty array to clear all rules.
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["appliance", "configure", "firewall", "multicastForwarding"],
@@ -729,6 +799,14 @@ class AsyncAppliance:
             "rules",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkApplianceFirewallMulticastForwarding: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -749,7 +827,7 @@ class AsyncAppliance:
 
         return self._session.get(metadata, resource)
 
-    def updateNetworkApplianceFirewallOneToManyNatRules(self, networkId: str, rules: list):
+    def updateNetworkApplianceFirewallOneToManyNatRules(self, networkId: str, rules: list, **kwargs):
         """
         **Set the 1:Many NAT mapping rules for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-firewall-one-to-many-nat-rules
@@ -757,8 +835,6 @@ class AsyncAppliance:
         - networkId (string): Network ID
         - rules (array): An array of 1:Many nat rules
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["appliance", "configure", "firewall", "oneToManyNatRules"],
@@ -771,6 +847,14 @@ class AsyncAppliance:
             "rules",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkApplianceFirewallOneToManyNatRules: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -791,7 +875,7 @@ class AsyncAppliance:
 
         return self._session.get(metadata, resource)
 
-    def updateNetworkApplianceFirewallOneToOneNatRules(self, networkId: str, rules: list):
+    def updateNetworkApplianceFirewallOneToOneNatRules(self, networkId: str, rules: list, **kwargs):
         """
         **Set the 1:1 NAT mapping rules for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-firewall-one-to-one-nat-rules
@@ -799,8 +883,6 @@ class AsyncAppliance:
         - networkId (string): Network ID
         - rules (array): An array of 1:1 nat rules
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["appliance", "configure", "firewall", "oneToOneNatRules"],
@@ -813,6 +895,14 @@ class AsyncAppliance:
             "rules",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkApplianceFirewallOneToOneNatRules: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -833,7 +923,7 @@ class AsyncAppliance:
 
         return self._session.get(metadata, resource)
 
-    def updateNetworkApplianceFirewallPortForwardingRules(self, networkId: str, rules: list):
+    def updateNetworkApplianceFirewallPortForwardingRules(self, networkId: str, rules: list, **kwargs):
         """
         **Update the port forwarding rules for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-firewall-port-forwarding-rules
@@ -841,8 +931,6 @@ class AsyncAppliance:
         - networkId (string): Network ID
         - rules (array): An array of port forwarding params
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["appliance", "configure", "firewall", "portForwardingRules"],
@@ -855,6 +943,14 @@ class AsyncAppliance:
             "rules",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkApplianceFirewallPortForwardingRules: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -884,8 +980,6 @@ class AsyncAppliance:
         - spoofingProtection (object): Spoofing protection settings
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "firewall", "settings"],
             "operation": "updateNetworkApplianceFirewallSettings",
@@ -897,6 +991,14 @@ class AsyncAppliance:
             "spoofingProtection",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkApplianceFirewallSettings: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -951,8 +1053,6 @@ class AsyncAppliance:
         - accessPolicy (string): The name of the policy. Only applicable to Access ports. Valid values are: 'open', '8021x-radius', 'mac-radius', 'hybris-radius' for MX64 or Z3 or any MX supporting the per port authentication feature. Otherwise, 'open' is the only valid value and 'open' is the default value if the field is missing.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "ports"],
             "operation": "updateNetworkAppliancePort",
@@ -970,6 +1070,12 @@ class AsyncAppliance:
             "accessPolicy",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkAppliancePort: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -1001,8 +1107,6 @@ class AsyncAppliance:
         - description (string): A name or description for the prefix
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "prefixes", "delegated", "statics"],
             "operation": "createNetworkAppliancePrefixesDelegatedStatic",
@@ -1016,6 +1120,14 @@ class AsyncAppliance:
             "description",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createNetworkAppliancePrefixesDelegatedStatic: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -1050,8 +1162,6 @@ class AsyncAppliance:
         - description (string): A name or description for the prefix
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "prefixes", "delegated", "statics"],
             "operation": "updateNetworkAppliancePrefixesDelegatedStatic",
@@ -1066,6 +1176,14 @@ class AsyncAppliance:
             "description",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkAppliancePrefixesDelegatedStatic: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -1117,8 +1235,6 @@ class AsyncAppliance:
         - perSsidSettings (object): Per-SSID radio settings by number.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "rfProfiles"],
             "operation": "createNetworkApplianceRfProfile",
@@ -1133,6 +1249,12 @@ class AsyncAppliance:
             "perSsidSettings",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkApplianceRfProfile: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -1149,8 +1271,6 @@ class AsyncAppliance:
         - perSsidSettings (object): Per-SSID radio settings by number.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "rfProfiles"],
             "operation": "updateNetworkApplianceRfProfile",
@@ -1166,6 +1286,12 @@ class AsyncAppliance:
             "perSsidSettings",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkApplianceRfProfile: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -1216,8 +1342,6 @@ class AsyncAppliance:
         - wanTrafficUplinkPreferences (array): policies with respective traffic filters for an MX network
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "sdwan", "internetPolicies"],
             "operation": "updateNetworkApplianceSdwanInternetPolicies",
@@ -1229,6 +1353,14 @@ class AsyncAppliance:
             "wanTrafficUplinkPreferences",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkApplianceSdwanInternetPolicies: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -1248,8 +1380,6 @@ class AsyncAppliance:
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - sortOrder (string): Sorted order of security events based on event detection time. Order options are 'ascending' or 'descending'. Default is ascending order.
         """
-
-        kwargs.update(locals())
 
         if "sortOrder" in kwargs:
             options = ["ascending", "descending"]
@@ -1274,6 +1404,12 @@ class AsyncAppliance:
             "sortOrder",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkApplianceSecurityEvents: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -1305,8 +1441,6 @@ class AsyncAppliance:
         - protectedNetworks (object): Set the included/excluded networks from the intrusion engine (optional - omitting will leave current config unchanged). This is available only in 'passthrough' mode
         """
 
-        kwargs.update(locals())
-
         if "mode" in kwargs:
             options = ["detection", "disabled", "prevention"]
             assert kwargs["mode"] in options, f'''"mode" cannot be "{kwargs["mode"]}", & must be set to one of: {options}'''
@@ -1329,6 +1463,14 @@ class AsyncAppliance:
             "protectedNetworks",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkApplianceSecurityIntrusion: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -1360,8 +1502,6 @@ class AsyncAppliance:
         - allowedFiles (array): The sha256 digests of files that should be permitted by the malware detection engine. If omitted, the current config will remain unchanged. This is available only if your network supports AMP allow listing
         """
 
-        kwargs.update(locals())
-
         if "mode" in kwargs:
             options = ["disabled", "enabled"]
             assert kwargs["mode"] in options, f'''"mode" cannot be "{kwargs["mode"]}", & must be set to one of: {options}'''
@@ -1379,6 +1519,14 @@ class AsyncAppliance:
             "allowedFiles",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkApplianceSecurityMalware: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -1410,8 +1558,6 @@ class AsyncAppliance:
         - dynamicDns (object): Dynamic DNS settings for a network
         """
 
-        kwargs.update(locals())
-
         if "clientTrackingMethod" in kwargs:
             options = ["IP address", "MAC address", "Unique client identifier"]
             assert kwargs["clientTrackingMethod"] in options, (
@@ -1436,6 +1582,12 @@ class AsyncAppliance:
             "dynamicDns",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkApplianceSettings: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -1468,8 +1620,6 @@ class AsyncAppliance:
         - mandatoryDhcp (object): Mandatory DHCP will enforce that clients connecting to this LAN must use the IP address assigned by the DHCP server. Clients who use a static IP address won't be able to associate. Only available on firmware versions 17.0 and above
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "singleLan"],
             "operation": "updateNetworkApplianceSingleLan",
@@ -1484,6 +1634,12 @@ class AsyncAppliance:
             "mandatoryDhcp",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkApplianceSingleLan: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -1543,8 +1699,6 @@ class AsyncAppliance:
         - dot11w (object): The current setting for Protected Management Frames (802.11w).
         """
 
-        kwargs.update(locals())
-
         if "authMode" in kwargs:
             options = ["8021x-meraki", "8021x-radius", "open", "psk"]
             assert kwargs["authMode"] in options, (
@@ -1584,6 +1738,12 @@ class AsyncAppliance:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkApplianceSsid: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.put(metadata, resource, payload)
 
     def getNetworkApplianceStaticRoutes(self, networkId: str):
@@ -1615,8 +1775,6 @@ class AsyncAppliance:
         - gatewayVlanId (integer): Gateway VLAN ID
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "staticRoutes"],
             "operation": "createNetworkApplianceStaticRoute",
@@ -1631,6 +1789,12 @@ class AsyncAppliance:
             "gatewayVlanId",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkApplianceStaticRoute: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -1669,8 +1833,6 @@ class AsyncAppliance:
         - reservedIpRanges (array): DHCP reserved IP ranges
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "staticRoutes"],
             "operation": "updateNetworkApplianceStaticRoute",
@@ -1689,6 +1851,12 @@ class AsyncAppliance:
             "reservedIpRanges",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkApplianceStaticRoute: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -1728,7 +1896,7 @@ class AsyncAppliance:
 
         return self._session.get(metadata, resource)
 
-    def updateNetworkApplianceTrafficShaping(self, networkId: str, globalBandwidthLimits: dict):
+    def updateNetworkApplianceTrafficShaping(self, networkId: str, globalBandwidthLimits: dict, **kwargs):
         """
         **Update the traffic shaping settings for an MX network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-traffic-shaping
@@ -1736,8 +1904,6 @@ class AsyncAppliance:
         - networkId (string): Network ID
         - globalBandwidthLimits (object): Global per-client bandwidth limit
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["appliance", "configure", "trafficShaping"],
@@ -1750,6 +1916,12 @@ class AsyncAppliance:
             "globalBandwidthLimits",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkApplianceTrafficShaping: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -1782,8 +1954,6 @@ class AsyncAppliance:
         - maxLossPercentage (integer): Maximum percentage of packet loss
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "trafficShaping", "customPerformanceClasses"],
             "operation": "createNetworkApplianceTrafficShapingCustomPerformanceClass",
@@ -1798,6 +1968,14 @@ class AsyncAppliance:
             "maxLossPercentage",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createNetworkApplianceTrafficShapingCustomPerformanceClass: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -1835,8 +2013,6 @@ class AsyncAppliance:
         - maxLossPercentage (integer): Maximum percentage of packet loss
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "trafficShaping", "customPerformanceClasses"],
             "operation": "updateNetworkApplianceTrafficShapingCustomPerformanceClass",
@@ -1852,6 +2028,14 @@ class AsyncAppliance:
             "maxLossPercentage",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkApplianceTrafficShapingCustomPerformanceClass: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -1887,8 +2071,6 @@ class AsyncAppliance:
 
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "trafficShaping", "rules"],
             "operation": "updateNetworkApplianceTrafficShapingRules",
@@ -1901,6 +2083,14 @@ class AsyncAppliance:
             "rules",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkApplianceTrafficShapingRules: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -1947,8 +2137,6 @@ class AsyncAppliance:
         - bandwidthLimits (object): A mapping of uplinks to their bandwidth settings (be sure to check which uplinks are supported for your network)
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "trafficShaping", "uplinkBandwidth"],
             "operation": "updateNetworkApplianceTrafficShapingUplinkBandwidth",
@@ -1960,6 +2148,14 @@ class AsyncAppliance:
             "bandwidthLimits",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkApplianceTrafficShapingUplinkBandwidth: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -1994,8 +2190,6 @@ class AsyncAppliance:
         - vpnTrafficUplinkPreferences (array): Array of uplink preference rules for VPN traffic
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "trafficShaping", "uplinkSelection"],
             "operation": "updateNetworkApplianceTrafficShapingUplinkSelection",
@@ -2013,6 +2207,14 @@ class AsyncAppliance:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkApplianceTrafficShapingUplinkSelection: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.put(metadata, resource, payload)
 
     def updateNetworkApplianceTrafficShapingVpnExclusions(self, networkId: str, **kwargs):
@@ -2024,8 +2226,6 @@ class AsyncAppliance:
         - custom (array): Custom VPN exclusion rules. Pass an empty array to clear existing rules.
         - majorApplications (array): Major Application based VPN exclusion rules. Pass an empty array to clear existing rules.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["appliance", "configure", "trafficShaping", "vpnExclusions"],
@@ -2040,9 +2240,17 @@ class AsyncAppliance:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkApplianceTrafficShapingVpnExclusions: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.put(metadata, resource, payload)
 
-    def connectNetworkApplianceUmbrellaAccount(self, networkId: str, api: dict):
+    def connectNetworkApplianceUmbrellaAccount(self, networkId: str, api: dict, **kwargs):
         """
         **Connect a Cisco Umbrella account to this network**
         https://developer.cisco.com/meraki/api-v1/#!connect-network-appliance-umbrella-account
@@ -2050,8 +2258,6 @@ class AsyncAppliance:
         - networkId (string): Network ID
         - api (object): Umbrella API credentials
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["appliance", "configure", "umbrella", "account"],
@@ -2064,6 +2270,14 @@ class AsyncAppliance:
             "api",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"connectNetworkApplianceUmbrellaAccount: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -2084,7 +2298,7 @@ class AsyncAppliance:
 
         return self._session.post(metadata, resource)
 
-    def updateNetworkApplianceUplinksNat(self, networkId: str, uplinks: list):
+    def updateNetworkApplianceUplinksNat(self, networkId: str, uplinks: list, **kwargs):
         """
         **Update uplink NAT settings of the specified network**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-uplinks-nat
@@ -2092,8 +2306,6 @@ class AsyncAppliance:
         - networkId (string): Network ID
         - uplinks (array): Per-uplink NAT exception configuration on the network.
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["appliance", "configure", "uplinks", "nat"],
@@ -2106,6 +2318,12 @@ class AsyncAppliance:
             "uplinks",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkApplianceUplinksNat: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -2121,8 +2339,6 @@ class AsyncAppliance:
         - resolution (integer): The time resolution in seconds for returned data. The valid resolutions are: 60, 300, 600, 1800, 3600, 86400. The default is 60.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "monitor", "uplinks", "usageHistory"],
             "operation": "getNetworkApplianceUplinksUsageHistory",
@@ -2137,6 +2353,14 @@ class AsyncAppliance:
             "resolution",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getNetworkApplianceUplinksUsageHistory: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get(metadata, resource, params)
 
@@ -2183,8 +2407,6 @@ class AsyncAppliance:
         - uplinks (array): Per-uplink NAT exception override configuration on the VLAN. Applicable only for networks that support NAT exceptions.
         """
 
-        kwargs.update(locals())
-
         if "templateVlanType" in kwargs:
             options = ["same", "unique"]
             assert kwargs["templateVlanType"] in options, (
@@ -2230,6 +2452,12 @@ class AsyncAppliance:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkApplianceVlan: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.post(metadata, resource, payload)
 
     def getNetworkApplianceVlansSettings(self, networkId: str):
@@ -2258,8 +2486,6 @@ class AsyncAppliance:
         - vlansEnabled (boolean): Boolean indicating whether to enable (true) or disable (false) VLANs for the network
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "vlans", "settings"],
             "operation": "updateNetworkApplianceVlansSettings",
@@ -2271,6 +2497,12 @@ class AsyncAppliance:
             "vlansEnabled",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkApplianceVlansSettings: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -2323,8 +2555,6 @@ class AsyncAppliance:
         - uplinks (array): Per-uplink NAT exception override configuration on the VLAN. Applicable only for networks that support NAT exceptions.
         """
 
-        kwargs.update(locals())
-
         if "dhcpHandling" in kwargs:
             options = ["Do not respond to DHCP requests", "Relay DHCP to another server", "Run a DHCP server"]
             assert kwargs["dhcpHandling"] in options, (
@@ -2373,6 +2603,12 @@ class AsyncAppliance:
             "uplinks",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkApplianceVlan: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -2425,8 +2661,6 @@ class AsyncAppliance:
         - neighbors (array): List of BGP neighbors. This list replaces the existing set of neighbors. When absent, this field is not updated.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "vpn", "bgp"],
             "operation": "updateNetworkApplianceVpnBgp",
@@ -2442,6 +2676,12 @@ class AsyncAppliance:
             "neighbors",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkApplianceVpnBgp: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -2475,8 +2715,6 @@ class AsyncAppliance:
         - hostTranslations (array): The list of VPN host translations. Host translations are supported starting from MX firmware version 26.1.2
         """
 
-        kwargs.update(locals())
-
         if "mode" in kwargs:
             options = ["hub", "none", "spoke"]
             assert kwargs["mode"] in options, f'''"mode" cannot be "{kwargs["mode"]}", & must be set to one of: {options}'''
@@ -2496,6 +2734,14 @@ class AsyncAppliance:
             "hostTranslations",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkApplianceVpnSiteToSiteVpn: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -2529,8 +2775,6 @@ class AsyncAppliance:
         - virtualIp2 (string): The WAN 2 shared IP
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "warmSpare"],
             "operation": "updateNetworkApplianceWarmSpare",
@@ -2546,6 +2790,12 @@ class AsyncAppliance:
             "virtualIp2",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkApplianceWarmSpare: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -2581,8 +2831,6 @@ class AsyncAppliance:
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "devices", "redundancy", "byNetwork"],
             "operation": "getOrganizationApplianceDevicesRedundancyByNetwork",
@@ -2597,6 +2845,14 @@ class AsyncAppliance:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApplianceDevicesRedundancyByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationApplianceDnsLocalProfiles(self, organizationId: str, **kwargs):
@@ -2607,8 +2863,6 @@ class AsyncAppliance:
         - organizationId (string): Organization ID
         - profileIds (array): Optional parameter to filter the results by profile IDs
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["appliance", "configure", "dns", "local", "profiles"],
@@ -2630,9 +2884,17 @@ class AsyncAppliance:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApplianceDnsLocalProfiles: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
-    def createOrganizationApplianceDnsLocalProfile(self, organizationId: str, name: str):
+    def createOrganizationApplianceDnsLocalProfile(self, organizationId: str, name: str, **kwargs):
         """
         **Create a new local DNS profile**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-appliance-dns-local-profile
@@ -2640,8 +2902,6 @@ class AsyncAppliance:
         - organizationId (string): Organization ID
         - name (string): Name of profile
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["appliance", "configure", "dns", "local", "profiles"],
@@ -2655,6 +2915,14 @@ class AsyncAppliance:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationApplianceDnsLocalProfile: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
     def getOrganizationApplianceDnsLocalProfilesAssignments(self, organizationId: str, **kwargs):
@@ -2666,8 +2934,6 @@ class AsyncAppliance:
         - profileIds (array): Optional parameter to filter the results by profile IDs
         - networkIds (array): Optional parameter to filter the results by network IDs
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["appliance", "configure", "dns", "local", "profiles", "assignments"],
@@ -2691,9 +2957,17 @@ class AsyncAppliance:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApplianceDnsLocalProfilesAssignments: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
-    def bulkOrganizationApplianceDnsLocalProfilesAssignmentsCreate(self, organizationId: str, items: list):
+    def bulkOrganizationApplianceDnsLocalProfilesAssignmentsCreate(self, organizationId: str, items: list, **kwargs):
         """
         **Assign the local DNS profile to networks in the organization**
         https://developer.cisco.com/meraki/api-v1/#!bulk-organization-appliance-dns-local-profiles-assignments-create
@@ -2701,8 +2975,6 @@ class AsyncAppliance:
         - organizationId (string): Organization ID
         - items (array): List containing the network ID and Profile ID
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["appliance", "configure", "dns", "local", "profiles", "assignments"],
@@ -2716,9 +2988,17 @@ class AsyncAppliance:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"bulkOrganizationApplianceDnsLocalProfilesAssignmentsCreate: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
-    def createOrganizationApplianceDnsLocalProfilesAssignmentsBulkDelete(self, organizationId: str, items: list):
+    def createOrganizationApplianceDnsLocalProfilesAssignmentsBulkDelete(self, organizationId: str, items: list, **kwargs):
         """
         **Unassign the local DNS profile to networks in the organization**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-appliance-dns-local-profiles-assignments-bulk-delete
@@ -2726,8 +3006,6 @@ class AsyncAppliance:
         - organizationId (string): Organization ID
         - items (array): List containing the assignment ID
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["appliance", "configure", "dns", "local", "profiles", "assignments", "bulkDelete"],
@@ -2741,9 +3019,17 @@ class AsyncAppliance:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationApplianceDnsLocalProfilesAssignmentsBulkDelete: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
-    def updateOrganizationApplianceDnsLocalProfile(self, organizationId: str, profileId: str, name: str):
+    def updateOrganizationApplianceDnsLocalProfile(self, organizationId: str, profileId: str, name: str, **kwargs):
         """
         **Update a local DNS profile**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-appliance-dns-local-profile
@@ -2752,8 +3038,6 @@ class AsyncAppliance:
         - profileId (string): Profile ID
         - name (string): Name of profile
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["appliance", "configure", "dns", "local", "profiles"],
@@ -2767,6 +3051,14 @@ class AsyncAppliance:
             "name",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationApplianceDnsLocalProfile: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -2798,8 +3090,6 @@ class AsyncAppliance:
         - profileIds (array): Optional parameter to filter the results by profile IDs
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "dns", "local", "records"],
             "operation": "getOrganizationApplianceDnsLocalRecords",
@@ -2820,9 +3110,19 @@ class AsyncAppliance:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApplianceDnsLocalRecords: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
-    def createOrganizationApplianceDnsLocalRecord(self, organizationId: str, hostname: str, address: str, profile: dict):
+    def createOrganizationApplianceDnsLocalRecord(
+        self, organizationId: str, hostname: str, address: str, profile: dict, **kwargs
+    ):
         """
         **Create a new local DNS record**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-appliance-dns-local-record
@@ -2832,8 +3132,6 @@ class AsyncAppliance:
         - address (string): IP for the DNS record
         - profile (object): The profile the DNS record is associated with
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["appliance", "configure", "dns", "local", "records"],
@@ -2849,6 +3147,14 @@ class AsyncAppliance:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationApplianceDnsLocalRecord: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
     def updateOrganizationApplianceDnsLocalRecord(self, organizationId: str, recordId: str, **kwargs):
@@ -2862,8 +3168,6 @@ class AsyncAppliance:
         - address (string): IP for the DNS record
         - profile (object): The profile the DNS record is associated with
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["appliance", "configure", "dns", "local", "records"],
@@ -2879,6 +3183,14 @@ class AsyncAppliance:
             "profile",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationApplianceDnsLocalRecord: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -2910,8 +3222,6 @@ class AsyncAppliance:
         - profileIds (array): Optional parameter to filter the results by profile IDs
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "dns", "split", "profiles"],
             "operation": "getOrganizationApplianceDnsSplitProfiles",
@@ -2932,9 +3242,19 @@ class AsyncAppliance:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApplianceDnsSplitProfiles: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
-    def createOrganizationApplianceDnsSplitProfile(self, organizationId: str, name: str, hostnames: list, nameservers: dict):
+    def createOrganizationApplianceDnsSplitProfile(
+        self, organizationId: str, name: str, hostnames: list, nameservers: dict, **kwargs
+    ):
         """
         **Create a new split DNS profile**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-appliance-dns-split-profile
@@ -2944,8 +3264,6 @@ class AsyncAppliance:
         - hostnames (array): The hostname patterns to match for redirection. For more information on Split DNS hostname pattern formatting, please consult the Split DNS KB.
         - nameservers (object): Contains the nameserver information for redirection.
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["appliance", "configure", "dns", "split", "profiles"],
@@ -2961,6 +3279,14 @@ class AsyncAppliance:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationApplianceDnsSplitProfile: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
     def getOrganizationApplianceDnsSplitProfilesAssignments(self, organizationId: str, **kwargs):
@@ -2972,8 +3298,6 @@ class AsyncAppliance:
         - profileIds (array): Optional parameter to filter the results by profile IDs
         - networkIds (array): Optional parameter to filter the results by network IDs
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["appliance", "configure", "dns", "split", "profiles", "assignments"],
@@ -2997,9 +3321,17 @@ class AsyncAppliance:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApplianceDnsSplitProfilesAssignments: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
-    def createOrganizationApplianceDnsSplitProfilesAssignmentsBulkCreate(self, organizationId: str, items: list):
+    def createOrganizationApplianceDnsSplitProfilesAssignmentsBulkCreate(self, organizationId: str, items: list, **kwargs):
         """
         **Assign the split DNS profile to networks in the organization**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-appliance-dns-split-profiles-assignments-bulk-create
@@ -3007,8 +3339,6 @@ class AsyncAppliance:
         - organizationId (string): Organization ID
         - items (array): List containing the network ID and Profile ID
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["appliance", "configure", "dns", "split", "profiles", "assignments", "bulkCreate"],
@@ -3022,9 +3352,17 @@ class AsyncAppliance:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationApplianceDnsSplitProfilesAssignmentsBulkCreate: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
-    def createOrganizationApplianceDnsSplitProfilesAssignmentsBulkDelete(self, organizationId: str, items: list):
+    def createOrganizationApplianceDnsSplitProfilesAssignmentsBulkDelete(self, organizationId: str, items: list, **kwargs):
         """
         **Unassign the split DNS profile to networks in the organization**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-appliance-dns-split-profiles-assignments-bulk-delete
@@ -3032,8 +3370,6 @@ class AsyncAppliance:
         - organizationId (string): Organization ID
         - items (array): List containing the assignment ID
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["appliance", "configure", "dns", "split", "profiles", "assignments", "bulkDelete"],
@@ -3046,6 +3382,14 @@ class AsyncAppliance:
             "items",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationApplianceDnsSplitProfilesAssignmentsBulkDelete: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -3061,8 +3405,6 @@ class AsyncAppliance:
         - nameservers (object): Contains the nameserver information for redirection.
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "dns", "split", "profiles"],
             "operation": "updateOrganizationApplianceDnsSplitProfile",
@@ -3077,6 +3419,14 @@ class AsyncAppliance:
             "nameservers",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationApplianceDnsSplitProfile: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -3115,8 +3465,6 @@ class AsyncAppliance:
         - networkIds (array): Optional parameter to filter the results by network IDs
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "firewall", "multicastForwarding", "byNetwork"],
             "operation": "getOrganizationApplianceFirewallMulticastForwardingByNetwork",
@@ -3140,6 +3488,14 @@ class AsyncAppliance:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApplianceFirewallMulticastForwardingByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationApplianceSecurityEvents(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -3158,8 +3514,6 @@ class AsyncAppliance:
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - sortOrder (string): Sorted order of security events based on event detection time. Order options are 'ascending' or 'descending'. Default is ascending order.
         """
-
-        kwargs.update(locals())
 
         if "sortOrder" in kwargs:
             options = ["ascending", "descending"]
@@ -3185,6 +3539,14 @@ class AsyncAppliance:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApplianceSecurityEvents: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationApplianceSecurityIntrusion(self, organizationId: str):
@@ -3204,7 +3566,7 @@ class AsyncAppliance:
 
         return self._session.get(metadata, resource)
 
-    def updateOrganizationApplianceSecurityIntrusion(self, organizationId: str, allowedRules: list):
+    def updateOrganizationApplianceSecurityIntrusion(self, organizationId: str, allowedRules: list, **kwargs):
         """
         **Sets supported intrusion settings for an organization**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-appliance-security-intrusion
@@ -3212,8 +3574,6 @@ class AsyncAppliance:
         - organizationId (string): Organization ID
         - allowedRules (array): Sets a list of specific SNORT signatures to allow
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["appliance", "configure", "security", "intrusion"],
@@ -3226,6 +3586,14 @@ class AsyncAppliance:
             "allowedRules",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationApplianceSecurityIntrusion: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -3244,8 +3612,6 @@ class AsyncAppliance:
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - networkIds (array): Optional parameter to filter the results by network IDs
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["appliance", "configure", "trafficShaping", "vpnExclusions", "byNetwork"],
@@ -3270,6 +3636,14 @@ class AsyncAppliance:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApplianceTrafficShapingVpnExclusionsByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationApplianceUplinkStatuses(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -3287,8 +3661,6 @@ class AsyncAppliance:
         - serials (array): A list of serial numbers. The returned devices will be filtered to only include these serials.
         - iccids (array): A list of ICCIDs. The returned devices will be filtered to only include these ICCIDs.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["appliance", "monitor", "uplinks", "statuses"],
@@ -3317,6 +3689,14 @@ class AsyncAppliance:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApplianceUplinkStatuses: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationApplianceUplinksNatByNetwork(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -3333,8 +3713,6 @@ class AsyncAppliance:
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["appliance", "configure", "uplinks", "nat", "byNetwork"],
@@ -3361,6 +3739,14 @@ class AsyncAppliance:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApplianceUplinksNatByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationApplianceUplinksStatusesOverview(self, organizationId: str, **kwargs):
@@ -3371,8 +3757,6 @@ class AsyncAppliance:
         - organizationId (string): Organization ID
         - networkIds (array): A list of network IDs. The returned devices will be filtered to only include these networks.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["appliance", "monitor", "uplinks", "statuses", "overview"],
@@ -3394,6 +3778,14 @@ class AsyncAppliance:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApplianceUplinksStatusesOverview: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def getOrganizationApplianceUplinksUsageByNetwork(self, organizationId: str, **kwargs):
@@ -3406,8 +3798,6 @@ class AsyncAppliance:
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 14 days. The default is 1 day.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["appliance", "monitor", "uplinks", "usage", "byNetwork"],
@@ -3422,6 +3812,14 @@ class AsyncAppliance:
             "timespan",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApplianceUplinksUsageByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get(metadata, resource, params)
 
@@ -3451,8 +3849,6 @@ class AsyncAppliance:
         - items (array): List of IPsec SLA policies
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "vpn", "siteToSite", "ipsec", "peers", "slas"],
             "operation": "updateOrganizationApplianceVpnSiteToSiteIpsecPeersSlas",
@@ -3464,6 +3860,14 @@ class AsyncAppliance:
             "items",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationApplianceVpnSiteToSiteIpsecPeersSlas: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -3483,8 +3887,6 @@ class AsyncAppliance:
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["appliance", "monitor", "vpn", "stats"],
@@ -3512,6 +3914,12 @@ class AsyncAppliance:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationApplianceVpnStats: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationApplianceVpnStatuses(self, organizationId: str, total_pages=1, direction="next", **kwargs):
@@ -3527,8 +3935,6 @@ class AsyncAppliance:
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - networkIds (array): A list of Meraki network IDs to filter results to contain only specified networks. E.g.: networkIds[]=N_12345678&networkIds[]=L_3456
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["appliance", "monitor", "vpn", "statuses"],
@@ -3553,6 +3959,12 @@ class AsyncAppliance:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationApplianceVpnStatuses: ignoring unrecognized kwargs: {invalid}")
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationApplianceVpnThirdPartyVPNPeers(self, organizationId: str):
@@ -3572,7 +3984,7 @@ class AsyncAppliance:
 
         return self._session.get(metadata, resource)
 
-    def updateOrganizationApplianceVpnThirdPartyVPNPeers(self, organizationId: str, peers: list):
+    def updateOrganizationApplianceVpnThirdPartyVPNPeers(self, organizationId: str, peers: list, **kwargs):
         """
         **Update the third party VPN peers for an organization**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-appliance-vpn-third-party-v-p-n-peers
@@ -3580,8 +3992,6 @@ class AsyncAppliance:
         - organizationId (string): Organization ID
         - peers (array): The list of VPN peers
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["appliance", "configure", "vpn", "thirdPartyVPNPeers"],
@@ -3594,6 +4004,14 @@ class AsyncAppliance:
             "peers",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationApplianceVpnThirdPartyVPNPeers: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.put(metadata, resource, payload)
 
@@ -3624,8 +4042,6 @@ class AsyncAppliance:
         - syslogDefaultRule (boolean): Log the special default rule (boolean value - enable only if you've configured a syslog server) (optional)
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["appliance", "configure", "vpn", "vpnFirewallRules"],
             "operation": "updateOrganizationApplianceVpnVpnFirewallRules",
@@ -3639,9 +4055,19 @@ class AsyncAppliance:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationApplianceVpnVpnFirewallRules: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.put(metadata, resource, payload)
 
-    def assignOrganizationPoliciesGlobalGroupPoliciesApplianceVlans(self, organizationId: str, policy: dict, vlans: list):
+    def assignOrganizationPoliciesGlobalGroupPoliciesApplianceVlans(
+        self, organizationId: str, policy: dict, vlans: list, **kwargs
+    ):
         """
         **Assign VLANs to a policy**
         https://developer.cisco.com/meraki/api-v1/#!assign-organization-policies-global-group-policies-appliance-vlans
@@ -3650,8 +4076,6 @@ class AsyncAppliance:
         - policy (object): Policy to assign VLANs to
         - vlans (array): VLANs to assign
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["appliance", "configure", "policies", "global", "group", "vlans"],
@@ -3665,6 +4089,14 @@ class AsyncAppliance:
             "vlans",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"assignOrganizationPoliciesGlobalGroupPoliciesApplianceVlans: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -3685,8 +4117,6 @@ class AsyncAppliance:
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["appliance", "configure", "policies", "global", "group", "vlans", "assignments"],
@@ -3715,6 +4145,14 @@ class AsyncAppliance:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationPoliciesGlobalGroupPoliciesApplianceVlansAssignments: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationPoliciesGlobalGroupPoliciesApplianceVlansAssignmentsByVlan(
@@ -3734,8 +4172,6 @@ class AsyncAppliance:
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["appliance", "configure", "policies", "global", "group", "vlans", "assignments", "byVlan"],
@@ -3763,9 +4199,19 @@ class AsyncAppliance:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationPoliciesGlobalGroupPoliciesApplianceVlansAssignmentsByVlan: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def removeOrganizationPoliciesGlobalGroupPoliciesApplianceVlans(self, organizationId: str, policy: dict, vlans: list):
+    def removeOrganizationPoliciesGlobalGroupPoliciesApplianceVlans(
+        self, organizationId: str, policy: dict, vlans: list, **kwargs
+    ):
         """
         **Remove VLANs from a policy**
         https://developer.cisco.com/meraki/api-v1/#!remove-organization-policies-global-group-policies-appliance-vlans
@@ -3774,8 +4220,6 @@ class AsyncAppliance:
         - policy (object): Policy to remove VLANs from
         - vlans (array): VLANs to remove
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["appliance", "configure", "policies", "global", "group", "vlans"],
@@ -3789,5 +4233,13 @@ class AsyncAppliance:
             "vlans",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"removeOrganizationPoliciesGlobalGroupPoliciesApplianceVlans: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)

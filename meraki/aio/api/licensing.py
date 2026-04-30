@@ -14,8 +14,6 @@ class AsyncLicensing:
         - skus (array): Filter to entitlements with the specified SKUs
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["licensing", "configure", "subscription", "entitlements"],
             "operation": "getAdministeredLicensingSubscriptionEntitlements",
@@ -35,6 +33,14 @@ class AsyncLicensing:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getAdministeredLicensingSubscriptionEntitlements: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def getAdministeredLicensingSubscriptionSubscriptions(
@@ -51,15 +57,13 @@ class AsyncLicensing:
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - subscriptionIds (array): List of subscription ids to fetch
-        - startDate (string): Filter subscriptions by start date, ISO 8601 format. To filter with a range of dates, use 'startDate[<option>]=?' in the request. Accepted options include lt, gt, lte, gte.
-        - endDate (string): Filter subscriptions by end date, ISO 8601 format. To filter with a range of dates, use 'endDate[<option>]=?' in the request. Accepted options include lt, gt, lte, gte.
         - statuses (array): List of statuses that returned subscriptions can have
         - productTypes (array): List of product types that returned subscriptions need to have entitlements for.
         - skus (array): List of SKUs that returned subscriptions need to have entitlements for.
         - name (string): Search for subscription name
+        - startDate (object or string): Filter subscriptions by start date, ISO 8601 format. To filter with a range of dates, use 'startDate[<option>]=?' in the request. Accepted options include lt, gt, lte, gte. (object supports: gt, gte, lt, lte, neq)
+        - endDate (object or string): Filter subscriptions by end date, ISO 8601 format. To filter with a range of dates, use 'endDate[<option>]=?' in the request. Accepted options include lt, gt, lte, gte. (object supports: gt, gte, lt, lte, neq)
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["licensing", "configure", "subscription", "subscriptions"],
@@ -73,12 +77,12 @@ class AsyncLicensing:
             "endingBefore",
             "subscriptionIds",
             "organizationIds",
-            "startDate",
-            "endDate",
             "statuses",
             "productTypes",
             "skus",
             "name",
+            "startDate",
+            "endDate",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
@@ -94,6 +98,14 @@ class AsyncLicensing:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getAdministeredLicensingSubscriptionSubscriptions: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def claimAdministeredLicensingSubscriptionSubscriptions(self, claimKey: str, organizationId: str, **kwargs):
@@ -107,8 +119,6 @@ class AsyncLicensing:
         - name (string): Friendly name to identify the subscription
         - description (string): Extra details or notes about the subscription
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["licensing", "configure", "subscription", "subscriptions"],
@@ -124,17 +134,23 @@ class AsyncLicensing:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"claimAdministeredLicensingSubscriptionSubscriptions: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
-    def validateAdministeredLicensingSubscriptionSubscriptionsClaimKey(self, claimKey: str):
+    def validateAdministeredLicensingSubscriptionSubscriptionsClaimKey(self, claimKey: str, **kwargs):
         """
         **Find a subscription by claim key**
         https://developer.cisco.com/meraki/api-v1/#!validate-administered-licensing-subscription-subscriptions-claim-key
 
         - claimKey (string): The subscription's claim key
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["licensing", "configure", "subscription", "subscriptions", "claimKey"],
@@ -147,6 +163,14 @@ class AsyncLicensing:
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"validateAdministeredLicensingSubscriptionSubscriptionsClaimKey: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.post(metadata, resource, payload)
 
     def getAdministeredLicensingSubscriptionSubscriptionsComplianceStatuses(self, organizationIds: list, **kwargs):
@@ -157,8 +181,6 @@ class AsyncLicensing:
         - organizationIds (array): Organizations to get subscription compliance information for
         - subscriptionIds (array): Subscription ids
         """
-
-        kwargs.update(locals())
 
         metadata = {
             "tags": ["licensing", "configure", "subscription", "subscriptions", "compliance", "statuses"],
@@ -181,6 +203,14 @@ class AsyncLicensing:
                 params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getAdministeredLicensingSubscriptionSubscriptionsComplianceStatuses: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get(metadata, resource, params)
 
     def bindAdministeredLicensingSubscriptionSubscription(self, subscriptionId: str, **kwargs):
@@ -193,8 +223,6 @@ class AsyncLicensing:
         - networkIds (array): List of network ids to bind to the subscription
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["licensing", "configure", "subscription", "subscriptions"],
             "operation": "bindAdministeredLicensingSubscriptionSubscription",
@@ -206,6 +234,14 @@ class AsyncLicensing:
             "networkIds",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"bindAdministeredLicensingSubscriptionSubscription: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -224,8 +260,6 @@ class AsyncLicensing:
         - expired (boolean): Filter for licenses that are expired
         """
 
-        kwargs.update(locals())
-
         metadata = {
             "tags": ["licensing", "configure", "coterm", "licenses"],
             "operation": "getOrganizationLicensingCotermLicenses",
@@ -242,9 +276,17 @@ class AsyncLicensing:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationLicensingCotermLicenses: ignoring unrecognized kwargs: {invalid}"
+                )
+
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def moveOrganizationLicensingCotermLicenses(self, organizationId: str, destination: dict, licenses: list):
+    def moveOrganizationLicensingCotermLicenses(self, organizationId: str, destination: dict, licenses: list, **kwargs):
         """
         **Moves a license to a different organization (coterm only)**
         https://developer.cisco.com/meraki/api-v1/#!move-organization-licensing-coterm-licenses
@@ -253,8 +295,6 @@ class AsyncLicensing:
         - destination (object): Destination data for the license move
         - licenses (array): The list of licenses to move
         """
-
-        kwargs = locals()
 
         metadata = {
             "tags": ["licensing", "configure", "coterm", "licenses"],
@@ -268,5 +308,13 @@ class AsyncLicensing:
             "licenses",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"moveOrganizationLicensingCotermLicenses: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)

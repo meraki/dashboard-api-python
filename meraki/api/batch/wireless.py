@@ -14,8 +14,6 @@ class ActionBatchWireless(object):
         - addresses (array): configured alternate management interface addresses
         """
 
-        kwargs.update(locals())
-
         serial = urllib.parse.quote(serial, safe="")
         resource = f"/devices/{serial}/wireless/alternateManagementInterface/ipv6"
 
@@ -44,8 +42,6 @@ class ActionBatchWireless(object):
           Dashboard's automatically generated value.
         """
 
-        kwargs.update(locals())
-
         serial = urllib.parse.quote(serial, safe="")
         resource = f"/devices/{serial}/wireless/bluetooth/settings"
 
@@ -71,8 +67,6 @@ class ActionBatchWireless(object):
         - channel (string): Desired ESL channel for the device, or 'Auto' (case insensitive) to use the recommended channel
         - enabled (boolean): Turn ESL features on and off for this device
         """
-
-        kwargs.update(locals())
 
         serial = urllib.parse.quote(serial, safe="")
         resource = f"/devices/{serial}/wireless/electronicShelfLabel"
@@ -100,8 +94,6 @@ class ActionBatchWireless(object):
         - fiveGhzSettings (object): Manual radio settings for 5 GHz.
         """
 
-        kwargs.update(locals())
-
         serial = urllib.parse.quote(serial, safe="")
         resource = f"/devices/{serial}/wireless/radio/settings"
 
@@ -118,7 +110,7 @@ class ActionBatchWireless(object):
         }
         return action
 
-    def createNetworkWirelessAirMarshalRule(self, networkId: str, type: str, match: dict):
+    def createNetworkWirelessAirMarshalRule(self, networkId: str, type: str, match: dict, **kwargs):
         """
         **Creates a new rule**
         https://developer.cisco.com/meraki/api-v1/#!create-network-wireless-air-marshal-rule
@@ -127,8 +119,6 @@ class ActionBatchWireless(object):
         - type (string): Indicates if this rule will allow, block, or alert.
         - match (object): Object describing the rule specification.
         """
-
-        kwargs = locals()
 
         if "type" in kwargs:
             options = ["alert", "allow", "block"]
@@ -159,8 +149,6 @@ class ActionBatchWireless(object):
         - type (string): Indicates if this rule will allow, block, or alert.
         - match (object): Object describing the rule specification.
         """
-
-        kwargs.update(locals())
 
         if "type" in kwargs:
             options = ["alert", "allow", "block"]
@@ -201,7 +189,7 @@ class ActionBatchWireless(object):
         }
         return action
 
-    def updateNetworkWirelessAirMarshalSettings(self, networkId: str, defaultPolicy: str):
+    def updateNetworkWirelessAirMarshalSettings(self, networkId: str, defaultPolicy: str, **kwargs):
         """
         **Updates Air Marshal settings.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-air-marshal-settings
@@ -209,8 +197,6 @@ class ActionBatchWireless(object):
         - networkId (string): Network ID
         - defaultPolicy (string): Allows clients to access rogue networks. Blocked by default.
         """
-
-        kwargs = locals()
 
         if "defaultPolicy" in kwargs:
             options = ["allow", "block"]
@@ -244,8 +230,6 @@ class ActionBatchWireless(object):
         - accessPoints (array): Array of access point serial number and IP assignment. Note: accessPoints IP assignment is not applicable for template networks, in other words, do not put 'accessPoints' in the body when updating template networks. Also, an empty 'accessPoints' array will remove all previous static IP assignments
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/wireless/alternateManagementInterface"
 
@@ -273,8 +257,6 @@ class ActionBatchWireless(object):
         - plans (array): Array of billing plans in the node group. (Can configure a maximum of 5)
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/wireless/billing"
 
@@ -300,8 +282,6 @@ class ActionBatchWireless(object):
         - enabled (boolean): Turn ESL features on and off for this network
         - mode (string): Electronic shelf label mode of the network. Valid options are 'Bluetooth', 'high frequency'
         """
-
-        kwargs.update(locals())
 
         if "mode" in kwargs:
             options = ["Bluetooth", "high frequency"]
@@ -334,8 +314,6 @@ class ActionBatchWireless(object):
         - usbPorts (array): AP usb ports configuration
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/wireless/ethernet/ports/profiles"
 
@@ -352,7 +330,7 @@ class ActionBatchWireless(object):
         }
         return action
 
-    def assignNetworkWirelessEthernetPortsProfiles(self, networkId: str, serials: list, profileId: str):
+    def assignNetworkWirelessEthernetPortsProfiles(self, networkId: str, serials: list, profileId: str, **kwargs):
         """
         **Assign AP port profile to list of APs**
         https://developer.cisco.com/meraki/api-v1/#!assign-network-wireless-ethernet-ports-profiles
@@ -361,8 +339,6 @@ class ActionBatchWireless(object):
         - serials (array): List of AP serials
         - profileId (string): AP profile ID
         """
-
-        kwargs = locals()
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/wireless/ethernet/ports/profiles/assign"
@@ -379,7 +355,7 @@ class ActionBatchWireless(object):
         }
         return action
 
-    def setNetworkWirelessEthernetPortsProfilesDefault(self, networkId: str, profileId: str):
+    def setNetworkWirelessEthernetPortsProfilesDefault(self, networkId: str, profileId: str, **kwargs):
         """
         **Set the AP port profile to be default for this network**
         https://developer.cisco.com/meraki/api-v1/#!set-network-wireless-ethernet-ports-profiles-default
@@ -387,8 +363,6 @@ class ActionBatchWireless(object):
         - networkId (string): Network ID
         - profileId (string): AP profile ID
         """
-
-        kwargs = locals()
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/wireless/ethernet/ports/profiles/setDefault"
@@ -415,8 +389,6 @@ class ActionBatchWireless(object):
         - ports (array): AP ports configuration
         - usbPorts (array): AP usb ports configuration
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         profileId = urllib.parse.quote(profileId, safe="")
@@ -464,8 +436,6 @@ class ActionBatchWireless(object):
         - api (object): Enable push API for scanning events, analytics must be enabled
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/wireless/location/scanning"
 
@@ -492,8 +462,6 @@ class ActionBatchWireless(object):
         - fra (object): FRA settings
         - ai (object): AI settings
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/wireless/radio/rrm"
@@ -530,8 +498,6 @@ class ActionBatchWireless(object):
         - perSsidSettings (object): Per-SSID radio settings by number.
         - flexRadios (object): Flex radio settings.
         """
-
-        kwargs.update(locals())
 
         if "minBitrateType" in kwargs:
             options = ["band", "ssid"]
@@ -589,8 +555,6 @@ class ActionBatchWireless(object):
         - perSsidSettings (object): Per-SSID radio settings by number.
         - flexRadios (object): Flex radio settings.
         """
-
-        kwargs.update(locals())
 
         if "minBitrateType" in kwargs:
             options = ["band", "ssid"]
@@ -664,8 +628,6 @@ class ActionBatchWireless(object):
         - multicastToUnicastConversion (object): Multicast-to-unicast conversion settings across the network
         - namedVlans (object): Named VLAN settings for wireless networks.
         """
-
-        kwargs.update(locals())
 
         if "upgradeStrategy" in kwargs:
             options = ["minimizeClientDowntime", "minimizeUpgradeTime"]
@@ -766,8 +728,6 @@ class ActionBatchWireless(object):
         - localAuthFallback (object): The current configuration for Local Authentication Fallback. Enables the Access Point (AP) to store client authentication data for a specified duration that can be adjusted as needed.
         - radiusAccountingStartDelay (integer): The delay (in seconds) before sending the first RADIUS accounting start message. Must be between 0 and 60 seconds.
         """
-
-        kwargs.update(locals())
 
         if "authMode" in kwargs:
             options = [
@@ -933,8 +893,6 @@ class ActionBatchWireless(object):
         - exception (object): Bonjour forwarding exception
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         number = urllib.parse.quote(number, safe="")
         resource = f"/networks/{networkId}/wireless/ssids/{number}/bonjourForwarding"
@@ -962,8 +920,6 @@ class ActionBatchWireless(object):
         - enabled (boolean): If true, the SSID device type group policies are enabled.
         - deviceTypePolicies (array): List of device type policies.
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         number = urllib.parse.quote(number, safe="")
@@ -994,8 +950,6 @@ class ActionBatchWireless(object):
         - eapolKey (object): EAPOL Key settings.
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         number = urllib.parse.quote(number, safe="")
         resource = f"/networks/{networkId}/wireless/ssids/{number}/eapOverride"
@@ -1025,8 +979,6 @@ class ActionBatchWireless(object):
         - allowLanAccess (boolean): Allow wireless client access to local LAN (boolean value - true allows access and false denies access) (optional)
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         number = urllib.parse.quote(number, safe="")
         resource = f"/networks/{networkId}/wireless/ssids/{number}/firewall/l3FirewallRules"
@@ -1052,8 +1004,6 @@ class ActionBatchWireless(object):
         - number (string): Number
         - rules (array): An array of L7 firewall rules for this SSID. Rules will get applied in the same order user has specified in request. Empty array will clear the L7 firewall rule configuration.
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         number = urllib.parse.quote(number, safe="")
@@ -1086,8 +1036,6 @@ class ActionBatchWireless(object):
         - mccMncs (array): An array of MCC/MNC pairs
         - naiRealms (array): An array of NAI realms
         """
-
-        kwargs.update(locals())
 
         if "networkAccessType" in kwargs:
             options = [
@@ -1139,8 +1087,6 @@ class ActionBatchWireless(object):
         - expiresAt (string): Timestamp for when the Identity PSK expires. Will not expire if left blank.
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         number = urllib.parse.quote(number, safe="")
         resource = f"/networks/{networkId}/wireless/ssids/{number}/identityPsks"
@@ -1172,8 +1118,6 @@ class ActionBatchWireless(object):
         - groupPolicyId (string): The group policy to be applied to clients
         - expiresAt (string): Timestamp for when the Identity PSK expires, or 'null' to never expire
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         number = urllib.parse.quote(number, safe="")
@@ -1226,8 +1170,6 @@ class ActionBatchWireless(object):
         - tenantId (string): The OpenRoaming DNA Spaces tenant ID.
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         number = urllib.parse.quote(number, safe="")
         resource = f"/networks/{networkId}/wireless/ssids/{number}/openRoaming"
@@ -1255,8 +1197,6 @@ class ActionBatchWireless(object):
         - ranges (array): List of outage ranges. Has a start date and time, and end date and time. If this parameter is passed in along with rangesInSeconds parameter, this will take precedence.
         - rangesInSeconds (array): List of outage ranges in seconds since Sunday at Midnight. Has a start and end. If this parameter is passed in along with the ranges parameter, ranges will take precedence.
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         number = urllib.parse.quote(number, safe="")
@@ -1300,8 +1240,6 @@ class ActionBatchWireless(object):
         - sentryEnrollment (object): Systems Manager sentry enrollment splash settings.
         - selfRegistration (object): Self-registration settings for splash with Meraki authentication.
         """
-
-        kwargs.update(locals())
 
         if "splashTimeout" in kwargs:
             options = [30, 60, 120, 240, 480, 720, 1080, 1440, 2880, 5760, 7200, 10080, 20160, 43200, 86400, 129600]
@@ -1360,8 +1298,6 @@ class ActionBatchWireless(object):
 
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         number = urllib.parse.quote(number, safe="")
         resource = f"/networks/{networkId}/wireless/ssids/{number}/trafficShaping/rules"
@@ -1390,8 +1326,6 @@ class ActionBatchWireless(object):
         - splitTunnel (object): The VPN split tunnel settings for this SSID.
         - failover (object): Secondary VPN concentrator settings. This is only used when two VPN concentrators are configured on the SSID.
         """
-
-        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         number = urllib.parse.quote(number, safe="")
@@ -1422,8 +1356,6 @@ class ActionBatchWireless(object):
         - defaults (object): Default Settings for Zigbee Devices
         """
 
-        kwargs.update(locals())
-
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/wireless/zigbee"
 
@@ -1451,8 +1383,6 @@ class ActionBatchWireless(object):
         - meta (object): Metadata relevant to the paginated dataset
         """
 
-        kwargs.update(locals())
-
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/wireless/devices/provisioning/deployments"
 
@@ -1477,8 +1407,6 @@ class ActionBatchWireless(object):
         - items (array): List of zero touch deployments to create
         - meta (object): Metadata relevant to the paginated dataset
         """
-
-        kwargs.update(locals())
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/wireless/devices/provisioning/deployments"
@@ -1515,7 +1443,7 @@ class ActionBatchWireless(object):
         return action
 
     def createOrganizationWirelessLocationScanningReceiver(
-        self, organizationId: str, network: dict, url: str, version: str, radio: dict, sharedSecret: str
+        self, organizationId: str, network: dict, url: str, version: str, radio: dict, sharedSecret: str, **kwargs
     ):
         """
         **Add new receiver for scanning API**
@@ -1528,8 +1456,6 @@ class ActionBatchWireless(object):
         - radio (object): Add scanning API Radio
         - sharedSecret (string): Secret Value for Receiver
         """
-
-        kwargs = locals()
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/wireless/location/scanning/receivers"
@@ -1560,8 +1486,6 @@ class ActionBatchWireless(object):
         - version (string): Scanning API Version
         - radio (object): Add scanning API Radio
         """
-
-        kwargs.update(locals())
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         receiverId = urllib.parse.quote(receiverId, safe="")
@@ -1611,8 +1535,6 @@ class ActionBatchWireless(object):
         - wifi (object): MQTT Wi-Fi Settings for network
         """
 
-        kwargs.update(locals())
-
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/wireless/mqtt/settings"
 
@@ -1630,7 +1552,7 @@ class ActionBatchWireless(object):
         }
         return action
 
-    def recalculateOrganizationWirelessRadioAutoRfChannels(self, organizationId: str, networkIds: list):
+    def recalculateOrganizationWirelessRadioAutoRfChannels(self, organizationId: str, networkIds: list, **kwargs):
         """
         **Recalculates automatically assigned channels for every AP within specified the specified network(s). Note: This could cause a brief loss in connectivity for wireless clients.**
         https://developer.cisco.com/meraki/api-v1/#!recalculate-organization-wireless-radio-auto-rf-channels
@@ -1638,8 +1560,6 @@ class ActionBatchWireless(object):
         - organizationId (string): Organization ID
         - networkIds (array): A list of network ids (limit: 15).
         """
-
-        kwargs = locals()
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/wireless/radio/autoRf/channels/recalculate"
@@ -1668,8 +1588,6 @@ class ActionBatchWireless(object):
         - network (object): The Network that allowlist belongs to
         - description (string): The description of mac address
         """
-
-        kwargs.update(locals())
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/wireless/ssids/firewall/isolation/allowlist/entries"
@@ -1718,8 +1636,6 @@ class ActionBatchWireless(object):
         - client (object): The client of allowlist
         """
 
-        kwargs.update(locals())
-
         organizationId = urllib.parse.quote(organizationId, safe="")
         entryId = urllib.parse.quote(entryId, safe="")
         resource = f"/organizations/{organizationId}/wireless/ssids/firewall/isolation/allowlist/entries/{entryId}"
@@ -1747,8 +1663,6 @@ class ActionBatchWireless(object):
         - channel (string): The new channel for the zigbee device
         """
 
-        kwargs.update(locals())
-
         organizationId = urllib.parse.quote(organizationId, safe="")
         id = urllib.parse.quote(id, safe="")
         resource = f"/organizations/{organizationId}/wireless/zigbee/devices/{id}"
@@ -1774,8 +1688,6 @@ class ActionBatchWireless(object):
         - doorLockId (string): Door lock ID
         - name (string): Door lock name to update
         """
-
-        kwargs.update(locals())
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         doorLockId = urllib.parse.quote(doorLockId, safe="")
