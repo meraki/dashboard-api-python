@@ -1,5 +1,9 @@
 blank_issues_enabled: false
 contact_links:
+  - name: I noticed an API operation is missing from the library
+    url: https://github.com/meraki/dashboard-api-python/tree/main/generator
+    about: >
+      The official library includes GA operations and excludes those that are Early Access (e.g., beta). To generate a local version of the library that includes Early Access operations, please follow these instructions.
   - name: Meraki Interactive API documentation
     url: https://developer.cisco.com/meraki/api-v1/#!api-reference-overview
     about: >
