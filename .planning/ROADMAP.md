@@ -46,7 +46,7 @@ Plans:
 **Plans**: 2 plans
 Plans:
 - [x] 02-01-PLAN.md: TDD parse_params_v3 with path inheritance, nullable, oneOf, style/explode
-- [ ] 02-02-PLAN.md: Golden-file snapshot test for output contract validation
+- [x] 02-02-PLAN.md: Golden-file snapshot test for output contract validation
 
 ### Phase 3: Generation Integration
 **Goal**: v3 generator produces sync, async, and batch modules from OASv3 spec
