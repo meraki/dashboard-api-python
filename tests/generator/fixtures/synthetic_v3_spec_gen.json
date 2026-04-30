@@ -1,0 +1,179 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Synthetic Meraki v3 for Generator Tests",
+    "version": "1.0.0"
+  },
+  "tags": [
+    {"name": "networks", "description": "Network operations"}
+  ],
+  "x-batchable-actions": [
+    {
+      "summary": "Create a network",
+      "resource": "/networks",
+      "operation": "create"
+    },
+    {
+      "summary": "Update a network's settings",
+      "resource": "/networks/{networkId}/settings",
+      "operation": "update"
+    },
+    {
+      "summary": "Delete a network",
+      "resource": "/networks/{networkId}",
+      "operation": "destroy"
+    }
+  ],
+  "paths": {
+    "/networks/{networkId}": {
+      "get": {
+        "tags": ["networks", "configure"],
+        "operationId": "getNetwork",
+        "summary": "Get network details",
+        "description": "Return details for a network",
+        "parameters": [
+          {
+            "name": "networkId",
+            "in": "path",
+            "required": true,
+            "schema": {"type": "string"},
+            "description": "Network ID"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "string"},
+            "description": "Optional name filter"
+          }
+        ],
+        "responses": {
+          "200": {"description": "OK"}
+        }
+      },
+      "put": {
+        "tags": ["networks", "configure"],
+        "operationId": "updateNetwork",
+        "summary": "Update a network",
+        "description": "Update network properties",
+        "parameters": [
+          {
+            "name": "networkId",
+            "in": "path",
+            "required": true,
+            "schema": {"type": "string"},
+            "description": "Network ID"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Network name"
+                  },
+                  "tags": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "Network tags"
+                  }
+                },
+                "required": ["name"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {"description": "OK"}
+        }
+      },
+      "delete": {
+        "tags": ["networks", "configure"],
+        "operationId": "deleteNetwork",
+        "summary": "Delete a network",
+        "description": "Delete a network",
+        "parameters": [
+          {
+            "name": "networkId",
+            "in": "path",
+            "required": true,
+            "schema": {"type": "string"},
+            "description": "Network ID"
+          }
+        ],
+        "responses": {
+          "204": {"description": "No Content"}
+        }
+      }
+    },
+    "/networks": {
+      "post": {
+        "tags": ["networks", "configure"],
+        "operationId": "createNetwork",
+        "summary": "Create a network",
+        "description": "Create a network",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Network name"
+                  },
+                  "type": {
+                    "type": "string",
+                    "description": "Network type"
+                  }
+                },
+                "required": ["name", "type"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {"description": "Created"}
+        }
+      }
+    },
+    "/networks/{networkId}/settings": {
+      "put": {
+        "tags": ["networks", "configure"],
+        "operationId": "updateNetworkSettings",
+        "summary": "Update a network's settings",
+        "description": "Update a network's settings",
+        "parameters": [
+          {
+            "name": "networkId",
+            "in": "path",
+            "required": true,
+            "schema": {"type": "string"},
+            "description": "Network ID"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "localStatusPageEnabled": {
+                    "type": "boolean",
+                    "description": "Enable local status page"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {"description": "OK"}
+        }
+      }
+    }
+  }
+}
