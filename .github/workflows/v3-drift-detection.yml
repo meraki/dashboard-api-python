@@ -1,0 +1,61 @@
+name: V3 Drift Detection
+
+on:
+  push:
+    branches: ['main', 'release']
+    paths:
+      - 'generator/**'
+      - 'scripts/semantic_diff_v2_v3.py'
+  pull_request:
+    branches: ['main', 'release']
+    paths:
+      - 'generator/**'
+      - 'scripts/semantic_diff_v2_v3.py'
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * 1'  # Weekly Monday 6am UTC
+
+jobs:
+  drift-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        run: uv python install 3.13
+
+      - name: Install dependencies
+        run: uv sync --python 3.13 --group generator
+
+      - name: Run semantic diff (live spec)
+        run: uv run python scripts/semantic_diff_v2_v3.py --live --json > drift-report.json
+        env:
+          PYTHONPATH: generator
+
+      - name: Check for critical drift
+        run: |
+          python -c "
+          import json, sys
+          with open('drift-report.json') as f:
+              drifts = json.load(f)
+          missing = [d for d in drifts if d['type'] == 'MISSING_IN_V3']
+          if missing:
+              print(f'CRITICAL: {len(missing)} methods missing in v3')
+              for d in missing[:10]:
+                  print(f'  {d[\"scope\"]}.{d[\"method\"]}')
+              sys.exit(1)
+          print(f'OK: {len(drifts)} expected differences, 0 critical')
+          "
+
+      - name: Upload drift report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: drift-report
+          path: drift-report.json
+          retention-days: 30
