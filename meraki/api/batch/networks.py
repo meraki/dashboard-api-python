@@ -4,8 +4,6 @@ import urllib
 class ActionBatchNetworks(object):
     def __init__(self):
         super(ActionBatchNetworks, self).__init__()
-        
-
 
     def updateNetwork(self, networkId: str, **kwargs):
         """
@@ -22,25 +20,23 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['networks', 'configure'],
-            'operation': 'updateNetwork'
-        }
-        resource = f'/networks/{networkId}'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}"
 
-        body_params = ['name', 'timeZone', 'tags', 'enrollmentString', 'notes', ]
+        body_params = [
+            "name",
+            "timeZone",
+            "tags",
+            "enrollmentString",
+            "notes",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def deleteNetwork(self, networkId: str):
         """
@@ -50,22 +46,14 @@ class ActionBatchNetworks(object):
         - networkId (string): Network ID
         """
 
-        metadata = {
-            'tags': ['networks', 'configure'],
-            'operation': 'deleteNetwork'
-        }
-        resource = f'/networks/{networkId}'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}"
 
         action = {
             "resource": resource,
             "operation": "destroy",
         }
         return action
-        
-
-
-
-
 
     def bindNetwork(self, networkId: str, configTemplateId: str, **kwargs):
         """
@@ -79,29 +67,24 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['networks', 'configure'],
-            'operation': 'bindNetwork'
-        }
-        resource = f'/networks/{networkId}/bind'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/bind"
 
-        body_params = ['configTemplateId', 'autoBind', ]
+        body_params = [
+            "configTemplateId",
+            "autoBind",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "bind",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def provisionNetworkClients(self, networkId: str, clients: list, devicePolicy: str, **kwargs):
         """
-        **Provisions a client with a name and policy**
+        **Provisions a client with a name and policy. Clients can be provisioned before they associate to the network.**
         https://developer.cisco.com/meraki/api-v1/#!provision-network-clients
 
         - networkId (string): Network ID
@@ -114,33 +97,33 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        if 'devicePolicy' in kwargs:
-            options = ['Allowed', 'Blocked', 'Group policy', 'Normal', 'Per connection']
-            assert kwargs['devicePolicy'] in options, f'''"devicePolicy" cannot be "{kwargs['devicePolicy']}", & must be set to one of: {options}'''
+        if "devicePolicy" in kwargs:
+            options = ["Allowed", "Blocked", "Group policy", "Normal", "Per connection"]
+            assert kwargs["devicePolicy"] in options, (
+                f'''"devicePolicy" cannot be "{kwargs["devicePolicy"]}", & must be set to one of: {options}'''
+            )
 
-        metadata = {
-            'tags': ['networks', 'configure', 'clients'],
-            'operation': 'provisionNetworkClients'
-        }
-        resource = f'/networks/{networkId}/clients/provision'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/clients/provision"
 
-        body_params = ['clients', 'devicePolicy', 'groupPolicyId', 'policiesBySecurityAppliance', 'policiesBySsid', ]
+        body_params = [
+            "clients",
+            "devicePolicy",
+            "groupPolicyId",
+            "policiesBySecurityAppliance",
+            "policiesBySsid",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "provision",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def claimNetworkDevices(self, networkId: str, serials: list, **kwargs):
         """
-        **Claim devices into a network. (Note: for recently claimed devices, it may take a few minutes for API requests against that device to succeed)**
+        **Claim devices into a network. (Note: for recently claimed devices, it may take a few minutes for API requests against that device to succeed). This operation can be used up to ten times within a single five minute window.**
         https://developer.cisco.com/meraki/api-v1/#!claim-network-devices
 
         - networkId (string): Network ID
@@ -151,25 +134,20 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['networks', 'configure', 'devices'],
-            'operation': 'claimNetworkDevices'
-        }
-        resource = f'/networks/{networkId}/devices/claim'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/devices/claim"
 
-        body_params = ['serials', 'detailsByDevice', ]
+        body_params = [
+            "serials",
+            "detailsByDevice",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "claim",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def vmxNetworkDevicesClaim(self, networkId: str, size: str):
         """
@@ -182,29 +160,23 @@ class ActionBatchNetworks(object):
 
         kwargs = locals()
 
-        if 'size' in kwargs:
-            options = ['100', 'large', 'medium', 'small', 'xlarge']
-            assert kwargs['size'] in options, f'''"size" cannot be "{kwargs['size']}", & must be set to one of: {options}'''
+        if "size" in kwargs:
+            options = ["100", "large", "medium", "small", "xlarge"]
+            assert kwargs["size"] in options, f'''"size" cannot be "{kwargs["size"]}", & must be set to one of: {options}'''
 
-        metadata = {
-            'tags': ['networks', 'configure', 'devices', 'claim'],
-            'operation': 'vmxNetworkDevicesClaim'
-        }
-        resource = f'/networks/{networkId}/devices/claim/vmx'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/devices/claim/vmx"
 
-        body_params = ['size', ]
+        body_params = [
+            "size",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "claim",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def removeNetworkDevices(self, networkId: str, serial: str):
         """
@@ -217,25 +189,19 @@ class ActionBatchNetworks(object):
 
         kwargs = locals()
 
-        metadata = {
-            'tags': ['networks', 'configure', 'devices'],
-            'operation': 'removeNetworkDevices'
-        }
-        resource = f'/networks/{networkId}/devices/remove'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/devices/remove"
 
-        body_params = ['serial', ]
+        body_params = [
+            "serial",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "remove",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkFirmwareUpgrades(self, networkId: str, **kwargs):
         """
@@ -250,25 +216,21 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['networks', 'configure', 'firmwareUpgrades'],
-            'operation': 'updateNetworkFirmwareUpgrades'
-        }
-        resource = f'/networks/{networkId}/firmwareUpgrades'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/firmwareUpgrades"
 
-        body_params = ['upgradeWindow', 'timezone', 'products', ]
+        body_params = [
+            "upgradeWindow",
+            "timezone",
+            "products",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def createNetworkFirmwareUpgradesRollback(self, networkId: str, reasons: list, **kwargs):
         """
@@ -280,33 +242,43 @@ class ActionBatchNetworks(object):
         - product (string): Product type to rollback (if the network is a combined network)
         - time (string): Scheduled time for the rollback
         - toVersion (object): Version to downgrade to (if the network has firmware flexibility)
+        - predownload (object): Predownload settings for the firmware upgrade
         """
 
         kwargs.update(locals())
 
-        if 'product' in kwargs:
-            options = ['appliance', 'camera', 'cellularGateway', 'secureConnect', 'switch', 'switchCatalyst', 'wireless', 'wirelessController']
-            assert kwargs['product'] in options, f'''"product" cannot be "{kwargs['product']}", & must be set to one of: {options}'''
+        if "product" in kwargs:
+            options = [
+                "appliance",
+                "camera",
+                "cellularGateway",
+                "secureConnect",
+                "switch",
+                "switchCatalyst",
+                "wireless",
+                "wirelessController",
+            ]
+            assert kwargs["product"] in options, (
+                f'''"product" cannot be "{kwargs["product"]}", & must be set to one of: {options}'''
+            )
 
-        metadata = {
-            'tags': ['networks', 'configure', 'firmwareUpgrades', 'rollbacks'],
-            'operation': 'createNetworkFirmwareUpgradesRollback'
-        }
-        resource = f'/networks/{networkId}/firmwareUpgrades/rollbacks'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/firmwareUpgrades/rollbacks"
 
-        body_params = ['product', 'time', 'reasons', 'toVersion', ]
+        body_params = [
+            "product",
+            "time",
+            "reasons",
+            "toVersion",
+            "predownload",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "create",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def createNetworkFirmwareUpgradesStagedGroup(self, networkId: str, name: str, isDefault: bool, **kwargs):
         """
@@ -322,25 +294,22 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['networks', 'configure', 'firmwareUpgrades', 'staged', 'groups'],
-            'operation': 'createNetworkFirmwareUpgradesStagedGroup'
-        }
-        resource = f'/networks/{networkId}/firmwareUpgrades/staged/groups'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/firmwareUpgrades/staged/groups"
 
-        body_params = ['name', 'description', 'isDefault', 'assignedDevices', ]
+        body_params = [
+            "name",
+            "description",
+            "isDefault",
+            "assignedDevices",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "create",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def deleteNetworkFirmwareUpgradesStagedGroup(self, networkId: str, groupId: str):
         """
@@ -351,22 +320,15 @@ class ActionBatchNetworks(object):
         - groupId (string): Group ID
         """
 
-        metadata = {
-            'tags': ['networks', 'configure', 'firmwareUpgrades', 'staged', 'groups'],
-            'operation': 'deleteNetworkFirmwareUpgradesStagedGroup'
-        }
-        resource = f'/networks/{networkId}/firmwareUpgrades/staged/groups/{groupId}'
+        networkId = urllib.parse.quote(networkId, safe="")
+        groupId = urllib.parse.quote(groupId, safe="")
+        resource = f"/networks/{networkId}/firmwareUpgrades/staged/groups/{groupId}"
 
         action = {
             "resource": resource,
             "operation": "destroy",
         }
         return action
-        
-
-
-
-
 
     def batchNetworkFloorPlansAutoLocateJobs(self, networkId: str, jobs: list):
         """
@@ -379,25 +341,19 @@ class ActionBatchNetworks(object):
 
         kwargs = locals()
 
-        metadata = {
-            'tags': ['networks', 'configure', 'floorPlans', 'autoLocate', 'jobs'],
-            'operation': 'batchNetworkFloorPlansAutoLocateJobs'
-        }
-        resource = f'/networks/{networkId}/floorPlans/autoLocate/jobs/batch'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/floorPlans/autoLocate/jobs/batch"
 
-        body_params = ['jobs', ]
+        body_params = [
+            "jobs",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "batch_create",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def cancelNetworkFloorPlansAutoLocateJob(self, networkId: str, jobId: str):
         """
@@ -408,22 +364,15 @@ class ActionBatchNetworks(object):
         - jobId (string): Job ID
         """
 
-        metadata = {
-            'tags': ['networks', 'configure', 'floorPlans', 'autoLocate', 'jobs'],
-            'operation': 'cancelNetworkFloorPlansAutoLocateJob'
-        }
-        resource = f'/networks/{networkId}/floorPlans/autoLocate/jobs/{jobId}/cancel'
+        networkId = urllib.parse.quote(networkId, safe="")
+        jobId = urllib.parse.quote(jobId, safe="")
+        resource = f"/networks/{networkId}/floorPlans/autoLocate/jobs/{jobId}/cancel"
 
         action = {
             "resource": resource,
             "operation": "cancel",
         }
         return action
-        
-
-
-
-
 
     def publishNetworkFloorPlansAutoLocateJob(self, networkId: str, jobId: str, **kwargs):
         """
@@ -437,25 +386,20 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['networks', 'configure', 'floorPlans', 'autoLocate', 'jobs'],
-            'operation': 'publishNetworkFloorPlansAutoLocateJob'
-        }
-        resource = f'/networks/{networkId}/floorPlans/autoLocate/jobs/{jobId}/publish'
+        networkId = urllib.parse.quote(networkId, safe="")
+        jobId = urllib.parse.quote(jobId, safe="")
+        resource = f"/networks/{networkId}/floorPlans/autoLocate/jobs/{jobId}/publish"
 
-        body_params = ['devices', ]
+        body_params = [
+            "devices",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "publish",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def recalculateNetworkFloorPlansAutoLocateJob(self, networkId: str, jobId: str, **kwargs):
         """
@@ -469,25 +413,20 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['networks', 'configure', 'floorPlans', 'autoLocate', 'jobs'],
-            'operation': 'recalculateNetworkFloorPlansAutoLocateJob'
-        }
-        resource = f'/networks/{networkId}/floorPlans/autoLocate/jobs/{jobId}/recalculate'
+        networkId = urllib.parse.quote(networkId, safe="")
+        jobId = urllib.parse.quote(jobId, safe="")
+        resource = f"/networks/{networkId}/floorPlans/autoLocate/jobs/{jobId}/recalculate"
 
-        body_params = ['devices', ]
+        body_params = [
+            "devices",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "recalculate",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def batchNetworkFloorPlansDevicesUpdate(self, networkId: str, assignments: list):
         """
@@ -500,25 +439,19 @@ class ActionBatchNetworks(object):
 
         kwargs = locals()
 
-        metadata = {
-            'tags': ['networks', 'configure', 'floorPlans', 'devices'],
-            'operation': 'batchNetworkFloorPlansDevicesUpdate'
-        }
-        resource = f'/networks/{networkId}/floorPlans/devices/batchUpdate'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/floorPlans/devices/batchUpdate"
 
-        body_params = ['assignments', ]
+        body_params = [
+            "assignments",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "batch_update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkFloorPlan(self, networkId: str, floorPlanId: str, **kwargs):
         """
@@ -539,25 +472,27 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['networks', 'configure', 'floorPlans'],
-            'operation': 'updateNetworkFloorPlan'
-        }
-        resource = f'/networks/{networkId}/floorPlans/{floorPlanId}'
+        networkId = urllib.parse.quote(networkId, safe="")
+        floorPlanId = urllib.parse.quote(floorPlanId, safe="")
+        resource = f"/networks/{networkId}/floorPlans/{floorPlanId}"
 
-        body_params = ['name', 'center', 'bottomLeftCorner', 'bottomRightCorner', 'topLeftCorner', 'topRightCorner', 'floorNumber', 'imageContents', ]
+        body_params = [
+            "name",
+            "center",
+            "bottomLeftCorner",
+            "bottomRightCorner",
+            "topLeftCorner",
+            "topRightCorner",
+            "floorNumber",
+            "imageContents",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def deleteNetworkFloorPlan(self, networkId: str, floorPlanId: str):
         """
@@ -568,22 +503,15 @@ class ActionBatchNetworks(object):
         - floorPlanId (string): Floor plan ID
         """
 
-        metadata = {
-            'tags': ['networks', 'configure', 'floorPlans'],
-            'operation': 'deleteNetworkFloorPlan'
-        }
-        resource = f'/networks/{networkId}/floorPlans/{floorPlanId}'
+        networkId = urllib.parse.quote(networkId, safe="")
+        floorPlanId = urllib.parse.quote(floorPlanId, safe="")
+        resource = f"/networks/{networkId}/floorPlans/{floorPlanId}"
 
         action = {
             "resource": resource,
             "operation": "destroy",
         }
         return action
-        
-
-
-
-
 
     def createNetworkGroupPolicy(self, networkId: str, name: str, **kwargs):
         """
@@ -606,29 +534,32 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        if 'splashAuthSettings' in kwargs:
-            options = ['bypass', 'network default']
-            assert kwargs['splashAuthSettings'] in options, f'''"splashAuthSettings" cannot be "{kwargs['splashAuthSettings']}", & must be set to one of: {options}'''
+        if "splashAuthSettings" in kwargs:
+            options = ["bypass", "network default"]
+            assert kwargs["splashAuthSettings"] in options, (
+                f'''"splashAuthSettings" cannot be "{kwargs["splashAuthSettings"]}", & must be set to one of: {options}'''
+            )
 
-        metadata = {
-            'tags': ['networks', 'configure', 'groupPolicies'],
-            'operation': 'createNetworkGroupPolicy'
-        }
-        resource = f'/networks/{networkId}/groupPolicies'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/groupPolicies"
 
-        body_params = ['name', 'scheduling', 'bandwidth', 'firewallAndTrafficShaping', 'contentFiltering', 'splashAuthSettings', 'vlanTagging', 'bonjourForwarding', ]
+        body_params = [
+            "name",
+            "scheduling",
+            "bandwidth",
+            "firewallAndTrafficShaping",
+            "contentFiltering",
+            "splashAuthSettings",
+            "vlanTagging",
+            "bonjourForwarding",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "create",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkGroupPolicy(self, networkId: str, groupPolicyId: str, **kwargs):
         """
@@ -652,29 +583,33 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        if 'splashAuthSettings' in kwargs:
-            options = ['bypass', 'network default']
-            assert kwargs['splashAuthSettings'] in options, f'''"splashAuthSettings" cannot be "{kwargs['splashAuthSettings']}", & must be set to one of: {options}'''
+        if "splashAuthSettings" in kwargs:
+            options = ["bypass", "network default"]
+            assert kwargs["splashAuthSettings"] in options, (
+                f'''"splashAuthSettings" cannot be "{kwargs["splashAuthSettings"]}", & must be set to one of: {options}'''
+            )
 
-        metadata = {
-            'tags': ['networks', 'configure', 'groupPolicies'],
-            'operation': 'updateNetworkGroupPolicy'
-        }
-        resource = f'/networks/{networkId}/groupPolicies/{groupPolicyId}'
+        networkId = urllib.parse.quote(networkId, safe="")
+        groupPolicyId = urllib.parse.quote(groupPolicyId, safe="")
+        resource = f"/networks/{networkId}/groupPolicies/{groupPolicyId}"
 
-        body_params = ['name', 'scheduling', 'bandwidth', 'firewallAndTrafficShaping', 'contentFiltering', 'splashAuthSettings', 'vlanTagging', 'bonjourForwarding', ]
+        body_params = [
+            "name",
+            "scheduling",
+            "bandwidth",
+            "firewallAndTrafficShaping",
+            "contentFiltering",
+            "splashAuthSettings",
+            "vlanTagging",
+            "bonjourForwarding",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def deleteNetworkGroupPolicy(self, networkId: str, groupPolicyId: str, **kwargs):
         """
@@ -688,22 +623,15 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['networks', 'configure', 'groupPolicies'],
-            'operation': 'deleteNetworkGroupPolicy'
-        }
-        resource = f'/networks/{networkId}/groupPolicies/{groupPolicyId}'
+        networkId = urllib.parse.quote(networkId, safe="")
+        groupPolicyId = urllib.parse.quote(groupPolicyId, safe="")
+        resource = f"/networks/{networkId}/groupPolicies/{groupPolicyId}"
 
         action = {
             "resource": resource,
             "operation": "destroy",
         }
         return action
-        
-
-
-
-
 
     def createNetworkMerakiAuthUser(self, networkId: str, email: str, authorizations: list, **kwargs):
         """
@@ -722,29 +650,31 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        if 'accountType' in kwargs:
-            options = ['802.1X', 'Client VPN', 'Guest']
-            assert kwargs['accountType'] in options, f'''"accountType" cannot be "{kwargs['accountType']}", & must be set to one of: {options}'''
+        if "accountType" in kwargs:
+            options = ["802.1X", "Client VPN", "Guest"]
+            assert kwargs["accountType"] in options, (
+                f'''"accountType" cannot be "{kwargs["accountType"]}", & must be set to one of: {options}'''
+            )
 
-        metadata = {
-            'tags': ['networks', 'configure', 'merakiAuthUsers'],
-            'operation': 'createNetworkMerakiAuthUser'
-        }
-        resource = f'/networks/{networkId}/merakiAuthUsers'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/merakiAuthUsers"
 
-        body_params = ['email', 'name', 'password', 'accountType', 'emailPasswordToUser', 'isAdmin', 'authorizations', ]
+        body_params = [
+            "email",
+            "name",
+            "password",
+            "accountType",
+            "emailPasswordToUser",
+            "isAdmin",
+            "authorizations",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "create",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def deleteNetworkMerakiAuthUser(self, networkId: str, merakiAuthUserId: str, **kwargs):
         """
@@ -758,22 +688,15 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['networks', 'configure', 'merakiAuthUsers'],
-            'operation': 'deleteNetworkMerakiAuthUser'
-        }
-        resource = f'/networks/{networkId}/merakiAuthUsers/{merakiAuthUserId}'
+        networkId = urllib.parse.quote(networkId, safe="")
+        merakiAuthUserId = urllib.parse.quote(merakiAuthUserId, safe="")
+        resource = f"/networks/{networkId}/merakiAuthUsers/{merakiAuthUserId}"
 
         action = {
             "resource": resource,
             "operation": "destroy",
         }
         return action
-        
-
-
-
-
 
     def updateNetworkMerakiAuthUser(self, networkId: str, merakiAuthUserId: str, **kwargs):
         """
@@ -790,25 +713,23 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['networks', 'configure', 'merakiAuthUsers'],
-            'operation': 'updateNetworkMerakiAuthUser'
-        }
-        resource = f'/networks/{networkId}/merakiAuthUsers/{merakiAuthUserId}'
+        networkId = urllib.parse.quote(networkId, safe="")
+        merakiAuthUserId = urllib.parse.quote(merakiAuthUserId, safe="")
+        resource = f"/networks/{networkId}/merakiAuthUsers/{merakiAuthUserId}"
 
-        body_params = ['name', 'password', 'emailPasswordToUser', 'authorizations', ]
+        body_params = [
+            "name",
+            "password",
+            "emailPasswordToUser",
+            "authorizations",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def createNetworkMqttBroker(self, networkId: str, name: str, host: str, port: int, **kwargs):
         """
@@ -825,25 +746,23 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['networks', 'configure', 'mqttBrokers'],
-            'operation': 'createNetworkMqttBroker'
-        }
-        resource = f'/networks/{networkId}/mqttBrokers'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/mqttBrokers"
 
-        body_params = ['name', 'host', 'port', 'security', 'authentication', ]
+        body_params = [
+            "name",
+            "host",
+            "port",
+            "security",
+            "authentication",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "create",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkMqttBroker(self, networkId: str, mqttBrokerId: str, **kwargs):
         """
@@ -861,25 +780,24 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['networks', 'configure', 'mqttBrokers'],
-            'operation': 'updateNetworkMqttBroker'
-        }
-        resource = f'/networks/{networkId}/mqttBrokers/{mqttBrokerId}'
+        networkId = urllib.parse.quote(networkId, safe="")
+        mqttBrokerId = urllib.parse.quote(mqttBrokerId, safe="")
+        resource = f"/networks/{networkId}/mqttBrokers/{mqttBrokerId}"
 
-        body_params = ['name', 'host', 'port', 'security', 'authentication', ]
+        body_params = [
+            "name",
+            "host",
+            "port",
+            "security",
+            "authentication",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def deleteNetworkMqttBroker(self, networkId: str, mqttBrokerId: str):
         """
@@ -890,22 +808,15 @@ class ActionBatchNetworks(object):
         - mqttBrokerId (string): Mqtt broker ID
         """
 
-        metadata = {
-            'tags': ['networks', 'configure', 'mqttBrokers'],
-            'operation': 'deleteNetworkMqttBroker'
-        }
-        resource = f'/networks/{networkId}/mqttBrokers/{mqttBrokerId}'
+        networkId = urllib.parse.quote(networkId, safe="")
+        mqttBrokerId = urllib.parse.quote(mqttBrokerId, safe="")
+        resource = f"/networks/{networkId}/mqttBrokers/{mqttBrokerId}"
 
         action = {
             "resource": resource,
             "operation": "destroy",
         }
         return action
-        
-
-
-
-
 
     def updateNetworkSettings(self, networkId: str, **kwargs):
         """
@@ -922,25 +833,23 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['networks', 'configure', 'settings'],
-            'operation': 'updateNetworkSettings'
-        }
-        resource = f'/networks/{networkId}/settings'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/settings"
 
-        body_params = ['localStatusPageEnabled', 'remoteStatusPageEnabled', 'localStatusPage', 'securePort', 'namedVlans', ]
+        body_params = [
+            "localStatusPageEnabled",
+            "remoteStatusPageEnabled",
+            "localStatusPage",
+            "securePort",
+            "namedVlans",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def splitNetwork(self, networkId: str):
         """
@@ -950,22 +859,14 @@ class ActionBatchNetworks(object):
         - networkId (string): Network ID
         """
 
-        metadata = {
-            'tags': ['networks', 'configure'],
-            'operation': 'splitNetwork'
-        }
-        resource = f'/networks/{networkId}/split'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/split"
 
         action = {
             "resource": resource,
-            "operation": "create",
+            "operation": "split",
         }
         return action
-        
-
-
-
-
 
     def unbindNetwork(self, networkId: str, **kwargs):
         """
@@ -978,25 +879,19 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['networks', 'configure'],
-            'operation': 'unbindNetwork'
-        }
-        resource = f'/networks/{networkId}/unbind'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/unbind"
 
-        body_params = ['retainConfigs', ]
+        body_params = [
+            "retainConfigs",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "create",
-            "body": payload
+            "operation": "unbind",
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def createNetworkVlanProfile(self, networkId: str, name: str, vlanNames: list, vlanGroups: list, iname: str):
         """
@@ -1012,25 +907,22 @@ class ActionBatchNetworks(object):
 
         kwargs = locals()
 
-        metadata = {
-            'tags': ['networks', 'configure', 'vlanProfiles'],
-            'operation': 'createNetworkVlanProfile'
-        }
-        resource = f'/networks/{networkId}/vlanProfiles'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/vlanProfiles"
 
-        body_params = ['name', 'vlanNames', 'vlanGroups', 'iname', ]
+        body_params = [
+            "name",
+            "vlanNames",
+            "vlanGroups",
+            "iname",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "create",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def deleteNetworkVlanProfile(self, networkId: str, iname: str):
         """
@@ -1041,22 +933,15 @@ class ActionBatchNetworks(object):
         - iname (string): Iname
         """
 
-        metadata = {
-            'tags': ['networks', 'configure', 'vlanProfiles'],
-            'operation': 'deleteNetworkVlanProfile'
-        }
-        resource = f'/networks/{networkId}/vlanProfiles/{iname}'
+        networkId = urllib.parse.quote(networkId, safe="")
+        iname = urllib.parse.quote(iname, safe="")
+        resource = f"/networks/{networkId}/vlanProfiles/{iname}"
 
         action = {
             "resource": resource,
             "operation": "destroy",
         }
         return action
-        
-
-
-
-
 
     def createNetworkWebhooksPayloadTemplate(self, networkId: str, name: str, **kwargs):
         """
@@ -1073,51 +958,42 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['networks', 'configure', 'webhooks', 'payloadTemplates'],
-            'operation': 'createNetworkWebhooksPayloadTemplate'
-        }
-        resource = f'/networks/{networkId}/webhooks/payloadTemplates'
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/webhooks/payloadTemplates"
 
-        body_params = ['name', 'body', 'headers', 'bodyFile', 'headersFile', ]
+        body_params = [
+            "name",
+            "body",
+            "headers",
+            "bodyFile",
+            "headersFile",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "create",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def deleteNetworkWebhooksPayloadTemplate(self, networkId: str, payloadTemplateId: str):
         """
-        **Destroy a webhook payload template for a network**
+        **Destroy a webhook payload template for a network. Does not work for included templates ('wpt_00001', 'wpt_00002', 'wpt_00003', 'wpt_00004', 'wpt_00005', 'wpt_00006', 'wpt_00007' or 'wpt_00008')**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-webhooks-payload-template
 
         - networkId (string): Network ID
         - payloadTemplateId (string): Payload template ID
         """
 
-        metadata = {
-            'tags': ['networks', 'configure', 'webhooks', 'payloadTemplates'],
-            'operation': 'deleteNetworkWebhooksPayloadTemplate'
-        }
-        resource = f'/networks/{networkId}/webhooks/payloadTemplates/{payloadTemplateId}'
+        networkId = urllib.parse.quote(networkId, safe="")
+        payloadTemplateId = urllib.parse.quote(payloadTemplateId, safe="")
+        resource = f"/networks/{networkId}/webhooks/payloadTemplates/{payloadTemplateId}"
 
         action = {
             "resource": resource,
             "operation": "destroy",
         }
         return action
-        
-
-
-
-
 
     def updateNetworkWebhooksPayloadTemplate(self, networkId: str, payloadTemplateId: str, **kwargs):
         """
@@ -1135,21 +1011,21 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['networks', 'configure', 'webhooks', 'payloadTemplates'],
-            'operation': 'updateNetworkWebhooksPayloadTemplate'
-        }
-        resource = f'/networks/{networkId}/webhooks/payloadTemplates/{payloadTemplateId}'
+        networkId = urllib.parse.quote(networkId, safe="")
+        payloadTemplateId = urllib.parse.quote(payloadTemplateId, safe="")
+        resource = f"/networks/{networkId}/webhooks/payloadTemplates/{payloadTemplateId}"
 
-        body_params = ['name', 'body', 'headers', 'bodyFile', 'headersFile', ]
+        body_params = [
+            "name",
+            "body",
+            "headers",
+            "bodyFile",
+            "headersFile",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-

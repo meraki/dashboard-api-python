@@ -5,8 +5,6 @@ class AsyncSpaces:
     def __init__(self, session):
         super().__init__()
         self._session = session
-        
-
 
     def getOrganizationSpacesIntegrateStatus(self, organizationId: str):
         """
@@ -17,15 +15,13 @@ class AsyncSpaces:
         """
 
         metadata = {
-            'tags': ['spaces', 'configure', 'integrate', 'status'],
-            'operation': 'getOrganizationSpacesIntegrateStatus'
+            "tags": ["spaces", "configure", "integrate", "status"],
+            "operation": "getOrganizationSpacesIntegrateStatus",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/spaces/integrate/status'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/spaces/integrate/status"
 
         return self._session.get(metadata, resource)
-        
-
 
     def removeOrganizationSpacesIntegration(self, organizationId: str):
         """
@@ -36,11 +32,10 @@ class AsyncSpaces:
         """
 
         metadata = {
-            'tags': ['spaces', 'configure', 'integration'],
-            'operation': 'removeOrganizationSpacesIntegration'
+            "tags": ["spaces", "configure", "integration"],
+            "operation": "removeOrganizationSpacesIntegration",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/spaces/integration/remove'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/spaces/integration/remove"
 
         return self._session.post(metadata, resource)
-        

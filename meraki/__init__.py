@@ -51,7 +51,7 @@ from meraki.exceptions import APIKeyError
 from meraki._version import __version__ as __version__  # noqa: F401
 from datetime import datetime
 
-__api_version__ = "1.68.0"
+__api_version__ = "1.69.0"
 
 
 class DashboardAPI(object):

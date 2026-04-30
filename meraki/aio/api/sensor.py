@@ -5,10 +5,8 @@ class AsyncSensor:
     def __init__(self, session):
         super().__init__()
         self._session = session
-        
 
-
-    def getDeviceSensorCommands(self, serial: str, total_pages=1, direction='next', **kwargs):
+    def getDeviceSensorCommands(self, serial: str, total_pages=1, direction="next", **kwargs):
         """
         **Returns a historical log of all commands**
         https://developer.cisco.com/meraki/api-v1/#!get-device-sensor-commands
@@ -28,29 +26,40 @@ class AsyncSensor:
 
         kwargs.update(locals())
 
-        if 'sortOrder' in kwargs:
-            options = ['ascending', 'descending']
-            assert kwargs['sortOrder'] in options, f'''"sortOrder" cannot be "{kwargs['sortOrder']}", & must be set to one of: {options}'''
+        if "sortOrder" in kwargs:
+            options = ["ascending", "descending"]
+            assert kwargs["sortOrder"] in options, (
+                f'''"sortOrder" cannot be "{kwargs["sortOrder"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['sensor', 'configure', 'commands'],
-            'operation': 'getDeviceSensorCommands'
+            "tags": ["sensor", "configure", "commands"],
+            "operation": "getDeviceSensorCommands",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/sensor/commands'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/sensor/commands"
 
-        query_params = ['operations', 'perPage', 'startingAfter', 'endingBefore', 'sortOrder', 't0', 't1', 'timespan', ]
+        query_params = [
+            "operations",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "sortOrder",
+            "t0",
+            "t1",
+            "timespan",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['operations', ]
+        array_params = [
+            "operations",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def createDeviceSensorCommand(self, serial: str, operation: str):
         """
@@ -63,23 +72,25 @@ class AsyncSensor:
 
         kwargs = locals()
 
-        if 'operation' in kwargs:
-            options = ['cycleDownstreamPower', 'disableDownstreamPower', 'enableDownstreamPower', 'refreshData']
-            assert kwargs['operation'] in options, f'''"operation" cannot be "{kwargs['operation']}", & must be set to one of: {options}'''
+        if "operation" in kwargs:
+            options = ["cycleDownstreamPower", "disableDownstreamPower", "enableDownstreamPower", "refreshData"]
+            assert kwargs["operation"] in options, (
+                f'''"operation" cannot be "{kwargs["operation"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['sensor', 'configure', 'commands'],
-            'operation': 'createDeviceSensorCommand'
+            "tags": ["sensor", "configure", "commands"],
+            "operation": "createDeviceSensorCommand",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/sensor/commands'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/sensor/commands"
 
-        body_params = ['operation', ]
+        body_params = [
+            "operation",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getDeviceSensorCommand(self, serial: str, commandId: str):
         """
@@ -91,16 +102,14 @@ class AsyncSensor:
         """
 
         metadata = {
-            'tags': ['sensor', 'configure', 'commands'],
-            'operation': 'getDeviceSensorCommand'
+            "tags": ["sensor", "configure", "commands"],
+            "operation": "getDeviceSensorCommand",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        commandId = urllib.parse.quote(str(commandId), safe='')
-        resource = f'/devices/{serial}/sensor/commands/{commandId}'
+        serial = urllib.parse.quote(str(serial), safe="")
+        commandId = urllib.parse.quote(str(commandId), safe="")
+        resource = f"/devices/{serial}/sensor/commands/{commandId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def getDeviceSensorRelationships(self, serial: str):
         """
@@ -111,15 +120,13 @@ class AsyncSensor:
         """
 
         metadata = {
-            'tags': ['sensor', 'configure', 'relationships'],
-            'operation': 'getDeviceSensorRelationships'
+            "tags": ["sensor", "configure", "relationships"],
+            "operation": "getDeviceSensorRelationships",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/sensor/relationships'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/sensor/relationships"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateDeviceSensorRelationships(self, serial: str, **kwargs):
         """
@@ -133,18 +140,18 @@ class AsyncSensor:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['sensor', 'configure', 'relationships'],
-            'operation': 'updateDeviceSensorRelationships'
+            "tags": ["sensor", "configure", "relationships"],
+            "operation": "updateDeviceSensorRelationships",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/sensor/relationships'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/sensor/relationships"
 
-        body_params = ['livestream', ]
+        body_params = [
+            "livestream",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkSensorAlertsCurrentOverviewByMetric(self, networkId: str):
         """
@@ -155,15 +162,13 @@ class AsyncSensor:
         """
 
         metadata = {
-            'tags': ['sensor', 'monitor', 'alerts', 'current', 'overview', 'byMetric'],
-            'operation': 'getNetworkSensorAlertsCurrentOverviewByMetric'
+            "tags": ["sensor", "monitor", "alerts", "current", "overview", "byMetric"],
+            "operation": "getNetworkSensorAlertsCurrentOverviewByMetric",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/sensor/alerts/current/overview/byMetric'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/sensor/alerts/current/overview/byMetric"
 
         return self._session.get(metadata, resource)
-        
-
 
     def getNetworkSensorAlertsOverviewByMetric(self, networkId: str, **kwargs):
         """
@@ -180,18 +185,21 @@ class AsyncSensor:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['sensor', 'monitor', 'alerts', 'overview', 'byMetric'],
-            'operation': 'getNetworkSensorAlertsOverviewByMetric'
+            "tags": ["sensor", "monitor", "alerts", "overview", "byMetric"],
+            "operation": "getNetworkSensorAlertsOverviewByMetric",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/sensor/alerts/overview/byMetric'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/sensor/alerts/overview/byMetric"
 
-        query_params = ['t0', 't1', 'timespan', 'interval', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "interval",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getNetworkSensorAlertsProfiles(self, networkId: str):
         """
@@ -202,15 +210,13 @@ class AsyncSensor:
         """
 
         metadata = {
-            'tags': ['sensor', 'configure', 'alerts', 'profiles'],
-            'operation': 'getNetworkSensorAlertsProfiles'
+            "tags": ["sensor", "configure", "alerts", "profiles"],
+            "operation": "getNetworkSensorAlertsProfiles",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/sensor/alerts/profiles'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/sensor/alerts/profiles"
 
         return self._session.get(metadata, resource)
-        
-
 
     def createNetworkSensorAlertsProfile(self, networkId: str, name: str, conditions: list, **kwargs):
         """
@@ -230,18 +236,24 @@ class AsyncSensor:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['sensor', 'configure', 'alerts', 'profiles'],
-            'operation': 'createNetworkSensorAlertsProfile'
+            "tags": ["sensor", "configure", "alerts", "profiles"],
+            "operation": "createNetworkSensorAlertsProfile",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/sensor/alerts/profiles'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/sensor/alerts/profiles"
 
-        body_params = ['name', 'schedule', 'conditions', 'recipients', 'serials', 'includeSensorUrl', 'message', ]
+        body_params = [
+            "name",
+            "schedule",
+            "conditions",
+            "recipients",
+            "serials",
+            "includeSensorUrl",
+            "message",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getNetworkSensorAlertsProfile(self, networkId: str, id: str):
         """
@@ -253,16 +265,14 @@ class AsyncSensor:
         """
 
         metadata = {
-            'tags': ['sensor', 'configure', 'alerts', 'profiles'],
-            'operation': 'getNetworkSensorAlertsProfile'
+            "tags": ["sensor", "configure", "alerts", "profiles"],
+            "operation": "getNetworkSensorAlertsProfile",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        id = urllib.parse.quote(str(id), safe='')
-        resource = f'/networks/{networkId}/sensor/alerts/profiles/{id}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/networks/{networkId}/sensor/alerts/profiles/{id}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkSensorAlertsProfile(self, networkId: str, id: str, **kwargs):
         """
@@ -283,19 +293,25 @@ class AsyncSensor:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['sensor', 'configure', 'alerts', 'profiles'],
-            'operation': 'updateNetworkSensorAlertsProfile'
+            "tags": ["sensor", "configure", "alerts", "profiles"],
+            "operation": "updateNetworkSensorAlertsProfile",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        id = urllib.parse.quote(str(id), safe='')
-        resource = f'/networks/{networkId}/sensor/alerts/profiles/{id}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/networks/{networkId}/sensor/alerts/profiles/{id}"
 
-        body_params = ['name', 'schedule', 'conditions', 'recipients', 'serials', 'includeSensorUrl', 'message', ]
+        body_params = [
+            "name",
+            "schedule",
+            "conditions",
+            "recipients",
+            "serials",
+            "includeSensorUrl",
+            "message",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteNetworkSensorAlertsProfile(self, networkId: str, id: str):
         """
@@ -307,16 +323,14 @@ class AsyncSensor:
         """
 
         metadata = {
-            'tags': ['sensor', 'configure', 'alerts', 'profiles'],
-            'operation': 'deleteNetworkSensorAlertsProfile'
+            "tags": ["sensor", "configure", "alerts", "profiles"],
+            "operation": "deleteNetworkSensorAlertsProfile",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        id = urllib.parse.quote(str(id), safe='')
-        resource = f'/networks/{networkId}/sensor/alerts/profiles/{id}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/networks/{networkId}/sensor/alerts/profiles/{id}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def getNetworkSensorMqttBrokers(self, networkId: str):
         """
@@ -327,15 +341,13 @@ class AsyncSensor:
         """
 
         metadata = {
-            'tags': ['sensor', 'configure', 'mqttBrokers'],
-            'operation': 'getNetworkSensorMqttBrokers'
+            "tags": ["sensor", "configure", "mqttBrokers"],
+            "operation": "getNetworkSensorMqttBrokers",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/sensor/mqttBrokers'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/sensor/mqttBrokers"
 
         return self._session.get(metadata, resource)
-        
-
 
     def getNetworkSensorMqttBroker(self, networkId: str, mqttBrokerId: str):
         """
@@ -347,16 +359,14 @@ class AsyncSensor:
         """
 
         metadata = {
-            'tags': ['sensor', 'configure', 'mqttBrokers'],
-            'operation': 'getNetworkSensorMqttBroker'
+            "tags": ["sensor", "configure", "mqttBrokers"],
+            "operation": "getNetworkSensorMqttBroker",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        mqttBrokerId = urllib.parse.quote(str(mqttBrokerId), safe='')
-        resource = f'/networks/{networkId}/sensor/mqttBrokers/{mqttBrokerId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        mqttBrokerId = urllib.parse.quote(str(mqttBrokerId), safe="")
+        resource = f"/networks/{networkId}/sensor/mqttBrokers/{mqttBrokerId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateNetworkSensorMqttBroker(self, networkId: str, mqttBrokerId: str, enabled: bool):
         """
@@ -371,19 +381,19 @@ class AsyncSensor:
         kwargs = locals()
 
         metadata = {
-            'tags': ['sensor', 'configure', 'mqttBrokers'],
-            'operation': 'updateNetworkSensorMqttBroker'
+            "tags": ["sensor", "configure", "mqttBrokers"],
+            "operation": "updateNetworkSensorMqttBroker",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        mqttBrokerId = urllib.parse.quote(str(mqttBrokerId), safe='')
-        resource = f'/networks/{networkId}/sensor/mqttBrokers/{mqttBrokerId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        mqttBrokerId = urllib.parse.quote(str(mqttBrokerId), safe="")
+        resource = f"/networks/{networkId}/sensor/mqttBrokers/{mqttBrokerId}"
 
-        body_params = ['enabled', ]
+        body_params = [
+            "enabled",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getNetworkSensorRelationships(self, networkId: str):
         """
@@ -394,17 +404,15 @@ class AsyncSensor:
         """
 
         metadata = {
-            'tags': ['sensor', 'configure', 'relationships'],
-            'operation': 'getNetworkSensorRelationships'
+            "tags": ["sensor", "configure", "relationships"],
+            "operation": "getNetworkSensorRelationships",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/sensor/relationships'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/sensor/relationships"
 
         return self._session.get(metadata, resource)
-        
 
-
-    def getOrganizationSensorGatewaysConnectionsLatest(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationSensorGatewaysConnectionsLatest(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Returns latest sensor-gateway connectivity data.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-sensor-gateways-connections-latest
@@ -421,26 +429,31 @@ class AsyncSensor:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['sensor', 'monitor', 'gateways', 'connections', 'latest'],
-            'operation': 'getOrganizationSensorGatewaysConnectionsLatest'
+            "tags": ["sensor", "monitor", "gateways", "connections", "latest"],
+            "operation": "getOrganizationSensorGatewaysConnectionsLatest",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/sensor/gateways/connections/latest'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/sensor/gateways/connections/latest"
 
-        query_params = ['sensorSerials', 'perPage', 'startingAfter', 'endingBefore', ]
+        query_params = [
+            "sensorSerials",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['sensorSerials', ]
+        array_params = [
+            "sensorSerials",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationSensorReadingsHistory(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationSensorReadingsHistory(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Return all reported readings from sensors in a given timespan, sorted by timestamp**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-sensor-readings-history
@@ -462,26 +475,38 @@ class AsyncSensor:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['sensor', 'monitor', 'readings', 'history'],
-            'operation': 'getOrganizationSensorReadingsHistory'
+            "tags": ["sensor", "monitor", "readings", "history"],
+            "operation": "getOrganizationSensorReadingsHistory",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/sensor/readings/history'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/sensor/readings/history"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', 'networkIds', 'serials', 'metrics', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "t0",
+            "t1",
+            "timespan",
+            "networkIds",
+            "serials",
+            "metrics",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', 'serials', 'metrics', ]
+        array_params = [
+            "networkIds",
+            "serials",
+            "metrics",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationSensorReadingsLatest(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationSensorReadingsLatest(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Return the latest available reading for each metric from each sensor, sorted by sensor serial**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-sensor-readings-latest
@@ -500,20 +525,30 @@ class AsyncSensor:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['sensor', 'monitor', 'readings', 'latest'],
-            'operation': 'getOrganizationSensorReadingsLatest'
+            "tags": ["sensor", "monitor", "readings", "latest"],
+            "operation": "getOrganizationSensorReadingsLatest",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/sensor/readings/latest'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/sensor/readings/latest"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'serials', 'metrics', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "serials",
+            "metrics",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', 'serials', 'metrics', ]
+        array_params = [
+            "networkIds",
+            "serials",
+            "metrics",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
