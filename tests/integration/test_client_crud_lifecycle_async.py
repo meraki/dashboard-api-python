@@ -199,22 +199,42 @@ async def test_delete_policy_objects(dashboard, org_id, version_salt):
 
 
 async def test_delete_network(dashboard, org_id, network):
+    import asyncio
     from meraki.api.batch.networks import ActionBatchNetworks
 
     action = ActionBatchNetworks().deleteNetwork(network["id"])
+    max_attempts = 5
 
-    batch = await dashboard.organizations.createOrganizationActionBatch(
-        organizationId=org_id,
-        actions=[action],
-        confirmed=False,
-        synchronous=False,
-    )
-    assert batch is not None
-    assert batch["id"]
+    for attempt in range(1, max_attempts + 1):
+        delay = 2**attempt
 
-    response = await dashboard.organizations.updateOrganizationActionBatch(
-        organizationId=org_id,
-        actionBatchId=batch["id"],
-        confirmed=True,
-    )
-    assert response is not None
+        await asyncio.sleep(delay)
+        batch = await dashboard.organizations.createOrganizationActionBatch(
+            organizationId=org_id,
+            actions=[action],
+            confirmed=False,
+            synchronous=False,
+        )
+        assert batch is not None
+        assert batch["id"]
+
+        await asyncio.sleep(delay)
+        await dashboard.organizations.updateOrganizationActionBatch(
+            organizationId=org_id,
+            actionBatchId=batch["id"],
+            confirmed=True,
+        )
+
+        for _ in range(10):
+            await asyncio.sleep(delay)
+            status = await dashboard.organizations.getOrganizationActionBatch(
+                organizationId=org_id,
+                actionBatchId=batch["id"],
+            )
+            if status["status"]["completed"]:
+                return
+            if status["status"]["failed"]:
+                break
+
+        if attempt == max_attempts:
+            pytest.fail(f"Action batch failed after {max_attempts} attempts")
