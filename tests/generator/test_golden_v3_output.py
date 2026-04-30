@@ -47,7 +47,7 @@ def _generate_fresh_output(spec, output_dir):
             return m
 
         with patch("generate_library.requests.get", side_effect=mock_get):
-            gen_v3.generate_library(spec, "0.0.0-golden", False)
+            gen_v3.generate_library(spec, "0.0.0-golden", "v1", False)
 
         sync = (output_dir / "meraki/api/networks.py").read_text()
         async_ = (output_dir / "meraki/aio/api/networks.py").read_text()
