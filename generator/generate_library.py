@@ -174,9 +174,17 @@ def unpack_params(operation: str, parameters: dict, param_filters):
         # Name the parameter
         name = p["name"]
 
-        # Consult the schema if there is one
-        if "schema" in p:
+        # Consult the schema if there is one and it has properties (object-type params)
+        if "schema" in p and "properties" in p["schema"]:
             unpacked_params.update(unpack_param_with_schema(unpacked_params, p))
+
+        # Schema exists but no properties (simple type like string/integer)
+        elif "schema" in p:
+            is_required = p.get("required", False)
+            flat_param = {**p, "type": p["schema"].get("type", "string")}
+            if "enum" in p["schema"]:
+                flat_param["enum"] = p["schema"]["enum"]
+            unpacked_params.update(unpack_param_without_schema(unpacked_params, flat_param, name, is_required))
 
         # If there is no schema, then consult the required attribute if it exists
         elif "required" in p and p["required"]:

@@ -38,11 +38,9 @@
                 params.pop(k.strip())
 
         {% endif %}
-        {% if body_params|length > 0 %}
+        {% if body_params|length > 0 and batch_operation != 'destroy' %}
         body_params = [{% for param in body_params %}"{{ param }}", {% endfor %}]
-        {% if batch_operation != 'destroy'%}
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-        {% endif %}
         {% endif %}
         action = {
             "resource": resource,
