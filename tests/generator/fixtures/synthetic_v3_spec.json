@@ -19,6 +19,21 @@
           "serial": {"type": "string"},
           "status": {"type": "string", "enum": ["online", "offline", "dormant"]}
         }
+      },
+      "DateFilter": {
+        "oneOf": [
+          {"type": "object", "properties": {"gt": {"type": "string"}, "lt": {"type": "string"}}},
+          {"type": "string"}
+        ]
+      }
+    },
+    "parameters": {
+      "orgIdParam": {
+        "name": "organizationId",
+        "in": "path",
+        "required": true,
+        "schema": {"type": "string"},
+        "description": "Organization ID"
       }
     }
   },
@@ -114,6 +129,42 @@
             }
           }
         },
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/organizations/{organizationId}/devices": {
+      "parameters": [{"$ref": "#/components/parameters/orgIdParam"}],
+      "get": {
+        "tags": ["organizations", "configure"],
+        "operationId": "getOrganizationDevices",
+        "parameters": [
+          {"name": "networkId", "in": "query", "schema": {"type": "string", "nullable": true}, "description": "Filter by network"},
+          {"name": "startDate", "in": "query", "schema": {"$ref": "#/components/schemas/DateFilter"}, "description": "Start date filter"},
+          {"name": "tags", "in": "query", "schema": {"type": "array", "items": {"type": "string"}}, "description": "Filter by tags"},
+          {"name": "perPage", "in": "query", "schema": {"type": "integer"}, "description": "Items per page"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/organizations/{organizationId}/networks": {
+      "parameters": [{"name": "organizationId", "in": "path", "required": true, "schema": {"type": "string"}, "description": "Path org ID"}],
+      "get": {
+        "tags": ["organizations", "configure"],
+        "operationId": "getOrganizationNetworks",
+        "parameters": [
+          {"name": "organizationId", "in": "path", "required": true, "schema": {"type": "string"}, "description": "Operation org ID"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/networks/{networkId}/events": {
+      "get": {
+        "tags": ["networks", "monitor"],
+        "operationId": "getNetworkEvents",
+        "parameters": [
+          {"name": "networkId", "in": "path", "required": true, "schema": {"type": "string"}},
+          {"name": "perPage", "in": "query", "schema": {"type": "integer"}, "description": "Items per page"}
+        ],
         "responses": {"200": {"description": "OK"}}
       }
     }

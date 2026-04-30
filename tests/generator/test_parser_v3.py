@@ -2,7 +2,8 @@ import json
 import pytest
 from pathlib import Path
 
-from parser_v3 import resolve_ref, clear_cache, _ref_cache, parse_request_body
+from parser_v3 import resolve_ref, clear_cache, _ref_cache, parse_request_body, parse_params_v3
+from generate_library import generate_pagination_parameters, return_params
 
 FIXTURES = Path(__file__).parent / "fixtures"
 
@@ -157,3 +158,103 @@ class TestParseRequestBody:
             assert "type" in entry, f"{name} missing 'type'"
             assert "description" in entry, f"{name} missing 'description'"
             assert "nullable" in entry, f"{name} missing 'nullable'"
+
+
+class TestParseParamsV3:
+    """Tests for parse_params_v3 covering path inheritance, oneOf, arrays, pagination."""
+
+    def test_path_level_inheritance(self, v3_spec):
+        path_item = v3_spec["paths"]["/organizations/{organizationId}/devices"]
+        operation = path_item["get"]
+        params, _ = parse_params_v3(operation, path_item, v3_spec)
+        assert "organizationId" in params
+        assert params["organizationId"]["in"] == "path"
+        assert params["organizationId"]["required"] is True
+
+    def test_operation_overrides_path_param(self, v3_spec):
+        path_item = v3_spec["paths"]["/organizations/{organizationId}/networks"]
+        operation = path_item["get"]
+        params, _ = parse_params_v3(operation, path_item, v3_spec)
+        assert "organizationId" in params
+        assert params["organizationId"]["description"] == "Operation org ID"
+
+    def test_nullable_query_param(self, v3_spec):
+        path_item = v3_spec["paths"]["/organizations/{organizationId}/devices"]
+        operation = path_item["get"]
+        params, _ = parse_params_v3(operation, path_item, v3_spec)
+        assert "networkId" in params
+        assert params["networkId"]["nullable"] is True
+
+    def test_non_nullable_default(self, v3_spec):
+        path_item = v3_spec["paths"]["/organizations/{organizationId}/devices"]
+        operation = path_item["get"]
+        params, _ = parse_params_v3(operation, path_item, v3_spec)
+        assert "perPage" in params
+        assert params["perPage"]["nullable"] is False
+
+    def test_oneof_query_param(self, v3_spec):
+        path_item = v3_spec["paths"]["/organizations/{organizationId}/devices"]
+        operation = path_item["get"]
+        params, _ = parse_params_v3(operation, path_item, v3_spec)
+        assert "startDate" in params
+        assert "object or string" in params["startDate"]["type"]
+        assert "(object supports: gt, lt)" in params["startDate"]["description"]
+
+    def test_array_param_defaults(self, v3_spec):
+        path_item = v3_spec["paths"]["/organizations/{organizationId}/devices"]
+        operation = path_item["get"]
+        params, _ = parse_params_v3(operation, path_item, v3_spec)
+        assert "tags" in params
+        assert params["tags"]["type"] == "array"
+        assert params["tags"]["style"] == "form"
+        assert params["tags"]["explode"] is True
+
+    def test_pagination_injection(self, v3_spec):
+        path_item = v3_spec["paths"]["/organizations/{organizationId}/devices"]
+        operation = path_item["get"]
+        params, _ = parse_params_v3(operation, path_item, v3_spec)
+        assert "perPage" in params
+        assert "total_pages" in params
+        assert "direction" in params
+
+    def test_body_params_merged(self, v3_spec):
+        path_item = v3_spec["paths"]["/networks/{networkId}"]
+        operation = path_item["put"]
+        params, _ = parse_params_v3(operation, path_item, v3_spec)
+        assert "name" in params
+        assert params["name"]["in"] == "body"
+        assert params["name"]["required"] is True
+
+    def test_metadata_content_type(self, v3_spec):
+        path_item = v3_spec["paths"]["/networks/{networkId}"]
+        operation = path_item["put"]
+        _, metadata = parse_params_v3(operation, path_item, v3_spec)
+        assert metadata["content_type"] == "application/json"
+
+    def test_no_params_returns_empty(self, v3_spec):
+        path_item = v3_spec["paths"]["/networks/{networkId}"]
+        operation = path_item["get"]
+        params, metadata = parse_params_v3(operation, path_item, v3_spec)
+        assert "networkId" in params
+        assert metadata["content_type"] is None
+
+    def test_ref_in_parameter(self, v3_spec):
+        path_item = v3_spec["paths"]["/organizations/{organizationId}/devices"]
+        operation = path_item["get"]
+        params, _ = parse_params_v3(operation, path_item, v3_spec)
+        assert "organizationId" in params
+
+    def test_param_filters_required(self, v3_spec):
+        path_item = v3_spec["paths"]["/organizations/{organizationId}/devices"]
+        operation = path_item["get"]
+        params, _ = parse_params_v3(operation, path_item, v3_spec, param_filters=["required"])
+        assert "organizationId" in params
+        assert "networkId" not in params
+
+    def test_param_filters_none(self, v3_spec):
+        path_item = v3_spec["paths"]["/organizations/{organizationId}/devices"]
+        operation = path_item["get"]
+        params, _ = parse_params_v3(operation, path_item, v3_spec, param_filters=None)
+        assert "organizationId" in params
+        assert "networkId" in params
+        assert "perPage" in params
