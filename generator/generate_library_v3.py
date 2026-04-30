@@ -290,8 +290,25 @@ def generate_standard_and_async_functions(
                 if operation == "getNetworkEvents":
                     definition += ", event_log_end_time=None"
 
-            # Add **kwargs if optional params exist
-            if return_params(operation, all_params, ["optional"]):
+            # Function body for GET endpoints
+            query_params = array_params = body_params = path_params = {}
+            if method == "get":
+                query_params = return_params(operation, all_params, ["query"])
+                array_params = return_params(operation, all_params, ["array"])
+                path_params = return_params(operation, all_params, ["path"])
+
+            # Function body for POST/PUT endpoints
+            elif method == "post" or method == "put":
+                body_params = return_params(operation, all_params, ["body"])
+                path_params = return_params(operation, all_params, ["path"])
+
+            # Function body for DELETE endpoints
+            elif method == "delete":
+                query_params = return_params(operation, all_params, ["query"])
+                path_params = return_params(operation, all_params, ["path"])
+
+            # Add **kwargs if optional params OR body/query/array params exist (templates use kwargs.items())
+            if return_params(operation, all_params, ["optional"]) or body_params or query_params or array_params:
                 definition += ", **kwargs"
 
             # Docstring
@@ -311,12 +328,8 @@ def generate_standard_and_async_functions(
                 for p, values in enum_params.items():
                     assert_blocks.append((p, values["enum"]))
 
-            # Function body for GET endpoints
-            query_params = array_params = body_params = path_params = {}
+            # Generate call_line based on method
             if method == "get":
-                query_params = return_params(operation, all_params, ["query"])
-                array_params = return_params(operation, all_params, ["array"])
-                path_params = return_params(operation, all_params, ["path"])
                 pagination_params = return_params(operation, all_params, ["pagination"])
                 if query_params or array_params:
                     if pagination_params:
@@ -331,20 +344,13 @@ def generate_standard_and_async_functions(
                 else:
                     call_line = "return self._session.get(metadata, resource)"
 
-            # Function body for POST/PUT endpoints
             elif method == "post" or method == "put":
-                body_params = return_params(operation, all_params, ["body"])
-                path_params = return_params(operation, all_params, ["path"])
                 if body_params:
                     call_line = f"return self._session.{method}(metadata, resource, payload)"
                 else:
                     call_line = f"return self._session.{method}(metadata, resource)"
 
-            # Function body for DELETE endpoints
             elif method == "delete":
-                query_params = return_params(operation, all_params, ["query"])
-                path_params = return_params(operation, all_params, ["path"])
-
                 if query_params:
                     call_line = "return self._session.delete(metadata, resource, params)"
                 else:
@@ -426,7 +432,7 @@ def generate_action_batch_functions(
                 # Parse params using v3 parser
                 all_params, metadata = parse_params_v3(endpoint, path_item, spec)
 
-                # Function body for GET endpoints
+                # Initialize param collections
                 query_params = array_params = body_params = {}
                 path_params = return_params(operation, all_params, ["path"])
 
@@ -434,12 +440,6 @@ def generate_action_batch_functions(
                 for p in re.findall(r"\{(\w+)\}", path):
                     if p not in path_params:
                         path_params[p] = {"type": "string", "in": "path"}
-
-                # Function body for POST/PUT endpoints
-                if method == "post" or method == "put":
-                    body_params = return_params(operation, all_params, ["body"])
-
-                # Function body for DELETE endpoints is empty (HTTP 204)
 
                 # Function definition
                 definition = ""
@@ -495,8 +495,12 @@ def generate_action_batch_functions(
                     if operation == "getNetworkEvents":
                         definition += ", event_log_end_time=None"
 
-                # Add **kwargs if optional params exist
-                if return_params(operation, all_params, ["optional"]):
+                # Function body for POST/PUT endpoints
+                if method == "post" or method == "put":
+                    body_params = return_params(operation, all_params, ["body"])
+
+                # Add **kwargs if optional params OR body params exist (batch template uses kwargs.items())
+                if return_params(operation, all_params, ["optional"]) or body_params:
                     definition += ", **kwargs"
 
                 # Docstring
