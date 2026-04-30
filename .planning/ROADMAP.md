@@ -34,7 +34,10 @@
   2. `generate_library_oasv2.py` imports and runs v2 generator code with deprecation warning
   3. Running `python generator/generate_library.py` produces SDK using v3 parser
   4. Running `python generator/generate_library_oasv2.py` logs deprecation warning but works
-**Plans**: TBD
+**Plans**: 1 plan
+
+Plans:
+- [ ] 06-01-PLAN.md — Swap generator files, add deprecation warning, update test imports
 
 ### Phase 7: Legacy Cleanup
 **Goal**: Abandoned v3 attempt removed, all imports and CI workflows updated
@@ -56,8 +59,8 @@
 | 3. Generation Integration | v1.0 | 2/2 | Complete | 2026-04-30 |
 | 4. Type Stubs | v1.0 | 2/2 | Complete | 2026-04-30 |
 | 5. Testing & CI | v1.0 | 3/3 | Complete | 2026-04-30 |
-| 6. Generator Swap | v1.1 | 0/0 | Not started | - |
+| 6. Generator Swap | v1.1 | 0/1 | Not started | - |
 | 7. Legacy Cleanup | v1.1 | 0/0 | Not started | - |
 
 ---
-*Roadmap updated: 2026-04-30 (v1.1 added)*
+*Roadmap updated: 2026-04-30 (Phase 6 plan created)*
