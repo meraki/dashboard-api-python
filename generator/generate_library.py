@@ -34,7 +34,9 @@ python[3] generate_library_v3.py [-o <org_id>] [-k <api_key>] [-v <version_numbe
 API key can, and is recommended to, be set as an environment variable named MERAKI_DASHBOARD_API_KEY."""
 
 
-def generate_library(spec: dict, version_number: str, is_github_action: bool, generate_stubs: bool = False):
+def generate_library(
+    spec: dict, version_number: str, api_version_number: str, is_github_action: bool, generate_stubs: bool = False
+):
     # Clear parser cache at entry
     clear_cache()
 
@@ -110,10 +112,9 @@ def generate_library(spec: dict, version_number: str, is_github_action: bool, ge
                 end = contents.find("\n", start)
                 contents = f"{contents[:start]}__version__ = '{version_number}'{contents[end:]}"
             elif file == "__init__.py":
-                # replace API version with v3
                 start = contents.find("__api_version__ = ")
                 end = contents.find("\n", start)
-                contents = f"{contents[:start]}__api_version__ = 'v3'{contents[end:]}"
+                contents = f"{contents[:start]}__api_version__ = '{api_version_number}'{contents[end:]}"
             fp.write(contents)
 
     # Filter paths to remove "parameters" key before passing to organize_spec
@@ -587,7 +588,7 @@ def main(inputs):
         elif opt == "-v":
             version_number = arg
         elif opt == "-a":
-            api_version_number = arg  # noqa: F841
+            api_version_number = arg
         elif opt == "-g":
             if arg.lower() == "true":
                 is_github_action = True
@@ -624,7 +625,7 @@ def main(inputs):
                 "If this continues for more than an hour, please contact Meraki support."
             )
 
-    generate_library(spec, version_number, is_github_action, generate_stubs=generate_stubs_flag)
+    generate_library(spec, version_number, api_version_number, is_github_action, generate_stubs=generate_stubs_flag)
 
 
 if __name__ == "__main__":

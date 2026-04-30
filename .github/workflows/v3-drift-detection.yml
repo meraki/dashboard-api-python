@@ -43,11 +43,12 @@ jobs:
           import json, sys
           with open('drift-report.json') as f:
               drifts = json.load(f)
-          missing = [d for d in drifts if d['type'] == 'MISSING_IN_V3']
-          if missing:
-              print(f'CRITICAL: {len(missing)} methods missing in v3')
-              for d in missing[:10]:
-                  print(f'  {d[\"scope\"]}.{d[\"method\"]}')
+          critical_types = ('MISSING_IN_V3', 'BODY_WIRING', 'QUERY_WIRING')
+          critical = [d for d in drifts if d['type'] in critical_types]
+          if critical:
+              print(f'CRITICAL: {len(critical)} issues found')
+              for d in critical[:20]:
+                  print(f'  [{d[\"type\"]}] {d[\"scope\"]}.{d[\"method\"]}: {d.get(\"detail\", \"\")}')
               sys.exit(1)
           print(f'OK: {len(drifts)} expected differences, 0 critical')
           "

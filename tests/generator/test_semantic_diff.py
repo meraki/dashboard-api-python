@@ -1,13 +1,13 @@
 """Unit tests for semantic_diff_v2_v3.py core functions."""
+
 import sys
 from pathlib import Path
 
-import pytest
 
 SCRIPTS_DIR = Path(__file__).resolve().parent.parent.parent / "scripts"
 sys.path.insert(0, str(SCRIPTS_DIR))
 
-from semantic_diff_v2_v3 import extract_methods, compare_modules
+from semantic_diff_v2_v3 import extract_methods, compare_modules, check_body_wiring  # noqa: E402
 
 
 class TestExtractMethods:
@@ -87,3 +87,67 @@ class TestCompareModules:
         # **kwargs difference should not trigger PARAM_DIFF
         param_diffs = [d for d in drifts if d["type"] == "PARAM_DIFF"]
         assert len(param_diffs) == 0
+
+
+class TestCheckBodyWiring:
+    def test_detects_missing_kwargs_merge(self):
+        content = (
+            "    def createNetwork(self, orgId: str, name: str, productTypes: list, **kwargs):\n"
+            "        metadata = {}\n"
+            "        orgId = urllib.parse.quote(str(orgId), safe='')\n"
+            "        resource = f'/organizations/{orgId}/networks'\n"
+            '        body_params = ["name", "productTypes", "tags"]\n'
+            "        payload = {k: v for k, v in kwargs.items() if k in body_params}\n"
+            "        return self._session.post(metadata, resource, payload)\n"
+        )
+        drifts = check_body_wiring(content, "organizations")
+        wiring = [d for d in drifts if d["type"] == "BODY_WIRING"]
+        assert len(wiring) == 1
+        assert "name" in wiring[0]["detail"] or "productTypes" in wiring[0]["detail"]
+
+    def test_passes_with_kwargs_update_locals(self):
+        content = (
+            "    def createNetwork(self, orgId: str, name: str, productTypes: list, **kwargs):\n"
+            "        kwargs.update(locals())\n"
+            "        metadata = {}\n"
+            '        body_params = ["name", "productTypes", "tags"]\n'
+            "        payload = {k: v for k, v in kwargs.items() if k in body_params}\n"
+            "        return self._session.post(metadata, resource, payload)\n"
+        )
+        drifts = check_body_wiring(content, "organizations")
+        assert len(drifts) == 0
+
+    def test_passes_with_kwargs_equals_locals(self):
+        content = (
+            "    def createNetwork(self, orgId: str, name: str, productTypes: list):\n"
+            "        kwargs = locals()\n"
+            "        metadata = {}\n"
+            '        body_params = ["name", "productTypes"]\n'
+            "        payload = {k: v for k, v in kwargs.items() if k in body_params}\n"
+            "        return self._session.post(metadata, resource, payload)\n"
+        )
+        drifts = check_body_wiring(content, "organizations")
+        assert len(drifts) == 0
+
+    def test_ignores_path_only_params(self):
+        content = (
+            "    def getNetwork(self, networkId: str):\n"
+            "        metadata = {}\n"
+            "        networkId = urllib.parse.quote(str(networkId), safe='')\n"
+            "        return self._session.get(metadata, resource)\n"
+        )
+        drifts = check_body_wiring(content, "networks")
+        assert len(drifts) == 0
+
+    def test_detects_query_wiring_issue(self):
+        content = (
+            "    def listClients(self, networkId: str, mac: str, **kwargs):\n"
+            "        metadata = {}\n"
+            '        query_params = ["mac", "ip"]\n'
+            "        params = {k: v for k, v in kwargs.items() if k in query_params}\n"
+            "        return self._session.get(metadata, resource, params)\n"
+        )
+        drifts = check_body_wiring(content, "networks")
+        query = [d for d in drifts if d["type"] == "QUERY_WIRING"]
+        assert len(query) == 1
+        assert "mac" in query[0]["detail"]

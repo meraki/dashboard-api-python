@@ -57,6 +57,77 @@ def extract_methods(content: str) -> dict[str, dict]:
     return methods
 
 
+def extract_method_bodies(content: str) -> dict[str, str]:
+    """Extract method name -> full body text (everything until the next method or EOF)."""
+    bodies = {}
+    pattern = re.compile(r"^    def (\w+)\(.*?\):\n", re.MULTILINE | re.DOTALL)
+    matches = list(pattern.finditer(content))
+    for i, match in enumerate(matches):
+        name = match.group(1)
+        if name == "__init__":
+            continue
+        start = match.end()
+        end = matches[i + 1].start() if i + 1 < len(matches) else len(content)
+        bodies[name] = content[start:end]
+    return bodies
+
+
+def check_body_wiring(content: str, scope: str) -> list[dict]:
+    """Check that positional params are reachable from the payload/params dict.
+
+    Detects the case where a method has required positional args listed in
+    body_params but no kwargs.update(locals()) or kwargs = locals() to merge
+    them into kwargs for the dict comprehension.
+    """
+    methods = extract_methods(content)
+    bodies = extract_method_bodies(content)
+    drifts = []
+
+    for name, info in methods.items():
+        body = bodies.get(name, "")
+        if "body_params" not in body and "query_params" not in body:
+            continue
+
+        has_merge = "kwargs.update(locals())" in body or "kwargs = locals()" in body
+
+        if has_merge:
+            continue
+
+        positional_params = {p for p in info["params"] if p != "**kwargs" and "=" not in p and p != "self"}
+
+        if "body_params" in body:
+            bp_match = re.search(r"body_params\s*=\s*\[(.*?)\]", body, re.DOTALL)
+            if bp_match:
+                listed = set(re.findall(r'"(\w+)"', bp_match.group(1)))
+                unwired = positional_params & listed
+                if unwired:
+                    drifts.append(
+                        {
+                            "type": "BODY_WIRING",
+                            "scope": scope,
+                            "method": name,
+                            "detail": f"Positional params {unwired} in body_params but no kwargs merge",
+                        }
+                    )
+
+        if "query_params" in body:
+            qp_match = re.search(r"query_params\s*=\s*\[(.*?)\]", body, re.DOTALL)
+            if qp_match:
+                listed = set(re.findall(r'"(\w+)"', qp_match.group(1)))
+                unwired = positional_params & listed
+                if unwired:
+                    drifts.append(
+                        {
+                            "type": "QUERY_WIRING",
+                            "scope": scope,
+                            "method": name,
+                            "detail": f"Positional params {unwired} in query_params but no kwargs merge",
+                        }
+                    )
+
+    return drifts
+
+
 def compare_modules(v2_content: str, v3_content: str, scope: str) -> list[dict]:
     """Compare two module contents semantically. Returns list of drift entries."""
     v2_methods = extract_methods(v2_content)
@@ -210,6 +281,7 @@ def main():
             v3_content = (v3_api / f"{scope}.py").read_text()
             drifts = compare_modules(v2_content, v3_content, scope)
             all_drifts.extend(drifts)
+            all_drifts.extend(check_body_wiring(v3_content, scope))
 
     # Cleanup
     shutil.rmtree(v2_dir, ignore_errors=True)
@@ -226,17 +298,24 @@ def main():
             missing_v2 = [d for d in all_drifts if d["type"] == "MISSING_IN_V2"]
             param_diffs = [d for d in all_drifts if d["type"] == "PARAM_DIFF"]
             type_diffs = [d for d in all_drifts if d["type"] == "TYPE_DIFF"]
+            wiring = [d for d in all_drifts if d["type"] in ("BODY_WIRING", "QUERY_WIRING")]
 
             print("\n=== Semantic Drift Report ===")
             print(f"Methods missing in v3: {len(missing_v3)}")
             print(f"Methods only in v3: {len(missing_v2)}")
             print(f"Parameter differences: {len(param_diffs)}")
             print(f"Type differences: {len(type_diffs)}")
+            print(f"Body/query wiring issues: {len(wiring)}")
 
             if missing_v3:
                 print(f"\n--- Missing in v3 ({len(missing_v3)}) ---")
                 for d in missing_v3[:20]:
                     print(f"  {d['scope']}.{d['method']}")
+
+            if wiring:
+                print(f"\n--- Wiring Issues ({len(wiring)}) ---")
+                for d in wiring[:20]:
+                    print(f"  {d['scope']}.{d['method']}: {d['detail']}")
 
             if param_diffs:
                 print(f"\n--- Param Diffs ({len(param_diffs)}) ---")
@@ -248,13 +327,11 @@ def main():
                 for d in type_diffs[:20]:
                     print(f"  {d['scope']}.{d['method']}: {d['detail']}")
 
-    # Exit code
-    if args.fail_on_missing:
-        missing_count = len([d for d in all_drifts if d["type"] == "MISSING_IN_V3"])
-        if missing_count > 0:
-            sys.exit(1)
+    # Exit code: fail on critical issues
+    critical = [d for d in all_drifts if d["type"] in ("MISSING_IN_V3", "BODY_WIRING", "QUERY_WIRING")]
+    if args.fail_on_missing and critical:
+        sys.exit(1)
 
-    # PARAM_DIFF and TYPE_DIFF are informational for now (v3 intentionally differs)
     sys.exit(0)
 
 
