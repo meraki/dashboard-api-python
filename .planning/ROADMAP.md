@@ -58,6 +58,9 @@ Plans:
   3. Generator handles x-batchable-actions for batch class generation (298 batch endpoints)
   4. CLI accepts same args as v2 and fetches v3 spec with ?version=3 param
 **Plans**: 2 plans
+Plans:
+- [ ] 03-01-PLAN.md: Core v3 generator module (sync/async/batch generation, explicit params, batch action matching)
+- [ ] 03-02-PLAN.md: CLI entry point with v3 spec fetch and integration tests
 
 ### Phase 4: Type Stubs
 **Goal**: Generator produces .pyi type stubs via Jinja2 for static analysis
@@ -86,8 +89,8 @@ Phases execute in numeric order: 1 > 2 > 3 > 4 > 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Parser Foundation | 0/2 | Planning complete | - |
-| 2. Unified Parameter Parser | 0/? | Not started | - |
-| 3. Generation Integration | 0/? | Not started | - |
+| 1. Parser Foundation | 2/2 | Complete | 2026-04-30 |
+| 2. Unified Parameter Parser | 2/2 | Complete | 2026-04-30 |
+| 3. Generation Integration | 0/2 | Planning complete | - |
 | 4. Type Stubs | 0/? | Not started | - |
 | 5. Testing & CI | 0/? | Not started | - |
