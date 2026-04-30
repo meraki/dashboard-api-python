@@ -73,7 +73,7 @@ Plans:
 **Plans**: 2 plans
 Plans:
 - [x] 04-01-PLAN.md: TDD stub generation module with typed signatures (nullable, oneOf)
-- [ ] 04-02-PLAN.md: CLI --stubs flag integration and py.typed marker
+- [x] 04-02-PLAN.md: CLI --stubs flag integration and py.typed marker
 
 ### Phase 5: Testing & CI
 **Goal**: Comprehensive test suite and CI drift detection validate v3 generator correctness
