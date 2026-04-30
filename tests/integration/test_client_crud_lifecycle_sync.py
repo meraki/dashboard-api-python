@@ -205,6 +205,23 @@ def test_delete_policy_objects(dashboard, org_id, version_salt):
     assert len(missed_policy_objects) == 0
 
 
-def test_delete_network(dashboard, network):
-    response = dashboard.networks.deleteNetwork(network["id"])
-    assert response is None
+def test_delete_network(dashboard, org_id, network):
+    from meraki.api.batch.networks import ActionBatchNetworks
+
+    action = ActionBatchNetworks().deleteNetwork(network["id"])
+
+    batch = dashboard.organizations.createOrganizationActionBatch(
+        organizationId=org_id,
+        actions=[action],
+        confirmed=False,
+        synchronous=False,
+    )
+    assert batch is not None
+    assert batch["id"]
+
+    response = dashboard.organizations.updateOrganizationActionBatch(
+        organizationId=org_id,
+        actionBatchId=batch["id"],
+        confirmed=True,
+    )
+    assert response is not None
