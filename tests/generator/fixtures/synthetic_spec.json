@@ -49,6 +49,30 @@
         ]
       }
     },
+    "/networks/{networkId}/profiles/{profileId}": {
+      "put": {
+        "tags": ["networks", "configure", "profiles"],
+        "operationId": "updateNetworkProfile",
+        "summary": "Update a network profile",
+        "description": "Update a network profile",
+        "parameters": [
+          {"name": "networkId", "in": "path", "type": "string", "required": true, "description": "Network ID"},
+          {"name": "profileId", "in": "path", "type": "string", "required": false, "description": "Profile ID"},
+          {
+            "name": "updateNetworkProfile",
+            "in": "body",
+            "schema": {
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name of the profile."
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "/networks/{networkId}": {
       "delete": {
         "tags": ["networks", "configure"],
@@ -68,6 +92,10 @@
     },
     {
       "summary": "Update the settings for a network",
+      "operation": "update"
+    },
+    {
+      "summary": "Update a network profile",
       "operation": "update"
     }
   ]

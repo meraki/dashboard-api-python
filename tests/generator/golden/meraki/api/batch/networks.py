@@ -28,6 +28,31 @@ class ActionBatchNetworks(object):
         }
         return action
 
+    def updateNetworkProfile(self, networkId: str, profileId: str, **kwargs):
+        """
+        **Update a network profile**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-profile
+
+        - networkId (string): Network ID
+        - profileId (string): Profile ID
+        - name (string): Name of the profile.
+        """
+
+        kwargs.update(locals())
+
+        resource = f"/networks/{networkId}/profiles/{profileId}"
+
+        body_params = [
+            "name",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
     def deleteNetwork(self, networkId: str):
         """
         **Delete a network**

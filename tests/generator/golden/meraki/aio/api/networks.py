@@ -6,9 +6,7 @@ class AsyncNetworks:
         super().__init__()
         self._session = session
 
-    def getNetworkClients(
-        self, networkId: str, total_pages=1, direction="next", **kwargs
-    ):
+    def getNetworkClients(self, networkId: str, total_pages=1, direction="next", **kwargs):
         """
         **List the clients that have used this network in the timespan**
         https://developer.cisco.com/meraki/api-v1/#!get-network-clients
@@ -41,9 +39,7 @@ class AsyncNetworks:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        return self._session.get_pages(
-            metadata, resource, params, total_pages, direction
-        )
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def updateNetworkSettings(self, networkId: str, **kwargs):
         """
@@ -67,6 +63,33 @@ class AsyncNetworks:
         body_params = [
             "localStatusPageEnabled",
             "securePort",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
+    def updateNetworkProfile(self, networkId: str, profileId: str, **kwargs):
+        """
+        **Update a network profile**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-profile
+
+        - networkId (string): Network ID
+        - profileId (string): Profile ID
+        - name (string): Name of the profile.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["networks", "configure", "profiles"],
+            "operation": "updateNetworkProfile",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        profileId = urllib.parse.quote(str(profileId), safe="")
+        resource = f"/networks/{networkId}/profiles/{profileId}"
+
+        body_params = [
+            "name",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 

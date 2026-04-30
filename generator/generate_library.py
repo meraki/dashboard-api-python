@@ -62,10 +62,7 @@ def check_python_version():
         f"python_version_tuple()[1] = {platform.python_version_tuple()[1]} "
     )
 
-    if not (
-        int(platform.python_version_tuple()[0]) == 3
-        and int(platform.python_version_tuple()[1]) >= 10
-    ):
+    if not (int(platform.python_version_tuple()[0]) == 3 and int(platform.python_version_tuple()[1]) >= 10):
         sys.exit(version_warning_string)
 
 
@@ -90,45 +87,25 @@ def return_params(operation: str, params: dict, param_filters):
     else:
         ret = {}
         if "required" in param_filters:
-            ret.update(
-                {k: v for k, v in params.items() if "required" in v and v["required"]}
-            )
+            ret.update({k: v for k, v in params.items() if "required" in v and v["required"]})
         if "pagination" in param_filters:
-            ret.update(
-                generate_pagination_parameters(operation) if "perPage" in params else {}
-            )
+            ret.update(generate_pagination_parameters(operation) if "perPage" in params else {})
         if "optional" in param_filters:
-            ret.update(
-                {
-                    k: v
-                    for k, v in params.items()
-                    if "required" in v and not v["required"]
-                }
-            )
+            ret.update({k: v for k, v in params.items() if "required" in v and not v["required"]})
         if "path" in param_filters:
-            ret.update(
-                {k: v for k, v in params.items() if "in" in v and v["in"] == "path"}
-            )
+            ret.update({k: v for k, v in params.items() if "in" in v and v["in"] == "path"})
         if "query" in param_filters:
-            ret.update(
-                {k: v for k, v in params.items() if "in" in v and v["in"] == "query"}
-            )
+            ret.update({k: v for k, v in params.items() if "in" in v and v["in"] == "query"})
         if "body" in param_filters:
-            ret.update(
-                {k: v for k, v in params.items() if "in" in v and v["in"] == "body"}
-            )
+            ret.update({k: v for k, v in params.items() if "in" in v and v["in"] == "body"})
         if "array" in param_filters:
-            ret.update(
-                {k: v for k, v in params.items() if "in" in v and v["type"] == "array"}
-            )
+            ret.update({k: v for k, v in params.items() if "in" in v and v["type"] == "array"})
         if "enum" in param_filters:
             ret.update({k: v for k, v in params.items() if "enum" in v})
         return ret
 
 
-def unpack_param_without_schema(
-    all_params: dict, this_param: dict, name: str, is_required: bool
-):
+def unpack_param_without_schema(all_params: dict, this_param: dict, name: str, is_required: bool):
     # Set required attribute
     all_params[name] = {"required": is_required}
 
@@ -202,15 +179,11 @@ def unpack_params(operation: str, parameters: dict, param_filters):
 
         # If there is no schema, then consult the required attribute if it exists
         elif "required" in p and p["required"]:
-            unpacked_params.update(
-                unpack_param_without_schema(unpacked_params, p, name, True)
-            )
+            unpacked_params.update(unpack_param_without_schema(unpacked_params, p, name, True))
 
         # Otherwise, the parameter is not required
         else:
-            unpacked_params.update(
-                unpack_param_without_schema(unpacked_params, p, name, False)
-            )
+            unpacked_params.update(unpack_param_without_schema(unpacked_params, p, name, False))
 
     # Add custom library parameters to handle pagination
     if "perPage" in unpacked_params:
@@ -230,9 +203,7 @@ def parse_params(operation: str, parameters: dict, param_filters=None):
     return unpack_params(operation, parameters, param_filters)
 
 
-def generate_library(
-    spec: dict, version_number: str, api_version_number: str, is_github_action: bool
-):
+def generate_library(spec: dict, version_number: str, api_version_number: str, is_github_action: bool):
     # Supported scopes list will include organizations, networks, devices, and all product types.
     supported_scopes = [
         "organizations",
@@ -297,9 +268,7 @@ def generate_library(
         "aio/api/__init__.py",
         "api/batch/__init__.py",
     ]
-    base_url = (
-        "https://raw.githubusercontent.com/meraki/dashboard-api-python/master/meraki/"
-    )
+    base_url = "https://raw.githubusercontent.com/meraki/dashboard-api-python/master/meraki/"
     for file in non_generated:
         response = requests.get(f"{base_url}{file}")
         with open(f"meraki/{file}", "w+", encoding="utf-8", newline=None) as fp:
@@ -325,9 +294,7 @@ def generate_library(
     # Generate API libraries
     # We will use newline=None to ensure that line breaks are handled correctly, especially when generating
     # on Windows and using `git autocrlf true`
-    jinja_env = jinja2.Environment(
-        trim_blocks=True, lstrip_blocks=True, keep_trailing_newline=True
-    )
+    jinja_env = jinja2.Environment(trim_blocks=True, lstrip_blocks=True, keep_trailing_newline=True)
     jinja_env.filters["to_double_quote_list"] = lambda lst: json.dumps(lst)
 
     # Iterate through the scopes creating standard, asyncio and batch modules for each
@@ -345,17 +312,11 @@ def generate_modules(batchable_actions, jinja_env, scopes, template_dir):
         section = scopes[scope]
 
         # Generate the standard module
-        with open(
-            f"meraki/api/{scope}.py", "w", encoding="utf-8", newline=None
-        ) as output:
+        with open(f"meraki/api/{scope}.py", "w", encoding="utf-8", newline=None) as output:
             # Open module file for Asyncio API libraries
-            async_output = open(
-                f"meraki/aio/api/{scope}.py", "w", encoding="utf-8", newline=None
-            )
+            async_output = open(f"meraki/aio/api/{scope}.py", "w", encoding="utf-8", newline=None)
             # Open module file for Action Batch API libraries
-            batch_output = open(
-                f"meraki/api/batch/{scope}.py", "w", encoding="utf-8", newline=None
-            )
+            batch_output = open(f"meraki/api/batch/{scope}.py", "w", encoding="utf-8", newline=None)
 
             modules = [
                 {"template_name": "class_template.jinja2", "module_output": output},
@@ -380,9 +341,7 @@ def generate_modules(batchable_actions, jinja_env, scopes, template_dir):
                 )
 
             # Generate API & Asyncio API functions
-            generate_standard_and_async_functions(
-                jinja_env, template_dir, section, output, async_output
-            )
+            generate_standard_and_async_functions(jinja_env, template_dir, section, output, async_output)
 
             # Generate API action batch functions
             generate_action_batch_functions(
@@ -413,10 +372,10 @@ def generate_standard_and_async_functions(
 
             # Function definition
             definition = ""
+            defined_params = set()
             if parameters:
-                for p, values in parse_params(
-                    operation, parameters, "required"
-                ).items():
+                for p, values in parse_params(operation, parameters, "required").items():
+                    defined_params.add(p)
                     if values["type"] == "array":
                         definition += f", {p}: list"
                     elif values["type"] == "number":
@@ -429,6 +388,23 @@ def generate_standard_and_async_functions(
                         definition += f", {p}: dict"
                     elif values["type"] == "string":
                         definition += f", {p}: str"
+
+                # Path params must be in the signature for URL construction
+                for p, values in parse_params(operation, parameters, "path").items():
+                    if p not in defined_params:
+                        defined_params.add(p)
+                        if values["type"] == "array":
+                            definition += f", {p}: list"
+                        elif values["type"] == "number":
+                            definition += f", {p}: float"
+                        elif values["type"] == "integer":
+                            definition += f", {p}: int"
+                        elif values["type"] == "boolean":
+                            definition += f", {p}: bool"
+                        elif values["type"] == "object":
+                            definition += f", {p}: dict"
+                        elif values["type"] == "string":
+                            definition += f", {p}: str"
 
                 if "perPage" in parse_params(operation, parameters):
                     if operation in REVERSE_PAGINATION:
@@ -443,14 +419,10 @@ def generate_standard_and_async_functions(
 
             # Docstring
             param_descriptions = list()
-            all_params = parse_params(
-                operation, parameters, ["required", "pagination", "optional"]
-            )
+            all_params = parse_params(operation, parameters, ["required", "pagination", "optional"])
             if all_params:
                 for p, values in all_params.items():
-                    param_descriptions.append(
-                        f"{p} ({values['type']}): {values['description']}"
-                    )
+                    param_descriptions.append(f"{p} ({values['type']}): {values['description']}")
 
             # Combine keyword args with locals
             kwarg_line = ""
@@ -469,21 +441,15 @@ def generate_standard_and_async_functions(
             # Function body for GET endpoints
             query_params = array_params = body_params = path_params = {}
             if method == "get":
-                array_params, call_line, path_params, query_params = parse_get_params(
-                    operation, parameters
-                )
+                array_params, call_line, path_params, query_params = parse_get_params(operation, parameters)
 
             # Function body for POST/PUT endpoints
             elif method == "post" or method == "put":
-                body_params, call_line, path_params = parse_post_and_put_params(
-                    method, operation, parameters
-                )
+                body_params, call_line, path_params = parse_post_and_put_params(method, operation, parameters)
 
             # Function body for DELETE endpoints
             elif method == "delete":
-                call_line, path_params, query_params = parse_delete_params(
-                    operation, parameters
-                )
+                call_line, path_params, query_params = parse_delete_params(operation, parameters)
 
             # Add function to files
             with open(
@@ -544,14 +510,10 @@ def parse_get_params(operation: str, parameters: dict):
         if pagination_params:
             if operation == "getNetworkEvents":
                 call_line = (
-                    "return self._session.get_pages(metadata, resource, params, "
-                    "total_pages, direction, event_log_end_time)"
+                    "return self._session.get_pages(metadata, resource, params, total_pages, direction, event_log_end_time)"
                 )
             else:
-                call_line = (
-                    "return self._session.get_pages(metadata, resource, params, "
-                    "total_pages, direction)"
-                )
+                call_line = "return self._session.get_pages(metadata, resource, params, total_pages, direction)"
         else:
             call_line = "return self._session.get(metadata, resource, params)"
     else:
@@ -589,9 +551,7 @@ def generate_action_batch_functions(
 ):
     for path, methods in section.items():
         for method, endpoint in methods.items():
-            batchable_action_summaries = [
-                action["summary"] for action in batchable_actions
-            ]
+            batchable_action_summaries = [action["summary"] for action in batchable_actions]
             if endpoint["description"] in batchable_action_summaries:
                 # Get metadata
                 tags = endpoint["tags"]
@@ -600,17 +560,13 @@ def generate_action_batch_functions(
                 summary = endpoint["summary"]
 
                 this_action = [
-                    action
-                    for action in batchable_actions
-                    if action["summary"] == description or action["summary"] == summary
+                    action for action in batchable_actions if action["summary"] == description or action["summary"] == summary
                 ][0]
 
                 batch_operation = this_action["operation"]
 
                 # May need update for OASv3
-                parameters = (
-                    endpoint["parameters"] if "parameters" in endpoint else None
-                )
+                parameters = endpoint["parameters"] if "parameters" in endpoint else None
 
                 # Function body for GET endpoints
                 query_params = array_params = body_params = {}
@@ -624,10 +580,10 @@ def generate_action_batch_functions(
 
                 # Function definition
                 definition = ""
+                defined_params = set()
                 if parameters:
-                    for p, values in parse_params(
-                        operation, parameters, "required"
-                    ).items():
+                    for p, values in parse_params(operation, parameters, "required").items():
+                        defined_params.add(p)
                         # Match OAS schema types to Python types
                         match values["type"]:
                             case "array":
@@ -643,6 +599,24 @@ def generate_action_batch_functions(
                             case "string":
                                 definition += f", {p}: str"
 
+                    # Path params must be in the signature for URL construction
+                    for p, values in parse_params(operation, parameters, "path").items():
+                        if p not in defined_params:
+                            defined_params.add(p)
+                            match values["type"]:
+                                case "array":
+                                    definition += f", {p}: list"
+                                case "number":
+                                    definition += f", {p}: float"
+                                case "integer":
+                                    definition += f", {p}: int"
+                                case "boolean":
+                                    definition += f", {p}: bool"
+                                case "object":
+                                    definition += f", {p}: dict"
+                                case "string":
+                                    definition += f", {p}: str"
+
                     if "perPage" in parse_params(operation, parameters):
                         if operation in REVERSE_PAGINATION:
                             definition += ", total_pages=1, direction='prev'"
@@ -656,14 +630,10 @@ def generate_action_batch_functions(
 
                 # Docstring
                 param_descriptions = list()
-                all_params = parse_params(
-                    operation, parameters, ["required", "pagination", "optional"]
-                )
+                all_params = parse_params(operation, parameters, ["required", "pagination", "optional"])
                 if all_params:
                     for p, values in all_params.items():
-                        param_descriptions.append(
-                            f"{p} ({values['type']}): {values['description']}"
-                        )
+                        param_descriptions.append(f"{p} ({values['type']}): {values['description']}")
 
                 # Combine keyword args with locals
                 kwarg_line = ""
