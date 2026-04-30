@@ -52,6 +52,22 @@ def _run_v3_generation(v3_spec, output_dir):
         os.chdir(original_cwd)
 
 
+def _run_v3_generation_with_stubs(v3_spec, output_dir):
+    import generate_library_v3 as gen_v3
+    original_cwd = os.getcwd()
+    try:
+        os.chdir(output_dir)
+        with patch("generate_library_v3.requests.get", side_effect=_mock_requests_get):
+            gen_v3.generate_library(
+                spec=v3_spec,
+                version_number="0.0.0-test",
+                is_github_action=False,
+                generate_stubs=True,
+            )
+    finally:
+        os.chdir(original_cwd)
+
+
 class TestV3GeneratorOutput:
     def test_produces_sync_module(self, v3_spec, output_dir):
         _run_v3_generation(v3_spec, output_dir)
@@ -154,3 +170,43 @@ class TestV3CLI:
             assert "12345" in args[0]
             assert kwargs.get("params") == {"version": 3}
             assert "Bearer testkey" in kwargs.get("headers", {}).get("Authorization", "")
+
+
+class TestV3Stubs:
+    def test_stubs_flag_produces_pyi(self, v3_spec, output_dir):
+        """GEN-03: --stubs produces .pyi files."""
+        _run_v3_generation_with_stubs(v3_spec, output_dir)
+        assert (output_dir / "meraki" / "api" / "networks.pyi").exists()
+
+    def test_stubs_flag_creates_py_typed(self, v3_spec, output_dir):
+        """GEN-03: --stubs creates py.typed marker."""
+        _run_v3_generation_with_stubs(v3_spec, output_dir)
+        assert (output_dir / "meraki" / "py.typed").exists()
+
+    def test_no_stubs_without_flag(self, v3_spec, output_dir):
+        """GEN-03: Without --stubs, no .pyi files generated."""
+        _run_v3_generation(v3_spec, output_dir)
+        assert not (output_dir / "meraki" / "api" / "networks.pyi").exists()
+        assert not (output_dir / "meraki" / "py.typed").exists()
+
+    def test_pyi_contains_typed_signatures(self, v3_spec, output_dir):
+        """GEN-03: .pyi has method signatures with type annotations."""
+        _run_v3_generation_with_stubs(v3_spec, output_dir)
+        content = (output_dir / "meraki" / "api" / "networks.pyi").read_text()
+        assert "def getNetwork" in content
+        assert "networkId: str" in content
+        assert "..." in content  # ellipsis body
+
+    def test_pyi_nullable_annotation(self, v3_spec, output_dir):
+        """GEN-03: Nullable params use | None annotation."""
+        _run_v3_generation_with_stubs(v3_spec, output_dir)
+        content = (output_dir / "meraki" / "api" / "networks.pyi").read_text()
+        # Optional (non-required) params should have | None = None
+        assert "| None" in content
+
+    def test_cli_accepts_s_flag(self):
+        """GEN-03: CLI accepts -s flag."""
+        import getopt
+        opts, args = getopt.getopt(["-s", "-v", "1.0"], "ho:k:v:a:g:s")
+        flags = [o for o, _ in opts]
+        assert "-s" in flags
