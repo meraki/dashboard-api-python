@@ -18,6 +18,7 @@ from generate_library import (
     check_python_version,
     return_params,
 )
+from generate_stubs import generate_stub_modules
 
 READ_ME = """
 === PREREQUISITES ===
@@ -28,12 +29,14 @@ pip[3] install requests
 This script generates the Meraki Python library from the OpenAPI v3 specification.
 
 === USAGE ===
-python[3] generate_library_v3.py [-o <org_id>] [-k <api_key>] [-v <version_number>] [-a <api_version_number>] [-g <is_called_from_github_action>]
+python[3] generate_library_v3.py [-o <org_id>] [-k <api_key>] [-v <version_number>] [-a <api_version_number>] [-g <is_called_from_github_action>] [-s]
+
+-s generates .pyi type stub files for static analysis
 
 API key can, and is recommended to, be set as an environment variable named MERAKI_DASHBOARD_API_KEY."""
 
 
-def generate_library(spec: dict, version_number: str, is_github_action: bool):
+def generate_library(spec: dict, version_number: str, is_github_action: bool, generate_stubs: bool = False):
     # Clear parser cache at entry
     clear_cache()
 
@@ -133,6 +136,15 @@ def generate_library(spec: dict, version_number: str, is_github_action: bool):
 
     # Iterate through the scopes creating standard, asyncio and batch modules for each
     generate_modules(spec, batchable_actions, jinja_env, scopes, template_dir)
+
+    # Generate type stubs if requested
+    if generate_stubs:
+        print("Generating .pyi type stubs...")
+        generate_stub_modules(spec, scopes, jinja_env, template_dir)
+        # Write py.typed marker for PEP 561
+        with open("meraki/py.typed", "w") as f:
+            pass  # Empty marker file
+        print("Type stubs and py.typed marker created.")
 
     # Format generated code with ruff
     print("Formatting generated code with ruff...")
@@ -552,9 +564,10 @@ def main(inputs):
     version_number = "custom"
     api_version_number = "custom"
     is_github_action = False
+    generate_stubs_flag = False
 
     try:
-        opts, args = getopt.getopt(inputs, "ho:k:v:a:g:")
+        opts, args = getopt.getopt(inputs, "ho:k:v:a:g:s")
     except getopt.GetoptError:
         print_help()
         sys.exit(2)
@@ -573,6 +586,8 @@ def main(inputs):
         elif opt == "-g":
             if arg.lower() == "true":
                 is_github_action = True
+        elif opt == "-s":
+            generate_stubs_flag = True
 
     check_python_version()
 
@@ -604,7 +619,7 @@ def main(inputs):
                 "If this continues for more than an hour, please contact Meraki support."
             )
 
-    generate_library(spec, version_number, is_github_action)
+    generate_library(spec, version_number, is_github_action, generate_stubs=generate_stubs_flag)
 
 
 if __name__ == "__main__":
