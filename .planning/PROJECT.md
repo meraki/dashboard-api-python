@@ -8,18 +8,19 @@ A Python SDK wrapping the Meraki Dashboard API, auto-generated from the OpenAPI 
 
 Developers can interact with every Meraki Dashboard API endpoint through a well-typed, well-documented Python client that stays current with the live API spec.
 
-## Current State
+## Current Milestone: v1.1 Deprecation Cycle
 
-**Shipped:** v1.0 OASv3 Generator (2026-04-30)
+**Goal:** Promote v3 generator to default, deprecate and remove v2 generator and abandoned v3 attempt.
 
-Modular OASv3 generator built and tested. Produces sync, async, and batch modules with explicit param construction, .pyi type stubs, and CI drift detection against live spec.
+**Target features:**
+- Rename v2 generator to `generate_library_oasv2.py` with deprecation warning
+- Promote v3 generator to `generate_library.py` (new default)
+- Remove abandoned `generate_library_oasv3.py`
+- Remove v2 generator after confirming no rollbacks needed
 
-**New files:**
-- `generator/parser_v3.py` (283 LOC) - $ref resolution, requestBody parsing, unified parse_params_v3
-- `generator/generate_library_v3.py` (630 LOC) - Module generation + CLI
-- `generator/generate_stubs.py` (136 LOC) - .pyi stub generation
-- `scripts/semantic_diff_v2_v3.py` (262 LOC) - v2/v3 drift detection
-- 124 tests passing
+## Previous State (v1.0)
+
+Modular OASv3 generator built and tested. Produces sync, async, and batch modules with explicit param construction, .pyi type stubs, and CI drift detection against live spec. 124 tests passing.
 
 ## Requirements
 
@@ -42,11 +43,14 @@ Modular OASv3 generator built and tested. Produces sync, async, and batch module
 
 ### Active
 
-(Next milestone TBD)
+- [ ] Rename v2 generator to `generate_library_oasv2.py` with deprecation warning
+- [ ] Promote v3 generator to `generate_library.py` (new default)
+- [ ] Remove abandoned `generate_library_oasv3.py`
+- [ ] Remove v2 generator after one minor version cycle
 
 ### Out of Scope
 
-- Modifying the v2 generator (kept for rollback)
+- Modifying the v2 generator internals (rename/remove is in scope for v1.1)
 - Changing the runtime SDK behavior (rest_session, pagination, etc.)
 - Supporting OpenAPI 3.1 (`type: [string, null]` syntax)
 - Rewriting Jinja2 templates from scratch (reuse existing, extend as needed)
@@ -95,4 +99,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-30 after v1.0 milestone*
+*Last updated: 2026-04-30 after v1.1 milestone start*
