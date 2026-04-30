@@ -151,12 +151,6 @@
 - Risk: OASv3 generator bugs will not be caught until live API is tested.
 - Priority: Blocking. Must be implemented before OASv3 generator is promoted to default (see OASV3-MIGRATION.md step 1: "Parity gate").
 
-**Integration Tests Against Mocked API:**
-- What's not tested: Integration tests use `responses` mocking library. No live API tests in CI to validate against actual Meraki API behavior.
-- Files: `tests/integration/`
-- Risk: Real API behavior diverges from mocks (e.g., pagination format changes, new error codes, rate limit headers vary). Code works in CI but fails in production.
-- Priority: Low. Live integration tests would require API key in CI (security risk) and real rate limits (slow tests). Current approach (mocking) is standard practice; can be supplemented with manual testing or separate staging pipeline.
-
 ---
 
 ## Missing Critical Features
