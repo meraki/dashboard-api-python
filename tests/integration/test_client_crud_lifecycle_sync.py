@@ -7,12 +7,6 @@ import meraki
 
 
 @pytest.fixture(scope="session")
-def api_key(pytestconfig):
-    # Replace with a valid Meraki API key
-    return pytestconfig.getoption("apikey")
-
-
-@pytest.fixture(scope="session")
 def dashboard(api_key):
     return meraki.DashboardAPI(
         api_key,

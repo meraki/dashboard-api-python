@@ -7,16 +7,6 @@ import meraki.aio
 
 
 @pytest.fixture(scope="session")
-def api_key(pytestconfig):
-    return pytestconfig.getoption("apikey")
-
-
-@pytest.fixture(scope="session")
-def org_id(pytestconfig):
-    return pytestconfig.getoption("o")
-
-
-@pytest.fixture(scope="session")
 def version_salt():
     python_version = platform.python_version()
     salt = str(random.randint(1, 17381738))

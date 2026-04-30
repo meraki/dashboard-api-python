@@ -6,16 +6,6 @@ import meraki
 import meraki.aio
 
 
-@pytest.fixture(scope="session")
-def api_key(pytestconfig):
-    return pytestconfig.getoption("apikey")
-
-
-@pytest.fixture(scope="session")
-def org_id(pytestconfig):
-    return pytestconfig.getoption("o")
-
-
 def test_sync_org_wide_clients_workflow(api_key, org_id):
     """Multi-endpoint chain: orgs -> networks -> clients."""
     dashboard = meraki.DashboardAPI(

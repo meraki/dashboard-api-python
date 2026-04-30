@@ -1,16 +1,4 @@
-import pytest
-
 import meraki
-
-
-@pytest.fixture(scope="session")
-def api_key(pytestconfig):
-    return pytestconfig.getoption("apikey")
-
-
-@pytest.fixture(scope="session")
-def org_id(pytestconfig):
-    return pytestconfig.getoption("o")
 
 
 def test_pagination_iterator_vs_legacy_networks(api_key, org_id):
