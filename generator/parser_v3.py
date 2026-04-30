@@ -8,6 +8,8 @@ Module-level functions (not class-based) per project convention.
 Spec passed as argument to all functions.
 """
 
+from generate_library import generate_pagination_parameters, return_params
+
 # Module-level cache for resolved $ref pointers (D-01)
 _ref_cache: dict[str, dict] = {}
 
@@ -152,3 +154,130 @@ def parse_request_body(operation: dict, spec: dict) -> tuple[dict, str | None]:
         params[prop_name] = entry
 
     return params, content_type
+
+
+def _document_oneof(schema: dict) -> tuple[str, str]:
+    """Document oneOf schema as type string with property details."""
+    if "oneOf" not in schema:
+        return schema.get("type", "object"), ""
+
+    oneof_types = [s.get("type") for s in schema["oneOf"] if "type" in s]
+
+    # Extract object properties
+    object_props = []
+    for s in schema["oneOf"]:
+        if s.get("type") == "object" and "properties" in s:
+            object_props = sorted(s["properties"].keys())
+            break
+
+    type_str = " or ".join(sorted(set(oneof_types)))
+
+    desc_add = ""
+    if object_props:
+        desc_add = f" (object supports: {', '.join(object_props)})"
+
+    return type_str, desc_add
+
+
+def _extract_param_entry(p: dict, spec: dict) -> dict:
+    """Convert OASv3 parameter to v2-compatible param dict entry."""
+    schema = p.get("schema", {})
+    if "$ref" in schema:
+        schema = resolve_ref(spec, schema["$ref"])
+
+    # Handle oneOf schemas
+    if "oneOf" in schema:
+        type_str, desc_add = _document_oneof(schema)
+    elif schema.get("type") == "array":
+        type_str = "array"
+    else:
+        type_str = schema.get("type", "string")
+
+    description = p.get("description", schema.get("description", ""))
+    if "oneOf" in schema:
+        _, desc_add = _document_oneof(schema)
+        if desc_add:
+            description = description + desc_add if description else desc_add
+
+    entry = {
+        "required": p.get("required", False),
+        "in": p.get("in", "query"),
+        "type": type_str,
+        "description": description,
+        "nullable": schema.get("nullable", False),
+    }
+
+    # Include enum if present
+    if "enum" in schema:
+        entry["enum"] = schema["enum"]
+
+    # Array params: include items and style/explode defaults
+    if schema.get("type") == "array":
+        if "items" in schema:
+            entry["items"] = schema["items"]
+        # OASv3 defaults for query arrays: style=form, explode=true
+        if p.get("in", "query") == "query":
+            entry["style"] = schema.get("style", "form")
+            entry["explode"] = schema.get("explode", True)
+
+    return entry
+
+
+def parse_params_v3(operation: dict, path_item: dict, spec: dict, param_filters=None) -> tuple[dict, dict]:
+    """
+    Parse and merge parameters from path-level and operation-level sources.
+
+    Merges path_item.parameters + operation.parameters (op overrides on name+in match),
+    then merges requestBody params via parse_request_body. Detects perPage for pagination injection.
+    Applies param_filters via return_params if provided (per CONTEXT.md: reuse v2 filter logic).
+
+    Args:
+        operation: Operation dict (e.g., paths["/foo"]["get"]).
+        path_item: PathItem dict (e.g., paths["/foo"]) for path-level params.
+        spec: Full OpenAPI spec dict (for $ref resolution).
+        param_filters: Optional list of filter strings (e.g., ["required", "query"]).
+            Passed to return_params() from generate_library.py. None = return all.
+
+    Returns:
+        Tuple of (params_dict, metadata_dict).
+        params_dict: {param_name: {required, in, type, description, nullable, ...}}
+        metadata_dict: {"content_type": str | None}
+    """
+    if param_filters is None:
+        param_filters = []
+
+    merged_params = {}
+
+    # Step 1: Inherit path-level parameters
+    for p in path_item.get("parameters", []):
+        if "$ref" in p:
+            p = resolve_ref(spec, p["$ref"])
+        key = (p["name"], p.get("in", "query"))
+        merged_params[key] = p
+
+    # Step 2: Add/override with operation-level parameters
+    for p in operation.get("parameters", []):
+        if "$ref" in p:
+            p = resolve_ref(spec, p["$ref"])
+        key = (p["name"], p.get("in", "query"))
+        merged_params[key] = p  # Overrides path-level on name+in match
+
+    # Step 3: Convert to v2-compatible param dict format
+    params = {}
+    for (name, location), p in merged_params.items():
+        params[name] = _extract_param_entry(p, spec)
+
+    # Step 4: Merge requestBody params
+    body_params, content_type = parse_request_body(operation, spec)
+    params.update(body_params)
+
+    # Step 5: Detect perPage and inject pagination params
+    operation_id = operation.get("operationId", "")
+    if "perPage" in params:
+        params.update(generate_pagination_parameters(operation_id))
+
+    # Step 6: Apply param_filters via return_params (per CONTEXT.md decision)
+    params = return_params(operation_id, params, param_filters)
+
+    metadata = {"content_type": content_type}
+    return params, metadata
