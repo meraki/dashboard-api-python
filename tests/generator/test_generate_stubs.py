@@ -174,7 +174,7 @@ class TestStubGeneration:
             os.chdir(original_cwd)
 
     def test_oneof_param_renders_union(self, v3_spec, output_dir):
-        """Test 6: OneOf param (type 'string or object') renders as 'filter: str | dict | None = None'."""
+        """Test 6: OneOf param (type 'string or object') renders as 'filter: dict | str | None = None'."""
         import jinja2
         from generate_stubs import generate_stub_modules
         import common
@@ -199,8 +199,8 @@ class TestStubGeneration:
             generate_stub_modules(v3_spec, scopes, jinja_env, "")
 
             content = (output_dir / "meraki" / "api" / "networks.pyi").read_text()
-            # getNetworkClients has oneOf filter param
-            assert "str | dict" in content
+            # getNetworkClients has oneOf filter param (types sorted alphabetically)
+            assert "dict | str" in content
         finally:
             os.chdir(original_cwd)
 
