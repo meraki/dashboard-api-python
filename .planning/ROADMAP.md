@@ -59,7 +59,7 @@ Plans:
   4. CLI accepts same args as v2 and fetches v3 spec with ?version=3 param
 **Plans**: 2 plans
 Plans:
-- [ ] 03-01-PLAN.md: Core v3 generator module (sync/async/batch generation, explicit params, batch action matching)
+- [x] 03-01-PLAN.md: Core v3 generator module (sync/async/batch generation, explicit params, batch action matching)
 - [ ] 03-02-PLAN.md: CLI entry point with v3 spec fetch and integration tests
 
 ### Phase 4: Type Stubs
