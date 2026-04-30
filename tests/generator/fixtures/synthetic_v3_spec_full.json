@@ -1,0 +1,333 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Synthetic Meraki v3 Full Coverage",
+    "version": "1.0.0"
+  },
+  "tags": [
+    {"name": "networks", "description": "Network operations"},
+    {"name": "organizations", "description": "Organization operations"}
+  ],
+  "x-batchable-actions": [
+    {
+      "summary": "Create a network",
+      "resource": "/networks",
+      "operation": "create"
+    },
+    {
+      "summary": "Update a network",
+      "resource": "/networks/{networkId}",
+      "operation": "update"
+    },
+    {
+      "summary": "Delete a network",
+      "resource": "/networks/{networkId}",
+      "operation": "destroy"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "Network": {
+        "type": "object",
+        "properties": {
+          "id": {"type": "string"},
+          "name": {"type": "string", "description": "Network name"},
+          "tags": {"type": "array", "items": {"type": "string"}}
+        }
+      },
+      "Circular": {
+        "$ref": "#/components/schemas/Circular"
+      },
+      "ChainA": {
+        "type": "object",
+        "properties": {
+          "b": {"$ref": "#/components/schemas/ChainB"}
+        }
+      },
+      "ChainB": {
+        "type": "object",
+        "properties": {
+          "a": {"$ref": "#/components/schemas/ChainA"}
+        }
+      },
+      "DateFilter": {
+        "oneOf": [
+          {"type": "string"},
+          {
+            "type": "object",
+            "properties": {
+              "gt": {"type": "string"},
+              "lt": {"type": "string"}
+            }
+          }
+        ]
+      }
+    },
+    "parameters": {
+      "orgIdParam": {
+        "name": "organizationId",
+        "in": "path",
+        "required": true,
+        "schema": {"type": "string"},
+        "description": "Organization ID"
+      }
+    }
+  },
+  "paths": {
+    "/networks/{networkId}": {
+      "get": {
+        "tags": ["networks", "configure"],
+        "operationId": "getNetwork",
+        "summary": "Get network details",
+        "parameters": [
+          {
+            "name": "networkId",
+            "in": "path",
+            "required": true,
+            "schema": {"type": "string"}
+          }
+        ],
+        "responses": {"200": {"description": "OK"}}
+      },
+      "put": {
+        "tags": ["networks", "configure"],
+        "operationId": "updateNetwork",
+        "summary": "Update a network",
+        "parameters": [
+          {
+            "name": "networkId",
+            "in": "path",
+            "required": true,
+            "schema": {"type": "string"}
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {"type": "string", "description": "Network name"},
+                  "tags": {"type": "array", "items": {"type": "string"}, "description": "Network tags"},
+                  "timeZone": {"type": "string", "description": "Timezone", "nullable": true}
+                },
+                "required": ["name"]
+              }
+            }
+          }
+        },
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/networks/{networkId}/firmware": {
+      "post": {
+        "tags": ["networks", "configure"],
+        "operationId": "createNetworkFirmwareUpgrade",
+        "summary": "Create firmware upgrade",
+        "parameters": [
+          {
+            "name": "networkId",
+            "in": "path",
+            "required": true,
+            "schema": {"type": "string"}
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Network"
+              }
+            }
+          }
+        },
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/networks/{networkId}/upload": {
+      "post": {
+        "tags": ["networks", "configure"],
+        "operationId": "uploadNetworkFile",
+        "summary": "Upload binary file",
+        "parameters": [
+          {
+            "name": "networkId",
+            "in": "path",
+            "required": true,
+            "schema": {"type": "string"}
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/octet-stream": {
+              "schema": {"type": "string", "format": "binary"}
+            }
+          }
+        },
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/networks/{networkId}/floorPlans": {
+      "post": {
+        "tags": ["networks", "configure"],
+        "operationId": "createNetworkFloorPlan",
+        "summary": "Create floor plan",
+        "parameters": [
+          {
+            "name": "networkId",
+            "in": "path",
+            "required": true,
+            "schema": {"type": "string"}
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {"type": "string", "description": "Floor plan name"},
+                  "imageContents": {"type": "string", "format": "binary", "description": "Image file"}
+                },
+                "required": ["name", "imageContents"]
+              }
+            }
+          }
+        },
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/networks/{networkId}/clients": {
+      "post": {
+        "tags": ["networks", "configure"],
+        "operationId": "provisionNetworkClients",
+        "summary": "Provision network clients",
+        "parameters": [
+          {
+            "name": "networkId",
+            "in": "path",
+            "required": true,
+            "schema": {"type": "string"}
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "deviceName": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Device name (nullable)"
+                  },
+                  "mac": {
+                    "type": "string",
+                    "description": "Device MAC address"
+                  }
+                },
+                "required": ["deviceName", "mac"]
+              }
+            }
+          }
+        },
+        "responses": {"201": {"description": "Created"}}
+      }
+    },
+    "/organizations/{organizationId}/devices": {
+      "parameters": [{"$ref": "#/components/parameters/orgIdParam"}],
+      "get": {
+        "tags": ["organizations", "configure"],
+        "operationId": "getOrganizationDevices",
+        "summary": "Get organization devices",
+        "parameters": [
+          {
+            "name": "networkId",
+            "in": "query",
+            "schema": {"type": "string", "nullable": true},
+            "description": "Filter by network"
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "schema": {"$ref": "#/components/schemas/DateFilter"},
+            "description": "Start date filter"
+          },
+          {
+            "name": "tags",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {"type": "string"}
+            },
+            "description": "Filter by tags"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": ["online", "offline", "dormant"]
+            },
+            "description": "Filter by device status"
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "schema": {"type": "integer"},
+            "description": "Items per page"
+          }
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/organizations/{organizationId}/networks": {
+      "parameters": [
+        {
+          "name": "organizationId",
+          "in": "path",
+          "required": true,
+          "schema": {"type": "string"},
+          "description": "Path org ID"
+        }
+      ],
+      "get": {
+        "tags": ["organizations", "configure"],
+        "operationId": "getOrganizationNetworks",
+        "summary": "Get organization networks",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "in": "path",
+            "required": true,
+            "schema": {"type": "string"},
+            "description": "Operation org ID"
+          }
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/networks/{networkId}/events": {
+      "get": {
+        "tags": ["networks", "monitor"],
+        "operationId": "getNetworkEvents",
+        "summary": "Get network events",
+        "parameters": [
+          {
+            "name": "networkId",
+            "in": "path",
+            "required": true,
+            "schema": {"type": "string"}
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "schema": {"type": "integer"},
+            "description": "Items per page"
+          }
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    }
+  }
+}
