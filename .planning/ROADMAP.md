@@ -72,7 +72,7 @@ Plans:
   3. Type stubs reflect nullable (str | None) and oneOf (Union[str, dict]) semantics
 **Plans**: 2 plans
 Plans:
-- [ ] 04-01-PLAN.md: TDD stub generation module with typed signatures (nullable, oneOf)
+- [x] 04-01-PLAN.md: TDD stub generation module with typed signatures (nullable, oneOf)
 - [ ] 04-02-PLAN.md: CLI --stubs flag integration and py.typed marker
 
 ### Phase 5: Testing & CI
