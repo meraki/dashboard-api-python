@@ -48,12 +48,6 @@
 
 ## Security Considerations
 
-**API Key Exposure Risk (Logging):**
-- Risk: API key is passed as `api_key` parameter to `DashboardAPI` and `AsyncDashboardAPI` constructors (line 114 in both `meraki/__init__.py` and `meraki/aio/__init__.py`). If logging is enabled with DEBUG level, metadata dict logged at line 223 in `rest_session.py` and line 166 in `aio/rest_session.py` may contain URL with embedded credentials if user constructs URLs improperly. However, Authorization header (set in `_headers` with Bearer token) is not logged directly.
-- Files: `meraki/__init__.py:114`, `meraki/aio/__init__.py:114`, `meraki/rest_session.py:223`, `meraki/aio/rest_session.py:166`
-- Current mitigation: API key is read from `MERAKI_DASHBOARD_API_KEY` environment variable or passed explicitly; only added to headers, not logged. Metadata logging excludes headers. URL construction in generated API methods does not embed credentials.
-- Recommendations: Add security note to docstrings warning against hardcoding API keys in source. Add log filter to redact Bearer tokens from any logged headers. Consider adding example of using env vars in README (already present at line 60-62 in `meraki/__init__.py` docstring).
-
 **Certificate Path Validation:**
 - Risk: `certificate_path` parameter (line 23 in `meraki/aio/rest_session.py`) is passed to `ssl.create_default_context()` and `load_verify_locations()` without existence check. If path is invalid, SSL context creation fails but error is raised at request time (first async call), not at session init.
 - Files: `meraki/aio/rest_session.py:97-98`, `meraki/rest_session.py` (similar pattern ~line 180)
