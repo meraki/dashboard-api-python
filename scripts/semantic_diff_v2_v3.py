@@ -126,13 +126,13 @@ def mock_requests_get(url):
 
 def run_v2_generator(spec: dict, output_dir: Path):
     """Run v2 generator in output_dir."""
-    import generate_library as gen_v2
+    import generate_library_oasv2 as gen_v2
 
     original = os.getcwd()
     try:
         os.chdir(output_dir)
         with (
-            patch("generate_library.requests.get", side_effect=mock_requests_get),
+            patch("generate_library_oasv2.requests.get", side_effect=mock_requests_get),
             contextlib.redirect_stdout(open(os.devnull, "w")),
         ):
             gen_v2.generate_library(spec, "0.0.0-diff", "v1", False)
