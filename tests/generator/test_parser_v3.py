@@ -258,3 +258,18 @@ class TestParseParamsV3:
         assert "organizationId" in params
         assert "networkId" in params
         assert "perPage" in params
+
+    def test_golden_file(self, v3_spec):
+        """Snapshot test: parse_params_v3 output matches committed golden file."""
+        path = "/organizations/{organizationId}/devices"
+        operation = v3_spec["paths"][path]["get"]
+        path_item = v3_spec["paths"][path]
+
+        params, metadata = parse_params_v3(operation, path_item, v3_spec)
+
+        golden_path = FIXTURES / "parse_params_v3_golden.json"
+        with open(golden_path) as f:
+            expected = json.load(f)
+
+        assert params == expected["params"]
+        assert metadata == expected["metadata"]

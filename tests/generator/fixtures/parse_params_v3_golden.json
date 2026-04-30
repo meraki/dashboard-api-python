@@ -1,0 +1,55 @@
+{
+  "params": {
+    "organizationId": {
+      "required": true,
+      "in": "path",
+      "type": "string",
+      "description": "Organization ID",
+      "nullable": false
+    },
+    "networkId": {
+      "required": false,
+      "in": "query",
+      "type": "string",
+      "description": "Filter by network",
+      "nullable": true
+    },
+    "startDate": {
+      "required": false,
+      "in": "query",
+      "type": "object or string",
+      "description": "Start date filter (object supports: gt, lt)",
+      "nullable": false
+    },
+    "tags": {
+      "required": false,
+      "in": "query",
+      "type": "array",
+      "description": "Filter by tags",
+      "nullable": false,
+      "items": {
+        "type": "string"
+      },
+      "style": "form",
+      "explode": true
+    },
+    "perPage": {
+      "required": false,
+      "in": "query",
+      "type": "integer",
+      "description": "Items per page",
+      "nullable": false
+    },
+    "total_pages": {
+      "type": "integer or string",
+      "description": "use with perPage to get total results up to total_pages*perPage; -1 or \"all\" for all pages"
+    },
+    "direction": {
+      "type": "string",
+      "description": "direction to paginate, either \"next\" (default) or \"prev\" page"
+    }
+  },
+  "metadata": {
+    "content_type": null
+  }
+}
