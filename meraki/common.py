@@ -9,10 +9,7 @@ from meraki.exceptions import PythonVersionError, SessionInputError
 def check_python_version():
     # Check minimum Python version
 
-    if not (
-        int(platform.python_version_tuple()[0]) == 3
-        and int(platform.python_version_tuple()[1]) >= 10
-    ):
+    if not (int(platform.python_version_tuple()[0]) == 3 and int(platform.python_version_tuple()[1]) >= 10):
         message = (
             f"This library requires Python 3.10 at minimum. Python versions 3.8 and below are EOL as of October 2024"
             f" or earlier. End of life Python versions no longer receive security updates since reaching end of life"
@@ -31,9 +28,7 @@ def validate_user_agent(be_geo_id, caller):
     # Validate that it follows the expected format
     user_agent = dict()
 
-    allowed_format_in_regex = (
-        r"^[A-Za-z0-9]+(?:/[0-9A-Za-z]+(?:\.[0-9A-Za-z]+)*(-[a-z]+)?)? [A-Za-z-0-9]+$"
-    )
+    allowed_format_in_regex = r"^[A-Za-z0-9]+(?:/[0-9A-Za-z]+(?:\.[0-9A-Za-z]+)*(-[a-z]+)?)? [A-Za-z-0-9]+$"
 
     if caller and re.match(allowed_format_in_regex, caller):
         user_agent["caller"] = caller
@@ -43,9 +38,7 @@ def validate_user_agent(be_geo_id, caller):
         if caller:
             message = "Please follow the user agent format prescribed in our User Agents guide, available here:"
             doc_link = "https://developer.cisco.com/meraki/api-v1/user-agents-overview/"
-            raise SessionInputError(
-                "MERAKI_PTYHON_SDK_CALLER", caller, message, doc_link
-            )
+            raise SessionInputError("MERAKI_PTYHON_SDK_CALLER", caller, message, doc_link)
         elif be_geo_id:
             message = "Use of be_geo_id is deprecated. Please use the argument MERAKI_PTYHON_SDK_CALLER instead."
             doc_link = "https://developer.cisco.com/meraki/api-v1/user-agents-overview/"

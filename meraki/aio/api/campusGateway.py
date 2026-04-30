@@ -5,10 +5,10 @@ class AsyncCampusGateway:
     def __init__(self, session):
         super().__init__()
         self._session = session
-        
 
-
-    def createNetworkCampusGatewayCluster(self, networkId: str, name: str, uplinks: list, tunnels: list, nameservers: dict, portChannels: list, **kwargs):
+    def createNetworkCampusGatewayCluster(
+        self, networkId: str, name: str, uplinks: list, tunnels: list, nameservers: dict, portChannels: list, **kwargs
+    ):
         """
         **Create a cluster and add campus gateways to it**
         https://developer.cisco.com/meraki/api-v1/#!create-network-campus-gateway-cluster
@@ -26,18 +26,24 @@ class AsyncCampusGateway:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['campusGateway', 'configure', 'clusters'],
-            'operation': 'createNetworkCampusGatewayCluster'
+            "tags": ["campusGateway", "configure", "clusters"],
+            "operation": "createNetworkCampusGatewayCluster",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/campusGateway/clusters'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/campusGateway/clusters"
 
-        body_params = ['name', 'uplinks', 'tunnels', 'nameservers', 'portChannels', 'devices', 'notes', ]
+        body_params = [
+            "name",
+            "uplinks",
+            "tunnels",
+            "nameservers",
+            "portChannels",
+            "devices",
+            "notes",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def updateNetworkCampusGatewayCluster(self, networkId: str, clusterId: str, **kwargs):
         """
@@ -58,21 +64,27 @@ class AsyncCampusGateway:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['campusGateway', 'configure', 'clusters'],
-            'operation': 'updateNetworkCampusGatewayCluster'
+            "tags": ["campusGateway", "configure", "clusters"],
+            "operation": "updateNetworkCampusGatewayCluster",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        clusterId = urllib.parse.quote(str(clusterId), safe='')
-        resource = f'/networks/{networkId}/campusGateway/clusters/{clusterId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        clusterId = urllib.parse.quote(str(clusterId), safe="")
+        resource = f"/networks/{networkId}/campusGateway/clusters/{clusterId}"
 
-        body_params = ['name', 'uplinks', 'tunnels', 'nameservers', 'portChannels', 'devices', 'notes', ]
+        body_params = [
+            "name",
+            "uplinks",
+            "tunnels",
+            "nameservers",
+            "portChannels",
+            "devices",
+            "notes",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
 
-
-    def getOrganizationCampusGatewayClusters(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationCampusGatewayClusters(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Get the details of campus gateway clusters**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-campus-gateway-clusters
@@ -89,26 +101,33 @@ class AsyncCampusGateway:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['campusGateway', 'configure', 'clusters'],
-            'operation': 'getOrganizationCampusGatewayClusters'
+            "tags": ["campusGateway", "configure", "clusters"],
+            "operation": "getOrganizationCampusGatewayClusters",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/campusGateway/clusters'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/campusGateway/clusters"
 
-        query_params = ['networkIds', 'perPage', 'startingAfter', 'endingBefore', ]
+        query_params = [
+            "networkIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', ]
+        array_params = [
+            "networkIds",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationCampusGatewayDevicesUplinksLocalOverridesByDevice(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationCampusGatewayDevicesUplinksLocalOverridesByDevice(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
         """
         **Uplink overrides configured locally on Campus Gateway devices in an organization.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-campus-gateway-devices-uplinks-local-overrides-by-device
@@ -125,20 +144,26 @@ class AsyncCampusGateway:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['campusGateway', 'configure', 'devices', 'uplinks', 'localOverrides', 'byDevice'],
-            'operation': 'getOrganizationCampusGatewayDevicesUplinksLocalOverridesByDevice'
+            "tags": ["campusGateway", "configure", "devices", "uplinks", "localOverrides", "byDevice"],
+            "operation": "getOrganizationCampusGatewayDevicesUplinksLocalOverridesByDevice",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/campusGateway/devices/uplinks/localOverrides/byDevice'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/campusGateway/devices/uplinks/localOverrides/byDevice"
 
-        query_params = ['serials', 'perPage', 'startingAfter', 'endingBefore', ]
+        query_params = [
+            "serials",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['serials', ]
+        array_params = [
+            "serials",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        

@@ -1,15 +1,10 @@
-import urllib
-
-
 class ActionBatchInsight(object):
     def __init__(self):
         super(ActionBatchInsight, self).__init__()
-        
-
 
     def createOrganizationInsightMonitoredMediaServer(self, organizationId: str, name: str, address: str, **kwargs):
         """
-        **Add a media server to be monitored for this organization**
+        **Add a media server to be monitored for this organization. Only valid for organizations with Meraki Insight.**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-insight-monitored-media-server
 
         - organizationId (string): Organization ID
@@ -20,29 +15,24 @@ class ActionBatchInsight(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['insight', 'configure', 'monitoredMediaServers'],
-            'operation': 'createOrganizationInsightMonitoredMediaServer'
-        }
-        resource = f'/organizations/{organizationId}/insight/monitoredMediaServers'
+        resource = f"/organizations/{organizationId}/insight/monitoredMediaServers"
 
-        body_params = ['name', 'address', 'bestEffortMonitoringEnabled', ]
+        body_params = [
+            "name",
+            "address",
+            "bestEffortMonitoringEnabled",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "create",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateOrganizationInsightMonitoredMediaServer(self, organizationId: str, monitoredMediaServerId: str, **kwargs):
         """
-        **Update a monitored media server for this organization**
+        **Update a monitored media server for this organization. Only valid for organizations with Meraki Insight.**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-insight-monitored-media-server
 
         - organizationId (string): Organization ID
@@ -54,47 +44,34 @@ class ActionBatchInsight(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['insight', 'configure', 'monitoredMediaServers'],
-            'operation': 'updateOrganizationInsightMonitoredMediaServer'
-        }
-        resource = f'/organizations/{organizationId}/insight/monitoredMediaServers/{monitoredMediaServerId}'
+        resource = f"/organizations/{organizationId}/insight/monitoredMediaServers/{monitoredMediaServerId}"
 
-        body_params = ['name', 'address', 'bestEffortMonitoringEnabled', ]
+        body_params = [
+            "name",
+            "address",
+            "bestEffortMonitoringEnabled",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def deleteOrganizationInsightMonitoredMediaServer(self, organizationId: str, monitoredMediaServerId: str):
         """
-        **Delete a monitored media server from this organization**
+        **Delete a monitored media server from this organization. Only valid for organizations with Meraki Insight.**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-insight-monitored-media-server
 
         - organizationId (string): Organization ID
         - monitoredMediaServerId (string): Monitored media server ID
         """
 
-        metadata = {
-            'tags': ['insight', 'configure', 'monitoredMediaServers'],
-            'operation': 'deleteOrganizationInsightMonitoredMediaServer'
-        }
-        resource = f'/organizations/{organizationId}/insight/monitoredMediaServers/{monitoredMediaServerId}'
+        resource = f"/organizations/{organizationId}/insight/monitoredMediaServers/{monitoredMediaServerId}"
 
         action = {
             "resource": resource,
             "operation": "destroy",
         }
         return action
-        
-
-
-

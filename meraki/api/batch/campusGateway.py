@@ -1,13 +1,10 @@
-import urllib
-
-
 class ActionBatchCampusGateway(object):
     def __init__(self):
         super(ActionBatchCampusGateway, self).__init__()
-        
 
-
-    def createNetworkCampusGatewayCluster(self, networkId: str, name: str, uplinks: list, tunnels: list, nameservers: dict, portChannels: list, **kwargs):
+    def createNetworkCampusGatewayCluster(
+        self, networkId: str, name: str, uplinks: list, tunnels: list, nameservers: dict, portChannels: list, **kwargs
+    ):
         """
         **Create a cluster and add campus gateways to it**
         https://developer.cisco.com/meraki/api-v1/#!create-network-campus-gateway-cluster
@@ -24,25 +21,24 @@ class ActionBatchCampusGateway(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['campusGateway', 'configure', 'clusters'],
-            'operation': 'createNetworkCampusGatewayCluster'
-        }
-        resource = f'/networks/{networkId}/campusGateway/clusters'
+        resource = f"/networks/{networkId}/campusGateway/clusters"
 
-        body_params = ['name', 'uplinks', 'tunnels', 'nameservers', 'portChannels', 'devices', 'notes', ]
+        body_params = [
+            "name",
+            "uplinks",
+            "tunnels",
+            "nameservers",
+            "portChannels",
+            "devices",
+            "notes",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "create",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def updateNetworkCampusGatewayCluster(self, networkId: str, clusterId: str, **kwargs):
         """
@@ -62,21 +58,21 @@ class ActionBatchCampusGateway(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['campusGateway', 'configure', 'clusters'],
-            'operation': 'updateNetworkCampusGatewayCluster'
-        }
-        resource = f'/networks/{networkId}/campusGateway/clusters/{clusterId}'
+        resource = f"/networks/{networkId}/campusGateway/clusters/{clusterId}"
 
-        body_params = ['name', 'uplinks', 'tunnels', 'nameservers', 'portChannels', 'devices', 'notes', ]
+        body_params = [
+            "name",
+            "uplinks",
+            "tunnels",
+            "nameservers",
+            "portChannels",
+            "devices",
+            "notes",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-

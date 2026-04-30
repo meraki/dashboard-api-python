@@ -5,8 +5,6 @@ class AsyncDevices:
     def __init__(self, session):
         super().__init__()
         self._session = session
-        
-
 
     def getDevice(self, serial: str):
         """
@@ -17,15 +15,13 @@ class AsyncDevices:
         """
 
         metadata = {
-            'tags': ['devices', 'configure'],
-            'operation': 'getDevice'
+            "tags": ["devices", "configure"],
+            "operation": "getDevice",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateDevice(self, serial: str, **kwargs):
         """
@@ -47,18 +43,26 @@ class AsyncDevices:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['devices', 'configure'],
-            'operation': 'updateDevice'
+            "tags": ["devices", "configure"],
+            "operation": "updateDevice",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}"
 
-        body_params = ['name', 'tags', 'lat', 'lng', 'address', 'notes', 'moveMapMarker', 'switchProfileId', 'floorPlanId', ]
+        body_params = [
+            "name",
+            "tags",
+            "lat",
+            "lng",
+            "address",
+            "notes",
+            "moveMapMarker",
+            "switchProfileId",
+            "floorPlanId",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def blinkDeviceLeds(self, serial: str, **kwargs):
         """
@@ -74,18 +78,20 @@ class AsyncDevices:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['devices', 'liveTools'],
-            'operation': 'blinkDeviceLeds'
+            "tags": ["devices", "liveTools"],
+            "operation": "blinkDeviceLeds",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/blinkLeds'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/blinkLeds"
 
-        body_params = ['duration', 'period', 'duty', ]
+        body_params = [
+            "duration",
+            "period",
+            "duty",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getDeviceCellularSims(self, serial: str):
         """
@@ -96,15 +102,13 @@ class AsyncDevices:
         """
 
         metadata = {
-            'tags': ['devices', 'configure', 'cellular', 'sims'],
-            'operation': 'getDeviceCellularSims'
+            "tags": ["devices", "configure", "cellular", "sims"],
+            "operation": "getDeviceCellularSims",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/cellular/sims'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/cellular/sims"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateDeviceCellularSims(self, serial: str, **kwargs):
         """
@@ -120,18 +124,20 @@ class AsyncDevices:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['devices', 'configure', 'cellular', 'sims'],
-            'operation': 'updateDeviceCellularSims'
+            "tags": ["devices", "configure", "cellular", "sims"],
+            "operation": "updateDeviceCellularSims",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/cellular/sims'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/cellular/sims"
 
-        body_params = ['sims', 'simOrdering', 'simFailover', ]
+        body_params = [
+            "sims",
+            "simOrdering",
+            "simFailover",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getDeviceClients(self, serial: str, **kwargs):
         """
@@ -146,18 +152,19 @@ class AsyncDevices:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['devices', 'monitor', 'clients'],
-            'operation': 'getDeviceClients'
+            "tags": ["devices", "monitor", "clients"],
+            "operation": "getDeviceClients",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/clients'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/clients"
 
-        query_params = ['t0', 'timespan', ]
+        query_params = [
+            "t0",
+            "timespan",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def createDeviceLiveToolsArpTable(self, serial: str, **kwargs):
         """
@@ -171,18 +178,18 @@ class AsyncDevices:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['devices', 'liveTools', 'arpTable'],
-            'operation': 'createDeviceLiveToolsArpTable'
+            "tags": ["devices", "liveTools", "arpTable"],
+            "operation": "createDeviceLiveToolsArpTable",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/liveTools/arpTable'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/liveTools/arpTable"
 
-        body_params = ['callback', ]
+        body_params = [
+            "callback",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getDeviceLiveToolsArpTable(self, serial: str, arpTableId: str):
         """
@@ -194,16 +201,14 @@ class AsyncDevices:
         """
 
         metadata = {
-            'tags': ['devices', 'liveTools', 'arpTable'],
-            'operation': 'getDeviceLiveToolsArpTable'
+            "tags": ["devices", "liveTools", "arpTable"],
+            "operation": "getDeviceLiveToolsArpTable",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        arpTableId = urllib.parse.quote(str(arpTableId), safe='')
-        resource = f'/devices/{serial}/liveTools/arpTable/{arpTableId}'
+        serial = urllib.parse.quote(str(serial), safe="")
+        arpTableId = urllib.parse.quote(str(arpTableId), safe="")
+        resource = f"/devices/{serial}/liveTools/arpTable/{arpTableId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def createDeviceLiveToolsCableTest(self, serial: str, ports: list, **kwargs):
         """
@@ -218,18 +223,19 @@ class AsyncDevices:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['devices', 'liveTools', 'cableTest'],
-            'operation': 'createDeviceLiveToolsCableTest'
+            "tags": ["devices", "liveTools", "cableTest"],
+            "operation": "createDeviceLiveToolsCableTest",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/liveTools/cableTest'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/liveTools/cableTest"
 
-        body_params = ['ports', 'callback', ]
+        body_params = [
+            "ports",
+            "callback",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getDeviceLiveToolsCableTest(self, serial: str, id: str):
         """
@@ -241,16 +247,14 @@ class AsyncDevices:
         """
 
         metadata = {
-            'tags': ['devices', 'liveTools', 'cableTest'],
-            'operation': 'getDeviceLiveToolsCableTest'
+            "tags": ["devices", "liveTools", "cableTest"],
+            "operation": "getDeviceLiveToolsCableTest",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        id = urllib.parse.quote(str(id), safe='')
-        resource = f'/devices/{serial}/liveTools/cableTest/{id}'
+        serial = urllib.parse.quote(str(serial), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/devices/{serial}/liveTools/cableTest/{id}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def createDeviceLiveToolsLedsBlink(self, serial: str, duration: int, **kwargs):
         """
@@ -265,18 +269,19 @@ class AsyncDevices:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['devices', 'liveTools', 'leds', 'blink'],
-            'operation': 'createDeviceLiveToolsLedsBlink'
+            "tags": ["devices", "liveTools", "leds", "blink"],
+            "operation": "createDeviceLiveToolsLedsBlink",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/liveTools/leds/blink'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/liveTools/leds/blink"
 
-        body_params = ['duration', 'callback', ]
+        body_params = [
+            "duration",
+            "callback",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getDeviceLiveToolsLedsBlink(self, serial: str, ledsBlinkId: str):
         """
@@ -288,16 +293,14 @@ class AsyncDevices:
         """
 
         metadata = {
-            'tags': ['devices', 'liveTools', 'leds', 'blink'],
-            'operation': 'getDeviceLiveToolsLedsBlink'
+            "tags": ["devices", "liveTools", "leds", "blink"],
+            "operation": "getDeviceLiveToolsLedsBlink",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        ledsBlinkId = urllib.parse.quote(str(ledsBlinkId), safe='')
-        resource = f'/devices/{serial}/liveTools/leds/blink/{ledsBlinkId}'
+        serial = urllib.parse.quote(str(serial), safe="")
+        ledsBlinkId = urllib.parse.quote(str(ledsBlinkId), safe="")
+        resource = f"/devices/{serial}/liveTools/leds/blink/{ledsBlinkId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def createDeviceLiveToolsMacTable(self, serial: str, **kwargs):
         """
@@ -311,18 +314,18 @@ class AsyncDevices:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['devices', 'liveTools', 'macTable'],
-            'operation': 'createDeviceLiveToolsMacTable'
+            "tags": ["devices", "liveTools", "macTable"],
+            "operation": "createDeviceLiveToolsMacTable",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/liveTools/macTable'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/liveTools/macTable"
 
-        body_params = ['callback', ]
+        body_params = [
+            "callback",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getDeviceLiveToolsMacTable(self, serial: str, macTableId: str):
         """
@@ -334,16 +337,14 @@ class AsyncDevices:
         """
 
         metadata = {
-            'tags': ['devices', 'liveTools', 'macTable'],
-            'operation': 'getDeviceLiveToolsMacTable'
+            "tags": ["devices", "liveTools", "macTable"],
+            "operation": "getDeviceLiveToolsMacTable",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        macTableId = urllib.parse.quote(str(macTableId), safe='')
-        resource = f'/devices/{serial}/liveTools/macTable/{macTableId}'
+        serial = urllib.parse.quote(str(serial), safe="")
+        macTableId = urllib.parse.quote(str(macTableId), safe="")
+        resource = f"/devices/{serial}/liveTools/macTable/{macTableId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def createDeviceLiveToolsMulticastRouting(self, serial: str, **kwargs):
         """
@@ -357,18 +358,18 @@ class AsyncDevices:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['devices', 'liveTools', 'multicastRouting'],
-            'operation': 'createDeviceLiveToolsMulticastRouting'
+            "tags": ["devices", "liveTools", "multicastRouting"],
+            "operation": "createDeviceLiveToolsMulticastRouting",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/liveTools/multicastRouting'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/liveTools/multicastRouting"
 
-        body_params = ['callback', ]
+        body_params = [
+            "callback",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getDeviceLiveToolsMulticastRouting(self, serial: str, multicastRoutingId: str):
         """
@@ -380,16 +381,14 @@ class AsyncDevices:
         """
 
         metadata = {
-            'tags': ['devices', 'liveTools', 'multicastRouting'],
-            'operation': 'getDeviceLiveToolsMulticastRouting'
+            "tags": ["devices", "liveTools", "multicastRouting"],
+            "operation": "getDeviceLiveToolsMulticastRouting",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        multicastRoutingId = urllib.parse.quote(str(multicastRoutingId), safe='')
-        resource = f'/devices/{serial}/liveTools/multicastRouting/{multicastRoutingId}'
+        serial = urllib.parse.quote(str(serial), safe="")
+        multicastRoutingId = urllib.parse.quote(str(multicastRoutingId), safe="")
+        resource = f"/devices/{serial}/liveTools/multicastRouting/{multicastRoutingId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def createDeviceLiveToolsPing(self, serial: str, target: str, **kwargs):
         """
@@ -405,18 +404,20 @@ class AsyncDevices:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['devices', 'liveTools', 'ping'],
-            'operation': 'createDeviceLiveToolsPing'
+            "tags": ["devices", "liveTools", "ping"],
+            "operation": "createDeviceLiveToolsPing",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/liveTools/ping'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/liveTools/ping"
 
-        body_params = ['target', 'count', 'callback', ]
+        body_params = [
+            "target",
+            "count",
+            "callback",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getDeviceLiveToolsPing(self, serial: str, id: str):
         """
@@ -428,16 +429,14 @@ class AsyncDevices:
         """
 
         metadata = {
-            'tags': ['devices', 'liveTools', 'ping'],
-            'operation': 'getDeviceLiveToolsPing'
+            "tags": ["devices", "liveTools", "ping"],
+            "operation": "getDeviceLiveToolsPing",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        id = urllib.parse.quote(str(id), safe='')
-        resource = f'/devices/{serial}/liveTools/ping/{id}'
+        serial = urllib.parse.quote(str(serial), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/devices/{serial}/liveTools/ping/{id}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def createDeviceLiveToolsPingDevice(self, serial: str, **kwargs):
         """
@@ -452,18 +451,19 @@ class AsyncDevices:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['devices', 'liveTools', 'pingDevice'],
-            'operation': 'createDeviceLiveToolsPingDevice'
+            "tags": ["devices", "liveTools", "pingDevice"],
+            "operation": "createDeviceLiveToolsPingDevice",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/liveTools/pingDevice'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/liveTools/pingDevice"
 
-        body_params = ['count', 'callback', ]
+        body_params = [
+            "count",
+            "callback",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getDeviceLiveToolsPingDevice(self, serial: str, id: str):
         """
@@ -475,16 +475,60 @@ class AsyncDevices:
         """
 
         metadata = {
-            'tags': ['devices', 'liveTools', 'pingDevice'],
-            'operation': 'getDeviceLiveToolsPingDevice'
+            "tags": ["devices", "liveTools", "pingDevice"],
+            "operation": "getDeviceLiveToolsPingDevice",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        id = urllib.parse.quote(str(id), safe='')
-        resource = f'/devices/{serial}/liveTools/pingDevice/{id}'
+        serial = urllib.parse.quote(str(serial), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/devices/{serial}/liveTools/pingDevice/{id}"
 
         return self._session.get(metadata, resource)
-        
 
+    def createDeviceLiveToolsPortsCycle(self, serial: str, ports: list, **kwargs):
+        """
+        **Enqueue a job to perform a cycle port for the device on the specified ports**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-ports-cycle
+
+        - serial (string): Serial
+        - ports (array): A list of ports to cycle. For Catalyst switches, IOS interface names are also supported, such as "GigabitEthernet1/0/8", "Gi1/0/8", or even "1/0/8".
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["devices", "liveTools", "ports", "cycle"],
+            "operation": "createDeviceLiveToolsPortsCycle",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/liveTools/ports/cycle"
+
+        body_params = [
+            "ports",
+            "callback",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+
+    def getDeviceLiveToolsPortsCycle(self, serial: str, id: str):
+        """
+        **Return a cycle port live tool job.**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-live-tools-ports-cycle
+
+        - serial (string): Serial
+        - id (string): ID
+        """
+
+        metadata = {
+            "tags": ["devices", "liveTools", "ports", "cycle"],
+            "operation": "getDeviceLiveToolsPortsCycle",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/devices/{serial}/liveTools/ports/cycle/{id}"
+
+        return self._session.get(metadata, resource)
 
     def createDeviceLiveToolsThroughputTest(self, serial: str, **kwargs):
         """
@@ -498,18 +542,18 @@ class AsyncDevices:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['devices', 'liveTools', 'throughputTest'],
-            'operation': 'createDeviceLiveToolsThroughputTest'
+            "tags": ["devices", "liveTools", "throughputTest"],
+            "operation": "createDeviceLiveToolsThroughputTest",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/liveTools/throughputTest'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/liveTools/throughputTest"
 
-        body_params = ['callback', ]
+        body_params = [
+            "callback",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getDeviceLiveToolsThroughputTest(self, serial: str, throughputTestId: str):
         """
@@ -521,16 +565,14 @@ class AsyncDevices:
         """
 
         metadata = {
-            'tags': ['devices', 'liveTools', 'throughputTest'],
-            'operation': 'getDeviceLiveToolsThroughputTest'
+            "tags": ["devices", "liveTools", "throughputTest"],
+            "operation": "getDeviceLiveToolsThroughputTest",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        throughputTestId = urllib.parse.quote(str(throughputTestId), safe='')
-        resource = f'/devices/{serial}/liveTools/throughputTest/{throughputTestId}'
+        serial = urllib.parse.quote(str(serial), safe="")
+        throughputTestId = urllib.parse.quote(str(throughputTestId), safe="")
+        resource = f"/devices/{serial}/liveTools/throughputTest/{throughputTestId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def createDeviceLiveToolsWakeOnLan(self, serial: str, vlanId: int, mac: str, **kwargs):
         """
@@ -546,18 +588,20 @@ class AsyncDevices:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['devices', 'liveTools', 'wakeOnLan'],
-            'operation': 'createDeviceLiveToolsWakeOnLan'
+            "tags": ["devices", "liveTools", "wakeOnLan"],
+            "operation": "createDeviceLiveToolsWakeOnLan",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/liveTools/wakeOnLan'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/liveTools/wakeOnLan"
 
-        body_params = ['vlanId', 'mac', 'callback', ]
+        body_params = [
+            "vlanId",
+            "mac",
+            "callback",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getDeviceLiveToolsWakeOnLan(self, serial: str, wakeOnLanId: str):
         """
@@ -569,16 +613,14 @@ class AsyncDevices:
         """
 
         metadata = {
-            'tags': ['devices', 'liveTools', 'wakeOnLan'],
-            'operation': 'getDeviceLiveToolsWakeOnLan'
+            "tags": ["devices", "liveTools", "wakeOnLan"],
+            "operation": "getDeviceLiveToolsWakeOnLan",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        wakeOnLanId = urllib.parse.quote(str(wakeOnLanId), safe='')
-        resource = f'/devices/{serial}/liveTools/wakeOnLan/{wakeOnLanId}'
+        serial = urllib.parse.quote(str(serial), safe="")
+        wakeOnLanId = urllib.parse.quote(str(wakeOnLanId), safe="")
+        resource = f"/devices/{serial}/liveTools/wakeOnLan/{wakeOnLanId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def getDeviceLldpCdp(self, serial: str):
         """
@@ -589,15 +631,13 @@ class AsyncDevices:
         """
 
         metadata = {
-            'tags': ['devices', 'monitor', 'lldpCdp'],
-            'operation': 'getDeviceLldpCdp'
+            "tags": ["devices", "monitor", "lldpCdp"],
+            "operation": "getDeviceLldpCdp",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/lldpCdp'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/lldpCdp"
 
         return self._session.get(metadata, resource)
-        
-
 
     def getDeviceLossAndLatencyHistory(self, serial: str, ip: str, **kwargs):
         """
@@ -610,28 +650,35 @@ class AsyncDevices:
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
         - resolution (integer): The time resolution in seconds for returned data. The valid resolutions are: 60, 600, 3600, 86400. The default is 60.
-        - uplink (string): The WAN uplink used to obtain the requested stats. Valid uplinks are wan1, wan2, wan3, cellular. The default is wan1.
+        - uplink (string): The WAN uplink used to obtain the requested stats. Valid uplinks are wan1, wan2, wan3, cellular, wan4. The default is wan1.
         """
 
         kwargs.update(locals())
 
-        if 'uplink' in kwargs:
-            options = ['cellular', 'wan1', 'wan2', 'wan3']
-            assert kwargs['uplink'] in options, f'''"uplink" cannot be "{kwargs['uplink']}", & must be set to one of: {options}'''
+        if "uplink" in kwargs:
+            options = ["cellular", "wan1", "wan2", "wan3", "wan4"]
+            assert kwargs["uplink"] in options, (
+                f'''"uplink" cannot be "{kwargs["uplink"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['devices', 'monitor', 'uplinks', 'lossAndLatencyHistory'],
-            'operation': 'getDeviceLossAndLatencyHistory'
+            "tags": ["devices", "monitor", "uplinks", "lossAndLatencyHistory"],
+            "operation": "getDeviceLossAndLatencyHistory",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/lossAndLatencyHistory'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/lossAndLatencyHistory"
 
-        query_params = ['t0', 't1', 'timespan', 'resolution', 'uplink', 'ip', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "resolution",
+            "uplink",
+            "ip",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getDeviceManagementInterface(self, serial: str):
         """
@@ -642,15 +689,13 @@ class AsyncDevices:
         """
 
         metadata = {
-            'tags': ['devices', 'configure', 'managementInterface'],
-            'operation': 'getDeviceManagementInterface'
+            "tags": ["devices", "configure", "managementInterface"],
+            "operation": "getDeviceManagementInterface",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/managementInterface'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/managementInterface"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateDeviceManagementInterface(self, serial: str, **kwargs):
         """
@@ -665,18 +710,19 @@ class AsyncDevices:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['devices', 'configure', 'managementInterface'],
-            'operation': 'updateDeviceManagementInterface'
+            "tags": ["devices", "configure", "managementInterface"],
+            "operation": "updateDeviceManagementInterface",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/managementInterface'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/managementInterface"
 
-        body_params = ['wan1', 'wan2', ]
+        body_params = [
+            "wan1",
+            "wan2",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def rebootDevice(self, serial: str):
         """
@@ -687,11 +733,10 @@ class AsyncDevices:
         """
 
         metadata = {
-            'tags': ['devices', 'liveTools'],
-            'operation': 'rebootDevice'
+            "tags": ["devices", "liveTools"],
+            "operation": "rebootDevice",
         }
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/devices/{serial}/reboot'
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/reboot"
 
         return self._session.post(metadata, resource)
-        

@@ -5,10 +5,8 @@ class AsyncOrganizations:
     def __init__(self, session):
         super().__init__()
         self._session = session
-        
 
-
-    def getOrganizations(self, total_pages=1, direction='next', **kwargs):
+    def getOrganizations(self, total_pages=1, direction="next", **kwargs):
         """
         **List the organizations that the user has privileges on**
         https://developer.cisco.com/meraki/api-v1/#!get-organizations
@@ -23,17 +21,19 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure'],
-            'operation': 'getOrganizations'
+            "tags": ["organizations", "configure"],
+            "operation": "getOrganizations",
         }
-        resource = f'/organizations'
+        resource = "/organizations"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def createOrganization(self, name: str, **kwargs):
         """
@@ -47,17 +47,18 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure'],
-            'operation': 'createOrganization'
+            "tags": ["organizations", "configure"],
+            "operation": "createOrganization",
         }
-        resource = f'/organizations'
+        resource = "/organizations"
 
-        body_params = ['name', 'management', ]
+        body_params = [
+            "name",
+            "management",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getOrganization(self, organizationId: str):
         """
@@ -68,15 +69,13 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure'],
-            'operation': 'getOrganization'
+            "tags": ["organizations", "configure"],
+            "operation": "getOrganization",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateOrganization(self, organizationId: str, **kwargs):
         """
@@ -92,18 +91,20 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure'],
-            'operation': 'updateOrganization'
+            "tags": ["organizations", "configure"],
+            "operation": "updateOrganization",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}"
 
-        body_params = ['name', 'management', 'api', ]
+        body_params = [
+            "name",
+            "management",
+            "api",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteOrganization(self, organizationId: str):
         """
@@ -114,15 +115,13 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure'],
-            'operation': 'deleteOrganization'
+            "tags": ["organizations", "configure"],
+            "operation": "deleteOrganization",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def createOrganizationActionBatch(self, organizationId: str, actions: list, **kwargs):
         """
@@ -139,18 +138,21 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'actionBatches'],
-            'operation': 'createOrganizationActionBatch'
+            "tags": ["organizations", "configure", "actionBatches"],
+            "operation": "createOrganizationActionBatch",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/actionBatches'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/actionBatches"
 
-        body_params = ['confirmed', 'synchronous', 'actions', 'callback', ]
+        body_params = [
+            "confirmed",
+            "synchronous",
+            "actions",
+            "callback",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getOrganizationActionBatches(self, organizationId: str, **kwargs):
         """
@@ -163,23 +165,25 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'status' in kwargs:
-            options = ['completed', 'failed', 'pending']
-            assert kwargs['status'] in options, f'''"status" cannot be "{kwargs['status']}", & must be set to one of: {options}'''
+        if "status" in kwargs:
+            options = ["completed", "failed", "pending"]
+            assert kwargs["status"] in options, (
+                f'''"status" cannot be "{kwargs["status"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['organizations', 'configure', 'actionBatches'],
-            'operation': 'getOrganizationActionBatches'
+            "tags": ["organizations", "configure", "actionBatches"],
+            "operation": "getOrganizationActionBatches",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/actionBatches'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/actionBatches"
 
-        query_params = ['status', ]
+        query_params = [
+            "status",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getOrganizationActionBatch(self, organizationId: str, actionBatchId: str):
         """
@@ -191,16 +195,14 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'actionBatches'],
-            'operation': 'getOrganizationActionBatch'
+            "tags": ["organizations", "configure", "actionBatches"],
+            "operation": "getOrganizationActionBatch",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        actionBatchId = urllib.parse.quote(str(actionBatchId), safe='')
-        resource = f'/organizations/{organizationId}/actionBatches/{actionBatchId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        actionBatchId = urllib.parse.quote(str(actionBatchId), safe="")
+        resource = f"/organizations/{organizationId}/actionBatches/{actionBatchId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def deleteOrganizationActionBatch(self, organizationId: str, actionBatchId: str):
         """
@@ -212,16 +214,14 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'actionBatches'],
-            'operation': 'deleteOrganizationActionBatch'
+            "tags": ["organizations", "configure", "actionBatches"],
+            "operation": "deleteOrganizationActionBatch",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        actionBatchId = urllib.parse.quote(str(actionBatchId), safe='')
-        resource = f'/organizations/{organizationId}/actionBatches/{actionBatchId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        actionBatchId = urllib.parse.quote(str(actionBatchId), safe="")
+        resource = f"/organizations/{organizationId}/actionBatches/{actionBatchId}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def updateOrganizationActionBatch(self, organizationId: str, actionBatchId: str, **kwargs):
         """
@@ -237,19 +237,20 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'actionBatches'],
-            'operation': 'updateOrganizationActionBatch'
+            "tags": ["organizations", "configure", "actionBatches"],
+            "operation": "updateOrganizationActionBatch",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        actionBatchId = urllib.parse.quote(str(actionBatchId), safe='')
-        resource = f'/organizations/{organizationId}/actionBatches/{actionBatchId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        actionBatchId = urllib.parse.quote(str(actionBatchId), safe="")
+        resource = f"/organizations/{organizationId}/actionBatches/{actionBatchId}"
 
-        body_params = ['confirmed', 'synchronous', ]
+        body_params = [
+            "confirmed",
+            "synchronous",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getOrganizationAdaptivePolicyAcls(self, organizationId: str):
         """
@@ -260,15 +261,13 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'adaptivePolicy', 'acls'],
-            'operation': 'getOrganizationAdaptivePolicyAcls'
+            "tags": ["organizations", "configure", "adaptivePolicy", "acls"],
+            "operation": "getOrganizationAdaptivePolicyAcls",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/adaptivePolicy/acls'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/adaptivePolicy/acls"
 
         return self._session.get(metadata, resource)
-        
-
 
     def createOrganizationAdaptivePolicyAcl(self, organizationId: str, name: str, rules: list, ipVersion: str, **kwargs):
         """
@@ -284,23 +283,28 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'ipVersion' in kwargs:
-            options = ['any', 'ipv4', 'ipv6']
-            assert kwargs['ipVersion'] in options, f'''"ipVersion" cannot be "{kwargs['ipVersion']}", & must be set to one of: {options}'''
+        if "ipVersion" in kwargs:
+            options = ["any", "ipv4", "ipv6"]
+            assert kwargs["ipVersion"] in options, (
+                f'''"ipVersion" cannot be "{kwargs["ipVersion"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['organizations', 'configure', 'adaptivePolicy', 'acls'],
-            'operation': 'createOrganizationAdaptivePolicyAcl'
+            "tags": ["organizations", "configure", "adaptivePolicy", "acls"],
+            "operation": "createOrganizationAdaptivePolicyAcl",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/adaptivePolicy/acls'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/adaptivePolicy/acls"
 
-        body_params = ['name', 'description', 'rules', 'ipVersion', ]
+        body_params = [
+            "name",
+            "description",
+            "rules",
+            "ipVersion",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getOrganizationAdaptivePolicyAcl(self, organizationId: str, aclId: str):
         """
@@ -312,16 +316,14 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'adaptivePolicy', 'acls'],
-            'operation': 'getOrganizationAdaptivePolicyAcl'
+            "tags": ["organizations", "configure", "adaptivePolicy", "acls"],
+            "operation": "getOrganizationAdaptivePolicyAcl",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        aclId = urllib.parse.quote(str(aclId), safe='')
-        resource = f'/organizations/{organizationId}/adaptivePolicy/acls/{aclId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        aclId = urllib.parse.quote(str(aclId), safe="")
+        resource = f"/organizations/{organizationId}/adaptivePolicy/acls/{aclId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateOrganizationAdaptivePolicyAcl(self, organizationId: str, aclId: str, **kwargs):
         """
@@ -338,24 +340,29 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'ipVersion' in kwargs:
-            options = ['any', 'ipv4', 'ipv6']
-            assert kwargs['ipVersion'] in options, f'''"ipVersion" cannot be "{kwargs['ipVersion']}", & must be set to one of: {options}'''
+        if "ipVersion" in kwargs:
+            options = ["any", "ipv4", "ipv6"]
+            assert kwargs["ipVersion"] in options, (
+                f'''"ipVersion" cannot be "{kwargs["ipVersion"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['organizations', 'configure', 'adaptivePolicy', 'acls'],
-            'operation': 'updateOrganizationAdaptivePolicyAcl'
+            "tags": ["organizations", "configure", "adaptivePolicy", "acls"],
+            "operation": "updateOrganizationAdaptivePolicyAcl",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        aclId = urllib.parse.quote(str(aclId), safe='')
-        resource = f'/organizations/{organizationId}/adaptivePolicy/acls/{aclId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        aclId = urllib.parse.quote(str(aclId), safe="")
+        resource = f"/organizations/{organizationId}/adaptivePolicy/acls/{aclId}"
 
-        body_params = ['name', 'description', 'rules', 'ipVersion', ]
+        body_params = [
+            "name",
+            "description",
+            "rules",
+            "ipVersion",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteOrganizationAdaptivePolicyAcl(self, organizationId: str, aclId: str):
         """
@@ -367,16 +374,14 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'adaptivePolicy', 'acls'],
-            'operation': 'deleteOrganizationAdaptivePolicyAcl'
+            "tags": ["organizations", "configure", "adaptivePolicy", "acls"],
+            "operation": "deleteOrganizationAdaptivePolicyAcl",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        aclId = urllib.parse.quote(str(aclId), safe='')
-        resource = f'/organizations/{organizationId}/adaptivePolicy/acls/{aclId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        aclId = urllib.parse.quote(str(aclId), safe="")
+        resource = f"/organizations/{organizationId}/adaptivePolicy/acls/{aclId}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def getOrganizationAdaptivePolicyGroups(self, organizationId: str):
         """
@@ -387,15 +392,13 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'adaptivePolicy', 'groups'],
-            'operation': 'getOrganizationAdaptivePolicyGroups'
+            "tags": ["organizations", "configure", "adaptivePolicy", "groups"],
+            "operation": "getOrganizationAdaptivePolicyGroups",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/adaptivePolicy/groups'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/adaptivePolicy/groups"
 
         return self._session.get(metadata, resource)
-        
-
 
     def createOrganizationAdaptivePolicyGroup(self, organizationId: str, name: str, sgt: int, **kwargs):
         """
@@ -412,18 +415,21 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'adaptivePolicy', 'groups'],
-            'operation': 'createOrganizationAdaptivePolicyGroup'
+            "tags": ["organizations", "configure", "adaptivePolicy", "groups"],
+            "operation": "createOrganizationAdaptivePolicyGroup",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/adaptivePolicy/groups'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/adaptivePolicy/groups"
 
-        body_params = ['name', 'sgt', 'description', 'policyObjects', ]
+        body_params = [
+            "name",
+            "sgt",
+            "description",
+            "policyObjects",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getOrganizationAdaptivePolicyGroup(self, organizationId: str, id: str):
         """
@@ -435,16 +441,14 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'adaptivePolicy', 'groups'],
-            'operation': 'getOrganizationAdaptivePolicyGroup'
+            "tags": ["organizations", "configure", "adaptivePolicy", "groups"],
+            "operation": "getOrganizationAdaptivePolicyGroup",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        id = urllib.parse.quote(str(id), safe='')
-        resource = f'/organizations/{organizationId}/adaptivePolicy/groups/{id}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/adaptivePolicy/groups/{id}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateOrganizationAdaptivePolicyGroup(self, organizationId: str, id: str, **kwargs):
         """
@@ -462,19 +466,22 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'adaptivePolicy', 'groups'],
-            'operation': 'updateOrganizationAdaptivePolicyGroup'
+            "tags": ["organizations", "configure", "adaptivePolicy", "groups"],
+            "operation": "updateOrganizationAdaptivePolicyGroup",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        id = urllib.parse.quote(str(id), safe='')
-        resource = f'/organizations/{organizationId}/adaptivePolicy/groups/{id}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/adaptivePolicy/groups/{id}"
 
-        body_params = ['name', 'sgt', 'description', 'policyObjects', ]
+        body_params = [
+            "name",
+            "sgt",
+            "description",
+            "policyObjects",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteOrganizationAdaptivePolicyGroup(self, organizationId: str, id: str):
         """
@@ -486,16 +493,14 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'adaptivePolicy', 'groups'],
-            'operation': 'deleteOrganizationAdaptivePolicyGroup'
+            "tags": ["organizations", "configure", "adaptivePolicy", "groups"],
+            "operation": "deleteOrganizationAdaptivePolicyGroup",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        id = urllib.parse.quote(str(id), safe='')
-        resource = f'/organizations/{organizationId}/adaptivePolicy/groups/{id}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/adaptivePolicy/groups/{id}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def getOrganizationAdaptivePolicyOverview(self, organizationId: str):
         """
@@ -506,15 +511,13 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'adaptivePolicy', 'overview'],
-            'operation': 'getOrganizationAdaptivePolicyOverview'
+            "tags": ["organizations", "monitor", "adaptivePolicy", "overview"],
+            "operation": "getOrganizationAdaptivePolicyOverview",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/adaptivePolicy/overview'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/adaptivePolicy/overview"
 
         return self._session.get(metadata, resource)
-        
-
 
     def getOrganizationAdaptivePolicyPolicies(self, organizationId: str):
         """
@@ -525,15 +528,13 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'adaptivePolicy', 'policies'],
-            'operation': 'getOrganizationAdaptivePolicyPolicies'
+            "tags": ["organizations", "configure", "adaptivePolicy", "policies"],
+            "operation": "getOrganizationAdaptivePolicyPolicies",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/adaptivePolicy/policies'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/adaptivePolicy/policies"
 
         return self._session.get(metadata, resource)
-        
-
 
     def createOrganizationAdaptivePolicyPolicy(self, organizationId: str, sourceGroup: dict, destinationGroup: dict, **kwargs):
         """
@@ -549,23 +550,28 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'lastEntryRule' in kwargs:
-            options = ['allow', 'default', 'deny']
-            assert kwargs['lastEntryRule'] in options, f'''"lastEntryRule" cannot be "{kwargs['lastEntryRule']}", & must be set to one of: {options}'''
+        if "lastEntryRule" in kwargs:
+            options = ["allow", "default", "deny"]
+            assert kwargs["lastEntryRule"] in options, (
+                f'''"lastEntryRule" cannot be "{kwargs["lastEntryRule"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['organizations', 'configure', 'adaptivePolicy', 'policies'],
-            'operation': 'createOrganizationAdaptivePolicyPolicy'
+            "tags": ["organizations", "configure", "adaptivePolicy", "policies"],
+            "operation": "createOrganizationAdaptivePolicyPolicy",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/adaptivePolicy/policies'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/adaptivePolicy/policies"
 
-        body_params = ['sourceGroup', 'destinationGroup', 'acls', 'lastEntryRule', ]
+        body_params = [
+            "sourceGroup",
+            "destinationGroup",
+            "acls",
+            "lastEntryRule",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getOrganizationAdaptivePolicyPolicy(self, organizationId: str, id: str):
         """
@@ -577,16 +583,14 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'adaptivePolicy', 'policies'],
-            'operation': 'getOrganizationAdaptivePolicyPolicy'
+            "tags": ["organizations", "configure", "adaptivePolicy", "policies"],
+            "operation": "getOrganizationAdaptivePolicyPolicy",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        id = urllib.parse.quote(str(id), safe='')
-        resource = f'/organizations/{organizationId}/adaptivePolicy/policies/{id}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/adaptivePolicy/policies/{id}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateOrganizationAdaptivePolicyPolicy(self, organizationId: str, id: str, **kwargs):
         """
@@ -603,24 +607,29 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'lastEntryRule' in kwargs:
-            options = ['allow', 'default', 'deny']
-            assert kwargs['lastEntryRule'] in options, f'''"lastEntryRule" cannot be "{kwargs['lastEntryRule']}", & must be set to one of: {options}'''
+        if "lastEntryRule" in kwargs:
+            options = ["allow", "default", "deny"]
+            assert kwargs["lastEntryRule"] in options, (
+                f'''"lastEntryRule" cannot be "{kwargs["lastEntryRule"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['organizations', 'configure', 'adaptivePolicy', 'policies'],
-            'operation': 'updateOrganizationAdaptivePolicyPolicy'
+            "tags": ["organizations", "configure", "adaptivePolicy", "policies"],
+            "operation": "updateOrganizationAdaptivePolicyPolicy",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        id = urllib.parse.quote(str(id), safe='')
-        resource = f'/organizations/{organizationId}/adaptivePolicy/policies/{id}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/adaptivePolicy/policies/{id}"
 
-        body_params = ['sourceGroup', 'destinationGroup', 'acls', 'lastEntryRule', ]
+        body_params = [
+            "sourceGroup",
+            "destinationGroup",
+            "acls",
+            "lastEntryRule",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteOrganizationAdaptivePolicyPolicy(self, organizationId: str, id: str):
         """
@@ -632,16 +641,14 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'adaptivePolicy', 'policies'],
-            'operation': 'deleteOrganizationAdaptivePolicyPolicy'
+            "tags": ["organizations", "configure", "adaptivePolicy", "policies"],
+            "operation": "deleteOrganizationAdaptivePolicyPolicy",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        id = urllib.parse.quote(str(id), safe='')
-        resource = f'/organizations/{organizationId}/adaptivePolicy/policies/{id}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/adaptivePolicy/policies/{id}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def getOrganizationAdaptivePolicySettings(self, organizationId: str):
         """
@@ -652,15 +659,13 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'adaptivePolicy', 'settings'],
-            'operation': 'getOrganizationAdaptivePolicySettings'
+            "tags": ["organizations", "configure", "adaptivePolicy", "settings"],
+            "operation": "getOrganizationAdaptivePolicySettings",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/adaptivePolicy/settings'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/adaptivePolicy/settings"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateOrganizationAdaptivePolicySettings(self, organizationId: str, **kwargs):
         """
@@ -674,18 +679,18 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'adaptivePolicy', 'settings'],
-            'operation': 'updateOrganizationAdaptivePolicySettings'
+            "tags": ["organizations", "configure", "adaptivePolicy", "settings"],
+            "operation": "updateOrganizationAdaptivePolicySettings",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/adaptivePolicy/settings'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/adaptivePolicy/settings"
 
-        body_params = ['enabledNetworks', ]
+        body_params = [
+            "enabledNetworks",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getOrganizationAdmins(self, organizationId: str, **kwargs):
         """
@@ -699,24 +704,26 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'admins'],
-            'operation': 'getOrganizationAdmins'
+            "tags": ["organizations", "configure", "admins"],
+            "operation": "getOrganizationAdmins",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/admins'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/admins"
 
-        query_params = ['networkIds', ]
+        query_params = [
+            "networkIds",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', ]
+        array_params = [
+            "networkIds",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def createOrganizationAdmin(self, organizationId: str, email: str, name: str, orgAccess: str, **kwargs):
         """
@@ -734,26 +741,35 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'orgAccess' in kwargs:
-            options = ['enterprise', 'full', 'none', 'read-only']
-            assert kwargs['orgAccess'] in options, f'''"orgAccess" cannot be "{kwargs['orgAccess']}", & must be set to one of: {options}'''
-        if 'authenticationMethod' in kwargs:
-            options = ['Email']
-            assert kwargs['authenticationMethod'] in options, f'''"authenticationMethod" cannot be "{kwargs['authenticationMethod']}", & must be set to one of: {options}'''
+        if "orgAccess" in kwargs:
+            options = ["enterprise", "full", "none", "read-only"]
+            assert kwargs["orgAccess"] in options, (
+                f'''"orgAccess" cannot be "{kwargs["orgAccess"]}", & must be set to one of: {options}'''
+            )
+        if "authenticationMethod" in kwargs:
+            options = ["Email"]
+            assert kwargs["authenticationMethod"] in options, (
+                f'''"authenticationMethod" cannot be "{kwargs["authenticationMethod"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['organizations', 'configure', 'admins'],
-            'operation': 'createOrganizationAdmin'
+            "tags": ["organizations", "configure", "admins"],
+            "operation": "createOrganizationAdmin",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/admins'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/admins"
 
-        body_params = ['email', 'name', 'orgAccess', 'tags', 'networks', 'authenticationMethod', ]
+        body_params = [
+            "email",
+            "name",
+            "orgAccess",
+            "tags",
+            "networks",
+            "authenticationMethod",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def updateOrganizationAdmin(self, organizationId: str, adminId: str, **kwargs):
         """
@@ -770,24 +786,29 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'orgAccess' in kwargs:
-            options = ['enterprise', 'full', 'none', 'read-only']
-            assert kwargs['orgAccess'] in options, f'''"orgAccess" cannot be "{kwargs['orgAccess']}", & must be set to one of: {options}'''
+        if "orgAccess" in kwargs:
+            options = ["enterprise", "full", "none", "read-only"]
+            assert kwargs["orgAccess"] in options, (
+                f'''"orgAccess" cannot be "{kwargs["orgAccess"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['organizations', 'configure', 'admins'],
-            'operation': 'updateOrganizationAdmin'
+            "tags": ["organizations", "configure", "admins"],
+            "operation": "updateOrganizationAdmin",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        adminId = urllib.parse.quote(str(adminId), safe='')
-        resource = f'/organizations/{organizationId}/admins/{adminId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        adminId = urllib.parse.quote(str(adminId), safe="")
+        resource = f"/organizations/{organizationId}/admins/{adminId}"
 
-        body_params = ['name', 'orgAccess', 'tags', 'networks', ]
+        body_params = [
+            "name",
+            "orgAccess",
+            "tags",
+            "networks",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteOrganizationAdmin(self, organizationId: str, adminId: str):
         """
@@ -799,16 +820,14 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'admins'],
-            'operation': 'deleteOrganizationAdmin'
+            "tags": ["organizations", "configure", "admins"],
+            "operation": "deleteOrganizationAdmin",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        adminId = urllib.parse.quote(str(adminId), safe='')
-        resource = f'/organizations/{organizationId}/admins/{adminId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        adminId = urllib.parse.quote(str(adminId), safe="")
+        resource = f"/organizations/{organizationId}/admins/{adminId}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def getOrganizationAlertsProfiles(self, organizationId: str):
         """
@@ -819,17 +838,17 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'alerts', 'profiles'],
-            'operation': 'getOrganizationAlertsProfiles'
+            "tags": ["organizations", "configure", "alerts", "profiles"],
+            "operation": "getOrganizationAlertsProfiles",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/alerts/profiles'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/alerts/profiles"
 
         return self._session.get(metadata, resource)
-        
 
-
-    def createOrganizationAlertsProfile(self, organizationId: str, type: str, alertCondition: dict, recipients: dict, networkTags: list, **kwargs):
+    def createOrganizationAlertsProfile(
+        self, organizationId: str, type: str, alertCondition: dict, recipients: dict, networkTags: list, **kwargs
+    ):
         """
         **Create an organization-wide alert configuration**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-alerts-profile
@@ -844,23 +863,36 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'type' in kwargs:
-            options = ['appOutage', 'voipJitter', 'voipMos', 'voipPacketLoss', 'wanLatency', 'wanPacketLoss', 'wanStatus', 'wanUtilization']
-            assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
+        if "type" in kwargs:
+            options = [
+                "appOutage",
+                "voipJitter",
+                "voipMos",
+                "voipPacketLoss",
+                "wanLatency",
+                "wanPacketLoss",
+                "wanStatus",
+                "wanUtilization",
+            ]
+            assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
 
         metadata = {
-            'tags': ['organizations', 'configure', 'alerts', 'profiles'],
-            'operation': 'createOrganizationAlertsProfile'
+            "tags": ["organizations", "configure", "alerts", "profiles"],
+            "operation": "createOrganizationAlertsProfile",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/alerts/profiles'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/alerts/profiles"
 
-        body_params = ['type', 'alertCondition', 'recipients', 'networkTags', 'description', ]
+        body_params = [
+            "type",
+            "alertCondition",
+            "recipients",
+            "networkTags",
+            "description",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def updateOrganizationAlertsProfile(self, organizationId: str, alertConfigId: str, **kwargs):
         """
@@ -879,24 +911,38 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'type' in kwargs:
-            options = ['appOutage', 'voipJitter', 'voipMos', 'voipPacketLoss', 'wanLatency', 'wanPacketLoss', 'wanStatus', 'wanUtilization']
-            assert kwargs['type'] in options, f'''"type" cannot be "{kwargs['type']}", & must be set to one of: {options}'''
+        if "type" in kwargs:
+            options = [
+                "appOutage",
+                "voipJitter",
+                "voipMos",
+                "voipPacketLoss",
+                "wanLatency",
+                "wanPacketLoss",
+                "wanStatus",
+                "wanUtilization",
+            ]
+            assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
 
         metadata = {
-            'tags': ['organizations', 'configure', 'alerts', 'profiles'],
-            'operation': 'updateOrganizationAlertsProfile'
+            "tags": ["organizations", "configure", "alerts", "profiles"],
+            "operation": "updateOrganizationAlertsProfile",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        alertConfigId = urllib.parse.quote(str(alertConfigId), safe='')
-        resource = f'/organizations/{organizationId}/alerts/profiles/{alertConfigId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        alertConfigId = urllib.parse.quote(str(alertConfigId), safe="")
+        resource = f"/organizations/{organizationId}/alerts/profiles/{alertConfigId}"
 
-        body_params = ['enabled', 'type', 'alertCondition', 'recipients', 'networkTags', 'description', ]
+        body_params = [
+            "enabled",
+            "type",
+            "alertCondition",
+            "recipients",
+            "networkTags",
+            "description",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteOrganizationAlertsProfile(self, organizationId: str, alertConfigId: str):
         """
@@ -908,18 +954,108 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'alerts', 'profiles'],
-            'operation': 'deleteOrganizationAlertsProfile'
+            "tags": ["organizations", "configure", "alerts", "profiles"],
+            "operation": "deleteOrganizationAlertsProfile",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        alertConfigId = urllib.parse.quote(str(alertConfigId), safe='')
-        resource = f'/organizations/{organizationId}/alerts/profiles/{alertConfigId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        alertConfigId = urllib.parse.quote(str(alertConfigId), safe="")
+        resource = f"/organizations/{organizationId}/alerts/profiles/{alertConfigId}"
 
         return self._session.delete(metadata, resource)
-        
 
+    def getOrganizationApiRestProvisioningPipelinesJobs(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List pipeline jobs, with optional status filtering**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-api-rest-provisioning-pipelines-jobs
 
-    def getOrganizationApiRequests(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 10.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - pipelineIds (array): Pipeline IDs to retrieve jobs for
+        - status (string): If provided, filters jobs by status
+        """
+
+        kwargs.update(locals())
+
+        if "status" in kwargs:
+            options = ["complete", "deferred", "failed", "new", "ready", "running", "scheduled"]
+            assert kwargs["status"] in options, (
+                f'''"status" cannot be "{kwargs["status"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["organizations", "configure", "api", "rest", "provisioning", "pipelines", "jobs"],
+            "operation": "getOrganizationApiRestProvisioningPipelinesJobs",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/api/rest/provisioning/pipelines/jobs"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "pipelineIds",
+            "status",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "pipelineIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationApiRestProvisioningPipelinesJobsOverviewsByPipeline(self, organizationId: str, **kwargs):
+        """
+        **Retrieves pipeline overviews with aggregated job status counts**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-api-rest-provisioning-pipelines-jobs-overviews-by-pipeline
+
+        - organizationId (string): Organization ID
+        - pipelineIds (array): Pipeline IDs to retrieve overviews for
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": [
+                "organizations",
+                "configure",
+                "api",
+                "rest",
+                "provisioning",
+                "pipelines",
+                "jobs",
+                "overviews",
+                "byPipeline",
+            ],
+            "operation": "getOrganizationApiRestProvisioningPipelinesJobsOverviewsByPipeline",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/api/rest/provisioning/pipelines/jobs/overviews/byPipeline"
+
+        query_params = [
+            "pipelineIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "pipelineIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationApiRequests(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **List the API requests made by an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-api-requests
@@ -945,32 +1081,51 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'method' in kwargs:
-            options = ['DELETE', 'GET', 'POST', 'PUT']
-            assert kwargs['method'] in options, f'''"method" cannot be "{kwargs['method']}", & must be set to one of: {options}'''
-        if 'version' in kwargs:
+        if "method" in kwargs:
+            options = ["DELETE", "GET", "POST", "PUT"]
+            assert kwargs["method"] in options, (
+                f'''"method" cannot be "{kwargs["method"]}", & must be set to one of: {options}'''
+            )
+        if "version" in kwargs:
             options = [0, 1]
-            assert kwargs['version'] in options, f'''"version" cannot be "{kwargs['version']}", & must be set to one of: {options}'''
+            assert kwargs["version"] in options, (
+                f'''"version" cannot be "{kwargs["version"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'apiRequests'],
-            'operation': 'getOrganizationApiRequests'
+            "tags": ["organizations", "monitor", "apiRequests"],
+            "operation": "getOrganizationApiRequests",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/apiRequests'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/apiRequests"
 
-        query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'adminId', 'path', 'method', 'responseCode', 'sourceIp', 'userAgent', 'version', 'operationIds', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "adminId",
+            "path",
+            "method",
+            "responseCode",
+            "sourceIp",
+            "userAgent",
+            "version",
+            "operationIds",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['operationIds', ]
+        array_params = [
+            "operationIds",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def getOrganizationApiRequestsOverview(self, organizationId: str, **kwargs):
         """
@@ -986,18 +1141,20 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'apiRequests', 'overview'],
-            'operation': 'getOrganizationApiRequestsOverview'
+            "tags": ["organizations", "monitor", "apiRequests", "overview"],
+            "operation": "getOrganizationApiRequestsOverview",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/apiRequests/overview'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/apiRequests/overview"
 
-        query_params = ['t0', 't1', 'timespan', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getOrganizationApiRequestsOverviewResponseCodesByInterval(self, organizationId: str, **kwargs):
         """
@@ -1018,31 +1175,45 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'version' in kwargs:
+        if "version" in kwargs:
             options = [0, 1]
-            assert kwargs['version'] in options, f'''"version" cannot be "{kwargs['version']}", & must be set to one of: {options}'''
+            assert kwargs["version"] in options, (
+                f'''"version" cannot be "{kwargs["version"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'apiRequests', 'overview', 'responseCodes', 'byInterval'],
-            'operation': 'getOrganizationApiRequestsOverviewResponseCodesByInterval'
+            "tags": ["organizations", "monitor", "apiRequests", "overview", "responseCodes", "byInterval"],
+            "operation": "getOrganizationApiRequestsOverviewResponseCodesByInterval",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/apiRequests/overview/responseCodes/byInterval'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/apiRequests/overview/responseCodes/byInterval"
 
-        query_params = ['t0', 't1', 'timespan', 'interval', 'version', 'operationIds', 'sourceIps', 'adminIds', 'userAgent', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "interval",
+            "version",
+            "operationIds",
+            "sourceIps",
+            "adminIds",
+            "userAgent",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['operationIds', 'sourceIps', 'adminIds', ]
+        array_params = [
+            "operationIds",
+            "sourceIps",
+            "adminIds",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get(metadata, resource, params)
-        
 
-
-    def getOrganizationAssuranceAlerts(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationAssuranceAlerts(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Return all health alerts for an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-alerts
@@ -1072,35 +1243,63 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'sortOrder' in kwargs:
-            options = ['ascending', 'descending']
-            assert kwargs['sortOrder'] in options, f'''"sortOrder" cannot be "{kwargs['sortOrder']}", & must be set to one of: {options}'''
-        if 'category' in kwargs:
-            options = ['configuration', 'connectivity', 'device_health', 'insights']
-            assert kwargs['category'] in options, f'''"category" cannot be "{kwargs['category']}", & must be set to one of: {options}'''
-        if 'sortBy' in kwargs:
-            options = ['category', 'dismissedAt', 'resolvedAt', 'severity', 'startedAt']
-            assert kwargs['sortBy'] in options, f'''"sortBy" cannot be "{kwargs['sortBy']}", & must be set to one of: {options}'''
+        if "sortOrder" in kwargs:
+            options = ["ascending", "descending"]
+            assert kwargs["sortOrder"] in options, (
+                f'''"sortOrder" cannot be "{kwargs["sortOrder"]}", & must be set to one of: {options}'''
+            )
+        if "category" in kwargs:
+            options = ["configuration", "connectivity", "device_health", "experience_metrics", "insights"]
+            assert kwargs["category"] in options, (
+                f'''"category" cannot be "{kwargs["category"]}", & must be set to one of: {options}'''
+            )
+        if "sortBy" in kwargs:
+            options = ["category", "dismissedAt", "resolvedAt", "severity", "startedAt"]
+            assert kwargs["sortBy"] in options, (
+                f'''"sortBy" cannot be "{kwargs["sortBy"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'alerts'],
-            'operation': 'getOrganizationAssuranceAlerts'
+            "tags": ["organizations", "monitor", "alerts"],
+            "operation": "getOrganizationAssuranceAlerts",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/assurance/alerts'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/alerts"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'sortOrder', 'networkId', 'severity', 'types', 'tsStart', 'tsEnd', 'category', 'sortBy', 'serials', 'deviceTypes', 'deviceTags', 'active', 'dismissed', 'resolved', 'suppressAlertsForOfflineNodes', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "sortOrder",
+            "networkId",
+            "severity",
+            "types",
+            "tsStart",
+            "tsEnd",
+            "category",
+            "sortBy",
+            "serials",
+            "deviceTypes",
+            "deviceTags",
+            "active",
+            "dismissed",
+            "resolved",
+            "suppressAlertsForOfflineNodes",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['types', 'serials', 'deviceTypes', 'deviceTags', ]
+        array_params = [
+            "types",
+            "serials",
+            "deviceTypes",
+            "deviceTags",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def dismissOrganizationAssuranceAlerts(self, organizationId: str, alertIds: list):
         """
@@ -1114,18 +1313,18 @@ class AsyncOrganizations:
         kwargs = locals()
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'alerts'],
-            'operation': 'dismissOrganizationAssuranceAlerts'
+            "tags": ["organizations", "monitor", "alerts"],
+            "operation": "dismissOrganizationAssuranceAlerts",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/assurance/alerts/dismiss'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/alerts/dismiss"
 
-        body_params = ['alertIds', ]
+        body_params = [
+            "alertIds",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getOrganizationAssuranceAlertsOverview(self, organizationId: str, **kwargs):
         """
@@ -1150,31 +1349,50 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'category' in kwargs:
-            options = ['configuration', 'connectivity', 'device_health', 'insights']
-            assert kwargs['category'] in options, f'''"category" cannot be "{kwargs['category']}", & must be set to one of: {options}'''
+        if "category" in kwargs:
+            options = ["configuration", "connectivity", "device_health", "experience_metrics", "insights"]
+            assert kwargs["category"] in options, (
+                f'''"category" cannot be "{kwargs["category"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'alerts', 'overview'],
-            'operation': 'getOrganizationAssuranceAlertsOverview'
+            "tags": ["organizations", "monitor", "alerts", "overview"],
+            "operation": "getOrganizationAssuranceAlertsOverview",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/assurance/alerts/overview'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/alerts/overview"
 
-        query_params = ['networkId', 'severity', 'types', 'tsStart', 'tsEnd', 'category', 'serials', 'deviceTypes', 'deviceTags', 'active', 'dismissed', 'resolved', 'suppressAlertsForOfflineNodes', ]
+        query_params = [
+            "networkId",
+            "severity",
+            "types",
+            "tsStart",
+            "tsEnd",
+            "category",
+            "serials",
+            "deviceTypes",
+            "deviceTags",
+            "active",
+            "dismissed",
+            "resolved",
+            "suppressAlertsForOfflineNodes",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['types', 'serials', 'deviceTypes', 'deviceTags', ]
+        array_params = [
+            "types",
+            "serials",
+            "deviceTypes",
+            "deviceTags",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get(metadata, resource, params)
-        
 
-
-    def getOrganizationAssuranceAlertsOverviewByNetwork(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationAssuranceAlertsOverviewByNetwork(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Return a Summary of Alerts grouped by network and severity**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-alerts-overview-by-network
@@ -1203,34 +1421,59 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'sortOrder' in kwargs:
-            options = ['ascending', 'descending']
-            assert kwargs['sortOrder'] in options, f'''"sortOrder" cannot be "{kwargs['sortOrder']}", & must be set to one of: {options}'''
-        if 'category' in kwargs:
-            options = ['configuration', 'connectivity', 'device_health', 'insights']
-            assert kwargs['category'] in options, f'''"category" cannot be "{kwargs['category']}", & must be set to one of: {options}'''
+        if "sortOrder" in kwargs:
+            options = ["ascending", "descending"]
+            assert kwargs["sortOrder"] in options, (
+                f'''"sortOrder" cannot be "{kwargs["sortOrder"]}", & must be set to one of: {options}'''
+            )
+        if "category" in kwargs:
+            options = ["configuration", "connectivity", "device_health", "experience_metrics", "insights"]
+            assert kwargs["category"] in options, (
+                f'''"category" cannot be "{kwargs["category"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'alerts', 'overview', 'byNetwork'],
-            'operation': 'getOrganizationAssuranceAlertsOverviewByNetwork'
+            "tags": ["organizations", "monitor", "alerts", "overview", "byNetwork"],
+            "operation": "getOrganizationAssuranceAlertsOverviewByNetwork",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/assurance/alerts/overview/byNetwork'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/alerts/overview/byNetwork"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'sortOrder', 'networkId', 'severity', 'types', 'tsStart', 'tsEnd', 'category', 'serials', 'deviceTypes', 'deviceTags', 'active', 'dismissed', 'resolved', 'suppressAlertsForOfflineNodes', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "sortOrder",
+            "networkId",
+            "severity",
+            "types",
+            "tsStart",
+            "tsEnd",
+            "category",
+            "serials",
+            "deviceTypes",
+            "deviceTags",
+            "active",
+            "dismissed",
+            "resolved",
+            "suppressAlertsForOfflineNodes",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['types', 'serials', 'deviceTypes', 'deviceTags', ]
+        array_params = [
+            "types",
+            "serials",
+            "deviceTypes",
+            "deviceTags",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationAssuranceAlertsOverviewByType(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationAssuranceAlertsOverviewByType(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Return a Summary of Alerts grouped by type and severity**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-alerts-overview-by-type
@@ -1255,42 +1498,76 @@ class AsyncOrganizations:
         - active (boolean): Optional parameter to filter by active alerts defaults to true
         - dismissed (boolean): Optional parameter to filter by dismissed alerts defaults to false
         - resolved (boolean): Optional parameter to filter by resolved alerts defaults to false
+        - includeDeviceTags (boolean): Include grouped device tags for each alert type in the response.
+        - includeNetworks (boolean): Include affected networks for each alert type in the response.
         - suppressAlertsForOfflineNodes (boolean): When set to true the api will only return connectivity alerts for a given device if that device is in an offline state. This only applies to devices. This is ignored when resolved is true. Example:  If a Switch has a VLan Mismatch and is Unreachable. only the Unreachable alert will be returned. Defaults to false.
         """
 
         kwargs.update(locals())
 
-        if 'sortOrder' in kwargs:
-            options = ['ascending', 'descending']
-            assert kwargs['sortOrder'] in options, f'''"sortOrder" cannot be "{kwargs['sortOrder']}", & must be set to one of: {options}'''
-        if 'category' in kwargs:
-            options = ['configuration', 'connectivity', 'device_health', 'insights']
-            assert kwargs['category'] in options, f'''"category" cannot be "{kwargs['category']}", & must be set to one of: {options}'''
-        if 'sortBy' in kwargs:
-            options = ['count', 'lastAlertedAt', 'networkCount', 'severity', 'startedAt']
-            assert kwargs['sortBy'] in options, f'''"sortBy" cannot be "{kwargs['sortBy']}", & must be set to one of: {options}'''
+        if "sortOrder" in kwargs:
+            options = ["ascending", "descending"]
+            assert kwargs["sortOrder"] in options, (
+                f'''"sortOrder" cannot be "{kwargs["sortOrder"]}", & must be set to one of: {options}'''
+            )
+        if "category" in kwargs:
+            options = ["configuration", "connectivity", "device_health", "experience_metrics", "insights"]
+            assert kwargs["category"] in options, (
+                f'''"category" cannot be "{kwargs["category"]}", & must be set to one of: {options}'''
+            )
+        if "sortBy" in kwargs:
+            options = ["count", "lastAlertedAt", "networkCount", "severity", "startedAt"]
+            assert kwargs["sortBy"] in options, (
+                f'''"sortBy" cannot be "{kwargs["sortBy"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'alerts', 'overview', 'byType'],
-            'operation': 'getOrganizationAssuranceAlertsOverviewByType'
+            "tags": ["organizations", "monitor", "alerts", "overview", "byType"],
+            "operation": "getOrganizationAssuranceAlertsOverviewByType",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/assurance/alerts/overview/byType'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/alerts/overview/byType"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'sortOrder', 'networkId', 'severity', 'types', 'tsStart', 'tsEnd', 'category', 'sortBy', 'serials', 'deviceTypes', 'deviceTags', 'active', 'dismissed', 'resolved', 'suppressAlertsForOfflineNodes', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "sortOrder",
+            "networkId",
+            "severity",
+            "types",
+            "tsStart",
+            "tsEnd",
+            "category",
+            "sortBy",
+            "serials",
+            "deviceTypes",
+            "deviceTags",
+            "active",
+            "dismissed",
+            "resolved",
+            "includeDeviceTags",
+            "includeNetworks",
+            "suppressAlertsForOfflineNodes",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['types', 'serials', 'deviceTypes', 'deviceTags', ]
+        array_params = [
+            "types",
+            "serials",
+            "deviceTypes",
+            "deviceTags",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationAssuranceAlertsOverviewHistorical(self, organizationId: str, segmentDuration: int, tsStart: str, **kwargs):
+    def getOrganizationAssuranceAlertsOverviewHistorical(
+        self, organizationId: str, segmentDuration: int, tsStart: str, **kwargs
+    ):
         """
         **Returns historical health alert overviews**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-alerts-overview-historical
@@ -1309,29 +1586,43 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'category' in kwargs:
-            options = ['configuration', 'connectivity', 'device_health', 'insights']
-            assert kwargs['category'] in options, f'''"category" cannot be "{kwargs['category']}", & must be set to one of: {options}'''
+        if "category" in kwargs:
+            options = ["configuration", "connectivity", "device_health", "experience_metrics", "insights"]
+            assert kwargs["category"] in options, (
+                f'''"category" cannot be "{kwargs["category"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'alerts', 'overview', 'historical'],
-            'operation': 'getOrganizationAssuranceAlertsOverviewHistorical'
+            "tags": ["organizations", "monitor", "alerts", "overview", "historical"],
+            "operation": "getOrganizationAssuranceAlertsOverviewHistorical",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/assurance/alerts/overview/historical'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/alerts/overview/historical"
 
-        query_params = ['segmentDuration', 'networkId', 'severity', 'types', 'tsStart', 'tsEnd', 'category', 'serials', 'deviceTypes', ]
+        query_params = [
+            "segmentDuration",
+            "networkId",
+            "severity",
+            "types",
+            "tsStart",
+            "tsEnd",
+            "category",
+            "serials",
+            "deviceTypes",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['types', 'serials', 'deviceTypes', ]
+        array_params = [
+            "types",
+            "serials",
+            "deviceTypes",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def restoreOrganizationAssuranceAlerts(self, organizationId: str, alertIds: list):
         """
@@ -1345,18 +1636,18 @@ class AsyncOrganizations:
         kwargs = locals()
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'alerts'],
-            'operation': 'restoreOrganizationAssuranceAlerts'
+            "tags": ["organizations", "monitor", "alerts"],
+            "operation": "restoreOrganizationAssuranceAlerts",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/assurance/alerts/restore'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/alerts/restore"
 
-        body_params = ['alertIds', ]
+        body_params = [
+            "alertIds",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getOrganizationAssuranceAlertsTaxonomyCategories(self, organizationId: str):
         """
@@ -1367,15 +1658,13 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'alerts', 'taxonomy', 'categories'],
-            'operation': 'getOrganizationAssuranceAlertsTaxonomyCategories'
+            "tags": ["organizations", "monitor", "alerts", "taxonomy", "categories"],
+            "operation": "getOrganizationAssuranceAlertsTaxonomyCategories",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/assurance/alerts/taxonomy/categories'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/alerts/taxonomy/categories"
 
         return self._session.get(metadata, resource)
-        
-
 
     def getOrganizationAssuranceAlertsTaxonomyTypes(self, organizationId: str):
         """
@@ -1386,15 +1675,13 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'alerts', 'taxonomy', 'types'],
-            'operation': 'getOrganizationAssuranceAlertsTaxonomyTypes'
+            "tags": ["organizations", "monitor", "alerts", "taxonomy", "types"],
+            "operation": "getOrganizationAssuranceAlertsTaxonomyTypes",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/assurance/alerts/taxonomy/types'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/alerts/taxonomy/types"
 
         return self._session.get(metadata, resource)
-        
-
 
     def getOrganizationAssuranceAlert(self, organizationId: str, id: str):
         """
@@ -1406,16 +1693,14 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'alerts'],
-            'operation': 'getOrganizationAssuranceAlert'
+            "tags": ["organizations", "monitor", "alerts"],
+            "operation": "getOrganizationAssuranceAlert",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        id = urllib.parse.quote(str(id), safe='')
-        resource = f'/organizations/{organizationId}/assurance/alerts/{id}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/assurance/alerts/{id}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def getOrganizationBrandingPolicies(self, organizationId: str):
         """
@@ -1426,48 +1711,50 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'brandingPolicies'],
-            'operation': 'getOrganizationBrandingPolicies'
+            "tags": ["organizations", "configure", "brandingPolicies"],
+            "operation": "getOrganizationBrandingPolicies",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/brandingPolicies'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/brandingPolicies"
 
         return self._session.get(metadata, resource)
-        
-
 
     def createOrganizationBrandingPolicy(self, organizationId: str, name: str, **kwargs):
         """
-        **Add a new branding policy to an organization**
-        https://developer.cisco.com/meraki/api-v1/#!create-organization-branding-policy
+               **Add a new branding policy to an organization**
+               https://developer.cisco.com/meraki/api-v1/#!create-organization-branding-policy
 
-        - organizationId (string): Organization ID
-        - name (string): Name of the Dashboard branding policy.
-        - enabled (boolean): Boolean indicating whether this policy is enabled.
-        - adminSettings (object): Settings for describing which kinds of admins this policy applies to.
-        - helpSettings (object):       Settings for describing the modifications to various Help page features. Each property in this object accepts one of
-      'default or inherit' (do not modify functionality), 'hide' (remove the section from Dashboard), or 'show' (always show
-      the section on Dashboard). Some properties in this object also accept custom HTML used to replace the section on
-      Dashboard; see the documentation for each property to see the allowed values.
- Each property defaults to 'default or inherit' when not provided.
-        - customLogo (object): Properties describing the custom logo attached to the branding policy.
+               - organizationId (string): Organization ID
+               - name (string): Name of the Dashboard branding policy.
+               - enabled (boolean): Boolean indicating whether this policy is enabled.
+               - adminSettings (object): Settings for describing which kinds of admins this policy applies to.
+               - helpSettings (object):       Settings for describing the modifications to various Help page features. Each property in this object accepts one of
+             'default or inherit' (do not modify functionality), 'hide' (remove the section from Dashboard), or 'show' (always show
+             the section on Dashboard). Some properties in this object also accept custom HTML used to replace the section on
+             Dashboard; see the documentation for each property to see the allowed values.
+        Each property defaults to 'default or inherit' when not provided.
+               - customLogo (object): Properties describing the custom logo attached to the branding policy.
         """
 
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'brandingPolicies'],
-            'operation': 'createOrganizationBrandingPolicy'
+            "tags": ["organizations", "configure", "brandingPolicies"],
+            "operation": "createOrganizationBrandingPolicy",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/brandingPolicies'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/brandingPolicies"
 
-        body_params = ['name', 'enabled', 'adminSettings', 'helpSettings', 'customLogo', ]
+        body_params = [
+            "name",
+            "enabled",
+            "adminSettings",
+            "helpSettings",
+            "customLogo",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getOrganizationBrandingPoliciesPriorities(self, organizationId: str):
         """
@@ -1478,15 +1765,13 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'brandingPolicies', 'priorities'],
-            'operation': 'getOrganizationBrandingPoliciesPriorities'
+            "tags": ["organizations", "configure", "brandingPolicies", "priorities"],
+            "operation": "getOrganizationBrandingPoliciesPriorities",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/brandingPolicies/priorities'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/brandingPolicies/priorities"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateOrganizationBrandingPoliciesPriorities(self, organizationId: str, **kwargs):
         """
@@ -1501,18 +1786,18 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'brandingPolicies', 'priorities'],
-            'operation': 'updateOrganizationBrandingPoliciesPriorities'
+            "tags": ["organizations", "configure", "brandingPolicies", "priorities"],
+            "operation": "updateOrganizationBrandingPoliciesPriorities",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/brandingPolicies/priorities'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/brandingPolicies/priorities"
 
-        body_params = ['brandingPolicyIds', ]
+        body_params = [
+            "brandingPolicyIds",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getOrganizationBrandingPolicy(self, organizationId: str, brandingPolicyId: str):
         """
@@ -1524,51 +1809,53 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'brandingPolicies'],
-            'operation': 'getOrganizationBrandingPolicy'
+            "tags": ["organizations", "configure", "brandingPolicies"],
+            "operation": "getOrganizationBrandingPolicy",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        brandingPolicyId = urllib.parse.quote(str(brandingPolicyId), safe='')
-        resource = f'/organizations/{organizationId}/brandingPolicies/{brandingPolicyId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        brandingPolicyId = urllib.parse.quote(str(brandingPolicyId), safe="")
+        resource = f"/organizations/{organizationId}/brandingPolicies/{brandingPolicyId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateOrganizationBrandingPolicy(self, organizationId: str, brandingPolicyId: str, name: str, **kwargs):
         """
-        **Update a branding policy**
-        https://developer.cisco.com/meraki/api-v1/#!update-organization-branding-policy
+          **Update a branding policy**
+          https://developer.cisco.com/meraki/api-v1/#!update-organization-branding-policy
 
-        - organizationId (string): Organization ID
-        - brandingPolicyId (string): Branding policy ID
-        - name (string): Name of the Dashboard branding policy.
-        - enabled (boolean): Boolean indicating whether this policy is enabled.
-        - adminSettings (object): Settings for describing which kinds of admins this policy applies to.
-        - helpSettings (object):       Settings for describing the modifications to various Help page features. Each property in this object accepts one of
-      'default or inherit' (do not modify functionality), 'hide' (remove the section from Dashboard), or 'show' (always show
-      the section on Dashboard). Some properties in this object also accept custom HTML used to replace the section on
-      Dashboard; see the documentation for each property to see the allowed values.
+          - organizationId (string): Organization ID
+          - brandingPolicyId (string): Branding policy ID
+          - name (string): Name of the Dashboard branding policy.
+          - enabled (boolean): Boolean indicating whether this policy is enabled.
+          - adminSettings (object): Settings for describing which kinds of admins this policy applies to.
+          - helpSettings (object):       Settings for describing the modifications to various Help page features. Each property in this object accepts one of
+        'default or inherit' (do not modify functionality), 'hide' (remove the section from Dashboard), or 'show' (always show
+        the section on Dashboard). Some properties in this object also accept custom HTML used to replace the section on
+        Dashboard; see the documentation for each property to see the allowed values.
 
-        - customLogo (object): Properties describing the custom logo attached to the branding policy.
+          - customLogo (object): Properties describing the custom logo attached to the branding policy.
         """
 
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'brandingPolicies'],
-            'operation': 'updateOrganizationBrandingPolicy'
+            "tags": ["organizations", "configure", "brandingPolicies"],
+            "operation": "updateOrganizationBrandingPolicy",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        brandingPolicyId = urllib.parse.quote(str(brandingPolicyId), safe='')
-        resource = f'/organizations/{organizationId}/brandingPolicies/{brandingPolicyId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        brandingPolicyId = urllib.parse.quote(str(brandingPolicyId), safe="")
+        resource = f"/organizations/{organizationId}/brandingPolicies/{brandingPolicyId}"
 
-        body_params = ['name', 'enabled', 'adminSettings', 'helpSettings', 'customLogo', ]
+        body_params = [
+            "name",
+            "enabled",
+            "adminSettings",
+            "helpSettings",
+            "customLogo",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteOrganizationBrandingPolicy(self, organizationId: str, brandingPolicyId: str):
         """
@@ -1580,16 +1867,14 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'brandingPolicies'],
-            'operation': 'deleteOrganizationBrandingPolicy'
+            "tags": ["organizations", "configure", "brandingPolicies"],
+            "operation": "deleteOrganizationBrandingPolicy",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        brandingPolicyId = urllib.parse.quote(str(brandingPolicyId), safe='')
-        resource = f'/organizations/{organizationId}/brandingPolicies/{brandingPolicyId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        brandingPolicyId = urllib.parse.quote(str(brandingPolicyId), safe="")
+        resource = f"/organizations/{organizationId}/brandingPolicies/{brandingPolicyId}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def claimIntoOrganization(self, organizationId: str, **kwargs):
         """
@@ -1605,18 +1890,20 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure'],
-            'operation': 'claimIntoOrganization'
+            "tags": ["organizations", "configure"],
+            "operation": "claimIntoOrganization",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/claim'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/claim"
 
-        body_params = ['orders', 'serials', 'licenses', ]
+        body_params = [
+            "orders",
+            "serials",
+            "licenses",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getOrganizationClientsBandwidthUsageHistory(self, organizationId: str, **kwargs):
         """
@@ -1636,18 +1923,24 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'clients', 'bandwidthUsageHistory'],
-            'operation': 'getOrganizationClientsBandwidthUsageHistory'
+            "tags": ["organizations", "monitor", "clients", "bandwidthUsageHistory"],
+            "operation": "getOrganizationClientsBandwidthUsageHistory",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/clients/bandwidthUsageHistory'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/clients/bandwidthUsageHistory"
 
-        query_params = ['networkTag', 'deviceTag', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
+        query_params = [
+            "networkTag",
+            "deviceTag",
+            "ssidName",
+            "usageUplink",
+            "t0",
+            "t1",
+            "timespan",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getOrganizationClientsOverview(self, organizationId: str, **kwargs):
         """
@@ -1663,20 +1956,22 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'clients', 'overview'],
-            'operation': 'getOrganizationClientsOverview'
+            "tags": ["organizations", "monitor", "clients", "overview"],
+            "operation": "getOrganizationClientsOverview",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/clients/overview'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/clients/overview"
 
-        query_params = ['t0', 't1', 'timespan', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
 
-
-    def getOrganizationClientsSearch(self, organizationId: str, mac: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationClientsSearch(self, organizationId: str, mac: str, total_pages=1, direction="next", **kwargs):
         """
         **Return the client details in an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-clients-search
@@ -1693,18 +1988,21 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'clients', 'search'],
-            'operation': 'getOrganizationClientsSearch'
+            "tags": ["organizations", "configure", "clients", "search"],
+            "operation": "getOrganizationClientsSearch",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/clients/search'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/clients/search"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'mac', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "mac",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def cloneOrganization(self, organizationId: str, name: str):
         """
@@ -1718,18 +2016,18 @@ class AsyncOrganizations:
         kwargs = locals()
 
         metadata = {
-            'tags': ['organizations', 'configure'],
-            'operation': 'cloneOrganization'
+            "tags": ["organizations", "configure"],
+            "operation": "cloneOrganization",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/clone'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/clone"
 
-        body_params = ['name', ]
+        body_params = [
+            "name",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getOrganizationConfigTemplates(self, organizationId: str):
         """
@@ -1740,15 +2038,13 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'configTemplates'],
-            'operation': 'getOrganizationConfigTemplates'
+            "tags": ["organizations", "configure", "configTemplates"],
+            "operation": "getOrganizationConfigTemplates",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/configTemplates'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/configTemplates"
 
         return self._session.get(metadata, resource)
-        
-
 
     def createOrganizationConfigTemplate(self, organizationId: str, name: str, **kwargs):
         """
@@ -1764,18 +2060,20 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'configTemplates'],
-            'operation': 'createOrganizationConfigTemplate'
+            "tags": ["organizations", "configure", "configTemplates"],
+            "operation": "createOrganizationConfigTemplate",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/configTemplates'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/configTemplates"
 
-        body_params = ['name', 'timeZone', 'copyFromNetworkId', ]
+        body_params = [
+            "name",
+            "timeZone",
+            "copyFromNetworkId",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getOrganizationConfigTemplate(self, organizationId: str, configTemplateId: str):
         """
@@ -1787,16 +2085,14 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'configTemplates'],
-            'operation': 'getOrganizationConfigTemplate'
+            "tags": ["organizations", "configure", "configTemplates"],
+            "operation": "getOrganizationConfigTemplate",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        configTemplateId = urllib.parse.quote(str(configTemplateId), safe='')
-        resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        configTemplateId = urllib.parse.quote(str(configTemplateId), safe="")
+        resource = f"/organizations/{organizationId}/configTemplates/{configTemplateId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateOrganizationConfigTemplate(self, organizationId: str, configTemplateId: str, **kwargs):
         """
@@ -1812,19 +2108,20 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'configTemplates'],
-            'operation': 'updateOrganizationConfigTemplate'
+            "tags": ["organizations", "configure", "configTemplates"],
+            "operation": "updateOrganizationConfigTemplate",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        configTemplateId = urllib.parse.quote(str(configTemplateId), safe='')
-        resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        configTemplateId = urllib.parse.quote(str(configTemplateId), safe="")
+        resource = f"/organizations/{organizationId}/configTemplates/{configTemplateId}"
 
-        body_params = ['name', 'timeZone', ]
+        body_params = [
+            "name",
+            "timeZone",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteOrganizationConfigTemplate(self, organizationId: str, configTemplateId: str):
         """
@@ -1836,18 +2133,16 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'configTemplates'],
-            'operation': 'deleteOrganizationConfigTemplate'
+            "tags": ["organizations", "configure", "configTemplates"],
+            "operation": "deleteOrganizationConfigTemplate",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        configTemplateId = urllib.parse.quote(str(configTemplateId), safe='')
-        resource = f'/organizations/{organizationId}/configTemplates/{configTemplateId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        configTemplateId = urllib.parse.quote(str(configTemplateId), safe="")
+        resource = f"/organizations/{organizationId}/configTemplates/{configTemplateId}"
 
         return self._session.delete(metadata, resource)
-        
 
-
-    def getOrganizationConfigurationChanges(self, organizationId: str, total_pages=1, direction='prev', **kwargs):
+    def getOrganizationConfigurationChanges(self, organizationId: str, total_pages=1, direction="prev", **kwargs):
         """
         **View the Change Log for your organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-configuration-changes
@@ -1868,20 +2163,27 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'configurationChanges'],
-            'operation': 'getOrganizationConfigurationChanges'
+            "tags": ["organizations", "monitor", "configurationChanges"],
+            "operation": "getOrganizationConfigurationChanges",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/configurationChanges'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/configurationChanges"
 
-        query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'networkId', 'adminId', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkId",
+            "adminId",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationDevices(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationDevices(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **List the devices in an organization that have been assigned to a network.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-devices
@@ -1910,31 +2212,58 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'tagsFilterType' in kwargs:
-            options = ['withAllTags', 'withAnyTags']
-            assert kwargs['tagsFilterType'] in options, f'''"tagsFilterType" cannot be "{kwargs['tagsFilterType']}", & must be set to one of: {options}'''
+        if "tagsFilterType" in kwargs:
+            options = ["withAllTags", "withAnyTags"]
+            assert kwargs["tagsFilterType"] in options, (
+                f'''"tagsFilterType" cannot be "{kwargs["tagsFilterType"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['organizations', 'configure', 'devices'],
-            'operation': 'getOrganizationDevices'
+            "tags": ["organizations", "configure", "devices"],
+            "operation": "getOrganizationDevices",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/devices'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'configurationUpdatedAfter', 'networkIds', 'productTypes', 'tags', 'tagsFilterType', 'name', 'mac', 'serial', 'model', 'macs', 'serials', 'sensorMetrics', 'sensorAlertProfileIds', 'models', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "configurationUpdatedAfter",
+            "networkIds",
+            "productTypes",
+            "tags",
+            "tagsFilterType",
+            "name",
+            "mac",
+            "serial",
+            "model",
+            "macs",
+            "serials",
+            "sensorMetrics",
+            "sensorAlertProfileIds",
+            "models",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', 'productTypes', 'tags', 'macs', 'serials', 'sensorMetrics', 'sensorAlertProfileIds', 'models', ]
+        array_params = [
+            "networkIds",
+            "productTypes",
+            "tags",
+            "macs",
+            "serials",
+            "sensorMetrics",
+            "sensorAlertProfileIds",
+            "models",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationDevicesAvailabilities(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationDevicesAvailabilities(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **List the availability information for devices in an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-availabilities
@@ -1955,31 +2284,49 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'tagsFilterType' in kwargs:
-            options = ['withAllTags', 'withAnyTags']
-            assert kwargs['tagsFilterType'] in options, f'''"tagsFilterType" cannot be "{kwargs['tagsFilterType']}", & must be set to one of: {options}'''
+        if "tagsFilterType" in kwargs:
+            options = ["withAllTags", "withAnyTags"]
+            assert kwargs["tagsFilterType"] in options, (
+                f'''"tagsFilterType" cannot be "{kwargs["tagsFilterType"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'devices', 'availabilities'],
-            'operation': 'getOrganizationDevicesAvailabilities'
+            "tags": ["organizations", "monitor", "devices", "availabilities"],
+            "operation": "getOrganizationDevicesAvailabilities",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/devices/availabilities'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/availabilities"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'productTypes', 'serials', 'tags', 'tagsFilterType', 'statuses', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "productTypes",
+            "serials",
+            "tags",
+            "tagsFilterType",
+            "statuses",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', 'productTypes', 'serials', 'tags', 'statuses', ]
+        array_params = [
+            "networkIds",
+            "productTypes",
+            "serials",
+            "tags",
+            "statuses",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationDevicesAvailabilitiesChangeHistory(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationDevicesAvailabilitiesChangeHistory(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
         """
         **List the availability history information for devices in an organization.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-availabilities-change-history
@@ -2002,24 +2349,222 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'devices', 'availabilities', 'changeHistory'],
-            'operation': 'getOrganizationDevicesAvailabilitiesChangeHistory'
+            "tags": ["organizations", "monitor", "devices", "availabilities", "changeHistory"],
+            "operation": "getOrganizationDevicesAvailabilitiesChangeHistory",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/devices/availabilities/changeHistory'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/availabilities/changeHistory"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', 'serials', 'productTypes', 'networkIds', 'statuses', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "t0",
+            "t1",
+            "timespan",
+            "serials",
+            "productTypes",
+            "networkIds",
+            "statuses",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['serials', 'productTypes', 'networkIds', 'statuses', ]
+        array_params = [
+            "serials",
+            "productTypes",
+            "networkIds",
+            "statuses",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
+    def getOrganizationDevicesCellularDataDevices(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List devices eligible for Cellular Data Management profile assignment in this organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-cellular-data-devices
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - includeAssigned (boolean): Whether to include devices that have already been assigned to a Cellular Data Management Profile
+        - includedSerials (array): List of device serials to force-include in the response when the devices would otherwise be filtered out. This override is primarily useful for keeping selected devices visible while paging through results. Maximum 1000 serials.
+        - excludedSerials (array): List of device serials to force-exclude from the response when the devices would otherwise be returned. This override is primarily useful for hiding selected devices while paging through results. Maximum 1000 serials.
+        - includedProfileIds (array): List of Cellular Data Management Profile IDs to include in the results. Maximum 1000 profile IDs.
+        - excludedProfileIds (array): List of Cellular Data Management Profile IDs to exclude from the results. Maximum 1000 profile IDs.
+        - deviceTypes (array): List of device types to filter by. Maximum 1000 device types.
+        - slots (array): List of SIM slot types that devices must support. Accepted values are sim1, sim2, and esim. Maximum 3 slots.
+        - name (string): Name of the device to filter by (partial matches allowed)
+        - serials (array): List of device serials to filter by. Maximum 1000 serials.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "monitor", "devices", "cellular", "data"],
+            "operation": "getOrganizationDevicesCellularDataDevices",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/cellular/data/devices"
+
+        query_params = [
+            "includeAssigned",
+            "includedSerials",
+            "excludedSerials",
+            "includedProfileIds",
+            "excludedProfileIds",
+            "deviceTypes",
+            "slots",
+            "name",
+            "serials",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "includedSerials",
+            "excludedSerials",
+            "includedProfileIds",
+            "excludedProfileIds",
+            "deviceTypes",
+            "slots",
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def createOrganizationDevicesCellularDataProfile(self, organizationId: str, name: str, description: str, rules: list):
+        """
+        **Add a cellular data management profile to this organization**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-devices-cellular-data-profile
+
+        - organizationId (string): Organization ID
+        - name (string): Name of the profile to be added. This must be unique.
+        - description (string): Description of the profile to be added.
+        - rules (array): The rules associated with this profile. At least one rule and no more than two rules may be defined for a profile.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "cellular", "data", "profiles"],
+            "operation": "createOrganizationDevicesCellularDataProfile",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/cellular/data/profiles"
+
+        body_params = [
+            "name",
+            "description",
+            "rules",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationDevicesCellularDataProfiles(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List cellular data management profiles in this organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-cellular-data-profiles
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - profileIds (array): Optional parameter to filter the results by Data Management Profile ID.
+        - serials (array): Devices to find Cellular Data Management Profiles for.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "cellular", "data", "profiles"],
+            "operation": "getOrganizationDevicesCellularDataProfiles",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/cellular/data/profiles"
+
+        query_params = [
+            "profileIds",
+            "serials",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "profileIds",
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def deleteOrganizationDevicesCellularDataProfile(self, organizationId: str, profileId: str):
+        """
+        **Delete a cellular data management profile from this organization**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-devices-cellular-data-profile
+
+        - organizationId (string): Organization ID
+        - profileId (string): Profile ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "cellular", "data", "profiles"],
+            "operation": "deleteOrganizationDevicesCellularDataProfile",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        profileId = urllib.parse.quote(str(profileId), safe="")
+        resource = f"/organizations/{organizationId}/devices/cellular/data/profiles/{profileId}"
+
+        return self._session.delete(metadata, resource)
+
+    def updateOrganizationDevicesCellularDataProfile(self, organizationId: str, rules: list, **kwargs):
+        """
+        **Update a Cellular Data Management Profile**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-devices-cellular-data-profile
+
+        - organizationId (string): Organization ID
+        - rules (array): The rules associated with this profile. At least one rule and no more than two rules may be defined for a profile.
+        - profileId (string): ID of the profile.
+        - description (string): New description of the profile.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "cellular", "data", "profiles"],
+            "operation": "updateOrganizationDevicesCellularDataProfile",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/cellular/data/profiles/{profileId}"
+
+        body_params = [
+            "profileId",
+            "description",
+            "rules",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
 
     def createOrganizationDevicesControllerMigration(self, organizationId: str, serials: list, target: str):
         """
@@ -2033,25 +2578,28 @@ class AsyncOrganizations:
 
         kwargs = locals()
 
-        if 'target' in kwargs:
-            options = ['wirelessController']
-            assert kwargs['target'] in options, f'''"target" cannot be "{kwargs['target']}", & must be set to one of: {options}'''
+        if "target" in kwargs:
+            options = ["wirelessController"]
+            assert kwargs["target"] in options, (
+                f'''"target" cannot be "{kwargs["target"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['organizations', 'configure', 'devices', 'controller', 'migrations'],
-            'operation': 'createOrganizationDevicesControllerMigration'
+            "tags": ["organizations", "configure", "devices", "controller", "migrations"],
+            "operation": "createOrganizationDevicesControllerMigration",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/devices/controller/migrations'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/controller/migrations"
 
-        body_params = ['serials', 'target', ]
+        body_params = [
+            "serials",
+            "target",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
 
-
-    def getOrganizationDevicesControllerMigrations(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationDevicesControllerMigrations(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Retrieve device migration statuses in an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-controller-migrations
@@ -2069,29 +2617,39 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'target' in kwargs:
-            options = ['wirelessController']
-            assert kwargs['target'] in options, f'''"target" cannot be "{kwargs['target']}", & must be set to one of: {options}'''
+        if "target" in kwargs:
+            options = ["wirelessController"]
+            assert kwargs["target"] in options, (
+                f'''"target" cannot be "{kwargs["target"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['organizations', 'configure', 'devices', 'controller', 'migrations'],
-            'operation': 'getOrganizationDevicesControllerMigrations'
+            "tags": ["organizations", "configure", "devices", "controller", "migrations"],
+            "operation": "getOrganizationDevicesControllerMigrations",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/devices/controller/migrations'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/controller/migrations"
 
-        query_params = ['serials', 'networkIds', 'target', 'perPage', 'startingAfter', 'endingBefore', ]
+        query_params = [
+            "serials",
+            "networkIds",
+            "target",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['serials', 'networkIds', ]
+        array_params = [
+            "serials",
+            "networkIds",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def bulkUpdateOrganizationDevicesDetails(self, organizationId: str, serials: list, details: list):
         """
@@ -2106,18 +2664,19 @@ class AsyncOrganizations:
         kwargs = locals()
 
         metadata = {
-            'tags': ['organizations', 'configure', 'devices', 'details', 'bulkUpdate'],
-            'operation': 'bulkUpdateOrganizationDevicesDetails'
+            "tags": ["organizations", "configure", "devices", "details", "bulkUpdate"],
+            "operation": "bulkUpdateOrganizationDevicesDetails",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/devices/details/bulkUpdate'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/details/bulkUpdate"
 
-        body_params = ['serials', 'details', ]
+        body_params = [
+            "serials",
+            "details",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getOrganizationDevicesOverviewByModel(self, organizationId: str, **kwargs):
         """
@@ -2133,26 +2692,32 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'devices', 'overview', 'byModel'],
-            'operation': 'getOrganizationDevicesOverviewByModel'
+            "tags": ["organizations", "configure", "devices", "overview", "byModel"],
+            "operation": "getOrganizationDevicesOverviewByModel",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/devices/overview/byModel'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/overview/byModel"
 
-        query_params = ['models', 'networkIds', 'productTypes', ]
+        query_params = [
+            "models",
+            "networkIds",
+            "productTypes",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['models', 'networkIds', 'productTypes', ]
+        array_params = [
+            "models",
+            "networkIds",
+            "productTypes",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get(metadata, resource, params)
-        
 
-
-    def getOrganizationDevicesPacketCaptureCaptures(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationDevicesPacketCaptureCaptures(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **List Packet Captures**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-packet-capture-captures
@@ -2181,29 +2746,55 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'sortOrder' in kwargs:
-            options = ['ascending', 'descending']
-            assert kwargs['sortOrder'] in options, f'''"sortOrder" cannot be "{kwargs['sortOrder']}", & must be set to one of: {options}'''
+        if "sortOrder" in kwargs:
+            options = ["ascending", "descending"]
+            assert kwargs["sortOrder"] in options, (
+                f'''"sortOrder" cannot be "{kwargs["sortOrder"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['organizations', 'configure', 'devices', 'packetCapture', 'captures'],
-            'operation': 'getOrganizationDevicesPacketCaptureCaptures'
+            "tags": ["organizations", "configure", "devices", "packetCapture", "captures"],
+            "operation": "getOrganizationDevicesPacketCaptureCaptures",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/devices/packetCapture/captures'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/packetCapture/captures"
 
-        query_params = ['captureIds', 'networkIds', 'serials', 'process', 'captureStatus', 'name', 'clientMac', 'notes', 'deviceName', 'adminName', 't0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'sortOrder', ]
+        query_params = [
+            "captureIds",
+            "networkIds",
+            "serials",
+            "process",
+            "captureStatus",
+            "name",
+            "clientMac",
+            "notes",
+            "deviceName",
+            "adminName",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "sortOrder",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['captureIds', 'networkIds', 'serials', 'process', 'captureStatus', 'name', 'clientMac', ]
+        array_params = [
+            "captureIds",
+            "networkIds",
+            "serials",
+            "process",
+            "captureStatus",
+            "name",
+            "clientMac",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def createOrganizationDevicesPacketCaptureCapture(self, organizationId: str, serials: list, name: str, **kwargs):
         """
@@ -2226,18 +2817,27 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'devices', 'packetCapture', 'captures'],
-            'operation': 'createOrganizationDevicesPacketCaptureCapture'
+            "tags": ["organizations", "configure", "devices", "packetCapture", "captures"],
+            "operation": "createOrganizationDevicesPacketCaptureCapture",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/devices/packetCapture/captures'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/packetCapture/captures"
 
-        body_params = ['serials', 'name', 'outputType', 'destination', 'ports', 'notes', 'duration', 'filterExpression', 'interface', 'advanced', ]
+        body_params = [
+            "serials",
+            "name",
+            "outputType",
+            "destination",
+            "ports",
+            "notes",
+            "duration",
+            "filterExpression",
+            "interface",
+            "advanced",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def bulkOrganizationDevicesPacketCaptureCapturesCreate(self, organizationId: str, devices: list, name: str, **kwargs):
         """
@@ -2256,18 +2856,23 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'devices', 'packetCapture', 'captures'],
-            'operation': 'bulkOrganizationDevicesPacketCaptureCapturesCreate'
+            "tags": ["organizations", "configure", "devices", "packetCapture", "captures"],
+            "operation": "bulkOrganizationDevicesPacketCaptureCapturesCreate",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/devices/packetCapture/captures/bulkCreate'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/packetCapture/captures/bulkCreate"
 
-        body_params = ['devices', 'notes', 'duration', 'filterExpression', 'name', 'advanced', ]
+        body_params = [
+            "devices",
+            "notes",
+            "duration",
+            "filterExpression",
+            "name",
+            "advanced",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def bulkOrganizationDevicesPacketCaptureCapturesDelete(self, organizationId: str, captureIds: list):
         """
@@ -2281,18 +2886,18 @@ class AsyncOrganizations:
         kwargs = locals()
 
         metadata = {
-            'tags': ['organizations', 'configure', 'devices', 'packetCapture', 'captures'],
-            'operation': 'bulkOrganizationDevicesPacketCaptureCapturesDelete'
+            "tags": ["organizations", "configure", "devices", "packetCapture", "captures"],
+            "operation": "bulkOrganizationDevicesPacketCaptureCapturesDelete",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/devices/packetCapture/captures/bulkDelete'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/packetCapture/captures/bulkDelete"
 
-        body_params = ['captureIds', ]
+        body_params = [
+            "captureIds",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def deleteOrganizationDevicesPacketCaptureCapture(self, organizationId: str, captureId: str):
         """
@@ -2304,16 +2909,14 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'devices', 'packetCapture', 'captures'],
-            'operation': 'deleteOrganizationDevicesPacketCaptureCapture'
+            "tags": ["organizations", "configure", "devices", "packetCapture", "captures"],
+            "operation": "deleteOrganizationDevicesPacketCaptureCapture",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        captureId = urllib.parse.quote(str(captureId), safe='')
-        resource = f'/organizations/{organizationId}/devices/packetCapture/captures/{captureId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        captureId = urllib.parse.quote(str(captureId), safe="")
+        resource = f"/organizations/{organizationId}/devices/packetCapture/captures/{captureId}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def generateOrganizationDevicesPacketCaptureCaptureDownloadUrl(self, organizationId: str, captureId: str):
         """
@@ -2325,16 +2928,14 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'devices', 'packetCapture', 'captures', 'downloadUrl'],
-            'operation': 'generateOrganizationDevicesPacketCaptureCaptureDownloadUrl'
+            "tags": ["organizations", "configure", "devices", "packetCapture", "captures", "downloadUrl"],
+            "operation": "generateOrganizationDevicesPacketCaptureCaptureDownloadUrl",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        captureId = urllib.parse.quote(str(captureId), safe='')
-        resource = f'/organizations/{organizationId}/devices/packetCapture/captures/{captureId}/downloadUrl/generate'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        captureId = urllib.parse.quote(str(captureId), safe="")
+        resource = f"/organizations/{organizationId}/devices/packetCapture/captures/{captureId}/downloadUrl/generate"
 
         return self._session.post(metadata, resource)
-        
-
 
     def stopOrganizationDevicesPacketCaptureCapture(self, organizationId: str, captureId: str, serials: list):
         """
@@ -2349,19 +2950,19 @@ class AsyncOrganizations:
         kwargs = locals()
 
         metadata = {
-            'tags': ['organizations', 'configure', 'devices', 'packetCapture', 'captures'],
-            'operation': 'stopOrganizationDevicesPacketCaptureCapture'
+            "tags": ["organizations", "configure", "devices", "packetCapture", "captures"],
+            "operation": "stopOrganizationDevicesPacketCaptureCapture",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        captureId = urllib.parse.quote(str(captureId), safe='')
-        resource = f'/organizations/{organizationId}/devices/packetCapture/captures/{captureId}/stop'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        captureId = urllib.parse.quote(str(captureId), safe="")
+        resource = f"/organizations/{organizationId}/devices/packetCapture/captures/{captureId}/stop"
 
-        body_params = ['serials', ]
+        body_params = [
+            "serials",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getOrganizationDevicesPacketCaptureSchedules(self, organizationId: str, **kwargs):
         """
@@ -2377,24 +2978,30 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'devices', 'packetCapture', 'schedules'],
-            'operation': 'getOrganizationDevicesPacketCaptureSchedules'
+            "tags": ["organizations", "configure", "devices", "packetCapture", "schedules"],
+            "operation": "getOrganizationDevicesPacketCaptureSchedules",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/devices/packetCapture/schedules'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/packetCapture/schedules"
 
-        query_params = ['scheduleIds', 'networkIds', 'deviceIds', ]
+        query_params = [
+            "scheduleIds",
+            "networkIds",
+            "deviceIds",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['scheduleIds', 'networkIds', 'deviceIds', ]
+        array_params = [
+            "scheduleIds",
+            "networkIds",
+            "deviceIds",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def createOrganizationDevicesPacketCaptureSchedule(self, organizationId: str, devices: list, **kwargs):
         """
@@ -2414,18 +3021,24 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'devices', 'packetCapture', 'schedules'],
-            'operation': 'createOrganizationDevicesPacketCaptureSchedule'
+            "tags": ["organizations", "configure", "devices", "packetCapture", "schedules"],
+            "operation": "createOrganizationDevicesPacketCaptureSchedule",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/devices/packetCapture/schedules'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/packetCapture/schedules"
 
-        body_params = ['devices', 'name', 'notes', 'duration', 'filterExpression', 'enabled', 'schedule', ]
+        body_params = [
+            "devices",
+            "name",
+            "notes",
+            "duration",
+            "filterExpression",
+            "enabled",
+            "schedule",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def reorderOrganizationDevicesPacketCaptureSchedules(self, organizationId: str, order: list):
         """
@@ -2439,18 +3052,18 @@ class AsyncOrganizations:
         kwargs = locals()
 
         metadata = {
-            'tags': ['organizations', 'configure', 'devices', 'packetCapture', 'schedules'],
-            'operation': 'reorderOrganizationDevicesPacketCaptureSchedules'
+            "tags": ["organizations", "configure", "devices", "packetCapture", "schedules"],
+            "operation": "reorderOrganizationDevicesPacketCaptureSchedules",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/devices/packetCapture/schedules/reorder'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/packetCapture/schedules/reorder"
 
-        body_params = ['order', ]
+        body_params = [
+            "order",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def updateOrganizationDevicesPacketCaptureSchedule(self, organizationId: str, scheduleId: str, devices: list, **kwargs):
         """
@@ -2471,19 +3084,25 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'devices', 'packetCapture', 'schedules'],
-            'operation': 'updateOrganizationDevicesPacketCaptureSchedule'
+            "tags": ["organizations", "configure", "devices", "packetCapture", "schedules"],
+            "operation": "updateOrganizationDevicesPacketCaptureSchedule",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        scheduleId = urllib.parse.quote(str(scheduleId), safe='')
-        resource = f'/organizations/{organizationId}/devices/packetCapture/schedules/{scheduleId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        scheduleId = urllib.parse.quote(str(scheduleId), safe="")
+        resource = f"/organizations/{organizationId}/devices/packetCapture/schedules/{scheduleId}"
 
-        body_params = ['devices', 'name', 'notes', 'duration', 'filterExpression', 'enabled', 'schedule', ]
+        body_params = [
+            "devices",
+            "name",
+            "notes",
+            "duration",
+            "filterExpression",
+            "enabled",
+            "schedule",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteOrganizationDevicesPacketCaptureSchedule(self, organizationId: str, scheduleId: str):
         """
@@ -2497,17 +3116,17 @@ class AsyncOrganizations:
         kwargs = locals()
 
         metadata = {
-            'tags': ['organizations', 'configure', 'devices', 'packetCapture', 'schedules'],
-            'operation': 'deleteOrganizationDevicesPacketCaptureSchedule'
+            "tags": ["organizations", "configure", "devices", "packetCapture", "schedules"],
+            "operation": "deleteOrganizationDevicesPacketCaptureSchedule",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/devices/packetCapture/schedules/{scheduleId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/packetCapture/schedules/{scheduleId}"
 
         return self._session.delete(metadata, resource)
-        
 
-
-    def getOrganizationDevicesPowerModulesStatusesByDevice(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationDevicesPowerModulesStatusesByDevice(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
         """
         **List the most recent status information for power modules in rackmount MX and MS devices that support them**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-power-modules-statuses-by-device
@@ -2527,31 +3146,45 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'tagsFilterType' in kwargs:
-            options = ['withAllTags', 'withAnyTags']
-            assert kwargs['tagsFilterType'] in options, f'''"tagsFilterType" cannot be "{kwargs['tagsFilterType']}", & must be set to one of: {options}'''
+        if "tagsFilterType" in kwargs:
+            options = ["withAllTags", "withAnyTags"]
+            assert kwargs["tagsFilterType"] in options, (
+                f'''"tagsFilterType" cannot be "{kwargs["tagsFilterType"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'devices', 'powerModules', 'statuses', 'byDevice'],
-            'operation': 'getOrganizationDevicesPowerModulesStatusesByDevice'
+            "tags": ["organizations", "monitor", "devices", "powerModules", "statuses", "byDevice"],
+            "operation": "getOrganizationDevicesPowerModulesStatusesByDevice",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/devices/powerModules/statuses/byDevice'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/powerModules/statuses/byDevice"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'productTypes', 'serials', 'tags', 'tagsFilterType', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "productTypes",
+            "serials",
+            "tags",
+            "tagsFilterType",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', 'productTypes', 'serials', 'tags', ]
+        array_params = [
+            "networkIds",
+            "productTypes",
+            "serials",
+            "tags",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationDevicesProvisioningStatuses(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationDevicesProvisioningStatuses(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **List the provisioning statuses information for devices in an organization.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-provisioning-statuses
@@ -2572,34 +3205,51 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'status' in kwargs:
-            options = ['complete', 'incomplete', 'unprovisioned']
-            assert kwargs['status'] in options, f'''"status" cannot be "{kwargs['status']}", & must be set to one of: {options}'''
-        if 'tagsFilterType' in kwargs:
-            options = ['withAllTags', 'withAnyTags']
-            assert kwargs['tagsFilterType'] in options, f'''"tagsFilterType" cannot be "{kwargs['tagsFilterType']}", & must be set to one of: {options}'''
+        if "status" in kwargs:
+            options = ["complete", "incomplete", "unprovisioned"]
+            assert kwargs["status"] in options, (
+                f'''"status" cannot be "{kwargs["status"]}", & must be set to one of: {options}'''
+            )
+        if "tagsFilterType" in kwargs:
+            options = ["withAllTags", "withAnyTags"]
+            assert kwargs["tagsFilterType"] in options, (
+                f'''"tagsFilterType" cannot be "{kwargs["tagsFilterType"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'devices', 'provisioning', 'statuses'],
-            'operation': 'getOrganizationDevicesProvisioningStatuses'
+            "tags": ["organizations", "monitor", "devices", "provisioning", "statuses"],
+            "operation": "getOrganizationDevicesProvisioningStatuses",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/devices/provisioning/statuses'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/provisioning/statuses"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'productTypes', 'serials', 'status', 'tags', 'tagsFilterType', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "productTypes",
+            "serials",
+            "status",
+            "tags",
+            "tagsFilterType",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', 'productTypes', 'serials', 'tags', ]
+        array_params = [
+            "networkIds",
+            "productTypes",
+            "serials",
+            "tags",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationDevicesStatuses(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationDevicesStatuses(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **List the status of every Meraki device in the organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-statuses
@@ -2621,29 +3271,47 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'tagsFilterType' in kwargs:
-            options = ['withAllTags', 'withAnyTags']
-            assert kwargs['tagsFilterType'] in options, f'''"tagsFilterType" cannot be "{kwargs['tagsFilterType']}", & must be set to one of: {options}'''
+        if "tagsFilterType" in kwargs:
+            options = ["withAllTags", "withAnyTags"]
+            assert kwargs["tagsFilterType"] in options, (
+                f'''"tagsFilterType" cannot be "{kwargs["tagsFilterType"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'devices', 'statuses'],
-            'operation': 'getOrganizationDevicesStatuses'
+            "tags": ["organizations", "monitor", "devices", "statuses"],
+            "operation": "getOrganizationDevicesStatuses",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/devices/statuses'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/statuses"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'serials', 'statuses', 'productTypes', 'models', 'tags', 'tagsFilterType', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "serials",
+            "statuses",
+            "productTypes",
+            "models",
+            "tags",
+            "tagsFilterType",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', 'serials', 'statuses', 'productTypes', 'models', 'tags', ]
+        array_params = [
+            "networkIds",
+            "serials",
+            "statuses",
+            "productTypes",
+            "models",
+            "tags",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def getOrganizationDevicesStatusesOverview(self, organizationId: str, **kwargs):
         """
@@ -2658,26 +3326,32 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'devices', 'statuses', 'overview'],
-            'operation': 'getOrganizationDevicesStatusesOverview'
+            "tags": ["organizations", "monitor", "devices", "statuses", "overview"],
+            "operation": "getOrganizationDevicesStatusesOverview",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/devices/statuses/overview'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/statuses/overview"
 
-        query_params = ['productTypes', 'networkIds', ]
+        query_params = [
+            "productTypes",
+            "networkIds",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['productTypes', 'networkIds', ]
+        array_params = [
+            "productTypes",
+            "networkIds",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get(metadata, resource, params)
-        
 
-
-    def getOrganizationDevicesSystemMemoryUsageHistoryByInterval(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationDevicesSystemMemoryUsageHistoryByInterval(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
         """
         **Return the memory utilization history in kB for devices in the organization.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-system-memory-usage-history-by-interval
@@ -2700,26 +3374,39 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'devices', 'system', 'memory', 'usage', 'history', 'byInterval'],
-            'operation': 'getOrganizationDevicesSystemMemoryUsageHistoryByInterval'
+            "tags": ["organizations", "monitor", "devices", "system", "memory", "usage", "history", "byInterval"],
+            "operation": "getOrganizationDevicesSystemMemoryUsageHistoryByInterval",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/devices/system/memory/usage/history/byInterval'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/system/memory/usage/history/byInterval"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 't0', 't1', 'timespan', 'interval', 'networkIds', 'serials', 'productTypes', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "t0",
+            "t1",
+            "timespan",
+            "interval",
+            "networkIds",
+            "serials",
+            "productTypes",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', 'serials', 'productTypes', ]
+        array_params = [
+            "networkIds",
+            "serials",
+            "productTypes",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationDevicesUplinksAddressesByDevice(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationDevicesUplinksAddressesByDevice(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **List the current uplink addresses for devices in an organization.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-uplinks-addresses-by-device
@@ -2739,29 +3426,43 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'tagsFilterType' in kwargs:
-            options = ['withAllTags', 'withAnyTags']
-            assert kwargs['tagsFilterType'] in options, f'''"tagsFilterType" cannot be "{kwargs['tagsFilterType']}", & must be set to one of: {options}'''
+        if "tagsFilterType" in kwargs:
+            options = ["withAllTags", "withAnyTags"]
+            assert kwargs["tagsFilterType"] in options, (
+                f'''"tagsFilterType" cannot be "{kwargs["tagsFilterType"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'devices', 'uplinks', 'addresses', 'byDevice'],
-            'operation': 'getOrganizationDevicesUplinksAddressesByDevice'
+            "tags": ["organizations", "monitor", "devices", "uplinks", "addresses", "byDevice"],
+            "operation": "getOrganizationDevicesUplinksAddressesByDevice",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/devices/uplinks/addresses/byDevice'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/uplinks/addresses/byDevice"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'productTypes', 'serials', 'tags', 'tagsFilterType', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "productTypes",
+            "serials",
+            "tags",
+            "tagsFilterType",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', 'productTypes', 'serials', 'tags', ]
+        array_params = [
+            "networkIds",
+            "productTypes",
+            "serials",
+            "tags",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def getOrganizationDevicesUplinksLossAndLatency(self, organizationId: str, **kwargs):
         """
@@ -2778,23 +3479,29 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'uplink' in kwargs:
-            options = ['cellular', 'wan1', 'wan2', 'wan3']
-            assert kwargs['uplink'] in options, f'''"uplink" cannot be "{kwargs['uplink']}", & must be set to one of: {options}'''
+        if "uplink" in kwargs:
+            options = ["cellular", "wan1", "wan2", "wan3"]
+            assert kwargs["uplink"] in options, (
+                f'''"uplink" cannot be "{kwargs["uplink"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'devices', 'uplinks', 'uplinksLossAndLatency'],
-            'operation': 'getOrganizationDevicesUplinksLossAndLatency'
+            "tags": ["organizations", "monitor", "devices", "uplinks", "uplinksLossAndLatency"],
+            "operation": "getOrganizationDevicesUplinksLossAndLatency",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/devices/uplinksLossAndLatency'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/uplinksLossAndLatency"
 
-        query_params = ['t0', 't1', 'timespan', 'uplink', 'ip', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "uplink",
+            "ip",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getOrganizationEarlyAccessFeatures(self, organizationId: str):
         """
@@ -2805,15 +3512,13 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'earlyAccess', 'features'],
-            'operation': 'getOrganizationEarlyAccessFeatures'
+            "tags": ["organizations", "configure", "earlyAccess", "features"],
+            "operation": "getOrganizationEarlyAccessFeatures",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/earlyAccess/features'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/earlyAccess/features"
 
         return self._session.get(metadata, resource)
-        
-
 
     def getOrganizationEarlyAccessFeaturesOptIns(self, organizationId: str):
         """
@@ -2824,15 +3529,13 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'earlyAccess', 'features', 'optIns'],
-            'operation': 'getOrganizationEarlyAccessFeaturesOptIns'
+            "tags": ["organizations", "configure", "earlyAccess", "features", "optIns"],
+            "operation": "getOrganizationEarlyAccessFeaturesOptIns",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/earlyAccess/features/optIns'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/earlyAccess/features/optIns"
 
         return self._session.get(metadata, resource)
-        
-
 
     def createOrganizationEarlyAccessFeaturesOptIn(self, organizationId: str, shortName: str, **kwargs):
         """
@@ -2847,18 +3550,19 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'earlyAccess', 'features', 'optIns'],
-            'operation': 'createOrganizationEarlyAccessFeaturesOptIn'
+            "tags": ["organizations", "configure", "earlyAccess", "features", "optIns"],
+            "operation": "createOrganizationEarlyAccessFeaturesOptIn",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/earlyAccess/features/optIns'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/earlyAccess/features/optIns"
 
-        body_params = ['shortName', 'limitScopeToNetworks', ]
+        body_params = [
+            "shortName",
+            "limitScopeToNetworks",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getOrganizationEarlyAccessFeaturesOptIn(self, organizationId: str, optInId: str):
         """
@@ -2870,16 +3574,14 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'earlyAccess', 'features', 'optIns'],
-            'operation': 'getOrganizationEarlyAccessFeaturesOptIn'
+            "tags": ["organizations", "configure", "earlyAccess", "features", "optIns"],
+            "operation": "getOrganizationEarlyAccessFeaturesOptIn",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        optInId = urllib.parse.quote(str(optInId), safe='')
-        resource = f'/organizations/{organizationId}/earlyAccess/features/optIns/{optInId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        optInId = urllib.parse.quote(str(optInId), safe="")
+        resource = f"/organizations/{organizationId}/earlyAccess/features/optIns/{optInId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateOrganizationEarlyAccessFeaturesOptIn(self, organizationId: str, optInId: str, **kwargs):
         """
@@ -2894,19 +3596,19 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'earlyAccess', 'features', 'optIns'],
-            'operation': 'updateOrganizationEarlyAccessFeaturesOptIn'
+            "tags": ["organizations", "configure", "earlyAccess", "features", "optIns"],
+            "operation": "updateOrganizationEarlyAccessFeaturesOptIn",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        optInId = urllib.parse.quote(str(optInId), safe='')
-        resource = f'/organizations/{organizationId}/earlyAccess/features/optIns/{optInId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        optInId = urllib.parse.quote(str(optInId), safe="")
+        resource = f"/organizations/{organizationId}/earlyAccess/features/optIns/{optInId}"
 
-        body_params = ['limitScopeToNetworks', ]
+        body_params = [
+            "limitScopeToNetworks",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteOrganizationEarlyAccessFeaturesOptIn(self, organizationId: str, optInId: str):
         """
@@ -2918,18 +3620,16 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'earlyAccess', 'features', 'optIns'],
-            'operation': 'deleteOrganizationEarlyAccessFeaturesOptIn'
+            "tags": ["organizations", "configure", "earlyAccess", "features", "optIns"],
+            "operation": "deleteOrganizationEarlyAccessFeaturesOptIn",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        optInId = urllib.parse.quote(str(optInId), safe='')
-        resource = f'/organizations/{organizationId}/earlyAccess/features/optIns/{optInId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        optInId = urllib.parse.quote(str(optInId), safe="")
+        resource = f"/organizations/{organizationId}/earlyAccess/features/optIns/{optInId}"
 
         return self._session.delete(metadata, resource)
-        
 
-
-    def getOrganizationFirmwareUpgrades(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationFirmwareUpgrades(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Get firmware upgrade information for an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-firmware-upgrades
@@ -2947,26 +3647,33 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'firmware', 'upgrades'],
-            'operation': 'getOrganizationFirmwareUpgrades'
+            "tags": ["organizations", "configure", "firmware", "upgrades"],
+            "operation": "getOrganizationFirmwareUpgrades",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/firmware/upgrades'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/firmware/upgrades"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'status', 'productTypes', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "status",
+            "productTypes",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['status', 'productTypes', ]
+        array_params = [
+            "status",
+            "productTypes",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationFirmwareUpgradesByDevice(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationFirmwareUpgradesByDevice(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Get firmware upgrade status for the filtered devices**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-firmware-upgrades-by-device
@@ -2989,26 +3696,41 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'firmware', 'upgrades', 'byDevice'],
-            'operation': 'getOrganizationFirmwareUpgradesByDevice'
+            "tags": ["organizations", "configure", "firmware", "upgrades", "byDevice"],
+            "operation": "getOrganizationFirmwareUpgradesByDevice",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/firmware/upgrades/byDevice'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/firmware/upgrades/byDevice"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'serials', 'macs', 'firmwareUpgradeBatchIds', 'upgradeStatuses', 'currentUpgradesOnly', 'limitPerDevice', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "serials",
+            "macs",
+            "firmwareUpgradeBatchIds",
+            "upgradeStatuses",
+            "currentUpgradesOnly",
+            "limitPerDevice",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', 'serials', 'macs', 'firmwareUpgradeBatchIds', 'upgradeStatuses', ]
+        array_params = [
+            "networkIds",
+            "serials",
+            "macs",
+            "firmwareUpgradeBatchIds",
+            "upgradeStatuses",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationFloorPlansAutoLocateDevices(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationFloorPlansAutoLocateDevices(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **List auto locate details for each device in your organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-floor-plans-auto-locate-devices
@@ -3026,26 +3748,33 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'floorPlans', 'autoLocate', 'devices'],
-            'operation': 'getOrganizationFloorPlansAutoLocateDevices'
+            "tags": ["organizations", "configure", "floorPlans", "autoLocate", "devices"],
+            "operation": "getOrganizationFloorPlansAutoLocateDevices",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/floorPlans/autoLocate/devices'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/floorPlans/autoLocate/devices"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'floorPlanIds', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "floorPlanIds",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', 'floorPlanIds', ]
+        array_params = [
+            "networkIds",
+            "floorPlanIds",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
-
-    def getOrganizationFloorPlansAutoLocateStatuses(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationFloorPlansAutoLocateStatuses(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **List the status of auto locate for each floorplan in your organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-floor-plans-auto-locate-statuses
@@ -3063,24 +3792,31 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'floorPlans', 'autoLocate', 'statuses'],
-            'operation': 'getOrganizationFloorPlansAutoLocateStatuses'
+            "tags": ["organizations", "configure", "floorPlans", "autoLocate", "statuses"],
+            "operation": "getOrganizationFloorPlansAutoLocateStatuses",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/floorPlans/autoLocate/statuses'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/floorPlans/autoLocate/statuses"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'floorPlanIds', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "floorPlanIds",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', 'floorPlanIds', ]
+        array_params = [
+            "networkIds",
+            "floorPlanIds",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def getOrganizationIntegrationsDeployable(self, organizationId: str):
         """
@@ -3091,15 +3827,13 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'integrations', 'deployable'],
-            'operation': 'getOrganizationIntegrationsDeployable'
+            "tags": ["organizations", "configure", "integrations", "deployable"],
+            "operation": "getOrganizationIntegrationsDeployable",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/integrations/deployable'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/integrations/deployable"
 
         return self._session.get(metadata, resource)
-        
-
 
     def getOrganizationIntegrationsDeployed(self, organizationId: str):
         """
@@ -3110,17 +3844,15 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'integrations', 'deployed'],
-            'operation': 'getOrganizationIntegrationsDeployed'
+            "tags": ["organizations", "configure", "integrations", "deployed"],
+            "operation": "getOrganizationIntegrationsDeployed",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/integrations/deployed'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/integrations/deployed"
 
         return self._session.get(metadata, resource)
-        
 
-
-    def getOrganizationIntegrationsXdrNetworks(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationIntegrationsXdrNetworks(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Returns the networks in the organization that have XDR enabled**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-integrations-xdr-networks
@@ -3137,24 +3869,29 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'integrations', 'xdr', 'networks'],
-            'operation': 'getOrganizationIntegrationsXdrNetworks'
+            "tags": ["organizations", "configure", "integrations", "xdr", "networks"],
+            "operation": "getOrganizationIntegrationsXdrNetworks",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/integrations/xdr/networks'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/integrations/xdr/networks"
 
-        query_params = ['networkIds', 'perPage', 'startingAfter', 'endingBefore', ]
+        query_params = [
+            "networkIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', ]
+        array_params = [
+            "networkIds",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def disableOrganizationIntegrationsXdrNetworks(self, organizationId: str, networks: list):
         """
@@ -3168,18 +3905,18 @@ class AsyncOrganizations:
         kwargs = locals()
 
         metadata = {
-            'tags': ['organizations', 'configure', 'integrations', 'xdr', 'networks'],
-            'operation': 'disableOrganizationIntegrationsXdrNetworks'
+            "tags": ["organizations", "configure", "integrations", "xdr", "networks"],
+            "operation": "disableOrganizationIntegrationsXdrNetworks",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/integrations/xdr/networks/disable'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/integrations/xdr/networks/disable"
 
-        body_params = ['networks', ]
+        body_params = [
+            "networks",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def enableOrganizationIntegrationsXdrNetworks(self, organizationId: str, networks: list):
         """
@@ -3193,18 +3930,18 @@ class AsyncOrganizations:
         kwargs = locals()
 
         metadata = {
-            'tags': ['organizations', 'configure', 'integrations', 'xdr', 'networks'],
-            'operation': 'enableOrganizationIntegrationsXdrNetworks'
+            "tags": ["organizations", "configure", "integrations", "xdr", "networks"],
+            "operation": "enableOrganizationIntegrationsXdrNetworks",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/integrations/xdr/networks/enable'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/integrations/xdr/networks/enable"
 
-        body_params = ['networks', ]
+        body_params = [
+            "networks",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def claimIntoOrganizationInventory(self, organizationId: str, **kwargs):
         """
@@ -3220,20 +3957,22 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'inventory'],
-            'operation': 'claimIntoOrganizationInventory'
+            "tags": ["organizations", "configure", "inventory"],
+            "operation": "claimIntoOrganizationInventory",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/inventory/claim'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/inventory/claim"
 
-        body_params = ['orders', 'serials', 'licenses', ]
+        body_params = [
+            "orders",
+            "serials",
+            "licenses",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
 
-
-    def getOrganizationInventoryDevices(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationInventoryDevices(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Return the device inventory for an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-inventory-devices
@@ -3259,32 +3998,58 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'usedState' in kwargs:
-            options = ['unused', 'used']
-            assert kwargs['usedState'] in options, f'''"usedState" cannot be "{kwargs['usedState']}", & must be set to one of: {options}'''
-        if 'tagsFilterType' in kwargs:
-            options = ['withAllTags', 'withAnyTags']
-            assert kwargs['tagsFilterType'] in options, f'''"tagsFilterType" cannot be "{kwargs['tagsFilterType']}", & must be set to one of: {options}'''
+        if "usedState" in kwargs:
+            options = ["unused", "used"]
+            assert kwargs["usedState"] in options, (
+                f'''"usedState" cannot be "{kwargs["usedState"]}", & must be set to one of: {options}'''
+            )
+        if "tagsFilterType" in kwargs:
+            options = ["withAllTags", "withAnyTags"]
+            assert kwargs["tagsFilterType"] in options, (
+                f'''"tagsFilterType" cannot be "{kwargs["tagsFilterType"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['organizations', 'configure', 'inventory', 'devices'],
-            'operation': 'getOrganizationInventoryDevices'
+            "tags": ["organizations", "configure", "inventory", "devices"],
+            "operation": "getOrganizationInventoryDevices",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/inventory/devices'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/inventory/devices"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'usedState', 'search', 'macs', 'networkIds', 'serials', 'models', 'orderNumbers', 'tags', 'tagsFilterType', 'productTypes', 'eoxStatuses', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "usedState",
+            "search",
+            "macs",
+            "networkIds",
+            "serials",
+            "models",
+            "orderNumbers",
+            "tags",
+            "tagsFilterType",
+            "productTypes",
+            "eoxStatuses",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['macs', 'networkIds', 'serials', 'models', 'orderNumbers', 'tags', 'productTypes', 'eoxStatuses', ]
+        array_params = [
+            "macs",
+            "networkIds",
+            "serials",
+            "models",
+            "orderNumbers",
+            "tags",
+            "productTypes",
+            "eoxStatuses",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def getOrganizationInventoryDevicesEoxOverview(self, organizationId: str):
         """
@@ -3295,15 +4060,13 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'inventory', 'devices', 'eox'],
-            'operation': 'getOrganizationInventoryDevicesEoxOverview'
+            "tags": ["organizations", "configure", "inventory", "devices", "eox"],
+            "operation": "getOrganizationInventoryDevicesEoxOverview",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/inventory/devices/eox/overview'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/inventory/devices/eox/overview"
 
         return self._session.get(metadata, resource)
-        
-
 
     def createOrganizationInventoryDevicesSwapsBulk(self, organizationId: str, swaps: list):
         """
@@ -3317,18 +4080,18 @@ class AsyncOrganizations:
         kwargs = locals()
 
         metadata = {
-            'tags': ['organizations', 'configure', 'inventory', 'devices', 'swaps', 'bulk'],
-            'operation': 'createOrganizationInventoryDevicesSwapsBulk'
+            "tags": ["organizations", "configure", "inventory", "devices", "swaps", "bulk"],
+            "operation": "createOrganizationInventoryDevicesSwapsBulk",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/inventory/devices/swaps/bulk'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/inventory/devices/swaps/bulk"
 
-        body_params = ['swaps', ]
+        body_params = [
+            "swaps",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getOrganizationInventoryDevicesSwapsBulk(self, organizationId: str, id: str):
         """
@@ -3340,16 +4103,14 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'inventory', 'devices', 'swaps', 'bulk'],
-            'operation': 'getOrganizationInventoryDevicesSwapsBulk'
+            "tags": ["organizations", "configure", "inventory", "devices", "swaps", "bulk"],
+            "operation": "getOrganizationInventoryDevicesSwapsBulk",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        id = urllib.parse.quote(str(id), safe='')
-        resource = f'/organizations/{organizationId}/inventory/devices/swaps/bulk/{id}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/inventory/devices/swaps/bulk/{id}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def getOrganizationInventoryDevice(self, organizationId: str, serial: str):
         """
@@ -3361,161 +4122,14 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'inventory', 'devices'],
-            'operation': 'getOrganizationInventoryDevice'
+            "tags": ["organizations", "configure", "inventory", "devices"],
+            "operation": "getOrganizationInventoryDevice",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        serial = urllib.parse.quote(str(serial), safe='')
-        resource = f'/organizations/{organizationId}/inventory/devices/{serial}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/organizations/{organizationId}/inventory/devices/{serial}"
 
         return self._session.get(metadata, resource)
-        
-
-
-    def createOrganizationInventoryOnboardingCloudMonitoringExportEvent(self, organizationId: str, logEvent: str, timestamp: int, **kwargs):
-        """
-        **Imports event logs related to the onboarding app into elastisearch**
-        https://developer.cisco.com/meraki/api-v1/#!create-organization-inventory-onboarding-cloud-monitoring-export-event
-
-        - organizationId (string): Organization ID
-        - logEvent (string): The type of log event this is recording, e.g. download or opening a banner
-        - timestamp (integer): A JavaScript UTC datetime stamp for when the even occurred
-        - targetOS (string): The name of the onboarding distro being downloaded
-        - request (string): Used to describe if this event was the result of a redirect. E.g. a query param if an info banner is being used
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['organizations', 'configure', 'inventory', 'onboarding', 'cloudMonitoring', 'exportEvents'],
-            'operation': 'createOrganizationInventoryOnboardingCloudMonitoringExportEvent'
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/inventory/onboarding/cloudMonitoring/exportEvents'
-
-        body_params = ['logEvent', 'timestamp', 'targetOS', 'request', ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-
-        return self._session.post(metadata, resource, payload)
-        
-
-
-    def createOrganizationInventoryOnboardingCloudMonitoringImport(self, organizationId: str, devices: list):
-        """
-        **Commits the import operation to complete the onboarding of a device into Dashboard for monitoring.**
-        https://developer.cisco.com/meraki/api-v1/#!create-organization-inventory-onboarding-cloud-monitoring-import
-
-        - organizationId (string): Organization ID
-        - devices (array): A set of device imports to commit
-        """
-
-        kwargs = locals()
-
-        metadata = {
-            'tags': ['organizations', 'configure', 'inventory', 'onboarding', 'cloudMonitoring', 'imports'],
-            'operation': 'createOrganizationInventoryOnboardingCloudMonitoringImport'
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/inventory/onboarding/cloudMonitoring/imports'
-
-        body_params = ['devices', ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-
-        return self._session.post(metadata, resource, payload)
-        
-
-
-    def getOrganizationInventoryOnboardingCloudMonitoringImports(self, organizationId: str, importIds: list):
-        """
-        **Check the status of a committed Import operation**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-inventory-onboarding-cloud-monitoring-imports
-
-        - organizationId (string): Organization ID
-        - importIds (array): import ids from an imports
-        """
-
-        kwargs = locals()
-
-        metadata = {
-            'tags': ['organizations', 'configure', 'inventory', 'onboarding', 'cloudMonitoring', 'imports'],
-            'operation': 'getOrganizationInventoryOnboardingCloudMonitoringImports'
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/inventory/onboarding/cloudMonitoring/imports'
-
-        query_params = ['importIds', ]
-        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
-
-        array_params = ['importIds', ]
-        for k, v in kwargs.items():
-            if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
-                params.pop(k.strip())
-
-        return self._session.get(metadata, resource, params)
-        
-
-
-    def getOrganizationInventoryOnboardingCloudMonitoringNetworks(self, organizationId: str, deviceType: str, total_pages=1, direction='next', **kwargs):
-        """
-        **Returns list of networks eligible for adding cloud monitored device**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-inventory-onboarding-cloud-monitoring-networks
-
-        - organizationId (string): Organization ID
-        - deviceType (string): Device Type switch or wireless controller
-        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
-        - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - search (string): Optional parameter to search on network name
-        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100000. Default is 1000.
-        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        """
-
-        kwargs.update(locals())
-
-        if 'deviceType' in kwargs:
-            options = ['switch', 'wireless_controller']
-            assert kwargs['deviceType'] in options, f'''"deviceType" cannot be "{kwargs['deviceType']}", & must be set to one of: {options}'''
-
-        metadata = {
-            'tags': ['organizations', 'configure', 'inventory', 'onboarding', 'cloudMonitoring', 'networks'],
-            'operation': 'getOrganizationInventoryOnboardingCloudMonitoringNetworks'
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/inventory/onboarding/cloudMonitoring/networks'
-
-        query_params = ['deviceType', 'search', 'perPage', 'startingAfter', 'endingBefore', ]
-        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
-
-        return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
-
-    def createOrganizationInventoryOnboardingCloudMonitoringPrepare(self, organizationId: str, devices: list, **kwargs):
-        """
-        **Initiates or updates an import session**
-        https://developer.cisco.com/meraki/api-v1/#!create-organization-inventory-onboarding-cloud-monitoring-prepare
-
-        - organizationId (string): Organization ID
-        - devices (array): A set of devices to import (or update)
-        - options (object): Additional options for the import
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            'tags': ['organizations', 'configure', 'inventory', 'onboarding', 'cloudMonitoring', 'prepare'],
-            'operation': 'createOrganizationInventoryOnboardingCloudMonitoringPrepare'
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/inventory/onboarding/cloudMonitoring/prepare'
-
-        body_params = ['devices', 'options', ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-
-        return self._session.post(metadata, resource, payload)
-        
-
 
     def claimOrganizationInventoryOrders(self, organizationId: str, claimId: str, **kwargs):
         """
@@ -3530,18 +4144,19 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'inventory', 'orders'],
-            'operation': 'claimOrganizationInventoryOrders'
+            "tags": ["organizations", "configure", "inventory", "orders"],
+            "operation": "claimOrganizationInventoryOrders",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/inventory/orders/claim'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/inventory/orders/claim"
 
-        body_params = ['claimId', 'subscriptions', ]
+        body_params = [
+            "claimId",
+            "subscriptions",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def previewOrganizationInventoryOrders(self, organizationId: str, claimId: str):
         """
@@ -3555,18 +4170,18 @@ class AsyncOrganizations:
         kwargs = locals()
 
         metadata = {
-            'tags': ['organizations', 'configure', 'inventory', 'orders'],
-            'operation': 'previewOrganizationInventoryOrders'
+            "tags": ["organizations", "configure", "inventory", "orders"],
+            "operation": "previewOrganizationInventoryOrders",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/inventory/orders/preview'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/inventory/orders/preview"
 
-        body_params = ['claimId', ]
+        body_params = [
+            "claimId",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def releaseFromOrganizationInventory(self, organizationId: str, **kwargs):
         """
@@ -3580,20 +4195,20 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'inventory'],
-            'operation': 'releaseFromOrganizationInventory'
+            "tags": ["organizations", "configure", "inventory"],
+            "operation": "releaseFromOrganizationInventory",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/inventory/release'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/inventory/release"
 
-        body_params = ['serials', ]
+        body_params = [
+            "serials",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
 
-
-    def getOrganizationLicenses(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationLicenses(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **List the licenses for an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-licenses
@@ -3611,23 +4226,28 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'state' in kwargs:
-            options = ['active', 'expired', 'expiring', 'recentlyQueued', 'unused', 'unusedActive']
-            assert kwargs['state'] in options, f'''"state" cannot be "{kwargs['state']}", & must be set to one of: {options}'''
+        if "state" in kwargs:
+            options = ["active", "expired", "expiring", "recentlyQueued", "unused", "unusedActive"]
+            assert kwargs["state"] in options, f'''"state" cannot be "{kwargs["state"]}", & must be set to one of: {options}'''
 
         metadata = {
-            'tags': ['organizations', 'configure', 'licenses'],
-            'operation': 'getOrganizationLicenses'
+            "tags": ["organizations", "configure", "licenses"],
+            "operation": "getOrganizationLicenses",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/licenses'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/licenses"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'deviceSerial', 'networkId', 'state', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "deviceSerial",
+            "networkId",
+            "state",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def assignOrganizationLicensesSeats(self, organizationId: str, licenseId: str, networkId: str, seatCount: int):
         """
@@ -3643,18 +4263,20 @@ class AsyncOrganizations:
         kwargs = locals()
 
         metadata = {
-            'tags': ['organizations', 'configure', 'licenses'],
-            'operation': 'assignOrganizationLicensesSeats'
+            "tags": ["organizations", "configure", "licenses"],
+            "operation": "assignOrganizationLicensesSeats",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/licenses/assignSeats'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/licenses/assignSeats"
 
-        body_params = ['licenseId', 'networkId', 'seatCount', ]
+        body_params = [
+            "licenseId",
+            "networkId",
+            "seatCount",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def moveOrganizationLicenses(self, organizationId: str, destOrganizationId: str, licenseIds: list):
         """
@@ -3669,18 +4291,19 @@ class AsyncOrganizations:
         kwargs = locals()
 
         metadata = {
-            'tags': ['organizations', 'configure', 'licenses'],
-            'operation': 'moveOrganizationLicenses'
+            "tags": ["organizations", "configure", "licenses"],
+            "operation": "moveOrganizationLicenses",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/licenses/move'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/licenses/move"
 
-        body_params = ['destOrganizationId', 'licenseIds', ]
+        body_params = [
+            "destOrganizationId",
+            "licenseIds",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def moveOrganizationLicensesSeats(self, organizationId: str, destOrganizationId: str, licenseId: str, seatCount: int):
         """
@@ -3696,18 +4319,20 @@ class AsyncOrganizations:
         kwargs = locals()
 
         metadata = {
-            'tags': ['organizations', 'configure', 'licenses'],
-            'operation': 'moveOrganizationLicensesSeats'
+            "tags": ["organizations", "configure", "licenses"],
+            "operation": "moveOrganizationLicensesSeats",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/licenses/moveSeats'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/licenses/moveSeats"
 
-        body_params = ['destOrganizationId', 'licenseId', 'seatCount', ]
+        body_params = [
+            "destOrganizationId",
+            "licenseId",
+            "seatCount",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getOrganizationLicensesOverview(self, organizationId: str):
         """
@@ -3718,15 +4343,13 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'licenses', 'overview'],
-            'operation': 'getOrganizationLicensesOverview'
+            "tags": ["organizations", "monitor", "licenses", "overview"],
+            "operation": "getOrganizationLicensesOverview",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/licenses/overview'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/licenses/overview"
 
         return self._session.get(metadata, resource)
-        
-
 
     def renewOrganizationLicensesSeats(self, organizationId: str, licenseIdToRenew: str, unusedLicenseId: str):
         """
@@ -3741,18 +4364,19 @@ class AsyncOrganizations:
         kwargs = locals()
 
         metadata = {
-            'tags': ['organizations', 'configure', 'licenses'],
-            'operation': 'renewOrganizationLicensesSeats'
+            "tags": ["organizations", "configure", "licenses"],
+            "operation": "renewOrganizationLicensesSeats",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/licenses/renewSeats'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/licenses/renewSeats"
 
-        body_params = ['licenseIdToRenew', 'unusedLicenseId', ]
+        body_params = [
+            "licenseIdToRenew",
+            "unusedLicenseId",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getOrganizationLicense(self, organizationId: str, licenseId: str):
         """
@@ -3764,16 +4388,14 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'licenses'],
-            'operation': 'getOrganizationLicense'
+            "tags": ["organizations", "configure", "licenses"],
+            "operation": "getOrganizationLicense",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        licenseId = urllib.parse.quote(str(licenseId), safe='')
-        resource = f'/organizations/{organizationId}/licenses/{licenseId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        licenseId = urllib.parse.quote(str(licenseId), safe="")
+        resource = f"/organizations/{organizationId}/licenses/{licenseId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateOrganizationLicense(self, organizationId: str, licenseId: str, **kwargs):
         """
@@ -3788,19 +4410,19 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'licenses'],
-            'operation': 'updateOrganizationLicense'
+            "tags": ["organizations", "configure", "licenses"],
+            "operation": "updateOrganizationLicense",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        licenseId = urllib.parse.quote(str(licenseId), safe='')
-        resource = f'/organizations/{organizationId}/licenses/{licenseId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        licenseId = urllib.parse.quote(str(licenseId), safe="")
+        resource = f"/organizations/{organizationId}/licenses/{licenseId}"
 
-        body_params = ['deviceSerial', ]
+        body_params = [
+            "deviceSerial",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getOrganizationLoginSecurity(self, organizationId: str):
         """
@@ -3811,15 +4433,13 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'loginSecurity'],
-            'operation': 'getOrganizationLoginSecurity'
+            "tags": ["organizations", "configure", "loginSecurity"],
+            "operation": "getOrganizationLoginSecurity",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/loginSecurity'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/loginSecurity"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateOrganizationLoginSecurity(self, organizationId: str, **kwargs):
         """
@@ -3846,20 +4466,33 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'loginSecurity'],
-            'operation': 'updateOrganizationLoginSecurity'
+            "tags": ["organizations", "configure", "loginSecurity"],
+            "operation": "updateOrganizationLoginSecurity",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/loginSecurity'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/loginSecurity"
 
-        body_params = ['enforcePasswordExpiration', 'passwordExpirationDays', 'enforceDifferentPasswords', 'numDifferentPasswords', 'enforceStrongPasswords', 'minimumPasswordLength', 'enforceAccountLockout', 'accountLockoutAttempts', 'enforceIdleTimeout', 'idleTimeoutMinutes', 'enforceTwoFactorAuth', 'enforceLoginIpRanges', 'loginIpRanges', 'apiAuthentication', ]
+        body_params = [
+            "enforcePasswordExpiration",
+            "passwordExpirationDays",
+            "enforceDifferentPasswords",
+            "numDifferentPasswords",
+            "enforceStrongPasswords",
+            "minimumPasswordLength",
+            "enforceAccountLockout",
+            "accountLockoutAttempts",
+            "enforceIdleTimeout",
+            "idleTimeoutMinutes",
+            "enforceTwoFactorAuth",
+            "enforceLoginIpRanges",
+            "loginIpRanges",
+            "apiAuthentication",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
 
-
-    def getOrganizationNetworks(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationNetworks(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **List the networks that the user has privileges on in an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-networks
@@ -3879,29 +4512,41 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'tagsFilterType' in kwargs:
-            options = ['withAllTags', 'withAnyTags']
-            assert kwargs['tagsFilterType'] in options, f'''"tagsFilterType" cannot be "{kwargs['tagsFilterType']}", & must be set to one of: {options}'''
+        if "tagsFilterType" in kwargs:
+            options = ["withAllTags", "withAnyTags"]
+            assert kwargs["tagsFilterType"] in options, (
+                f'''"tagsFilterType" cannot be "{kwargs["tagsFilterType"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['organizations', 'configure', 'networks'],
-            'operation': 'getOrganizationNetworks'
+            "tags": ["organizations", "configure", "networks"],
+            "operation": "getOrganizationNetworks",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/networks'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/networks"
 
-        query_params = ['configTemplateId', 'isBoundToConfigTemplate', 'tags', 'tagsFilterType', 'productTypes', 'perPage', 'startingAfter', 'endingBefore', ]
+        query_params = [
+            "configTemplateId",
+            "isBoundToConfigTemplate",
+            "tags",
+            "tagsFilterType",
+            "productTypes",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['tags', 'productTypes', ]
+        array_params = [
+            "tags",
+            "productTypes",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def createOrganizationNetwork(self, organizationId: str, name: str, productTypes: list, **kwargs):
         """
@@ -3920,18 +4565,23 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'networks'],
-            'operation': 'createOrganizationNetwork'
+            "tags": ["organizations", "configure", "networks"],
+            "operation": "createOrganizationNetwork",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/networks'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/networks"
 
-        body_params = ['name', 'productTypes', 'tags', 'timeZone', 'copyFromNetworkId', 'notes', ]
+        body_params = [
+            "name",
+            "productTypes",
+            "tags",
+            "timeZone",
+            "copyFromNetworkId",
+            "notes",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def combineOrganizationNetworks(self, organizationId: str, name: str, networkIds: list, **kwargs):
         """
@@ -3947,18 +4597,20 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'networks'],
-            'operation': 'combineOrganizationNetworks'
+            "tags": ["organizations", "configure", "networks"],
+            "operation": "combineOrganizationNetworks",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/networks/combine'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/networks/combine"
 
-        body_params = ['name', 'networkIds', 'enrollmentString', ]
+        body_params = [
+            "name",
+            "networkIds",
+            "enrollmentString",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def createNetworkMove(self, organizationId: str, network: dict, organizations: dict, **kwargs):
         """
@@ -3974,20 +4626,22 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'networks'],
-            'operation': 'createNetworkMove'
+            "tags": ["organizations", "configure", "networks"],
+            "operation": "createNetworkMove",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/networks/moves'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/networks/moves"
 
-        body_params = ['network', 'organizations', 'simulate', ]
+        body_params = [
+            "network",
+            "organizations",
+            "simulate",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
 
-
-    def getNetworkMoves(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getNetworkMoves(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Return a list of network move operations in the organization**
         https://developer.cisco.com/meraki/api-v1/#!get-network-moves
@@ -4004,24 +4658,29 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'networks', 'moves'],
-            'operation': 'getNetworkMoves'
+            "tags": ["organizations", "configure", "networks", "moves"],
+            "operation": "getNetworkMoves",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/networks/moves'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/networks/moves"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'moveIds', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "moveIds",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['moveIds', ]
+        array_params = [
+            "moveIds",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def getOrganizationOpenapiSpec(self, organizationId: str, **kwargs):
         """
@@ -4034,25 +4693,29 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'version' in kwargs:
+        if "version" in kwargs:
             options = [2, 3]
-            assert kwargs['version'] in options, f'''"version" cannot be "{kwargs['version']}", & must be set to one of: {options}'''
+            assert kwargs["version"] in options, (
+                f'''"version" cannot be "{kwargs["version"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'openapiSpec'],
-            'operation': 'getOrganizationOpenapiSpec'
+            "tags": ["organizations", "monitor", "openapiSpec"],
+            "operation": "getOrganizationOpenapiSpec",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/openapiSpec'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/openapiSpec"
 
-        query_params = ['version', ]
+        query_params = [
+            "version",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
 
-
-    def getOrganizationPoliciesAssignmentsByClient(self, organizationId: str, networkIds: list, total_pages=1, direction='next', **kwargs):
+    def getOrganizationPoliciesAssignmentsByClient(
+        self, organizationId: str, networkIds: list, total_pages=1, direction="next", **kwargs
+    ):
         """
         **Get policies for all clients with policies**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-policies-assignments-by-client
@@ -4072,26 +4735,689 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'policies', 'assignments', 'byClient'],
-            'operation': 'getOrganizationPoliciesAssignmentsByClient'
+            "tags": ["organizations", "configure", "policies", "assignments", "byClient"],
+            "operation": "getOrganizationPoliciesAssignmentsByClient",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/policies/assignments/byClient'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/policies/assignments/byClient"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 't0', 'timespan', 'includeUndetectedClients', 'networkIds', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "t0",
+            "timespan",
+            "includeUndetectedClients",
+            "networkIds",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', ]
+        array_params = [
+            "networkIds",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
+    def getOrganizationPoliciesGlobalFirewallApplicationCategories(self, organizationId: str):
+        """
+        **List application categories with their associated applications**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-policies-global-firewall-application-categories
 
-    def getOrganizationPolicyObjects(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "policies", "global", "firewall", "applicationCategories"],
+            "operation": "getOrganizationPoliciesGlobalFirewallApplicationCategories",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/policies/global/firewall/applicationCategories"
+
+        return self._session.get(metadata, resource)
+
+    def getOrganizationPoliciesGlobalFirewallRulesets(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List Organization-Wide Policy Firewall Rulesets**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-policies-global-firewall-rulesets
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - rulesetIds (array): Filter rulesets by IDs
+        - name (string): Filter rulesets by name (partial match, case-insensitive). If multiple instances are provided, only the last one is used.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "policies", "global", "firewall", "rulesets"],
+            "operation": "getOrganizationPoliciesGlobalFirewallRulesets",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/policies/global/firewall/rulesets"
+
+        query_params = [
+            "rulesetIds",
+            "name",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "rulesetIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def createOrganizationPoliciesGlobalFirewallRuleset(self, organizationId: str, name: str, **kwargs):
+        """
+        **Create an Organization-Wide Policy Firewall Ruleset**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-policies-global-firewall-ruleset
+
+        - organizationId (string): Organization ID
+        - name (string): Name of the firewall ruleset
+        - description (string): Description of the firewall ruleset
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "policies", "global", "firewall", "rulesets"],
+            "operation": "createOrganizationPoliciesGlobalFirewallRuleset",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/policies/global/firewall/rulesets"
+
+        body_params = [
+            "name",
+            "description",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+
+    def createOrganizationPoliciesGlobalFirewallRulesetsRule(
+        self, organizationId: str, name: str, rulesetId: str, policy: str, sources: dict, destinations: dict, **kwargs
+    ):
+        """
+        **Create an Organization-Wide Policy Firewall Rule**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-policies-global-firewall-rulesets-rule
+
+        - organizationId (string): Organization ID
+        - name (string): Name of the firewall rule
+        - rulesetId (string): Firewall ruleset ID to associate the rule with
+        - policy (string): Rule policy - allow or deny traffic
+        - sources (object): Source traffic criteria. Each source or destination bloc is capped separately per rule at 100 total segment values. The count is segments_values_count: the sum of all values across every segment type in that bloc. Ports use a separate cap of 100.
+        - destinations (object): Destination traffic criteria. Each source or destination bloc is capped separately per rule at 100 total segment values. The count is segments_values_count: the sum of all values across every segment type in that bloc. Ports use a separate cap of 100.
+        - enabled (boolean): Whether the rule is enabled
+        - priority (integer): Rule priority (lower numbers = higher priority)
+        - description (string): Description of the firewall rule
+        """
+
+        kwargs.update(locals())
+
+        if "policy" in kwargs:
+            options = ["allow", "deny"]
+            assert kwargs["policy"] in options, (
+                f'''"policy" cannot be "{kwargs["policy"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["organizations", "configure", "policies", "global", "firewall", "rulesets", "rules"],
+            "operation": "createOrganizationPoliciesGlobalFirewallRulesetsRule",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/policies/global/firewall/rulesets/rules"
+
+        body_params = [
+            "name",
+            "rulesetId",
+            "policy",
+            "enabled",
+            "priority",
+            "description",
+            "sources",
+            "destinations",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationPoliciesGlobalFirewallRulesetsRules(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List Organization-Wide Policy Firewall Rules**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-policies-global-firewall-rulesets-rules
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - rulesetIds (array): Filter rules by firewall ruleset IDs
+        - ruleIds (array): Filter rules by rule IDs
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "policies", "global", "firewall", "rulesets", "rules"],
+            "operation": "getOrganizationPoliciesGlobalFirewallRulesetsRules",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/policies/global/firewall/rulesets/rules"
+
+        query_params = [
+            "rulesetIds",
+            "ruleIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "rulesetIds",
+            "ruleIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def deleteOrganizationPoliciesGlobalFirewallRulesetsRule(self, organizationId: str, ruleId: str):
+        """
+        **Delete an Organization-Wide Policy Firewall Rule**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-policies-global-firewall-rulesets-rule
+
+        - organizationId (string): Organization ID
+        - ruleId (string): Rule ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "policies", "global", "firewall", "rulesets", "rules"],
+            "operation": "deleteOrganizationPoliciesGlobalFirewallRulesetsRule",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        ruleId = urllib.parse.quote(str(ruleId), safe="")
+        resource = f"/organizations/{organizationId}/policies/global/firewall/rulesets/rules/{ruleId}"
+
+        return self._session.delete(metadata, resource)
+
+    def updateOrganizationPoliciesGlobalFirewallRulesetsRule(self, organizationId: str, ruleId: str, **kwargs):
+        """
+        **Update an Organization-Wide Policy Firewall Rule**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-policies-global-firewall-rulesets-rule
+
+        - organizationId (string): Organization ID
+        - ruleId (string): Rule ID
+        - name (string): Name of the firewall rule
+        - rulesetId (string): Firewall ruleset ID to associate the rule with
+        - policy (string): Rule policy - allow or deny traffic
+        - enabled (boolean): Whether the rule is enabled
+        - priority (integer): Rule priority (lower numbers = higher priority)
+        - description (string): Description of the firewall rule
+        - sources (object): Source traffic criteria. Each source or destination bloc is capped separately per rule at 100 total segment values. The count is segments_values_count: the sum of all values across every segment type in that bloc. Ports use a separate cap of 100.
+        - destinations (object): Destination traffic criteria. Each source or destination bloc is capped separately per rule at 100 total segment values. The count is segments_values_count: the sum of all values across every segment type in that bloc. Ports use a separate cap of 100.
+        """
+
+        kwargs.update(locals())
+
+        if "policy" in kwargs:
+            options = ["allow", "deny"]
+            assert kwargs["policy"] in options, (
+                f'''"policy" cannot be "{kwargs["policy"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["organizations", "configure", "policies", "global", "firewall", "rulesets", "rules"],
+            "operation": "updateOrganizationPoliciesGlobalFirewallRulesetsRule",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        ruleId = urllib.parse.quote(str(ruleId), safe="")
+        resource = f"/organizations/{organizationId}/policies/global/firewall/rulesets/rules/{ruleId}"
+
+        body_params = [
+            "name",
+            "rulesetId",
+            "policy",
+            "enabled",
+            "priority",
+            "description",
+            "sources",
+            "destinations",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
+    def updateOrganizationPoliciesGlobalFirewallRuleset(self, organizationId: str, rulesetId: str, **kwargs):
+        """
+        **Update an Organization-Wide Policy Firewall Ruleset**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-policies-global-firewall-ruleset
+
+        - organizationId (string): Organization ID
+        - rulesetId (string): Ruleset ID
+        - name (string): Name of the firewall ruleset
+        - description (string): Description of the firewall ruleset
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "policies", "global", "firewall", "rulesets"],
+            "operation": "updateOrganizationPoliciesGlobalFirewallRuleset",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        rulesetId = urllib.parse.quote(str(rulesetId), safe="")
+        resource = f"/organizations/{organizationId}/policies/global/firewall/rulesets/{rulesetId}"
+
+        body_params = [
+            "name",
+            "description",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteOrganizationPoliciesGlobalFirewallRuleset(self, organizationId: str, rulesetId: str):
+        """
+        **Delete an Organization-Wide Policy Firewall Ruleset**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-policies-global-firewall-ruleset
+
+        - organizationId (string): Organization ID
+        - rulesetId (string): Ruleset ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "policies", "global", "firewall", "rulesets"],
+            "operation": "deleteOrganizationPoliciesGlobalFirewallRuleset",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        rulesetId = urllib.parse.quote(str(rulesetId), safe="")
+        resource = f"/organizations/{organizationId}/policies/global/firewall/rulesets/{rulesetId}"
+
+        return self._session.delete(metadata, resource)
+
+    def getOrganizationPoliciesGlobalGroupPolicies(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List Organization-Wide Policies**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-policies-global-group-policies
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - name (string): Filter policies by name (partial match, case-insensitive). If multiple instances are provided, only the last one is used.
+        - policyIds (array): Filter policies by IDs
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "policies", "global", "group"],
+            "operation": "getOrganizationPoliciesGlobalGroupPolicies",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/policies/global/group/policies"
+
+        query_params = [
+            "name",
+            "policyIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "policyIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def createOrganizationPoliciesGlobalGroupPolicy(self, organizationId: str, name: str, **kwargs):
+        """
+        **Create an Organization-Wide Policy**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-policies-global-group-policy
+
+        - organizationId (string): Organization ID
+        - name (string): Name of the policy
+        - description (string): Description of the policy
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "policies", "global", "group"],
+            "operation": "createOrganizationPoliciesGlobalGroupPolicy",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/policies/global/group/policies"
+
+        body_params = [
+            "name",
+            "description",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+
+    def assignOrganizationPoliciesGlobalGroupPoliciesAdaptivePolicyGroups(
+        self, organizationId: str, policy: dict, adaptivePolicyGroups: list
+    ):
+        """
+        **Assign adaptive policy groups to a policy**
+        https://developer.cisco.com/meraki/api-v1/#!assign-organization-policies-global-group-policies-adaptive-policy-groups
+
+        - organizationId (string): Organization ID
+        - policy (object): Policy to assign adaptive policy groups to
+        - adaptivePolicyGroups (array): Adaptive policy groups to assign
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "policies", "global", "group", "adaptivePolicyGroups"],
+            "operation": "assignOrganizationPoliciesGlobalGroupPoliciesAdaptivePolicyGroups",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/policies/global/group/policies/adaptivePolicyGroups/assign"
+
+        body_params = [
+            "policy",
+            "adaptivePolicyGroups",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationPoliciesGlobalGroupPoliciesAdaptivePolicyGroupsAssignments(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List adaptive policy group assignments**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-policies-global-group-policies-adaptive-policy-groups-assignments
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - assignmentIds (array): Filter assignments by assignment IDs
+        - policyIds (array): Filter assignments by policy IDs
+        - adaptivePolicyGroupIds (array): Filter assignments by adaptive policy group IDs
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "policies", "global", "group", "adaptivePolicyGroups", "assignments"],
+            "operation": "getOrganizationPoliciesGlobalGroupPoliciesAdaptivePolicyGroupsAssignments",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/policies/global/group/policies/adaptivePolicyGroups/assignments"
+
+        query_params = [
+            "assignmentIds",
+            "policyIds",
+            "adaptivePolicyGroupIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "assignmentIds",
+            "policyIds",
+            "adaptivePolicyGroupIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def removeOrganizationPoliciesGlobalGroupPoliciesAdaptivePolicyGroups(
+        self, organizationId: str, policy: dict, adaptivePolicyGroups: list
+    ):
+        """
+        **Remove adaptive policy groups from a policy**
+        https://developer.cisco.com/meraki/api-v1/#!remove-organization-policies-global-group-policies-adaptive-policy-groups
+
+        - organizationId (string): Organization ID
+        - policy (object): Policy to remove adaptive policy groups from
+        - adaptivePolicyGroups (array): Adaptive policy groups to remove
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "policies", "global", "group", "adaptivePolicyGroups"],
+            "operation": "removeOrganizationPoliciesGlobalGroupPoliciesAdaptivePolicyGroups",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/policies/global/group/policies/adaptivePolicyGroups/remove"
+
+        body_params = [
+            "policy",
+            "adaptivePolicyGroups",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationPoliciesGlobalGroupPoliciesFirewallRulesetsAssignments(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List Organization-Wide Policy Ruleset Assignments**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-policies-global-group-policies-firewall-rulesets-assignments
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - rulesetIds (array): Filter assignments by ruleset IDs
+        - policyIds (array): Filter assignments by policy IDs
+        - assignmentIds (array): Filter assignments by assignment IDs
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "policies", "global", "group", "firewall", "rulesets", "assignments"],
+            "operation": "getOrganizationPoliciesGlobalGroupPoliciesFirewallRulesetsAssignments",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/policies/global/group/policies/firewall/rulesets/assignments"
+
+        query_params = [
+            "rulesetIds",
+            "policyIds",
+            "assignmentIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "rulesetIds",
+            "policyIds",
+            "assignmentIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def createOrganizationPoliciesGlobalGroupPoliciesFirewallRulesetsAssignment(
+        self, organizationId: str, rulesetId: str, policyId: str, **kwargs
+    ):
+        """
+        **Create an Organization-Wide Policy Ruleset Assignment**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-policies-global-group-policies-firewall-rulesets-assignment
+
+        - organizationId (string): Organization ID
+        - rulesetId (string): ID of the ruleset to assign
+        - policyId (string): ID of the policy to assign the ruleset to
+        - priority (integer): Priority of the ruleset assignment (lower numbers = higher priority)
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "policies", "global", "group", "firewall", "rulesets", "assignments"],
+            "operation": "createOrganizationPoliciesGlobalGroupPoliciesFirewallRulesetsAssignment",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/policies/global/group/policies/firewall/rulesets/assignments"
+
+        body_params = [
+            "rulesetId",
+            "policyId",
+            "priority",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+
+    def updateOrganizationPoliciesGlobalGroupPoliciesFirewallRulesetsAssignment(
+        self, organizationId: str, assignmentId: str, **kwargs
+    ):
+        """
+        **Update an Organization-Wide Policy Ruleset Assignment**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-policies-global-group-policies-firewall-rulesets-assignment
+
+        - organizationId (string): Organization ID
+        - assignmentId (string): Assignment ID
+        - rulesetId (string): ID of the ruleset to assign
+        - policyId (string): ID of the policy to assign the ruleset to
+        - priority (integer): Priority of the ruleset assignment (lower numbers = higher priority)
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "policies", "global", "group", "firewall", "rulesets", "assignments"],
+            "operation": "updateOrganizationPoliciesGlobalGroupPoliciesFirewallRulesetsAssignment",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        assignmentId = urllib.parse.quote(str(assignmentId), safe="")
+        resource = (
+            f"/organizations/{organizationId}/policies/global/group/policies/firewall/rulesets/assignments/{assignmentId}"
+        )
+
+        body_params = [
+            "rulesetId",
+            "policyId",
+            "priority",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteOrganizationPoliciesGlobalGroupPoliciesFirewallRulesetsAssignment(self, organizationId: str, assignmentId: str):
+        """
+        **Delete an Organization-Wide Policy Ruleset Assignment**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-policies-global-group-policies-firewall-rulesets-assignment
+
+        - organizationId (string): Organization ID
+        - assignmentId (string): Assignment ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "policies", "global", "group", "firewall", "rulesets", "assignments"],
+            "operation": "deleteOrganizationPoliciesGlobalGroupPoliciesFirewallRulesetsAssignment",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        assignmentId = urllib.parse.quote(str(assignmentId), safe="")
+        resource = (
+            f"/organizations/{organizationId}/policies/global/group/policies/firewall/rulesets/assignments/{assignmentId}"
+        )
+
+        return self._session.delete(metadata, resource)
+
+    def updateOrganizationPoliciesGlobalGroupPolicy(self, organizationId: str, policyId: str, **kwargs):
+        """
+        **Update an Organization-Wide Policy**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-policies-global-group-policy
+
+        - organizationId (string): Organization ID
+        - policyId (string): Policy ID
+        - name (string): Name of the policy
+        - description (string): Description of the policy
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "policies", "global", "group"],
+            "operation": "updateOrganizationPoliciesGlobalGroupPolicy",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        policyId = urllib.parse.quote(str(policyId), safe="")
+        resource = f"/organizations/{organizationId}/policies/global/group/policies/{policyId}"
+
+        body_params = [
+            "name",
+            "description",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteOrganizationPoliciesGlobalGroupPolicy(self, organizationId: str, policyId: str):
+        """
+        **Delete an Organization-Wide Policy**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-policies-global-group-policy
+
+        - organizationId (string): Organization ID
+        - policyId (string): Policy ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "policies", "global", "group"],
+            "operation": "deleteOrganizationPoliciesGlobalGroupPolicy",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        policyId = urllib.parse.quote(str(policyId), safe="")
+        resource = f"/organizations/{organizationId}/policies/global/group/policies/{policyId}"
+
+        return self._session.delete(metadata, resource)
+
+    def getOrganizationPolicyObjects(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Lists Policy Objects belonging to the organization.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-policy-objects
@@ -4107,18 +5433,20 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'policyObjects'],
-            'operation': 'getOrganizationPolicyObjects'
+            "tags": ["organizations", "configure", "policyObjects"],
+            "operation": "getOrganizationPolicyObjects",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/policyObjects'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/policyObjects"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def createOrganizationPolicyObject(self, organizationId: str, name: str, category: str, type: str, **kwargs):
         """
@@ -4139,20 +5467,27 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'policyObjects'],
-            'operation': 'createOrganizationPolicyObject'
+            "tags": ["organizations", "configure", "policyObjects"],
+            "operation": "createOrganizationPolicyObject",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/policyObjects'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/policyObjects"
 
-        body_params = ['name', 'category', 'type', 'cidr', 'fqdn', 'mask', 'ip', 'groupIds', ]
+        body_params = [
+            "name",
+            "category",
+            "type",
+            "cidr",
+            "fqdn",
+            "mask",
+            "ip",
+            "groupIds",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
 
-
-    def getOrganizationPolicyObjectsGroups(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationPolicyObjectsGroups(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Lists Policy Object Groups belonging to the organization.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-policy-objects-groups
@@ -4168,18 +5503,20 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'policyObjects', 'groups'],
-            'operation': 'getOrganizationPolicyObjectsGroups'
+            "tags": ["organizations", "configure", "policyObjects", "groups"],
+            "operation": "getOrganizationPolicyObjectsGroups",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/policyObjects/groups'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/policyObjects/groups"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def createOrganizationPolicyObjectsGroup(self, organizationId: str, name: str, **kwargs):
         """
@@ -4195,18 +5532,20 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'policyObjects', 'groups'],
-            'operation': 'createOrganizationPolicyObjectsGroup'
+            "tags": ["organizations", "configure", "policyObjects", "groups"],
+            "operation": "createOrganizationPolicyObjectsGroup",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/policyObjects/groups'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/policyObjects/groups"
 
-        body_params = ['name', 'category', 'objectIds', ]
+        body_params = [
+            "name",
+            "category",
+            "objectIds",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getOrganizationPolicyObjectsGroup(self, organizationId: str, policyObjectGroupId: str):
         """
@@ -4218,16 +5557,14 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'policyObjects', 'groups'],
-            'operation': 'getOrganizationPolicyObjectsGroup'
+            "tags": ["organizations", "configure", "policyObjects", "groups"],
+            "operation": "getOrganizationPolicyObjectsGroup",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        policyObjectGroupId = urllib.parse.quote(str(policyObjectGroupId), safe='')
-        resource = f'/organizations/{organizationId}/policyObjects/groups/{policyObjectGroupId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        policyObjectGroupId = urllib.parse.quote(str(policyObjectGroupId), safe="")
+        resource = f"/organizations/{organizationId}/policyObjects/groups/{policyObjectGroupId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateOrganizationPolicyObjectsGroup(self, organizationId: str, policyObjectGroupId: str, **kwargs):
         """
@@ -4243,19 +5580,20 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'policyObjects', 'groups'],
-            'operation': 'updateOrganizationPolicyObjectsGroup'
+            "tags": ["organizations", "configure", "policyObjects", "groups"],
+            "operation": "updateOrganizationPolicyObjectsGroup",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        policyObjectGroupId = urllib.parse.quote(str(policyObjectGroupId), safe='')
-        resource = f'/organizations/{organizationId}/policyObjects/groups/{policyObjectGroupId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        policyObjectGroupId = urllib.parse.quote(str(policyObjectGroupId), safe="")
+        resource = f"/organizations/{organizationId}/policyObjects/groups/{policyObjectGroupId}"
 
-        body_params = ['name', 'objectIds', ]
+        body_params = [
+            "name",
+            "objectIds",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteOrganizationPolicyObjectsGroup(self, organizationId: str, policyObjectGroupId: str):
         """
@@ -4267,16 +5605,14 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'policyObjects', 'groups'],
-            'operation': 'deleteOrganizationPolicyObjectsGroup'
+            "tags": ["organizations", "configure", "policyObjects", "groups"],
+            "operation": "deleteOrganizationPolicyObjectsGroup",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        policyObjectGroupId = urllib.parse.quote(str(policyObjectGroupId), safe='')
-        resource = f'/organizations/{organizationId}/policyObjects/groups/{policyObjectGroupId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        policyObjectGroupId = urllib.parse.quote(str(policyObjectGroupId), safe="")
+        resource = f"/organizations/{organizationId}/policyObjects/groups/{policyObjectGroupId}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def getOrganizationPolicyObject(self, organizationId: str, policyObjectId: str):
         """
@@ -4288,16 +5624,14 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'policyObjects'],
-            'operation': 'getOrganizationPolicyObject'
+            "tags": ["organizations", "configure", "policyObjects"],
+            "operation": "getOrganizationPolicyObject",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        policyObjectId = urllib.parse.quote(str(policyObjectId), safe='')
-        resource = f'/organizations/{organizationId}/policyObjects/{policyObjectId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        policyObjectId = urllib.parse.quote(str(policyObjectId), safe="")
+        resource = f"/organizations/{organizationId}/policyObjects/{policyObjectId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateOrganizationPolicyObject(self, organizationId: str, policyObjectId: str, **kwargs):
         """
@@ -4317,19 +5651,24 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'policyObjects'],
-            'operation': 'updateOrganizationPolicyObject'
+            "tags": ["organizations", "configure", "policyObjects"],
+            "operation": "updateOrganizationPolicyObject",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        policyObjectId = urllib.parse.quote(str(policyObjectId), safe='')
-        resource = f'/organizations/{organizationId}/policyObjects/{policyObjectId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        policyObjectId = urllib.parse.quote(str(policyObjectId), safe="")
+        resource = f"/organizations/{organizationId}/policyObjects/{policyObjectId}"
 
-        body_params = ['name', 'cidr', 'fqdn', 'mask', 'ip', 'groupIds', ]
+        body_params = [
+            "name",
+            "cidr",
+            "fqdn",
+            "mask",
+            "ip",
+            "groupIds",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteOrganizationPolicyObject(self, organizationId: str, policyObjectId: str):
         """
@@ -4341,16 +5680,14 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'policyObjects'],
-            'operation': 'deleteOrganizationPolicyObject'
+            "tags": ["organizations", "configure", "policyObjects"],
+            "operation": "deleteOrganizationPolicyObject",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        policyObjectId = urllib.parse.quote(str(policyObjectId), safe='')
-        resource = f'/organizations/{organizationId}/policyObjects/{policyObjectId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        policyObjectId = urllib.parse.quote(str(policyObjectId), safe="")
+        resource = f"/organizations/{organizationId}/policyObjects/{policyObjectId}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def getOrganizationSaml(self, organizationId: str):
         """
@@ -4361,15 +5698,13 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'saml'],
-            'operation': 'getOrganizationSaml'
+            "tags": ["organizations", "configure", "saml"],
+            "operation": "getOrganizationSaml",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/saml'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/saml"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateOrganizationSaml(self, organizationId: str, **kwargs):
         """
@@ -4384,18 +5719,19 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'saml'],
-            'operation': 'updateOrganizationSaml'
+            "tags": ["organizations", "configure", "saml"],
+            "operation": "updateOrganizationSaml",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/saml'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/saml"
 
-        body_params = ['enabled', 'spInitiated', ]
+        body_params = [
+            "enabled",
+            "spInitiated",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getOrganizationSamlIdps(self, organizationId: str):
         """
@@ -4406,15 +5742,13 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'saml', 'idps'],
-            'operation': 'getOrganizationSamlIdps'
+            "tags": ["organizations", "configure", "saml", "idps"],
+            "operation": "getOrganizationSamlIdps",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/saml/idps'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/saml/idps"
 
         return self._session.get(metadata, resource)
-        
-
 
     def createOrganizationSamlIdp(self, organizationId: str, x509certSha1Fingerprint: str, **kwargs):
         """
@@ -4430,18 +5764,20 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'saml', 'idps'],
-            'operation': 'createOrganizationSamlIdp'
+            "tags": ["organizations", "configure", "saml", "idps"],
+            "operation": "createOrganizationSamlIdp",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/saml/idps'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/saml/idps"
 
-        body_params = ['x509certSha1Fingerprint', 'ssoLoginUrl', 'sloLogoutUrl', ]
+        body_params = [
+            "x509certSha1Fingerprint",
+            "ssoLoginUrl",
+            "sloLogoutUrl",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def updateOrganizationSamlIdp(self, organizationId: str, idpId: str, **kwargs):
         """
@@ -4458,19 +5794,21 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'saml', 'idps'],
-            'operation': 'updateOrganizationSamlIdp'
+            "tags": ["organizations", "configure", "saml", "idps"],
+            "operation": "updateOrganizationSamlIdp",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        idpId = urllib.parse.quote(str(idpId), safe='')
-        resource = f'/organizations/{organizationId}/saml/idps/{idpId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        idpId = urllib.parse.quote(str(idpId), safe="")
+        resource = f"/organizations/{organizationId}/saml/idps/{idpId}"
 
-        body_params = ['x509certSha1Fingerprint', 'ssoLoginUrl', 'sloLogoutUrl', ]
+        body_params = [
+            "x509certSha1Fingerprint",
+            "ssoLoginUrl",
+            "sloLogoutUrl",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getOrganizationSamlIdp(self, organizationId: str, idpId: str):
         """
@@ -4482,16 +5820,14 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'saml', 'idps'],
-            'operation': 'getOrganizationSamlIdp'
+            "tags": ["organizations", "configure", "saml", "idps"],
+            "operation": "getOrganizationSamlIdp",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        idpId = urllib.parse.quote(str(idpId), safe='')
-        resource = f'/organizations/{organizationId}/saml/idps/{idpId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        idpId = urllib.parse.quote(str(idpId), safe="")
+        resource = f"/organizations/{organizationId}/saml/idps/{idpId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def deleteOrganizationSamlIdp(self, organizationId: str, idpId: str):
         """
@@ -4503,16 +5839,14 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'saml', 'idps'],
-            'operation': 'deleteOrganizationSamlIdp'
+            "tags": ["organizations", "configure", "saml", "idps"],
+            "operation": "deleteOrganizationSamlIdp",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        idpId = urllib.parse.quote(str(idpId), safe='')
-        resource = f'/organizations/{organizationId}/saml/idps/{idpId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        idpId = urllib.parse.quote(str(idpId), safe="")
+        resource = f"/organizations/{organizationId}/saml/idps/{idpId}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def getOrganizationSamlRoles(self, organizationId: str):
         """
@@ -4523,15 +5857,13 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'samlRoles'],
-            'operation': 'getOrganizationSamlRoles'
+            "tags": ["organizations", "configure", "samlRoles"],
+            "operation": "getOrganizationSamlRoles",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/samlRoles'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/samlRoles"
 
         return self._session.get(metadata, resource)
-        
-
 
     def createOrganizationSamlRole(self, organizationId: str, role: str, orgAccess: str, **kwargs):
         """
@@ -4547,23 +5879,22 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'orgAccess' in kwargs:
-            options = ['enterprise', 'full', 'none', 'read-only']
-            assert kwargs['orgAccess'] in options, f'''"orgAccess" cannot be "{kwargs['orgAccess']}", & must be set to one of: {options}'''
-
         metadata = {
-            'tags': ['organizations', 'configure', 'samlRoles'],
-            'operation': 'createOrganizationSamlRole'
+            "tags": ["organizations", "configure", "samlRoles"],
+            "operation": "createOrganizationSamlRole",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/samlRoles'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/samlRoles"
 
-        body_params = ['role', 'orgAccess', 'tags', 'networks', ]
+        body_params = [
+            "role",
+            "orgAccess",
+            "tags",
+            "networks",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getOrganizationSamlRole(self, organizationId: str, samlRoleId: str):
         """
@@ -4575,16 +5906,14 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'samlRoles'],
-            'operation': 'getOrganizationSamlRole'
+            "tags": ["organizations", "configure", "samlRoles"],
+            "operation": "getOrganizationSamlRole",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        samlRoleId = urllib.parse.quote(str(samlRoleId), safe='')
-        resource = f'/organizations/{organizationId}/samlRoles/{samlRoleId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        samlRoleId = urllib.parse.quote(str(samlRoleId), safe="")
+        resource = f"/organizations/{organizationId}/samlRoles/{samlRoleId}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateOrganizationSamlRole(self, organizationId: str, samlRoleId: str, **kwargs):
         """
@@ -4601,24 +5930,23 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'orgAccess' in kwargs:
-            options = ['enterprise', 'full', 'none', 'read-only']
-            assert kwargs['orgAccess'] in options, f'''"orgAccess" cannot be "{kwargs['orgAccess']}", & must be set to one of: {options}'''
-
         metadata = {
-            'tags': ['organizations', 'configure', 'samlRoles'],
-            'operation': 'updateOrganizationSamlRole'
+            "tags": ["organizations", "configure", "samlRoles"],
+            "operation": "updateOrganizationSamlRole",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        samlRoleId = urllib.parse.quote(str(samlRoleId), safe='')
-        resource = f'/organizations/{organizationId}/samlRoles/{samlRoleId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        samlRoleId = urllib.parse.quote(str(samlRoleId), safe="")
+        resource = f"/organizations/{organizationId}/samlRoles/{samlRoleId}"
 
-        body_params = ['role', 'orgAccess', 'tags', 'networks', ]
+        body_params = [
+            "role",
+            "orgAccess",
+            "tags",
+            "networks",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteOrganizationSamlRole(self, organizationId: str, samlRoleId: str):
         """
@@ -4630,18 +5958,121 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'samlRoles'],
-            'operation': 'deleteOrganizationSamlRole'
+            "tags": ["organizations", "configure", "samlRoles"],
+            "operation": "deleteOrganizationSamlRole",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        samlRoleId = urllib.parse.quote(str(samlRoleId), safe='')
-        resource = f'/organizations/{organizationId}/samlRoles/{samlRoleId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        samlRoleId = urllib.parse.quote(str(samlRoleId), safe="")
+        resource = f"/organizations/{organizationId}/samlRoles/{samlRoleId}"
 
         return self._session.delete(metadata, resource)
-        
 
+    def getOrganizationSaseConnectors(self, organizationId: str):
+        """
+        **List SSE Connectors for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-sase-connectors
 
-    def getOrganizationSaseNetworksEligible(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "sase", "connectors"],
+            "operation": "getOrganizationSaseConnectors",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/sase/connectors"
+
+        return self._session.get(metadata, resource)
+
+    def batchOrganizationSaseConnectorsDelete(self, organizationId: str, **kwargs):
+        """
+        **Delete SSE Connectors by ID**
+        https://developer.cisco.com/meraki/api-v1/#!batch-organization-sase-connectors-delete
+
+        - organizationId (string): Organization ID
+        - items (array): List of connectors to delete (maximum 20 items)
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "sase", "connectors"],
+            "operation": "batchOrganizationSaseConnectorsDelete",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/sase/connectors/batchDelete"
+
+        body_params = [
+            "items",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+
+    def createOrganizationSaseIntegration(self, organizationId: str, api: dict):
+        """
+        **Create a new Secure Access integration**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-sase-integration
+
+        - organizationId (string): Organization ID
+        - api (object): API credentials
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "sase", "integrations"],
+            "operation": "createOrganizationSaseIntegration",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/sase/integrations"
+
+        body_params = [
+            "api",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationSaseIntegration(self, organizationId: str, integrationId: str):
+        """
+        **Get details of a Secure Access integration**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-sase-integration
+
+        - organizationId (string): Organization ID
+        - integrationId (string): Integration ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "sase", "integrations"],
+            "operation": "getOrganizationSaseIntegration",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        integrationId = urllib.parse.quote(str(integrationId), safe="")
+        resource = f"/organizations/{organizationId}/sase/integrations/{integrationId}"
+
+        return self._session.get(metadata, resource)
+
+    def deleteOrganizationSaseIntegration(self, organizationId: str, integrationId: str):
+        """
+        **Remove a Secure Access integration**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-sase-integration
+
+        - organizationId (string): Organization ID
+        - integrationId (string): Integration ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "sase", "integrations"],
+            "operation": "deleteOrganizationSaseIntegration",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        integrationId = urllib.parse.quote(str(integrationId), safe="")
+        resource = f"/organizations/{organizationId}/sase/integrations/{integrationId}"
+
+        return self._session.delete(metadata, resource)
+
+    def getOrganizationSaseNetworksEligible(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **List of MX networks or templates that can be enrolled into Secure Access**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-sase-networks-eligible
@@ -4658,18 +6089,208 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'sase', 'networks', 'eligible'],
-            'operation': 'getOrganizationSaseNetworksEligible'
+            "tags": ["organizations", "configure", "sase", "networks", "eligible"],
+            "operation": "getOrganizationSaseNetworksEligible",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/sase/networks/eligible'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/sase/networks/eligible"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'search', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "search",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
 
+    def getOrganizationSaseRegions(self, organizationId: str):
+        """
+        **List regions**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-sase-regions
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "sase", "regions"],
+            "operation": "getOrganizationSaseRegions",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/sase/regions"
+
+        return self._session.get(metadata, resource)
+
+    def getOrganizationSaseSites(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List of enrolled SASE sites in this organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-sase-sites
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 10.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - search (string): If provided, filters results by search string
+        - status (string): If provided, filters results by site status label (e.g., 'good')
+        - siteId (string): If provided, returns only the site matching this ID
+        """
+
+        kwargs.update(locals())
+
+        if "status" in kwargs:
+            options = ["bad NAT", "bad tunnel", "dormant", "good", "many bad tunnels", "no registry", "offline"]
+            assert kwargs["status"] in options, (
+                f'''"status" cannot be "{kwargs["status"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["organizations", "configure", "sase", "sites"],
+            "operation": "getOrganizationSaseSites",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/sase/sites"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "search",
+            "status",
+            "siteId",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def attachOrganizationSaseSites(self, organizationId: str, **kwargs):
+        """
+        **Attach sites in this organization to Secure Access**
+        https://developer.cisco.com/meraki/api-v1/#!attach-organization-sase-sites
+
+        - organizationId (string): Organization ID
+        - items (array): List of Meraki SD-WAN sites with the associated regions to be attached.
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "sase", "sites"],
+            "operation": "attachOrganizationSaseSites",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/sase/sites/attach"
+
+        body_params = [
+            "items",
+            "callback",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationSaseSitesConnectivityHistoryBySite(self, organizationId: str, **kwargs):
+        """
+        **Get the connectivity history of SASE sites in this organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-sase-sites-connectivity-history-by-site
+
+        - organizationId (string): Organization ID
+        - siteIds (array): Array of site IDs to fetch connectivity status data (maximum 100 values)
+        - timespan (string): Timespan for the status data (e.g., '-2hours')
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "monitor", "sase", "sites", "connectivity", "history", "bySite"],
+            "operation": "getOrganizationSaseSitesConnectivityHistoryBySite",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/sase/sites/connectivity/history/bySite"
+
+        query_params = [
+            "siteIds",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "siteIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationSaseSitesConnectivityOverview(self, organizationId: str):
+        """
+        **List high-level SASE site statuses (healthy, degraded, offline)**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-sase-sites-connectivity-overview
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "sase", "sites", "connectivity", "overview"],
+            "operation": "getOrganizationSaseSitesConnectivityOverview",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/sase/sites/connectivity/overview"
+
+        return self._session.get(metadata, resource)
+
+    def detachOrganizationSaseSites(self, organizationId: str, **kwargs):
+        """
+        **Detach sites in this organization from Secure Access**
+        https://developer.cisco.com/meraki/api-v1/#!detach-organization-sase-sites
+
+        - organizationId (string): Organization ID
+        - items (array): List of Secure Access sites to be detached.
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "sase", "sites"],
+            "operation": "detachOrganizationSaseSites",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/sase/sites/detach"
+
+        return self._session.delete(metadata, resource)
+
+    def updateOrganizationSaseSite(self, organizationId: str, siteId: str, **kwargs):
+        """
+        **Update the configuration for a site**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-sase-site
+
+        - organizationId (string): Organization ID
+        - siteId (string): Site ID of the site to update
+        - routing (object): Routing configuration for the site
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "sase", "sites"],
+            "operation": "updateOrganizationSaseSite",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/sase/sites/{siteId}"
+
+        body_params = [
+            "siteId",
+            "routing",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
 
     def getOrganizationSnmp(self, organizationId: str):
         """
@@ -4680,15 +6301,13 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'snmp'],
-            'operation': 'getOrganizationSnmp'
+            "tags": ["organizations", "configure", "snmp"],
+            "operation": "getOrganizationSnmp",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/snmp'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/snmp"
 
         return self._session.get(metadata, resource)
-        
-
 
     def updateOrganizationSnmp(self, organizationId: str, **kwargs):
         """
@@ -4707,26 +6326,36 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'v3AuthMode' in kwargs:
-            options = ['MD5', 'SHA']
-            assert kwargs['v3AuthMode'] in options, f'''"v3AuthMode" cannot be "{kwargs['v3AuthMode']}", & must be set to one of: {options}'''
-        if 'v3PrivMode' in kwargs:
-            options = ['AES128', 'DES']
-            assert kwargs['v3PrivMode'] in options, f'''"v3PrivMode" cannot be "{kwargs['v3PrivMode']}", & must be set to one of: {options}'''
+        if "v3AuthMode" in kwargs:
+            options = ["MD5", "SHA"]
+            assert kwargs["v3AuthMode"] in options, (
+                f'''"v3AuthMode" cannot be "{kwargs["v3AuthMode"]}", & must be set to one of: {options}'''
+            )
+        if "v3PrivMode" in kwargs:
+            options = ["AES128", "DES"]
+            assert kwargs["v3PrivMode"] in options, (
+                f'''"v3PrivMode" cannot be "{kwargs["v3PrivMode"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['organizations', 'configure', 'snmp'],
-            'operation': 'updateOrganizationSnmp'
+            "tags": ["organizations", "configure", "snmp"],
+            "operation": "updateOrganizationSnmp",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/snmp'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/snmp"
 
-        body_params = ['v2cEnabled', 'v3Enabled', 'v3AuthMode', 'v3AuthPass', 'v3PrivMode', 'v3PrivPass', 'peerIps', ]
+        body_params = [
+            "v2cEnabled",
+            "v3Enabled",
+            "v3AuthMode",
+            "v3AuthPass",
+            "v3PrivMode",
+            "v3PrivPass",
+            "peerIps",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def getOrganizationSplashAsset(self, organizationId: str, id: str):
         """
@@ -4738,16 +6367,14 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'splash', 'assets'],
-            'operation': 'getOrganizationSplashAsset'
+            "tags": ["organizations", "configure", "splash", "assets"],
+            "operation": "getOrganizationSplashAsset",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        id = urllib.parse.quote(str(id), safe='')
-        resource = f'/organizations/{organizationId}/splash/assets/{id}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/splash/assets/{id}"
 
         return self._session.get(metadata, resource)
-        
-
 
     def deleteOrganizationSplashAsset(self, organizationId: str, id: str):
         """
@@ -4759,16 +6386,14 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'splash', 'assets'],
-            'operation': 'deleteOrganizationSplashAsset'
+            "tags": ["organizations", "configure", "splash", "assets"],
+            "operation": "deleteOrganizationSplashAsset",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        id = urllib.parse.quote(str(id), safe='')
-        resource = f'/organizations/{organizationId}/splash/assets/{id}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/splash/assets/{id}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def getOrganizationSplashThemes(self, organizationId: str):
         """
@@ -4779,15 +6404,13 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'splash', 'themes'],
-            'operation': 'getOrganizationSplashThemes'
+            "tags": ["organizations", "configure", "splash", "themes"],
+            "operation": "getOrganizationSplashThemes",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/splash/themes'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/splash/themes"
 
         return self._session.get(metadata, resource)
-        
-
 
     def createOrganizationSplashTheme(self, organizationId: str, **kwargs):
         """
@@ -4796,24 +6419,25 @@ class AsyncOrganizations:
 
         - organizationId (string): Organization ID
         - name (string): theme name
-        - baseTheme (string): base theme id 
+        - baseTheme (string): base theme id
         """
 
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'splash', 'themes'],
-            'operation': 'createOrganizationSplashTheme'
+            "tags": ["organizations", "configure", "splash", "themes"],
+            "operation": "createOrganizationSplashTheme",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/splash/themes'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/splash/themes"
 
-        body_params = ['name', 'baseTheme', ]
+        body_params = [
+            "name",
+            "baseTheme",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def deleteOrganizationSplashTheme(self, organizationId: str, id: str):
         """
@@ -4825,16 +6449,14 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'splash', 'themes'],
-            'operation': 'deleteOrganizationSplashTheme'
+            "tags": ["organizations", "configure", "splash", "themes"],
+            "operation": "deleteOrganizationSplashTheme",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        id = urllib.parse.quote(str(id), safe='')
-        resource = f'/organizations/{organizationId}/splash/themes/{id}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/splash/themes/{id}"
 
         return self._session.delete(metadata, resource)
-        
-
 
     def createOrganizationSplashThemeAsset(self, organizationId: str, themeIdentifier: str, **kwargs):
         """
@@ -4850,19 +6472,20 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'configure', 'splash', 'themes', 'assets'],
-            'operation': 'createOrganizationSplashThemeAsset'
+            "tags": ["organizations", "configure", "splash", "themes", "assets"],
+            "operation": "createOrganizationSplashThemeAsset",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        themeIdentifier = urllib.parse.quote(str(themeIdentifier), safe='')
-        resource = f'/organizations/{organizationId}/splash/themes/{themeIdentifier}/assets'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        themeIdentifier = urllib.parse.quote(str(themeIdentifier), safe="")
+        resource = f"/organizations/{organizationId}/splash/themes/{themeIdentifier}/assets"
 
-        body_params = ['name', 'content', ]
+        body_params = [
+            "name",
+            "content",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.post(metadata, resource, payload)
-        
-
 
     def getOrganizationSummaryTopAppliancesByUtilization(self, organizationId: str, **kwargs):
         """
@@ -4883,18 +6506,25 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'summary', 'top', 'appliances', 'byUtilization'],
-            'operation': 'getOrganizationSummaryTopAppliancesByUtilization'
+            "tags": ["organizations", "monitor", "summary", "top", "appliances", "byUtilization"],
+            "operation": "getOrganizationSummaryTopAppliancesByUtilization",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/summary/top/appliances/byUtilization'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/summary/top/appliances/byUtilization"
 
-        query_params = ['networkTag', 'deviceTag', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
+        query_params = [
+            "networkTag",
+            "deviceTag",
+            "quantity",
+            "ssidName",
+            "usageUplink",
+            "t0",
+            "t1",
+            "timespan",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getOrganizationSummaryTopApplicationsByUsage(self, organizationId: str, **kwargs):
         """
@@ -4916,18 +6546,26 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'summary', 'top', 'applications', 'byUsage'],
-            'operation': 'getOrganizationSummaryTopApplicationsByUsage'
+            "tags": ["organizations", "monitor", "summary", "top", "applications", "byUsage"],
+            "operation": "getOrganizationSummaryTopApplicationsByUsage",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/summary/top/applications/byUsage'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/summary/top/applications/byUsage"
 
-        query_params = ['networkTag', 'device', 'networkId', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
+        query_params = [
+            "networkTag",
+            "device",
+            "networkId",
+            "quantity",
+            "ssidName",
+            "usageUplink",
+            "t0",
+            "t1",
+            "timespan",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getOrganizationSummaryTopApplicationsCategoriesByUsage(self, organizationId: str, **kwargs):
         """
@@ -4949,18 +6587,26 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'summary', 'top', 'applications', 'categories', 'byUsage'],
-            'operation': 'getOrganizationSummaryTopApplicationsCategoriesByUsage'
+            "tags": ["organizations", "monitor", "summary", "top", "applications", "categories", "byUsage"],
+            "operation": "getOrganizationSummaryTopApplicationsCategoriesByUsage",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/summary/top/applications/categories/byUsage'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/summary/top/applications/categories/byUsage"
 
-        query_params = ['networkTag', 'deviceTag', 'networkId', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
+        query_params = [
+            "networkTag",
+            "deviceTag",
+            "networkId",
+            "quantity",
+            "ssidName",
+            "usageUplink",
+            "t0",
+            "t1",
+            "timespan",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getOrganizationSummaryTopClientsByUsage(self, organizationId: str, **kwargs):
         """
@@ -4981,18 +6627,25 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'summary', 'top', 'clients', 'byUsage'],
-            'operation': 'getOrganizationSummaryTopClientsByUsage'
+            "tags": ["organizations", "monitor", "summary", "top", "clients", "byUsage"],
+            "operation": "getOrganizationSummaryTopClientsByUsage",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/summary/top/clients/byUsage'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/summary/top/clients/byUsage"
 
-        query_params = ['networkTag', 'deviceTag', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
+        query_params = [
+            "networkTag",
+            "deviceTag",
+            "quantity",
+            "ssidName",
+            "usageUplink",
+            "t0",
+            "t1",
+            "timespan",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getOrganizationSummaryTopClientsManufacturersByUsage(self, organizationId: str, **kwargs):
         """
@@ -5013,18 +6666,25 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'summary', 'top', 'clients', 'manufacturers', 'byUsage'],
-            'operation': 'getOrganizationSummaryTopClientsManufacturersByUsage'
+            "tags": ["organizations", "monitor", "summary", "top", "clients", "manufacturers", "byUsage"],
+            "operation": "getOrganizationSummaryTopClientsManufacturersByUsage",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/summary/top/clients/manufacturers/byUsage'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/summary/top/clients/manufacturers/byUsage"
 
-        query_params = ['networkTag', 'deviceTag', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
+        query_params = [
+            "networkTag",
+            "deviceTag",
+            "quantity",
+            "ssidName",
+            "usageUplink",
+            "t0",
+            "t1",
+            "timespan",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getOrganizationSummaryTopDevicesByUsage(self, organizationId: str, **kwargs):
         """
@@ -5045,18 +6705,25 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'summary', 'top', 'devices', 'byUsage'],
-            'operation': 'getOrganizationSummaryTopDevicesByUsage'
+            "tags": ["organizations", "monitor", "summary", "top", "devices", "byUsage"],
+            "operation": "getOrganizationSummaryTopDevicesByUsage",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/summary/top/devices/byUsage'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/summary/top/devices/byUsage"
 
-        query_params = ['networkTag', 'deviceTag', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
+        query_params = [
+            "networkTag",
+            "deviceTag",
+            "quantity",
+            "ssidName",
+            "usageUplink",
+            "t0",
+            "t1",
+            "timespan",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getOrganizationSummaryTopDevicesModelsByUsage(self, organizationId: str, **kwargs):
         """
@@ -5077,20 +6744,27 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'summary', 'top', 'devices', 'models', 'byUsage'],
-            'operation': 'getOrganizationSummaryTopDevicesModelsByUsage'
+            "tags": ["organizations", "monitor", "summary", "top", "devices", "models", "byUsage"],
+            "operation": "getOrganizationSummaryTopDevicesModelsByUsage",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/summary/top/devices/models/byUsage'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/summary/top/devices/models/byUsage"
 
-        query_params = ['networkTag', 'deviceTag', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
+        query_params = [
+            "networkTag",
+            "deviceTag",
+            "quantity",
+            "ssidName",
+            "usageUplink",
+            "t0",
+            "t1",
+            "timespan",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
 
-
-    def getOrganizationSummaryTopNetworksByStatus(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationSummaryTopNetworksByStatus(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **List the client and status overview information for the networks in an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-summary-top-networks-by-status
@@ -5111,18 +6785,25 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'summary', 'top', 'networks', 'byStatus'],
-            'operation': 'getOrganizationSummaryTopNetworksByStatus'
+            "tags": ["organizations", "monitor", "summary", "top", "networks", "byStatus"],
+            "operation": "getOrganizationSummaryTopNetworksByStatus",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/summary/top/networks/byStatus'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/summary/top/networks/byStatus"
 
-        query_params = ['networkTag', 'deviceTag', 'quantity', 'ssidName', 'usageUplink', 'perPage', 'startingAfter', 'endingBefore', ]
+        query_params = [
+            "networkTag",
+            "deviceTag",
+            "quantity",
+            "ssidName",
+            "usageUplink",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def getOrganizationSummaryTopSsidsByUsage(self, organizationId: str, **kwargs):
         """
@@ -5143,18 +6824,25 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'summary', 'top', 'ssids', 'byUsage'],
-            'operation': 'getOrganizationSummaryTopSsidsByUsage'
+            "tags": ["organizations", "monitor", "summary", "top", "ssids", "byUsage"],
+            "operation": "getOrganizationSummaryTopSsidsByUsage",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/summary/top/ssids/byUsage'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/summary/top/ssids/byUsage"
 
-        query_params = ['networkTag', 'deviceTag', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
+        query_params = [
+            "networkTag",
+            "deviceTag",
+            "quantity",
+            "ssidName",
+            "usageUplink",
+            "t0",
+            "t1",
+            "timespan",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getOrganizationSummaryTopSwitchesByEnergyUsage(self, organizationId: str, **kwargs):
         """
@@ -5175,20 +6863,27 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'summary', 'top', 'switches', 'byEnergyUsage'],
-            'operation': 'getOrganizationSummaryTopSwitchesByEnergyUsage'
+            "tags": ["organizations", "monitor", "summary", "top", "switches", "byEnergyUsage"],
+            "operation": "getOrganizationSummaryTopSwitchesByEnergyUsage",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/summary/top/switches/byEnergyUsage'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/summary/top/switches/byEnergyUsage"
 
-        query_params = ['networkTag', 'deviceTag', 'quantity', 'ssidName', 'usageUplink', 't0', 't1', 'timespan', ]
+        query_params = [
+            "networkTag",
+            "deviceTag",
+            "quantity",
+            "ssidName",
+            "usageUplink",
+            "t0",
+            "t1",
+            "timespan",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
 
-
-    def getOrganizationUplinksStatuses(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationUplinksStatuses(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **List the uplink status of every Meraki MX, MG and Z series devices in the organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-uplinks-statuses
@@ -5207,24 +6902,33 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'uplinks', 'statuses'],
-            'operation': 'getOrganizationUplinksStatuses'
+            "tags": ["organizations", "monitor", "uplinks", "statuses"],
+            "operation": "getOrganizationUplinksStatuses",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/uplinks/statuses'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/uplinks/statuses"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 'networkIds', 'serials', 'iccids', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "serials",
+            "iccids",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', 'serials', 'iccids', ]
+        array_params = [
+            "networkIds",
+            "serials",
+            "iccids",
+        ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
-                params[f'{k.strip()}[]'] = kwargs[f'{k}']
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
                 params.pop(k.strip())
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
 
     def getOrganizationWebhooksAlertTypes(self, organizationId: str, **kwargs):
         """
@@ -5237,23 +6941,25 @@ class AsyncOrganizations:
 
         kwargs.update(locals())
 
-        if 'productType' in kwargs:
-            options = ['appliance', 'camera', 'cellularGateway', 'platform', 'sensor', 'sm', 'switch', 'wireless']
-            assert kwargs['productType'] in options, f'''"productType" cannot be "{kwargs['productType']}", & must be set to one of: {options}'''
+        if "productType" in kwargs:
+            options = ["appliance", "camera", "cellularGateway", "platform", "sensor", "sm", "switch", "wireless"]
+            assert kwargs["productType"] in options, (
+                f'''"productType" cannot be "{kwargs["productType"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'webhooks', 'alertTypes'],
-            'operation': 'getOrganizationWebhooksAlertTypes'
+            "tags": ["organizations", "monitor", "webhooks", "alertTypes"],
+            "operation": "getOrganizationWebhooksAlertTypes",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/webhooks/alertTypes'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/webhooks/alertTypes"
 
-        query_params = ['productType', ]
+        query_params = [
+            "productType",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get(metadata, resource, params)
-        
-
 
     def getOrganizationWebhooksCallbacksStatus(self, organizationId: str, callbackId: str):
         """
@@ -5265,18 +6971,16 @@ class AsyncOrganizations:
         """
 
         metadata = {
-            'tags': ['organizations', 'configure', 'webhooks', 'callbacks', 'statuses'],
-            'operation': 'getOrganizationWebhooksCallbacksStatus'
+            "tags": ["organizations", "configure", "webhooks", "callbacks", "statuses"],
+            "operation": "getOrganizationWebhooksCallbacksStatus",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        callbackId = urllib.parse.quote(str(callbackId), safe='')
-        resource = f'/organizations/{organizationId}/webhooks/callbacks/statuses/{callbackId}'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        callbackId = urllib.parse.quote(str(callbackId), safe="")
+        resource = f"/organizations/{organizationId}/webhooks/callbacks/statuses/{callbackId}"
 
         return self._session.get(metadata, resource)
-        
 
-
-    def getOrganizationWebhooksLogs(self, organizationId: str, total_pages=1, direction='next', **kwargs):
+    def getOrganizationWebhooksLogs(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Return the log of webhook POSTs sent**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-webhooks-logs
@@ -5284,9 +6988,9 @@ class AsyncOrganizations:
         - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 90 days from today.
-        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
-        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 30 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 30 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 30 days. The default is 1 day.
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 50.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
@@ -5296,14 +7000,21 @@ class AsyncOrganizations:
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['organizations', 'monitor', 'webhooks', 'logs'],
-            'operation': 'getOrganizationWebhooksLogs'
+            "tags": ["organizations", "monitor", "webhooks", "logs"],
+            "operation": "getOrganizationWebhooksLogs",
         }
-        organizationId = urllib.parse.quote(str(organizationId), safe='')
-        resource = f'/organizations/{organizationId}/webhooks/logs'
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/webhooks/logs"
 
-        query_params = ['t0', 't1', 'timespan', 'perPage', 'startingAfter', 'endingBefore', 'url', ]
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "url",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
