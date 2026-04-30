@@ -16,6 +16,7 @@ This library maintains two HTTP backends (`requests` for sync, `aiohttp` for asy
 
 - Bare `except Exception` in async handler (replaces with typed `httpx.HTTPError`)
 - Inconsistent error handling between sync (catches `requests.exceptions.RequestException`) and async (catches everything)
+- Blocking `time.sleep()` call in async 4xx handler (`aio/rest_session.py:268`), which blocks the event loop during network-delete retry waits
 
 **Quality gaps it creates the opportunity to close:**
 
@@ -29,6 +30,7 @@ This library maintains two HTTP backends (`requests` for sync, `aiohttp` for asy
 - After `await client.request()`, response body is already buffered; `.json()` is synchronous even on the async client (simplifies pagination logic)
 - Same `verify=`, `timeout=` semantics as requests (minimal learning curve for contributors)
 - `proxy=` as a simple string (matches current config model)
+- `response.links` property parses Link headers identically to requests (same `{'next': {'url': '...'}}` dict format)
 - Actively maintained, type-annotated from the start, HTTP/2 capable
 - Industry momentum: FastAPI, Starlette, and most modern Python HTTP tooling default to or recommend httpx
 
@@ -44,9 +46,19 @@ These concerns remain and require separate work:
 
 ---
 
-## Phase 0: Shared Utilities (additive, no breaking changes)
+## Phase 0: Integration Test Baseline
 
-**Create `meraki/http_utils.py`** with two library-agnostic functions:
+Before touching HTTP code, capture a passing integration test run against the Meraki sandbox. This becomes the regression gate for all subsequent phases.
+
+- Run existing integration tests, record pass/fail state
+- Document which endpoints are exercised
+- This baseline validates that Phases 2-3 produce identical external behavior
+
+---
+
+## Phase 1: Shared Utilities (additive, no breaking changes)
+
+**Create `meraki/http_utils.py`** with one library-agnostic function:
 
 ### `encode_meraki_params(data) -> str | None`
 
@@ -60,15 +72,11 @@ Current behavior:
 
 The existing impl uses `requests.utils.to_key_val_list` (just `.items()` on dicts) and `requests.compat.basestring` (just `str` in Python 3). Both are trivially replaceable.
 
-### `parse_link_header(header_value: str | None) -> dict`
-
-Replaces `response.links` (used in 5 pagination locations). httpx has no `.links` property.
-
-Returns `{"next": {"url": "..."}, "prev": {"url": "..."}}` matching the requests format. Parses RFC 8288 `<URL>; rel="name"` comma-separated values.
+Note: `response.links` does NOT need a replacement utility. httpx provides `.links` with the same dict format as requests.
 
 ---
 
-## Phase 1: Session Base Class
+## Phase 2: Session Base Class
 
 **Create `meraki/_session_base.py`** extracting shared logic from both session files:
 
@@ -77,13 +85,14 @@ Returns `{"next": {"url": "..."}, "prev": {"url": "..."}}` matching the requests
 - URL resolution and validation
 - Retry decision logic (`_should_retry_4xx`, `_get_retry_wait`)
 - Param encoding dispatch (`_apply_params` calls `encode_meraki_params`)
-- Link header parsing dispatch
 
 The two concrete session classes become thin I/O layers over this base.
 
+**Design decision for sync/async split:** The base class holds all decision logic (should we retry? how long to wait? what error to raise?) but does NOT hold the retry loop itself, because the loop calls `time.sleep()` (sync) vs `await asyncio.sleep()` (async). Each concrete class implements `_execute_with_retry` using the base's decision methods. This keeps the base simple and avoids abstract-method overhead.
+
 ---
 
-## Phase 2: Rewrite Sync Session
+## Phase 3: Rewrite Sync Session
 
 **Rewrite `meraki/rest_session.py`** to use `httpx.Client`:
 
@@ -93,16 +102,18 @@ The two concrete session classes become thin I/O layers over this base.
 | `session.request(method, url, allow_redirects=False, **kwargs)` | `self._client.request(method, url, **kwargs)` |
 | `requests.exceptions.RequestException` | `httpx.HTTPError` |
 | `response.reason` | `response.reason_phrase` |
-| `response.links` | `parse_link_header(response.headers.get("link"))` |
+| `response.links` | `response.links` (same API) |
 | `verify=path` | `verify=path` (same) |
 | `proxies={"https": url}` | `proxy=url` |
 | `timeout=60` | `timeout=60` (same) |
 
 Key: params are pre-encoded into the URL via `_apply_params()`, so httpx never sees `params=`.
 
+**Important:** Remove the monkey-patch (`requests.models.RequestEncodingMixin._encode_params = encode_params` at line 107) in this same phase. If requests remains importable (e.g., generator scripts), the monkey-patch must not fire at SDK import time.
+
 ---
 
-## Phase 3: Rewrite Async Session
+## Phase 4: Rewrite Async Session
 
 **Rewrite `meraki/aio/rest_session.py`** to use `httpx.AsyncClient`:
 
@@ -113,24 +124,46 @@ Key: params are pre-encoded into the URL via `_apply_params()`, so httpx never s
 | `await response.json(content_type=None)` | `response.json()` (sync after await on request) |
 | `ssl=ssl_context` | `verify=path` (httpx handles SSLContext internally) |
 | `proxy=url` (singular) | `proxy=url` (same) |
-| `response.release()` | (not needed, body already buffered) |
+| `response.release()` | (delete, body already buffered) |
 | `async with await self.request(...) as response:` | `response = await self.request(...)` |
+| `response.links` | `response.links` (same API) |
+
+**Structural changes beyond the table:**
+
+- All 6 `async with await self.request(...) as response:` patterns (get, post, put, delete, _get_pages_legacy x2) become simple assignment. This is a pervasive rewrite, not a find-replace.
+- `response.release()` calls in the async iterator are deleted (httpx buffers fully on await).
+- `content_type=None` in `response.json()` calls (~10 occurrences) is dropped silently; httpx doesn't validate MIME type by default.
 
 The `asyncio.Semaphore` for concurrency control and `asyncio.create_task` for page pre-fetching remain unchanged.
 
 ---
 
-## Phase 4: Update Exceptions
+## Phase 5: Update Exceptions
 
 **Modify `meraki/exceptions.py`:**
 
-- `APIError.__init__`: change `response.reason` to `response.reason_phrase`
-- `AsyncAPIError`: keep as alias of `APIError` for backwards compat (both now use `response.status_code`)
-- `APIResponseError`: unchanged (wraps connection errors, not HTTP responses)
+Current state:
+- `APIError.__init__(metadata, response)` uses `response.status_code`, `response.reason`
+- `AsyncAPIError.__init__(metadata, response, message)` uses `response.status`, `response.reason`, separate `message` param
+
+These have **different signatures and different attribute sources**. Unifying requires:
+
+1. Change `APIError`:
+   - `response.reason` -> `response.reason_phrase`
+   - `response.content` -> `response.content` (same in httpx)
+
+2. Change `AsyncAPIError`:
+   - `response.status` -> `response.status_code`
+   - `response.reason` -> `response.reason_phrase`
+
+3. Deprecation path for `AsyncAPIError`:
+   - Keep the class but make it a subclass of `APIError` with a compatibility `__init__` that accepts the old 3-arg signature
+   - Add a deprecation warning when instantiated directly
+   - Document in CHANGELOG that users should catch `APIError` for both sync and async in future versions
 
 ---
 
-## Phase 5: Update Dependencies
+## Phase 6: Update Dependencies
 
 **Modify `pyproject.toml`:**
 
@@ -148,31 +181,72 @@ dev = [
 
 Remove: `requests`, `aiohttp`, `responses`
 
+Note on upper pin: `<1` guards against httpx 1.0 API breaks (they've discussed backwards-incompatible changes for 1.0). Re-evaluate when 1.0 ships.
+
+**This phase MUST be atomic with Phases 3-4.** If `requests` remains installed while the new code is live, the old monkey-patch import path could still fire from stale .pyc caches or editable installs.
+
 ---
 
-## Phase 6: Update Tests
+## Phase 7: Update Tests
 
 | Test file | Change |
 |-----------|--------|
-| `tests/unit/test_rest_session.py` | Mock `httpx.Response` instead of `requests.Response`; `.reason` -> `.reason_phrase`; `.links` -> link header in `response.headers` |
+| `tests/unit/test_rest_session.py` | Mock `httpx.Response` instead of `requests.Response`; `.reason` -> `.reason_phrase`; `.links` remains same API |
 | `tests/unit/test_aio_rest_session.py` | Replace aiohttp mocks with httpx mocks; `.status` -> `.status_code`; remove `__aenter__`/`__aexit__` patterns; `.json()` no longer awaitable |
 | `tests/unit/test_mock_integration.py` | Replace `responses` library with `respx` |
-| Integration tests | No changes (test high-level API, not HTTP layer) |
+| Integration tests | Re-run baseline from Phase 0, confirm identical pass/fail |
 
 ---
 
-## Phase 7: Backwards Compatibility
+## Phase 8: Backwards Compatibility
 
 | Concern | Resolution |
 |---------|------------|
 | `requests_proxy` parameter name | Keep it. Pass through as `proxy=` internally. |
 | `REQUESTS_PROXY` config constant | Keep it. Just a default value string. |
-| `AsyncAPIError` class | Keep as alias of `APIError`. |
+| `AsyncAPIError` class | Keep as deprecated subclass of `APIError`. |
 | `_req_session` internal attribute | Add deprecation property mapping to `_client`. |
 
 ---
 
-## Phase 8: Generator Scripts (optional, low priority)
+## Phase 9: Decompose Request Logic
+
+The current `AsyncRestSession._request` has complexity 40 (4x industry ceiling). During rewrite, decompose into:
+
+| Method | Responsibility |
+|--------|---------------|
+| `_execute_with_retry` | Retry loop, attempt counting, backoff timing |
+| `_handle_rate_limit` | 429 detection, Retry-After parsing, wait logic |
+| `_handle_error_response` | 4xx/5xx classification, exception raising |
+| `_log_request` | Request/response debug logging |
+
+Each method stays under complexity 10. Decision logic lives in the base class; sync/async layers differ only in sleep/request calls.
+
+---
+
+## Phase 10: Type Annotations
+
+Type-annotate the new unified session base class and both thin I/O layers. This is the natural place to introduce typing since the code is being rewritten anyway, and the shared base class gives ~80% coverage for free.
+
+- All public methods get full signatures (params and return types)
+- Use `httpx.Response` directly (no wrapper)
+- Add `py.typed` marker (PEP 561) in the same commit
+
+---
+
+## Phase 11: Property-Based Tests
+
+Add `hypothesis` property-based tests for the param encoding utility:
+
+| Function | Properties to verify |
+|----------|---------------------|
+| `encode_meraki_params` | Roundtrip: parsed output matches input structure; never produces bare `=` without key; handles empty dicts/lists; output is valid URL query string |
+
+Add `hypothesis` to dev dependencies in `pyproject.toml`.
+
+---
+
+## Phase 12: Generator Scripts (optional, low priority)
 
 `generator/generate_library.py` and siblings use `requests.get()` at build-time to fetch OpenAPI specs. Not shipped to users. Can migrate separately or leave as dev-only dependency.
 
@@ -190,44 +264,6 @@ These items from TODO.md are eliminated or simplified by this migration:
 
 ---
 
-## Phase 2a: Type Annotations
-
-Type-annotate the new unified session base class and both thin I/O layers. This is the natural place to introduce typing since the code is being rewritten anyway, and the shared base class gives ~80% coverage for free.
-
-- All public methods get full signatures (params and return types)
-- Use `httpx.Response` directly (no wrapper)
-- Add `py.typed` marker (PEP 561) in the same commit
-
----
-
-## Phase 2b: Decompose Request Logic
-
-The current `AsyncRestSession._request` has complexity 40 (4x industry ceiling). During rewrite, decompose into:
-
-| Method | Responsibility |
-|--------|---------------|
-| `_execute_with_retry` | Retry loop, attempt counting, backoff timing |
-| `_handle_rate_limit` | 429 detection, Retry-After parsing, wait logic |
-| `_handle_error_response` | 4xx/5xx classification, exception raising |
-| `_log_request` | Request/response debug logging |
-
-Each method stays under complexity 10. The base class holds the logic; sync/async layers only differ in `await`.
-
----
-
-## Phase 6a: Property-Based Tests
-
-Add `hypothesis` property-based tests for the two new utility functions:
-
-| Function | Properties to verify |
-|----------|---------------------|
-| `encode_meraki_params` | Roundtrip: parsed output matches input structure; never produces bare `=` without key; handles empty dicts/lists; output is valid URL query string |
-| `parse_link_header` | Roundtrip with generated Link headers; handles missing rel; handles multiple rels; empty input returns empty dict |
-
-Add `hypothesis` to dev dependencies in `pyproject.toml`.
-
----
-
 ## Risk Mitigation
 
 - httpx sync responses are fully buffered (like requests). No behavior change.
@@ -236,6 +272,7 @@ Add `hypothesis` to dev dependencies in `pyproject.toml`.
 - Timeout: httpx default is 5s, but SDK explicitly sets 60s. No issue.
 - Certificate verification: `verify="/path/to/cert.pem"` works identically.
 - Proxy: `proxy="http://host:port"` as string. Direct pass-through.
+- Monkey-patch removal: must happen atomically with requests removal to avoid import-time side effects on other packages.
 
 ---
 
@@ -243,12 +280,17 @@ Add `hypothesis` to dev dependencies in `pyproject.toml`.
 
 | Step | Risk | Validation |
 |------|------|------------|
-| Phase 0 (utilities) | None | Unit tests for encode/parse functions |
-| Phase 1 (base class) | None | Unit tests for shared logic |
-| Phase 2 (sync rewrite) | **High** | Full sync test suite passes |
-| Phase 3 (async rewrite) | **High** | Full async test suite passes |
-| Phase 4 (exceptions) | Medium | Error formatting matches expected output |
-| Phase 5 (dependencies) | Low | `pip install -e .` succeeds |
-| Phase 6 (tests) | Medium | All tests green |
-| Phase 7 (compat) | Low | Existing user code still works |
+| Phase 0 (integration baseline) | None | Record current pass/fail state |
+| Phase 1 (utilities) | None | Unit tests for encode function |
+| Phase 2 (base class) | None | Unit tests for shared logic |
+| Phase 3 (sync rewrite) | **High** | Full sync test suite passes |
+| Phase 4 (async rewrite) | **High** | Full async test suite passes |
+| Phase 5 (exceptions) | Medium | Error formatting matches expected output |
+| Phase 6 (dependencies) | Medium | `pip install -e .` succeeds; atomic with 3-4 |
+| Phase 7 (tests) | Medium | All tests green |
+| Phase 8 (compat) | Low | Existing user code still works |
+| Phase 9 (decompose) | Low | Complexity scores under 10 per method |
+| Phase 10 (types) | Low | mypy passes |
+| Phase 11 (property tests) | Low | hypothesis finds no violations |
+| Phase 12 (generator) | None | Optional, dev-only |
 | Integration gate | **Critical** | Live API tests pass against Meraki sandbox |
