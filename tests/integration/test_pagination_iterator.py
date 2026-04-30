@@ -20,14 +20,14 @@ def test_pagination_iterator_vs_legacy_networks(api_key, org_id):
         suppress_logging=True,
         maximum_retries=5,
         use_iterator_for_get_pages=True,
-        caller="PytestIntegration",
+        caller="PythonSDKTestPaginationIterator Cisco",
     )
     dashboard_legacy = meraki.DashboardAPI(
         api_key,
         suppress_logging=True,
         maximum_retries=5,
         use_iterator_for_get_pages=False,
-        caller="PytestIntegration",
+        caller="PythonSDKTestPaginationIterator Cisco",
     )
 
     # Legacy returns a flat list
@@ -50,7 +50,7 @@ def test_pagination_iterator_yields_dicts(api_key, org_id):
         suppress_logging=True,
         maximum_retries=5,
         use_iterator_for_get_pages=True,
-        caller="PytestIntegration",
+        caller="PythonSDKTestPaginationIterator Cisco",
     )
 
     for network in dashboard.organizations.getOrganizationNetworks(org_id, perPage=5, total_pages=-1):
@@ -66,7 +66,7 @@ def test_get_organization_api_requests(api_key, org_id):
         api_key,
         suppress_logging=True,
         maximum_retries=5,
-        caller="PytestIntegration",
+        caller="PythonSDKTestPaginationIterator Cisco",
     )
 
     requests_log = dashboard.organizations.getOrganizationApiRequests(org_id, timespan=900, total_pages=-1)

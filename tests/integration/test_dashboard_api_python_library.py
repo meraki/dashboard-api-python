@@ -19,7 +19,7 @@ def dashboard(api_key):
         suppress_logging=True,
         network_delete_retry_wait_time=1000,
         maximum_retries=1000,
-        caller="PytestForPythonLibrary Meraki",
+        caller="PythonSDKTest Cisco",
     )
 
 
@@ -46,9 +46,7 @@ def network(dashboard, org_id, version_salt):
         "timezone": "America/Los_Angeles",
     }
 
-    created_network = dashboard.organizations.createOrganizationNetwork(
-        org_id, name, product_types, **network_kwargs
-    )
+    created_network = dashboard.organizations.createOrganizationNetwork(org_id, name, product_types, **network_kwargs)
     yield created_network
 
 
@@ -89,9 +87,7 @@ def test_update_network(dashboard, network):
         "name": new_name,
         "tags": ["updated_test_tag", "github", "shouldBeDeleted"],
     }
-    updated_network = dashboard.networks.updateNetwork(
-        network["id"], **updated_network_data
-    )
+    updated_network = dashboard.networks.updateNetwork(network["id"], **updated_network_data)
     assert updated_network is not None
     assert updated_network["name"] == new_name
 
@@ -114,9 +110,7 @@ def test_create_organization_policy_objects(dashboard, org_id, network, version_
     ]
 
     for policy_object in policy_objects:
-        new_object = dashboard.organizations.createOrganizationPolicyObject(
-            org_id, **policy_object
-        )
+        new_object = dashboard.organizations.createOrganizationPolicyObject(org_id, **policy_object)
         assert new_object is not None
         assert isinstance(new_object["id"], str)
 
@@ -128,17 +122,13 @@ def test_get_organization_policy_objects(dashboard, org_id):
 
 
 def test_get_network_appliance_l3_firewall_rules(dashboard, network):
-    rules = dashboard.appliance.getNetworkApplianceFirewallL3FirewallRules(
-        network["id"]
-    )
+    rules = dashboard.appliance.getNetworkApplianceFirewallL3FirewallRules(network["id"])
     assert rules is not None
     assert len(rules) > 0
 
 
 def test_update_network_appliance_vlan_settings(dashboard, network):
-    response = dashboard.appliance.updateNetworkApplianceVlansSettings(
-        network["id"], vlansEnabled=True
-    )
+    response = dashboard.appliance.updateNetworkApplianceVlansSettings(network["id"], vlansEnabled=True)
     assert response is not None
     assert response["vlansEnabled"]
 
@@ -168,9 +158,7 @@ def test_update_l3_firewall_rules(dashboard, org_id, network, version_salt):
 
     # only interact with the ones created for this test run
     policy_objects = [
-        policy_object
-        for policy_object in all_policy_objects
-        if f"{version_salt}".replace(".", "-") in policy_object["name"]
+        policy_object for policy_object in all_policy_objects if f"{version_salt}".replace(".", "-") in policy_object["name"]
     ]
     new_rules = {
         "rules": [
@@ -196,9 +184,7 @@ def test_update_l3_firewall_rules(dashboard, org_id, network, version_salt):
             },
         ]
     }
-    updated_rules = dashboard.appliance.updateNetworkApplianceFirewallL3FirewallRules(
-        network["id"], **new_rules
-    )["rules"]
+    updated_rules = dashboard.appliance.updateNetworkApplianceFirewallL3FirewallRules(network["id"], **new_rules)["rules"]
     assert updated_rules is not None
     assert len(updated_rules) == 3
     assert updated_rules[0]["comment"] == "HamByIP"
@@ -212,15 +198,11 @@ def test_delete_policy_objects(dashboard, org_id, version_salt):
     # only interact with the ones this test run created
     for policy_object in all_policy_objects:
         if f"{version_salt}".replace(".", "-") in policy_object["name"]:
-            response = dashboard.organizations.deleteOrganizationPolicyObject(
-                org_id, policy_object["id"]
-            )
+            response = dashboard.organizations.deleteOrganizationPolicyObject(org_id, policy_object["id"])
             assert response is None
 
     # ensure this one's policy objects are cleaned up
-    remaining_policy_objects = dashboard.organizations.getOrganizationPolicyObjects(
-        org_id
-    )
+    remaining_policy_objects = dashboard.organizations.getOrganizationPolicyObjects(org_id)
     missed_policy_objects = [
         policy_object
         for policy_object in remaining_policy_objects

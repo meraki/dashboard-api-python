@@ -19,7 +19,7 @@ async def test_get_organizations(api_key):
         api_key,
         suppress_logging=True,
         maximum_retries=1000,
-        caller="PytestForPythonLibrary Meraki",
+        caller="PythonSDKTest Cisco",
     ) as dashboard:
         organizations = await dashboard.organizations.getOrganizations()
         assert organizations is not None
@@ -32,7 +32,7 @@ async def test_get_organization(api_key, org_id):
         api_key,
         suppress_logging=True,
         maximum_retries=1000,
-        caller="PytestForPythonLibrary Meraki",
+        caller="PPythonSDKTest Cisco",
     ) as dashboard:
         organization = await dashboard.organizations.getOrganization(org_id)
         assert isinstance(organization, dict)
@@ -45,7 +45,7 @@ async def test_get_organization_networks(api_key, org_id):
         api_key,
         suppress_logging=True,
         maximum_retries=1000,
-        caller="PytestForPythonLibrary Meraki",
+        caller="PythonSDKTest Cisco",
     ) as dashboard:
         networks = await dashboard.organizations.getOrganizationNetworks(org_id)
         assert networks is not None

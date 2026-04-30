@@ -22,7 +22,7 @@ def test_sync_org_wide_clients_workflow(api_key, org_id):
         api_key,
         suppress_logging=True,
         maximum_retries=5,
-        caller="PytestIntegration",
+        caller="PythonSDKTestOrgWideWorkflows Cisco",
     )
 
     networks = dashboard.organizations.getOrganizationNetworks(org_id, total_pages="all", perPage=1000)
@@ -46,7 +46,7 @@ async def test_async_org_wide_clients_workflow(api_key, org_id):
         api_key,
         suppress_logging=True,
         maximum_retries=5,
-        caller="PytestIntegration",
+        caller="PythonSDKTestOrgWideWorkflows Cisco",
     ) as dashboard:
         networks = await dashboard.organizations.getOrganizationNetworks(org_id)
         assert len(networks) > 0
