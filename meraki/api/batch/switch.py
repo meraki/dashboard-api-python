@@ -5,7 +5,7 @@ class ActionBatchSwitch(object):
     def __init__(self):
         super(ActionBatchSwitch, self).__init__()
 
-    def cycleDeviceSwitchPorts(self, serial: str, ports: list):
+    def cycleDeviceSwitchPorts(self, serial: str, ports: list, **kwargs):
         """
         **Cycle a set of switch ports**
         https://developer.cisco.com/meraki/api-v1/#!cycle-device-switch-ports
@@ -688,7 +688,9 @@ class ActionBatchSwitch(object):
         }
         return action
 
-    def createNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer(self, networkId: str, mac: str, vlan: int, ipv4: dict):
+    def createNetworkSwitchDhcpServerPolicyArpInspectionTrustedServer(
+        self, networkId: str, mac: str, vlan: int, ipv4: dict, **kwargs
+    ):
         """
         **Add a server to be trusted by Dynamic ARP Inspection on this network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-switch-dhcp-server-policy-arp-inspection-trusted-server
@@ -767,7 +769,7 @@ class ActionBatchSwitch(object):
         }
         return action
 
-    def updateNetworkSwitchDscpToCosMappings(self, networkId: str, mappings: list):
+    def updateNetworkSwitchDscpToCosMappings(self, networkId: str, mappings: list, **kwargs):
         """
         **Update the DSCP to CoS mappings**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-dscp-to-cos-mappings
@@ -969,7 +971,7 @@ class ActionBatchSwitch(object):
         }
         return action
 
-    def updateNetworkSwitchQosRulesOrder(self, networkId: str, ruleIds: list):
+    def updateNetworkSwitchQosRulesOrder(self, networkId: str, ruleIds: list, **kwargs):
         """
         **Update the order in which the rules should be processed by the switch**
         https://developer.cisco.com/meraki/api-v1/#!update-network-switch-qos-rules-order
@@ -1716,7 +1718,7 @@ class ActionBatchSwitch(object):
         }
         return action
 
-    def cloneOrganizationSwitchDevices(self, organizationId: str, sourceSerial: str, targetSerials: list):
+    def cloneOrganizationSwitchDevices(self, organizationId: str, sourceSerial: str, targetSerials: list, **kwargs):
         """
         **Clone port-level and some switch-level configuration settings from a source switch to one or more target switches. Cloned settings include: Aggregation Groups, Power Settings, Multicast Settings, MTU Configuration, STP Bridge priority, Port Mirroring**
         https://developer.cisco.com/meraki/api-v1/#!clone-organization-switch-devices

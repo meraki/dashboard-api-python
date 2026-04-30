@@ -118,7 +118,7 @@ class ActionBatchWireless(object):
         }
         return action
 
-    def createNetworkWirelessAirMarshalRule(self, networkId: str, type: str, match: dict):
+    def createNetworkWirelessAirMarshalRule(self, networkId: str, type: str, match: dict, **kwargs):
         """
         **Creates a new rule**
         https://developer.cisco.com/meraki/api-v1/#!create-network-wireless-air-marshal-rule
@@ -201,7 +201,7 @@ class ActionBatchWireless(object):
         }
         return action
 
-    def updateNetworkWirelessAirMarshalSettings(self, networkId: str, defaultPolicy: str):
+    def updateNetworkWirelessAirMarshalSettings(self, networkId: str, defaultPolicy: str, **kwargs):
         """
         **Updates Air Marshal settings.**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-air-marshal-settings
@@ -352,7 +352,7 @@ class ActionBatchWireless(object):
         }
         return action
 
-    def assignNetworkWirelessEthernetPortsProfiles(self, networkId: str, serials: list, profileId: str):
+    def assignNetworkWirelessEthernetPortsProfiles(self, networkId: str, serials: list, profileId: str, **kwargs):
         """
         **Assign AP port profile to list of APs**
         https://developer.cisco.com/meraki/api-v1/#!assign-network-wireless-ethernet-ports-profiles
@@ -379,7 +379,7 @@ class ActionBatchWireless(object):
         }
         return action
 
-    def setNetworkWirelessEthernetPortsProfilesDefault(self, networkId: str, profileId: str):
+    def setNetworkWirelessEthernetPortsProfilesDefault(self, networkId: str, profileId: str, **kwargs):
         """
         **Set the AP port profile to be default for this network**
         https://developer.cisco.com/meraki/api-v1/#!set-network-wireless-ethernet-ports-profiles-default
@@ -1515,7 +1515,7 @@ class ActionBatchWireless(object):
         return action
 
     def createOrganizationWirelessLocationScanningReceiver(
-        self, organizationId: str, network: dict, url: str, version: str, radio: dict, sharedSecret: str
+        self, organizationId: str, network: dict, url: str, version: str, radio: dict, sharedSecret: str, **kwargs
     ):
         """
         **Add new receiver for scanning API**
@@ -1630,7 +1630,7 @@ class ActionBatchWireless(object):
         }
         return action
 
-    def recalculateOrganizationWirelessRadioAutoRfChannels(self, organizationId: str, networkIds: list):
+    def recalculateOrganizationWirelessRadioAutoRfChannels(self, organizationId: str, networkIds: list, **kwargs):
         """
         **Recalculates automatically assigned channels for every AP within specified the specified network(s). Note: This could cause a brief loss in connectivity for wireless clients.**
         https://developer.cisco.com/meraki/api-v1/#!recalculate-organization-wireless-radio-auto-rf-channels

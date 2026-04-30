@@ -149,7 +149,7 @@ class ActionBatchNetworks(object):
         }
         return action
 
-    def vmxNetworkDevicesClaim(self, networkId: str, size: str):
+    def vmxNetworkDevicesClaim(self, networkId: str, size: str, **kwargs):
         """
         **Claim a vMX into a network**
         https://developer.cisco.com/meraki/api-v1/#!vmx-network-devices-claim
@@ -178,7 +178,7 @@ class ActionBatchNetworks(object):
         }
         return action
 
-    def removeNetworkDevices(self, networkId: str, serial: str):
+    def removeNetworkDevices(self, networkId: str, serial: str, **kwargs):
         """
         **Remove a single device**
         https://developer.cisco.com/meraki/api-v1/#!remove-network-devices
@@ -330,7 +330,7 @@ class ActionBatchNetworks(object):
         }
         return action
 
-    def batchNetworkFloorPlansAutoLocateJobs(self, networkId: str, jobs: list):
+    def batchNetworkFloorPlansAutoLocateJobs(self, networkId: str, jobs: list, **kwargs):
         """
         **Schedule auto locate jobs for one or more floor plans in a network**
         https://developer.cisco.com/meraki/api-v1/#!batch-network-floor-plans-auto-locate-jobs
@@ -428,7 +428,7 @@ class ActionBatchNetworks(object):
         }
         return action
 
-    def batchNetworkFloorPlansDevicesUpdate(self, networkId: str, assignments: list):
+    def batchNetworkFloorPlansDevicesUpdate(self, networkId: str, assignments: list, **kwargs):
         """
         **Update floorplan assignments for a batch of devices**
         https://developer.cisco.com/meraki/api-v1/#!batch-network-floor-plans-devices-update
@@ -893,7 +893,7 @@ class ActionBatchNetworks(object):
         }
         return action
 
-    def createNetworkVlanProfile(self, networkId: str, name: str, vlanNames: list, vlanGroups: list, iname: str):
+    def createNetworkVlanProfile(self, networkId: str, name: str, vlanNames: list, vlanGroups: list, iname: str, **kwargs):
         """
         **Create a VLAN profile for a network**
         https://developer.cisco.com/meraki/api-v1/#!create-network-vlan-profile

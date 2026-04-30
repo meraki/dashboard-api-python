@@ -191,7 +191,7 @@ class ActionBatchCellularGateway(object):
         return action
 
     def createOrganizationCellularGatewayEsimsServiceProvidersAccount(
-        self, organizationId: str, accountId: str, apiKey: str, serviceProvider: dict, title: str, username: str
+        self, organizationId: str, accountId: str, apiKey: str, serviceProvider: dict, title: str, username: str, **kwargs
     ):
         """
         **Add a service provider account.**
@@ -273,7 +273,7 @@ class ActionBatchCellularGateway(object):
         }
         return action
 
-    def createOrganizationCellularGatewayEsimsSwap(self, organizationId: str, swaps: list):
+    def createOrganizationCellularGatewayEsimsSwap(self, organizationId: str, swaps: list, **kwargs):
         """
         **Swap which profile an eSIM uses.**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-cellular-gateway-esims-swap
