@@ -45,7 +45,7 @@ Plans:
   4. Golden-file test with synthetic v3 fixture validates parser output format
 **Plans**: 2 plans
 Plans:
-- [ ] 02-01-PLAN.md: TDD parse_params_v3 with path inheritance, nullable, oneOf, style/explode
+- [x] 02-01-PLAN.md: TDD parse_params_v3 with path inheritance, nullable, oneOf, style/explode
 - [ ] 02-02-PLAN.md: Golden-file snapshot test for output contract validation
 
 ### Phase 3: Generation Integration
