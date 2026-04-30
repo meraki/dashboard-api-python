@@ -95,6 +95,34 @@ class Networks(object):
 
         return self._session.put(metadata, resource, payload)
 
+    def updateNetworkPolicy(self, networkId: str, policyId: str, **kwargs):
+        """
+        **Update a network policy**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-policy
+
+        - networkId (string): Network ID
+        - policyId (string): ID of the policy.
+        - description (string): Description of the policy.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["networks", "configure", "policies"],
+            "operation": "updateNetworkPolicy",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        policyId = urllib.parse.quote(str(policyId), safe="")
+        resource = f"/networks/{networkId}/policies/{policyId}"
+
+        body_params = [
+            "policyId",
+            "description",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        return self._session.put(metadata, resource, payload)
+
     def deleteNetwork(self, networkId: str):
         """
         **Delete a network**

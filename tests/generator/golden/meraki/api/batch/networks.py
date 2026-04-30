@@ -1,3 +1,6 @@
+import urllib
+
+
 class ActionBatchNetworks(object):
     def __init__(self):
         super(ActionBatchNetworks, self).__init__()
@@ -14,6 +17,7 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
+        networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/settings"
 
         body_params = [
@@ -40,10 +44,40 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
+        networkId = urllib.parse.quote(networkId, safe="")
+        profileId = urllib.parse.quote(profileId, safe="")
         resource = f"/networks/{networkId}/profiles/{profileId}"
 
         body_params = [
             "name",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def updateNetworkPolicy(self, networkId: str, policyId: str, **kwargs):
+        """
+        **Update a network policy**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-policy
+
+        - networkId (string): Network ID
+        - policyId (string): ID of the policy.
+        - description (string): Description of the policy.
+        """
+
+        kwargs.update(locals())
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        policyId = urllib.parse.quote(policyId, safe="")
+        resource = f"/networks/{networkId}/policies/{policyId}"
+
+        body_params = [
+            "policyId",
+            "description",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -61,6 +95,7 @@ class ActionBatchNetworks(object):
         - networkId (string): Network ID
         """
 
+        networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}"
 
         action = {

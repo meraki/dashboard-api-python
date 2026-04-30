@@ -73,6 +73,33 @@
         ]
       }
     },
+    "/networks/{networkId}/policies/{policyId}": {
+      "put": {
+        "tags": ["networks", "configure", "policies"],
+        "operationId": "updateNetworkPolicy",
+        "summary": "Update a network policy",
+        "description": "Update a network policy",
+        "parameters": [
+          {"name": "networkId", "in": "path", "type": "string", "required": true, "description": "Network ID"},
+          {
+            "name": "updateNetworkPolicy",
+            "in": "body",
+            "schema": {
+              "properties": {
+                "policyId": {
+                  "type": "string",
+                  "description": "ID of the policy."
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Description of the policy."
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "/networks/{networkId}": {
       "delete": {
         "tags": ["networks", "configure"],
@@ -96,6 +123,10 @@
     },
     {
       "summary": "Update a network profile",
+      "operation": "update"
+    },
+    {
+      "summary": "Update a network policy",
       "operation": "update"
     }
   ]

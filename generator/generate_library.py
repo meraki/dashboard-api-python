@@ -2,6 +2,7 @@ import getopt
 import json
 import os
 import platform
+import re
 import subprocess
 import sys
 
@@ -406,6 +407,12 @@ def generate_standard_and_async_functions(
                         elif values["type"] == "string":
                             definition += f", {p}: str"
 
+                # Catch params referenced in the URL but not declared as path params
+                for p in re.findall(r"\{(\w+)\}", path):
+                    if p not in defined_params:
+                        defined_params.add(p)
+                        definition += f", {p}: str"
+
                 if "perPage" in parse_params(operation, parameters):
                     if operation in REVERSE_PAGINATION:
                         definition += ", total_pages=1, direction='prev'"
@@ -450,6 +457,11 @@ def generate_standard_and_async_functions(
             # Function body for DELETE endpoints
             elif method == "delete":
                 call_line, path_params, query_params = parse_delete_params(operation, parameters)
+
+            # Ensure all URL-referenced params get quote lines in the template
+            for p in re.findall(r"\{(\w+)\}", path):
+                if p not in path_params:
+                    path_params[p] = {"type": "string", "in": "path"}
 
             # Add function to files
             with open(
@@ -570,6 +582,12 @@ def generate_action_batch_functions(
 
                 # Function body for GET endpoints
                 query_params = array_params = body_params = {}
+                path_params = parse_params(operation, parameters, "path")
+
+                # Ensure all URL-referenced params get quote lines in the template
+                for p in re.findall(r"\{(\w+)\}", path):
+                    if p not in path_params:
+                        path_params[p] = {"type": "string", "in": "path"}
 
                 # Function body for POST/PUT endpoints
                 if method == "post" or method == "put":
@@ -616,6 +634,12 @@ def generate_action_batch_functions(
                                     definition += f", {p}: dict"
                                 case "string":
                                     definition += f", {p}: str"
+
+                    # Catch params referenced in the URL but not declared as path params
+                    for p in re.findall(r"\{(\w+)\}", path):
+                        if p not in defined_params:
+                            defined_params.add(p)
+                            definition += f", {p}: str"
 
                     if "perPage" in parse_params(operation, parameters):
                         if operation in REVERSE_PAGINATION:
@@ -678,6 +702,7 @@ def generate_action_batch_functions(
                             query_params=query_params,
                             array_params=array_params,
                             body_params=body_params,
+                            path_params=path_params,
                             call_line=call_line,
                             batch_operation=batch_operation,
                         )
