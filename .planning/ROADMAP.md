@@ -85,8 +85,8 @@ Plans:
   3. CI workflow runs semantic diff of v2 vs v3 generator output on live spec (params, types, structure, not text diff)
 **Plans**: 3 plans
 Plans:
-- [ ] 05-01-PLAN.md: Comprehensive synthetic v3 fixture with coverage assertion tests
-- [ ] 05-02-PLAN.md: Golden-file tests for v3 generator output (sync, async, batch)
+- [x] 05-01-PLAN.md: Comprehensive synthetic v3 fixture with coverage assertion tests
+- [x] 05-02-PLAN.md: Golden-file tests for v3 generator output (sync, async, batch)
 - [ ] 05-03-PLAN.md: CI semantic diff workflow for v2/v3 drift detection
 
 ## Progress
