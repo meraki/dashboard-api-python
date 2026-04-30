@@ -71,6 +71,9 @@ Plans:
   2. Package includes py.typed marker for PEP 561 compliance
   3. Type stubs reflect nullable (str | None) and oneOf (Union[str, dict]) semantics
 **Plans**: 2 plans
+Plans:
+- [ ] 04-01-PLAN.md: TDD stub generation module with typed signatures (nullable, oneOf)
+- [ ] 04-02-PLAN.md: CLI --stubs flag integration and py.typed marker
 
 ### Phase 5: Testing & CI
 **Goal**: Comprehensive test suite and CI drift detection validate v3 generator correctness
@@ -91,6 +94,6 @@ Phases execute in numeric order: 1 > 2 > 3 > 4 > 5
 |-------|----------------|--------|-----------|
 | 1. Parser Foundation | 2/2 | Complete | 2026-04-30 |
 | 2. Unified Parameter Parser | 2/2 | Complete | 2026-04-30 |
-| 3. Generation Integration | 0/2 | Planning complete | - |
-| 4. Type Stubs | 0/? | Not started | - |
+| 3. Generation Integration | 2/2 | Complete | 2026-04-30 |
+| 4. Type Stubs | 0/2 | Planning complete | - |
 | 5. Testing & CI | 0/? | Not started | - |
