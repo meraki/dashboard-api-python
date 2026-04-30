@@ -20,8 +20,8 @@ def organize_spec(paths, scopes):
             # This helps ensure they are scoped to the correct module
             if len(tags) > 2:
                 match tags[2]:
-                    case 'spaces':
-                        scope = 'spaces'
+                    case "spaces":
+                        scope = "spaces"
                     case _:
                         scope = tags[0]
             else:

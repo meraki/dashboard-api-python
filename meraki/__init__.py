@@ -3,6 +3,7 @@ import os
 
 from meraki.api.administered import Administered
 from meraki.api.appliance import Appliance
+
 # Batch class imports
 from meraki.api.batch import Batch
 from meraki.api.camera import Camera
@@ -19,6 +20,7 @@ from meraki.api.spaces import Spaces
 from meraki.api.switch import Switch
 from meraki.api.wireless import Wireless
 from meraki.api.wirelessController import WirelessController
+
 # Config import
 from meraki.config import (
     API_KEY_ENVIRONMENT_VARIABLE,
@@ -44,10 +46,12 @@ from meraki.config import (
     MERAKI_PYTHON_SDK_CALLER,
     USE_ITERATOR_FOR_GET_PAGES,
 )
-from meraki.rest_session import *
+from meraki.rest_session import RestSession
+from meraki.exceptions import APIKeyError
+from meraki._version import __version__ as __version__
+from datetime import datetime
 
-__version__ = '2.2.0'
-__api_version__ = '1.68.0'
+__api_version__ = "1.68.0"
 
 
 class DashboardAPI(object):
@@ -78,41 +82,41 @@ class DashboardAPI(object):
     - use_iterator_for_get_pages (boolean): list* methods will return an iterator with each object instead of a complete list with all items
     """
 
-    def __init__(self,
-                 api_key=None,
-                 base_url=DEFAULT_BASE_URL,
-                 single_request_timeout=SINGLE_REQUEST_TIMEOUT,
-                 certificate_path=CERTIFICATE_PATH,
-                 requests_proxy=REQUESTS_PROXY,
-                 wait_on_rate_limit=WAIT_ON_RATE_LIMIT,
-                 nginx_429_retry_wait_time=NGINX_429_RETRY_WAIT_TIME,
-                 action_batch_retry_wait_time=ACTION_BATCH_RETRY_WAIT_TIME,
-                 network_delete_retry_wait_time=NETWORK_DELETE_RETRY_WAIT_TIME,
-                 retry_4xx_error=RETRY_4XX_ERROR,
-                 retry_4xx_error_wait_time=RETRY_4XX_ERROR_WAIT_TIME,
-                 maximum_retries=MAXIMUM_RETRIES,
-                 output_log=OUTPUT_LOG,
-                 log_path=LOG_PATH,
-                 log_file_prefix=LOG_FILE_PREFIX,
-                 print_console=PRINT_TO_CONSOLE,
-                 suppress_logging=SUPPRESS_LOGGING,
-                 simulate=SIMULATE_API_CALLS,
-                 be_geo_id=BE_GEO_ID,
-                 caller=MERAKI_PYTHON_SDK_CALLER,
-                 use_iterator_for_get_pages=USE_ITERATOR_FOR_GET_PAGES,
-                 inherit_logging_config=INHERIT_LOGGING_CONFIG,
-                 ):
-
+    def __init__(
+        self,
+        api_key=None,
+        base_url=DEFAULT_BASE_URL,
+        single_request_timeout=SINGLE_REQUEST_TIMEOUT,
+        certificate_path=CERTIFICATE_PATH,
+        requests_proxy=REQUESTS_PROXY,
+        wait_on_rate_limit=WAIT_ON_RATE_LIMIT,
+        nginx_429_retry_wait_time=NGINX_429_RETRY_WAIT_TIME,
+        action_batch_retry_wait_time=ACTION_BATCH_RETRY_WAIT_TIME,
+        network_delete_retry_wait_time=NETWORK_DELETE_RETRY_WAIT_TIME,
+        retry_4xx_error=RETRY_4XX_ERROR,
+        retry_4xx_error_wait_time=RETRY_4XX_ERROR_WAIT_TIME,
+        maximum_retries=MAXIMUM_RETRIES,
+        output_log=OUTPUT_LOG,
+        log_path=LOG_PATH,
+        log_file_prefix=LOG_FILE_PREFIX,
+        print_console=PRINT_TO_CONSOLE,
+        suppress_logging=SUPPRESS_LOGGING,
+        simulate=SIMULATE_API_CALLS,
+        be_geo_id=BE_GEO_ID,
+        caller=MERAKI_PYTHON_SDK_CALLER,
+        use_iterator_for_get_pages=USE_ITERATOR_FOR_GET_PAGES,
+        inherit_logging_config=INHERIT_LOGGING_CONFIG,
+    ):
         # Check API key
         api_key = api_key or os.environ.get(API_KEY_ENVIRONMENT_VARIABLE)
         if not api_key:
             raise APIKeyError()
 
         # Pull the BE GEO ID from an environment variable if present
-        be_geo_id = be_geo_id or os.environ.get('BE_GEO_ID')
+        be_geo_id = be_geo_id or os.environ.get("BE_GEO_ID")
 
         # Pull the caller from an environment variable if present
-        caller = caller or os.environ.get('MERAKI_PYTHON_SDK_CALLER')
+        caller = caller or os.environ.get("MERAKI_PYTHON_SDK_CALLER")
 
         use_iterator_for_get_pages = use_iterator_for_get_pages
         inherit_logging_config = inherit_logging_config
@@ -125,19 +129,17 @@ class DashboardAPI(object):
                 self._logger.setLevel(logging.DEBUG)
 
                 formatter = logging.Formatter(
-                    fmt='%(asctime)s %(name)12s: %(levelname)8s > %(message)s',
-                    datefmt='%Y-%m-%d %H:%M:%S'
+                    fmt="%(asctime)s %(name)12s: %(levelname)8s > %(message)s",
+                    datefmt="%Y-%m-%d %H:%M:%S",
                 )
                 handler_console = logging.StreamHandler()
                 handler_console.setFormatter(formatter)
 
                 if output_log:
-                    if log_path and log_path[-1] != '/':
-                        log_path += '/'
-                    self._log_file = f'{log_path}{log_file_prefix}_log__{datetime.now():%Y-%m-%d_%H-%M-%S}.log'
-                    handler_log = logging.FileHandler(
-                        filename=self._log_file
-                    )
+                    if log_path and log_path[-1] != "/":
+                        log_path += "/"
+                    self._log_file = f"{log_path}{log_file_prefix}_log__{datetime.now():%Y-%m-%d_%H-%M-%S}.log"
+                    handler_log = logging.FileHandler(filename=self._log_file)
                     handler_log.setFormatter(formatter)
 
                 if output_log and not self._logger.hasHandlers():

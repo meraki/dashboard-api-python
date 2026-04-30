@@ -1,6 +1,8 @@
 import getopt
+import json
 import os
 import platform
+import subprocess
 import sys
 
 import jinja2
@@ -228,7 +230,9 @@ def parse_params(operation: str, parameters: dict, param_filters=None):
     return unpack_params(operation, parameters, param_filters)
 
 
-def generate_library(spec: dict, version_number: str, api_version_number: str, is_github_action: bool):
+def generate_library(
+    spec: dict, version_number: str, api_version_number: str, is_github_action: bool
+):
     # Supported scopes list will include organizations, networks, devices, and all product types.
     supported_scopes = [
         "organizations",
@@ -248,7 +252,7 @@ def generate_library(spec: dict, version_number: str, api_version_number: str, i
         "wirelessController",
         "campusGateway",
         "spaces",
-        "nac"
+        "nac",
     ]
     # legacy scopes = ['organizations', 'networks', 'devices', 'appliance', 'camera', 'cellularGateway', 'insight',
     #                  'sm', 'switch', 'wireless']
@@ -281,6 +285,7 @@ def generate_library(spec: dict, version_number: str, api_version_number: str, i
     # Files that are not generated
     non_generated = [
         "__init__.py",
+        "_version.py",
         "config.py",
         "common.py",
         "exceptions.py",
@@ -299,11 +304,12 @@ def generate_library(spec: dict, version_number: str, api_version_number: str, i
         response = requests.get(f"{base_url}{file}")
         with open(f"meraki/{file}", "w+", encoding="utf-8", newline=None) as fp:
             contents = response.text
-            if file == "__init__.py":
+            if file == "_version.py":
                 # replace library version
                 start = contents.find("__version__ = ")
                 end = contents.find("\n", start)
                 contents = f"{contents[:start]}__version__ = '{version_number}'{contents[end:]}"
+            elif file == "__init__.py":
                 # replace API version
                 start = contents.find("__api_version__ = ")
                 end = contents.find("\n", start)
@@ -322,9 +328,15 @@ def generate_library(spec: dict, version_number: str, api_version_number: str, i
     jinja_env = jinja2.Environment(
         trim_blocks=True, lstrip_blocks=True, keep_trailing_newline=True
     )
+    jinja_env.filters["to_double_quote_list"] = lambda lst: json.dumps(lst)
 
     # Iterate through the scopes creating standard, asyncio and batch modules for each
     generate_modules(batchable_actions, jinja_env, scopes, template_dir)
+
+    # Format generated code with ruff
+    print("Formatting generated code with ruff...")
+    subprocess.run(["ruff", "check", "--fix", "--quiet", "meraki/"], check=False)
+    subprocess.run(["ruff", "format", "--quiet", "meraki/"], check=False)
 
 
 def generate_modules(batchable_actions, jinja_env, scopes, template_dir):
@@ -437,7 +449,7 @@ def generate_standard_and_async_functions(
             if all_params:
                 for p, values in all_params.items():
                     param_descriptions.append(
-                        f'{p} ({values["type"]}): {values["description"]}'
+                        f"{p} ({values['type']}): {values['description']}"
                     )
 
             # Combine keyword args with locals
@@ -469,7 +481,9 @@ def generate_standard_and_async_functions(
 
             # Function body for DELETE endpoints
             elif method == "delete":
-                call_line, path_params, query_params = parse_delete_params(operation, parameters)
+                call_line, path_params, query_params = parse_delete_params(
+                    operation, parameters
+                )
 
             # Add function to files
             with open(
@@ -648,7 +662,7 @@ def generate_action_batch_functions(
                 if all_params:
                     for p, values in all_params.items():
                         param_descriptions.append(
-                            f'{p} ({values["type"]}): {values["description"]}'
+                            f"{p} ({values['type']}): {values['description']}"
                         )
 
                 # Combine keyword args with locals

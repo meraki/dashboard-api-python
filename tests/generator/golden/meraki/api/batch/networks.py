@@ -1,11 +1,6 @@
-import urllib
-
-
 class ActionBatchNetworks(object):
     def __init__(self):
         super(ActionBatchNetworks, self).__init__()
-        
-
 
     def updateNetworkSettings(self, networkId: str, **kwargs):
         """
@@ -19,25 +14,19 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        metadata = {
-            'tags': ['networks', 'configure'],
-            'operation': 'updateNetworkSettings'
-        }
-        resource = f'/networks/{networkId}/settings'
+        resource = f"/networks/{networkId}/settings"
 
-        body_params = ['localStatusPageEnabled', 'securePort', ]
+        body_params = [
+            "localStatusPageEnabled",
+            "securePort",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload
+            "body": payload,
         }
         return action
-        
-
-
-
-
 
     def deleteNetwork(self, networkId: str):
         """
@@ -47,18 +36,10 @@ class ActionBatchNetworks(object):
         - networkId (string): Network ID
         """
 
-        metadata = {
-            'tags': ['networks', 'configure'],
-            'operation': 'deleteNetwork'
-        }
-        resource = f'/networks/{networkId}'
+        resource = f"/networks/{networkId}"
 
         action = {
             "resource": resource,
             "operation": "destroy",
         }
         return action
-        
-
-
-

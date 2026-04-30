@@ -111,6 +111,7 @@ class TestGoldenFiles:
             for call in mocked.call_args_list:
                 url = call[0][0]
                 from urllib.parse import urlparse
+
                 assert urlparse(url).hostname == "raw.githubusercontent.com"
         finally:
             os.chdir(original_cwd)

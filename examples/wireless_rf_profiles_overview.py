@@ -3,7 +3,7 @@ import meraki
 ### work in progress
 
 print(
-    f"To use this tool, you must supply your organization ID. Your organization ID should be an integer."
+    "To use this tool, you must supply your organization ID. Your organization ID should be an integer."
 )
 organization_id = ""
 # organization_id = input(f"Enter your organization ID:")
@@ -13,7 +13,7 @@ all_rf_profiles = list()
 d = meraki.DashboardAPI(suppress_logging=True)
 
 # fetch RF profiles assignments by device
-print(f"Fetching RF profile assignments for the organization")
+print("Fetching RF profile assignments for the organization")
 rf_profiles_assignments = (
     d.wireless.getOrganizationWirelessRfProfilesAssignmentsByDevice(
         organization_id, total_pages=all
@@ -47,7 +47,7 @@ for profile in profiles:
 
 
 # fetch wireless networks
-print(f"Fetching wireless networks")
+print("Fetching wireless networks")
 networks = d.organizations.getOrganizationNetworks(
     organization_id, productTypes=["wireless"], total_pages=all
 )
@@ -55,7 +55,7 @@ wireless_networks = [
     network for network in networks if "wireless" in network["productTypes"]
 ]
 
-print(f"Fetching RF profiles per network")
+print("Fetching RF profiles per network")
 rf_profiles_by_network = [
     d.wireless.getNetworkWirelessRfProfiles(network["id"])
     for network in wireless_networks
@@ -66,7 +66,7 @@ for network in rf_profiles_by_network:
     for profile in network:
         all_rf_profiles.append(profile)
 
-print(f"Fetching RF profiles per network")
-print(f"Fetching RF profiles per network")
+print("Fetching RF profiles per network")
+print("Fetching RF profiles per network")
 
 print(1)

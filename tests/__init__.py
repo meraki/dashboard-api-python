@@ -1,3 +1,4 @@
 import sys
-sys.path.append('.')
-sys.path.append('./meraki')
+
+sys.path.append(".")
+sys.path.append("./meraki")

@@ -149,4 +149,4 @@ if __name__ == "__main__":
     start_time = datetime.now()
     main()
     end_time = datetime.now()
-    print(f'\nScript complete, total runtime {end_time - start_time}')
+    print(f"\nScript complete, total runtime {end_time - start_time}")

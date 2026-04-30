@@ -28,17 +28,15 @@ d = meraki.DashboardAPI()
 my_orgs = d.organizations.getOrganizations()
 my_orgs = [org for org in my_orgs if org["id"] not in excluded_org_ids]
 
-print(f"done gathering organizations")
+print("done gathering organizations")
 
 # gather networks
 my_networks = [
-    d.organizations.getOrganizationNetworks(
-        organization["id"], total_pages=all
-    )
+    d.organizations.getOrganizationNetworks(organization["id"], total_pages=all)
     for organization in my_orgs
 ]
 
-print(f"done gathering networks")
+print("done gathering networks")
 
 my_appliance_networks = [
     network
@@ -48,7 +46,7 @@ my_appliance_networks = [
     and "appliance" in network["productTypes"]
 ]
 
-print(f"done gathering appliance networks")
+print("done gathering appliance networks")
 
 # gather routed networks -- appliances in passthrough mode don't have local subnets
 my_appliance_routed_networks = [
@@ -58,7 +56,7 @@ my_appliance_routed_networks = [
     == "routed"
 ]
 
-print(f"done gathering routed appliance networks")
+print("done gathering routed appliance networks")
 
 my_appliance_networks_with_vlans = [
     network
@@ -66,7 +64,7 @@ my_appliance_networks_with_vlans = [
     if d.appliance.getNetworkApplianceVlansSettings(network["id"])["vlansEnabled"]
 ]
 
-print(f"done gathering appliance network vlan settings")
+print("done gathering appliance network vlan settings")
 
 my_appliance_networks_without_vlans = [
     network
@@ -83,7 +81,7 @@ my_vlan_lists = [
     for network in my_appliance_networks_with_vlans
 ]
 
-print(f"done gathering appliance network vlans")
+print("done gathering appliance network vlans")
 
 my_lans = [
     {
@@ -94,7 +92,7 @@ my_lans = [
     for network in my_appliance_networks_without_vlans
 ]
 
-print(f"done gathering appliance network lans")
+print("done gathering appliance network lans")
 
 # unpack the subnets
 vlan_subnets = list()

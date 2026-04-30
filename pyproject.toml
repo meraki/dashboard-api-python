@@ -33,12 +33,30 @@ include = ["meraki/"]
 packages = ["meraki"]
 
 [dependency-groups]
-dev = ["pytest>=8.3.5,<10", "flake8>=7.0,<8"]
+dev = [
+    "pytest>=8.3.5,<10",
+    "pytest-asyncio>=1.0,<2",
+    "pytest-cov>=6.0,<7",
+    "responses>=0.25,<1",
+    "flake8>=7.0,<8",
+    "pre-commit>=4.6.0",
+    "ruff>=0.15.12",
+]
 generator = ["jinja2==3.1.6"]
 
 [tool.uv]
 default-groups = ["dev"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["tests/unit"]
 norecursedirs = ["tests/generator"]
+asyncio_mode = "auto"
+
+[tool.coverage.run]
+source = ["meraki"]
+omit = ["meraki/api/*", "meraki/aio/api/*", "meraki/aio/__init__.py"]
+
+[tool.coverage.report]
+fail_under = 60
+show_missing = true
+exclude_lines = ["pragma: no cover", "if __name__"]

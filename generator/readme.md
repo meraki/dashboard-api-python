@@ -6,7 +6,7 @@ via `pip install --upgrade meraki`.
 However, if you participate in Early Access features, you may want to generate a library to match your org's spec. In
 which case, follow along.
 
-> **NB:** The generator requires Python 3.10 or later.
+> **NB:** The generator requires Python 3.11 or later.
 
 1. Clone this repo locally.
 2. Open a terminal in this `generator` folder.

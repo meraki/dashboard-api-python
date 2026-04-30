@@ -5,10 +5,10 @@ class Networks(object):
     def __init__(self, session):
         super(Networks, self).__init__()
         self._session = session
-        
 
-
-    def getNetworkClients(self, networkId: str, total_pages=1, direction='next', **kwargs):
+    def getNetworkClients(
+        self, networkId: str, total_pages=1, direction="next", **kwargs
+    ):
         """
         **List the clients that have used this network in the timespan**
         https://developer.cisco.com/meraki/api-v1/#!get-network-clients
@@ -26,18 +26,24 @@ class Networks(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['networks', 'configure', 'clients'],
-            'operation': 'getNetworkClients'
+            "tags": ["networks", "configure", "clients"],
+            "operation": "getNetworkClients",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/clients'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/clients"
 
-        query_params = ['perPage', 'startingAfter', 'endingBefore', 't0', 'timespan', ]
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "t0",
+            "timespan",
+        ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        return self._session.get_pages(metadata, resource, params, total_pages, direction)
-        
-
+        return self._session.get_pages(
+            metadata, resource, params, total_pages, direction
+        )
 
     def updateNetworkSettings(self, networkId: str, **kwargs):
         """
@@ -52,18 +58,19 @@ class Networks(object):
         kwargs.update(locals())
 
         metadata = {
-            'tags': ['networks', 'configure'],
-            'operation': 'updateNetworkSettings'
+            "tags": ["networks", "configure"],
+            "operation": "updateNetworkSettings",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}/settings'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/settings"
 
-        body_params = ['localStatusPageEnabled', 'securePort', ]
+        body_params = [
+            "localStatusPageEnabled",
+            "securePort",
+        ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         return self._session.put(metadata, resource, payload)
-        
-
 
     def deleteNetwork(self, networkId: str):
         """
@@ -74,11 +81,10 @@ class Networks(object):
         """
 
         metadata = {
-            'tags': ['networks', 'configure'],
-            'operation': 'deleteNetwork'
+            "tags": ["networks", "configure"],
+            "operation": "deleteNetwork",
         }
-        networkId = urllib.parse.quote(str(networkId), safe='')
-        resource = f'/networks/{networkId}'
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}"
 
         return self._session.delete(metadata, resource)
-        

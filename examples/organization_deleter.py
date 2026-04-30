@@ -22,7 +22,7 @@ EMAIL_ADDRESS_OF_API_KEY_OWNER = ""
 print(
     f"This script will delete all orgs in this list: {LIST_OF_ORGANIZATIONS_TO_DELETE}"
 )
-confirmed = input(f"Are you sure you'd like to proceed? (yes/N)")
+confirmed = input("Are you sure you'd like to proceed? (yes/N)")
 
 # User will need to type yes to continue
 if confirmed != "yes":
@@ -44,7 +44,7 @@ for organization in LIST_OF_ORGANIZATIONS_TO_DELETE:
         delete_network = d.networks.deleteNetwork(network["id"])
         count_networks -= 1
         print(f"{count_networks} remaining.")
-    print(f"Done deleting networks.")
+    print("Done deleting networks.")
 
     # get config templates
     org_templates = d.organizations.getOrganizationConfigTemplates(organization)
@@ -56,7 +56,7 @@ for organization in LIST_OF_ORGANIZATIONS_TO_DELETE:
         )
         count_templates -= 1
         print(f"{count_templates} remaining.")
-    print(f"Done deleting config templates.")
+    print("Done deleting config templates.")
 
     # get org inventory devices
     org_devices = d.organizations.getOrganizationInventoryDevices(organization)
@@ -68,7 +68,7 @@ for organization in LIST_OF_ORGANIZATIONS_TO_DELETE:
             organization, serials=device_serials
         )
         print(f"Released {count_devices} devices from inventory.")
-    print(f"Done releasing devices.")
+    print("Done releasing devices.")
 
     # get org admins
     org_admins = d.organizations.getOrganizationAdmins(organization)
@@ -80,7 +80,7 @@ for organization in LIST_OF_ORGANIZATIONS_TO_DELETE:
 
     print(f"Done deleting networks and admins in organization (id: {organization}).")
 
-confirmed = input(f"Would you like to proceed with deleting the organizations? (yes/N)")
+confirmed = input("Would you like to proceed with deleting the organizations? (yes/N)")
 
 if confirmed != "yes":
     print("Aborting")
@@ -90,4 +90,4 @@ for organization in LIST_OF_ORGANIZATIONS_TO_DELETE:
     delete_organization = d.organizations.deleteOrganization(organization)
     print(f"Deleted organization (id: {organization}).")
 
-print(f"Done deleting organizations.")
+print("Done deleting organizations.")

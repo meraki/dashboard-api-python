@@ -109,13 +109,13 @@ class PythonVersionError(Exception):
         super().__init__(self.message)
 
 
-class SessionInputError(Exception): 
+class SessionInputError(Exception):
     """Exception raised for unsupported session inputs."""
-    
+
     def __init__(self, argument, value, message, doc_link):
         self.argument = argument
         self.value = value
         self.message = message
         self.doc_link = doc_link
-        
-        super().__init__(f'{self.message} {self.doc_link}')
+
+        super().__init__(f"{self.message} {self.doc_link}")

@@ -40,11 +40,11 @@ print(f"{len(channels)} channels found. The channels are {channels}.")
 # How many operations in each channel?
 for channel in channels:
     print(
-        f'There are {len([operation for operation in operations if operation["x-release-stage"] == channel])}'
+        f"There are {len([operation for operation in operations if operation['x-release-stage'] == channel])}"
         f" operations in the {channel} channel."
     )
 
-if input(f"Would you like to see the operations? y/N") == 'y':
+if input("Would you like to see the operations? y/N") == "y":
     print(operations)
 else:
-    print(f"Goodbye.")
+    print("Goodbye.")

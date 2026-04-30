@@ -295,9 +295,7 @@ class TestParsePostAndPutParams:
                 "name": "createBody",
                 "in": "body",
                 "schema": {
-                    "properties": {
-                        "name": {"type": "string", "description": "Name"}
-                    },
+                    "properties": {"name": {"type": "string", "description": "Name"}},
                 },
             },
         ]

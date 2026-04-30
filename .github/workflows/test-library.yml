@@ -45,7 +45,7 @@ jobs:
         uv run flake8 . --count --select=E9,F63,F7,F82 --ignore=F405,W391,W291,C901,E501,E303,W293 --exclude=examples,generator,.venv --show-source --statistics
         uv run flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --exclude=examples,generator,.venv --statistics
 
-  test:
+  unit-test:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -66,5 +66,30 @@ jobs:
     - name: Install dependencies
       run: uv sync --python ${{ matrix.python-version }}
 
-    - name: Test with pytest
-      run: uv run pytest --apikey ${{ secrets.TEST_ORG_API_KEY }} --o ${{ secrets.TEST_ORG_ID }}
+    - name: Unit tests with coverage
+      run: uv run pytest tests/unit --cov --cov-report=term-missing --cov-fail-under=60
+
+  integration-test:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13", "3.14"]
+
+    steps:
+    - uses: actions/checkout@v6
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v4
+      with:
+        enable-cache: true
+
+    - name: Set up Python ${{ matrix.python-version }}
+      run: uv python install ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: uv sync --python ${{ matrix.python-version }}
+
+    - name: Integration tests
+      run: uv run pytest tests/integration --apikey ${{ secrets.TEST_ORG_API_KEY }} --o ${{ secrets.TEST_ORG_ID }}

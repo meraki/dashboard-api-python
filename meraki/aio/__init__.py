@@ -17,9 +17,13 @@ from meraki.aio.api.spaces import AsyncSpaces
 from meraki.aio.api.switch import AsyncSwitch
 from meraki.aio.api.wireless import AsyncWireless
 from meraki.aio.api.wirelessController import AsyncWirelessController
-from meraki.aio.rest_session import *
+from meraki.aio.rest_session import AsyncRestSession
+from meraki.exceptions import APIKeyError
+from datetime import datetime
+
 # Batch class imports
 from meraki.api.batch import Batch
+
 # Config import
 from meraki.config import (
     API_KEY_ENVIRONMENT_VARIABLE,
@@ -77,42 +81,42 @@ class AsyncDashboardAPI:
     - use_iterator_for_get_pages (boolean): list* methods will return an iterator with each object instead of a complete list with all items
     """
 
-    def __init__(self,
-                 api_key=None,
-                 base_url=DEFAULT_BASE_URL,
-                 single_request_timeout=SINGLE_REQUEST_TIMEOUT,
-                 certificate_path=CERTIFICATE_PATH,
-                 requests_proxy=REQUESTS_PROXY,
-                 wait_on_rate_limit=WAIT_ON_RATE_LIMIT,
-                 nginx_429_retry_wait_time=NGINX_429_RETRY_WAIT_TIME,
-                 action_batch_retry_wait_time=ACTION_BATCH_RETRY_WAIT_TIME,
-                 network_delete_retry_wait_time=NETWORK_DELETE_RETRY_WAIT_TIME,
-                 retry_4xx_error=RETRY_4XX_ERROR,
-                 retry_4xx_error_wait_time=RETRY_4XX_ERROR_WAIT_TIME,
-                 maximum_retries=MAXIMUM_RETRIES,
-                 output_log=OUTPUT_LOG,
-                 log_path=LOG_PATH,
-                 log_file_prefix=LOG_FILE_PREFIX,
-                 print_console=PRINT_TO_CONSOLE,
-                 suppress_logging=SUPPRESS_LOGGING,
-                 simulate=SIMULATE_API_CALLS,
-                 be_geo_id=BE_GEO_ID,
-                 caller=MERAKI_PYTHON_SDK_CALLER,
-                 use_iterator_for_get_pages=USE_ITERATOR_FOR_GET_PAGES,
-                 inherit_logging_config=INHERIT_LOGGING_CONFIG,
-                 maximum_concurrent_requests=AIO_MAXIMUM_CONCURRENT_REQUESTS,
-                 ):
-
+    def __init__(
+        self,
+        api_key=None,
+        base_url=DEFAULT_BASE_URL,
+        single_request_timeout=SINGLE_REQUEST_TIMEOUT,
+        certificate_path=CERTIFICATE_PATH,
+        requests_proxy=REQUESTS_PROXY,
+        wait_on_rate_limit=WAIT_ON_RATE_LIMIT,
+        nginx_429_retry_wait_time=NGINX_429_RETRY_WAIT_TIME,
+        action_batch_retry_wait_time=ACTION_BATCH_RETRY_WAIT_TIME,
+        network_delete_retry_wait_time=NETWORK_DELETE_RETRY_WAIT_TIME,
+        retry_4xx_error=RETRY_4XX_ERROR,
+        retry_4xx_error_wait_time=RETRY_4XX_ERROR_WAIT_TIME,
+        maximum_retries=MAXIMUM_RETRIES,
+        output_log=OUTPUT_LOG,
+        log_path=LOG_PATH,
+        log_file_prefix=LOG_FILE_PREFIX,
+        print_console=PRINT_TO_CONSOLE,
+        suppress_logging=SUPPRESS_LOGGING,
+        simulate=SIMULATE_API_CALLS,
+        be_geo_id=BE_GEO_ID,
+        caller=MERAKI_PYTHON_SDK_CALLER,
+        use_iterator_for_get_pages=USE_ITERATOR_FOR_GET_PAGES,
+        inherit_logging_config=INHERIT_LOGGING_CONFIG,
+        maximum_concurrent_requests=AIO_MAXIMUM_CONCURRENT_REQUESTS,
+    ):
         # Check API key
         api_key = api_key or os.environ.get(API_KEY_ENVIRONMENT_VARIABLE)
         if not api_key:
             raise APIKeyError()
 
         # Pull the BE GEO ID from an environment variable if present
-        be_geo_id = be_geo_id or os.environ.get('BE_GEO_ID')
+        be_geo_id = be_geo_id or os.environ.get("BE_GEO_ID")
 
         # Pull the caller from an environment variable if present
-        caller = caller or os.environ.get('MERAKI_PYTHON_SDK_CALLER')
+        caller = caller or os.environ.get("MERAKI_PYTHON_SDK_CALLER")
 
         use_iterator_for_get_pages = use_iterator_for_get_pages
         inherit_logging_config = inherit_logging_config

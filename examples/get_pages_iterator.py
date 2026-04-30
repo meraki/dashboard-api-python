@@ -13,8 +13,9 @@ NETWORK_ID = ""
 
 def getNetworksLegacy(meraki: meraki.DashboardAPI, perPage=5):
     count = 0
-    for x in meraki.organizations.getOrganizationNetworks(organizationId=ORGANIZATION_ID, perPage=perPage,
-                                                          total_pages=-1):
+    for x in meraki.organizations.getOrganizationNetworks(
+        organizationId=ORGANIZATION_ID, perPage=perPage, total_pages=-1
+    ):
         print(f"{x['id']} - {x['name']}")
         count = count + 1
     print(f"Found {count} networks")
@@ -22,8 +23,9 @@ def getNetworksLegacy(meraki: meraki.DashboardAPI, perPage=5):
 
 def getNetworksIterator(meraki: meraki.DashboardAPI, perPage=5):
     count = 0
-    for x in meraki.organizations.getOrganizationNetworks(organizationId=ORGANIZATION_ID, perPage=perPage,
-                                                          total_pages=-1):
+    for x in meraki.organizations.getOrganizationNetworks(
+        organizationId=ORGANIZATION_ID, perPage=perPage, total_pages=-1
+    ):
         print(f"{x['id']} - {x['name']}")
         count = count + 1
     print(f"Found {count} networks")
@@ -31,8 +33,9 @@ def getNetworksIterator(meraki: meraki.DashboardAPI, perPage=5):
 
 def getNetworkEventsLegacy(meraki: meraki.DashboardAPI, perPage=5):
     count = 0
-    result = meraki.networks.getNetworkEvents(networkId=NETWORK_ID, perPage=perPage, total_pages=50,
-                                              productType="wireless")
+    result = meraki.networks.getNetworkEvents(
+        networkId=NETWORK_ID, perPage=perPage, total_pages=50, productType="wireless"
+    )
     for x in result["events"]:
         print(f"{x['occurredAt']}")
         count = count + 1
@@ -41,15 +44,18 @@ def getNetworkEventsLegacy(meraki: meraki.DashboardAPI, perPage=5):
 
 def getNetworkEventsIterator(meraki: meraki.DashboardAPI, perPage=5):
     count = 0
-    for x in meraki.networks.getNetworkEvents(networkId=NETWORK_ID, perPage=perPage, total_pages=50,
-                                              productType="wireless"):
+    for x in meraki.networks.getNetworkEvents(
+        networkId=NETWORK_ID, perPage=perPage, total_pages=50, productType="wireless"
+    ):
         print(f"{x['occurredAt']}")
         count = count + 1
     print(f"Found {count} events")
 
 
 async def main():
-    parser = argparse.ArgumentParser(description='Example for demonstrating the use_iterator_for_get_pages parameter')
+    argparse.ArgumentParser(
+        description="Example for demonstrating the use_iterator_for_get_pages parameter"
+    )
 
     # Instantiate a Meraki dashboard API session
     # NOTE: you have to use "async with" so that the session will be closed correctly at the end of the usage
@@ -58,7 +64,7 @@ async def main():
         base_url="https://api.meraki.com/api/v1",
         log_file_prefix=__file__[:-3],
         print_console=True,
-        use_iterator_for_get_pages=True
+        use_iterator_for_get_pages=True,
     )
 
     meraki_legacy = meraki.DashboardAPI(
@@ -66,7 +72,7 @@ async def main():
         base_url="https://api.meraki.com/api/v1",
         log_file_prefix=__file__[:-3],
         print_console=False,
-        use_iterator_for_get_pages=False
+        use_iterator_for_get_pages=False,
     )
 
     print("Test legacy")
