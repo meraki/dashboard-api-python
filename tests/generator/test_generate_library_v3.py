@@ -1,4 +1,5 @@
 """Tests for v3 generator module."""
+
 import json
 import os
 import shutil
@@ -39,6 +40,7 @@ def _mock_requests_get(url):
 
 def _run_v3_generation(v3_spec, output_dir):
     import generate_library as gen_v3
+
     original_cwd = os.getcwd()
     try:
         os.chdir(output_dir)
@@ -54,6 +56,7 @@ def _run_v3_generation(v3_spec, output_dir):
 
 def _run_v3_generation_with_stubs(v3_spec, output_dir):
     import generate_library as gen_v3
+
     original_cwd = os.getcwd()
     try:
         os.chdir(output_dir)
@@ -81,17 +84,11 @@ class TestV3GeneratorOutput:
         _run_v3_generation(v3_spec, output_dir)
         assert (output_dir / "meraki" / "api" / "batch" / "networks.py").exists()
 
-    def test_no_kwargs_update_locals(self, v3_spec, output_dir):
-        """GEN-02: No kwargs.update(locals()) in generated code."""
+    def test_kwargs_merges_positional_params(self, v3_spec, output_dir):
+        """Required positional params must be merged into kwargs for payload construction."""
         _run_v3_generation(v3_spec, output_dir)
-        for rel_path in [
-            "meraki/api/networks.py",
-            "meraki/aio/api/networks.py",
-            "meraki/api/batch/networks.py",
-        ]:
-            content = (output_dir / rel_path).read_text()
-            assert "kwargs.update(locals())" not in content
-            assert "kwargs = locals()" not in content
+        content = (output_dir / "meraki" / "api" / "networks.py").read_text()
+        assert "kwargs.update(locals())" in content or "kwargs = locals()" in content
 
     def test_batch_action_count(self, v3_spec, output_dir):
         """GEN-04: All batchable actions produce batch methods."""
@@ -102,9 +99,7 @@ class TestV3GeneratorOutput:
         method_count = content.count("    def ")
         # Subtract __init__
         method_count -= 1
-        assert method_count == expected_count, (
-            f"Expected {expected_count} batch methods, got {method_count}"
-        )
+        assert method_count == expected_count, f"Expected {expected_count} batch methods, got {method_count}"
 
     def test_explicit_param_construction(self, v3_spec, output_dir):
         """GEN-02: Methods use explicit param list filtering."""
@@ -120,6 +115,7 @@ class TestV3CLI:
     def test_help_flag_exits(self):
         """GEN-05: -h prints help and exits."""
         import generate_library as gen_v3
+
         with pytest.raises(SystemExit) as exc_info:
             gen_v3.main(["-h"])
         assert exc_info.value.code == 2
@@ -127,10 +123,8 @@ class TestV3CLI:
     def test_accepts_all_v2_flags(self):
         """GEN-05: CLI accepts -o, -k, -v, -a, -g flags."""
         import getopt
-        opts, args = getopt.getopt(
-            ["-o", "123", "-k", "fake", "-v", "1.0", "-a", "v1", "-g", "false"],
-            "ho:k:v:a:g:"
-        )
+
+        opts, args = getopt.getopt(["-o", "123", "-k", "fake", "-v", "1.0", "-a", "v1", "-g", "false"], "ho:k:v:a:g:")
         flags = [o for o, _ in opts]
         assert "-o" in flags
         assert "-k" in flags
@@ -141,6 +135,7 @@ class TestV3CLI:
     def test_spec_fetch_uses_version_3(self):
         """GEN-05: Spec fetch includes ?version=3."""
         import generate_library as gen_v3
+
         with patch("generate_library.requests.get") as mock_get:
             mock_response = MagicMock()
             mock_response.ok = True
@@ -157,6 +152,7 @@ class TestV3CLI:
     def test_org_specific_fetch_uses_version_3(self):
         """GEN-05: Org-specific fetch includes ?version=3 and auth header."""
         import generate_library as gen_v3
+
         with patch("generate_library.requests.get") as mock_get:
             mock_response = MagicMock()
             mock_response.ok = True
@@ -207,6 +203,7 @@ class TestV3Stubs:
     def test_cli_accepts_s_flag(self):
         """GEN-03: CLI accepts -s flag."""
         import getopt
+
         opts, args = getopt.getopt(["-s", "-v", "1.0"], "ho:k:v:a:g:s")
         flags = [o for o, _ in opts]
         assert "-s" in flags

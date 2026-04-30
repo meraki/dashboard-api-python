@@ -1,7 +1,6 @@
 import getopt
 import json
 import os
-import platform
 import re
 import subprocess
 import sys
@@ -13,7 +12,6 @@ import common as common
 from parser_v3 import parse_params_v3, clear_cache
 from generate_library_oasv2 import (
     REVERSE_PAGINATION,
-    generate_pagination_parameters,
     docs_url,
     check_python_version,
     return_params,
@@ -142,8 +140,7 @@ def generate_library(spec: dict, version_number: str, is_github_action: bool, ge
         print("Generating .pyi type stubs...")
         generate_stub_modules(spec, scopes, jinja_env, template_dir)
         # Write py.typed marker for PEP 561
-        with open("meraki/py.typed", "w") as f:
-            pass  # Empty marker file
+        open("meraki/py.typed", "w").close()
         print("Type stubs and py.typed marker created.")
 
     # Format generated code with ruff
@@ -318,8 +315,11 @@ def generate_standard_and_async_functions(
                 for p, values in all_params_for_doc.items():
                     param_descriptions.append(f"{p} ({values['type']}): {values['description']}")
 
-            # CRITICAL GEN-02 FIX: Always set kwarg_line to empty string
             kwarg_line = ""
+            if return_params(operation, all_params, ["optional"]):
+                kwarg_line = "kwargs.update(locals())"
+            elif return_params(operation, all_params, ["query", "array", "body"]):
+                kwarg_line = "kwargs = locals()"
 
             # Assert valid values for enum
             enum_params = return_params(operation, all_params, ["enum"])
@@ -334,9 +334,7 @@ def generate_standard_and_async_functions(
                 if query_params or array_params:
                     if pagination_params:
                         if operation == "getNetworkEvents":
-                            call_line = (
-                                "return self._session.get_pages(metadata, resource, params, total_pages, direction, event_log_end_time)"
-                            )
+                            call_line = "return self._session.get_pages(metadata, resource, params, total_pages, direction, event_log_end_time)"
                         else:
                             call_line = "return self._session.get_pages(metadata, resource, params, total_pages, direction)"
                     else:
@@ -510,8 +508,11 @@ def generate_action_batch_functions(
                     for p, values in all_params_for_doc.items():
                         param_descriptions.append(f"{p} ({values['type']}): {values['description']}")
 
-                # CRITICAL GEN-02 FIX: Always set kwarg_line to empty string
                 kwarg_line = ""
+                if return_params(operation, all_params, ["optional"]):
+                    kwarg_line = "kwargs.update(locals())"
+                elif return_params(operation, all_params, ["body"]):
+                    kwarg_line = "kwargs = locals()"
 
                 # Assert valid values for enum
                 enum_params = return_params(operation, all_params, ["enum"])
@@ -586,7 +587,7 @@ def main(inputs):
         elif opt == "-v":
             version_number = arg
         elif opt == "-a":
-            api_version_number = arg
+            api_version_number = arg  # noqa: F841
         elif opt == "-g":
             if arg.lower() == "true":
                 is_github_action = True
