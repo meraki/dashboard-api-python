@@ -41,6 +41,9 @@ def synthetic_spec():
 def output_dir(tmp_path):
     for tmpl in GENERATOR_DIR.glob("*.jinja2"):
         shutil.copy2(tmpl, tmp_path / tmpl.name)
+    # Copy pyproject.toml so ruff uses project settings (e.g. line-length)
+    project_root = GENERATOR_DIR.parent
+    shutil.copy2(project_root / "pyproject.toml", tmp_path / "pyproject.toml")
     return tmp_path
 
 
@@ -74,9 +77,7 @@ class TestGoldenFiles:
             generated_file = output_dir / rel_path
             golden_file = GOLDEN_DIR / rel_path
 
-            assert generated_file.exists(), (
-                f"Expected generated file not found: {rel_path}"
-            )
+            assert generated_file.exists(), f"Expected generated file not found: {rel_path}"
 
             generated_content = generated_file.read_text(encoding="utf-8")
 
@@ -84,23 +85,17 @@ class TestGoldenFiles:
                 golden_file.parent.mkdir(parents=True, exist_ok=True)
                 golden_file.write_text(generated_content, encoding="utf-8")
             else:
-                assert golden_file.exists(), (
-                    f"Golden file missing: {golden_file}\n"
-                    f"Run with --update-golden to generate."
-                )
+                assert golden_file.exists(), f"Golden file missing: {golden_file}\nRun with --update-golden to generate."
                 expected_content = golden_file.read_text(encoding="utf-8")
                 assert generated_content == expected_content, (
-                    f"Generated output differs from golden file: {rel_path}\n"
-                    f"Run with --update-golden to update."
+                    f"Generated output differs from golden file: {rel_path}\nRun with --update-golden to update."
                 )
 
     def test_no_real_http_calls(self, synthetic_spec, output_dir):
         original_cwd = os.getcwd()
         try:
             os.chdir(output_dir)
-            with patch(
-                "generate_library.requests.get", side_effect=_mock_requests_get
-            ) as mocked:
+            with patch("generate_library.requests.get", side_effect=_mock_requests_get) as mocked:
                 gen.generate_library(
                     spec=synthetic_spec,
                     version_number="0.0.0-test",
