@@ -31,7 +31,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. Parser functions return normalized params dict matching v2 format (enables template reuse)
 **Plans**: 2 plans
 Plans:
-- [ ] 01-01-PLAN.md: $ref resolution with caching and cycle detection (TDD)
+- [x] 01-01-PLAN.md: $ref resolution with caching and cycle detection (TDD)
 - [ ] 01-02-PLAN.md: requestBody parsing for json, multipart, octet-stream (TDD)
 
 ### Phase 2: Unified Parameter Parser
