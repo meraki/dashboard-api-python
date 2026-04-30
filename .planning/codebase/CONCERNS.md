@@ -70,12 +70,6 @@
 - Cause: Results are appended to a single list/dict in a while loop (lines 540-561 in `rest_session.py`). No streaming or generator pattern.
 - Improvement path: Implement generator-based pagination (`_get_pages_iterator` at `meraki/rest_session.py:390` and async version already exist but are not default; `use_iterator_for_get_pages` property controls switch). Document iterator approach as best practice for large result sets. Make iterator the default in next major version.
 
-**Retry Delay Uses Sleep (Blocks Event Loop in Async):**
-- Problem: `meraki/aio/rest_session.py:190` and :212 use `await asyncio.sleep(1)` for retries, but this is inside a for loop that doesn't use task/coroutine structure. Concurrent requests can be blocked by a single slow endpoint's retries.
-- Files: `meraki/aio/rest_session.py:190`, :212
-- Cause: Retries are synchronous within the request method; no mechanism to queue retries or back off without blocking the semaphore holder.
-- Improvement path: Consider exponential backoff or jitter for retries. Use `asyncio.sleep()` with task scheduling to avoid blocking other requests waiting on `_concurrent_requests_semaphore`.
-
 ---
 
 ## Fragile Areas

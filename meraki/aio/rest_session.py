@@ -2,7 +2,6 @@ import asyncio
 import json
 import random
 import ssl
-import time
 import urllib.parse
 from datetime import datetime
 
@@ -129,8 +128,7 @@ class AsyncRestSession:
         self._use_iterator_for_get_pages = value
 
     async def request(self, metadata, method, url, **kwargs):
-        async with self._concurrent_requests_semaphore:
-            return await self._request(metadata, method, url, allow_redirects=False, **kwargs)
+        return await self._request(metadata, method, url, allow_redirects=False, **kwargs)
 
     async def _request(self, metadata, method, url, **kwargs):
         # Metadata on endpoint
@@ -177,18 +175,19 @@ class AsyncRestSession:
                     response.release()
                     response = None
 
-                # Make the HTTP request to the API endpoint
-                try:
-                    if self._logger:
-                        self._logger.info(f"{method} {abs_url}")
-                    response = await self._req_session.request(method, abs_url, **kwargs)
-                    reason = response.reason if response.reason else None
-                    status = response.status
-                except Exception as e:
-                    if self._logger:
-                        self._logger.warning(f"{tag}, {operation} > {abs_url} - {e}, retrying in 1 second")
-                    await asyncio.sleep(1)
-                    continue
+                # Acquire semaphore only for the HTTP call, not retry waits
+                async with self._concurrent_requests_semaphore:
+                    try:
+                        if self._logger:
+                            self._logger.info(f"{method} {abs_url}")
+                        response = await self._req_session.request(method, abs_url, **kwargs)
+                        reason = response.reason if response.reason else None
+                        status = response.status
+                    except Exception as e:
+                        if self._logger:
+                            self._logger.warning(f"{tag}, {operation} > {abs_url} - {e}, retrying in 1 second")
+                        await asyncio.sleep(1)
+                        continue
 
                 if 200 <= status < 300:
                     if "page" in metadata:
@@ -268,7 +267,7 @@ class AsyncRestSession:
                         wait = random.randint(15, self._network_delete_retry_wait_time)
                         if self._logger:
                             self._logger.warning(f"{tag}, {operation} - {status} {reason}, retrying in {wait} seconds")
-                        time.sleep(wait)
+                        await asyncio.sleep(wait)
                         retries -= 1
                         if retries == 0:
                             raise APIError(metadata, response)
