@@ -83,7 +83,11 @@ Plans:
   1. Synthetic v3 fixture exercises all v3-specific features ($ref with cycles, requestBody, oneOf, nullable, multipart, path-level params)
   2. Golden-file tests validate v3 generator output for sync, async, and batch modules (semantic correctness, not byte-for-byte v2 match)
   3. CI workflow runs semantic diff of v2 vs v3 generator output on live spec (params, types, structure, not text diff)
-**Plans**: 2 plans
+**Plans**: 3 plans
+Plans:
+- [ ] 05-01-PLAN.md: Comprehensive synthetic v3 fixture with coverage assertion tests
+- [ ] 05-02-PLAN.md: Golden-file tests for v3 generator output (sync, async, batch)
+- [ ] 05-03-PLAN.md: CI semantic diff workflow for v2/v3 drift detection
 
 ## Progress
 
@@ -95,5 +99,5 @@ Phases execute in numeric order: 1 > 2 > 3 > 4 > 5
 | 1. Parser Foundation | 2/2 | Complete | 2026-04-30 |
 | 2. Unified Parameter Parser | 2/2 | Complete | 2026-04-30 |
 | 3. Generation Integration | 2/2 | Complete | 2026-04-30 |
-| 4. Type Stubs | 0/2 | Planning complete | - |
-| 5. Testing & CI | 0/? | Not started | - |
+| 4. Type Stubs | 2/2 | Complete | 2026-04-30 |
+| 5. Testing & CI | 0/3 | Planning complete | - |
