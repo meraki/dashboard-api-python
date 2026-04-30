@@ -142,13 +142,13 @@ def run_v2_generator(spec: dict, output_dir: Path):
 
 def run_v3_generator(spec: dict, output_dir: Path):
     """Run v3 generator in output_dir."""
-    import generate_library_v3 as gen_v3
+    import generate_library as gen_v3
 
     original = os.getcwd()
     try:
         os.chdir(output_dir)
         with (
-            patch("generate_library_v3.requests.get", side_effect=mock_requests_get),
+            patch("generate_library.requests.get", side_effect=mock_requests_get),
             contextlib.redirect_stdout(open(os.devnull, "w")),
         ):
             gen_v3.generate_library(spec, "0.0.0-diff", False)
