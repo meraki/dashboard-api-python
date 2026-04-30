@@ -38,11 +38,11 @@ def _mock_requests_get(url):
 
 
 def _run_v3_generation(v3_spec, output_dir):
-    import generate_library_v3 as gen_v3
+    import generate_library as gen_v3
     original_cwd = os.getcwd()
     try:
         os.chdir(output_dir)
-        with patch("generate_library_v3.requests.get", side_effect=_mock_requests_get):
+        with patch("generate_library.requests.get", side_effect=_mock_requests_get):
             gen_v3.generate_library(
                 spec=v3_spec,
                 version_number="0.0.0-test",
@@ -53,11 +53,11 @@ def _run_v3_generation(v3_spec, output_dir):
 
 
 def _run_v3_generation_with_stubs(v3_spec, output_dir):
-    import generate_library_v3 as gen_v3
+    import generate_library as gen_v3
     original_cwd = os.getcwd()
     try:
         os.chdir(output_dir)
-        with patch("generate_library_v3.requests.get", side_effect=_mock_requests_get):
+        with patch("generate_library.requests.get", side_effect=_mock_requests_get):
             gen_v3.generate_library(
                 spec=v3_spec,
                 version_number="0.0.0-test",
@@ -119,7 +119,7 @@ class TestV3GeneratorOutput:
 class TestV3CLI:
     def test_help_flag_exits(self):
         """GEN-05: -h prints help and exits."""
-        import generate_library_v3 as gen_v3
+        import generate_library as gen_v3
         with pytest.raises(SystemExit) as exc_info:
             gen_v3.main(["-h"])
         assert exc_info.value.code == 2
@@ -140,8 +140,8 @@ class TestV3CLI:
 
     def test_spec_fetch_uses_version_3(self):
         """GEN-05: Spec fetch includes ?version=3."""
-        import generate_library_v3 as gen_v3
-        with patch("generate_library_v3.requests.get") as mock_get:
+        import generate_library as gen_v3
+        with patch("generate_library.requests.get") as mock_get:
             mock_response = MagicMock()
             mock_response.ok = True
             mock_response.json.return_value = {"paths": {}, "tags": [], "x-batchable-actions": []}
@@ -156,8 +156,8 @@ class TestV3CLI:
 
     def test_org_specific_fetch_uses_version_3(self):
         """GEN-05: Org-specific fetch includes ?version=3 and auth header."""
-        import generate_library_v3 as gen_v3
-        with patch("generate_library_v3.requests.get") as mock_get:
+        import generate_library as gen_v3
+        with patch("generate_library.requests.get") as mock_get:
             mock_response = MagicMock()
             mock_response.ok = True
             mock_response.json.return_value = {"paths": {}, "tags": [], "x-batchable-actions": []}
