@@ -1,4 +1,5 @@
 """TEST-02: Golden-file tests for v3 generator output."""
+
 import json
 import os
 import re
@@ -17,7 +18,7 @@ sys.path.insert(0, str(GENERATOR_DIR))
 def _extract_methods(content: str) -> dict[str, str]:
     """Extract method name -> signature from generated module."""
     methods = {}
-    pattern = re.compile(r'^\s{4}def (\w+)\(([^)]*)\):', re.MULTILINE)
+    pattern = re.compile(r"^\s{4}def (\w+)\(([^)]*)\):", re.MULTILINE)
     for match in pattern.finditer(content):
         name = match.group(1)
         signature = match.group(2)
@@ -27,13 +28,13 @@ def _extract_methods(content: str) -> dict[str, str]:
 
 def _extract_class_name(content: str) -> str | None:
     """Extract class name from module."""
-    match = re.search(r'^class (\w+)', content, re.MULTILINE)
+    match = re.search(r"^class (\w+)", content, re.MULTILINE)
     return match.group(1) if match else None
 
 
 def _generate_fresh_output(spec, output_dir):
     """Run v3 generator and return generated file contents."""
-    import generate_library_v3 as gen_v3
+    import generate_library as gen_v3
 
     original_cwd = os.getcwd()
     try:
@@ -45,7 +46,7 @@ def _generate_fresh_output(spec, output_dir):
             m.ok = True
             return m
 
-        with patch("generate_library_v3.requests.get", side_effect=mock_get):
+        with patch("generate_library.requests.get", side_effect=mock_get):
             gen_v3.generate_library(spec, "0.0.0-golden", False)
 
         sync = (output_dir / "meraki/api/networks.py").read_text()
@@ -95,8 +96,8 @@ class TestGoldenSync:
         for name in golden_methods:
             assert name in fresh_methods, f"Missing method: {name}"
             # Compare param names (ignore whitespace)
-            fresh_params = sorted(re.findall(r'\w+', fresh_methods[name]))
-            golden_params = sorted(re.findall(r'\w+', golden_methods[name]))
+            fresh_params = sorted(re.findall(r"\w+", fresh_methods[name]))
+            golden_params = sorted(re.findall(r"\w+", golden_methods[name]))
             assert fresh_params == golden_params, f"Signature mismatch for {name}"
 
     def test_no_kwargs_update_locals(self, fresh_output):
@@ -123,8 +124,8 @@ class TestGoldenAsync:
         golden_methods = _extract_methods(golden)
         for name in golden_methods:
             assert name in fresh_methods, f"Missing method: {name}"
-            fresh_params = sorted(re.findall(r'\w+', fresh_methods[name]))
-            golden_params = sorted(re.findall(r'\w+', golden_methods[name]))
+            fresh_params = sorted(re.findall(r"\w+", fresh_methods[name]))
+            golden_params = sorted(re.findall(r"\w+", golden_methods[name]))
             assert fresh_params == golden_params, f"Signature mismatch for {name}"
 
 

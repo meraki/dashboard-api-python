@@ -13,7 +13,7 @@ from unittest.mock import patch, MagicMock
 
 import pytest
 
-import generate_library as gen
+import generate_library_oasv2 as gen
 
 FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures"
 GOLDEN_DIR = Path(__file__).resolve().parent / "golden"
@@ -58,7 +58,7 @@ def _run_generation(synthetic_spec, output_dir):
     original_cwd = os.getcwd()
     try:
         os.chdir(output_dir)
-        with patch("generate_library.requests.get", side_effect=_mock_requests_get):
+        with patch("generate_library_oasv2.requests.get", side_effect=_mock_requests_get):
             gen.generate_library(
                 spec=synthetic_spec,
                 version_number="0.0.0-test",
@@ -95,7 +95,7 @@ class TestGoldenFiles:
         original_cwd = os.getcwd()
         try:
             os.chdir(output_dir)
-            with patch("generate_library.requests.get", side_effect=_mock_requests_get) as mocked:
+            with patch("generate_library_oasv2.requests.get", side_effect=_mock_requests_get) as mocked:
                 gen.generate_library(
                     spec=synthetic_spec,
                     version_number="0.0.0-test",

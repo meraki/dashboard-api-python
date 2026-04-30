@@ -12,11 +12,12 @@ import requests
 
 import common as common
 
-warnings.warn(
-    "generate_library_oasv2.py is deprecated and will be removed in v1.2. Use generate_library.py instead.",
-    DeprecationWarning,
-    stacklevel=2
-)
+if __name__ == "__main__" or "generate_library_oasv2" in sys.argv[0]:
+    warnings.warn(
+        "generate_library_oasv2.py is deprecated and will be removed in v1.2. Use generate_library.py instead.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
 
 READ_ME = """
 === PREREQUISITES ===

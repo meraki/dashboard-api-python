@@ -1,24 +1,19 @@
 import pytest
 
-import generate_library as gen
+import generate_library_oasv2 as gen
 
 
 class TestDocsUrl:
     def test_simple(self):
-        assert gen.docs_url("getOrganizations") == (
-            "https://developer.cisco.com/meraki/api-v1/#!get-organizations"
-        )
+        assert gen.docs_url("getOrganizations") == ("https://developer.cisco.com/meraki/api-v1/#!get-organizations")
 
     def test_multi_camel_case(self):
         assert gen.docs_url("getNetworkApplianceFirewallL3FirewallRules") == (
-            "https://developer.cisco.com/meraki/api-v1/#!"
-            "get-network-appliance-firewall-l-3-firewall-rules"
+            "https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-firewall-l-3-firewall-rules"
         )
 
     def test_all_lowercase(self):
-        assert gen.docs_url("lowercase") == (
-            "https://developer.cisco.com/meraki/api-v1/#!lowercase"
-        )
+        assert gen.docs_url("lowercase") == ("https://developer.cisco.com/meraki/api-v1/#!lowercase")
 
 
 class TestGeneratePaginationParameters:
@@ -35,9 +30,7 @@ class TestGeneratePaginationParameters:
         assert "event_log_end_time" in result
 
     def test_reverse_pagination_config_changes(self):
-        result = gen.generate_pagination_parameters(
-            "getOrganizationConfigurationChanges"
-        )
+        result = gen.generate_pagination_parameters("getOrganizationConfigurationChanges")
         assert "prev" in result["direction"]["description"]
         assert "event_log_end_time" not in result
 
@@ -238,9 +231,7 @@ class TestParseGetParams:
                 "description": "Starting after",
             },
         ]
-        array_params, call_line, path_params, query_params = gen.parse_get_params(
-            "getNetworkClients", parameters
-        )
+        array_params, call_line, path_params, query_params = gen.parse_get_params("getNetworkClients", parameters)
         assert "get_pages" in call_line
         assert "networkId" in path_params
         assert "perPage" in query_params
@@ -255,9 +246,7 @@ class TestParseGetParams:
                 "description": "Serial",
             },
         ]
-        array_params, call_line, path_params, query_params = gen.parse_get_params(
-            "getDevice", parameters
-        )
+        array_params, call_line, path_params, query_params = gen.parse_get_params("getDevice", parameters)
         assert call_line == "return self._session.get(metadata, resource)"
 
     def test_network_events_pagination(self):
@@ -299,9 +288,7 @@ class TestParsePostAndPutParams:
                 },
             },
         ]
-        body_params, call_line, path_params = gen.parse_post_and_put_params(
-            "post", "createNetwork", parameters
-        )
+        body_params, call_line, path_params = gen.parse_post_and_put_params("post", "createNetwork", parameters)
         assert "post" in call_line
         assert "payload" in call_line
         assert "name" in body_params
@@ -316,9 +303,7 @@ class TestParsePostAndPutParams:
                 "description": "Network ID",
             },
         ]
-        body_params, call_line, path_params = gen.parse_post_and_put_params(
-            "put", "updateThing", parameters
-        )
+        body_params, call_line, path_params = gen.parse_post_and_put_params("put", "updateThing", parameters)
         assert "payload" not in call_line
 
 
@@ -333,9 +318,7 @@ class TestParseDeleteParams:
                 "description": "Network ID",
             },
         ]
-        call_line, path_params, query_params = gen.parse_delete_params(
-            "deleteNetwork", parameters
-        )
+        call_line, path_params, query_params = gen.parse_delete_params("deleteNetwork", parameters)
         assert call_line == "return self._session.delete(metadata, resource)"
         assert "networkId" in path_params
 
@@ -356,8 +339,6 @@ class TestParseDeleteParams:
                 "description": "Force delete",
             },
         ]
-        call_line, path_params, query_params = gen.parse_delete_params(
-            "deleteNetwork", parameters
-        )
+        call_line, path_params, query_params = gen.parse_delete_params("deleteNetwork", parameters)
         assert "params" in call_line
         assert "force" in query_params
