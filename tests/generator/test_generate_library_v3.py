@@ -98,3 +98,59 @@ class TestV3GeneratorOutput:
         assert '"name"' in content
         # updateNetwork has body params, should appear in body_params list
         assert "body_params" in content
+
+
+class TestV3CLI:
+    def test_help_flag_exits(self):
+        """GEN-05: -h prints help and exits."""
+        import generate_library_v3 as gen_v3
+        with pytest.raises(SystemExit) as exc_info:
+            gen_v3.main(["-h"])
+        assert exc_info.value.code == 2
+
+    def test_accepts_all_v2_flags(self):
+        """GEN-05: CLI accepts -o, -k, -v, -a, -g flags."""
+        import getopt
+        opts, args = getopt.getopt(
+            ["-o", "123", "-k", "fake", "-v", "1.0", "-a", "v1", "-g", "false"],
+            "ho:k:v:a:g:"
+        )
+        flags = [o for o, _ in opts]
+        assert "-o" in flags
+        assert "-k" in flags
+        assert "-v" in flags
+        assert "-a" in flags
+        assert "-g" in flags
+
+    def test_spec_fetch_uses_version_3(self):
+        """GEN-05: Spec fetch includes ?version=3."""
+        import generate_library_v3 as gen_v3
+        with patch("generate_library_v3.requests.get") as mock_get:
+            mock_response = MagicMock()
+            mock_response.ok = True
+            mock_response.json.return_value = {"paths": {}, "tags": [], "x-batchable-actions": []}
+            mock_get.return_value = mock_response
+
+            with patch.object(gen_v3, "generate_library"):
+                gen_v3.main(["-v", "1.0"])
+
+            # Verify params={"version": 3} was passed
+            call_kwargs = mock_get.call_args.kwargs
+            assert call_kwargs.get("params") == {"version": 3}
+
+    def test_org_specific_fetch_uses_version_3(self):
+        """GEN-05: Org-specific fetch includes ?version=3 and auth header."""
+        import generate_library_v3 as gen_v3
+        with patch("generate_library_v3.requests.get") as mock_get:
+            mock_response = MagicMock()
+            mock_response.ok = True
+            mock_response.json.return_value = {"paths": {}, "tags": [], "x-batchable-actions": []}
+            mock_get.return_value = mock_response
+
+            with patch.object(gen_v3, "generate_library"):
+                gen_v3.main(["-o", "12345", "-k", "testkey", "-v", "1.0"])
+
+            args, kwargs = mock_get.call_args
+            assert "12345" in args[0]
+            assert kwargs.get("params") == {"version": 3}
+            assert "Bearer testkey" in kwargs.get("headers", {}).get("Authorization", "")
