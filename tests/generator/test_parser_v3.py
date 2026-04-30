@@ -3,7 +3,6 @@ import pytest
 from pathlib import Path
 
 from parser_v3 import resolve_ref, clear_cache, _ref_cache, parse_request_body, parse_params_v3
-from generate_library import generate_pagination_parameters, return_params
 
 FIXTURES = Path(__file__).parent / "fixtures"
 

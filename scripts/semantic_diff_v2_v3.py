@@ -222,7 +222,7 @@ def run_v3_generator(spec: dict, output_dir: Path):
             patch("generate_library.requests.get", side_effect=mock_requests_get),
             contextlib.redirect_stdout(open(os.devnull, "w")),
         ):
-            gen_v3.generate_library(spec, "0.0.0-diff", False)
+            gen_v3.generate_library(spec, "0.0.0-diff", "v1", False)
     finally:
         os.chdir(original)
 
