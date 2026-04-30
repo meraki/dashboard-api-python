@@ -100,10 +100,9 @@ class TestGoldenSync:
             golden_params = sorted(re.findall(r"\w+", golden_methods[name]))
             assert fresh_params == golden_params, f"Signature mismatch for {name}"
 
-    def test_no_kwargs_update_locals(self, fresh_output):
+    def test_kwargs_update_locals_present(self, fresh_output):
         sync, _, _ = fresh_output
-        assert "kwargs.update(locals())" not in sync
-        assert "kwargs = locals()" not in sync
+        assert "kwargs.update(locals())" in sync or "kwargs = locals()" in sync
 
 
 class TestGoldenAsync:

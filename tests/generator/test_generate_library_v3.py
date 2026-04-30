@@ -48,6 +48,7 @@ def _run_v3_generation(v3_spec, output_dir):
             gen_v3.generate_library(
                 spec=v3_spec,
                 version_number="0.0.0-test",
+                api_version_number="v1",
                 is_github_action=False,
             )
     finally:
@@ -64,6 +65,7 @@ def _run_v3_generation_with_stubs(v3_spec, output_dir):
             gen_v3.generate_library(
                 spec=v3_spec,
                 version_number="0.0.0-test",
+                api_version_number="v1",
                 is_github_action=False,
                 generate_stubs=True,
             )
