@@ -49,6 +49,7 @@ from meraki.config import (
     MERAKI_PYTHON_SDK_CALLER,
     USE_ITERATOR_FOR_GET_PAGES,
     AIO_MAXIMUM_CONCURRENT_REQUESTS,
+    VALIDATE_KWARGS,
 )
 
 
@@ -79,6 +80,7 @@ class AsyncDashboardAPI:
     - be_geo_id (string): optional partner identifier for API usage tracking; can also be set as an environment variable BE_GEO_ID
     - caller (string): optional identifier for API usage tracking; can also be set as an environment variable MERAKI_PYTHON_SDK_CALLER
     - use_iterator_for_get_pages (boolean): list* methods will return an iterator with each object instead of a complete list with all items
+    - validate_kwargs (boolean): log warnings when unrecognized kwargs are passed to API methods
     """
 
     def __init__(
@@ -106,6 +108,7 @@ class AsyncDashboardAPI:
         use_iterator_for_get_pages=USE_ITERATOR_FOR_GET_PAGES,
         inherit_logging_config=INHERIT_LOGGING_CONFIG,
         maximum_concurrent_requests=AIO_MAXIMUM_CONCURRENT_REQUESTS,
+        validate_kwargs=VALIDATE_KWARGS,
     ):
         # Check API key
         api_key = api_key or os.environ.get(API_KEY_ENVIRONMENT_VARIABLE)
@@ -172,6 +175,7 @@ class AsyncDashboardAPI:
             caller=caller,
             use_iterator_for_get_pages=use_iterator_for_get_pages,
             maximum_concurrent_requests=maximum_concurrent_requests,
+            validate_kwargs=validate_kwargs,
         )
 
         # API endpoints by section

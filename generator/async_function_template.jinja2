@@ -47,4 +47,15 @@
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         {% endif %}
+        {% if query_params|length > 0 or body_params|length > 0 %}
+        if self._session._validate_kwargs:
+            all_params = {% if query_params|length > 0 %}query_params{% else %}[]{% endif %}{% if array_params|length > 0 %} + array_params{% endif %}{% if body_params|length > 0 %} + body_params{% endif %}
+
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"{{ operation }}: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        {% endif %}
         {{ call_line }}

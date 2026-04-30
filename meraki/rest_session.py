@@ -144,6 +144,7 @@ class RestSession(object):
         be_geo_id=BE_GEO_ID,
         caller=MERAKI_PYTHON_SDK_CALLER,
         use_iterator_for_get_pages=USE_ITERATOR_FOR_GET_PAGES,
+        validate_kwargs=False,
     ):
         super(RestSession, self).__init__()
 
@@ -165,6 +166,7 @@ class RestSession(object):
         self._be_geo_id = be_geo_id
         self._caller = caller
         self.use_iterator_for_get_pages = use_iterator_for_get_pages
+        self._validate_kwargs = validate_kwargs
 
         # Initialize a new `requests` session
         self._req_session = requests.session()

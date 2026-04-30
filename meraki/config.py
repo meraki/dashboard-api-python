@@ -94,3 +94,6 @@ BE_GEO_ID = ""
 # If you are an official ecosystem partner, this is required.
 # For more guidance, please refer to https://developer.cisco.com/meraki/api-v1/user-agents-overview/
 MERAKI_PYTHON_SDK_CALLER = ""
+
+# Log a warning when unrecognized kwargs are passed to API methods?
+VALIDATE_KWARGS = False

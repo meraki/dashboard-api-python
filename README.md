@@ -35,6 +35,7 @@ convenient processes and options for you automatically.
 * Get all (or a specified number of) pages of data with built-in pagination control
 * Tweak settings such as maximum retries, certificate path, suppress logging, and other options
 * Simulate POST/PUT/DELETE calls to preview first, so that network configuration does not get changed
+* Optional kwarg validation that warns when unrecognized keyword arguments are silently ignored
 
 ## Setup
 
@@ -104,6 +105,20 @@ You can find fully working example scripts in the **examples** folder.
 | Script                  | Purpose                                                                                                                                                                                               |
 |-------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **org_wide_clients.py** | That code collects the clients of all networks, in all orgs to which the key has access. No changes are made, since only GET endpoints are called, and the data is written to local CSV output files. |
+
+### Keyword argument validation
+
+All optional parameters are passed as keyword arguments (`**kwargs`). By default, if you pass a misspelled or
+unsupported kwarg, it is silently ignored. Enable `validate_kwargs` to log a warning when this happens:
+
+```python
+dashboard = meraki.DashboardAPI(validate_kwargs=True)
+
+# This will log a warning: "updateNetwork: ignoring unrecognized kwargs: ['nme']"
+dashboard.networks.updateNetwork(networkId, nme="HQ")
+```
+
+This is off by default for backwards compatibility and zero performance overhead in production.
 
 ## AsyncIO
 
