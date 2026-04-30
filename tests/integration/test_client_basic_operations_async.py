@@ -2,6 +2,8 @@ import pytest
 
 import meraki.aio
 
+pytestmark = pytest.mark.xdist_group("basic_operations_async")
+
 
 @pytest.fixture(scope="session")
 async def dashboard(api_key):

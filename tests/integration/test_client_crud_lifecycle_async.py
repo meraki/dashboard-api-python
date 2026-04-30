@@ -5,6 +5,8 @@ import pytest
 
 import meraki.aio
 
+pytestmark = pytest.mark.xdist_group("crud_lifecycle_async")
+
 
 @pytest.fixture(scope="session")
 def version_salt():
