@@ -93,12 +93,8 @@ def encode_params(_, data):
                     for k_1, v_1 in v.items():
                         result.append(
                             (
-                                (k + k_1).encode("utf-8")
-                                if isinstance(k, str)
-                                else k_1,
-                                (v + v_1).encode("utf-8")
-                                if isinstance(v, str)
-                                else v_1,
+                                (k + k_1).encode("utf-8") if isinstance(k, str) else k_1,
+                                (v + v_1).encode("utf-8") if isinstance(v, str) else v_1,
                             )
                         )
         # Return URL encoded string
@@ -184,8 +180,7 @@ class RestSession(object):
         self._req_session.headers = {
             "Authorization": "Bearer " + self._api_key,
             "Content-Type": "application/json",
-            "User-Agent": f"python-meraki/{self._version} "
-            + validate_user_agent(self._be_geo_id, self._caller),
+            "User-Agent": f"python-meraki/{self._version} " + validate_user_agent(self._be_geo_id, self._caller),
         }
 
         # Log API calls
@@ -197,9 +192,7 @@ class RestSession(object):
         self._parameters.pop("__class__")
         self._parameters["api_key"] = "*" * 36 + self._api_key[-4:]
         if self._logger:
-            self._logger.info(
-                f"Meraki dashboard API session initialized with these parameters: {self._parameters}"
-            )
+            self._logger.info(f"Meraki dashboard API session initialized with these parameters: {self._parameters}")
 
     @property
     def use_iterator_for_get_pages(self):
@@ -239,25 +232,19 @@ class RestSession(object):
                         response.close()
                     if self._logger:
                         self._logger.info(f"{method} {abs_url}")
-                    response = self._req_session.request(
-                        method, abs_url, allow_redirects=False, **kwargs
-                    )
+                    response = self._req_session.request(method, abs_url, allow_redirects=False, **kwargs)
                     reason = response.reason if response.reason else ""
                     status = response.status_code
                 except requests.exceptions.RequestException as e:
                     if self._logger:
-                        self._logger.warning(
-                            f"{tag}, {operation} - {e}, retrying in 1 second"
-                        )
+                        self._logger.warning(f"{tag}, {operation} - {e}, retrying in 1 second")
                     time.sleep(1)
                     retries -= 1
                     if retries == 0:
                         if e.response and e.response.status_code:
                             raise APIError(
                                 metadata,
-                                APIResponseError(
-                                    e.__class__.__name__, e.response.status_code, str(e)
-                                ),
+                                APIResponseError(e.__class__.__name__, e.response.status_code, str(e)),
                             )
                         else:
                             raise APIError(
@@ -276,14 +263,10 @@ class RestSession(object):
                         if "page" in metadata:
                             counter = metadata["page"]
                             if self._logger:
-                                self._logger.info(
-                                    f"{tag}, {operation}; page {counter} - {status} {reason}"
-                                )
+                                self._logger.info(f"{tag}, {operation}; page {counter} - {status} {reason}")
                         else:
                             if self._logger:
-                                self._logger.info(
-                                    f"{tag}, {operation} - {status} {reason}"
-                                )
+                                self._logger.info(f"{tag}, {operation} - {status} {reason}")
                         # For non-empty response to GET, ensure valid JSON
                         try:
                             if method == "GET" and response.content.strip():
@@ -291,9 +274,7 @@ class RestSession(object):
                             return response
                         except json.decoder.JSONDecodeError as e:
                             if self._logger:
-                                self._logger.warning(
-                                    f"{tag}, {operation} - {e}, retrying in 1 second"
-                                )
+                                self._logger.warning(f"{tag}, {operation} - {e}, retrying in 1 second")
                             time.sleep(1)
                             retries -= 1
                             if retries == 0:
@@ -307,13 +288,9 @@ class RestSession(object):
                             if "Retry-After" in response.headers:
                                 wait = int(response.headers["Retry-After"])
                             else:
-                                wait = random.randint(
-                                    1, self._nginx_429_retry_wait_time
-                                )
+                                wait = random.randint(1, self._nginx_429_retry_wait_time)
                             if self._logger:
-                                self._logger.warning(
-                                    f"{tag}, {operation} - {status} {reason}, retrying in {wait} seconds"
-                                )
+                                self._logger.warning(f"{tag}, {operation} - {status} {reason}, retrying in {wait} seconds")
                             time.sleep(wait)
                             retries -= 1
                             if retries == 0:
@@ -324,18 +301,14 @@ class RestSession(object):
                     # Handle 5xx errors
                     case status if 500 <= status:
                         if self._logger:
-                            self._logger.warning(
-                                f"{tag}, {operation} - {status} {reason}, retrying in 1 second"
-                            )
+                            self._logger.warning(f"{tag}, {operation} - {status} {reason}, retrying in 1 second")
                         time.sleep(1)
                         retries -= 1
                         if retries == 0:
                             raise APIError(metadata, response)
                     # Handle other 4xx errors
                     case status if status != 429 and 400 <= status < 500:
-                        retries = self.handle_4xx_errors(
-                            metadata, operation, reason, response, retries, status, tag
-                        )
+                        retries = self.handle_4xx_errors(metadata, operation, reason, response, retries, status, tag)
 
         return response
 
@@ -346,9 +319,7 @@ class RestSession(object):
             kwargs.setdefault("proxies", {"https": self._requests_proxy})
         kwargs.setdefault("timeout", self._single_request_timeout)
 
-    def handle_4xx_errors(
-        self, metadata, operation, reason, response, retries, status, tag
-    ):
+    def handle_4xx_errors(self, metadata, operation, reason, response, retries, status, tag):
         try:
             message = response.json()
             message_is_dict = True
@@ -367,9 +338,7 @@ class RestSession(object):
             if network_delete_concurrency_error_text in message["errors"][0]:
                 wait = random.randint(30, self._network_delete_retry_wait_time)
                 if self._logger:
-                    self._logger.warning(
-                        f"{tag}, {operation} - {status} {reason}, retrying in {wait} seconds"
-                    )
+                    self._logger.warning(f"{tag}, {operation} - {status} {reason}, retrying in {wait} seconds")
                 time.sleep(wait)
                 retries -= 1
                 if retries == 0:
@@ -378,16 +347,10 @@ class RestSession(object):
         # Next, we check for action batch concurrency errors
         # message['errors'][0] is the first error, and it contains helpful text
         # here we use it to confirm that the 400 error is related to concurrent requests
-        elif (
-            message_is_dict
-            and "errors" in message.keys()
-            and action_batch_concurrency_error_text in message["errors"][0]
-        ):
+        elif message_is_dict and "errors" in message.keys() and action_batch_concurrency_error_text in message["errors"][0]:
             wait = self._action_batch_retry_wait_time
             if self._logger:
-                self._logger.warning(
-                    f"{tag}, {operation} - {status} {reason}, retrying in {wait} seconds"
-                )
+                self._logger.warning(f"{tag}, {operation} - {status} {reason}, retrying in {wait} seconds")
             time.sleep(wait)
             retries -= 1
             if retries == 0:
@@ -397,9 +360,7 @@ class RestSession(object):
         elif self._retry_4xx_error:
             wait = random.randint(1, self._retry_4xx_error_wait_time)
             if self._logger:
-                self._logger.warning(
-                    f"{tag}, {operation} - {status} {reason}, retrying in {wait} seconds"
-                )
+                self._logger.warning(f"{tag}, {operation} - {status} {reason}, retrying in {wait} seconds")
             time.sleep(wait)
             retries -= 1
             if retries == 0:
@@ -424,17 +385,6 @@ class RestSession(object):
             response.close()
         return ret
 
-    def get_pages(
-        self,
-        metadata,
-        url,
-        params=None,
-        total_pages=-1,
-        direction="next",
-        event_log_end_time=None,
-    ):
-        pass
-
     def _get_pages_iterator(
         self,
         metadata,
@@ -452,9 +402,7 @@ class RestSession(object):
             raise SessionInputError(
                 "total_pages",
                 total_pages,
-                "total_pages must be either an"
-                " integer or 'all' as a string (remember to add the"
-                " quotation marks).",
+                "total_pages must be either an integer or 'all' as a string (remember to add the quotation marks).",
                 None,
             )
         metadata["page"] = 1
@@ -470,12 +418,8 @@ class RestSession(object):
             if direction == "next" and "next" in links:
                 # Prevent getNetworkEvents from infinite loop as time goes forward
                 if metadata["operation"] == "getNetworkEvents":
-                    starting_after = urllib.parse.unquote(
-                        str(links["next"]["url"]).split("startingAfter=")[1]
-                    )
-                    delta = datetime.now(timezone.utc) - datetime.fromisoformat(
-                        starting_after
-                    )
+                    starting_after = urllib.parse.unquote(str(links["next"]["url"]).split("startingAfter=")[1])
+                    delta = datetime.now(timezone.utc) - datetime.fromisoformat(starting_after)
                     # Break out of loop if startingAfter returned from next link is within 5 minutes of current time
                     if delta.total_seconds() < 300:
                         break
@@ -488,9 +432,7 @@ class RestSession(object):
             elif direction == "prev" and "prev" in links:
                 # Prevent getNetworkEvents from infinite loop as time goes backward (to epoch 0)
                 if metadata["operation"] == "getNetworkEvents":
-                    ending_before = urllib.parse.unquote(
-                        str(links["prev"]["url"]).split("endingBefore=")[1]
-                    )
+                    ending_before = urllib.parse.unquote(str(links["prev"]["url"]).split("endingBefore=")[1])
                     # Break out of loop if endingBefore returned from prev link is before 2014
                     if ending_before < "2014-01-01":
                         break
@@ -540,9 +482,7 @@ class RestSession(object):
             raise SessionInputError(
                 "total_pages",
                 total_pages,
-                "total_pages must be either an"
-                " integer or 'all' as a string (remember to add the"
-                " quotation marks).",
+                "total_pages must be either an integer or 'all' as a string (remember to add the quotation marks).",
                 None,
             )
 
@@ -557,11 +497,7 @@ class RestSession(object):
             results = response.json()
 
         # For event log endpoint when using 'next' direction, so results/events are sorted chronologically
-        if (
-            isinstance(results, dict)
-            and metadata["operation"] == "getNetworkEvents"
-            and direction == "next"
-        ):
+        if isinstance(results, dict) and metadata["operation"] == "getNetworkEvents" and direction == "next":
             results["events"] = results["events"][::-1]
 
         # Get additional pages if more than one requested
@@ -574,12 +510,8 @@ class RestSession(object):
             if direction == "next" and "next" in links:
                 # Prevent getNetworkEvents from infinite loop as time goes forward
                 if metadata["operation"] == "getNetworkEvents":
-                    starting_after = urllib.parse.unquote(
-                        links["next"]["url"].split("startingAfter=")[1]
-                    )
-                    delta = datetime.now(timezone.utc) - datetime.fromisoformat(
-                        starting_after
-                    )
+                    starting_after = urllib.parse.unquote(links["next"]["url"].split("startingAfter=")[1])
+                    delta = datetime.now(timezone.utc) - datetime.fromisoformat(starting_after)
                     # Break out of loop if startingAfter returned from next link is within 5 minutes of current time
                     if delta.total_seconds() < 300:
                         break
@@ -592,9 +524,7 @@ class RestSession(object):
             elif direction == "prev" and "prev" in links:
                 # Prevent getNetworkEvents from infinite loop as time goes backward (to epoch 0)
                 if metadata["operation"] == "getNetworkEvents":
-                    ending_before = urllib.parse.unquote(
-                        links["prev"]["url"].split("endingBefore=")[1]
-                    )
+                    ending_before = urllib.parse.unquote(links["prev"]["url"].split("endingBefore=")[1])
                     # Break out of loop if endingBefore returned from prev link is before 2014
                     if ending_before < "2014-01-01":
                         break
@@ -610,15 +540,14 @@ class RestSession(object):
             elif isinstance(results, dict) and "items" in results:
                 results["items"].extend(response.json()["items"])
                 if "meta" in results:
-                    results["meta"]["counts"]["items"]["remaining"] = response.json()[
-                        "meta"
-                    ]["counts"]["items"]["remaining"]
+                    results["meta"]["counts"]["items"]["remaining"] = response.json()["meta"]["counts"]["items"]["remaining"]
             # For event log endpoint
             elif isinstance(results, dict):
                 try:
                     start = response.json()["pageStartAt"]
                 except KeyError:
-                    print(response.headers)
+                    if self._logger:
+                        self._logger.warning(f"pageStartAt missing from response: {response.headers}")
                 end = response.json()["pageEndAt"]
                 events = response.json()["events"]
                 if direction == "next":

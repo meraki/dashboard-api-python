@@ -7,6 +7,49 @@ import pytest
 from meraki.exceptions import AsyncAPIError
 
 
+class _AwaitableValue:
+    """A wrapper that makes a value both usable directly and awaitable.
+
+    This is needed because the async rest session does `await response.json()`
+    while APIError.__init__ calls `response.json()` synchronously.
+    """
+
+    def __init__(self, value):
+        self._value = value
+
+    def __await__(self):
+        async def _resolve():
+            return self._value
+
+        return _resolve().__await__()
+
+    def __bool__(self):
+        return bool(self._value)
+
+    def __getitem__(self, key):
+        return self._value[key]
+
+    def __contains__(self, item):
+        return item in self._value
+
+    def __eq__(self, other):
+        if isinstance(other, _AwaitableValue):
+            return self._value == other._value
+        return self._value == other
+
+    def __repr__(self):
+        return repr(self._value)
+
+    def keys(self):
+        return self._value.keys()
+
+    def values(self):
+        return self._value.values()
+
+    def items(self):
+        return self._value.items()
+
+
 async def _noop_sleep(*args, **kwargs):
     pass
 
@@ -149,17 +192,13 @@ def _metadata(operation="getOrganizations", tags=None):
     return {"tags": tags or ["organizations"], "operation": operation}
 
 
-def _mock_aio_response(
-    status=200, json_data=None, reason="OK", headers=None, links=None
-):
+def _mock_aio_response(status=200, json_data=None, reason="OK", headers=None, links=None):
     resp = MagicMock()
     resp.status = status
     resp.reason = reason
     resp.headers = headers or {}
     resp.links = links or {}
-    resp.json = AsyncMock(
-        return_value=json_data if json_data is not None else {"ok": True}
-    )
+    resp.json = MagicMock(return_value=_AwaitableValue(json_data if json_data is not None else {"ok": True}))
     resp.text = AsyncMock(return_value="")
     resp.release = MagicMock()
     resp.__aenter__ = AsyncMock(return_value=resp)
@@ -245,9 +284,7 @@ class TestAsyncURLHandling:
         resp_200 = _mock_aio_response(200)
         async_session._req_session.request = AsyncMock(return_value=resp_200)
 
-        await async_session._request(
-            _metadata(), "GET", "https://n123.meraki.com/api/v1/orgs"
-        )
+        await async_session._request(_metadata(), "GET", "https://n123.meraki.com/api/v1/orgs")
         call_args = async_session._req_session.request.call_args[0]
         assert call_args[1] == "https://n123.meraki.com/api/v1/orgs"
 
@@ -256,9 +293,7 @@ class TestAsyncURLHandling:
         resp_200 = _mock_aio_response(200)
         async_session._req_session.request = AsyncMock(return_value=resp_200)
 
-        await async_session._request(
-            _metadata(), "GET", "https://n123.meraki.cn/api/v1/orgs"
-        )
+        await async_session._request(_metadata(), "GET", "https://n123.meraki.cn/api/v1/orgs")
         call_args = async_session._req_session.request.call_args[0]
         assert call_args[1] == "https://n123.meraki.cn/api/v1/orgs"
 
@@ -282,9 +317,7 @@ class TestAsyncURLHandling:
 class TestAsyncRetry429:
     @pytest.mark.asyncio
     async def test_retry_on_429_with_retry_after(self, async_session):
-        resp_429 = _mock_aio_response(
-            429, reason="Too Many Requests", headers={"Retry-After": "1"}
-        )
+        resp_429 = _mock_aio_response(429, reason="Too Many Requests", headers={"Retry-After": "1"})
         resp_200 = _mock_aio_response(200)
         async_session._req_session.request = AsyncMock(side_effect=[resp_429, resp_200])
 
@@ -308,9 +341,7 @@ class TestAsyncRetry429:
     @pytest.mark.asyncio
     async def test_429_raises_after_max_retries(self, async_session):
         async_session._maximum_retries = 2
-        resp_429 = _mock_aio_response(
-            429, reason="Too Many Requests", headers={"Retry-After": "1"}
-        )
+        resp_429 = _mock_aio_response(429, reason="Too Many Requests", headers={"Retry-After": "1"})
         async_session._req_session.request = AsyncMock(return_value=resp_429)
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
@@ -350,9 +381,7 @@ class TestAsyncConnectionErrors:
     @pytest.mark.asyncio
     async def test_retry_on_exception(self, async_session):
         resp_200 = _mock_aio_response(200)
-        async_session._req_session.request = AsyncMock(
-            side_effect=[Exception("Connection refused"), resp_200]
-        )
+        async_session._req_session.request = AsyncMock(side_effect=[Exception("Connection refused"), resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             result = await async_session._request(_metadata(), "GET", "/organizations")
@@ -361,9 +390,7 @@ class TestAsyncConnectionErrors:
     @pytest.mark.asyncio
     async def test_exception_raises_after_max_retries(self, async_session):
         async_session._maximum_retries = 2
-        async_session._req_session.request = AsyncMock(
-            side_effect=Exception("Connection refused")
-        )
+        async_session._req_session.request = AsyncMock(side_effect=Exception("Connection refused"))
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             with pytest.raises(AsyncAPIError):
@@ -376,9 +403,7 @@ class TestAsyncConnectionErrors:
 class TestAsync4xx:
     @pytest.mark.asyncio
     async def test_generic_4xx_raises(self, async_session):
-        resp_400 = _mock_aio_response(
-            400, json_data={"errors": ["bad"]}, reason="Bad Request"
-        )
+        resp_400 = _mock_aio_response(400, json_data={"errors": ["bad"]}, reason="Bad Request")
         async_session._req_session.request = AsyncMock(return_value=resp_400)
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
@@ -388,27 +413,19 @@ class TestAsync4xx:
     @pytest.mark.asyncio
     async def test_retry_4xx_when_enabled(self, async_session):
         async_session._retry_4xx_error = True
-        resp_400 = _mock_aio_response(
-            400, json_data={"errors": ["something"]}, reason="Bad Request"
-        )
+        resp_400 = _mock_aio_response(400, json_data={"errors": ["something"]}, reason="Bad Request")
         resp_200 = _mock_aio_response(200)
         async_session._req_session.request = AsyncMock(side_effect=[resp_400, resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             with patch("random.randint", return_value=1):
-                result = await async_session._request(
-                    _metadata(), "GET", "/organizations"
-                )
+                result = await async_session._request(_metadata(), "GET", "/organizations")
         assert result.status == 200
 
     @pytest.mark.asyncio
     async def test_network_delete_concurrency_retries(self, async_session):
         async_session._maximum_retries = 3
-        error_msg = {
-            "errors": [
-                "This may be due to concurrent requests to delete networks. Please retry."
-            ]
-        }
+        error_msg = {"errors": ["This may be due to concurrent requests to delete networks. Please retry."]}
         resp_400 = _mock_aio_response(400, json_data=error_msg, reason="Bad Request")
         resp_200 = _mock_aio_response(200)
         async_session._req_session.request = AsyncMock(side_effect=[resp_400, resp_200])
@@ -424,11 +441,7 @@ class TestAsync4xx:
     @pytest.mark.asyncio
     async def test_network_delete_concurrency_exhausts_retries(self, async_session):
         async_session._maximum_retries = 2
-        error_msg = {
-            "errors": [
-                "This may be due to concurrent requests to delete networks. Please retry."
-            ]
-        }
+        error_msg = {"errors": ["This may be due to concurrent requests to delete networks. Please retry."]}
         resp_400 = _mock_aio_response(400, json_data=error_msg, reason="Bad Request")
         async_session._req_session.request = AsyncMock(return_value=resp_400)
 
@@ -445,9 +458,7 @@ class TestAsync4xx:
     @pytest.mark.asyncio
     async def test_action_batch_concurrency_retries(self, async_session):
         error_msg = {
-            "errors": [
-                "Too many concurrently executing batches. Maximum is 5 confirmed but not yet executed batches."
-            ]
+            "errors": ["Too many concurrently executing batches. Maximum is 5 confirmed but not yet executed batches."]
         }
         resp_400 = _mock_aio_response(400, json_data=error_msg, reason="Bad Request")
         resp_200 = _mock_aio_response(200)
@@ -483,11 +494,7 @@ class TestAsync4xx:
         resp_400.reason = "Bad Request"
         resp_400.headers = {}
         resp_400.links = {}
-        resp_400.json = AsyncMock(
-            side_effect=aiohttp.client_exceptions.ContentTypeError(
-                MagicMock(), MagicMock()
-            )
-        )
+        resp_400.json = AsyncMock(side_effect=aiohttp.client_exceptions.ContentTypeError(MagicMock(), MagicMock()))
         resp_400.text = AsyncMock(side_effect=Exception("read error"))
         resp_400.release = MagicMock()
         resp_400.__aenter__ = AsyncMock(return_value=resp_400)
@@ -501,9 +508,7 @@ class TestAsync4xx:
 
     @pytest.mark.asyncio
     async def test_4xx_non_dict_json_response(self, async_session):
-        resp_400 = _mock_aio_response(
-            400, json_data="just a string", reason="Bad Request"
-        )
+        resp_400 = _mock_aio_response(400, json_data="just a string", reason="Bad Request")
         async_session._req_session.request = AsyncMock(return_value=resp_400)
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
@@ -568,9 +573,7 @@ class TestAsyncSimulate:
     @pytest.mark.asyncio
     async def test_simulate_with_logger(self, async_session_with_logger):
         async_session_with_logger._simulate = True
-        result = await async_session_with_logger._request(
-            _metadata(), "POST", "/organizations"
-        )
+        result = await async_session_with_logger._request(_metadata(), "POST", "/organizations")
         assert result is None
         assert async_session_with_logger._logger.info.call_count >= 1
 
@@ -582,27 +585,19 @@ class TestAsync2xxResponse:
     @pytest.mark.asyncio
     async def test_success_with_page_metadata(self, async_session_with_logger):
         resp_200 = _mock_aio_response(200, json_data=[{"id": 1}])
-        async_session_with_logger._req_session.request = AsyncMock(
-            return_value=resp_200
-        )
+        async_session_with_logger._req_session.request = AsyncMock(return_value=resp_200)
 
         metadata = _metadata()
         metadata["page"] = 3
-        result = await async_session_with_logger._request(
-            metadata, "GET", "/organizations"
-        )
+        result = await async_session_with_logger._request(metadata, "GET", "/organizations")
         assert result.status == 200
 
     @pytest.mark.asyncio
     async def test_success_without_page_metadata(self, async_session_with_logger):
         resp_200 = _mock_aio_response(200, json_data=[{"id": 1}])
-        async_session_with_logger._req_session.request = AsyncMock(
-            return_value=resp_200
-        )
+        async_session_with_logger._req_session.request = AsyncMock(return_value=resp_200)
 
-        result = await async_session_with_logger._request(
-            _metadata(), "GET", "/organizations"
-        )
+        result = await async_session_with_logger._request(_metadata(), "GET", "/organizations")
         assert result.status == 200
 
     @pytest.mark.asyncio
@@ -612,18 +607,14 @@ class TestAsync2xxResponse:
         resp_bad_json.reason = "OK"
         resp_bad_json.headers = {}
         resp_bad_json.links = {}
-        resp_bad_json.json = AsyncMock(
-            side_effect=json.decoder.JSONDecodeError("", "", 0)
-        )
+        resp_bad_json.json = AsyncMock(side_effect=json.decoder.JSONDecodeError("", "", 0))
         resp_bad_json.release = MagicMock()
         resp_bad_json.__aenter__ = AsyncMock(return_value=resp_bad_json)
         resp_bad_json.__aexit__ = AsyncMock(return_value=False)
 
         resp_200 = _mock_aio_response(200, json_data={"ok": True})
 
-        async_session._req_session.request = AsyncMock(
-            side_effect=[resp_bad_json, resp_200]
-        )
+        async_session._req_session.request = AsyncMock(side_effect=[resp_bad_json, resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             result = await async_session._request(_metadata(), "GET", "/organizations")
@@ -655,9 +646,7 @@ class TestAsyncRequestLogging:
     @pytest.mark.asyncio
     async def test_logs_debug_metadata(self, async_session_with_logger):
         resp_200 = _mock_aio_response(200)
-        async_session_with_logger._req_session.request = AsyncMock(
-            return_value=resp_200
-        )
+        async_session_with_logger._req_session.request = AsyncMock(return_value=resp_200)
 
         await async_session_with_logger._request(_metadata(), "GET", "/organizations")
         async_session_with_logger._logger.debug.assert_called()
@@ -665,73 +654,49 @@ class TestAsyncRequestLogging:
     @pytest.mark.asyncio
     async def test_logs_request_url(self, async_session_with_logger):
         resp_200 = _mock_aio_response(200)
-        async_session_with_logger._req_session.request = AsyncMock(
-            return_value=resp_200
-        )
+        async_session_with_logger._req_session.request = AsyncMock(return_value=resp_200)
 
         await async_session_with_logger._request(_metadata(), "GET", "/organizations")
-        info_calls = [
-            str(c) for c in async_session_with_logger._logger.info.call_args_list
-        ]
+        info_calls = [str(c) for c in async_session_with_logger._logger.info.call_args_list]
         assert any("GET" in c for c in info_calls)
 
     @pytest.mark.asyncio
     async def test_logs_warning_on_connection_error(self, async_session_with_logger):
         resp_200 = _mock_aio_response(200)
-        async_session_with_logger._req_session.request = AsyncMock(
-            side_effect=[Exception("timeout"), resp_200]
-        )
+        async_session_with_logger._req_session.request = AsyncMock(side_effect=[Exception("timeout"), resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
-            await async_session_with_logger._request(
-                _metadata(), "GET", "/organizations"
-            )
+            await async_session_with_logger._request(_metadata(), "GET", "/organizations")
         async_session_with_logger._logger.warning.assert_called()
 
     @pytest.mark.asyncio
     async def test_logs_warning_on_429(self, async_session_with_logger):
-        resp_429 = _mock_aio_response(
-            429, reason="Too Many Requests", headers={"Retry-After": "1"}
-        )
+        resp_429 = _mock_aio_response(429, reason="Too Many Requests", headers={"Retry-After": "1"})
         resp_200 = _mock_aio_response(200)
-        async_session_with_logger._req_session.request = AsyncMock(
-            side_effect=[resp_429, resp_200]
-        )
+        async_session_with_logger._req_session.request = AsyncMock(side_effect=[resp_429, resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
-            await async_session_with_logger._request(
-                _metadata(), "GET", "/organizations"
-            )
+            await async_session_with_logger._request(_metadata(), "GET", "/organizations")
         async_session_with_logger._logger.warning.assert_called()
 
     @pytest.mark.asyncio
     async def test_logs_warning_on_5xx(self, async_session_with_logger):
         resp_500 = _mock_aio_response(500, reason="Server Error")
         resp_200 = _mock_aio_response(200)
-        async_session_with_logger._req_session.request = AsyncMock(
-            side_effect=[resp_500, resp_200]
-        )
+        async_session_with_logger._req_session.request = AsyncMock(side_effect=[resp_500, resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
-            await async_session_with_logger._request(
-                _metadata(), "GET", "/organizations"
-            )
+            await async_session_with_logger._request(_metadata(), "GET", "/organizations")
         async_session_with_logger._logger.warning.assert_called()
 
     @pytest.mark.asyncio
     async def test_logs_error_on_4xx(self, async_session_with_logger):
-        resp_400 = _mock_aio_response(
-            400, json_data={"errors": ["bad"]}, reason="Bad Request"
-        )
-        async_session_with_logger._req_session.request = AsyncMock(
-            return_value=resp_400
-        )
+        resp_400 = _mock_aio_response(400, json_data={"errors": ["bad"]}, reason="Bad Request")
+        async_session_with_logger._req_session.request = AsyncMock(return_value=resp_400)
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             with pytest.raises(AsyncAPIError):
-                await async_session_with_logger._request(
-                    _metadata(), "GET", "/organizations"
-                )
+                await async_session_with_logger._request(_metadata(), "GET", "/organizations")
         async_session_with_logger._logger.error.assert_called()
 
     @pytest.mark.asyncio
@@ -741,25 +706,17 @@ class TestAsyncRequestLogging:
         resp_bad.reason = "OK"
         resp_bad.headers = {}
         resp_bad.links = {}
-        resp_bad.json = AsyncMock(
-            side_effect=aiohttp.client_exceptions.ContentTypeError(
-                MagicMock(), MagicMock()
-            )
-        )
+        resp_bad.json = AsyncMock(side_effect=aiohttp.client_exceptions.ContentTypeError(MagicMock(), MagicMock()))
         resp_bad.release = MagicMock()
         resp_bad.__aenter__ = AsyncMock(return_value=resp_bad)
         resp_bad.__aexit__ = AsyncMock(return_value=False)
 
         resp_200 = _mock_aio_response(200)
 
-        async_session_with_logger._req_session.request = AsyncMock(
-            side_effect=[resp_bad, resp_200]
-        )
+        async_session_with_logger._req_session.request = AsyncMock(side_effect=[resp_bad, resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
-            await async_session_with_logger._request(
-                _metadata(), "GET", "/organizations"
-            )
+            await async_session_with_logger._request(_metadata(), "GET", "/organizations")
         async_session_with_logger._logger.warning.assert_called()
 
 
@@ -780,9 +737,7 @@ class TestAsyncHTTPVerbs:
         resp_200 = _mock_aio_response(200, json_data=[{"id": 1}])
         async_session._req_session.request = AsyncMock(return_value=resp_200)
 
-        result = await async_session.get(
-            _metadata(), "/organizations", params={"perPage": 10}
-        )
+        result = await async_session.get(_metadata(), "/organizations", params={"perPage": 10})
         assert result == [{"id": 1}]
 
     @pytest.mark.asyncio
@@ -790,9 +745,7 @@ class TestAsyncHTTPVerbs:
         resp_201 = _mock_aio_response(201, json_data={"id": "new"})
         async_session._req_session.request = AsyncMock(return_value=resp_201)
 
-        result = await async_session.post(
-            _metadata(), "/organizations", json={"name": "Test"}
-        )
+        result = await async_session.post(_metadata(), "/organizations", json={"name": "Test"})
         assert result == {"id": "new"}
 
     @pytest.mark.asyncio
@@ -800,9 +753,7 @@ class TestAsyncHTTPVerbs:
         resp_200 = _mock_aio_response(200, json_data={"id": "updated"})
         async_session._req_session.request = AsyncMock(return_value=resp_200)
 
-        result = await async_session.put(
-            _metadata(), "/organizations/1", json={"name": "New"}
-        )
+        result = await async_session.put(_metadata(), "/organizations/1", json={"name": "New"})
         assert result == {"id": "updated"}
 
     @pytest.mark.asyncio
@@ -835,11 +786,7 @@ class TestAsyncPaginationLegacy:
     @pytest.mark.asyncio
     async def test_multiple_pages_list(self, async_session):
         resp1 = _mock_aio_response(200, json_data=[{"id": 1}])
-        resp1.links = {
-            "next": {
-                "url": "https://api.meraki.com/api/v1/organizations?startingAfter=1"
-            }
-        }
+        resp1.links = {"next": {"url": "https://api.meraki.com/api/v1/organizations?startingAfter=1"}}
         resp2 = _mock_aio_response(200, json_data=[{"id": 2}])
         resp2.links = {}
         async_session._req_session.request = AsyncMock(side_effect=[resp1, resp2])
@@ -853,9 +800,7 @@ class TestAsyncPaginationLegacy:
         resp.links = {}
         async_session._req_session.request = AsyncMock(return_value=resp)
 
-        result = await async_session._get_pages_legacy(
-            _metadata(), "/organizations", total_pages="all"
-        )
+        result = await async_session._get_pages_legacy(_metadata(), "/organizations", total_pages="all")
         assert result == [{"id": 1}]
 
     @pytest.mark.asyncio
@@ -864,47 +809,29 @@ class TestAsyncPaginationLegacy:
         resp.links = {}
         async_session._req_session.request = AsyncMock(return_value=resp)
 
-        result = await async_session._get_pages_legacy(
-            _metadata(), "/organizations", total_pages="1"
-        )
+        result = await async_session._get_pages_legacy(_metadata(), "/organizations", total_pages="1")
         assert result == [{"id": 1}]
 
     @pytest.mark.asyncio
     async def test_total_pages_limit(self, async_session):
         resp1 = _mock_aio_response(200, json_data=[{"id": 1}])
-        resp1.links = {
-            "next": {
-                "url": "https://api.meraki.com/api/v1/organizations?startingAfter=1"
-            }
-        }
+        resp1.links = {"next": {"url": "https://api.meraki.com/api/v1/organizations?startingAfter=1"}}
         resp2 = _mock_aio_response(200, json_data=[{"id": 2}])
-        resp2.links = {
-            "next": {
-                "url": "https://api.meraki.com/api/v1/organizations?startingAfter=2"
-            }
-        }
+        resp2.links = {"next": {"url": "https://api.meraki.com/api/v1/organizations?startingAfter=2"}}
         async_session._req_session.request = AsyncMock(side_effect=[resp1, resp2])
 
-        result = await async_session._get_pages_legacy(
-            _metadata(), "/organizations", total_pages=2
-        )
+        result = await async_session._get_pages_legacy(_metadata(), "/organizations", total_pages=2)
         assert result == [{"id": 1}, {"id": 2}]
 
     @pytest.mark.asyncio
     async def test_prev_direction(self, async_session):
         resp1 = _mock_aio_response(200, json_data=[{"id": 2}])
-        resp1.links = {
-            "prev": {
-                "url": "https://api.meraki.com/api/v1/organizations?endingBefore=2"
-            }
-        }
+        resp1.links = {"prev": {"url": "https://api.meraki.com/api/v1/organizations?endingBefore=2"}}
         resp2 = _mock_aio_response(200, json_data=[{"id": 1}])
         resp2.links = {}
         async_session._req_session.request = AsyncMock(side_effect=[resp1, resp2])
 
-        result = await async_session._get_pages_legacy(
-            _metadata(), "/organizations", direction="prev"
-        )
+        result = await async_session._get_pages_legacy(_metadata(), "/organizations", direction="prev")
         assert result == [{"id": 2}, {"id": 1}]
 
     @pytest.mark.asyncio
@@ -916,9 +843,7 @@ class TestAsyncPaginationLegacy:
                 "meta": {"counts": {"items": {"remaining": 1}}},
             },
         )
-        resp1.links = {
-            "next": {"url": "https://api.meraki.com/api/v1/items?startingAfter=1"}
-        }
+        resp1.links = {"next": {"url": "https://api.meraki.com/api/v1/items?startingAfter=1"}}
         resp2 = _mock_aio_response(
             200,
             json_data={
@@ -945,11 +870,7 @@ class TestAsyncPaginationLegacy:
                 "pageEndAt": "2024-01-01T01:00:00Z",
             },
         )
-        resp1.links = {
-            "next": {
-                "url": "https://api.meraki.com/api/v1/events?startingAfter=2014-06-01T00:00:00Z"
-            }
-        }
+        resp1.links = {"next": {"url": "https://api.meraki.com/api/v1/events?startingAfter=2014-06-01T00:00:00Z"}}
         resp2 = _mock_aio_response(
             200,
             json_data={
@@ -966,16 +887,10 @@ class TestAsyncPaginationLegacy:
             mock_dt.utcnow.return_value = type(
                 "FakeDT",
                 (),
-                {
-                    "__sub__": lambda self, other: type(
-                        "TD", (), {"total_seconds": lambda s: 86400}
-                    )()
-                },
+                {"__sub__": lambda self, other: type("TD", (), {"total_seconds": lambda s: 86400})()},
             )()
             mock_dt.fromisoformat = lambda s: s
-            result = await async_session._get_pages_legacy(
-                metadata, "/events", direction="next"
-            )
+            result = await async_session._get_pages_legacy(metadata, "/events", direction="next")
 
         assert result["events"][0] == {"ts": "a"}
         assert result["events"][1] == {"ts": "b"}
@@ -990,11 +905,7 @@ class TestAsyncPaginationLegacy:
                 "pageEndAt": "2024-01-01T01:00:00Z",
             },
         )
-        resp1.links = {
-            "next": {
-                "url": "https://api.meraki.com/api/v1/events?startingAfter=2024-01-01T00:00:00Z"
-            }
-        }
+        resp1.links = {"next": {"url": "https://api.meraki.com/api/v1/events?startingAfter=2024-01-01T00:00:00Z"}}
         async_session._req_session.request = AsyncMock(return_value=resp1)
 
         metadata = _metadata(operation="getNetworkEvents")
@@ -1003,9 +914,7 @@ class TestAsyncPaginationLegacy:
         with patch("meraki.aio.rest_session.datetime") as mock_dt:
             mock_dt.utcnow.return_value = datetime(2024, 1, 1, 0, 2, 0)
             mock_dt.fromisoformat.return_value = datetime(2024, 1, 1, 0, 0, 0)
-            result = await async_session._get_pages_legacy(
-                metadata, "/events", direction="next"
-            )
+            result = await async_session._get_pages_legacy(metadata, "/events", direction="next")
 
         assert result["events"] == [{"ts": "a"}, {"ts": "b"}]
 
@@ -1019,11 +928,7 @@ class TestAsyncPaginationLegacy:
                 "pageEndAt": "2024-01-01T01:00:00Z",
             },
         )
-        resp1.links = {
-            "next": {
-                "url": "https://api.meraki.com/api/v1/events?startingAfter=2024-06-01T00:00:00Z"
-            }
-        }
+        resp1.links = {"next": {"url": "https://api.meraki.com/api/v1/events?startingAfter=2024-06-01T00:00:00Z"}}
         async_session._req_session.request = AsyncMock(return_value=resp1)
 
         metadata = _metadata(operation="getNetworkEvents")
@@ -1050,17 +955,11 @@ class TestAsyncPaginationLegacy:
                 "pageEndAt": "2014-01-02T00:00:00Z",
             },
         )
-        resp1.links = {
-            "prev": {
-                "url": "https://api.meraki.com/api/v1/events?endingBefore=2013-12-31T00:00:00Z"
-            }
-        }
+        resp1.links = {"prev": {"url": "https://api.meraki.com/api/v1/events?endingBefore=2013-12-31T00:00:00Z"}}
         async_session._req_session.request = AsyncMock(return_value=resp1)
 
         metadata = _metadata(operation="getNetworkEvents")
-        result = await async_session._get_pages_legacy(
-            metadata, "/events", direction="prev"
-        )
+        result = await async_session._get_pages_legacy(metadata, "/events", direction="prev")
         assert result["events"] == [{"ts": "a"}]
 
 
@@ -1075,28 +974,20 @@ class TestAsyncPaginationIterator:
         async_session._req_session.request = AsyncMock(return_value=resp)
 
         items = []
-        async for item in async_session._get_pages_iterator(
-            _metadata(), "/organizations"
-        ):
+        async for item in async_session._get_pages_iterator(_metadata(), "/organizations"):
             items.append(item)
         assert items == [{"id": 1}, {"id": 2}]
 
     @pytest.mark.asyncio
     async def test_multiple_pages_yields_all(self, async_session):
         resp1 = _mock_aio_response(200, json_data=[{"id": 1}])
-        resp1.links = {
-            "next": {
-                "url": "https://api.meraki.com/api/v1/organizations?startingAfter=1"
-            }
-        }
+        resp1.links = {"next": {"url": "https://api.meraki.com/api/v1/organizations?startingAfter=1"}}
         resp2 = _mock_aio_response(200, json_data=[{"id": 2}])
         resp2.links = {}
         async_session._req_session.request = AsyncMock(side_effect=[resp1, resp2])
 
         items = []
-        async for item in async_session._get_pages_iterator(
-            _metadata(), "/organizations"
-        ):
+        async for item in async_session._get_pages_iterator(_metadata(), "/organizations"):
             items.append(item)
         assert items == [{"id": 1}, {"id": 2}]
 
@@ -1107,9 +998,7 @@ class TestAsyncPaginationIterator:
         async_session._req_session.request = AsyncMock(return_value=resp)
 
         items = []
-        async for item in async_session._get_pages_iterator(
-            _metadata(), "/organizations", total_pages="all"
-        ):
+        async for item in async_session._get_pages_iterator(_metadata(), "/organizations", total_pages="all"):
             items.append(item)
         assert items == [{"id": 1}]
 
@@ -1120,9 +1009,7 @@ class TestAsyncPaginationIterator:
         async_session._req_session.request = AsyncMock(return_value=resp)
 
         items = []
-        async for item in async_session._get_pages_iterator(
-            _metadata(), "/organizations", total_pages="2"
-        ):
+        async for item in async_session._get_pages_iterator(_metadata(), "/organizations", total_pages="2"):
             items.append(item)
         assert items == [{"id": 1}]
 
@@ -1152,9 +1039,7 @@ class TestAsyncPaginationIterator:
 
         metadata = _metadata(operation="getNetworkEvents")
         items = []
-        async for item in async_session._get_pages_iterator(
-            metadata, "/events", direction="next"
-        ):
+        async for item in async_session._get_pages_iterator(metadata, "/events", direction="next"):
             items.append(item)
         assert items == [{"ts": "a"}, {"ts": "b"}]
 
@@ -1173,26 +1058,20 @@ class TestAsyncPaginationIterator:
 
         metadata = _metadata(operation="someOtherOp")
         items = []
-        async for item in async_session._get_pages_iterator(
-            metadata, "/events", direction="prev"
-        ):
+        async for item in async_session._get_pages_iterator(metadata, "/events", direction="prev"):
             items.append(item)
         assert items == [{"ts": "a"}, {"ts": "b"}]
 
     @pytest.mark.asyncio
     async def test_prev_direction_pagination(self, async_session):
         resp1 = _mock_aio_response(200, json_data=[{"id": 2}])
-        resp1.links = {
-            "prev": {"url": "https://api.meraki.com/api/v1/orgs?endingBefore=2"}
-        }
+        resp1.links = {"prev": {"url": "https://api.meraki.com/api/v1/orgs?endingBefore=2"}}
         resp2 = _mock_aio_response(200, json_data=[{"id": 1}])
         resp2.links = {}
         async_session._req_session.request = AsyncMock(side_effect=[resp1, resp2])
 
         items = []
-        async for item in async_session._get_pages_iterator(
-            _metadata(), "/orgs", direction="prev"
-        ):
+        async for item in async_session._get_pages_iterator(_metadata(), "/orgs", direction="prev"):
             items.append(item)
         assert items == [{"id": 2}, {"id": 1}]
 
@@ -1207,11 +1086,7 @@ class TestAsyncPaginationIterator:
                 "pageEndAt": "2024-01-02",
             },
         )
-        resp1.links = {
-            "next": {
-                "url": "https://api.meraki.com/api/v1/events?startingAfter=2024-01-01T00:00:00Z"
-            }
-        }
+        resp1.links = {"next": {"url": "https://api.meraki.com/api/v1/events?startingAfter=2024-01-01T00:00:00Z"}}
         resp2 = _mock_aio_response(
             200,
             json_data={
@@ -1220,11 +1095,7 @@ class TestAsyncPaginationIterator:
                 "pageEndAt": "2024-01-03",
             },
         )
-        resp2.links = {
-            "next": {
-                "url": "https://api.meraki.com/api/v1/events?startingAfter=2024-01-02T23:58:00Z"
-            }
-        }
+        resp2.links = {"next": {"url": "https://api.meraki.com/api/v1/events?startingAfter=2024-01-02T23:58:00Z"}}
         async_session._req_session.request = AsyncMock(side_effect=[resp1, resp2])
 
         metadata = _metadata(operation="getNetworkEvents")
@@ -1245,9 +1116,7 @@ class TestAsyncPaginationIterator:
             mock_dt.utcnow = fake_utcnow
             mock_dt.fromisoformat = fake_fromisoformat
             items = []
-            async for item in async_session._get_pages_iterator(
-                metadata, "/events", direction="next"
-            ):
+            async for item in async_session._get_pages_iterator(metadata, "/events", direction="next"):
                 items.append(item)
         # First page yielded, second page triggered break (data lost)
         assert items == [{"ts": "a"}]
@@ -1262,11 +1131,7 @@ class TestAsyncPaginationIterator:
                 "pageEndAt": "2024-01-02",
             },
         )
-        resp1.links = {
-            "next": {
-                "url": "https://api.meraki.com/api/v1/events?startingAfter=2024-04-01T00:00:00Z"
-            }
-        }
+        resp1.links = {"next": {"url": "https://api.meraki.com/api/v1/events?startingAfter=2024-04-01T00:00:00Z"}}
         resp2 = _mock_aio_response(
             200,
             json_data={
@@ -1275,11 +1140,7 @@ class TestAsyncPaginationIterator:
                 "pageEndAt": "2024-05-01",
             },
         )
-        resp2.links = {
-            "next": {
-                "url": "https://api.meraki.com/api/v1/events?startingAfter=2024-06-01T00:00:00Z"
-            }
-        }
+        resp2.links = {"next": {"url": "https://api.meraki.com/api/v1/events?startingAfter=2024-06-01T00:00:00Z"}}
         async_session._req_session.request = AsyncMock(side_effect=[resp1, resp2])
 
         metadata = _metadata(operation="getNetworkEvents")
@@ -1319,11 +1180,7 @@ class TestAsyncPaginationIterator:
                 "pageEndAt": "2014-06-02",
             },
         )
-        resp1.links = {
-            "prev": {
-                "url": "https://api.meraki.com/api/v1/events?endingBefore=2014-06-01T00:00:00Z"
-            }
-        }
+        resp1.links = {"prev": {"url": "https://api.meraki.com/api/v1/events?endingBefore=2014-06-01T00:00:00Z"}}
         resp2 = _mock_aio_response(
             200,
             json_data={
@@ -1332,18 +1189,12 @@ class TestAsyncPaginationIterator:
                 "pageEndAt": "2013-12-31",
             },
         )
-        resp2.links = {
-            "prev": {
-                "url": "https://api.meraki.com/api/v1/events?endingBefore=2013-06-01T00:00:00Z"
-            }
-        }
+        resp2.links = {"prev": {"url": "https://api.meraki.com/api/v1/events?endingBefore=2013-06-01T00:00:00Z"}}
         async_session._req_session.request = AsyncMock(side_effect=[resp1, resp2])
 
         metadata = _metadata(operation="getNetworkEvents")
         items = []
-        async for item in async_session._get_pages_iterator(
-            metadata, "/events", direction="prev"
-        ):
+        async for item in async_session._get_pages_iterator(metadata, "/events", direction="prev"):
             items.append(item)
         # First page yielded, second triggers break
         assert items == [{"ts": "a"}]

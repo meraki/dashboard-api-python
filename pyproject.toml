@@ -47,6 +47,9 @@ generator = ["jinja2==3.1.6"]
 [tool.uv]
 default-groups = ["dev"]
 
+[tool.ruff]
+line-length = 127
+
 [tool.pytest.ini_options]
 testpaths = ["tests/unit"]
 norecursedirs = ["tests/generator"]
@@ -57,6 +60,6 @@ source = ["meraki"]
 omit = ["meraki/api/*", "meraki/aio/api/*", "meraki/aio/__init__.py"]
 
 [tool.coverage.report]
-fail_under = 60
+fail_under = 90
 show_missing = true
 exclude_lines = ["pragma: no cover", "if __name__"]
