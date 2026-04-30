@@ -87,7 +87,7 @@ Plans:
 Plans:
 - [x] 05-01-PLAN.md: Comprehensive synthetic v3 fixture with coverage assertion tests
 - [x] 05-02-PLAN.md: Golden-file tests for v3 generator output (sync, async, batch)
-- [ ] 05-03-PLAN.md: CI semantic diff workflow for v2/v3 drift detection
+- [x] 05-03-PLAN.md: CI semantic diff workflow for v2/v3 drift detection
 
 ## Progress
 
