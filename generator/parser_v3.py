@@ -8,7 +8,7 @@ Module-level functions (not class-based) per project convention.
 Spec passed as argument to all functions.
 """
 
-from generate_library import generate_pagination_parameters, return_params
+from generate_library_oasv2 import generate_pagination_parameters, return_params
 
 # Module-level cache for resolved $ref pointers (D-01)
 _ref_cache: dict[str, dict] = {}

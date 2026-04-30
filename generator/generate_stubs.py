@@ -8,7 +8,7 @@ import os
 import re
 import jinja2
 from parser_v3 import parse_params_v3
-from generate_library import return_params, REVERSE_PAGINATION
+from generate_library_oasv2 import return_params, REVERSE_PAGINATION
 
 
 def _python_type_annotation(param_dict: dict) -> str:
