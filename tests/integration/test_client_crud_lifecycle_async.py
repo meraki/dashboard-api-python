@@ -6,10 +6,7 @@ import pytest_asyncio
 
 import meraki.aio
 
-pytestmark = [
-    pytest.mark.xdist_group("crud_lifecycle_async"),
-    pytest.mark.asyncio(loop_scope="session"),
-]
+pytestmark = pytest.mark.asyncio(loop_scope="session")
 
 
 @pytest.fixture(scope="session")

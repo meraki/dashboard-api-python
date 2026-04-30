@@ -37,7 +37,6 @@ dev = [
     "pytest>=8.3.5,<10",
     "pytest-asyncio>=1.0,<2",
     "pytest-cov>=7.1.0,<8",
-    "pytest-xdist>=3.5,<4",
     "responses>=0.25,<1",
     "flake8>=7.0,<8",
     "pre-commit>=4.6.0",

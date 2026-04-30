@@ -5,8 +5,6 @@ import pytest
 import meraki
 import meraki.aio
 
-pytestmark = pytest.mark.xdist_group("org_wide_workflows")
-
 
 def test_sync_org_wide_clients_workflow(api_key, org_id):
     """Multi-endpoint chain: orgs -> networks -> clients."""

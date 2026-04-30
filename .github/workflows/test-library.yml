@@ -88,4 +88,4 @@ jobs:
       run: uv sync --python ${{ matrix.python-version }}
 
     - name: Integration tests
-      run: uv run pytest tests/integration -n auto --dist loadgroup -v --tb=short --apikey ${{ secrets.TEST_ORG_API_KEY }} --o ${{ secrets.TEST_ORG_ID }}
+      run: uv run pytest tests/integration -v --tb=short --apikey ${{ secrets.TEST_ORG_API_KEY }} --o ${{ secrets.TEST_ORG_ID }}
