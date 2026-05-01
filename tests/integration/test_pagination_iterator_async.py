@@ -23,7 +23,7 @@ async def dashboard(api_key):
     async with meraki.aio.AsyncDashboardAPI(
         api_key,
         suppress_logging=True,
-        maximum_retries=5,
+        maximum_retries=1000,
         caller="PythonSDKTestPaginationIterator Cisco",
     ) as d:
         yield d

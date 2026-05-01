@@ -20,7 +20,7 @@ def dashboard(api_key):
     return meraki.DashboardAPI(
         api_key,
         suppress_logging=True,
-        maximum_retries=5,
+        maximum_retries=1000,
         caller="PythonSDKTestPaginationIterator Cisco",
     )
 
