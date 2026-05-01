@@ -1,10 +1,22 @@
-.DS_Store
-# No PyCharm config files
-.idea/
-.vscode/
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+
+# Virtual environments
 venv/
 .venv/
-__pycache__
-/.pytest_cache/
-dist/
-*.egg-info/
+
+# Testing
+.pytest_cache/
+
+# IDEs
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+
+# Project
+.scratch/
