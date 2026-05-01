@@ -30,7 +30,7 @@ async def _poll_batch(dashboard, org_id, batch_id, max_checks=10, delay=4):
 async def test_iterator_async_full_lifecycle(api_key, org_id):
     python_version = platform.python_version()
     salt = str(random.randint(1, 17381738))
-    version_salt = f"{python_version} {salt}"
+    version_salt = f"{python_version} {salt}".replace(".", "-")
 
     batch_orgs = ActionBatchOrganizations()
 
