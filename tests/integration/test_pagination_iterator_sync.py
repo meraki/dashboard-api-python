@@ -1,9 +1,18 @@
+import platform
+import random
 import time
 
 import pytest
 
 import meraki
 from meraki.api.batch.wireless import ActionBatchWireless
+
+
+@pytest.fixture(scope="module")
+def version_salt():
+    python_version = platform.python_version()
+    salt = str(random.randint(1, 17381738))
+    return f"{python_version} {salt}"
 
 
 @pytest.fixture(scope="module")
@@ -17,10 +26,10 @@ def dashboard(api_key):
 
 
 @pytest.fixture(scope="module")
-def network(dashboard, org_id):
+def network(dashboard, org_id, version_salt):
     created = dashboard.organizations.createOrganizationNetwork(
         org_id,
-        "_PaginationIteratorTest Network",
+        f"_GitHubAction PaginationIteratorTest {version_salt}",
         ["wireless"],
         tags=["test_tag", "pagination", "shouldBeDeleted"],
         timezone="America/Los_Angeles",

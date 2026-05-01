@@ -1,4 +1,6 @@
 import asyncio
+import platform
+import random
 
 import pytest
 import pytest_asyncio
@@ -7,6 +9,13 @@ import meraki.aio
 from meraki.api.batch.wireless import ActionBatchWireless
 
 pytestmark = pytest.mark.asyncio(loop_scope="module")
+
+
+@pytest.fixture(scope="module")
+def version_salt():
+    python_version = platform.python_version()
+    salt = str(random.randint(1, 17381738))
+    return f"{python_version} {salt}"
 
 
 @pytest_asyncio.fixture(scope="module", loop_scope="module")
@@ -21,10 +30,10 @@ async def dashboard(api_key):
 
 
 @pytest_asyncio.fixture(scope="module", loop_scope="module")
-async def network(dashboard, org_id):
+async def network(dashboard, org_id, version_salt):
     created = await dashboard.organizations.createOrganizationNetwork(
         org_id,
-        "_PaginationIteratorTest Async Network",
+        f"_GitHubAction PaginationIteratorTest Async {version_salt}",
         ["wireless"],
         tags=["test_tag", "pagination", "shouldBeDeleted"],
         timezone="America/Los_Angeles",
