@@ -8,15 +8,19 @@ A Python SDK wrapping the Meraki Dashboard API, auto-generated from the OpenAPI 
 
 Developers can interact with every Meraki Dashboard API endpoint through a well-typed, well-documented Python client that stays current with the live API spec.
 
-## Current Milestone: v1.1 Deprecation Cycle
+## Current Milestone: v4.0 HTTPX Migration
 
-**Goal:** Promote v3 generator to default, deprecate and remove v2 generator and abandoned v3 attempt.
+**Goal:** Replace dual HTTP backends (requests + aiohttp) with unified httpx, eliminating sync/async duplication and fixing known bugs.
 
 **Target features:**
-- Rename v2 generator to `generate_library_oasv2.py` with deprecation warning
-- Promote v3 generator to `generate_library.py` (new default)
-- Remove abandoned `generate_library_oasv3.py`
-- Remove v2 generator after confirming no rollbacks needed
+- Unified HTTP backend (httpx.Client + httpx.AsyncClient)
+- Shared session base class extracting ~80% of duplicated logic
+- Library-agnostic param encoding (remove monkey-patch)
+- Decomposed request logic (complexity 42 -> <10 per method)
+- Full type annotations on session layer
+- Backwards-compatible deprecation of AsyncAPIError
+- Property-based tests for param encoding
+- Updated test infra (respx replaces responses)
 
 ## Previous State (v1.0)
 
@@ -43,17 +47,23 @@ Modular OASv3 generator built and tested. Produces sync, async, and batch module
 
 ### Active
 
-- [ ] Rename v2 generator to `generate_library_oasv2.py` with deprecation warning
-- [ ] Promote v3 generator to `generate_library.py` (new default)
-- [ ] Remove abandoned `generate_library_oasv3.py`
-- [ ] Remove v2 generator after one minor version cycle
+- [ ] Unified httpx backend replacing requests + aiohttp
+- [ ] Shared session base class with decision logic
+- [ ] Library-agnostic param encoding utility
+- [ ] Decomposed request methods (complexity <10 each)
+- [ ] Type annotations on session layer
+- [ ] AsyncAPIError backwards-compatible deprecation
+- [ ] Property-based tests for param encoding
+- [ ] Test infra migration (respx replaces responses)
 
 ### Out of Scope
 
-- Modifying the v2 generator internals (rename/remove is in scope for v1.1)
-- Changing the runtime SDK behavior (rest_session, pagination, etc.)
-- Supporting OpenAPI 3.1 (`type: [string, null]` syntax)
-- Rewriting Jinja2 templates from scratch (reuse existing, extend as needed)
+- Adaptive retry strategy (app logic, not library choice)
+- Pagination memory buffering (iterator pattern already exists)
+- API key exposure risk (logging concern, unrelated to transport)
+- OASv3 generator migration (separate milestone)
+- Request cancellation/OpenTelemetry integration (httpx has primitives but wiring is separate)
+- Generator scripts' use of requests (dev-only, optional Phase 12)
 
 ## Context
 
@@ -99,4 +109,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-30 after v1.1 milestone start*
+*Last updated: 2026-05-01 after v4.0 milestone start*
