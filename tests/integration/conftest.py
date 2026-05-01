@@ -1,12 +1,12 @@
 import pytest
 
 FILE_ORDER = [
-    "test_pagination_iterator_sync.py",
-    "test_pagination_iterator_async.py",
-    "test_org_wide_workflows.py",
-    "test_client_basic_operations_async.py",
     "test_client_crud_lifecycle_sync.py",
     "test_client_crud_lifecycle_async.py",
+    "test_org_wide_workflows.py",
+    "test_client_basic_operations_async.py",
+    "test_pagination_iterator_sync.py",
+    "test_pagination_iterator_async.py",
 ]
 
 
