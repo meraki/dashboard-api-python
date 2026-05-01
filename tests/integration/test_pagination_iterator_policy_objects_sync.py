@@ -61,40 +61,41 @@ def _run_action_batch(dashboard, org_id, actions, max_attempts=5):
 
 
 @pytest.fixture(scope="module")
-def firewall_rulesets(dashboard, org_id, version_salt):
-    """Create 100 firewall rulesets via action batch, yield ruleset IDs, then delete."""
+def policy_objects(dashboard, org_id, version_salt):
+    """Create 100 policy objects via action batch, yield object IDs, then delete."""
     batch_orgs = ActionBatchOrganizations()
 
     actions = [
-        batch_orgs.createOrganizationPoliciesGlobalFirewallRuleset(
+        batch_orgs.createOrganizationPolicyObject(
             organizationId=org_id,
-            name=f"_test_ruleset_{version_salt}_{i:03d}",
+            name=f"_test_pobj_{version_salt}_{i:03d}",
+            category="network",
+            type="cidr",
+            cidr=f"10.{i // 256}.{i % 256}.0/24",
         )
         for i in range(100)
     ]
 
     _run_action_batch(dashboard, org_id, actions)
 
-    rulesets = dashboard.organizations.getOrganizationPoliciesGlobalFirewallRulesets(
-        org_id, name=f"_test_ruleset_{version_salt}", total_pages=-1
-    )
-    ruleset_ids = [r["rulesetId"] for r in rulesets]
-    assert len(ruleset_ids) >= 100
+    all_objects = dashboard.organizations.getOrganizationPolicyObjects(org_id, total_pages=-1)
+    obj_ids = [o["id"] for o in all_objects if o["name"].startswith(f"_test_pobj_{version_salt}")]
+    assert len(obj_ids) >= 100
 
-    yield ruleset_ids
+    yield obj_ids
 
     delete_actions = [
-        batch_orgs.deleteOrganizationPoliciesGlobalFirewallRuleset(
+        batch_orgs.deleteOrganizationPolicyObject(
             organizationId=org_id,
-            rulesetId=ruleset_id,
+            policyObjectId=obj_id,
         )
-        for ruleset_id in ruleset_ids
+        for obj_id in obj_ids
     ]
     _run_action_batch(dashboard, org_id, delete_actions)
 
 
-def test_pagination_iterator_vs_legacy_firewall_rulesets(api_key, org_id, version_salt, firewall_rulesets):
-    """Prove iterator mode yields the same firewall rulesets as legacy mode."""
+def test_pagination_iterator_vs_legacy_policy_objects(api_key, org_id, version_salt, policy_objects):
+    """Prove iterator mode yields the same policy objects as legacy mode."""
     dashboard_iterator = meraki.DashboardAPI(
         api_key,
         suppress_logging=True,
@@ -110,23 +111,20 @@ def test_pagination_iterator_vs_legacy_firewall_rulesets(api_key, org_id, versio
         caller="PythonSDKTestPaginationIterator Cisco",
     )
 
-    legacy_rulesets = dashboard_legacy.organizations.getOrganizationPoliciesGlobalFirewallRulesets(
-        org_id, name=f"_test_ruleset_{version_salt}", perPage=3, total_pages=-1
-    )
-    legacy_ids = {r["rulesetId"] for r in legacy_rulesets}
+    legacy_objects = dashboard_legacy.organizations.getOrganizationPolicyObjects(org_id, perPage=10, total_pages=-1)
+    legacy_ids = {o["id"] for o in legacy_objects if o["name"].startswith(f"_test_pobj_{version_salt}")}
 
     iterator_ids = set()
-    for ruleset in dashboard_iterator.organizations.getOrganizationPoliciesGlobalFirewallRulesets(
-        org_id, name=f"_test_ruleset_{version_salt}", perPage=3, total_pages=-1
-    ):
-        iterator_ids.add(ruleset["rulesetId"])
+    for obj in dashboard_iterator.organizations.getOrganizationPolicyObjects(org_id, perPage=10, total_pages=-1):
+        if obj["name"].startswith(f"_test_pobj_{version_salt}"):
+            iterator_ids.add(obj["id"])
 
     assert legacy_ids == iterator_ids
     assert len(legacy_ids) >= 100
 
 
-def test_pagination_iterator_yields_dicts(api_key, org_id, version_salt, firewall_rulesets):
-    """Each yielded item from the iterator is a dict with rulesetId."""
+def test_pagination_iterator_yields_dicts(api_key, org_id, version_salt, policy_objects):
+    """Each yielded item from the iterator is a dict with an id field."""
     dashboard = meraki.DashboardAPI(
         api_key,
         suppress_logging=True,
@@ -135,9 +133,7 @@ def test_pagination_iterator_yields_dicts(api_key, org_id, version_salt, firewal
         caller="PythonSDKTestPaginationIterator Cisco",
     )
 
-    for ruleset in dashboard.organizations.getOrganizationPoliciesGlobalFirewallRulesets(
-        org_id, name=f"_test_ruleset_{version_salt}", perPage=3, total_pages=-1
-    ):
-        assert isinstance(ruleset, dict)
-        assert "rulesetId" in ruleset
+    for obj in dashboard.organizations.getOrganizationPolicyObjects(org_id, perPage=10, total_pages=-1):
+        assert isinstance(obj, dict)
+        assert "id" in obj
         break

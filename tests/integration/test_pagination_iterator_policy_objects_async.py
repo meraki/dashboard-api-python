@@ -65,40 +65,41 @@ async def _run_action_batch_async(dashboard, org_id, actions, max_attempts=5):
 
 
 @pytest_asyncio.fixture(scope="module", loop_scope="module")
-async def firewall_rulesets(dashboard, org_id, version_salt):
-    """Create 100 firewall rulesets via action batch, yield ruleset IDs, then delete."""
+async def policy_objects(dashboard, org_id, version_salt):
+    """Create 100 policy objects via action batch, yield object IDs, then delete."""
     batch_orgs = ActionBatchOrganizations()
 
     actions = [
-        batch_orgs.createOrganizationPoliciesGlobalFirewallRuleset(
+        batch_orgs.createOrganizationPolicyObject(
             organizationId=org_id,
-            name=f"_test_ruleset_{version_salt}_{i:03d}",
+            name=f"_test_pobj_{version_salt}_{i:03d}",
+            category="network",
+            type="cidr",
+            cidr=f"10.{i // 256}.{i % 256}.0/24",
         )
         for i in range(100)
     ]
 
     await _run_action_batch_async(dashboard, org_id, actions)
 
-    rulesets = await dashboard.organizations.getOrganizationPoliciesGlobalFirewallRulesets(
-        org_id, name=f"_test_ruleset_{version_salt}", total_pages=-1
-    )
-    ruleset_ids = [r["rulesetId"] for r in rulesets]
-    assert len(ruleset_ids) >= 100
+    all_objects = await dashboard.organizations.getOrganizationPolicyObjects(org_id, total_pages=-1)
+    obj_ids = [o["id"] for o in all_objects if o["name"].startswith(f"_test_pobj_{version_salt}")]
+    assert len(obj_ids) >= 100
 
-    yield ruleset_ids
+    yield obj_ids
 
     delete_actions = [
-        batch_orgs.deleteOrganizationPoliciesGlobalFirewallRuleset(
+        batch_orgs.deleteOrganizationPolicyObject(
             organizationId=org_id,
-            rulesetId=ruleset_id,
+            policyObjectId=obj_id,
         )
-        for ruleset_id in ruleset_ids
+        for obj_id in obj_ids
     ]
     await _run_action_batch_async(dashboard, org_id, delete_actions)
 
 
-async def test_async_pagination_iterator_vs_legacy_firewall_rulesets(api_key, org_id, version_salt, firewall_rulesets):
-    """Prove async iterator mode yields the same firewall rulesets as legacy await mode."""
+async def test_async_pagination_iterator_vs_legacy_policy_objects(api_key, org_id, version_salt, policy_objects):
+    """Prove async iterator mode yields the same policy objects as legacy await mode."""
 
     async def fetch_legacy():
         async with meraki.aio.AsyncDashboardAPI(
@@ -108,10 +109,8 @@ async def test_async_pagination_iterator_vs_legacy_firewall_rulesets(api_key, or
             use_iterator_for_get_pages=False,
             caller="PythonSDKTestPaginationIterator Cisco",
         ) as d:
-            rulesets = await d.organizations.getOrganizationPoliciesGlobalFirewallRulesets(
-                org_id, name=f"_test_ruleset_{version_salt}", perPage=3, total_pages=-1
-            )
-            return {r["rulesetId"] for r in rulesets}
+            objects = await d.organizations.getOrganizationPolicyObjects(org_id, perPage=10, total_pages=-1)
+            return {o["id"] for o in objects if o["name"].startswith(f"_test_pobj_{version_salt}")}
 
     async def fetch_iterator():
         async with meraki.aio.AsyncDashboardAPI(
@@ -122,10 +121,9 @@ async def test_async_pagination_iterator_vs_legacy_firewall_rulesets(api_key, or
             caller="PythonSDKTestPaginationIterator Cisco",
         ) as d:
             ids = set()
-            async for ruleset in d.organizations.getOrganizationPoliciesGlobalFirewallRulesets(
-                org_id, name=f"_test_ruleset_{version_salt}", perPage=3, total_pages=-1
-            ):
-                ids.add(ruleset["rulesetId"])
+            async for obj in d.organizations.getOrganizationPolicyObjects(org_id, perPage=10, total_pages=-1):
+                if obj["name"].startswith(f"_test_pobj_{version_salt}"):
+                    ids.add(obj["id"])
             return ids
 
     legacy_ids, iterator_ids = await asyncio.gather(fetch_legacy(), fetch_iterator())
@@ -134,8 +132,8 @@ async def test_async_pagination_iterator_vs_legacy_firewall_rulesets(api_key, or
     assert len(legacy_ids) >= 100
 
 
-async def test_async_iterator_yields_dicts(api_key, org_id, version_salt, firewall_rulesets):
-    """Each item from async iterator is a dict with rulesetId."""
+async def test_async_iterator_yields_dicts(api_key, org_id, version_salt, policy_objects):
+    """Each item from async iterator is a dict with an id field."""
     async with meraki.aio.AsyncDashboardAPI(
         api_key,
         suppress_logging=True,
@@ -143,9 +141,7 @@ async def test_async_iterator_yields_dicts(api_key, org_id, version_salt, firewa
         use_iterator_for_get_pages=True,
         caller="PythonSDKTestPaginationIterator Cisco",
     ) as d:
-        async for ruleset in d.organizations.getOrganizationPoliciesGlobalFirewallRulesets(
-            org_id, name=f"_test_ruleset_{version_salt}", perPage=3, total_pages=-1
-        ):
-            assert isinstance(ruleset, dict)
-            assert "rulesetId" in ruleset
+        async for obj in d.organizations.getOrganizationPolicyObjects(org_id, perPage=10, total_pages=-1):
+            assert isinstance(obj, dict)
+            assert "id" in obj
             break
