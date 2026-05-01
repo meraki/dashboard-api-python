@@ -57,28 +57,29 @@ None planned beyond this milestone.
 
 | Requirement | Phase | Status |
 | ----------- | ----- | ------ |
-| HTTP-01 | TBD | Pending |
-| HTTP-02 | TBD | Pending |
-| HTTP-03 | TBD | Pending |
-| HTTP-04 | TBD | Pending |
-| ERR-01 | TBD | Pending |
-| ERR-02 | TBD | Pending |
-| ERR-03 | TBD | Pending |
-| DEP-01 | TBD | Pending |
-| DEP-02 | TBD | Pending |
-| DEP-03 | TBD | Pending |
-| QUAL-01 | TBD | Pending |
-| QUAL-02 | TBD | Pending |
-| QUAL-03 | TBD | Pending |
-| TEST-01 | TBD | Pending |
-| TEST-02 | TBD | Pending |
-| TEST-03 | TBD | Pending |
-| TEST-04 | TBD | Pending |
+| TEST-01 | Phase 8 | Pending |
+| HTTP-04 | Phase 9 | Pending |
+| QUAL-03 | Phase 9 | Pending |
+| HTTP-03 | Phase 10 | Pending |
+| QUAL-01 | Phase 10 | Pending |
+| QUAL-02 | Phase 10 | Pending |
+| HTTP-01 | Phase 11 | Pending |
+| HTTP-02 | Phase 11 | Pending |
+| ERR-01 | Phase 11 | Pending |
+| ERR-03 | Phase 11 | Pending |
+| DEP-01 | Phase 11 | Pending |
+| DEP-03 | Phase 11 | Pending |
+| ERR-02 | Phase 12 | Pending |
+| DEP-02 | Phase 13 | Pending |
+| TEST-02 | Phase 13 | Pending |
+| TEST-03 | Phase 13 | Pending |
+| TEST-04 | Phase 13 | Pending |
 
 **Coverage:**
 - v4.0 requirements: 17 total
-- Mapped to phases: 0 (pending roadmap)
-- Unmapped: 17
+- Mapped to phases: 17
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-05-01*
+*Traceability updated: 2026-05-01*
