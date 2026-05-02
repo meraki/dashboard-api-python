@@ -48,7 +48,7 @@
   3. Endpoints exercised by tests are listed
 **Plans**: 1 plan
 Plans:
-- [ ] 08-01-PLAN.md — Install pytest-json-report, fix conftest, capture baseline report
+- [x] 08-01-PLAN.md — Install pytest-json-report, fix conftest, capture baseline report
 
 ### Phase 9: Foundation
 **Goal**: Pure functions for param encoding replace monkey-patched requests internals
