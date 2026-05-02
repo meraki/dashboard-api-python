@@ -46,7 +46,9 @@
   1. All integration tests run against Meraki sandbox
   2. Current pass/fail state documented (regression gate reference)
   3. Endpoints exercised by tests are listed
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 08-01-PLAN.md — Install pytest-json-report, fix conftest, capture baseline report
 
 ### Phase 9: Foundation
 **Goal**: Pure functions for param encoding replace monkey-patched requests internals
@@ -115,7 +117,7 @@
 | 5. Testing & CI | v1.0 | 3/3 | Complete | 2026-04-30 |
 | 6. Generator Swap | v1.1 | 1/1 | Complete | 2026-04-30 |
 | 7. Legacy Cleanup | v1.1 | 0/0 | Complete | 2026-04-30 |
-| 8. Integration Baseline | v4.0 | 0/0 | Not started | - |
+| 8. Integration Baseline | v4.0 | 0/1 | Planning | - |
 | 9. Foundation | v4.0 | 0/0 | Not started | - |
 | 10. Session Refactor | v4.0 | 0/0 | Not started | - |
 | 11. HTTP Backend Migration | v4.0 | 0/0 | Not started | - |
@@ -123,4 +125,4 @@
 | 13. Test Infrastructure | v4.0 | 0/0 | Not started | - |
 
 ---
-*Roadmap updated: 2026-05-01 (v4.0 phases 8-13 created)*
+*Roadmap updated: 2026-05-01 (Phase 8 planned: 1 plan)*
