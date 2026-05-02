@@ -365,7 +365,7 @@ assert stdlib_urlencode(test_data, doseq=True) == requests_urlencode(test_data, 
 # Both produce: "key=val1&key=val2&param%5B%5Dkey=data"
 ```
 
-## Open Questions
+## Open Questions (RESOLVED - discretion items per D-05)
 
 1. **Should we add parametrize tests alongside property tests?**
    - What we know: Existing unit tests use parametrize for specific cases
