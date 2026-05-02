@@ -1,0 +1,1068 @@
+{
+  "created": 1777681221.1439042,
+  "duration": 115.48956537246704,
+  "exitcode": 0,
+  "root": "C:\\Users\\jkuchta\\Work\\_Repos\\meraki\\dashboard-api-python",
+  "environment": {},
+  "summary": {
+    "passed": 32,
+    "total": 32,
+    "collected": 32
+  },
+  "collectors": [
+    {
+      "nodeid": "",
+      "outcome": "passed",
+      "result": [
+        {
+          "nodeid": "tests/integration",
+          "type": "Dir"
+        }
+      ]
+    },
+    {
+      "nodeid": "tests/integration/baseline",
+      "outcome": "passed",
+      "result": []
+    },
+    {
+      "nodeid": "tests/integration/test_client_crud_lifecycle_async.py",
+      "outcome": "passed",
+      "result": [
+        {
+          "nodeid": "tests/integration/test_client_crud_lifecycle_async.py::test_get_administered_identities_me",
+          "type": "Coroutine",
+          "lineno": 43
+        },
+        {
+          "nodeid": "tests/integration/test_client_crud_lifecycle_async.py::test_get_organizations",
+          "type": "Coroutine",
+          "lineno": 50
+        },
+        {
+          "nodeid": "tests/integration/test_client_crud_lifecycle_async.py::test_get_organization",
+          "type": "Coroutine",
+          "lineno": 56
+        },
+        {
+          "nodeid": "tests/integration/test_client_crud_lifecycle_async.py::test_create_network",
+          "type": "Coroutine",
+          "lineno": 62
+        },
+        {
+          "nodeid": "tests/integration/test_client_crud_lifecycle_async.py::test_get_networks",
+          "type": "Coroutine",
+          "lineno": 67
+        },
+        {
+          "nodeid": "tests/integration/test_client_crud_lifecycle_async.py::test_update_network",
+          "type": "Coroutine",
+          "lineno": 73
+        },
+        {
+          "nodeid": "tests/integration/test_client_crud_lifecycle_async.py::test_create_organization_policy_objects",
+          "type": "Coroutine",
+          "lineno": 84
+        },
+        {
+          "nodeid": "tests/integration/test_client_crud_lifecycle_async.py::test_get_organization_policy_objects",
+          "type": "Coroutine",
+          "lineno": 107
+        },
+        {
+          "nodeid": "tests/integration/test_client_crud_lifecycle_async.py::test_get_network_appliance_l3_firewall_rules",
+          "type": "Coroutine",
+          "lineno": 113
+        },
+        {
+          "nodeid": "tests/integration/test_client_crud_lifecycle_async.py::test_update_network_appliance_vlan_settings",
+          "type": "Coroutine",
+          "lineno": 119
+        },
+        {
+          "nodeid": "tests/integration/test_client_crud_lifecycle_async.py::test_create_network_appliance_vlan",
+          "type": "Coroutine",
+          "lineno": 125
+        },
+        {
+          "nodeid": "tests/integration/test_client_crud_lifecycle_async.py::test_update_l3_firewall_rules",
+          "type": "Coroutine",
+          "lineno": 144
+        },
+        {
+          "nodeid": "tests/integration/test_client_crud_lifecycle_async.py::test_delete_policy_objects",
+          "type": "Coroutine",
+          "lineno": 183
+        },
+        {
+          "nodeid": "tests/integration/test_client_crud_lifecycle_async.py::test_delete_network",
+          "type": "Coroutine",
+          "lineno": 200
+        }
+      ]
+    },
+    {
+      "nodeid": "tests/integration/test_client_crud_lifecycle_sync.py",
+      "outcome": "passed",
+      "result": [
+        {
+          "nodeid": "tests/integration/test_client_crud_lifecycle_sync.py::test_get_administered_identities_me",
+          "type": "Function",
+          "lineno": 46
+        },
+        {
+          "nodeid": "tests/integration/test_client_crud_lifecycle_sync.py::test_get_organizations",
+          "type": "Function",
+          "lineno": 53
+        },
+        {
+          "nodeid": "tests/integration/test_client_crud_lifecycle_sync.py::test_get_organization",
+          "type": "Function",
+          "lineno": 59
+        },
+        {
+          "nodeid": "tests/integration/test_client_crud_lifecycle_sync.py::test_create_network",
+          "type": "Function",
+          "lineno": 65
+        },
+        {
+          "nodeid": "tests/integration/test_client_crud_lifecycle_sync.py::test_get_networks",
+          "type": "Function",
+          "lineno": 70
+        },
+        {
+          "nodeid": "tests/integration/test_client_crud_lifecycle_sync.py::test_update_network",
+          "type": "Function",
+          "lineno": 76
+        },
+        {
+          "nodeid": "tests/integration/test_client_crud_lifecycle_sync.py::test_create_organization_policy_objects",
+          "type": "Function",
+          "lineno": 88
+        },
+        {
+          "nodeid": "tests/integration/test_client_crud_lifecycle_sync.py::test_get_organization_policy_objects",
+          "type": "Function",
+          "lineno": 111
+        },
+        {
+          "nodeid": "tests/integration/test_client_crud_lifecycle_sync.py::test_get_network_appliance_l3_firewall_rules",
+          "type": "Function",
+          "lineno": 117
+        },
+        {
+          "nodeid": "tests/integration/test_client_crud_lifecycle_sync.py::test_update_network_appliance_vlan_settings",
+          "type": "Function",
+          "lineno": 123
+        },
+        {
+          "nodeid": "tests/integration/test_client_crud_lifecycle_sync.py::test_create_network_appliance_vlan",
+          "type": "Function",
+          "lineno": 129
+        },
+        {
+          "nodeid": "tests/integration/test_client_crud_lifecycle_sync.py::test_update_l3_firewall_rules",
+          "type": "Function",
+          "lineno": 148
+        },
+        {
+          "nodeid": "tests/integration/test_client_crud_lifecycle_sync.py::test_delete_policy_objects",
+          "type": "Function",
+          "lineno": 187
+        },
+        {
+          "nodeid": "tests/integration/test_client_crud_lifecycle_sync.py::test_delete_network",
+          "type": "Function",
+          "lineno": 207
+        }
+      ]
+    },
+    {
+      "nodeid": "tests/integration/test_iterator_async.py",
+      "outcome": "passed",
+      "result": [
+        {
+          "nodeid": "tests/integration/test_iterator_async.py::test_iterator_async_full_lifecycle",
+          "type": "Coroutine",
+          "lineno": 29
+        }
+      ]
+    },
+    {
+      "nodeid": "tests/integration/test_iterator_sync.py",
+      "outcome": "passed",
+      "result": [
+        {
+          "nodeid": "tests/integration/test_iterator_sync.py::test_iterator_sync_full_lifecycle",
+          "type": "Function",
+          "lineno": 25
+        }
+      ]
+    },
+    {
+      "nodeid": "tests/integration/test_org_wide_workflows.py",
+      "outcome": "passed",
+      "result": [
+        {
+          "nodeid": "tests/integration/test_org_wide_workflows.py::test_sync_org_wide_clients_workflow",
+          "type": "Function",
+          "lineno": 8
+        },
+        {
+          "nodeid": "tests/integration/test_org_wide_workflows.py::test_async_org_wide_clients_workflow",
+          "type": "Coroutine",
+          "lineno": 31
+        }
+      ]
+    },
+    {
+      "nodeid": "tests/integration",
+      "outcome": "passed",
+      "result": [
+        {
+          "nodeid": "tests/integration/baseline",
+          "type": "Dir"
+        },
+        {
+          "nodeid": "tests/integration/test_client_crud_lifecycle_async.py",
+          "type": "Module"
+        },
+        {
+          "nodeid": "tests/integration/test_client_crud_lifecycle_sync.py",
+          "type": "Module"
+        },
+        {
+          "nodeid": "tests/integration/test_iterator_async.py",
+          "type": "Module"
+        },
+        {
+          "nodeid": "tests/integration/test_iterator_sync.py",
+          "type": "Module"
+        },
+        {
+          "nodeid": "tests/integration/test_org_wide_workflows.py",
+          "type": "Module"
+        }
+      ]
+    }
+  ],
+  "tests": [
+    {
+      "nodeid": "tests/integration/test_client_crud_lifecycle_sync.py::test_get_administered_identities_me",
+      "lineno": 46,
+      "outcome": "passed",
+      "keywords": [
+        "test_get_administered_identities_me",
+        "test_client_crud_lifecycle_sync.py",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 0.0010485999991942663,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.7933835000003455,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.00014060000103199854,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "tests/integration/test_client_crud_lifecycle_sync.py::test_get_organizations",
+      "lineno": 53,
+      "outcome": "passed",
+      "keywords": [
+        "test_get_organizations",
+        "test_client_crud_lifecycle_sync.py",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 0.0001731000011204742,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.46288840000124765,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.00014340000052470714,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "tests/integration/test_client_crud_lifecycle_sync.py::test_get_organization",
+      "lineno": 59,
+      "outcome": "passed",
+      "keywords": [
+        "test_get_organization",
+        "test_client_crud_lifecycle_sync.py",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 0.00026960000104736537,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.29764999999679276,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.0001370999998471234,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "tests/integration/test_client_crud_lifecycle_sync.py::test_create_network",
+      "lineno": 65,
+      "outcome": "passed",
+      "keywords": [
+        "test_create_network",
+        "test_client_crud_lifecycle_sync.py",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 3.396638100002747,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.00013219999891589396,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.00012569999671541154,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "tests/integration/test_client_crud_lifecycle_sync.py::test_get_networks",
+      "lineno": 70,
+      "outcome": "passed",
+      "keywords": [
+        "test_get_networks",
+        "test_client_crud_lifecycle_sync.py",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 0.00013870000111637637,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.28337069999906817,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.00013720000060857274,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "tests/integration/test_client_crud_lifecycle_sync.py::test_update_network",
+      "lineno": 76,
+      "outcome": "passed",
+      "keywords": [
+        "test_update_network",
+        "test_client_crud_lifecycle_sync.py",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 0.0001995999991777353,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.8609858999989228,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.00013269999908516183,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "tests/integration/test_client_crud_lifecycle_sync.py::test_create_organization_policy_objects",
+      "lineno": 88,
+      "outcome": "passed",
+      "keywords": [
+        "test_create_organization_policy_objects",
+        "test_client_crud_lifecycle_sync.py",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 0.000229199999012053,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 1.1937579000004916,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.00017239999942830764,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "tests/integration/test_client_crud_lifecycle_sync.py::test_get_organization_policy_objects",
+      "lineno": 111,
+      "outcome": "passed",
+      "keywords": [
+        "test_get_organization_policy_objects",
+        "test_client_crud_lifecycle_sync.py",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 0.00024359999952139333,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.5413779999980761,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.000134599999000784,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "tests/integration/test_client_crud_lifecycle_sync.py::test_get_network_appliance_l3_firewall_rules",
+      "lineno": 117,
+      "outcome": "passed",
+      "keywords": [
+        "test_get_network_appliance_l3_firewall_rules",
+        "test_client_crud_lifecycle_sync.py",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 0.00015999999959603883,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.5264481999984127,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.00013760000001639128,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "tests/integration/test_client_crud_lifecycle_sync.py::test_update_network_appliance_vlan_settings",
+      "lineno": 123,
+      "outcome": "passed",
+      "keywords": [
+        "test_update_network_appliance_vlan_settings",
+        "test_client_crud_lifecycle_sync.py",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 0.00015310000162571669,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.5576407999978983,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.00013490000128513202,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "tests/integration/test_client_crud_lifecycle_sync.py::test_create_network_appliance_vlan",
+      "lineno": 129,
+      "outcome": "passed",
+      "keywords": [
+        "test_create_network_appliance_vlan",
+        "test_client_crud_lifecycle_sync.py",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 0.0001491999973950442,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 1.5098424999996496,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.00013490000128513202,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "tests/integration/test_client_crud_lifecycle_sync.py::test_update_l3_firewall_rules",
+      "lineno": 148,
+      "outcome": "passed",
+      "keywords": [
+        "test_update_l3_firewall_rules",
+        "test_client_crud_lifecycle_sync.py",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 0.00014770000052521937,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.9906009999976959,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.00012829999832320027,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "tests/integration/test_client_crud_lifecycle_sync.py::test_delete_policy_objects",
+      "lineno": 187,
+      "outcome": "passed",
+      "keywords": [
+        "test_delete_policy_objects",
+        "test_client_crud_lifecycle_sync.py",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 0.00014250000094762072,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 2.2484381000031135,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.00019489999976940453,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "tests/integration/test_client_crud_lifecycle_sync.py::test_delete_network",
+      "lineno": 207,
+      "outcome": "passed",
+      "keywords": [
+        "test_delete_network",
+        "test_client_crud_lifecycle_sync.py",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 0.0001919999995152466,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 13.989967000001343,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.00013349999790079892,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "tests/integration/test_client_crud_lifecycle_async.py::test_get_administered_identities_me",
+      "lineno": 43,
+      "outcome": "passed",
+      "keywords": [
+        "test_get_administered_identities_me",
+        "test_client_crud_lifecycle_async.py",
+        "asyncio",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 0.002668099998118123,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.47884870000052615,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.00013730000137002207,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "tests/integration/test_client_crud_lifecycle_async.py::test_get_organizations",
+      "lineno": 50,
+      "outcome": "passed",
+      "keywords": [
+        "test_get_organizations",
+        "test_client_crud_lifecycle_async.py",
+        "asyncio",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 0.00017490000027464703,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.2649894999995013,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.0001354000014543999,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "tests/integration/test_client_crud_lifecycle_async.py::test_get_organization",
+      "lineno": 56,
+      "outcome": "passed",
+      "keywords": [
+        "test_get_organization",
+        "test_client_crud_lifecycle_async.py",
+        "asyncio",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 0.00022680000256514177,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.2856160000010277,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.00011770000128308311,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "tests/integration/test_client_crud_lifecycle_async.py::test_create_network",
+      "lineno": 62,
+      "outcome": "passed",
+      "keywords": [
+        "test_create_network",
+        "test_client_crud_lifecycle_async.py",
+        "asyncio",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 3.051430600000458,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.00020430000222404487,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.0001145999995060265,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "tests/integration/test_client_crud_lifecycle_async.py::test_get_networks",
+      "lineno": 67,
+      "outcome": "passed",
+      "keywords": [
+        "test_get_networks",
+        "test_client_crud_lifecycle_async.py",
+        "asyncio",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 0.00015210000128718093,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.2914024999990943,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.0001396000006934628,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "tests/integration/test_client_crud_lifecycle_async.py::test_update_network",
+      "lineno": 73,
+      "outcome": "passed",
+      "keywords": [
+        "test_update_network",
+        "test_client_crud_lifecycle_async.py",
+        "asyncio",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 0.00021579999884124845,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.8056949999991048,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.00014290000035543926,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "tests/integration/test_client_crud_lifecycle_async.py::test_create_organization_policy_objects",
+      "lineno": 84,
+      "outcome": "passed",
+      "keywords": [
+        "test_create_organization_policy_objects",
+        "test_client_crud_lifecycle_async.py",
+        "asyncio",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 0.00023490000239689834,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.5688245999990613,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.00012700000297627412,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "tests/integration/test_client_crud_lifecycle_async.py::test_get_organization_policy_objects",
+      "lineno": 107,
+      "outcome": "passed",
+      "keywords": [
+        "test_get_organization_policy_objects",
+        "test_client_crud_lifecycle_async.py",
+        "asyncio",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 0.00017690000095171854,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.2803993999987142,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.0001430000011168886,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "tests/integration/test_client_crud_lifecycle_async.py::test_get_network_appliance_l3_firewall_rules",
+      "lineno": 113,
+      "outcome": "passed",
+      "keywords": [
+        "test_get_network_appliance_l3_firewall_rules",
+        "test_client_crud_lifecycle_async.py",
+        "asyncio",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 0.00022739999985788018,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.30385259999820846,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.0002696999981708359,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "tests/integration/test_client_crud_lifecycle_async.py::test_update_network_appliance_vlan_settings",
+      "lineno": 119,
+      "outcome": "passed",
+      "keywords": [
+        "test_update_network_appliance_vlan_settings",
+        "test_client_crud_lifecycle_async.py",
+        "asyncio",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 0.00022909999825060368,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.41092959999878076,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.00011660000018309802,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "tests/integration/test_client_crud_lifecycle_async.py::test_create_network_appliance_vlan",
+      "lineno": 125,
+      "outcome": "passed",
+      "keywords": [
+        "test_create_network_appliance_vlan",
+        "test_client_crud_lifecycle_async.py",
+        "asyncio",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 0.00021700000070268288,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 1.2798312999984773,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.0001354000014543999,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "tests/integration/test_client_crud_lifecycle_async.py::test_update_l3_firewall_rules",
+      "lineno": 144,
+      "outcome": "passed",
+      "keywords": [
+        "test_update_l3_firewall_rules",
+        "test_client_crud_lifecycle_async.py",
+        "asyncio",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 0.0001785000022209715,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.7769468000005872,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.00010830000246642157,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "tests/integration/test_client_crud_lifecycle_async.py::test_delete_policy_objects",
+      "lineno": 183,
+      "outcome": "passed",
+      "keywords": [
+        "test_delete_policy_objects",
+        "test_client_crud_lifecycle_async.py",
+        "asyncio",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 0.0003133000027446542,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 1.5033273000008194,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.00012889999925391749,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "tests/integration/test_client_crud_lifecycle_async.py::test_delete_network",
+      "lineno": 200,
+      "outcome": "passed",
+      "keywords": [
+        "test_delete_network",
+        "test_client_crud_lifecycle_async.py",
+        "asyncio",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 0.00017279999883612618,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 9.322395800001686,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.00013279999984661117,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "tests/integration/test_org_wide_workflows.py::test_sync_org_wide_clients_workflow",
+      "lineno": 8,
+      "outcome": "passed",
+      "keywords": [
+        "test_sync_org_wide_clients_workflow",
+        "test_org_wide_workflows.py",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 0.0001756999990902841,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.839036400000623,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.00014450000162469223,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "tests/integration/test_org_wide_workflows.py::test_async_org_wide_clients_workflow",
+      "lineno": 31,
+      "outcome": "passed",
+      "keywords": [
+        "test_async_org_wide_clients_workflow",
+        "asyncio",
+        "pytestmark",
+        "test_org_wide_workflows.py",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 0.0008937999991758261,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 1.0785622999974294,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.0010290999998687766,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "tests/integration/test_iterator_sync.py::test_iterator_sync_full_lifecycle",
+      "lineno": 25,
+      "outcome": "passed",
+      "keywords": [
+        "test_iterator_sync_full_lifecycle",
+        "test_iterator_sync.py",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 0.0001694999991741497,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 32.9232955999978,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.00015500000154133886,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "tests/integration/test_iterator_async.py::test_iterator_async_full_lifecycle",
+      "lineno": 29,
+      "outcome": "passed",
+      "keywords": [
+        "test_iterator_async_full_lifecycle",
+        "test_iterator_async.py",
+        "asyncio",
+        "integration",
+        "tests",
+        "dashboard-api-python",
+        ""
+      ],
+      "setup": {
+        "duration": 0.0010623999987728894,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 33.057837699998345,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.002345099997910438,
+        "outcome": "passed"
+      }
+    }
+  ]
+}
