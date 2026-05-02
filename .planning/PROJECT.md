@@ -109,4 +109,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-01 after v4.0 milestone start*
+*Last updated: 2026-05-01 after Phase 8 (integration baseline) complete — 32 tests captured, all passing*
