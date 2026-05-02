@@ -58,7 +58,9 @@ Plans:
   1. `encode_meraki_params()` function produces query strings matching current behavior
   2. Array-of-objects encoding roundtrips correctly in property-based tests
   3. Function uses only stdlib (urllib.parse), no requests dependency
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 09-01-PLAN.md — TDD: implement encode_meraki_params with stdlib + Hypothesis property tests
 
 ### Phase 10: Session Refactor
 **Goal**: Shared session base class extracts duplicated logic from sync/async implementations
@@ -118,11 +120,11 @@ Plans:
 | 6. Generator Swap | v1.1 | 1/1 | Complete | 2026-04-30 |
 | 7. Legacy Cleanup | v1.1 | 0/0 | Complete | 2026-04-30 |
 | 8. Integration Baseline | v4.0 | 0/1 | Planning | - |
-| 9. Foundation | v4.0 | 0/0 | Not started | - |
+| 9. Foundation | v4.0 | 0/1 | Planning | - |
 | 10. Session Refactor | v4.0 | 0/0 | Not started | - |
 | 11. HTTP Backend Migration | v4.0 | 0/0 | Not started | - |
 | 12. Error Handling Deprecation | v4.0 | 0/0 | Not started | - |
 | 13. Test Infrastructure | v4.0 | 0/0 | Not started | - |
 
 ---
-*Roadmap updated: 2026-05-01 (Phase 8 planned: 1 plan)*
+*Roadmap updated: 2026-05-01 (Phase 9 planned: 1 plan)*
