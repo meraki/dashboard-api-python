@@ -31,7 +31,7 @@
 
 - [ ] **Phase 8: Integration Baseline** - Capture passing integration tests before any HTTP changes
 - [ ] **Phase 9: Foundation** - Library-agnostic param encoding and property-based tests
-- [ ] **Phase 10: Session Refactor** - Shared base class with decomposed, type-annotated logic
+- [x] **Phase 10: Session Refactor** - Shared base class with decomposed, type-annotated logic (completed 2026-05-04)
 - [ ] **Phase 11: HTTP Backend Migration** - Replace requests/aiohttp with httpx.Client/AsyncClient
 - [ ] **Phase 12: Error Handling Deprecation** - Unify exception classes with backwards compatibility
 - [ ] **Phase 13: Test Infrastructure** - Update test mocks and validate regression gate
@@ -74,7 +74,7 @@ Plans:
 **Plans**: 2 plans
 Plans:
 - [x] 10-01-PLAN.md — SessionBase ABC with config, retry loop, status handlers, type annotations
-- [ ] 10-02-PLAN.md — Sync/async subclasses, import rewiring, old file removal
+- [x] 10-02-PLAN.md — Sync/async subclasses, import rewiring, old file removal
 
 ### Phase 11: HTTP Backend Migration
 **Goal**: SDK uses httpx.Client and httpx.AsyncClient for all HTTP requests
@@ -124,7 +124,7 @@ Plans:
 | 7. Legacy Cleanup | v1.1 | 0/0 | Complete | 2026-04-30 |
 | 8. Integration Baseline | v4.0 | 0/1 | Planning | - |
 | 9. Foundation | v4.0 | 0/1 | Planning | - |
-| 10. Session Refactor | v4.0 | 1/2 | In Progress|  |
+| 10. Session Refactor | v4.0 | 2/2 | Complete   | 2026-05-04 |
 | 11. HTTP Backend Migration | v4.0 | 0/0 | Not started | - |
 | 12. Error Handling Deprecation | v4.0 | 0/0 | Not started | - |
 | 13. Test Infrastructure | v4.0 | 0/0 | Not started | - |
