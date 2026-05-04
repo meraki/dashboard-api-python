@@ -7,7 +7,7 @@ import json
 import random
 import ssl
 import urllib.parse
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import TYPE_CHECKING, Any, Dict, Optional
 
 import aiohttp
@@ -373,7 +373,7 @@ class AsyncRestSession(SessionBase):
                 # Prevent getNetworkEvents from infinite loop as time goes forward
                 if metadata["operation"] == "getNetworkEvents":
                     starting_after = urllib.parse.unquote(str(links["next"]["url"]).split("startingAfter=")[1])
-                    delta = datetime.utcnow() - datetime.fromisoformat(starting_after[:-1])
+                    delta = datetime.now(timezone.utc) - datetime.fromisoformat(starting_after)
                     # Break out of loop if startingAfter returned from next link is within 5 minutes of current time
                     if delta.total_seconds() < 300:
                         break
@@ -450,7 +450,7 @@ class AsyncRestSession(SessionBase):
                 # Prevent getNetworkEvents from infinite loop as time goes forward
                 if metadata["operation"] == "getNetworkEvents":
                     starting_after = urllib.parse.unquote(str(links["next"]["url"]).split("startingAfter=")[1])
-                    delta = datetime.utcnow() - datetime.fromisoformat(starting_after[:-1])
+                    delta = datetime.now(timezone.utc) - datetime.fromisoformat(starting_after)
                     if delta.total_seconds() < 300:
                         break
                     elif event_log_end_time and starting_after > event_log_end_time:
