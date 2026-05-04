@@ -42,6 +42,7 @@ dev = [
     "pre-commit>=4.6.0",
     "ruff>=0.15.12",
     "pytest-json-report>=1.5.0",
+    "hypothesis>=6.122.0,<7",
 ]
 generator = ["jinja2==3.1.6"]
 
