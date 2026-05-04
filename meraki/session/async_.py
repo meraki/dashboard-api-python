@@ -12,11 +12,9 @@ from typing import TYPE_CHECKING, Any, Dict, Optional
 
 import aiohttp
 
-from meraki._version import __version__
 from meraki.common import validate_base_url, validate_user_agent
 from meraki.config import AIO_MAXIMUM_CONCURRENT_REQUESTS
 from meraki.exceptions import APIError, AsyncAPIError
-from meraki.response_handler import handle_3xx
 from meraki.session.base import SessionBase
 
 if TYPE_CHECKING:
@@ -44,7 +42,9 @@ class AsyncRestSession(SessionBase):
         # Build headers dict (aiohttp uses dict, not session.headers)
         self._headers = self._build_headers()
         # Async user-agent prefix
-        self._headers["User-Agent"] = f"python-meraki/aio-{self._version} " + validate_user_agent(self._be_geo_id, self._caller)
+        self._headers["User-Agent"] = f"python-meraki/aio-{self._version} " + validate_user_agent(
+            self._be_geo_id, self._caller
+        )
 
         # SSL context for certificate_path
         if self._certificate_path:
@@ -58,6 +58,9 @@ class AsyncRestSession(SessionBase):
             headers=self._headers,
             timeout=aiohttp.ClientTimeout(total=self._single_request_timeout),
         )
+
+        # Trigger the property setter to bind the correct get_pages implementation
+        self.use_iterator_for_get_pages = self._use_iterator_for_get_pages
 
     @property
     def use_iterator_for_get_pages(self):
@@ -143,7 +146,11 @@ class AsyncRestSession(SessionBase):
                 if retries == 0:
                     raise APIError(
                         metadata,
-                        type("FakeResponse", (), {"status_code": 503, "reason_phrase": str(e), "json": lambda: {}, "content": b""})(),
+                        type(
+                            "FakeResponse",
+                            (),
+                            {"status_code": 503, "reason_phrase": str(e), "json": lambda: {}, "content": b""},
+                        )(),
                     )
                 continue
 
@@ -294,11 +301,7 @@ class AsyncRestSession(SessionBase):
             return retries
 
         # Action batch concurrency error
-        if (
-            message_is_dict
-            and "errors" in message
-            and "executing batches" in str(message["errors"][0]).lower()
-        ):
+        if message_is_dict and "errors" in message and "executing batches" in str(message["errors"][0]).lower():
             wait = self._action_batch_retry_wait_time
             if self._logger:
                 self._logger.warning(f"{tag}, {operation} - {status} {reason}, retrying in {wait} seconds")
