@@ -54,7 +54,7 @@ line-length = 127
 
 [tool.pytest.ini_options]
 testpaths = ["tests/unit"]
-norecursedirs = ["tests/generator"]
+norecursedirs = ["tests/generator", ".hypothesis"]
 asyncio_mode = "auto"
 
 [tool.coverage.run]
