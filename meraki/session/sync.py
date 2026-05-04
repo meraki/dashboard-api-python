@@ -1,0 +1,302 @@
+"""Synchronous REST session for Meraki Dashboard API."""
+
+from __future__ import annotations
+
+import time
+import urllib.parse
+from datetime import datetime, timezone
+from typing import TYPE_CHECKING, Any, Dict, Optional
+
+import requests
+
+from meraki.common import (
+    iterator_for_get_pages_bool,
+    use_iterator_for_get_pages_setter,
+    validate_base_url,
+)
+from meraki.exceptions import SessionInputError
+from meraki.session.base import SessionBase
+
+if TYPE_CHECKING:
+    import httpx
+
+
+class RestSession(SessionBase):
+    """Synchronous session using requests library.
+
+    Inherits config, retry loop, and status dispatch from SessionBase.
+    Implements transport-specific sleep and request methods.
+    """
+
+    def __init__(self, logger, api_key, **kwargs: Any) -> None:
+        super().__init__(logger, api_key, **kwargs)
+
+        # Initialize requests session
+        self._req_session = requests.session()
+        self._req_session.encoding = "utf-8"
+        self._req_session.headers = self._build_headers()
+
+    @property
+    def use_iterator_for_get_pages(self):
+        return iterator_for_get_pages_bool(self)
+
+    @use_iterator_for_get_pages.setter
+    def use_iterator_for_get_pages(self, value):
+        use_iterator_for_get_pages_setter(self, value)
+
+    def _send_request(self, method: str, url: str, **kwargs: Any) -> "httpx.Response":
+        """Send HTTP request via requests.Session."""
+        response = self._req_session.request(method, url, **kwargs)
+        return response  # type: ignore[return-value]
+
+    def _sleep(self, seconds: float) -> None:
+        """Blocking sleep for retry delays."""
+        time.sleep(seconds)
+
+    def _transport_kwargs(self, kwargs: Dict[str, Any]) -> Dict[str, Any]:
+        """Map config to requests-specific kwargs (verify, proxies, timeout)."""
+        if self._certificate_path:
+            kwargs.setdefault("verify", self._certificate_path)
+        if self._requests_proxy:
+            kwargs.setdefault("proxies", {"https": self._requests_proxy})
+        kwargs.setdefault("timeout", self._single_request_timeout)
+        return kwargs
+
+    # ------------------------------------------------------------------
+    # Convenience HTTP methods
+    # ------------------------------------------------------------------
+
+    def get(self, metadata, url, params=None):
+        metadata["method"] = "GET"
+        metadata["url"] = url
+        metadata["params"] = params
+        response = self.request(metadata, "GET", url, params=params)
+        ret = None
+        if response:
+            if response.content.strip():
+                ret = response.json()
+            response.close()
+        return ret
+
+    def post(self, metadata, url, json=None):
+        metadata["method"] = "POST"
+        metadata["url"] = url
+        metadata["json"] = json
+        response = self.request(metadata, "POST", url, json=json)
+        ret = None
+        if response:
+            if response.content.strip():
+                ret = response.json()
+            response.close()
+        return ret
+
+    def put(self, metadata, url, json=None):
+        metadata["method"] = "PUT"
+        metadata["url"] = url
+        metadata["json"] = json
+        response = self.request(metadata, "PUT", url, json=json)
+        ret = None
+        if response:
+            if response.content.strip():
+                ret = response.json()
+            response.close()
+        return ret
+
+    def delete(self, metadata, url, json=None):
+        metadata["method"] = "DELETE"
+        metadata["url"] = url
+        metadata["json"] = json
+        response = self.request(metadata, "DELETE", url, json=json)
+        if response:
+            response.close()
+        return None
+
+    # ------------------------------------------------------------------
+    # Pagination
+    # ------------------------------------------------------------------
+
+    def get_pages(self, metadata, url, params=None, total_pages=-1, direction="next", event_log_end_time=None):
+        """Dispatch to iterator or legacy pagination based on config."""
+        if self._use_iterator_for_get_pages:
+            return self._get_pages_iterator(metadata, url, params, total_pages, direction, event_log_end_time)
+        return self._get_pages_legacy(metadata, url, params, total_pages, direction, event_log_end_time)
+
+    def _get_pages_iterator(
+        self,
+        metadata,
+        url,
+        params=None,
+        total_pages=-1,
+        direction="next",
+        event_log_end_time=None,
+    ):
+        if isinstance(total_pages, str) and total_pages.lower() == "all":
+            total_pages = -1
+        elif isinstance(total_pages, str) and total_pages.isnumeric():
+            total_pages = int(total_pages)
+        elif not isinstance(total_pages, int):
+            raise SessionInputError(
+                "total_pages",
+                total_pages,
+                "total_pages must be either an integer or 'all' as a string (remember to add the quotation marks).",
+                None,
+            )
+        metadata["page"] = 1
+
+        response = self.request(metadata, "GET", url, params=params)
+
+        # Get additional pages if more than one requested
+        while total_pages != 0:
+            results = response.json()
+            links = response.links
+
+            # GET the subsequent page
+            if direction == "next" and "next" in links:
+                # Prevent getNetworkEvents from infinite loop as time goes forward
+                if metadata["operation"] == "getNetworkEvents":
+                    starting_after = urllib.parse.unquote(str(links["next"]["url"]).split("startingAfter=")[1])
+                    delta = datetime.now(timezone.utc) - datetime.fromisoformat(starting_after)
+                    # Break out of loop if startingAfter returned from next link is within 5 minutes of current time
+                    if delta.total_seconds() < 300:
+                        break
+                    # Or if the next page is past the specified window's end time
+                    elif event_log_end_time and starting_after > event_log_end_time:
+                        break
+
+                metadata["page"] += 1
+                nextlink = links["next"]["url"]
+            elif direction == "prev" and "prev" in links:
+                # Prevent getNetworkEvents from infinite loop as time goes backward (to epoch 0)
+                if metadata["operation"] == "getNetworkEvents":
+                    ending_before = urllib.parse.unquote(str(links["prev"]["url"]).split("endingBefore=")[1])
+                    # Break out of loop if endingBefore returned from prev link is before 2014
+                    if ending_before < "2014-01-01":
+                        break
+
+                metadata["page"] += 1
+                nextlink = links["prev"]["url"]
+            else:
+                total_pages = 1
+
+            response.close()
+
+            return_items = []
+            # Just prepare the list
+            if isinstance(results, list):
+                return_items = results
+            elif isinstance(results, dict) and "items" in results:
+                return_items = results["items"]
+            # For event log endpoint
+            elif isinstance(results, dict):
+                if direction == "next":
+                    return_items = results["events"][::-1]
+                else:
+                    return_items = results["events"]
+
+            for item in return_items:
+                yield item
+
+            total_pages = total_pages - 1
+
+            if total_pages != 0:
+                response = self.request(metadata, "GET", nextlink)
+
+    def _get_pages_legacy(
+        self,
+        metadata,
+        url,
+        params=None,
+        total_pages=-1,
+        direction="next",
+        event_log_end_time=None,
+    ):
+        if isinstance(total_pages, str) and total_pages.lower() == "all":
+            total_pages = -1
+        elif isinstance(total_pages, str) and total_pages.isnumeric():
+            total_pages = int(total_pages)
+        elif not isinstance(total_pages, int):
+            raise SessionInputError(
+                "total_pages",
+                total_pages,
+                "total_pages must be either an integer or 'all' as a string (remember to add the quotation marks).",
+                None,
+            )
+
+        metadata["page"] = 1
+
+        response = self.request(metadata, "GET", url, params=params)
+
+        # Handle GETs that produce 204 No Content responses
+        if response.status_code == 204:
+            results = None
+        else:
+            results = response.json()
+
+        # For event log endpoint when using 'next' direction, so results/events are sorted chronologically
+        if isinstance(results, dict) and metadata["operation"] == "getNetworkEvents" and direction == "next":
+            results["events"] = results["events"][::-1]
+
+        # Get additional pages if more than one requested
+        while total_pages != 1:
+            links = response.links
+            response.close()
+            response = None
+
+            # GET the subsequent page
+            if direction == "next" and "next" in links:
+                # Prevent getNetworkEvents from infinite loop as time goes forward
+                if metadata["operation"] == "getNetworkEvents":
+                    starting_after = urllib.parse.unquote(links["next"]["url"].split("startingAfter=")[1])
+                    delta = datetime.now(timezone.utc) - datetime.fromisoformat(starting_after)
+                    # Break out of loop if startingAfter returned from next link is within 5 minutes of current time
+                    if delta.total_seconds() < 300:
+                        break
+                    # Or if next page is past the specified window's end time
+                    elif event_log_end_time and starting_after > event_log_end_time:
+                        break
+
+                metadata["page"] += 1
+                response = self.request(metadata, "GET", links["next"]["url"])
+            elif direction == "prev" and "prev" in links:
+                # Prevent getNetworkEvents from infinite loop as time goes backward (to epoch 0)
+                if metadata["operation"] == "getNetworkEvents":
+                    ending_before = urllib.parse.unquote(links["prev"]["url"].split("endingBefore=")[1])
+                    # Break out of loop if endingBefore returned from prev link is before 2014
+                    if ending_before < "2014-01-01":
+                        break
+
+                metadata["page"] += 1
+                response = self.request(metadata, "GET", links["prev"]["url"])
+            else:
+                break
+
+            # Append that page's results, depending on the endpoint
+            if isinstance(results, list):
+                results.extend(response.json())
+            elif isinstance(results, dict) and "items" in results:
+                results["items"].extend(response.json()["items"])
+                if "meta" in results:
+                    results["meta"]["counts"]["items"]["remaining"] = response.json()["meta"]["counts"]["items"]["remaining"]
+            # For event log endpoint
+            elif isinstance(results, dict):
+                try:
+                    start = response.json()["pageStartAt"]
+                except KeyError:
+                    if self._logger:
+                        self._logger.warning(f"pageStartAt missing from response: {response.headers}")
+                end = response.json()["pageEndAt"]
+                events = response.json()["events"]
+                if direction == "next":
+                    events = events[::-1]
+                if start < results["pageStartAt"]:
+                    results["pageStartAt"] = start
+                if end > results["pageEndAt"]:
+                    results["pageEndAt"] = end
+                results["events"].extend(events)
+
+            total_pages -= 1
+
+        if response:
+            response.close()
+
+        return results
