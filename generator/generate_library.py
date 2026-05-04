@@ -159,12 +159,11 @@ def generate_modules(spec, batchable_actions, jinja_env, scopes, template_dir):
         section = scopes[scope]
 
         # Generate the standard module
-        with open(f"meraki/api/{scope}.py", "w", encoding="utf-8", newline=None) as output:
-            # Open module file for Asyncio API libraries
-            async_output = open(f"meraki/aio/api/{scope}.py", "w", encoding="utf-8", newline=None)
-            # Open module file for Action Batch API libraries
-            batch_output = open(f"meraki/api/batch/{scope}.py", "w", encoding="utf-8", newline=None)
-
+        with (
+            open(f"meraki/api/{scope}.py", "w", encoding="utf-8", newline=None) as output,
+            open(f"meraki/aio/api/{scope}.py", "w", encoding="utf-8", newline=None) as async_output,
+            open(f"meraki/api/batch/{scope}.py", "w", encoding="utf-8", newline=None) as batch_output,
+        ):
             modules = [
                 {"template_name": "class_template.jinja2", "module_output": output},
                 {
