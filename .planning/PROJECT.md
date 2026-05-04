@@ -49,11 +49,11 @@ Modular OASv3 generator built and tested. Produces sync, async, and batch module
 
 - [ ] Unified httpx backend replacing requests + aiohttp
 - [ ] Shared session base class with decision logic
-- [ ] Library-agnostic param encoding utility
+- [x] Library-agnostic param encoding utility - Validated in Phase 9: Foundation
 - [ ] Decomposed request methods (complexity <10 each)
 - [ ] Type annotations on session layer
 - [ ] AsyncAPIError backwards-compatible deprecation
-- [ ] Property-based tests for param encoding
+- [x] Property-based tests for param encoding - Validated in Phase 9: Foundation
 - [ ] Test infra migration (respx replaces responses)
 
 ### Out of Scope
