@@ -48,11 +48,19 @@ from meraki.config import (
     VALIDATE_KWARGS,
 )
 from meraki.rest_session import RestSession
-from meraki.exceptions import APIKeyError
-from meraki._version import __version__ as __version__  # noqa: F401
+from meraki.exceptions import APIError, APIKeyError, APIResponseError, AsyncAPIError
+from meraki._version import __version__  # noqa: F401
 from datetime import datetime
 
 __api_version__ = "1.69.0"
+
+__all__ = [
+    "APIError",
+    "APIKeyError",
+    "APIResponseError",
+    "AsyncAPIError",
+    "DashboardAPI",
+]
 
 
 class DashboardAPI(object):
