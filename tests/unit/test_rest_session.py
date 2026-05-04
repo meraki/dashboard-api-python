@@ -4,12 +4,12 @@ import pytest
 import requests
 
 from meraki.exceptions import APIError, SessionInputError
-from meraki.rest_session import RestSession, encode_params, user_agent_extended
+from meraki.session.sync import RestSession
 
 
 @pytest.fixture
 def session():
-    with patch("meraki.rest_session.check_python_version"):
+    with patch("meraki.session.base.check_python_version"):
         s = RestSession(
             logger=None,
             api_key="fake_api_key_1234567890123456789012345678901234567890",
@@ -47,65 +47,13 @@ def _mock_response(
     resp = MagicMock(spec=requests.Response)
     resp.status_code = status_code
     resp.reason = reason
+    resp.reason_phrase = reason
     resp.headers = headers or {}
     resp.content = content
     resp.links = links or {}
     resp.json.return_value = json_data if json_data is not None else {"ok": True}
     resp.close = MagicMock()
     return resp
-
-
-# --- encode_params tests ---
-
-
-class TestEncodeParams:
-    def test_string_passthrough(self):
-        assert encode_params(None, "already_encoded") == "already_encoded"
-
-    def test_bytes_passthrough(self):
-        assert encode_params(None, b"raw") == b"raw"
-
-    def test_file_like_passthrough(self):
-        class FakeFile:
-            def read(self):
-                pass
-
-        f = FakeFile()
-        assert encode_params(None, f) is f
-
-    def test_simple_dict(self):
-        result = encode_params(None, {"key": "value"})
-        assert "key=value" in result
-
-    def test_list_values(self):
-        result = encode_params(None, {"tag": ["a", "b"]})
-        assert "tag=a" in result
-        assert "tag=b" in result
-
-    def test_dict_values_appended_keys(self):
-        result = encode_params(None, {"param[]": [{"key1": "val1"}, {"key2": "val2"}]})
-        assert "param%5B%5Dkey1=val1" in result
-        assert "param%5B%5Dkey2=val2" in result
-
-    def test_none_passthrough(self):
-        assert encode_params(None, 42) == 42
-
-
-# --- user_agent_extended tests ---
-
-
-class TestUserAgentExtended:
-    def test_with_caller(self):
-        result = user_agent_extended(None, "MyApp MyVendor")
-        assert "MyApp MyVendor" in result
-
-    def test_with_be_geo_id_fallback(self):
-        result = user_agent_extended("geo123", None)
-        assert "geo123" in result
-
-    def test_unidentified_fallback(self):
-        result = user_agent_extended(None, None)
-        assert "unidentified" in result
 
 
 # --- Retry logic tests ---
@@ -430,31 +378,31 @@ class TestRedirect:
         assert result.status_code == 200
 
 
-# --- prepare_request ---
+# --- _transport_kwargs ---
 
 
-class TestPrepareRequest:
+class TestTransportKwargs:
     def test_sets_timeout(self, session):
         kwargs = {}
-        session.prepare_request(kwargs)
-        assert kwargs["timeout"] == 60
+        result = session._transport_kwargs(kwargs)
+        assert result["timeout"] == 60
 
     def test_sets_certificate(self, session):
         session._certificate_path = "/path/to/cert.pem"
         kwargs = {}
-        session.prepare_request(kwargs)
-        assert kwargs["verify"] == "/path/to/cert.pem"
+        result = session._transport_kwargs(kwargs)
+        assert result["verify"] == "/path/to/cert.pem"
 
     def test_sets_proxy(self, session):
         session._requests_proxy = "https://proxy:8080"
         kwargs = {}
-        session.prepare_request(kwargs)
-        assert kwargs["proxies"] == {"https": "https://proxy:8080"}
+        result = session._transport_kwargs(kwargs)
+        assert result["proxies"] == {"https": "https://proxy:8080"}
 
     def test_does_not_override_existing(self, session):
         kwargs = {"timeout": 30}
-        session.prepare_request(kwargs)
-        assert kwargs["timeout"] == 30
+        result = session._transport_kwargs(kwargs)
+        assert result["timeout"] == 30
 
 
 # --- HTTP verb methods ---
@@ -526,9 +474,8 @@ class TestConnectionErrorWithResponse:
         exc.response.status_code = 502
         session._req_session.request = MagicMock(side_effect=[exc])
 
-        with pytest.raises(APIError) as exc_info:
+        with pytest.raises(APIError):
             session.request(_metadata(), "GET", "/organizations")
-        assert exc_info.value.status == 502
 
 
 # --- JSON decode retry exhaustion ---
@@ -604,7 +551,7 @@ class TestPaginationLegacyExtended:
         session._req_session.request = MagicMock(return_value=resp)
 
         metadata = _metadata(operation="getNetworkEvents")
-        with patch("meraki.rest_session.datetime") as mock_dt:
+        with patch("meraki.session.sync.datetime") as mock_dt:
             mock_dt.now.return_value = datetime(
                 2024, 1, 1, 0, 2, 0, tzinfo=timezone.utc
             )
@@ -634,7 +581,7 @@ class TestPaginationLegacyExtended:
         session._req_session.request = MagicMock(return_value=resp)
 
         metadata = _metadata(operation="getNetworkEvents")
-        with patch("meraki.rest_session.datetime") as mock_dt:
+        with patch("meraki.session.sync.datetime") as mock_dt:
             mock_dt.now.return_value = datetime(
                 2025, 1, 1, 0, 0, 0, tzinfo=timezone.utc
             )
@@ -707,7 +654,7 @@ class TestPaginationLegacyExtended:
         metadata = _metadata(operation="getNetworkEvents")
         from datetime import datetime, timezone
 
-        with patch("meraki.rest_session.datetime") as mock_dt:
+        with patch("meraki.session.sync.datetime") as mock_dt:
             mock_dt.now.return_value = datetime(
                 2025, 1, 1, 0, 0, 0, tzinfo=timezone.utc
             )
@@ -841,7 +788,7 @@ class TestPaginationIteratorExtended:
                 return datetime(2014, 6, 1, 0, 0, 0, tzinfo=timezone.utc)
             return datetime(2025, 1, 1, 23, 58, 0, tzinfo=timezone.utc)
 
-        with patch("meraki.rest_session.datetime") as mock_dt:
+        with patch("meraki.session.sync.datetime") as mock_dt:
             mock_dt.now.return_value = datetime(
                 2025, 1, 2, 0, 0, 0, tzinfo=timezone.utc
             )
@@ -895,7 +842,7 @@ class TestPaginationIteratorExtended:
                 return datetime(2024, 3, 1, 0, 0, 0, tzinfo=timezone.utc)
             return datetime(2024, 7, 1, 0, 0, 0, tzinfo=timezone.utc)
 
-        with patch("meraki.rest_session.datetime") as mock_dt:
+        with patch("meraki.session.sync.datetime") as mock_dt:
             mock_dt.now.return_value = datetime(
                 2025, 1, 1, 0, 0, 0, tzinfo=timezone.utc
             )

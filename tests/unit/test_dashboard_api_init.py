@@ -9,7 +9,7 @@ from meraki.exceptions import APIKeyError
 
 
 class TestDashboardAPIInit:
-    @patch("meraki.rest_session.check_python_version")
+    @patch("meraki.session.base.check_python_version")
     def test_api_key_from_param(self, mock_check):
         d = meraki.DashboardAPI(
             "test_key_1234567890123456789012345678901234567890",
@@ -20,7 +20,7 @@ class TestDashboardAPIInit:
             d._session._api_key == "test_key_1234567890123456789012345678901234567890"
         )
 
-    @patch("meraki.rest_session.check_python_version")
+    @patch("meraki.session.base.check_python_version")
     def test_api_key_from_env(self, mock_check):
         with patch.dict(
             os.environ,
@@ -40,7 +40,7 @@ class TestDashboardAPIInit:
             with pytest.raises(APIKeyError):
                 meraki.DashboardAPI(suppress_logging=True, caller="TestApp TestVendor")
 
-    @patch("meraki.rest_session.check_python_version")
+    @patch("meraki.session.base.check_python_version")
     def test_suppress_logging_sets_none(self, mock_check):
         d = meraki.DashboardAPI(
             "test_key_1234567890123456789012345678901234567890",
@@ -49,7 +49,7 @@ class TestDashboardAPIInit:
         )
         assert d._logger is None
 
-    @patch("meraki.rest_session.check_python_version")
+    @patch("meraki.session.base.check_python_version")
     def test_simulate_mode_propagates(self, mock_check):
         d = meraki.DashboardAPI(
             "test_key_1234567890123456789012345678901234567890",
@@ -59,7 +59,7 @@ class TestDashboardAPIInit:
         )
         assert d._session._simulate is True
 
-    @patch("meraki.rest_session.check_python_version")
+    @patch("meraki.session.base.check_python_version")
     def test_custom_base_url(self, mock_check):
         d = meraki.DashboardAPI(
             "test_key_1234567890123456789012345678901234567890",
@@ -69,7 +69,7 @@ class TestDashboardAPIInit:
         )
         assert d._session._base_url == "https://api.meraki.cn/api/v1"
 
-    @patch("meraki.rest_session.check_python_version")
+    @patch("meraki.session.base.check_python_version")
     def test_maximum_retries_propagates(self, mock_check):
         d = meraki.DashboardAPI(
             "test_key_1234567890123456789012345678901234567890",
@@ -79,7 +79,7 @@ class TestDashboardAPIInit:
         )
         assert d._session._maximum_retries == 10
 
-    @patch("meraki.rest_session.check_python_version")
+    @patch("meraki.session.base.check_python_version")
     def test_use_iterator_propagates(self, mock_check):
         d = meraki.DashboardAPI(
             "test_key_1234567890123456789012345678901234567890",
@@ -89,7 +89,7 @@ class TestDashboardAPIInit:
         )
         assert d._session.use_iterator_for_get_pages is True
 
-    @patch("meraki.rest_session.check_python_version")
+    @patch("meraki.session.base.check_python_version")
     def test_caller_from_env(self, mock_check):
         with patch.dict(os.environ, {"MERAKI_PYTHON_SDK_CALLER": "EnvApp EnvVendor"}):
             d = meraki.DashboardAPI(
@@ -98,7 +98,7 @@ class TestDashboardAPIInit:
             )
         assert "EnvApp EnvVendor" in d._session._req_session.headers["User-Agent"]
 
-    @patch("meraki.rest_session.check_python_version")
+    @patch("meraki.session.base.check_python_version")
     def test_all_api_sections_initialized(self, mock_check):
         d = meraki.DashboardAPI(
             "test_key_1234567890123456789012345678901234567890",
@@ -113,7 +113,7 @@ class TestDashboardAPIInit:
 
 
 class TestDashboardAPILogging:
-    @patch("meraki.rest_session.check_python_version")
+    @patch("meraki.session.base.check_python_version")
     def test_inherit_logging_config(self, mock_check):
         d = meraki.DashboardAPI(
             "test_key_1234567890123456789012345678901234567890",
@@ -124,7 +124,7 @@ class TestDashboardAPILogging:
         assert d._logger is not None
         assert d._logger.name == "meraki"
 
-    @patch("meraki.rest_session.check_python_version")
+    @patch("meraki.session.base.check_python_version")
     def test_output_log_with_print_console(self, mock_check, tmp_path):
         d = meraki.DashboardAPI(
             "test_key_1234567890123456789012345678901234567890",
@@ -143,7 +143,7 @@ class TestDashboardAPILogging:
         # Clean up handlers to avoid pollution
         d._logger.handlers.clear()
 
-    @patch("meraki.rest_session.check_python_version")
+    @patch("meraki.session.base.check_python_version")
     def test_output_log_path_without_trailing_slash(self, mock_check, tmp_path):
         log_path = str(tmp_path).rstrip("/").rstrip("\\")
         d = meraki.DashboardAPI(
@@ -160,7 +160,7 @@ class TestDashboardAPILogging:
         assert "pfx_log__" in d._log_file
         d._logger.handlers.clear()
 
-    @patch("meraki.rest_session.check_python_version")
+    @patch("meraki.session.base.check_python_version")
     def test_output_log_path_with_trailing_slash(self, mock_check, tmp_path):
         log_path = str(tmp_path) + "/"
         d = meraki.DashboardAPI(
@@ -176,7 +176,7 @@ class TestDashboardAPILogging:
         assert "//" not in d._log_file.replace("\\", "/").replace("//", "/", 1)
         d._logger.handlers.clear()
 
-    @patch("meraki.rest_session.check_python_version")
+    @patch("meraki.session.base.check_python_version")
     def test_no_output_log_with_print_console(self, mock_check):
         d = meraki.DashboardAPI(
             "test_key_1234567890123456789012345678901234567890",
@@ -190,7 +190,7 @@ class TestDashboardAPILogging:
         assert d._logger.level == logging.DEBUG
         d._logger.handlers.clear()
 
-    @patch("meraki.rest_session.check_python_version")
+    @patch("meraki.session.base.check_python_version")
     def test_no_output_log_no_print_console(self, mock_check):
         d = meraki.DashboardAPI(
             "test_key_1234567890123456789012345678901234567890",

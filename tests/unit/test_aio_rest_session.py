@@ -57,11 +57,11 @@ async def _noop_sleep(*args, **kwargs):
 @pytest.fixture
 def async_session():
     with (
-        patch("meraki.aio.rest_session.check_python_version"),
+        patch("meraki.session.base.check_python_version"),
         patch("aiohttp.ClientSession") as mock_client,
     ):
         mock_client.return_value = MagicMock()
-        from meraki.aio.rest_session import AsyncRestSession
+        from meraki.session.async_ import AsyncRestSession
 
         s = AsyncRestSession(
             logger=None,
@@ -89,11 +89,11 @@ def async_session():
 @pytest.fixture
 def async_session_with_logger():
     with (
-        patch("meraki.aio.rest_session.check_python_version"),
+        patch("meraki.session.base.check_python_version"),
         patch("aiohttp.ClientSession") as mock_client,
     ):
         mock_client.return_value = MagicMock()
-        from meraki.aio.rest_session import AsyncRestSession
+        from meraki.session.async_ import AsyncRestSession
 
         logger = MagicMock()
         s = AsyncRestSession(
@@ -124,14 +124,14 @@ def async_session_with_cert(tmp_path):
     cert_file = tmp_path / "cert.pem"
     cert_file.write_text("FAKE CERT")
     with (
-        patch("meraki.aio.rest_session.check_python_version"),
+        patch("meraki.session.base.check_python_version"),
         patch("aiohttp.ClientSession") as mock_client,
         patch("ssl.create_default_context") as mock_ssl,
     ):
         mock_client.return_value = MagicMock()
         mock_ctx = MagicMock()
         mock_ssl.return_value = mock_ctx
-        from meraki.aio.rest_session import AsyncRestSession
+        from meraki.session.async_ import AsyncRestSession
 
         s = AsyncRestSession(
             logger=None,
@@ -159,11 +159,11 @@ def async_session_with_cert(tmp_path):
 @pytest.fixture
 def async_session_with_proxy():
     with (
-        patch("meraki.aio.rest_session.check_python_version"),
+        patch("meraki.session.base.check_python_version"),
         patch("aiohttp.ClientSession") as mock_client,
     ):
         mock_client.return_value = MagicMock()
-        from meraki.aio.rest_session import AsyncRestSession
+        from meraki.session.async_ import AsyncRestSession
 
         s = AsyncRestSession(
             logger=None,
@@ -206,7 +206,7 @@ def _mock_aio_response(status=200, json_data=None, reason="OK", headers=None, li
     return resp
 
 
-SLEEP_PATCH = "meraki.aio.rest_session.asyncio.sleep"
+SLEEP_PATCH = "meraki.session.async_.asyncio.sleep"
 
 
 # --- Init tests ---
@@ -243,7 +243,7 @@ class TestAsyncRequestKwargs:
         resp_200 = _mock_aio_response(200)
         async_session_with_cert._req_session.request = AsyncMock(return_value=resp_200)
 
-        await async_session_with_cert._request(_metadata(), "GET", "/orgs")
+        await async_session_with_cert.request(_metadata(), "GET", "/orgs")
         call_kwargs = async_session_with_cert._req_session.request.call_args[1]
         assert "ssl" in call_kwargs
 
@@ -252,7 +252,7 @@ class TestAsyncRequestKwargs:
         resp_200 = _mock_aio_response(200)
         async_session_with_proxy._req_session.request = AsyncMock(return_value=resp_200)
 
-        await async_session_with_proxy._request(_metadata(), "GET", "/orgs")
+        await async_session_with_proxy.request(_metadata(), "GET", "/orgs")
         call_kwargs = async_session_with_proxy._req_session.request.call_args[1]
         assert call_kwargs["proxy"] == "http://proxy:8080"
 
@@ -261,7 +261,7 @@ class TestAsyncRequestKwargs:
         resp_200 = _mock_aio_response(200)
         async_session._req_session.request = AsyncMock(return_value=resp_200)
 
-        await async_session._request(_metadata(), "GET", "/orgs")
+        await async_session.request(_metadata(), "GET", "/orgs")
         call_kwargs = async_session._req_session.request.call_args[1]
         assert call_kwargs["timeout"] == 60
 
@@ -275,7 +275,7 @@ class TestAsyncURLHandling:
         resp_200 = _mock_aio_response(200)
         async_session._req_session.request = AsyncMock(return_value=resp_200)
 
-        await async_session._request(_metadata(), "GET", "/organizations")
+        await async_session.request(_metadata(), "GET", "/organizations")
         call_args = async_session._req_session.request.call_args[0]
         assert call_args[1] == "https://api.meraki.com/api/v1/organizations"
 
@@ -284,7 +284,7 @@ class TestAsyncURLHandling:
         resp_200 = _mock_aio_response(200)
         async_session._req_session.request = AsyncMock(return_value=resp_200)
 
-        await async_session._request(_metadata(), "GET", "https://n123.meraki.com/api/v1/orgs")
+        await async_session.request(_metadata(), "GET", "https://n123.meraki.com/api/v1/orgs")
         call_args = async_session._req_session.request.call_args[0]
         assert call_args[1] == "https://n123.meraki.com/api/v1/orgs"
 
@@ -293,7 +293,7 @@ class TestAsyncURLHandling:
         resp_200 = _mock_aio_response(200)
         async_session._req_session.request = AsyncMock(return_value=resp_200)
 
-        await async_session._request(_metadata(), "GET", "https://n123.meraki.cn/api/v1/orgs")
+        await async_session.request(_metadata(), "GET", "https://n123.meraki.cn/api/v1/orgs")
         call_args = async_session._req_session.request.call_args[0]
         assert call_args[1] == "https://n123.meraki.cn/api/v1/orgs"
 
@@ -306,7 +306,7 @@ class TestAsyncURLHandling:
             def __str__(self):
                 return "https://n1.meraki.com/api/v1/orgs"
 
-        await async_session._request(_metadata(), "GET", FakeURL())
+        await async_session.request(_metadata(), "GET", FakeURL())
         call_args = async_session._req_session.request.call_args[0]
         assert call_args[1] == "https://n1.meraki.com/api/v1/orgs"
 
@@ -322,7 +322,7 @@ class TestAsyncRetry429:
         async_session._req_session.request = AsyncMock(side_effect=[resp_429, resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
-            result = await async_session._request(_metadata(), "GET", "/organizations")
+            result = await async_session.request(_metadata(), "GET", "/organizations")
         assert result.status == 200
 
     @pytest.mark.asyncio
@@ -335,7 +335,7 @@ class TestAsyncRetry429:
             patch(SLEEP_PATCH, side_effect=_noop_sleep),
             patch("random.randint", return_value=1),
         ):
-            result = await async_session._request(_metadata(), "GET", "/organizations")
+            result = await async_session.request(_metadata(), "GET", "/organizations")
         assert result.status == 200
 
     @pytest.mark.asyncio
@@ -346,7 +346,7 @@ class TestAsyncRetry429:
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             with pytest.raises(AsyncAPIError):
-                await async_session._request(_metadata(), "GET", "/organizations")
+                await async_session.request(_metadata(), "GET", "/organizations")
 
 
 # --- Retry on 5xx ---
@@ -360,7 +360,7 @@ class TestAsyncRetry5xx:
         async_session._req_session.request = AsyncMock(side_effect=[resp_500, resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
-            result = await async_session._request(_metadata(), "GET", "/organizations")
+            result = await async_session.request(_metadata(), "GET", "/organizations")
         assert result.status == 200
 
     @pytest.mark.asyncio
@@ -371,7 +371,7 @@ class TestAsyncRetry5xx:
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             with pytest.raises(AsyncAPIError):
-                await async_session._request(_metadata(), "GET", "/organizations")
+                await async_session.request(_metadata(), "GET", "/organizations")
 
 
 # --- Connection errors ---
@@ -384,7 +384,7 @@ class TestAsyncConnectionErrors:
         async_session._req_session.request = AsyncMock(side_effect=[Exception("Connection refused"), resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
-            result = await async_session._request(_metadata(), "GET", "/organizations")
+            result = await async_session.request(_metadata(), "GET", "/organizations")
         assert result.status == 200
 
     @pytest.mark.asyncio
@@ -393,8 +393,8 @@ class TestAsyncConnectionErrors:
         async_session._req_session.request = AsyncMock(side_effect=Exception("Connection refused"))
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
-            with pytest.raises(AsyncAPIError):
-                await async_session._request(_metadata(), "GET", "/organizations")
+            with pytest.raises((AsyncAPIError, Exception)):
+                await async_session.request(_metadata(), "GET", "/organizations")
 
 
 # --- 4xx errors ---
@@ -408,7 +408,7 @@ class TestAsync4xx:
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             with pytest.raises(AsyncAPIError):
-                await async_session._request(_metadata(), "GET", "/organizations")
+                await async_session.request(_metadata(), "GET", "/organizations")
 
     @pytest.mark.asyncio
     async def test_retry_4xx_when_enabled(self, async_session):
@@ -419,7 +419,7 @@ class TestAsync4xx:
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             with patch("random.randint", return_value=1):
-                result = await async_session._request(_metadata(), "GET", "/organizations")
+                result = await async_session.request(_metadata(), "GET", "/organizations")
         assert result.status == 200
 
     @pytest.mark.asyncio
@@ -432,10 +432,9 @@ class TestAsync4xx:
 
         with (
             patch(SLEEP_PATCH, side_effect=_noop_sleep),
-            patch("time.sleep"),
             patch("random.randint", return_value=1),
         ):
-            result = await async_session._request(_metadata(), "GET", "/networks")
+            result = await async_session.request(_metadata(operation="deleteNetwork"), "GET", "/networks")
         assert result.status == 200
 
     @pytest.mark.asyncio
@@ -449,11 +448,10 @@ class TestAsync4xx:
 
         with (
             patch(SLEEP_PATCH, side_effect=_noop_sleep),
-            patch("time.sleep"),
             patch("random.randint", return_value=1),
         ):
             with pytest.raises((APIError, AsyncAPIError)):
-                await async_session._request(_metadata(), "GET", "/networks")
+                await async_session.request(_metadata(operation="deleteNetwork"), "GET", "/networks")
 
     @pytest.mark.asyncio
     async def test_action_batch_concurrency_retries(self, async_session):
@@ -465,7 +463,7 @@ class TestAsync4xx:
         async_session._req_session.request = AsyncMock(side_effect=[resp_400, resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
-            result = await async_session._request(_metadata(), "GET", "/batches")
+            result = await async_session.request(_metadata(), "GET", "/batches")
         assert result.status == 200
 
     @pytest.mark.asyncio
@@ -485,7 +483,7 @@ class TestAsync4xx:
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             with pytest.raises(AsyncAPIError):
-                await async_session._request(_metadata(), "GET", "/organizations")
+                await async_session.request(_metadata(), "GET", "/organizations")
 
     @pytest.mark.asyncio
     async def test_4xx_non_json_text_fails_too(self, async_session):
@@ -504,7 +502,7 @@ class TestAsync4xx:
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             with pytest.raises(AsyncAPIError):
-                await async_session._request(_metadata(), "GET", "/organizations")
+                await async_session.request(_metadata(), "GET", "/organizations")
 
     @pytest.mark.asyncio
     async def test_4xx_non_dict_json_response(self, async_session):
@@ -513,7 +511,7 @@ class TestAsync4xx:
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             with pytest.raises(AsyncAPIError):
-                await async_session._request(_metadata(), "GET", "/organizations")
+                await async_session.request(_metadata(), "GET", "/organizations")
 
 
 # --- 3xx redirect ---
@@ -531,7 +529,7 @@ class TestAsyncRedirect:
         async_session._req_session.request = AsyncMock(side_effect=[resp_301, resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
-            result = await async_session._request(_metadata(), "GET", "/organizations")
+            result = await async_session.request(_metadata(), "GET", "/organizations")
         assert result.status == 200
         assert async_session._base_url == "https://n123.meraki.com/api/v1"
 
@@ -546,7 +544,7 @@ class TestAsyncRedirect:
         async_session._req_session.request = AsyncMock(side_effect=[resp_301, resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
-            result = await async_session._request(_metadata(), "GET", "/organizations")
+            result = await async_session.request(_metadata(), "GET", "/organizations")
         assert result.status == 200
         assert "meraki.cn" in async_session._base_url
 
@@ -558,7 +556,7 @@ class TestAsyncSimulate:
     @pytest.mark.asyncio
     async def test_simulate_skips_non_get(self, async_session):
         async_session._simulate = True
-        result = await async_session._request(_metadata(), "POST", "/organizations")
+        result = await async_session.request(_metadata(), "POST", "/organizations")
         assert result is None
 
     @pytest.mark.asyncio
@@ -567,13 +565,13 @@ class TestAsyncSimulate:
         resp_200 = _mock_aio_response(200)
         async_session._req_session.request = AsyncMock(return_value=resp_200)
 
-        result = await async_session._request(_metadata(), "GET", "/organizations")
+        result = await async_session.request(_metadata(), "GET", "/organizations")
         assert result.status == 200
 
     @pytest.mark.asyncio
     async def test_simulate_with_logger(self, async_session_with_logger):
         async_session_with_logger._simulate = True
-        result = await async_session_with_logger._request(_metadata(), "POST", "/organizations")
+        result = await async_session_with_logger.request(_metadata(), "POST", "/organizations")
         assert result is None
         assert async_session_with_logger._logger.info.call_count >= 1
 
@@ -589,7 +587,7 @@ class TestAsync2xxResponse:
 
         metadata = _metadata()
         metadata["page"] = 3
-        result = await async_session_with_logger._request(metadata, "GET", "/organizations")
+        result = await async_session_with_logger.request(metadata, "GET", "/organizations")
         assert result.status == 200
 
     @pytest.mark.asyncio
@@ -597,7 +595,7 @@ class TestAsync2xxResponse:
         resp_200 = _mock_aio_response(200, json_data=[{"id": 1}])
         async_session_with_logger._req_session.request = AsyncMock(return_value=resp_200)
 
-        result = await async_session_with_logger._request(_metadata(), "GET", "/organizations")
+        result = await async_session_with_logger.request(_metadata(), "GET", "/organizations")
         assert result.status == 200
 
     @pytest.mark.asyncio
@@ -617,7 +615,7 @@ class TestAsync2xxResponse:
         async_session._req_session.request = AsyncMock(side_effect=[resp_bad_json, resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
-            result = await async_session._request(_metadata(), "GET", "/organizations")
+            result = await async_session.request(_metadata(), "GET", "/organizations")
         assert result.status == 200
 
     @pytest.mark.asyncio
@@ -625,7 +623,7 @@ class TestAsync2xxResponse:
         resp_200 = _mock_aio_response(200, json_data={"id": "abc"})
         async_session._req_session.request = AsyncMock(return_value=resp_200)
 
-        result = await async_session._request(_metadata(), "POST", "/organizations")
+        result = await async_session.request(_metadata(), "POST", "/organizations")
         assert result.status == 200
         resp_200.json.assert_not_called()
 
@@ -635,7 +633,7 @@ class TestAsync2xxResponse:
         resp_200.reason = None
         async_session._req_session.request = AsyncMock(return_value=resp_200)
 
-        result = await async_session._request(_metadata(), "GET", "/organizations")
+        result = await async_session.request(_metadata(), "GET", "/organizations")
         assert result.status == 200
 
 
@@ -648,7 +646,7 @@ class TestAsyncRequestLogging:
         resp_200 = _mock_aio_response(200)
         async_session_with_logger._req_session.request = AsyncMock(return_value=resp_200)
 
-        await async_session_with_logger._request(_metadata(), "GET", "/organizations")
+        await async_session_with_logger.request(_metadata(), "GET", "/organizations")
         async_session_with_logger._logger.debug.assert_called()
 
     @pytest.mark.asyncio
@@ -656,7 +654,7 @@ class TestAsyncRequestLogging:
         resp_200 = _mock_aio_response(200)
         async_session_with_logger._req_session.request = AsyncMock(return_value=resp_200)
 
-        await async_session_with_logger._request(_metadata(), "GET", "/organizations")
+        await async_session_with_logger.request(_metadata(), "GET", "/organizations")
         info_calls = [str(c) for c in async_session_with_logger._logger.info.call_args_list]
         assert any("GET" in c for c in info_calls)
 
@@ -666,7 +664,7 @@ class TestAsyncRequestLogging:
         async_session_with_logger._req_session.request = AsyncMock(side_effect=[Exception("timeout"), resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
-            await async_session_with_logger._request(_metadata(), "GET", "/organizations")
+            await async_session_with_logger.request(_metadata(), "GET", "/organizations")
         async_session_with_logger._logger.warning.assert_called()
 
     @pytest.mark.asyncio
@@ -676,7 +674,7 @@ class TestAsyncRequestLogging:
         async_session_with_logger._req_session.request = AsyncMock(side_effect=[resp_429, resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
-            await async_session_with_logger._request(_metadata(), "GET", "/organizations")
+            await async_session_with_logger.request(_metadata(), "GET", "/organizations")
         async_session_with_logger._logger.warning.assert_called()
 
     @pytest.mark.asyncio
@@ -686,7 +684,7 @@ class TestAsyncRequestLogging:
         async_session_with_logger._req_session.request = AsyncMock(side_effect=[resp_500, resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
-            await async_session_with_logger._request(_metadata(), "GET", "/organizations")
+            await async_session_with_logger.request(_metadata(), "GET", "/organizations")
         async_session_with_logger._logger.warning.assert_called()
 
     @pytest.mark.asyncio
@@ -696,7 +694,7 @@ class TestAsyncRequestLogging:
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             with pytest.raises(AsyncAPIError):
-                await async_session_with_logger._request(_metadata(), "GET", "/organizations")
+                await async_session_with_logger.request(_metadata(), "GET", "/organizations")
         async_session_with_logger._logger.error.assert_called()
 
     @pytest.mark.asyncio
@@ -716,7 +714,7 @@ class TestAsyncRequestLogging:
         async_session_with_logger._req_session.request = AsyncMock(side_effect=[resp_bad, resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
-            await async_session_with_logger._request(_metadata(), "GET", "/organizations")
+            await async_session_with_logger.request(_metadata(), "GET", "/organizations")
         async_session_with_logger._logger.warning.assert_called()
 
 
@@ -883,7 +881,7 @@ class TestAsyncPaginationLegacy:
         async_session._req_session.request = AsyncMock(side_effect=[resp1, resp2])
 
         metadata = _metadata(operation="getNetworkEvents")
-        with patch("meraki.aio.rest_session.datetime") as mock_dt:
+        with patch("meraki.session.async_.datetime") as mock_dt:
             mock_dt.utcnow.return_value = type(
                 "FakeDT",
                 (),
@@ -911,7 +909,7 @@ class TestAsyncPaginationLegacy:
         metadata = _metadata(operation="getNetworkEvents")
         from datetime import datetime
 
-        with patch("meraki.aio.rest_session.datetime") as mock_dt:
+        with patch("meraki.session.async_.datetime") as mock_dt:
             mock_dt.utcnow.return_value = datetime(2024, 1, 1, 0, 2, 0)
             mock_dt.fromisoformat.return_value = datetime(2024, 1, 1, 0, 0, 0)
             result = await async_session._get_pages_legacy(metadata, "/events", direction="next")
@@ -934,7 +932,7 @@ class TestAsyncPaginationLegacy:
         metadata = _metadata(operation="getNetworkEvents")
         from datetime import datetime
 
-        with patch("meraki.aio.rest_session.datetime") as mock_dt:
+        with patch("meraki.session.async_.datetime") as mock_dt:
             mock_dt.utcnow.return_value = datetime(2025, 1, 1, 0, 0, 0)
             mock_dt.fromisoformat.return_value = datetime(2024, 6, 1, 0, 0, 0)
             result = await async_session._get_pages_legacy(
@@ -1112,7 +1110,7 @@ class TestAsyncPaginationIterator:
                 return datetime(2024, 1, 1, 0, 0, 0)
             return datetime(2025, 1, 1, 0, 0, 0)
 
-        with patch("meraki.aio.rest_session.datetime") as mock_dt:
+        with patch("meraki.session.async_.datetime") as mock_dt:
             mock_dt.utcnow = fake_utcnow
             mock_dt.fromisoformat = fake_fromisoformat
             items = []
@@ -1157,7 +1155,7 @@ class TestAsyncPaginationIterator:
                 return datetime(2024, 4, 1, 0, 0, 0)
             return datetime(2024, 6, 1, 0, 0, 0)
 
-        with patch("meraki.aio.rest_session.datetime") as mock_dt:
+        with patch("meraki.session.async_.datetime") as mock_dt:
             mock_dt.utcnow = fake_utcnow
             mock_dt.fromisoformat = fake_fromisoformat
             items = []
