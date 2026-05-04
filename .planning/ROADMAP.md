@@ -71,7 +71,10 @@ Plans:
   2. Request methods decomposed to complexity <10 each
   3. Session layer fully type-annotated with httpx types
   4. Both sync and async sessions inherit from base
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 10-01-PLAN.md — SessionBase ABC with config, retry loop, status handlers, type annotations
+- [ ] 10-02-PLAN.md — Sync/async subclasses, import rewiring, old file removal
 
 ### Phase 11: HTTP Backend Migration
 **Goal**: SDK uses httpx.Client and httpx.AsyncClient for all HTTP requests
@@ -121,10 +124,10 @@ Plans:
 | 7. Legacy Cleanup | v1.1 | 0/0 | Complete | 2026-04-30 |
 | 8. Integration Baseline | v4.0 | 0/1 | Planning | - |
 | 9. Foundation | v4.0 | 0/1 | Planning | - |
-| 10. Session Refactor | v4.0 | 0/0 | Not started | - |
+| 10. Session Refactor | v4.0 | 0/2 | Planning | - |
 | 11. HTTP Backend Migration | v4.0 | 0/0 | Not started | - |
 | 12. Error Handling Deprecation | v4.0 | 0/0 | Not started | - |
 | 13. Test Infrastructure | v4.0 | 0/0 | Not started | - |
 
 ---
-*Roadmap updated: 2026-05-01 (Phase 9 planned: 1 plan)*
+*Roadmap updated: 2026-05-04 (Phase 10 planned: 2 plans)*
