@@ -9,18 +9,18 @@
 ## Phases
 
 <details>
-<summary>✅ v1.0 OASv3 Generator (Phases 1-5) — SHIPPED 2026-04-30</summary>
+<summary>✅ v1.0 OASv3 Generator (Phases 1-5) - SHIPPED 2026-04-30</summary>
 
-- [x] Phase 1: Parser Foundation (2/2 plans) — completed 2026-04-30
-- [x] Phase 2: Unified Parameter Parser (2/2 plans) — completed 2026-04-30
-- [x] Phase 3: Generation Integration (2/2 plans) — completed 2026-04-30
-- [x] Phase 4: Type Stubs (2/2 plans) — completed 2026-04-30
-- [x] Phase 5: Testing & CI (3/3 plans) — completed 2026-04-30
+- [x] Phase 1: Parser Foundation (2/2 plans) - completed 2026-04-30
+- [x] Phase 2: Unified Parameter Parser (2/2 plans) - completed 2026-04-30
+- [x] Phase 3: Generation Integration (2/2 plans) - completed 2026-04-30
+- [x] Phase 4: Type Stubs (2/2 plans) - completed 2026-04-30
+- [x] Phase 5: Testing & CI (3/3 plans) - completed 2026-04-30
 
 </details>
 
 <details>
-<summary>✅ v1.1 Deprecation Cycle (Phases 6-7) — COMPLETED</summary>
+<summary>✅ v1.1 Deprecation Cycle (Phases 6-7) - COMPLETED</summary>
 
 - [x] **Phase 6: Generator Swap** - Rename v2 generator with deprecation warning, promote v3 to default
 - [x] **Phase 7: Legacy Cleanup** - Remove abandoned v3 attempt, update all references
@@ -48,7 +48,7 @@
   3. Endpoints exercised by tests are listed
 **Plans**: 1 plan
 Plans:
-- [x] 08-01-PLAN.md — Install pytest-json-report, fix conftest, capture baseline report
+- [x] 08-01-PLAN.md - Install pytest-json-report, fix conftest, capture baseline report
 
 ### Phase 9: Foundation
 **Goal**: Pure functions for param encoding replace monkey-patched requests internals
@@ -60,7 +60,7 @@ Plans:
   3. Function uses only stdlib (urllib.parse), no requests dependency
 **Plans**: 1 plan
 Plans:
-- [x] 09-01-PLAN.md — TDD: implement encode_meraki_params with stdlib + Hypothesis property tests
+- [x] 09-01-PLAN.md - TDD: implement encode_meraki_params with stdlib + Hypothesis property tests
 
 ### Phase 10: Session Refactor
 **Goal**: Shared session base class extracts duplicated logic from sync/async implementations
@@ -73,8 +73,8 @@ Plans:
   4. Both sync and async sessions inherit from base
 **Plans**: 2 plans
 Plans:
-- [x] 10-01-PLAN.md — SessionBase ABC with config, retry loop, status handlers, type annotations
-- [x] 10-02-PLAN.md — Sync/async subclasses, import rewiring, old file removal
+- [x] 10-01-PLAN.md - SessionBase ABC with config, retry loop, status handlers, type annotations
+- [x] 10-02-PLAN.md - Sync/async subclasses, import rewiring, old file removal
 
 ### Phase 11: HTTP Backend Migration
 **Goal**: SDK uses httpx.Client and httpx.AsyncClient for all HTTP requests
@@ -87,7 +87,11 @@ Plans:
   4. Typed exception handling catches httpx.HTTPError (not bare except)
   5. Dependencies updated: httpx>=0.28,<1 replaces requests and aiohttp
   6. requests_proxy param still works (passes through as proxy=)
-**Plans**: TBD
+**Plans**: 3 plans
+Plans:
+- [ ] 11-01-PLAN.md - Dependencies, exceptions, config update to httpx
+- [ ] 11-02-PLAN.md - Sync session migration (RestSession -> httpx.Client)
+- [ ] 11-03-PLAN.md - Async session migration (AsyncRestSession -> httpx.AsyncClient)
 
 ### Phase 12: Error Handling Deprecation
 **Goal**: Unified exception handling with backwards-compatible AsyncAPIError
@@ -98,7 +102,11 @@ Plans:
   2. Deprecation warning fires when AsyncAPIError instantiated
   3. Old 3-arg signature still works (message param)
   4. Documentation recommends catching APIError for both sync and async
-**Plans**: TBD
+**Plans**: 3 plans
+Plans:
+- [ ] 11-01-PLAN.md - Dependencies, exceptions, config update to httpx
+- [ ] 11-02-PLAN.md - Sync session migration (RestSession -> httpx.Client)
+- [ ] 11-03-PLAN.md - Async session migration (AsyncRestSession -> httpx.AsyncClient)
 
 ### Phase 13: Test Infrastructure
 **Goal**: All tests mock httpx responses and validate identical behavior
@@ -109,7 +117,11 @@ Plans:
   2. Unit tests mock httpx.Response (not requests/aiohttp responses)
   3. Integration tests pass with same pass/fail state as Phase 8 baseline
   4. Performance benchmark compares requests/aiohttp vs httpx (documented)
-**Plans**: TBD
+**Plans**: 3 plans
+Plans:
+- [ ] 11-01-PLAN.md - Dependencies, exceptions, config update to httpx
+- [ ] 11-02-PLAN.md - Sync session migration (RestSession -> httpx.Client)
+- [ ] 11-03-PLAN.md - Async session migration (AsyncRestSession -> httpx.AsyncClient)
 
 ## Progress
 
@@ -125,7 +137,7 @@ Plans:
 | 8. Integration Baseline | v4.0 | 0/1 | Planning | - |
 | 9. Foundation | v4.0 | 0/1 | Planning | - |
 | 10. Session Refactor | v4.0 | 2/2 | Complete    | 2026-05-04 |
-| 11. HTTP Backend Migration | v4.0 | 0/0 | Not started | - |
+| 11. HTTP Backend Migration | v4.0 | 0/3 | Planning | - |
 | 12. Error Handling Deprecation | v4.0 | 0/0 | Not started | - |
 | 13. Test Infrastructure | v4.0 | 0/0 | Not started | - |
 
