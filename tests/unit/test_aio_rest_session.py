@@ -882,7 +882,7 @@ class TestAsyncPaginationLegacy:
 
         metadata = _metadata(operation="getNetworkEvents")
         with patch("meraki.session.async_.datetime") as mock_dt:
-            mock_dt.utcnow.return_value = type(
+            mock_dt.now.return_value = type(
                 "FakeDT",
                 (),
                 {"__sub__": lambda self, other: type("TD", (), {"total_seconds": lambda s: 86400})()},
@@ -910,7 +910,7 @@ class TestAsyncPaginationLegacy:
         from datetime import datetime
 
         with patch("meraki.session.async_.datetime") as mock_dt:
-            mock_dt.utcnow.return_value = datetime(2024, 1, 1, 0, 2, 0)
+            mock_dt.now.return_value = datetime(2024, 1, 1, 0, 2, 0)
             mock_dt.fromisoformat.return_value = datetime(2024, 1, 1, 0, 0, 0)
             result = await async_session._get_pages_legacy(metadata, "/events", direction="next")
 
@@ -933,7 +933,7 @@ class TestAsyncPaginationLegacy:
         from datetime import datetime
 
         with patch("meraki.session.async_.datetime") as mock_dt:
-            mock_dt.utcnow.return_value = datetime(2025, 1, 1, 0, 0, 0)
+            mock_dt.now.return_value = datetime(2025, 1, 1, 0, 0, 0)
             mock_dt.fromisoformat.return_value = datetime(2024, 6, 1, 0, 0, 0)
             result = await async_session._get_pages_legacy(
                 metadata,
@@ -1101,7 +1101,7 @@ class TestAsyncPaginationIterator:
 
         call_count = [0]
 
-        def fake_utcnow():
+        def fake_now(tz=None):
             return datetime(2025, 1, 1, 0, 0, 0)
 
         def fake_fromisoformat(s):
@@ -1111,7 +1111,7 @@ class TestAsyncPaginationIterator:
             return datetime(2025, 1, 1, 0, 0, 0)
 
         with patch("meraki.session.async_.datetime") as mock_dt:
-            mock_dt.utcnow = fake_utcnow
+            mock_dt.now = fake_now
             mock_dt.fromisoformat = fake_fromisoformat
             items = []
             async for item in async_session._get_pages_iterator(metadata, "/events", direction="next"):
@@ -1146,7 +1146,7 @@ class TestAsyncPaginationIterator:
 
         call_count = [0]
 
-        def fake_utcnow():
+        def fake_now(tz=None):
             return datetime(2025, 1, 1, 0, 0, 0)
 
         def fake_fromisoformat(s):
@@ -1156,7 +1156,7 @@ class TestAsyncPaginationIterator:
             return datetime(2024, 6, 1, 0, 0, 0)
 
         with patch("meraki.session.async_.datetime") as mock_dt:
-            mock_dt.utcnow = fake_utcnow
+            mock_dt.now = fake_now
             mock_dt.fromisoformat = fake_fromisoformat
             items = []
             async for item in async_session._get_pages_iterator(
