@@ -327,57 +327,23 @@ class SessionBase(ABC):
 
         Raises APIError if error is not retryable or retries exhausted.
         """
-        tag = metadata["tags"][0]
-        operation = metadata["operation"]
-        reason = response.reason_phrase if hasattr(response, "reason_phrase") else ""
-        status = response.status_code
-
         # Parse response body
         try:
             message = response.json()
         except (ValueError, json.decoder.JSONDecodeError):
             message = response.content[:100]
 
-        # Network delete concurrency error
-        if self._is_network_delete_concurrency(metadata, response, message):
-            wait = random.randint(30, self._network_delete_retry_wait_time)
-            if self._logger:
-                self._logger.warning(
-                    f"{tag}, {operation} - {status} {reason}, retrying in {wait} seconds"
-                )
-            self._sleep(wait)
-            retries -= 1
-            if retries == 0:
-                raise APIError(metadata, response)
-            return retries
+        # Determine wait time based on error type
+        wait = self._classify_client_error_wait(metadata, response, message)
 
-        # Action batch concurrency error
-        if self._is_action_batch_concurrency(message):
-            wait = self._action_batch_retry_wait_time
-            if self._logger:
-                self._logger.warning(
-                    f"{tag}, {operation} - {status} {reason}, retrying in {wait} seconds"
-                )
-            self._sleep(wait)
-            retries -= 1
-            if retries == 0:
-                raise APIError(metadata, response)
-            return retries
-
-        # Generic 4xx retry
-        if self._retry_4xx_error and retries > 0:
-            wait = random.randint(1, self._retry_4xx_error_wait_time)
-            if self._logger:
-                self._logger.warning(
-                    f"{tag}, {operation} - {status} {reason}, retrying in {wait} seconds"
-                )
-            self._sleep(wait)
-            retries -= 1
-            if retries == 0:
-                raise APIError(metadata, response)
-            return retries
+        if wait is not None:
+            return self._retry_with_wait(wait, metadata, response, retries)
 
         # Non-retryable client error
+        tag = metadata["tags"][0]
+        operation = metadata["operation"]
+        reason = response.reason_phrase if hasattr(response, "reason_phrase") else ""
+        status = response.status_code
         if self._logger:
             self._logger.error(f"{tag}, {operation} - {status} {reason}, {message}")
         raise APIError(metadata, response)
@@ -385,6 +351,44 @@ class SessionBase(ABC):
     # ------------------------------------------------------------------
     # Helper methods
     # ------------------------------------------------------------------
+
+    def _classify_client_error_wait(
+        self,
+        metadata: Dict[str, Any],
+        response: "httpx.Response",
+        message: Any,
+    ) -> Optional[float]:
+        """Determine retry wait time for a 4xx error, or None if non-retryable."""
+        if self._is_network_delete_concurrency(metadata, response, message):
+            return float(random.randint(30, self._network_delete_retry_wait_time))
+        if self._is_action_batch_concurrency(message):
+            return float(self._action_batch_retry_wait_time)
+        if self._retry_4xx_error:
+            return float(random.randint(1, self._retry_4xx_error_wait_time))
+        return None
+
+    def _retry_with_wait(
+        self,
+        wait: float,
+        metadata: Dict[str, Any],
+        response: "httpx.Response",
+        retries: int,
+    ) -> int:
+        """Log, sleep, decrement retries; raise APIError if exhausted."""
+        tag = metadata["tags"][0]
+        operation = metadata["operation"]
+        reason = response.reason_phrase if hasattr(response, "reason_phrase") else ""
+        status = response.status_code
+
+        if self._logger:
+            self._logger.warning(
+                f"{tag}, {operation} - {status} {reason}, retrying in {wait} seconds"
+            )
+        self._sleep(wait)
+        retries -= 1
+        if retries == 0:
+            raise APIError(metadata, response)
+        return retries
 
     def _is_network_delete_concurrency(
         self,
