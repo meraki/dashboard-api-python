@@ -5,14 +5,13 @@ from __future__ import annotations
 import time
 import urllib.parse
 from datetime import datetime, timezone
-from typing import TYPE_CHECKING, Any, Dict, Optional
+from typing import TYPE_CHECKING, Any, Dict
 
 import requests
 
 from meraki.common import (
     iterator_for_get_pages_bool,
     use_iterator_for_get_pages_setter,
-    validate_base_url,
 )
 from meraki.exceptions import SessionInputError
 from meraki.session.base import SessionBase
@@ -284,6 +283,7 @@ class RestSession(SessionBase):
                 except KeyError:
                     if self._logger:
                         self._logger.warning(f"pageStartAt missing from response: {response.headers}")
+                    start = results["pageStartAt"]  # fallback: keep existing value
                 end = response.json()["pageEndAt"]
                 events = response.json()["events"]
                 if direction == "next":
