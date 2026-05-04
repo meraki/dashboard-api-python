@@ -17,7 +17,7 @@ from meraki.aio.api.spaces import AsyncSpaces
 from meraki.aio.api.switch import AsyncSwitch
 from meraki.aio.api.wireless import AsyncWireless
 from meraki.aio.api.wirelessController import AsyncWirelessController
-from meraki.aio.rest_session import AsyncRestSession
+from meraki.session.async_ import AsyncRestSession
 from meraki.exceptions import APIKeyError
 from datetime import datetime
 

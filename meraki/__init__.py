@@ -47,7 +47,7 @@ from meraki.config import (
     USE_ITERATOR_FOR_GET_PAGES,
     VALIDATE_KWARGS,
 )
-from meraki.rest_session import RestSession
+from meraki.session.sync import RestSession
 from meraki.exceptions import APIError, APIKeyError, APIResponseError, AsyncAPIError
 from meraki._version import __version__  # noqa: F401
 from datetime import datetime
