@@ -137,7 +137,7 @@ Plans:
 | 10. Session Refactor | v4.0 | 2/2 | Complete    | 2026-05-04 |
 | 11. HTTP Backend Migration | v4.0 | 4/4 | Complete    | 2026-05-05 |
 | 12. Error Handling Deprecation | v4.0 | 1/1 | Complete    | 2026-05-05 |
-| 13. Test Infrastructure | v4.0 | 3/3 | Complete   | 2026-05-05 |
+| 13. Test Infrastructure | v4.0 | 3/3 | Complete    | 2026-05-05 |
 
 ---
 *Roadmap updated: 2026-05-05 (Phase 13 planned: 3 plans)*
