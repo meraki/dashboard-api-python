@@ -57,7 +57,9 @@ def generate_pagination_parameters(operation):
 
 
 # Helper function to return parameters within OAS spec, optionally based on list of input filters
-def parse_params(operation, parameters, param_filters=[]):
+def parse_params(operation, parameters, param_filters=None):
+    if param_filters is None:
+        param_filters = []
     if parameters is None:
         return {}
 
