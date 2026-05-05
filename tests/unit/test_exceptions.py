@@ -52,11 +52,11 @@ class TestAPIResponseError:
 
 class TestAPIError:
     def _make_response(
-        self, status_code=400, reason="Bad Request", json_data=None, content=b""
+        self, status_code=400, reason_phrase="Bad Request", json_data=None, content=b""
     ):
         resp = MagicMock()
         resp.status_code = status_code
-        resp.reason = reason
+        resp.reason_phrase = reason_phrase
         resp.json.return_value = json_data or {"errors": ["something"]}
         resp.content = content
         return resp
@@ -84,7 +84,7 @@ class TestAPIError:
         metadata = {"tags": ["orgs"], "operation": "getOrgs"}
         resp = MagicMock()
         resp.status_code = None
-        resp.reason = None
+        resp.reason_phrase = None
         resp.json.return_value = None
         err = APIError(metadata, resp)
         assert err.status is None
@@ -95,7 +95,7 @@ class TestAPIError:
         metadata = {"tags": ["orgs"], "operation": "getOrgs"}
         resp = MagicMock()
         resp.status_code = 500
-        resp.reason = "Server Error"
+        resp.reason_phrase = "Server Error"
         resp.json.side_effect = ValueError("No JSON")
         resp.content = b"<html>Internal Server Error</html>"
         err = APIError(metadata, resp)
@@ -105,7 +105,7 @@ class TestAPIError:
         metadata = {"tags": ["orgs"], "operation": "getOrg"}
         resp = MagicMock()
         resp.status_code = 404
-        resp.reason = "Not Found"
+        resp.reason_phrase = "Not Found"
         resp.json.side_effect = ValueError("No JSON")
         resp.content = b"Not found here"
         err = APIError(metadata, resp)
@@ -115,7 +115,7 @@ class TestAPIError:
         metadata = {"tags": ["orgs"], "operation": "getOrg"}
         resp = MagicMock()
         resp.status_code = 500
-        resp.reason = "Server Error"
+        resp.reason_phrase = "Server Error"
         resp.json.side_effect = ValueError("No JSON")
         resp.content = b"error text"
         err = APIError(metadata, resp)
@@ -123,10 +123,10 @@ class TestAPIError:
 
 
 class TestAsyncAPIError:
-    def _make_response(self, status=400, reason="Bad Request"):
+    def _make_response(self, status_code=400, reason_phrase="Bad Request"):
         resp = MagicMock()
-        resp.status = status
-        resp.reason = reason
+        resp.status_code = status_code
+        resp.reason_phrase = reason_phrase
         return resp
 
     def test_basic_init(self):
@@ -155,13 +155,13 @@ class TestAsyncAPIError:
 
     def test_404_appends_wait_message(self):
         metadata = {"tags": ["orgs"], "operation": "getOrg"}
-        resp = self._make_response(status=404, reason="Not Found")
+        resp = self._make_response(status_code=404, reason_phrase="Not Found")
         err = AsyncAPIError(metadata, resp, "resource missing")
         assert "please wait" in err.message
 
     def test_non_404_does_not_append_wait_message(self):
         metadata = {"tags": ["orgs"], "operation": "getOrg"}
-        resp = self._make_response(status=500, reason="Server Error")
+        resp = self._make_response(status_code=500, reason_phrase="Server Error")
         err = AsyncAPIError(metadata, resp, "server broke")
         assert "please wait" not in err.message
 

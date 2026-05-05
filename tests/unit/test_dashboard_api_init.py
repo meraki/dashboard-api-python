@@ -96,7 +96,7 @@ class TestDashboardAPIInit:
                 "test_key_1234567890123456789012345678901234567890",
                 suppress_logging=True,
             )
-        assert "EnvApp EnvVendor" in d._session._req_session.headers["User-Agent"]
+        assert "EnvApp EnvVendor" in d._session._client.headers["User-Agent"]
 
     @patch("meraki.session.base.check_python_version")
     def test_all_api_sections_initialized(self, mock_check):
