@@ -77,6 +77,7 @@ def generate_library(
     # Check paths and create directories if needed
     directories = [
         "meraki",
+        "meraki/session",
         "meraki/api",
         "meraki/api/batch",
         "meraki/aio",
