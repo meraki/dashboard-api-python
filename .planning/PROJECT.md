@@ -54,7 +54,7 @@ Modular OASv3 generator built and tested. Produces sync, async, and batch module
 - [ ] Type annotations on session layer
 - [x] AsyncAPIError backwards-compatible deprecation - Validated in Phase 12: error-handling-deprecation
 - [x] Property-based tests for param encoding - Validated in Phase 9: Foundation
-- [ ] Test infra migration (respx replaces responses)
+- [x] Test infra migration (respx replaces responses) - Validated in Phase 13: test-infrastructure
 
 ### Out of Scope
 
@@ -63,7 +63,7 @@ Modular OASv3 generator built and tested. Produces sync, async, and batch module
 - API key exposure risk (logging concern, unrelated to transport)
 - OASv3 generator migration (separate milestone)
 - Request cancellation/OpenTelemetry integration (httpx has primitives but wiring is separate)
-- Generator scripts' use of requests (dev-only, optional Phase 12)
+- Generator scripts' use of requests (dev-only, migrated in Phase 13)
 
 ## Context
 
@@ -109,4 +109,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-05 after Phase 12 (error-handling-deprecation) complete, AsyncAPIError deprecated as APIError subclass*
+*Last updated: 2026-05-05 after Phase 13 (test-infrastructure) complete, test infra migrated to httpx-native tooling*
