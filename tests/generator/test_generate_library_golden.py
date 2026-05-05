@@ -9,7 +9,9 @@ import json
 import os
 import shutil
 from pathlib import Path
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
+
+import httpx
 
 import pytest
 
@@ -47,18 +49,18 @@ def output_dir(tmp_path):
     return tmp_path
 
 
-def _mock_requests_get(url):
-    mock_response = MagicMock()
-    mock_response.text = f"# placeholder for {url.split('/')[-1]}\n"
-    mock_response.ok = True
-    return mock_response
+def _mock_httpx_get(url):
+    return httpx.Response(
+        200,
+        text=f"# placeholder for {url.split('/')[-1]}\n",
+    )
 
 
 def _run_generation(synthetic_spec, output_dir):
     original_cwd = os.getcwd()
     try:
         os.chdir(output_dir)
-        with patch("generate_library_oasv2.requests.get", side_effect=_mock_requests_get):
+        with patch("generate_library_oasv2.httpx.get", side_effect=_mock_httpx_get):
             gen.generate_library(
                 spec=synthetic_spec,
                 version_number="0.0.0-test",
@@ -95,7 +97,7 @@ class TestGoldenFiles:
         original_cwd = os.getcwd()
         try:
             os.chdir(output_dir)
-            with patch("generate_library_oasv2.requests.get", side_effect=_mock_requests_get) as mocked:
+            with patch("generate_library_oasv2.httpx.get", side_effect=_mock_httpx_get) as mocked:
                 gen.generate_library(
                     spec=synthetic_spec,
                     version_number="0.0.0-test",
