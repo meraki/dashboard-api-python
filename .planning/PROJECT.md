@@ -52,7 +52,7 @@ Modular OASv3 generator built and tested. Produces sync, async, and batch module
 - [x] Library-agnostic param encoding utility - Validated in Phase 9: Foundation
 - [ ] Decomposed request methods (complexity <10 each)
 - [ ] Type annotations on session layer
-- [ ] AsyncAPIError backwards-compatible deprecation
+- [x] AsyncAPIError backwards-compatible deprecation - Validated in Phase 12: error-handling-deprecation
 - [x] Property-based tests for param encoding - Validated in Phase 9: Foundation
 - [ ] Test infra migration (respx replaces responses)
 
@@ -109,4 +109,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-01 after Phase 8 (integration baseline) complete — 32 tests captured, all passing*
+*Last updated: 2026-05-05 after Phase 12 (error-handling-deprecation) complete, AsyncAPIError deprecated as APIError subclass*
