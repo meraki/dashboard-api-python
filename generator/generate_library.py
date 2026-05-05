@@ -6,7 +6,7 @@ import subprocess
 import sys
 
 import jinja2
-import requests
+import httpx
 
 import common as common
 from parser_v3 import parse_params_v3, clear_cache
@@ -20,8 +20,8 @@ from generate_stubs import generate_stub_modules
 
 READ_ME = """
 === PREREQUISITES ===
-Include the jinja2 files in same directory as this script, and install Python requests
-pip[3] install requests
+Include the jinja2 files in same directory as this script, and install Python httpx
+pip[3] install httpx
 
 === DESCRIPTION ===
 This script generates the Meraki Python library from the OpenAPI v3 specification.
@@ -106,7 +106,7 @@ def generate_library(
     ]
     base_url = "https://raw.githubusercontent.com/meraki/dashboard-api-python/master/meraki/"
     for file in non_generated:
-        response = requests.get(f"{base_url}{file}")
+        response = httpx.get(f"{base_url}{file}")
         with open(f"meraki/{file}", "w+", encoding="utf-8", newline=None) as fp:
             contents = response.text
             if file == "_version.py":
@@ -605,19 +605,19 @@ def main(inputs):
             print_help()
             sys.exit(2)
         else:
-            response = requests.get(
+            response = httpx.get(
                 f"https://api.meraki.com/api/v1/organizations/{org_id}/openapiSpec",
                 headers={"Authorization": f"Bearer {api_key}"},
                 params={"version": 3},
             )
-            if response.ok:
+            if response.status_code == 200:
                 spec = response.json()
             else:
                 print_help()
                 sys.exit(f"API key provided does not have access to org {org_id}")
     else:
-        response = requests.get("https://api.meraki.com/api/v1/openapiSpec", params={"version": 3})
-        if response.ok:
+        response = httpx.get("https://api.meraki.com/api/v1/openapiSpec", params={"version": 3})
+        if response.status_code == 200:
             spec = response.json()
             print("Successfully pulled Meraki dashboard API OpenAPI v3 spec.")
         else:

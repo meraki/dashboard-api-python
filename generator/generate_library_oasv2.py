@@ -8,7 +8,7 @@ import sys
 import warnings
 
 import jinja2
-import requests
+import httpx
 
 import common as common
 
@@ -21,8 +21,8 @@ if __name__ == "__main__" or "generate_library_oasv2" in sys.argv[0]:
 
 READ_ME = """
 === PREREQUISITES ===
-Include the jinja2 files in same directory as this script, and install Python requests
-pip[3] install requests 
+Include the jinja2 files in same directory as this script, and install Python httpx
+pip[3] install httpx 
 
 === DESCRIPTION ===
 This script generates the Meraki Python library using either the public OpenAPI specification, or, with an API key & org
@@ -287,7 +287,7 @@ def generate_library(spec: dict, version_number: str, api_version_number: str, i
     ]
     base_url = "https://raw.githubusercontent.com/meraki/dashboard-api-python/master/meraki/"
     for file in non_generated:
-        response = requests.get(f"{base_url}{file}")
+        response = httpx.get(f"{base_url}{file}")
         with open(f"meraki/{file}", "w+", encoding="utf-8", newline=None) as fp:
             contents = response.text
             if file == "_version.py":
@@ -786,19 +786,19 @@ def main(inputs):
             print_help()
             sys.exit(2)
         else:
-            response = requests.get(
+            response = httpx.get(
                 f"https://api.meraki.com/api/v1/organizations/{org_id}/openapiSpec",
                 headers={"Authorization": f"Bearer {api_key}"},
             )
-            if response.ok:
+            if response.status_code == 200:
                 spec = response.json()
             else:
                 print_help()
                 sys.exit(f"API key provided does not have access to org {org_id}")
     else:
-        response = requests.get("https://api.meraki.com/api/v1/openapiSpec")
+        response = httpx.get("https://api.meraki.com/api/v1/openapiSpec")
         # Validate that the spec pulled successfully before trying to generate the library.
-        if response.ok:
+        if response.status_code == 200:
             spec = response.json()
             print("Successfully pulled Meraki dashboard API OpenAPI spec.")
         else:

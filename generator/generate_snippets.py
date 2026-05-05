@@ -1,7 +1,7 @@
 import os
 import sys
 
-import requests
+import httpx
 from jinja2 import Template
 import common as common
 
@@ -176,7 +176,7 @@ def process_assignments(parameters):
 
 def main():
     # Get latest OpenAPI specification
-    spec = requests.get("https://api.meraki.com/api/v1/openapiSpec").json()
+    spec = httpx.get("https://api.meraki.com/api/v1/openapiSpec").json()
 
     # Supported scopes list will include organizations, networks, devices, and all product types.
     supported_scopes = [
