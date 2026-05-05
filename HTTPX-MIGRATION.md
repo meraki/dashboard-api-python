@@ -163,6 +163,60 @@ These have **different signatures and different attribute sources**. Unifying re
 
 ---
 
+## Deprecated: AsyncAPIError
+
+**Status:** Deprecated as of v4.0. Use `APIError` for both sync and async exceptions.
+
+### What Changed
+
+In previous versions, the SDK used two separate exception classes:
+- `APIError` for synchronous errors
+- `AsyncAPIError` for asynchronous errors
+
+Starting in v4.0, both sync and async sessions raise exceptions that inherit from `APIError`. The `AsyncAPIError` class remains available for backwards compatibility but is deprecated.
+
+### Migration
+
+**Before (v3.x):**
+```python
+from meraki.aio import AsyncDashboardAPI
+from meraki.exceptions import AsyncAPIError
+
+async with AsyncDashboardAPI(api_key=API_KEY) as aiomeraki:
+    try:
+        response = await aiomeraki.organizations.getOrganizations()
+    except AsyncAPIError as e:
+        print(f"Error: {e.status} {e.reason}")
+```
+
+**After (v4.0+):**
+```python
+from meraki.aio import AsyncDashboardAPI
+from meraki.exceptions import APIError  # Changed
+
+async with AsyncDashboardAPI(api_key=API_KEY) as aiomeraki:
+    try:
+        response = await aiomeraki.organizations.getOrganizations()
+    except APIError as e:  # Changed
+        print(f"Error: {e.status} {e.reason}")
+```
+
+### Backwards Compatibility
+
+Existing code using `except AsyncAPIError:` will continue to work because `AsyncAPIError` is now a subclass of `APIError`. However, you will see a `DeprecationWarning` when the exception is raised.
+
+To suppress the warning during migration:
+```python
+import warnings
+warnings.filterwarnings('ignore', category=DeprecationWarning, module='meraki')
+```
+
+### Recommended Action
+
+Update exception handlers to catch `APIError` instead of `AsyncAPIError`. This future-proofs your code and eliminates deprecation warnings.
+
+---
+
 ## Phase 6: Update Dependencies
 
 **Modify `pyproject.toml`:**
