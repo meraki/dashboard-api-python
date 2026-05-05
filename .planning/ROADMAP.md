@@ -89,7 +89,7 @@ Plans:
   6. requests_proxy param still works (passes through as proxy=)
 **Plans**: 3 plans
 Plans:
-- [ ] 11-01-PLAN.md - Dependencies, exceptions, config update to httpx
+- [x] 11-01-PLAN.md - Dependencies, exceptions, config update to httpx
 - [ ] 11-02-PLAN.md - Sync session migration (RestSession -> httpx.Client)
 - [ ] 11-03-PLAN.md - Async session migration (AsyncRestSession -> httpx.AsyncClient)
 
@@ -137,7 +137,7 @@ Plans:
 | 8. Integration Baseline | v4.0 | 0/1 | Planning | - |
 | 9. Foundation | v4.0 | 0/1 | Planning | - |
 | 10. Session Refactor | v4.0 | 2/2 | Complete    | 2026-05-04 |
-| 11. HTTP Backend Migration | v4.0 | 0/3 | Planning | - |
+| 11. HTTP Backend Migration | v4.0 | 1/3 | In Progress|  |
 | 12. Error Handling Deprecation | v4.0 | 0/0 | Not started | - |
 | 13. Test Infrastructure | v4.0 | 0/0 | Not started | - |
 
