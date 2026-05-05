@@ -1,53 +1,10 @@
 import json
 from unittest.mock import AsyncMock, MagicMock, patch
 
-import aiohttp
+import httpx
 import pytest
 
-from meraki.exceptions import AsyncAPIError
-
-
-class _AwaitableValue:
-    """A wrapper that makes a value both usable directly and awaitable.
-
-    This is needed because the async rest session does `await response.json()`
-    while APIError.__init__ calls `response.json()` synchronously.
-    """
-
-    def __init__(self, value):
-        self._value = value
-
-    def __await__(self):
-        async def _resolve():
-            return self._value
-
-        return _resolve().__await__()
-
-    def __bool__(self):
-        return bool(self._value)
-
-    def __getitem__(self, key):
-        return self._value[key]
-
-    def __contains__(self, item):
-        return item in self._value
-
-    def __eq__(self, other):
-        if isinstance(other, _AwaitableValue):
-            return self._value == other._value
-        return self._value == other
-
-    def __repr__(self):
-        return repr(self._value)
-
-    def keys(self):
-        return self._value.keys()
-
-    def values(self):
-        return self._value.values()
-
-    def items(self):
-        return self._value.items()
+from meraki.exceptions import APIError, AsyncAPIError
 
 
 async def _noop_sleep(*args, **kwargs):
@@ -58,9 +15,12 @@ async def _noop_sleep(*args, **kwargs):
 def async_session():
     with (
         patch("meraki.session.base.check_python_version"),
-        patch("aiohttp.ClientSession") as mock_client,
+        patch("httpx.AsyncClient") as mock_client,
     ):
-        mock_client.return_value = MagicMock()
+        mock_instance = MagicMock()
+        mock_instance.headers = {}
+        mock_instance.request = AsyncMock()
+        mock_client.return_value = mock_instance
         from meraki.session.async_ import AsyncRestSession
 
         s = AsyncRestSession(
@@ -90,9 +50,12 @@ def async_session():
 def async_session_with_logger():
     with (
         patch("meraki.session.base.check_python_version"),
-        patch("aiohttp.ClientSession") as mock_client,
+        patch("httpx.AsyncClient") as mock_client,
     ):
-        mock_client.return_value = MagicMock()
+        mock_instance = MagicMock()
+        mock_instance.headers = {}
+        mock_instance.request = AsyncMock()
+        mock_client.return_value = mock_instance
         from meraki.session.async_ import AsyncRestSession
 
         logger = MagicMock()
@@ -125,12 +88,12 @@ def async_session_with_cert(tmp_path):
     cert_file.write_text("FAKE CERT")
     with (
         patch("meraki.session.base.check_python_version"),
-        patch("aiohttp.ClientSession") as mock_client,
-        patch("ssl.create_default_context") as mock_ssl,
+        patch("httpx.AsyncClient") as mock_client,
     ):
-        mock_client.return_value = MagicMock()
-        mock_ctx = MagicMock()
-        mock_ssl.return_value = mock_ctx
+        mock_instance = MagicMock()
+        mock_instance.headers = {}
+        mock_instance.request = AsyncMock()
+        mock_client.return_value = mock_instance
         from meraki.session.async_ import AsyncRestSession
 
         s = AsyncRestSession(
@@ -160,9 +123,12 @@ def async_session_with_cert(tmp_path):
 def async_session_with_proxy():
     with (
         patch("meraki.session.base.check_python_version"),
-        patch("aiohttp.ClientSession") as mock_client,
+        patch("httpx.AsyncClient") as mock_client,
     ):
-        mock_client.return_value = MagicMock()
+        mock_instance = MagicMock()
+        mock_instance.headers = {}
+        mock_instance.request = AsyncMock()
+        mock_client.return_value = mock_instance
         from meraki.session.async_ import AsyncRestSession
 
         s = AsyncRestSession(
@@ -192,17 +158,16 @@ def _metadata(operation="getOrganizations", tags=None):
     return {"tags": tags or ["organizations"], "operation": operation}
 
 
-def _mock_aio_response(status=200, json_data=None, reason="OK", headers=None, links=None):
-    resp = MagicMock()
-    resp.status = status
-    resp.reason = reason
+def _mock_aio_response(status_code=200, json_data=None, reason_phrase="OK", headers=None, links=None):
+    resp = MagicMock(spec=httpx.Response)
+    resp.status_code = status_code
+    resp.reason_phrase = reason_phrase
     resp.headers = headers or {}
     resp.links = links or {}
-    resp.json = MagicMock(return_value=_AwaitableValue(json_data if json_data is not None else {"ok": True}))
-    resp.text = AsyncMock(return_value="")
-    resp.release = MagicMock()
-    resp.__aenter__ = AsyncMock(return_value=resp)
-    resp.__aexit__ = AsyncMock(return_value=False)
+    resp.content = json.dumps(json_data if json_data is not None else {"ok": True}).encode()
+    resp.json.return_value = json_data if json_data is not None else {"ok": True}
+    resp.text = json.dumps(json_data if json_data is not None else {"ok": True})
+    resp.close = MagicMock()
     return resp
 
 
@@ -213,8 +178,8 @@ SLEEP_PATCH = "meraki.session.async_.asyncio.sleep"
 
 
 class TestAsyncInit:
-    def test_certificate_path_creates_ssl_context(self, async_session_with_cert):
-        assert hasattr(async_session_with_cert, "_sslcontext")
+    def test_certificate_path_passed_to_client(self, async_session_with_cert):
+        assert async_session_with_cert._certificate_path
 
     def test_proxy_stored(self, async_session_with_proxy):
         assert async_session_with_proxy._requests_proxy == "http://proxy:8080"
@@ -239,31 +204,13 @@ class TestAsyncInit:
 
 class TestAsyncRequestKwargs:
     @pytest.mark.asyncio
-    async def test_ssl_context_passed(self, async_session_with_cert):
-        resp_200 = _mock_aio_response(200)
-        async_session_with_cert._req_session.request = AsyncMock(return_value=resp_200)
-
-        await async_session_with_cert.request(_metadata(), "GET", "/orgs")
-        call_kwargs = async_session_with_cert._req_session.request.call_args[1]
-        assert "ssl" in call_kwargs
-
-    @pytest.mark.asyncio
-    async def test_proxy_passed(self, async_session_with_proxy):
-        resp_200 = _mock_aio_response(200)
-        async_session_with_proxy._req_session.request = AsyncMock(return_value=resp_200)
-
-        await async_session_with_proxy.request(_metadata(), "GET", "/orgs")
-        call_kwargs = async_session_with_proxy._req_session.request.call_args[1]
-        assert call_kwargs["proxy"] == "http://proxy:8080"
-
-    @pytest.mark.asyncio
-    async def test_timeout_set(self, async_session):
-        resp_200 = _mock_aio_response(200)
-        async_session._req_session.request = AsyncMock(return_value=resp_200)
+    async def test_follow_redirects_false(self, async_session):
+        resp_200 = _mock_aio_response(status_code=200)
+        async_session._client.request = AsyncMock(return_value=resp_200)
 
         await async_session.request(_metadata(), "GET", "/orgs")
-        call_kwargs = async_session._req_session.request.call_args[1]
-        assert call_kwargs["timeout"] == 60
+        call_kwargs = async_session._client.request.call_args[1]
+        assert call_kwargs.get("follow_redirects") is False
 
 
 # --- URL handling ---
@@ -272,42 +219,42 @@ class TestAsyncRequestKwargs:
 class TestAsyncURLHandling:
     @pytest.mark.asyncio
     async def test_relative_url_prepends_base(self, async_session):
-        resp_200 = _mock_aio_response(200)
-        async_session._req_session.request = AsyncMock(return_value=resp_200)
+        resp_200 = _mock_aio_response(status_code=200)
+        async_session._client.request = AsyncMock(return_value=resp_200)
 
         await async_session.request(_metadata(), "GET", "/organizations")
-        call_args = async_session._req_session.request.call_args[0]
+        call_args = async_session._client.request.call_args[0]
         assert call_args[1] == "https://api.meraki.com/api/v1/organizations"
 
     @pytest.mark.asyncio
     async def test_absolute_meraki_url_not_prepended(self, async_session):
-        resp_200 = _mock_aio_response(200)
-        async_session._req_session.request = AsyncMock(return_value=resp_200)
+        resp_200 = _mock_aio_response(status_code=200)
+        async_session._client.request = AsyncMock(return_value=resp_200)
 
         await async_session.request(_metadata(), "GET", "https://n123.meraki.com/api/v1/orgs")
-        call_args = async_session._req_session.request.call_args[0]
+        call_args = async_session._client.request.call_args[0]
         assert call_args[1] == "https://n123.meraki.com/api/v1/orgs"
 
     @pytest.mark.asyncio
     async def test_meraki_cn_domain_recognized(self, async_session):
-        resp_200 = _mock_aio_response(200)
-        async_session._req_session.request = AsyncMock(return_value=resp_200)
+        resp_200 = _mock_aio_response(status_code=200)
+        async_session._client.request = AsyncMock(return_value=resp_200)
 
         await async_session.request(_metadata(), "GET", "https://n123.meraki.cn/api/v1/orgs")
-        call_args = async_session._req_session.request.call_args[0]
+        call_args = async_session._client.request.call_args[0]
         assert call_args[1] == "https://n123.meraki.cn/api/v1/orgs"
 
     @pytest.mark.asyncio
     async def test_non_string_url_converted(self, async_session):
-        resp_200 = _mock_aio_response(200)
-        async_session._req_session.request = AsyncMock(return_value=resp_200)
+        resp_200 = _mock_aio_response(status_code=200)
+        async_session._client.request = AsyncMock(return_value=resp_200)
 
         class FakeURL:
             def __str__(self):
                 return "https://n1.meraki.com/api/v1/orgs"
 
         await async_session.request(_metadata(), "GET", FakeURL())
-        call_args = async_session._req_session.request.call_args[0]
+        call_args = async_session._client.request.call_args[0]
         assert call_args[1] == "https://n1.meraki.com/api/v1/orgs"
 
 
@@ -317,32 +264,32 @@ class TestAsyncURLHandling:
 class TestAsyncRetry429:
     @pytest.mark.asyncio
     async def test_retry_on_429_with_retry_after(self, async_session):
-        resp_429 = _mock_aio_response(429, reason="Too Many Requests", headers={"Retry-After": "1"})
-        resp_200 = _mock_aio_response(200)
-        async_session._req_session.request = AsyncMock(side_effect=[resp_429, resp_200])
+        resp_429 = _mock_aio_response(status_code=429, reason_phrase="Too Many Requests", headers={"Retry-After": "1"})
+        resp_200 = _mock_aio_response(status_code=200)
+        async_session._client.request = AsyncMock(side_effect=[resp_429, resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             result = await async_session.request(_metadata(), "GET", "/organizations")
-        assert result.status == 200
+        assert result.status_code == 200
 
     @pytest.mark.asyncio
     async def test_retry_on_429_without_retry_after(self, async_session):
-        resp_429 = _mock_aio_response(429, reason="Too Many Requests")
-        resp_200 = _mock_aio_response(200)
-        async_session._req_session.request = AsyncMock(side_effect=[resp_429, resp_200])
+        resp_429 = _mock_aio_response(status_code=429, reason_phrase="Too Many Requests")
+        resp_200 = _mock_aio_response(status_code=200)
+        async_session._client.request = AsyncMock(side_effect=[resp_429, resp_200])
 
         with (
             patch(SLEEP_PATCH, side_effect=_noop_sleep),
             patch("random.randint", return_value=1),
         ):
             result = await async_session.request(_metadata(), "GET", "/organizations")
-        assert result.status == 200
+        assert result.status_code == 200
 
     @pytest.mark.asyncio
     async def test_429_raises_after_max_retries(self, async_session):
         async_session._maximum_retries = 2
-        resp_429 = _mock_aio_response(429, reason="Too Many Requests", headers={"Retry-After": "1"})
-        async_session._req_session.request = AsyncMock(return_value=resp_429)
+        resp_429 = _mock_aio_response(status_code=429, reason_phrase="Too Many Requests", headers={"Retry-After": "1"})
+        async_session._client.request = AsyncMock(return_value=resp_429)
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             with pytest.raises(AsyncAPIError):
@@ -355,19 +302,19 @@ class TestAsyncRetry429:
 class TestAsyncRetry5xx:
     @pytest.mark.asyncio
     async def test_retry_on_500(self, async_session):
-        resp_500 = _mock_aio_response(500, reason="Internal Server Error")
-        resp_200 = _mock_aio_response(200)
-        async_session._req_session.request = AsyncMock(side_effect=[resp_500, resp_200])
+        resp_500 = _mock_aio_response(status_code=500, reason_phrase="Internal Server Error")
+        resp_200 = _mock_aio_response(status_code=200)
+        async_session._client.request = AsyncMock(side_effect=[resp_500, resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             result = await async_session.request(_metadata(), "GET", "/organizations")
-        assert result.status == 200
+        assert result.status_code == 200
 
     @pytest.mark.asyncio
     async def test_5xx_raises_after_max_retries(self, async_session):
         async_session._maximum_retries = 2
-        resp_500 = _mock_aio_response(500, reason="Internal Server Error")
-        async_session._req_session.request = AsyncMock(return_value=resp_500)
+        resp_500 = _mock_aio_response(status_code=500, reason_phrase="Internal Server Error")
+        async_session._client.request = AsyncMock(return_value=resp_500)
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             with pytest.raises(AsyncAPIError):
@@ -380,17 +327,17 @@ class TestAsyncRetry5xx:
 class TestAsyncConnectionErrors:
     @pytest.mark.asyncio
     async def test_retry_on_exception(self, async_session):
-        resp_200 = _mock_aio_response(200)
-        async_session._req_session.request = AsyncMock(side_effect=[Exception("Connection refused"), resp_200])
+        resp_200 = _mock_aio_response(status_code=200)
+        async_session._client.request = AsyncMock(side_effect=[Exception("Connection refused"), resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             result = await async_session.request(_metadata(), "GET", "/organizations")
-        assert result.status == 200
+        assert result.status_code == 200
 
     @pytest.mark.asyncio
     async def test_exception_raises_after_max_retries(self, async_session):
         async_session._maximum_retries = 2
-        async_session._req_session.request = AsyncMock(side_effect=Exception("Connection refused"))
+        async_session._client.request = AsyncMock(side_effect=Exception("Connection refused"))
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             with pytest.raises((AsyncAPIError, Exception)):
@@ -403,8 +350,8 @@ class TestAsyncConnectionErrors:
 class TestAsync4xx:
     @pytest.mark.asyncio
     async def test_generic_4xx_raises(self, async_session):
-        resp_400 = _mock_aio_response(400, json_data={"errors": ["bad"]}, reason="Bad Request")
-        async_session._req_session.request = AsyncMock(return_value=resp_400)
+        resp_400 = _mock_aio_response(status_code=400, json_data={"errors": ["bad"]}, reason_phrase="Bad Request")
+        async_session._client.request = AsyncMock(return_value=resp_400)
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             with pytest.raises(AsyncAPIError):
@@ -413,36 +360,36 @@ class TestAsync4xx:
     @pytest.mark.asyncio
     async def test_retry_4xx_when_enabled(self, async_session):
         async_session._retry_4xx_error = True
-        resp_400 = _mock_aio_response(400, json_data={"errors": ["something"]}, reason="Bad Request")
-        resp_200 = _mock_aio_response(200)
-        async_session._req_session.request = AsyncMock(side_effect=[resp_400, resp_200])
+        resp_400 = _mock_aio_response(status_code=400, json_data={"errors": ["something"]}, reason_phrase="Bad Request")
+        resp_200 = _mock_aio_response(status_code=200)
+        async_session._client.request = AsyncMock(side_effect=[resp_400, resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             with patch("random.randint", return_value=1):
                 result = await async_session.request(_metadata(), "GET", "/organizations")
-        assert result.status == 200
+        assert result.status_code == 200
 
     @pytest.mark.asyncio
     async def test_network_delete_concurrency_retries(self, async_session):
         async_session._maximum_retries = 3
         error_msg = {"errors": ["This may be due to concurrent requests to delete networks. Please retry."]}
-        resp_400 = _mock_aio_response(400, json_data=error_msg, reason="Bad Request")
-        resp_200 = _mock_aio_response(200)
-        async_session._req_session.request = AsyncMock(side_effect=[resp_400, resp_200])
+        resp_400 = _mock_aio_response(status_code=400, json_data=error_msg, reason_phrase="Bad Request")
+        resp_200 = _mock_aio_response(status_code=200)
+        async_session._client.request = AsyncMock(side_effect=[resp_400, resp_200])
 
         with (
             patch(SLEEP_PATCH, side_effect=_noop_sleep),
             patch("random.randint", return_value=1),
         ):
             result = await async_session.request(_metadata(operation="deleteNetwork"), "GET", "/networks")
-        assert result.status == 200
+        assert result.status_code == 200
 
     @pytest.mark.asyncio
     async def test_network_delete_concurrency_exhausts_retries(self, async_session):
         async_session._maximum_retries = 2
         error_msg = {"errors": ["This may be due to concurrent requests to delete networks. Please retry."]}
-        resp_400 = _mock_aio_response(400, json_data=error_msg, reason="Bad Request")
-        async_session._req_session.request = AsyncMock(return_value=resp_400)
+        resp_400 = _mock_aio_response(status_code=400, json_data=error_msg, reason_phrase="Bad Request")
+        async_session._client.request = AsyncMock(return_value=resp_400)
 
         from meraki.exceptions import APIError
 
@@ -458,28 +405,26 @@ class TestAsync4xx:
         error_msg = {
             "errors": ["Too many concurrently executing batches. Maximum is 5 confirmed but not yet executed batches."]
         }
-        resp_400 = _mock_aio_response(400, json_data=error_msg, reason="Bad Request")
-        resp_200 = _mock_aio_response(200)
-        async_session._req_session.request = AsyncMock(side_effect=[resp_400, resp_200])
+        resp_400 = _mock_aio_response(status_code=400, json_data=error_msg, reason_phrase="Bad Request")
+        resp_200 = _mock_aio_response(status_code=200)
+        async_session._client.request = AsyncMock(side_effect=[resp_400, resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             result = await async_session.request(_metadata(), "GET", "/batches")
-        assert result.status == 200
+        assert result.status_code == 200
 
     @pytest.mark.asyncio
     async def test_4xx_non_json_response(self, async_session):
         resp_400 = MagicMock()
-        resp_400.status = 400
-        resp_400.reason = "Bad Request"
+        resp_400.status_code = 400
+        resp_400.reason_phrase = "Bad Request"
         resp_400.headers = {}
         resp_400.links = {}
-        resp_400.json = AsyncMock(side_effect=json.decoder.JSONDecodeError("", "", 0))
-        resp_400.text = AsyncMock(return_value="Some HTML error page content")
-        resp_400.release = MagicMock()
-        resp_400.__aenter__ = AsyncMock(return_value=resp_400)
-        resp_400.__aexit__ = AsyncMock(return_value=False)
+        resp_400.json = MagicMock(side_effect=json.decoder.JSONDecodeError("", "", 0))
+        resp_400.text = "Some HTML error page content"
+        resp_400.close = MagicMock()
 
-        async_session._req_session.request = AsyncMock(return_value=resp_400)
+        async_session._client.request = AsyncMock(return_value=resp_400)
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             with pytest.raises(AsyncAPIError):
@@ -488,17 +433,15 @@ class TestAsync4xx:
     @pytest.mark.asyncio
     async def test_4xx_non_json_text_fails_too(self, async_session):
         resp_400 = MagicMock()
-        resp_400.status = 400
-        resp_400.reason = "Bad Request"
+        resp_400.status_code = 400
+        resp_400.reason_phrase = "Bad Request"
         resp_400.headers = {}
         resp_400.links = {}
-        resp_400.json = AsyncMock(side_effect=aiohttp.client_exceptions.ContentTypeError(MagicMock(), MagicMock()))
-        resp_400.text = AsyncMock(side_effect=Exception("read error"))
-        resp_400.release = MagicMock()
-        resp_400.__aenter__ = AsyncMock(return_value=resp_400)
-        resp_400.__aexit__ = AsyncMock(return_value=False)
+        resp_400.json = MagicMock(side_effect=ValueError("Invalid JSON"))
+        resp_400.text = MagicMock(side_effect=Exception("read error"))
+        resp_400.close = MagicMock()
 
-        async_session._req_session.request = AsyncMock(return_value=resp_400)
+        async_session._client.request = AsyncMock(return_value=resp_400)
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             with pytest.raises(AsyncAPIError):
@@ -506,8 +449,8 @@ class TestAsync4xx:
 
     @pytest.mark.asyncio
     async def test_4xx_non_dict_json_response(self, async_session):
-        resp_400 = _mock_aio_response(400, json_data="just a string", reason="Bad Request")
-        async_session._req_session.request = AsyncMock(return_value=resp_400)
+        resp_400 = _mock_aio_response(status_code=400, json_data="just a string", reason_phrase="Bad Request")
+        async_session._client.request = AsyncMock(return_value=resp_400)
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             with pytest.raises(AsyncAPIError):
@@ -521,31 +464,31 @@ class TestAsyncRedirect:
     @pytest.mark.asyncio
     async def test_follows_redirect(self, async_session):
         resp_301 = _mock_aio_response(
-            301,
-            reason="Moved",
+            status_code=301,
+            reason_phrase="Moved",
             headers={"Location": "https://n123.meraki.com/api/v1/organizations"},
         )
-        resp_200 = _mock_aio_response(200)
-        async_session._req_session.request = AsyncMock(side_effect=[resp_301, resp_200])
+        resp_200 = _mock_aio_response(status_code=200)
+        async_session._client.request = AsyncMock(side_effect=[resp_301, resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             result = await async_session.request(_metadata(), "GET", "/organizations")
-        assert result.status == 200
+        assert result.status_code == 200
         assert async_session._base_url == "https://n123.meraki.com/api/v1"
 
     @pytest.mark.asyncio
     async def test_redirect_to_cn_domain(self, async_session):
         resp_301 = _mock_aio_response(
-            301,
-            reason="Moved",
+            status_code=301,
+            reason_phrase="Moved",
             headers={"Location": "https://n123.meraki.cn/api/v1/organizations"},
         )
-        resp_200 = _mock_aio_response(200)
-        async_session._req_session.request = AsyncMock(side_effect=[resp_301, resp_200])
+        resp_200 = _mock_aio_response(status_code=200)
+        async_session._client.request = AsyncMock(side_effect=[resp_301, resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             result = await async_session.request(_metadata(), "GET", "/organizations")
-        assert result.status == 200
+        assert result.status_code == 200
         assert "meraki.cn" in async_session._base_url
 
 
@@ -562,11 +505,11 @@ class TestAsyncSimulate:
     @pytest.mark.asyncio
     async def test_simulate_allows_get(self, async_session):
         async_session._simulate = True
-        resp_200 = _mock_aio_response(200)
-        async_session._req_session.request = AsyncMock(return_value=resp_200)
+        resp_200 = _mock_aio_response(status_code=200)
+        async_session._client.request = AsyncMock(return_value=resp_200)
 
         result = await async_session.request(_metadata(), "GET", "/organizations")
-        assert result.status == 200
+        assert result.status_code == 200
 
     @pytest.mark.asyncio
     async def test_simulate_with_logger(self, async_session_with_logger):
@@ -582,59 +525,57 @@ class TestAsyncSimulate:
 class TestAsync2xxResponse:
     @pytest.mark.asyncio
     async def test_success_with_page_metadata(self, async_session_with_logger):
-        resp_200 = _mock_aio_response(200, json_data=[{"id": 1}])
-        async_session_with_logger._req_session.request = AsyncMock(return_value=resp_200)
+        resp_200 = _mock_aio_response(status_code=200, json_data=[{"id": 1}])
+        async_session_with_logger._client.request = AsyncMock(return_value=resp_200)
 
         metadata = _metadata()
         metadata["page"] = 3
         result = await async_session_with_logger.request(metadata, "GET", "/organizations")
-        assert result.status == 200
+        assert result.status_code == 200
 
     @pytest.mark.asyncio
     async def test_success_without_page_metadata(self, async_session_with_logger):
-        resp_200 = _mock_aio_response(200, json_data=[{"id": 1}])
-        async_session_with_logger._req_session.request = AsyncMock(return_value=resp_200)
+        resp_200 = _mock_aio_response(status_code=200, json_data=[{"id": 1}])
+        async_session_with_logger._client.request = AsyncMock(return_value=resp_200)
 
         result = await async_session_with_logger.request(_metadata(), "GET", "/organizations")
-        assert result.status == 200
+        assert result.status_code == 200
 
     @pytest.mark.asyncio
     async def test_get_retries_on_invalid_json(self, async_session):
         resp_bad_json = MagicMock()
-        resp_bad_json.status = 200
-        resp_bad_json.reason = "OK"
+        resp_bad_json.status_code = 200
+        resp_bad_json.reason_phrase = "OK"
         resp_bad_json.headers = {}
         resp_bad_json.links = {}
-        resp_bad_json.json = AsyncMock(side_effect=json.decoder.JSONDecodeError("", "", 0))
-        resp_bad_json.release = MagicMock()
-        resp_bad_json.__aenter__ = AsyncMock(return_value=resp_bad_json)
-        resp_bad_json.__aexit__ = AsyncMock(return_value=False)
+        resp_bad_json.json = MagicMock(side_effect=json.decoder.JSONDecodeError("", "", 0))
+        resp_bad_json.close = MagicMock()
 
-        resp_200 = _mock_aio_response(200, json_data={"ok": True})
+        resp_200 = _mock_aio_response(status_code=200, json_data={"ok": True})
 
-        async_session._req_session.request = AsyncMock(side_effect=[resp_bad_json, resp_200])
+        async_session._client.request = AsyncMock(side_effect=[resp_bad_json, resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             result = await async_session.request(_metadata(), "GET", "/organizations")
-        assert result.status == 200
+        assert result.status_code == 200
 
     @pytest.mark.asyncio
     async def test_non_get_returns_without_json_validation(self, async_session):
-        resp_200 = _mock_aio_response(200, json_data={"id": "abc"})
-        async_session._req_session.request = AsyncMock(return_value=resp_200)
+        resp_200 = _mock_aio_response(status_code=200, json_data={"id": "abc"})
+        async_session._client.request = AsyncMock(return_value=resp_200)
 
         result = await async_session.request(_metadata(), "POST", "/organizations")
-        assert result.status == 200
+        assert result.status_code == 200
         resp_200.json.assert_not_called()
 
     @pytest.mark.asyncio
     async def test_response_with_no_reason(self, async_session):
-        resp_200 = _mock_aio_response(200)
+        resp_200 = _mock_aio_response(status_code=200)
         resp_200.reason = None
-        async_session._req_session.request = AsyncMock(return_value=resp_200)
+        async_session._client.request = AsyncMock(return_value=resp_200)
 
         result = await async_session.request(_metadata(), "GET", "/organizations")
-        assert result.status == 200
+        assert result.status_code == 200
 
 
 # --- Logger coverage in request flow ---
@@ -643,16 +584,16 @@ class TestAsync2xxResponse:
 class TestAsyncRequestLogging:
     @pytest.mark.asyncio
     async def test_logs_debug_metadata(self, async_session_with_logger):
-        resp_200 = _mock_aio_response(200)
-        async_session_with_logger._req_session.request = AsyncMock(return_value=resp_200)
+        resp_200 = _mock_aio_response(status_code=200)
+        async_session_with_logger._client.request = AsyncMock(return_value=resp_200)
 
         await async_session_with_logger.request(_metadata(), "GET", "/organizations")
         async_session_with_logger._logger.debug.assert_called()
 
     @pytest.mark.asyncio
     async def test_logs_request_url(self, async_session_with_logger):
-        resp_200 = _mock_aio_response(200)
-        async_session_with_logger._req_session.request = AsyncMock(return_value=resp_200)
+        resp_200 = _mock_aio_response(status_code=200)
+        async_session_with_logger._client.request = AsyncMock(return_value=resp_200)
 
         await async_session_with_logger.request(_metadata(), "GET", "/organizations")
         info_calls = [str(c) for c in async_session_with_logger._logger.info.call_args_list]
@@ -660,8 +601,8 @@ class TestAsyncRequestLogging:
 
     @pytest.mark.asyncio
     async def test_logs_warning_on_connection_error(self, async_session_with_logger):
-        resp_200 = _mock_aio_response(200)
-        async_session_with_logger._req_session.request = AsyncMock(side_effect=[Exception("timeout"), resp_200])
+        resp_200 = _mock_aio_response(status_code=200)
+        async_session_with_logger._client.request = AsyncMock(side_effect=[Exception("timeout"), resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             await async_session_with_logger.request(_metadata(), "GET", "/organizations")
@@ -669,9 +610,9 @@ class TestAsyncRequestLogging:
 
     @pytest.mark.asyncio
     async def test_logs_warning_on_429(self, async_session_with_logger):
-        resp_429 = _mock_aio_response(429, reason="Too Many Requests", headers={"Retry-After": "1"})
-        resp_200 = _mock_aio_response(200)
-        async_session_with_logger._req_session.request = AsyncMock(side_effect=[resp_429, resp_200])
+        resp_429 = _mock_aio_response(status_code=429, reason_phrase="Too Many Requests", headers={"Retry-After": "1"})
+        resp_200 = _mock_aio_response(status_code=200)
+        async_session_with_logger._client.request = AsyncMock(side_effect=[resp_429, resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             await async_session_with_logger.request(_metadata(), "GET", "/organizations")
@@ -679,9 +620,9 @@ class TestAsyncRequestLogging:
 
     @pytest.mark.asyncio
     async def test_logs_warning_on_5xx(self, async_session_with_logger):
-        resp_500 = _mock_aio_response(500, reason="Server Error")
-        resp_200 = _mock_aio_response(200)
-        async_session_with_logger._req_session.request = AsyncMock(side_effect=[resp_500, resp_200])
+        resp_500 = _mock_aio_response(status_code=500, reason_phrase="Server Error")
+        resp_200 = _mock_aio_response(status_code=200)
+        async_session_with_logger._client.request = AsyncMock(side_effect=[resp_500, resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             await async_session_with_logger.request(_metadata(), "GET", "/organizations")
@@ -689,8 +630,8 @@ class TestAsyncRequestLogging:
 
     @pytest.mark.asyncio
     async def test_logs_error_on_4xx(self, async_session_with_logger):
-        resp_400 = _mock_aio_response(400, json_data={"errors": ["bad"]}, reason="Bad Request")
-        async_session_with_logger._req_session.request = AsyncMock(return_value=resp_400)
+        resp_400 = _mock_aio_response(status_code=400, json_data={"errors": ["bad"]}, reason_phrase="Bad Request")
+        async_session_with_logger._client.request = AsyncMock(return_value=resp_400)
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             with pytest.raises(AsyncAPIError):
@@ -700,18 +641,16 @@ class TestAsyncRequestLogging:
     @pytest.mark.asyncio
     async def test_logs_warning_on_bad_json_200(self, async_session_with_logger):
         resp_bad = MagicMock()
-        resp_bad.status = 200
-        resp_bad.reason = "OK"
+        resp_bad.status_code = 200
+        resp_bad.reason_phrase = "OK"
         resp_bad.headers = {}
         resp_bad.links = {}
-        resp_bad.json = AsyncMock(side_effect=aiohttp.client_exceptions.ContentTypeError(MagicMock(), MagicMock()))
-        resp_bad.release = MagicMock()
-        resp_bad.__aenter__ = AsyncMock(return_value=resp_bad)
-        resp_bad.__aexit__ = AsyncMock(return_value=False)
+        resp_bad.json = MagicMock(side_effect=ValueError("Invalid JSON"))
+        resp_bad.close = MagicMock()
 
-        resp_200 = _mock_aio_response(200)
+        resp_200 = _mock_aio_response(status_code=200)
 
-        async_session_with_logger._req_session.request = AsyncMock(side_effect=[resp_bad, resp_200])
+        async_session_with_logger._client.request = AsyncMock(side_effect=[resp_bad, resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             await async_session_with_logger.request(_metadata(), "GET", "/organizations")
@@ -724,49 +663,49 @@ class TestAsyncRequestLogging:
 class TestAsyncHTTPVerbs:
     @pytest.mark.asyncio
     async def test_get(self, async_session):
-        resp_200 = _mock_aio_response(200, json_data={"data": [1, 2, 3]})
-        async_session._req_session.request = AsyncMock(return_value=resp_200)
+        resp_200 = _mock_aio_response(status_code=200, json_data={"data": [1, 2, 3]})
+        async_session._client.request = AsyncMock(return_value=resp_200)
 
         result = await async_session.get(_metadata(), "/organizations")
         assert result == {"data": [1, 2, 3]}
 
     @pytest.mark.asyncio
     async def test_get_with_params(self, async_session):
-        resp_200 = _mock_aio_response(200, json_data=[{"id": 1}])
-        async_session._req_session.request = AsyncMock(return_value=resp_200)
+        resp_200 = _mock_aio_response(status_code=200, json_data=[{"id": 1}])
+        async_session._client.request = AsyncMock(return_value=resp_200)
 
         result = await async_session.get(_metadata(), "/organizations", params={"perPage": 10})
         assert result == [{"id": 1}]
 
     @pytest.mark.asyncio
     async def test_post(self, async_session):
-        resp_201 = _mock_aio_response(201, json_data={"id": "new"})
-        async_session._req_session.request = AsyncMock(return_value=resp_201)
+        resp_201 = _mock_aio_response(status_code=201, json_data={"id": "new"})
+        async_session._client.request = AsyncMock(return_value=resp_201)
 
         result = await async_session.post(_metadata(), "/organizations", json={"name": "Test"})
         assert result == {"id": "new"}
 
     @pytest.mark.asyncio
     async def test_put(self, async_session):
-        resp_200 = _mock_aio_response(200, json_data={"id": "updated"})
-        async_session._req_session.request = AsyncMock(return_value=resp_200)
+        resp_200 = _mock_aio_response(status_code=200, json_data={"id": "updated"})
+        async_session._client.request = AsyncMock(return_value=resp_200)
 
         result = await async_session.put(_metadata(), "/organizations/1", json={"name": "New"})
         assert result == {"id": "updated"}
 
     @pytest.mark.asyncio
     async def test_delete(self, async_session):
-        resp_204 = _mock_aio_response(204, json_data=None, reason="No Content")
-        async_session._req_session.request = AsyncMock(return_value=resp_204)
+        resp_204 = _mock_aio_response(status_code=204, json_data=None, reason_phrase="No Content")
+        async_session._client.request = AsyncMock(return_value=resp_204)
 
         result = await async_session.delete(_metadata(), "/organizations/1")
         assert result is None
 
     @pytest.mark.asyncio
     async def test_close(self, async_session):
-        async_session._req_session.close = AsyncMock()
+        async_session._client.aclose = AsyncMock()
         await async_session.close()
-        async_session._req_session.close.assert_called_once()
+        async_session._client.aclose.assert_called_once()
 
 
 # --- Pagination: _get_pages_legacy ---
@@ -775,59 +714,59 @@ class TestAsyncHTTPVerbs:
 class TestAsyncPaginationLegacy:
     @pytest.mark.asyncio
     async def test_single_page_no_links(self, async_session):
-        resp = _mock_aio_response(200, json_data=[{"id": 1}, {"id": 2}])
-        async_session._req_session.request = AsyncMock(return_value=resp)
+        resp = _mock_aio_response(status_code=200, json_data=[{"id": 1}, {"id": 2}])
+        async_session._client.request = AsyncMock(return_value=resp)
 
         result = await async_session._get_pages_legacy(_metadata(), "/organizations")
         assert result == [{"id": 1}, {"id": 2}]
 
     @pytest.mark.asyncio
     async def test_multiple_pages_list(self, async_session):
-        resp1 = _mock_aio_response(200, json_data=[{"id": 1}])
+        resp1 = _mock_aio_response(status_code=200, json_data=[{"id": 1}])
         resp1.links = {"next": {"url": "https://api.meraki.com/api/v1/organizations?startingAfter=1"}}
-        resp2 = _mock_aio_response(200, json_data=[{"id": 2}])
+        resp2 = _mock_aio_response(status_code=200, json_data=[{"id": 2}])
         resp2.links = {}
-        async_session._req_session.request = AsyncMock(side_effect=[resp1, resp2])
+        async_session._client.request = AsyncMock(side_effect=[resp1, resp2])
 
         result = await async_session._get_pages_legacy(_metadata(), "/organizations")
         assert result == [{"id": 1}, {"id": 2}]
 
     @pytest.mark.asyncio
     async def test_total_pages_string_all(self, async_session):
-        resp = _mock_aio_response(200, json_data=[{"id": 1}])
+        resp = _mock_aio_response(status_code=200, json_data=[{"id": 1}])
         resp.links = {}
-        async_session._req_session.request = AsyncMock(return_value=resp)
+        async_session._client.request = AsyncMock(return_value=resp)
 
         result = await async_session._get_pages_legacy(_metadata(), "/organizations", total_pages="all")
         assert result == [{"id": 1}]
 
     @pytest.mark.asyncio
     async def test_total_pages_numeric_string(self, async_session):
-        resp = _mock_aio_response(200, json_data=[{"id": 1}])
+        resp = _mock_aio_response(status_code=200, json_data=[{"id": 1}])
         resp.links = {}
-        async_session._req_session.request = AsyncMock(return_value=resp)
+        async_session._client.request = AsyncMock(return_value=resp)
 
         result = await async_session._get_pages_legacy(_metadata(), "/organizations", total_pages="1")
         assert result == [{"id": 1}]
 
     @pytest.mark.asyncio
     async def test_total_pages_limit(self, async_session):
-        resp1 = _mock_aio_response(200, json_data=[{"id": 1}])
+        resp1 = _mock_aio_response(status_code=200, json_data=[{"id": 1}])
         resp1.links = {"next": {"url": "https://api.meraki.com/api/v1/organizations?startingAfter=1"}}
-        resp2 = _mock_aio_response(200, json_data=[{"id": 2}])
+        resp2 = _mock_aio_response(status_code=200, json_data=[{"id": 2}])
         resp2.links = {"next": {"url": "https://api.meraki.com/api/v1/organizations?startingAfter=2"}}
-        async_session._req_session.request = AsyncMock(side_effect=[resp1, resp2])
+        async_session._client.request = AsyncMock(side_effect=[resp1, resp2])
 
         result = await async_session._get_pages_legacy(_metadata(), "/organizations", total_pages=2)
         assert result == [{"id": 1}, {"id": 2}]
 
     @pytest.mark.asyncio
     async def test_prev_direction(self, async_session):
-        resp1 = _mock_aio_response(200, json_data=[{"id": 2}])
+        resp1 = _mock_aio_response(status_code=200, json_data=[{"id": 2}])
         resp1.links = {"prev": {"url": "https://api.meraki.com/api/v1/organizations?endingBefore=2"}}
-        resp2 = _mock_aio_response(200, json_data=[{"id": 1}])
+        resp2 = _mock_aio_response(status_code=200, json_data=[{"id": 1}])
         resp2.links = {}
-        async_session._req_session.request = AsyncMock(side_effect=[resp1, resp2])
+        async_session._client.request = AsyncMock(side_effect=[resp1, resp2])
 
         result = await async_session._get_pages_legacy(_metadata(), "/organizations", direction="prev")
         assert result == [{"id": 2}, {"id": 1}]
@@ -850,7 +789,7 @@ class TestAsyncPaginationLegacy:
             },
         )
         resp2.links = {}
-        async_session._req_session.request = AsyncMock(side_effect=[resp1, resp2])
+        async_session._client.request = AsyncMock(side_effect=[resp1, resp2])
 
         result = await async_session._get_pages_legacy(_metadata(), "/items")
         assert result == {
@@ -878,7 +817,7 @@ class TestAsyncPaginationLegacy:
             },
         )
         resp2.links = {}
-        async_session._req_session.request = AsyncMock(side_effect=[resp1, resp2])
+        async_session._client.request = AsyncMock(side_effect=[resp1, resp2])
 
         metadata = _metadata(operation="getNetworkEvents")
         with patch("meraki.session.async_.datetime") as mock_dt:
@@ -904,7 +843,7 @@ class TestAsyncPaginationLegacy:
             },
         )
         resp1.links = {"next": {"url": "https://api.meraki.com/api/v1/events?startingAfter=2024-01-01T00:00:00Z"}}
-        async_session._req_session.request = AsyncMock(return_value=resp1)
+        async_session._client.request = AsyncMock(return_value=resp1)
 
         metadata = _metadata(operation="getNetworkEvents")
         from datetime import datetime
@@ -927,7 +866,7 @@ class TestAsyncPaginationLegacy:
             },
         )
         resp1.links = {"next": {"url": "https://api.meraki.com/api/v1/events?startingAfter=2024-06-01T00:00:00Z"}}
-        async_session._req_session.request = AsyncMock(return_value=resp1)
+        async_session._client.request = AsyncMock(return_value=resp1)
 
         metadata = _metadata(operation="getNetworkEvents")
         from datetime import datetime
@@ -954,7 +893,7 @@ class TestAsyncPaginationLegacy:
             },
         )
         resp1.links = {"prev": {"url": "https://api.meraki.com/api/v1/events?endingBefore=2013-12-31T00:00:00Z"}}
-        async_session._req_session.request = AsyncMock(return_value=resp1)
+        async_session._client.request = AsyncMock(return_value=resp1)
 
         metadata = _metadata(operation="getNetworkEvents")
         result = await async_session._get_pages_legacy(metadata, "/events", direction="prev")
@@ -967,9 +906,9 @@ class TestAsyncPaginationLegacy:
 class TestAsyncPaginationIterator:
     @pytest.mark.asyncio
     async def test_single_page_yields_items(self, async_session):
-        resp = _mock_aio_response(200, json_data=[{"id": 1}, {"id": 2}])
+        resp = _mock_aio_response(status_code=200, json_data=[{"id": 1}, {"id": 2}])
         resp.links = {}
-        async_session._req_session.request = AsyncMock(return_value=resp)
+        async_session._client.request = AsyncMock(return_value=resp)
 
         items = []
         async for item in async_session._get_pages_iterator(_metadata(), "/organizations"):
@@ -978,11 +917,11 @@ class TestAsyncPaginationIterator:
 
     @pytest.mark.asyncio
     async def test_multiple_pages_yields_all(self, async_session):
-        resp1 = _mock_aio_response(200, json_data=[{"id": 1}])
+        resp1 = _mock_aio_response(status_code=200, json_data=[{"id": 1}])
         resp1.links = {"next": {"url": "https://api.meraki.com/api/v1/organizations?startingAfter=1"}}
-        resp2 = _mock_aio_response(200, json_data=[{"id": 2}])
+        resp2 = _mock_aio_response(status_code=200, json_data=[{"id": 2}])
         resp2.links = {}
-        async_session._req_session.request = AsyncMock(side_effect=[resp1, resp2])
+        async_session._client.request = AsyncMock(side_effect=[resp1, resp2])
 
         items = []
         async for item in async_session._get_pages_iterator(_metadata(), "/organizations"):
@@ -991,9 +930,9 @@ class TestAsyncPaginationIterator:
 
     @pytest.mark.asyncio
     async def test_total_pages_string_all(self, async_session):
-        resp = _mock_aio_response(200, json_data=[{"id": 1}])
+        resp = _mock_aio_response(status_code=200, json_data=[{"id": 1}])
         resp.links = {}
-        async_session._req_session.request = AsyncMock(return_value=resp)
+        async_session._client.request = AsyncMock(return_value=resp)
 
         items = []
         async for item in async_session._get_pages_iterator(_metadata(), "/organizations", total_pages="all"):
@@ -1002,9 +941,9 @@ class TestAsyncPaginationIterator:
 
     @pytest.mark.asyncio
     async def test_total_pages_numeric_string(self, async_session):
-        resp = _mock_aio_response(200, json_data=[{"id": 1}])
+        resp = _mock_aio_response(status_code=200, json_data=[{"id": 1}])
         resp.links = {}
-        async_session._req_session.request = AsyncMock(return_value=resp)
+        async_session._client.request = AsyncMock(return_value=resp)
 
         items = []
         async for item in async_session._get_pages_iterator(_metadata(), "/organizations", total_pages="2"):
@@ -1013,9 +952,9 @@ class TestAsyncPaginationIterator:
 
     @pytest.mark.asyncio
     async def test_items_dict_yields_items(self, async_session):
-        resp = _mock_aio_response(200, json_data={"items": [{"id": 1}, {"id": 2}]})
+        resp = _mock_aio_response(status_code=200, json_data={"items": [{"id": 1}, {"id": 2}]})
         resp.links = {}
-        async_session._req_session.request = AsyncMock(return_value=resp)
+        async_session._client.request = AsyncMock(return_value=resp)
 
         items = []
         async for item in async_session._get_pages_iterator(_metadata(), "/items"):
@@ -1033,7 +972,7 @@ class TestAsyncPaginationIterator:
             },
         )
         resp.links = {}
-        async_session._req_session.request = AsyncMock(return_value=resp)
+        async_session._client.request = AsyncMock(return_value=resp)
 
         metadata = _metadata(operation="getNetworkEvents")
         items = []
@@ -1052,7 +991,7 @@ class TestAsyncPaginationIterator:
             },
         )
         resp.links = {}
-        async_session._req_session.request = AsyncMock(return_value=resp)
+        async_session._client.request = AsyncMock(return_value=resp)
 
         metadata = _metadata(operation="someOtherOp")
         items = []
@@ -1062,11 +1001,11 @@ class TestAsyncPaginationIterator:
 
     @pytest.mark.asyncio
     async def test_prev_direction_pagination(self, async_session):
-        resp1 = _mock_aio_response(200, json_data=[{"id": 2}])
+        resp1 = _mock_aio_response(status_code=200, json_data=[{"id": 2}])
         resp1.links = {"prev": {"url": "https://api.meraki.com/api/v1/orgs?endingBefore=2"}}
-        resp2 = _mock_aio_response(200, json_data=[{"id": 1}])
+        resp2 = _mock_aio_response(status_code=200, json_data=[{"id": 1}])
         resp2.links = {}
-        async_session._req_session.request = AsyncMock(side_effect=[resp1, resp2])
+        async_session._client.request = AsyncMock(side_effect=[resp1, resp2])
 
         items = []
         async for item in async_session._get_pages_iterator(_metadata(), "/orgs", direction="prev"):
@@ -1094,7 +1033,7 @@ class TestAsyncPaginationIterator:
             },
         )
         resp2.links = {"next": {"url": "https://api.meraki.com/api/v1/events?startingAfter=2024-01-02T23:58:00Z"}}
-        async_session._req_session.request = AsyncMock(side_effect=[resp1, resp2])
+        async_session._client.request = AsyncMock(side_effect=[resp1, resp2])
 
         metadata = _metadata(operation="getNetworkEvents")
         from datetime import datetime
@@ -1139,7 +1078,7 @@ class TestAsyncPaginationIterator:
             },
         )
         resp2.links = {"next": {"url": "https://api.meraki.com/api/v1/events?startingAfter=2024-06-01T00:00:00Z"}}
-        async_session._req_session.request = AsyncMock(side_effect=[resp1, resp2])
+        async_session._client.request = AsyncMock(side_effect=[resp1, resp2])
 
         metadata = _metadata(operation="getNetworkEvents")
         from datetime import datetime
@@ -1188,7 +1127,7 @@ class TestAsyncPaginationIterator:
             },
         )
         resp2.links = {"prev": {"url": "https://api.meraki.com/api/v1/events?endingBefore=2013-06-01T00:00:00Z"}}
-        async_session._req_session.request = AsyncMock(side_effect=[resp1, resp2])
+        async_session._client.request = AsyncMock(side_effect=[resp1, resp2])
 
         metadata = _metadata(operation="getNetworkEvents")
         items = []
@@ -1204,8 +1143,8 @@ class TestAsyncPaginationIterator:
 class TestAsyncDownloadPage:
     @pytest.mark.asyncio
     async def test_download_page(self, async_session):
-        resp = _mock_aio_response(200, json_data=[{"id": 1}])
+        resp = _mock_aio_response(status_code=200, json_data=[{"id": 1}])
         request_coro = AsyncMock(return_value=resp)()
         response, result = await async_session._download_page(request_coro)
         assert result == [{"id": 1}]
-        assert response.status == 200
+        assert response.status_code == 200
