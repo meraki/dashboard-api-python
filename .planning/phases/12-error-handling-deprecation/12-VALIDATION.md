@@ -38,10 +38,8 @@ created: 2026-05-05
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 12-01-01 | 01 | 1 | ERR-02 | — | N/A | unit | `python -m pytest tests/unit/test_exceptions.py::test_async_api_error_is_subclass -x` | ❌ W0 | ⬜ pending |
-| 12-01-02 | 01 | 1 | ERR-02 | — | N/A | unit | `python -m pytest tests/unit/test_exceptions.py::test_async_api_error_deprecation_warning -x` | ❌ W0 | ⬜ pending |
-| 12-01-03 | 01 | 1 | ERR-02 | — | N/A | unit | `python -m pytest tests/unit/test_exceptions.py::test_async_api_error_old_3arg_signature -x` | ❌ W0 | ⬜ pending |
-| 12-01-04 | 01 | 1 | ERR-02 | — | N/A | unit | `python -m pytest tests/unit/test_exceptions.py::test_async_api_error_caught_by_api_error -x` | ❌ W0 | ⬜ pending |
+| 12-01-01 | 01 | 1 | ERR-02 | — | N/A | unit | `python -m pytest tests/unit/test_exceptions.py::TestAsyncAPIError -x` | ❌ W0 | ⬜ pending |
+| 12-01-02 | 01 | 1 | ERR-02 | — | N/A | manual | `grep -c "## Deprecated: AsyncAPIError" HTTPX-MIGRATION.md` | ✅ | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
