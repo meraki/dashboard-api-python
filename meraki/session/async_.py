@@ -37,9 +37,7 @@ class AsyncRestSession(SessionBase):
         # Build headers dict
         headers = self._build_headers()
         # Async user-agent prefix
-        headers["User-Agent"] = f"python-meraki/aio-{self._version} " + validate_user_agent(
-            self._be_geo_id, self._caller
-        )
+        headers["User-Agent"] = f"python-meraki/aio-{self._version} " + validate_user_agent(self._be_geo_id, self._caller)
 
         # Build client config (per D-02: Limits replaces Semaphore, per D-06: proxy passthrough)
         client_kwargs: Dict[str, Any] = {
@@ -128,7 +126,7 @@ class AsyncRestSession(SessionBase):
                 if self._logger:
                     self._logger.info(f"{method} {abs_url}")
                 response = await self._send_request(method, abs_url, **kwargs)
-            except Exception as e:
+            except httpx.HTTPError as e:
                 if self._logger:
                     self._logger.warning(f"{tag}, {operation} - {e}, retrying in 1 second")
                 await self._sleep(1)
@@ -139,7 +137,7 @@ class AsyncRestSession(SessionBase):
                         type(
                             "FakeResponse",
                             (),
-                            {"status_code": 503, "reason_phrase": str(e), "json": lambda: {}, "content": b""},
+                            {"status_code": 503, "reason_phrase": str(e), "json": lambda self: {}, "content": b""},
                         )(),
                     )
                 continue

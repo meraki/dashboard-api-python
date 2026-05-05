@@ -328,7 +328,7 @@ class TestAsyncConnectionErrors:
     @pytest.mark.asyncio
     async def test_retry_on_exception(self, async_session):
         resp_200 = _mock_aio_response(status_code=200)
-        async_session._client.request = AsyncMock(side_effect=[Exception("Connection refused"), resp_200])
+        async_session._client.request = AsyncMock(side_effect=[httpx.ConnectError("Connection refused"), resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             result = await async_session.request(_metadata(), "GET", "/organizations")
@@ -337,10 +337,10 @@ class TestAsyncConnectionErrors:
     @pytest.mark.asyncio
     async def test_exception_raises_after_max_retries(self, async_session):
         async_session._maximum_retries = 2
-        async_session._client.request = AsyncMock(side_effect=Exception("Connection refused"))
+        async_session._client.request = AsyncMock(side_effect=httpx.ConnectError("Connection refused"))
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
-            with pytest.raises((AsyncAPIError, Exception)):
+            with pytest.raises(APIError):
                 await async_session.request(_metadata(), "GET", "/organizations")
 
 
@@ -602,7 +602,7 @@ class TestAsyncRequestLogging:
     @pytest.mark.asyncio
     async def test_logs_warning_on_connection_error(self, async_session_with_logger):
         resp_200 = _mock_aio_response(status_code=200)
-        async_session_with_logger._client.request = AsyncMock(side_effect=[Exception("timeout"), resp_200])
+        async_session_with_logger._client.request = AsyncMock(side_effect=[httpx.ConnectError("timeout"), resp_200])
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             await async_session_with_logger.request(_metadata(), "GET", "/organizations")

@@ -4,9 +4,8 @@ from __future__ import annotations
 
 import json
 import random
-import urllib.parse
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, Dict, Optional
+from typing import Any, Dict, Optional
 
 from meraki._version import __version__
 from meraki.common import (
@@ -32,11 +31,10 @@ from meraki.config import (
     USE_ITERATOR_FOR_GET_PAGES,
     WAIT_ON_RATE_LIMIT,
 )
+import httpx
+
 from meraki.exceptions import APIError, APIResponseError
 from meraki.response_handler import handle_3xx
-
-if TYPE_CHECKING:
-    import httpx
 
 
 class SessionBase(ABC):
@@ -118,9 +116,7 @@ class SessionBase(ABC):
         self._parameters["use_iterator_for_get_pages"] = self._use_iterator_for_get_pages
 
         if self._logger:
-            self._logger.info(
-                f"Meraki dashboard API session initialized with these parameters: {self._parameters}"
-            )
+            self._logger.info(f"Meraki dashboard API session initialized with these parameters: {self._parameters}")
 
     # ------------------------------------------------------------------
     # Abstract methods (subclass contract)
@@ -145,9 +141,7 @@ class SessionBase(ABC):
     # Template method: request
     # ------------------------------------------------------------------
 
-    def request(
-        self, metadata: Dict[str, Any], method: str, url: str, **kwargs: Any
-    ) -> Optional["httpx.Response"]:
+    def request(self, metadata: Dict[str, Any], method: str, url: str, **kwargs: Any) -> Optional["httpx.Response"]:
         """Execute an API request with retry loop and status dispatch.
 
         Args:
@@ -185,7 +179,7 @@ class SessionBase(ABC):
                 if self._logger:
                     self._logger.info(f"{method} {abs_url}")
                 response = self._send_request(method, abs_url, **kwargs)
-            except Exception as e:
+            except httpx.HTTPError as e:
                 if self._logger:
                     self._logger.warning(f"{tag}, {operation} - {e}, retrying in 1 second")
                 self._sleep(1)
@@ -261,9 +255,7 @@ class SessionBase(ABC):
             return response
         except (json.decoder.JSONDecodeError, ValueError):
             if self._logger:
-                self._logger.warning(
-                    f"{tag}, {operation} - JSON decode error, retrying in 1 second"
-                )
+                self._logger.warning(f"{tag}, {operation} - JSON decode error, retrying in 1 second")
             return None
 
     def _handle_redirect(self, response: "httpx.Response") -> str:
@@ -298,14 +290,10 @@ class SessionBase(ABC):
             )
 
         if self._logger:
-            self._logger.warning(
-                f"{tag}, {operation} - {status} {reason}, retrying in {wait} seconds"
-            )
+            self._logger.warning(f"{tag}, {operation} - {status} {reason}, retrying in {wait} seconds")
         return wait
 
-    def _handle_server_error(
-        self, response: "httpx.Response", metadata: Dict[str, Any]
-    ) -> None:
+    def _handle_server_error(self, response: "httpx.Response", metadata: Dict[str, Any]) -> None:
         """Handle 5xx server errors. Logs warning before retry."""
         tag = metadata["tags"][0]
         operation = metadata["operation"]
@@ -313,9 +301,7 @@ class SessionBase(ABC):
         status = response.status_code
 
         if self._logger:
-            self._logger.warning(
-                f"{tag}, {operation} - {status} {reason}, retrying in 1 second"
-            )
+            self._logger.warning(f"{tag}, {operation} - {status} {reason}, retrying in 1 second")
 
     def _handle_client_error(
         self,
@@ -381,9 +367,7 @@ class SessionBase(ABC):
         status = response.status_code
 
         if self._logger:
-            self._logger.warning(
-                f"{tag}, {operation} - {status} {reason}, retrying in {wait} seconds"
-            )
+            self._logger.warning(f"{tag}, {operation} - {status} {reason}, retrying in {wait} seconds")
         self._sleep(wait)
         retries -= 1
         if retries == 0:
@@ -416,6 +400,5 @@ class SessionBase(ABC):
         return {
             "Authorization": "Bearer " + self._api_key,
             "Content-Type": "application/json",
-            "User-Agent": f"python-meraki/{self._version} "
-            + validate_user_agent(self._be_geo_id, self._caller),
+            "User-Agent": f"python-meraki/{self._version} " + validate_user_agent(self._be_geo_id, self._caller),
         }
