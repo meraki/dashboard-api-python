@@ -1,7 +1,7 @@
 from unittest.mock import MagicMock, patch
 
+import httpx
 import pytest
-import requests
 
 from meraki.exceptions import APIError, SessionInputError
 from meraki.session.sync import RestSession
@@ -10,25 +10,29 @@ from meraki.session.sync import RestSession
 @pytest.fixture
 def session():
     with patch("meraki.session.base.check_python_version"):
-        s = RestSession(
-            logger=None,
-            api_key="fake_api_key_1234567890123456789012345678901234567890",
-            base_url="https://api.meraki.com/api/v1",
-            single_request_timeout=60,
-            certificate_path="",
-            requests_proxy="",
-            wait_on_rate_limit=True,
-            nginx_429_retry_wait_time=2,
-            action_batch_retry_wait_time=2,
-            network_delete_retry_wait_time=2,
-            retry_4xx_error=False,
-            retry_4xx_error_wait_time=1,
-            maximum_retries=3,
-            simulate=False,
-            be_geo_id="",
-            caller="TestApp TestVendor",
-            use_iterator_for_get_pages=False,
-        )
+        with patch("httpx.Client") as mock_client:
+            mock_instance = MagicMock()
+            mock_instance.headers = MagicMock(spec=dict)
+            mock_client.return_value = mock_instance
+            s = RestSession(
+                logger=None,
+                api_key="fake_api_key_1234567890123456789012345678901234567890",
+                base_url="https://api.meraki.com/api/v1",
+                single_request_timeout=60,
+                certificate_path="",
+                requests_proxy="",
+                wait_on_rate_limit=True,
+                nginx_429_retry_wait_time=2,
+                action_batch_retry_wait_time=2,
+                network_delete_retry_wait_time=2,
+                retry_4xx_error=False,
+                retry_4xx_error_wait_time=1,
+                maximum_retries=3,
+                simulate=False,
+                be_geo_id="",
+                caller="TestApp TestVendor",
+                use_iterator_for_get_pages=False,
+            )
     return s
 
 
@@ -39,15 +43,14 @@ def _metadata(operation="getOrganizations", tags=None):
 def _mock_response(
     status_code=200,
     json_data=None,
-    reason="OK",
+    reason_phrase="OK",
     headers=None,
     content=b'{"ok":true}',
     links=None,
 ):
-    resp = MagicMock(spec=requests.Response)
+    resp = MagicMock(spec=httpx.Response)
     resp.status_code = status_code
-    resp.reason = reason
-    resp.reason_phrase = reason
+    resp.reason_phrase = reason_phrase
     resp.headers = headers or {}
     resp.content = content
     resp.links = links or {}
@@ -63,10 +66,10 @@ class TestRetryLogic:
     @patch("time.sleep", return_value=None)
     def test_retry_on_429_with_retry_after(self, mock_sleep, session):
         resp_429 = _mock_response(
-            429, reason="Too Many Requests", headers={"Retry-After": "1"}
+            429, reason_phrase="Too Many Requests", headers={"Retry-After": "1"}
         )
         resp_200 = _mock_response(200)
-        session._req_session.request = MagicMock(side_effect=[resp_429, resp_200])
+        session._client.request = MagicMock(side_effect=[resp_429, resp_200])
 
         result = session.request(_metadata(), "GET", "/organizations")
         assert result.status_code == 200
@@ -74,9 +77,9 @@ class TestRetryLogic:
 
     @patch("time.sleep", return_value=None)
     def test_retry_on_429_without_retry_after(self, mock_sleep, session):
-        resp_429 = _mock_response(429, reason="Too Many Requests", headers={})
+        resp_429 = _mock_response(429, reason_phrase="Too Many Requests", headers={})
         resp_200 = _mock_response(200)
-        session._req_session.request = MagicMock(side_effect=[resp_429, resp_200])
+        session._client.request = MagicMock(side_effect=[resp_429, resp_200])
 
         with patch("random.randint", return_value=1):
             result = session.request(_metadata(), "GET", "/organizations")
@@ -86,9 +89,9 @@ class TestRetryLogic:
     def test_429_raises_after_max_retries(self, mock_sleep, session):
         session._maximum_retries = 2
         resp_429 = _mock_response(
-            429, reason="Too Many Requests", headers={"Retry-After": "1"}
+            429, reason_phrase="Too Many Requests", headers={"Retry-After": "1"}
         )
-        session._req_session.request = MagicMock(return_value=resp_429)
+        session._client.request = MagicMock(return_value=resp_429)
 
         with pytest.raises(APIError):
             session.request(_metadata(), "GET", "/organizations")
@@ -96,17 +99,17 @@ class TestRetryLogic:
     @patch("time.sleep", return_value=None)
     def test_429_raises_immediately_when_wait_disabled(self, mock_sleep, session):
         session._wait_on_rate_limit = False
-        resp_429 = _mock_response(429, reason="Too Many Requests", headers={})
-        session._req_session.request = MagicMock(return_value=resp_429)
+        resp_429 = _mock_response(429, reason_phrase="Too Many Requests", headers={})
+        session._client.request = MagicMock(return_value=resp_429)
 
         with pytest.raises(APIError):
             session.request(_metadata(), "GET", "/organizations")
 
     @patch("time.sleep", return_value=None)
     def test_retry_on_5xx(self, mock_sleep, session):
-        resp_500 = _mock_response(500, reason="Internal Server Error")
+        resp_500 = _mock_response(500, reason_phrase="Internal Server Error")
         resp_200 = _mock_response(200)
-        session._req_session.request = MagicMock(side_effect=[resp_500, resp_200])
+        session._client.request = MagicMock(side_effect=[resp_500, resp_200])
 
         result = session.request(_metadata(), "GET", "/organizations")
         assert result.status_code == 200
@@ -114,18 +117,17 @@ class TestRetryLogic:
     @patch("time.sleep", return_value=None)
     def test_5xx_raises_after_max_retries(self, mock_sleep, session):
         session._maximum_retries = 2
-        resp_500 = _mock_response(500, reason="Internal Server Error")
-        session._req_session.request = MagicMock(return_value=resp_500)
+        resp_500 = _mock_response(500, reason_phrase="Internal Server Error")
+        session._client.request = MagicMock(return_value=resp_500)
 
         with pytest.raises(APIError):
             session.request(_metadata(), "GET", "/organizations")
 
     @patch("time.sleep", return_value=None)
     def test_retry_on_connection_error(self, mock_sleep, session):
-        exc = requests.exceptions.ConnectionError("Connection refused")
-        exc.response = None
+        exc = httpx.ConnectError("Connection refused")
         resp_200 = _mock_response(200)
-        session._req_session.request = MagicMock(side_effect=[exc, resp_200])
+        session._client.request = MagicMock(side_effect=[exc, resp_200])
 
         result = session.request(_metadata(), "GET", "/organizations")
         assert result.status_code == 200
@@ -133,9 +135,8 @@ class TestRetryLogic:
     @patch("time.sleep", return_value=None)
     def test_connection_error_raises_after_max_retries(self, mock_sleep, session):
         session._maximum_retries = 1
-        exc = requests.exceptions.ConnectionError("Connection refused")
-        exc.response = None
-        session._req_session.request = MagicMock(side_effect=[exc])
+        exc = httpx.ConnectError("Connection refused")
+        session._client.request = MagicMock(side_effect=[exc])
 
         with pytest.raises(APIError):
             session.request(_metadata(), "GET", "/organizations")
@@ -148,7 +149,7 @@ class TestPaginationLegacy:
     @patch("time.sleep", return_value=None)
     def test_single_page(self, mock_sleep, session):
         resp = _mock_response(200, json_data=[{"id": "1"}], links={})
-        session._req_session.request = MagicMock(return_value=resp)
+        session._client.request = MagicMock(return_value=resp)
 
         result = session._get_pages_legacy(_metadata(), "/organizations")
         assert result == [{"id": "1"}]
@@ -165,7 +166,7 @@ class TestPaginationLegacy:
             },
         )
         resp2 = _mock_response(200, json_data=[{"id": "2"}], links={})
-        session._req_session.request = MagicMock(side_effect=[resp1, resp2])
+        session._client.request = MagicMock(side_effect=[resp1, resp2])
 
         result = session._get_pages_legacy(
             _metadata(), "/organizations", total_pages=-1
@@ -192,7 +193,7 @@ class TestPaginationLegacy:
                 }
             },
         )
-        session._req_session.request = MagicMock(side_effect=[resp1, resp2])
+        session._client.request = MagicMock(side_effect=[resp1, resp2])
 
         result = session._get_pages_legacy(_metadata(), "/organizations", total_pages=2)
         assert result == [{"id": "1"}, {"id": "2"}]
@@ -200,7 +201,7 @@ class TestPaginationLegacy:
     @patch("time.sleep", return_value=None)
     def test_total_pages_string_all(self, mock_sleep, session):
         resp = _mock_response(200, json_data=[{"id": "1"}], links={})
-        session._req_session.request = MagicMock(return_value=resp)
+        session._client.request = MagicMock(return_value=resp)
 
         result = session._get_pages_legacy(
             _metadata(), "/organizations", total_pages="all"
@@ -216,8 +217,8 @@ class TestPaginationLegacy:
 
     @patch("time.sleep", return_value=None)
     def test_204_no_content(self, mock_sleep, session):
-        resp = _mock_response(204, json_data=None, reason="No Content", links={})
-        session._req_session.request = MagicMock(return_value=resp)
+        resp = _mock_response(204, json_data=None, reason_phrase="No Content", links={})
+        session._client.request = MagicMock(return_value=resp)
 
         result = session._get_pages_legacy(_metadata(), "/organizations")
         assert result is None
@@ -242,7 +243,7 @@ class TestPaginationLegacy:
             },
             links={},
         )
-        session._req_session.request = MagicMock(side_effect=[resp1, resp2])
+        session._client.request = MagicMock(side_effect=[resp1, resp2])
 
         result = session._get_pages_legacy(_metadata(), "/things", total_pages=-1)
         assert result["items"] == [{"id": "1"}, {"id": "2"}]
@@ -253,7 +254,7 @@ class TestPaginationIterator:
     @patch("time.sleep", return_value=None)
     def test_single_page_yields_items(self, mock_sleep, session):
         resp = _mock_response(200, json_data=[{"id": "1"}, {"id": "2"}], links={})
-        session._req_session.request = MagicMock(return_value=resp)
+        session._client.request = MagicMock(return_value=resp)
 
         results = list(session._get_pages_iterator(_metadata(), "/organizations"))
         assert results == [{"id": "1"}, {"id": "2"}]
@@ -268,7 +269,7 @@ class TestPaginationIterator:
             },
         )
         resp2 = _mock_response(200, json_data=[{"id": "2"}], links={})
-        session._req_session.request = MagicMock(side_effect=[resp1, resp2])
+        session._client.request = MagicMock(side_effect=[resp1, resp2])
 
         results = list(
             session._get_pages_iterator(_metadata(), "/organizations", total_pages=-1)
@@ -280,7 +281,7 @@ class TestPaginationIterator:
         resp = _mock_response(
             200, json_data={"items": [{"id": "a"}, {"id": "b"}]}, links={}
         )
-        session._req_session.request = MagicMock(return_value=resp)
+        session._client.request = MagicMock(return_value=resp)
 
         results = list(session._get_pages_iterator(_metadata(), "/things"))
         assert results == [{"id": "a"}, {"id": "b"}]
@@ -293,9 +294,9 @@ class TestHandle4xxErrors:
     @patch("time.sleep", return_value=None)
     def test_generic_4xx_raises_immediately(self, mock_sleep, session):
         resp_400 = _mock_response(
-            400, json_data={"errors": ["bad request"]}, reason="Bad Request"
+            400, json_data={"errors": ["bad request"]}, reason_phrase="Bad Request"
         )
-        session._req_session.request = MagicMock(return_value=resp_400)
+        session._client.request = MagicMock(return_value=resp_400)
 
         with pytest.raises(APIError):
             session.request(_metadata(), "GET", "/organizations")
@@ -305,10 +306,10 @@ class TestHandle4xxErrors:
         resp_400 = _mock_response(
             400,
             json_data={"errors": ["concurrent requests detected"]},
-            reason="Bad Request",
+            reason_phrase="Bad Request",
         )
         resp_200 = _mock_response(200)
-        session._req_session.request = MagicMock(side_effect=[resp_400, resp_200])
+        session._client.request = MagicMock(side_effect=[resp_400, resp_200])
 
         with patch("random.randint", return_value=1):
             result = session.request(
@@ -321,10 +322,10 @@ class TestHandle4xxErrors:
         resp_400 = _mock_response(
             400,
             json_data={"errors": ["Too many concurrently executing batches"]},
-            reason="Bad Request",
+            reason_phrase="Bad Request",
         )
         resp_200 = _mock_response(200)
-        session._req_session.request = MagicMock(side_effect=[resp_400, resp_200])
+        session._client.request = MagicMock(side_effect=[resp_400, resp_200])
 
         result = session.request(_metadata(operation="createBatch"), "POST", "/batches")
         assert result.status_code == 200
@@ -333,10 +334,10 @@ class TestHandle4xxErrors:
     def test_retry_4xx_when_enabled(self, mock_sleep, session):
         session._retry_4xx_error = True
         resp_400 = _mock_response(
-            400, json_data={"errors": ["something"]}, reason="Bad Request"
+            400, json_data={"errors": ["something"]}, reason_phrase="Bad Request"
         )
         resp_200 = _mock_response(200)
-        session._req_session.request = MagicMock(side_effect=[resp_400, resp_200])
+        session._client.request = MagicMock(side_effect=[resp_400, resp_200])
 
         with patch("random.randint", return_value=1):
             result = session.request(_metadata(), "GET", "/organizations")
@@ -355,7 +356,7 @@ class TestSimulateMode:
     def test_simulate_allows_get(self, session):
         session._simulate = True
         resp_200 = _mock_response(200)
-        session._req_session.request = MagicMock(return_value=resp_200)
+        session._client.request = MagicMock(return_value=resp_200)
         result = session.request(_metadata(), "GET", "/organizations")
         assert result.status_code == 200
 
@@ -368,11 +369,11 @@ class TestRedirect:
     def test_follows_redirect(self, mock_sleep, session):
         resp_301 = _mock_response(
             301,
-            reason="Moved",
+            reason_phrase="Moved",
             headers={"Location": "https://n123.meraki.com/api/v1/organizations"},
         )
         resp_200 = _mock_response(200)
-        session._req_session.request = MagicMock(side_effect=[resp_301, resp_200])
+        session._client.request = MagicMock(side_effect=[resp_301, resp_200])
 
         result = session.request(_metadata(), "GET", "/organizations")
         assert result.status_code == 200
@@ -382,27 +383,21 @@ class TestRedirect:
 
 
 class TestTransportKwargs:
-    def test_sets_timeout(self, session):
+    def test_returns_kwargs_unchanged(self, session):
+        kwargs = {"params": {"foo": "bar"}}
+        result = session._transport_kwargs(kwargs)
+        assert result == {"params": {"foo": "bar"}}
+
+    def test_does_not_inject_timeout(self, session):
         kwargs = {}
         result = session._transport_kwargs(kwargs)
-        assert result["timeout"] == 60
+        assert "timeout" not in result
 
-    def test_sets_certificate(self, session):
+    def test_does_not_inject_verify(self, session):
         session._certificate_path = "/path/to/cert.pem"
         kwargs = {}
         result = session._transport_kwargs(kwargs)
-        assert result["verify"] == "/path/to/cert.pem"
-
-    def test_sets_proxy(self, session):
-        session._requests_proxy = "https://proxy:8080"
-        kwargs = {}
-        result = session._transport_kwargs(kwargs)
-        assert result["proxies"] == {"https": "https://proxy:8080"}
-
-    def test_does_not_override_existing(self, session):
-        kwargs = {"timeout": 30}
-        result = session._transport_kwargs(kwargs)
-        assert result["timeout"] == 30
+        assert "verify" not in result
 
 
 # --- HTTP verb methods ---
@@ -411,33 +406,33 @@ class TestTransportKwargs:
 class TestHTTPVerbs:
     def test_get_returns_json(self, session):
         resp = _mock_response(200, json_data={"id": "1"}, content=b'{"id":"1"}')
-        session._req_session.request = MagicMock(return_value=resp)
+        session._client.request = MagicMock(return_value=resp)
         result = session.get(_metadata(), "/organizations")
         assert result == {"id": "1"}
 
     def test_get_returns_none_on_empty_content(self, session):
         resp = _mock_response(200, json_data=None, content=b"   ")
-        session._req_session.request = MagicMock(return_value=resp)
+        session._client.request = MagicMock(return_value=resp)
         result = session.get(_metadata(), "/organizations")
         assert result is None
 
     def test_get_returns_none_when_simulated(self, session):
         session._simulate = True
         resp = _mock_response(200, json_data={"id": "1"}, content=b'{"id":"1"}')
-        session._req_session.request = MagicMock(return_value=resp)
+        session._client.request = MagicMock(return_value=resp)
         # GET still goes through in simulate mode
         result = session.get(_metadata(), "/organizations")
         assert result == {"id": "1"}
 
     def test_post_returns_json(self, session):
         resp = _mock_response(201, json_data={"id": "new"}, content=b'{"id":"new"}')
-        session._req_session.request = MagicMock(return_value=resp)
+        session._client.request = MagicMock(return_value=resp)
         result = session.post(_metadata(), "/organizations", json={"name": "Test"})
         assert result == {"id": "new"}
 
     def test_post_returns_none_on_empty_content(self, session):
         resp = _mock_response(204, json_data=None, content=b"")
-        session._req_session.request = MagicMock(return_value=resp)
+        session._client.request = MagicMock(return_value=resp)
         result = session.post(_metadata(), "/organizations", json={"name": "Test"})
         assert result is None
 
@@ -445,19 +440,19 @@ class TestHTTPVerbs:
         resp = _mock_response(
             200, json_data={"id": "updated"}, content=b'{"id":"updated"}'
         )
-        session._req_session.request = MagicMock(return_value=resp)
+        session._client.request = MagicMock(return_value=resp)
         result = session.put(_metadata(), "/organizations/1", json={"name": "New"})
         assert result == {"id": "updated"}
 
     def test_put_returns_none_on_empty_content(self, session):
         resp = _mock_response(200, json_data=None, content=b"  ")
-        session._req_session.request = MagicMock(return_value=resp)
+        session._client.request = MagicMock(return_value=resp)
         result = session.put(_metadata(), "/organizations/1", json={"name": "New"})
         assert result is None
 
     def test_delete_returns_none(self, session):
-        resp = _mock_response(204, reason="No Content", content=b"")
-        session._req_session.request = MagicMock(return_value=resp)
+        resp = _mock_response(204, reason_phrase="No Content", content=b"")
+        session._client.request = MagicMock(return_value=resp)
         result = session.delete(_metadata(), "/organizations/1")
         assert result is None
 
@@ -469,10 +464,8 @@ class TestConnectionErrorWithResponse:
     @patch("time.sleep", return_value=None)
     def test_connection_error_with_response_status(self, mock_sleep, session):
         session._maximum_retries = 1
-        exc = requests.exceptions.ConnectionError("refused")
-        exc.response = MagicMock()
-        exc.response.status_code = 502
-        session._req_session.request = MagicMock(side_effect=[exc])
+        exc = httpx.ConnectError("refused")
+        session._client.request = MagicMock(side_effect=[exc])
 
         with pytest.raises(APIError):
             session.request(_metadata(), "GET", "/organizations")
@@ -489,7 +482,7 @@ class TestJSONDecodeRetryExhaustion:
         session._maximum_retries = 2
         resp = _mock_response(200, content=b'{"ok":true}')
         resp.json.side_effect = json_mod.decoder.JSONDecodeError("", "", 0)
-        session._req_session.request = MagicMock(return_value=resp)
+        session._client.request = MagicMock(return_value=resp)
 
         with pytest.raises(APIError):
             session.request(_metadata(), "GET", "/organizations")
@@ -509,7 +502,7 @@ class TestPaginationLegacyExtended:
             },
         )
         resp2 = _mock_response(200, json_data=[{"id": "1"}], links={})
-        session._req_session.request = MagicMock(side_effect=[resp1, resp2])
+        session._client.request = MagicMock(side_effect=[resp1, resp2])
 
         result = session._get_pages_legacy(_metadata(), "/orgs", direction="prev")
         assert result == [{"id": "2"}, {"id": "1"}]
@@ -525,7 +518,7 @@ class TestPaginationLegacyExtended:
             },
             links={},
         )
-        session._req_session.request = MagicMock(return_value=resp)
+        session._client.request = MagicMock(return_value=resp)
 
         metadata = _metadata(operation="getNetworkEvents")
         result = session._get_pages_legacy(metadata, "/events", direction="next")
@@ -548,7 +541,7 @@ class TestPaginationLegacyExtended:
                 }
             },
         )
-        session._req_session.request = MagicMock(return_value=resp)
+        session._client.request = MagicMock(return_value=resp)
 
         metadata = _metadata(operation="getNetworkEvents")
         with patch("meraki.session.sync.datetime") as mock_dt:
@@ -578,7 +571,7 @@ class TestPaginationLegacyExtended:
                 }
             },
         )
-        session._req_session.request = MagicMock(return_value=resp)
+        session._client.request = MagicMock(return_value=resp)
 
         metadata = _metadata(operation="getNetworkEvents")
         with patch("meraki.session.sync.datetime") as mock_dt:
@@ -611,7 +604,7 @@ class TestPaginationLegacyExtended:
                 }
             },
         )
-        session._req_session.request = MagicMock(return_value=resp)
+        session._client.request = MagicMock(return_value=resp)
 
         metadata = _metadata(operation="getNetworkEvents")
         result = session._get_pages_legacy(metadata, "/events", direction="prev")
@@ -620,7 +613,7 @@ class TestPaginationLegacyExtended:
     @patch("time.sleep", return_value=None)
     def test_total_pages_numeric_string(self, mock_sleep, session):
         resp = _mock_response(200, json_data=[{"id": "1"}], links={})
-        session._req_session.request = MagicMock(return_value=resp)
+        session._client.request = MagicMock(return_value=resp)
 
         result = session._get_pages_legacy(_metadata(), "/orgs", total_pages="3")
         assert result == [{"id": "1"}]
@@ -649,7 +642,7 @@ class TestPaginationLegacyExtended:
             },
             links={},
         )
-        session._req_session.request = MagicMock(side_effect=[resp1, resp2])
+        session._client.request = MagicMock(side_effect=[resp1, resp2])
 
         metadata = _metadata(operation="getNetworkEvents")
         from datetime import datetime, timezone
@@ -676,7 +669,7 @@ class TestPaginationIteratorExtended:
     @patch("time.sleep", return_value=None)
     def test_total_pages_numeric_string(self, mock_sleep, session):
         resp = _mock_response(200, json_data=[{"id": "1"}], links={})
-        session._req_session.request = MagicMock(return_value=resp)
+        session._client.request = MagicMock(return_value=resp)
 
         results = list(
             session._get_pages_iterator(_metadata(), "/orgs", total_pages="3")
@@ -700,7 +693,7 @@ class TestPaginationIteratorExtended:
             },
         )
         resp2 = _mock_response(200, json_data=[{"id": "1"}], links={})
-        session._req_session.request = MagicMock(side_effect=[resp1, resp2])
+        session._client.request = MagicMock(side_effect=[resp1, resp2])
 
         results = list(
             session._get_pages_iterator(_metadata(), "/orgs", direction="prev")
@@ -718,7 +711,7 @@ class TestPaginationIteratorExtended:
             },
             links={},
         )
-        session._req_session.request = MagicMock(return_value=resp)
+        session._client.request = MagicMock(return_value=resp)
 
         metadata = _metadata(operation="getNetworkEvents")
         results = list(
@@ -737,7 +730,7 @@ class TestPaginationIteratorExtended:
             },
             links={},
         )
-        session._req_session.request = MagicMock(return_value=resp)
+        session._client.request = MagicMock(return_value=resp)
 
         metadata = _metadata(operation="someOp")
         results = list(
@@ -777,7 +770,7 @@ class TestPaginationIteratorExtended:
                 }
             },
         )
-        session._req_session.request = MagicMock(side_effect=[resp1, resp2])
+        session._client.request = MagicMock(side_effect=[resp1, resp2])
 
         metadata = _metadata(operation="getNetworkEvents")
         call_count = [0]
@@ -831,7 +824,7 @@ class TestPaginationIteratorExtended:
                 }
             },
         )
-        session._req_session.request = MagicMock(side_effect=[resp1, resp2])
+        session._client.request = MagicMock(side_effect=[resp1, resp2])
 
         metadata = _metadata(operation="getNetworkEvents")
         call_count = [0]
@@ -887,7 +880,7 @@ class TestPaginationIteratorExtended:
                 }
             },
         )
-        session._req_session.request = MagicMock(side_effect=[resp1, resp2])
+        session._client.request = MagicMock(side_effect=[resp1, resp2])
 
         metadata = _metadata(operation="getNetworkEvents")
         results = list(
