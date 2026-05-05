@@ -5,9 +5,9 @@ from __future__ import annotations
 import time
 import urllib.parse
 from datetime import datetime, timezone
-from typing import TYPE_CHECKING, Any, Dict
+from typing import Any, Dict
 
-import requests
+import httpx
 
 from meraki.common import (
     iterator_for_get_pages_bool,
@@ -16,12 +16,9 @@ from meraki.common import (
 from meraki.exceptions import SessionInputError
 from meraki.session.base import SessionBase
 
-if TYPE_CHECKING:
-    import httpx
-
 
 class RestSession(SessionBase):
-    """Synchronous session using requests library.
+    """Synchronous session using httpx.Client.
 
     Inherits config, retry loop, and status dispatch from SessionBase.
     Implements transport-specific sleep and request methods.
@@ -30,10 +27,18 @@ class RestSession(SessionBase):
     def __init__(self, logger, api_key, **kwargs: Any) -> None:
         super().__init__(logger, api_key, **kwargs)
 
-        # Initialize requests session
-        self._req_session = requests.session()
-        self._req_session.encoding = "utf-8"
-        self._req_session.headers = self._build_headers()
+        # Build client config from session config (per D-06: requests_proxy -> proxy kwarg)
+        client_kwargs: Dict[str, Any] = {
+            "timeout": self._single_request_timeout,
+        }
+        if self._certificate_path:
+            client_kwargs["verify"] = self._certificate_path
+        if self._requests_proxy:
+            client_kwargs["proxy"] = self._requests_proxy
+
+        # Persistent httpx client with connection pooling
+        self._client = httpx.Client(**client_kwargs)
+        self._client.headers.update(self._build_headers())
 
     @property
     def use_iterator_for_get_pages(self):
@@ -43,22 +48,17 @@ class RestSession(SessionBase):
     def use_iterator_for_get_pages(self, value):
         use_iterator_for_get_pages_setter(self, value)
 
-    def _send_request(self, method: str, url: str, **kwargs: Any) -> "httpx.Response":
-        """Send HTTP request via requests.Session."""
-        response = self._req_session.request(method, url, **kwargs)
-        return response  # type: ignore[return-value]
+    def _send_request(self, method: str, url: str, **kwargs: Any) -> httpx.Response:
+        """Send HTTP request via persistent httpx.Client."""
+        response = self._client.request(method, url, follow_redirects=False, **kwargs)
+        return response
 
     def _sleep(self, seconds: float) -> None:
         """Blocking sleep for retry delays."""
         time.sleep(seconds)
 
     def _transport_kwargs(self, kwargs: Dict[str, Any]) -> Dict[str, Any]:
-        """Map config to requests-specific kwargs (verify, proxies, timeout)."""
-        if self._certificate_path:
-            kwargs.setdefault("verify", self._certificate_path)
-        if self._requests_proxy:
-            kwargs.setdefault("proxies", {"https": self._requests_proxy})
-        kwargs.setdefault("timeout", self._single_request_timeout)
+        """No-op: httpx config handled at client initialization level."""
         return kwargs
 
     # ------------------------------------------------------------------
