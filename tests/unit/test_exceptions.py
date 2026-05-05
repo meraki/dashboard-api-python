@@ -132,7 +132,8 @@ class TestAsyncAPIError:
     def test_basic_init(self):
         metadata = {"tags": ["devices"], "operation": "getDevices"}
         resp = self._make_response()
-        err = AsyncAPIError(metadata, resp, {"errors": ["fail"]})
+        with pytest.warns(DeprecationWarning):
+            err = AsyncAPIError(metadata, resp, {"errors": ["fail"]})
         assert err.tag == "devices"
         assert err.operation == "getDevices"
         assert err.status == 400
@@ -142,7 +143,8 @@ class TestAsyncAPIError:
     def test_repr(self):
         metadata = {"tags": ["devices"], "operation": "getDevices"}
         resp = self._make_response()
-        err = AsyncAPIError(metadata, resp, "some error")
+        with pytest.warns(DeprecationWarning):
+            err = AsyncAPIError(metadata, resp, "some error")
         r = repr(err)
         assert "devices" in r
         assert "400" in r
@@ -150,26 +152,51 @@ class TestAsyncAPIError:
     def test_string_message_stripped(self):
         metadata = {"tags": ["orgs"], "operation": "getOrgs"}
         resp = self._make_response()
-        err = AsyncAPIError(metadata, resp, "  spaces around  ")
+        with pytest.warns(DeprecationWarning):
+            err = AsyncAPIError(metadata, resp, "  spaces around  ")
         assert err.message == "spaces around"
 
     def test_404_appends_wait_message(self):
         metadata = {"tags": ["orgs"], "operation": "getOrg"}
         resp = self._make_response(status_code=404, reason_phrase="Not Found")
-        err = AsyncAPIError(metadata, resp, "resource missing")
+        with pytest.warns(DeprecationWarning):
+            err = AsyncAPIError(metadata, resp, "resource missing")
         assert "please wait" in err.message
 
     def test_non_404_does_not_append_wait_message(self):
         metadata = {"tags": ["orgs"], "operation": "getOrg"}
         resp = self._make_response(status_code=500, reason_phrase="Server Error")
-        err = AsyncAPIError(metadata, resp, "server broke")
+        with pytest.warns(DeprecationWarning):
+            err = AsyncAPIError(metadata, resp, "server broke")
         assert "please wait" not in err.message
 
     def test_none_response(self):
         metadata = {"tags": ["orgs"], "operation": "getOrg"}
-        err = AsyncAPIError(metadata, None, "no response")
+        with pytest.warns(DeprecationWarning):
+            err = AsyncAPIError(metadata, None, "no response")
         assert err.status is None
         assert err.reason is None
+
+    def test_is_subclass_of_api_error(self):
+        metadata = {"tags": ["devices"], "operation": "getDevices"}
+        resp = self._make_response()
+        with pytest.warns(DeprecationWarning):
+            err = AsyncAPIError(metadata, resp, "msg")
+        assert isinstance(err, APIError)
+
+    def test_emits_deprecation_warning(self):
+        metadata = {"tags": ["devices"], "operation": "getDevices"}
+        resp = self._make_response()
+        with pytest.warns(DeprecationWarning, match="AsyncAPIError is deprecated"):
+            AsyncAPIError(metadata, resp, {"errors": ["fail"]})
+
+    def test_2arg_signature_delegates_to_parent(self):
+        metadata = {"tags": ["networks"], "operation": "getNetworks"}
+        resp = self._make_response()
+        resp.json.return_value = {"errors": ["server failed"]}
+        with pytest.warns(DeprecationWarning):
+            err = AsyncAPIError(metadata, resp)
+        assert err.message == {"errors": ["server failed"]}
 
 
 class TestPythonVersionError:
