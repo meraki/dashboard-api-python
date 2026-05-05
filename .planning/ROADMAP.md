@@ -32,7 +32,7 @@
 - [ ] **Phase 8: Integration Baseline** - Capture passing integration tests before any HTTP changes
 - [ ] **Phase 9: Foundation** - Library-agnostic param encoding and property-based tests
 - [x] **Phase 10: Session Refactor** - Shared base class with decomposed, type-annotated logic (completed 2026-05-04)
-- [ ] **Phase 11: HTTP Backend Migration** - Replace requests/aiohttp with httpx.Client/AsyncClient
+- [x] **Phase 11: HTTP Backend Migration** - Replace requests/aiohttp with httpx.Client/AsyncClient (completed 2026-05-05)
 - [ ] **Phase 12: Error Handling Deprecation** - Unify exception classes with backwards compatibility
 - [ ] **Phase 13: Test Infrastructure** - Update test mocks and validate regression gate
 
@@ -90,8 +90,8 @@ Plans:
 **Plans**: 3 plans
 Plans:
 - [x] 11-01-PLAN.md - Dependencies, exceptions, config update to httpx
-- [ ] 11-02-PLAN.md - Sync session migration (RestSession -> httpx.Client)
-- [ ] 11-03-PLAN.md - Async session migration (AsyncRestSession -> httpx.AsyncClient)
+- [x] 11-02-PLAN.md - Sync session migration (RestSession -> httpx.Client)
+- [x] 11-03-PLAN.md - Async session migration (AsyncRestSession -> httpx.AsyncClient)
 
 ### Phase 12: Error Handling Deprecation
 **Goal**: Unified exception handling with backwards-compatible AsyncAPIError
@@ -104,9 +104,9 @@ Plans:
   4. Documentation recommends catching APIError for both sync and async
 **Plans**: 3 plans
 Plans:
-- [ ] 11-01-PLAN.md - Dependencies, exceptions, config update to httpx
-- [ ] 11-02-PLAN.md - Sync session migration (RestSession -> httpx.Client)
-- [ ] 11-03-PLAN.md - Async session migration (AsyncRestSession -> httpx.AsyncClient)
+- [x] 11-01-PLAN.md - Dependencies, exceptions, config update to httpx
+- [x] 11-02-PLAN.md - Sync session migration (RestSession -> httpx.Client)
+- [x] 11-03-PLAN.md - Async session migration (AsyncRestSession -> httpx.AsyncClient)
 
 ### Phase 13: Test Infrastructure
 **Goal**: All tests mock httpx responses and validate identical behavior
@@ -119,7 +119,7 @@ Plans:
   4. Performance benchmark compares requests/aiohttp vs httpx (documented)
 **Plans**: 3 plans
 Plans:
-- [ ] 11-01-PLAN.md - Dependencies, exceptions, config update to httpx
+- [x] 11-01-PLAN.md - Dependencies, exceptions, config update to httpx
 - [ ] 11-02-PLAN.md - Sync session migration (RestSession -> httpx.Client)
 - [ ] 11-03-PLAN.md - Async session migration (AsyncRestSession -> httpx.AsyncClient)
 
@@ -137,7 +137,7 @@ Plans:
 | 8. Integration Baseline | v4.0 | 0/1 | Planning | - |
 | 9. Foundation | v4.0 | 0/1 | Planning | - |
 | 10. Session Refactor | v4.0 | 2/2 | Complete    | 2026-05-04 |
-| 11. HTTP Backend Migration | v4.0 | 1/3 | In Progress|  |
+| 11. HTTP Backend Migration | v4.0 | 3/3 | Complete   | 2026-05-05 |
 | 12. Error Handling Deprecation | v4.0 | 0/0 | Not started | - |
 | 13. Test Infrastructure | v4.0 | 0/0 | Not started | - |
 
