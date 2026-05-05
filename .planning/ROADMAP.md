@@ -137,7 +137,7 @@ Plans:
 | 8. Integration Baseline | v4.0 | 0/1 | Planning | - |
 | 9. Foundation | v4.0 | 0/1 | Planning | - |
 | 10. Session Refactor | v4.0 | 2/2 | Complete    | 2026-05-04 |
-| 11. HTTP Backend Migration | v4.0 | 4/4 | Complete   | 2026-05-05 |
+| 11. HTTP Backend Migration | v4.0 | 4/4 | Complete    | 2026-05-05 |
 | 12. Error Handling Deprecation | v4.0 | 0/0 | Not started | - |
 | 13. Test Infrastructure | v4.0 | 0/0 | Not started | - |
 
