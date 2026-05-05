@@ -117,7 +117,7 @@ Plans:
   4. Performance benchmark compares requests/aiohttp vs httpx (documented)
 **Plans**: 3 plans
 Plans:
-- [ ] 13-01-PLAN.md - Upgrade deps, migrate generator scripts and tests to httpx
+- [x] 13-01-PLAN.md - Upgrade deps, migrate generator scripts and tests to httpx
 - [ ] 13-02-PLAN.md - Performance benchmark suite (latency/throughput/memory/pool)
 - [ ] 13-03-PLAN.md - CI workflow: benchmark job and baseline validation
 
@@ -137,7 +137,7 @@ Plans:
 | 10. Session Refactor | v4.0 | 2/2 | Complete    | 2026-05-04 |
 | 11. HTTP Backend Migration | v4.0 | 4/4 | Complete    | 2026-05-05 |
 | 12. Error Handling Deprecation | v4.0 | 1/1 | Complete    | 2026-05-05 |
-| 13. Test Infrastructure | v4.0 | 0/3 | Planned | - |
+| 13. Test Infrastructure | v4.0 | 1/3 | In Progress|  |
 
 ---
 *Roadmap updated: 2026-05-05 (Phase 13 planned: 3 plans)*
