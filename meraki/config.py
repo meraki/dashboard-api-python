@@ -69,6 +69,7 @@ USE_ITERATOR_FOR_GET_PAGES = False
 SIMULATE_API_CALLS = False
 
 # Number of concurrent API requests for asynchronous class
+# Maps to httpx.Limits(max_connections=N) in AsyncRestSession
 AIO_MAXIMUM_CONCURRENT_REQUESTS = 8
 
 # Legacy partner identifier for API usage tracking; can also be set as an environment variable BE_GEO_ID

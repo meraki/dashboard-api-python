@@ -184,7 +184,7 @@ class SessionBase(ABC):
             try:
                 if self._logger:
                     self._logger.info(f"{method} {abs_url}")
-                response = self._send_request(method, abs_url, allow_redirects=False, **kwargs)
+                response = self._send_request(method, abs_url, **kwargs)
             except Exception as e:
                 if self._logger:
                     self._logger.warning(f"{tag}, {operation} - {e}, retrying in 1 second")
