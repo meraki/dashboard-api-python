@@ -34,7 +34,7 @@
 - [x] **Phase 10: Session Refactor** - Shared base class with decomposed, type-annotated logic (completed 2026-05-04)
 - [x] **Phase 11: HTTP Backend Migration** - Replace requests/aiohttp with httpx.Client/AsyncClient (completed 2026-05-05)
 - [x] **Phase 12: Error Handling Deprecation** - Unify exception classes with backwards compatibility (completed 2026-05-05)
-- [ ] **Phase 13: Test Infrastructure** - Update test mocks and validate regression gate
+- [x] **Phase 13: Test Infrastructure** - Update test mocks and validate regression gate (completed 2026-05-05)
 
 ## Phase Details
 
@@ -118,8 +118,8 @@ Plans:
 **Plans**: 3 plans
 Plans:
 - [x] 13-01-PLAN.md - Upgrade deps, migrate generator scripts and tests to httpx
-- [ ] 13-02-PLAN.md - Performance benchmark suite (latency/throughput/memory/pool)
-- [ ] 13-03-PLAN.md - CI workflow: benchmark job and baseline validation
+- [x] 13-02-PLAN.md - Performance benchmark suite (latency/throughput/memory/pool)
+- [x] 13-03-PLAN.md - CI workflow: benchmark job and baseline validation
 
 ## Progress
 
@@ -137,7 +137,7 @@ Plans:
 | 10. Session Refactor | v4.0 | 2/2 | Complete    | 2026-05-04 |
 | 11. HTTP Backend Migration | v4.0 | 4/4 | Complete    | 2026-05-05 |
 | 12. Error Handling Deprecation | v4.0 | 1/1 | Complete    | 2026-05-05 |
-| 13. Test Infrastructure | v4.0 | 1/3 | In Progress|  |
+| 13. Test Infrastructure | v4.0 | 3/3 | Complete   | 2026-05-05 |
 
 ---
 *Roadmap updated: 2026-05-05 (Phase 13 planned: 3 plans)*
