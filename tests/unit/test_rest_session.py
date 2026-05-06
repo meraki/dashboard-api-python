@@ -65,9 +65,7 @@ def _mock_response(
 class TestRetryLogic:
     @patch("time.sleep", return_value=None)
     def test_retry_on_429_with_retry_after(self, mock_sleep, session):
-        resp_429 = _mock_response(
-            429, reason_phrase="Too Many Requests", headers={"Retry-After": "1"}
-        )
+        resp_429 = _mock_response(429, reason_phrase="Too Many Requests", headers={"Retry-After": "1"})
         resp_200 = _mock_response(200)
         session._client.request = MagicMock(side_effect=[resp_429, resp_200])
 
@@ -88,9 +86,7 @@ class TestRetryLogic:
     @patch("time.sleep", return_value=None)
     def test_429_raises_after_max_retries(self, mock_sleep, session):
         session._maximum_retries = 2
-        resp_429 = _mock_response(
-            429, reason_phrase="Too Many Requests", headers={"Retry-After": "1"}
-        )
+        resp_429 = _mock_response(429, reason_phrase="Too Many Requests", headers={"Retry-After": "1"})
         session._client.request = MagicMock(return_value=resp_429)
 
         with pytest.raises(APIError):
@@ -141,6 +137,53 @@ class TestRetryLogic:
         with pytest.raises(APIError):
             session.request(_metadata(), "GET", "/organizations")
 
+    @patch("time.sleep", return_value=None)
+    def test_429_retry_count_matches_maximum_retries(self, mock_sleep, session):
+        """Verify exactly maximum_retries attempts occur before APIError."""
+        session._maximum_retries = 3
+        resp_429 = _mock_response(429, reason_phrase="Too Many Requests", headers={"Retry-After": "1"})
+        session._client.request = MagicMock(return_value=resp_429)
+
+        with pytest.raises(APIError):
+            session.request(_metadata(), "GET", "/organizations")
+
+        assert session._client.request.call_count == 3
+
+    @patch("time.sleep", return_value=None)
+    def test_429_uses_retry_after_header_value(self, mock_sleep, session):
+        """Verify sleep uses exact Retry-After header value."""
+        resp_429 = _mock_response(429, reason_phrase="Too Many Requests", headers={"Retry-After": "7"})
+        resp_200 = _mock_response(200)
+        session._client.request = MagicMock(side_effect=[resp_429, resp_200])
+
+        session.request(_metadata(), "GET", "/organizations")
+        mock_sleep.assert_called_with(7)
+
+    @patch("time.sleep", return_value=None)
+    def test_server_error_retries_exactly_maximum_retries(self, mock_sleep, session):
+        """Verify 5xx retries exhaust exactly maximum_retries attempts."""
+        session._maximum_retries = 2
+        resp_500 = _mock_response(500, reason_phrase="Internal Server Error")
+        session._client.request = MagicMock(return_value=resp_500)
+
+        with pytest.raises(APIError):
+            session.request(_metadata(), "GET", "/organizations")
+
+        assert session._client.request.call_count == 2
+        assert mock_sleep.call_count == 2
+
+    @patch("time.sleep", return_value=None)
+    def test_connection_error_retries_exactly_maximum_retries(self, mock_sleep, session):
+        """Verify HTTPError retries exhaust exactly maximum_retries attempts."""
+        session._maximum_retries = 3
+        session._client.request = MagicMock(side_effect=httpx.ConnectError("connection refused"))
+
+        with pytest.raises(APIError):
+            session.request(_metadata(), "GET", "/organizations")
+
+        assert session._client.request.call_count == 3
+        assert mock_sleep.call_count == 3
+
 
 # --- Pagination tests ---
 
@@ -159,18 +202,12 @@ class TestPaginationLegacy:
         resp1 = _mock_response(
             200,
             json_data=[{"id": "1"}],
-            links={
-                "next": {
-                    "url": "https://api.meraki.com/api/v1/organizations?startingAfter=1"
-                }
-            },
+            links={"next": {"url": "https://api.meraki.com/api/v1/organizations?startingAfter=1"}},
         )
         resp2 = _mock_response(200, json_data=[{"id": "2"}], links={})
         session._client.request = MagicMock(side_effect=[resp1, resp2])
 
-        result = session._get_pages_legacy(
-            _metadata(), "/organizations", total_pages=-1
-        )
+        result = session._get_pages_legacy(_metadata(), "/organizations", total_pages=-1)
         assert result == [{"id": "1"}, {"id": "2"}]
 
     @patch("time.sleep", return_value=None)
@@ -178,20 +215,12 @@ class TestPaginationLegacy:
         resp1 = _mock_response(
             200,
             json_data=[{"id": "1"}],
-            links={
-                "next": {
-                    "url": "https://api.meraki.com/api/v1/organizations?startingAfter=1"
-                }
-            },
+            links={"next": {"url": "https://api.meraki.com/api/v1/organizations?startingAfter=1"}},
         )
         resp2 = _mock_response(
             200,
             json_data=[{"id": "2"}],
-            links={
-                "next": {
-                    "url": "https://api.meraki.com/api/v1/organizations?startingAfter=2"
-                }
-            },
+            links={"next": {"url": "https://api.meraki.com/api/v1/organizations?startingAfter=2"}},
         )
         session._client.request = MagicMock(side_effect=[resp1, resp2])
 
@@ -203,17 +232,13 @@ class TestPaginationLegacy:
         resp = _mock_response(200, json_data=[{"id": "1"}], links={})
         session._client.request = MagicMock(return_value=resp)
 
-        result = session._get_pages_legacy(
-            _metadata(), "/organizations", total_pages="all"
-        )
+        result = session._get_pages_legacy(_metadata(), "/organizations", total_pages="all")
         assert result == [{"id": "1"}]
 
     @patch("time.sleep", return_value=None)
     def test_total_pages_invalid_raises(self, mock_sleep, session):
         with pytest.raises(SessionInputError):
-            session._get_pages_legacy(
-                _metadata(), "/organizations", total_pages="invalid"
-            )
+            session._get_pages_legacy(_metadata(), "/organizations", total_pages="invalid")
 
     @patch("time.sleep", return_value=None)
     def test_204_no_content(self, mock_sleep, session):
@@ -231,9 +256,7 @@ class TestPaginationLegacy:
                 "items": [{"id": "1"}],
                 "meta": {"counts": {"items": {"remaining": 1}}},
             },
-            links={
-                "next": {"url": "https://api.meraki.com/api/v1/things?startingAfter=1"}
-            },
+            links={"next": {"url": "https://api.meraki.com/api/v1/things?startingAfter=1"}},
         )
         resp2 = _mock_response(
             200,
@@ -264,23 +287,17 @@ class TestPaginationIterator:
         resp1 = _mock_response(
             200,
             json_data=[{"id": "1"}],
-            links={
-                "next": {"url": "https://api.meraki.com/api/v1/orgs?startingAfter=1"}
-            },
+            links={"next": {"url": "https://api.meraki.com/api/v1/orgs?startingAfter=1"}},
         )
         resp2 = _mock_response(200, json_data=[{"id": "2"}], links={})
         session._client.request = MagicMock(side_effect=[resp1, resp2])
 
-        results = list(
-            session._get_pages_iterator(_metadata(), "/organizations", total_pages=-1)
-        )
+        results = list(session._get_pages_iterator(_metadata(), "/organizations", total_pages=-1))
         assert results == [{"id": "1"}, {"id": "2"}]
 
     @patch("time.sleep", return_value=None)
     def test_items_dict_yields_items(self, mock_sleep, session):
-        resp = _mock_response(
-            200, json_data={"items": [{"id": "a"}, {"id": "b"}]}, links={}
-        )
+        resp = _mock_response(200, json_data={"items": [{"id": "a"}, {"id": "b"}]}, links={})
         session._client.request = MagicMock(return_value=resp)
 
         results = list(session._get_pages_iterator(_metadata(), "/things"))
@@ -293,9 +310,7 @@ class TestPaginationIterator:
 class TestHandle4xxErrors:
     @patch("time.sleep", return_value=None)
     def test_generic_4xx_raises_immediately(self, mock_sleep, session):
-        resp_400 = _mock_response(
-            400, json_data={"errors": ["bad request"]}, reason_phrase="Bad Request"
-        )
+        resp_400 = _mock_response(400, json_data={"errors": ["bad request"]}, reason_phrase="Bad Request")
         session._client.request = MagicMock(return_value=resp_400)
 
         with pytest.raises(APIError):
@@ -312,9 +327,7 @@ class TestHandle4xxErrors:
         session._client.request = MagicMock(side_effect=[resp_400, resp_200])
 
         with patch("random.randint", return_value=1):
-            result = session.request(
-                _metadata(operation="deleteNetwork"), "DELETE", "/networks/123"
-            )
+            result = session.request(_metadata(operation="deleteNetwork"), "DELETE", "/networks/123")
         assert result.status_code == 200
 
     @patch("time.sleep", return_value=None)
@@ -333,9 +346,7 @@ class TestHandle4xxErrors:
     @patch("time.sleep", return_value=None)
     def test_retry_4xx_when_enabled(self, mock_sleep, session):
         session._retry_4xx_error = True
-        resp_400 = _mock_response(
-            400, json_data={"errors": ["something"]}, reason_phrase="Bad Request"
-        )
+        resp_400 = _mock_response(400, json_data={"errors": ["something"]}, reason_phrase="Bad Request")
         resp_200 = _mock_response(200)
         session._client.request = MagicMock(side_effect=[resp_400, resp_200])
 
@@ -437,9 +448,7 @@ class TestHTTPVerbs:
         assert result is None
 
     def test_put_returns_json(self, session):
-        resp = _mock_response(
-            200, json_data={"id": "updated"}, content=b'{"id":"updated"}'
-        )
+        resp = _mock_response(200, json_data={"id": "updated"}, content=b'{"id":"updated"}')
         session._client.request = MagicMock(return_value=resp)
         result = session.put(_metadata(), "/organizations/1", json={"name": "New"})
         assert result == {"id": "updated"}
@@ -455,6 +464,14 @@ class TestHTTPVerbs:
         session._client.request = MagicMock(return_value=resp)
         result = session.delete(_metadata(), "/organizations/1")
         assert result is None
+
+    def test_delete_passes_query_params(self, session):
+        resp = _mock_response(204, reason_phrase="No Content", content=b"")
+        session._client.request = MagicMock(return_value=resp)
+        params = {"force": "true"}
+        session.delete(_metadata(), "/networks/1/groupPolicies/1", params)
+        call_kwargs = session._client.request.call_args
+        assert call_kwargs.kwargs.get("params") == params
 
 
 # --- Connection error with response object ---
@@ -497,9 +514,7 @@ class TestPaginationLegacyExtended:
         resp1 = _mock_response(
             200,
             json_data=[{"id": "2"}],
-            links={
-                "prev": {"url": "https://api.meraki.com/api/v1/orgs?endingBefore=2"}
-            },
+            links={"prev": {"url": "https://api.meraki.com/api/v1/orgs?endingBefore=2"}},
         )
         resp2 = _mock_response(200, json_data=[{"id": "1"}], links={})
         session._client.request = MagicMock(side_effect=[resp1, resp2])
@@ -535,22 +550,14 @@ class TestPaginationLegacyExtended:
                 "pageStartAt": "2024-01-01T00:00:00Z",
                 "pageEndAt": "2024-01-01T01:00:00Z",
             },
-            links={
-                "next": {
-                    "url": "https://api.meraki.com/api/v1/events?startingAfter=2024-01-01T00:00:00+00:00"
-                }
-            },
+            links={"next": {"url": "https://api.meraki.com/api/v1/events?startingAfter=2024-01-01T00:00:00+00:00"}},
         )
         session._client.request = MagicMock(return_value=resp)
 
         metadata = _metadata(operation="getNetworkEvents")
         with patch("meraki.session.sync.datetime") as mock_dt:
-            mock_dt.now.return_value = datetime(
-                2024, 1, 1, 0, 2, 0, tzinfo=timezone.utc
-            )
-            mock_dt.fromisoformat.return_value = datetime(
-                2024, 1, 1, 0, 0, 0, tzinfo=timezone.utc
-            )
+            mock_dt.now.return_value = datetime(2024, 1, 1, 0, 2, 0, tzinfo=timezone.utc)
+            mock_dt.fromisoformat.return_value = datetime(2024, 1, 1, 0, 0, 0, tzinfo=timezone.utc)
             result = session._get_pages_legacy(metadata, "/events", direction="next")
         assert result["events"] == [{"ts": "a"}]
 
@@ -565,22 +572,14 @@ class TestPaginationLegacyExtended:
                 "pageStartAt": "2024-01-01T00:00:00Z",
                 "pageEndAt": "2024-01-01T01:00:00Z",
             },
-            links={
-                "next": {
-                    "url": "https://api.meraki.com/api/v1/events?startingAfter=2024-06-01T00:00:00+00:00"
-                }
-            },
+            links={"next": {"url": "https://api.meraki.com/api/v1/events?startingAfter=2024-06-01T00:00:00+00:00"}},
         )
         session._client.request = MagicMock(return_value=resp)
 
         metadata = _metadata(operation="getNetworkEvents")
         with patch("meraki.session.sync.datetime") as mock_dt:
-            mock_dt.now.return_value = datetime(
-                2025, 1, 1, 0, 0, 0, tzinfo=timezone.utc
-            )
-            mock_dt.fromisoformat.return_value = datetime(
-                2024, 6, 1, 0, 0, 0, tzinfo=timezone.utc
-            )
+            mock_dt.now.return_value = datetime(2025, 1, 1, 0, 0, 0, tzinfo=timezone.utc)
+            mock_dt.fromisoformat.return_value = datetime(2024, 6, 1, 0, 0, 0, tzinfo=timezone.utc)
             result = session._get_pages_legacy(
                 metadata,
                 "/events",
@@ -598,11 +597,7 @@ class TestPaginationLegacyExtended:
                 "pageStartAt": "2014-01-01T00:00:00Z",
                 "pageEndAt": "2014-01-02T00:00:00Z",
             },
-            links={
-                "prev": {
-                    "url": "https://api.meraki.com/api/v1/events?endingBefore=2013-12-31T00:00:00Z"
-                }
-            },
+            links={"prev": {"url": "https://api.meraki.com/api/v1/events?endingBefore=2013-12-31T00:00:00Z"}},
         )
         session._client.request = MagicMock(return_value=resp)
 
@@ -627,11 +622,7 @@ class TestPaginationLegacyExtended:
                 "pageStartAt": "2024-01-01T00:00:00Z",
                 "pageEndAt": "2024-01-01T01:00:00Z",
             },
-            links={
-                "next": {
-                    "url": "https://api.meraki.com/api/v1/events?startingAfter=2014-06-01T00:00:00+00:00"
-                }
-            },
+            links={"next": {"url": "https://api.meraki.com/api/v1/events?startingAfter=2014-06-01T00:00:00+00:00"}},
         )
         resp2 = _mock_response(
             200,
@@ -648,12 +639,8 @@ class TestPaginationLegacyExtended:
         from datetime import datetime, timezone
 
         with patch("meraki.session.sync.datetime") as mock_dt:
-            mock_dt.now.return_value = datetime(
-                2025, 1, 1, 0, 0, 0, tzinfo=timezone.utc
-            )
-            mock_dt.fromisoformat.return_value = datetime(
-                2014, 6, 1, 0, 0, 0, tzinfo=timezone.utc
-            )
+            mock_dt.now.return_value = datetime(2025, 1, 1, 0, 0, 0, tzinfo=timezone.utc)
+            mock_dt.fromisoformat.return_value = datetime(2014, 6, 1, 0, 0, 0, tzinfo=timezone.utc)
             result = session._get_pages_legacy(metadata, "/events", direction="next")
 
         # First page reversed, second page reversed and appended
@@ -671,33 +658,25 @@ class TestPaginationIteratorExtended:
         resp = _mock_response(200, json_data=[{"id": "1"}], links={})
         session._client.request = MagicMock(return_value=resp)
 
-        results = list(
-            session._get_pages_iterator(_metadata(), "/orgs", total_pages="3")
-        )
+        results = list(session._get_pages_iterator(_metadata(), "/orgs", total_pages="3"))
         assert results == [{"id": "1"}]
 
     @patch("time.sleep", return_value=None)
     def test_total_pages_invalid_raises(self, mock_sleep, session):
         with pytest.raises(SessionInputError):
-            list(
-                session._get_pages_iterator(_metadata(), "/orgs", total_pages="invalid")
-            )
+            list(session._get_pages_iterator(_metadata(), "/orgs", total_pages="invalid"))
 
     @patch("time.sleep", return_value=None)
     def test_prev_direction(self, mock_sleep, session):
         resp1 = _mock_response(
             200,
             json_data=[{"id": "2"}],
-            links={
-                "prev": {"url": "https://api.meraki.com/api/v1/orgs?endingBefore=2"}
-            },
+            links={"prev": {"url": "https://api.meraki.com/api/v1/orgs?endingBefore=2"}},
         )
         resp2 = _mock_response(200, json_data=[{"id": "1"}], links={})
         session._client.request = MagicMock(side_effect=[resp1, resp2])
 
-        results = list(
-            session._get_pages_iterator(_metadata(), "/orgs", direction="prev")
-        )
+        results = list(session._get_pages_iterator(_metadata(), "/orgs", direction="prev"))
         assert results == [{"id": "2"}, {"id": "1"}]
 
     @patch("time.sleep", return_value=None)
@@ -714,9 +693,7 @@ class TestPaginationIteratorExtended:
         session._client.request = MagicMock(return_value=resp)
 
         metadata = _metadata(operation="getNetworkEvents")
-        results = list(
-            session._get_pages_iterator(metadata, "/events", direction="next")
-        )
+        results = list(session._get_pages_iterator(metadata, "/events", direction="next"))
         assert results == [{"ts": "a"}, {"ts": "b"}]
 
     @patch("time.sleep", return_value=None)
@@ -733,9 +710,7 @@ class TestPaginationIteratorExtended:
         session._client.request = MagicMock(return_value=resp)
 
         metadata = _metadata(operation="someOp")
-        results = list(
-            session._get_pages_iterator(metadata, "/events", direction="prev")
-        )
+        results = list(session._get_pages_iterator(metadata, "/events", direction="prev"))
         assert results == [{"ts": "a"}, {"ts": "b"}]
 
     @patch("time.sleep", return_value=None)
@@ -750,11 +725,7 @@ class TestPaginationIteratorExtended:
                 "pageStartAt": "2024-01-01",
                 "pageEndAt": "2024-01-02",
             },
-            links={
-                "next": {
-                    "url": "https://api.meraki.com/api/v1/events?startingAfter=2014-06-01T00:00:00+00:00"
-                }
-            },
+            links={"next": {"url": "https://api.meraki.com/api/v1/events?startingAfter=2014-06-01T00:00:00+00:00"}},
         )
         # Page 2: too recent, triggers break before yielding
         resp2 = _mock_response(
@@ -764,11 +735,7 @@ class TestPaginationIteratorExtended:
                 "pageStartAt": "2025-01-01",
                 "pageEndAt": "2025-01-02",
             },
-            links={
-                "next": {
-                    "url": "https://api.meraki.com/api/v1/events?startingAfter=2025-01-01T23:58:00+00:00"
-                }
-            },
+            links={"next": {"url": "https://api.meraki.com/api/v1/events?startingAfter=2025-01-01T23:58:00+00:00"}},
         )
         session._client.request = MagicMock(side_effect=[resp1, resp2])
 
@@ -782,13 +749,9 @@ class TestPaginationIteratorExtended:
             return datetime(2025, 1, 1, 23, 58, 0, tzinfo=timezone.utc)
 
         with patch("meraki.session.sync.datetime") as mock_dt:
-            mock_dt.now.return_value = datetime(
-                2025, 1, 2, 0, 0, 0, tzinfo=timezone.utc
-            )
+            mock_dt.now.return_value = datetime(2025, 1, 2, 0, 0, 0, tzinfo=timezone.utc)
             mock_dt.fromisoformat = fake_fromisoformat
-            results = list(
-                session._get_pages_iterator(metadata, "/events", direction="next")
-            )
+            results = list(session._get_pages_iterator(metadata, "/events", direction="next"))
         # Only page 1 yielded (reversed)
         assert results == [{"ts": "a"}]
 
@@ -804,11 +767,7 @@ class TestPaginationIteratorExtended:
                 "pageStartAt": "2024-01-01",
                 "pageEndAt": "2024-01-02",
             },
-            links={
-                "next": {
-                    "url": "https://api.meraki.com/api/v1/events?startingAfter=2024-03-01T00:00:00+00:00"
-                }
-            },
+            links={"next": {"url": "https://api.meraki.com/api/v1/events?startingAfter=2024-03-01T00:00:00+00:00"}},
         )
         # Page 2: past end_time, triggers break
         resp2 = _mock_response(
@@ -818,11 +777,7 @@ class TestPaginationIteratorExtended:
                 "pageStartAt": "2024-06-01",
                 "pageEndAt": "2024-06-02",
             },
-            links={
-                "next": {
-                    "url": "https://api.meraki.com/api/v1/events?startingAfter=2024-07-01T00:00:00+00:00"
-                }
-            },
+            links={"next": {"url": "https://api.meraki.com/api/v1/events?startingAfter=2024-07-01T00:00:00+00:00"}},
         )
         session._client.request = MagicMock(side_effect=[resp1, resp2])
 
@@ -836,9 +791,7 @@ class TestPaginationIteratorExtended:
             return datetime(2024, 7, 1, 0, 0, 0, tzinfo=timezone.utc)
 
         with patch("meraki.session.sync.datetime") as mock_dt:
-            mock_dt.now.return_value = datetime(
-                2025, 1, 1, 0, 0, 0, tzinfo=timezone.utc
-            )
+            mock_dt.now.return_value = datetime(2025, 1, 1, 0, 0, 0, tzinfo=timezone.utc)
             mock_dt.fromisoformat = fake_fromisoformat
             results = list(
                 session._get_pages_iterator(
@@ -860,11 +813,7 @@ class TestPaginationIteratorExtended:
                 "pageStartAt": "2014-06-01",
                 "pageEndAt": "2014-06-02",
             },
-            links={
-                "prev": {
-                    "url": "https://api.meraki.com/api/v1/events?endingBefore=2014-06-01T00:00:00Z"
-                }
-            },
+            links={"prev": {"url": "https://api.meraki.com/api/v1/events?endingBefore=2014-06-01T00:00:00Z"}},
         )
         # Page 2: endingBefore is before 2014, triggers break
         resp2 = _mock_response(
@@ -874,17 +823,11 @@ class TestPaginationIteratorExtended:
                 "pageStartAt": "2014-01-01",
                 "pageEndAt": "2014-01-02",
             },
-            links={
-                "prev": {
-                    "url": "https://api.meraki.com/api/v1/events?endingBefore=2013-12-31T00:00:00Z"
-                }
-            },
+            links={"prev": {"url": "https://api.meraki.com/api/v1/events?endingBefore=2013-12-31T00:00:00Z"}},
         )
         session._client.request = MagicMock(side_effect=[resp1, resp2])
 
         metadata = _metadata(operation="getNetworkEvents")
-        results = list(
-            session._get_pages_iterator(metadata, "/events", direction="prev")
-        )
+        results = list(session._get_pages_iterator(metadata, "/events", direction="prev"))
         # Only page 1 yielded
         assert results == [{"ts": "a"}]
