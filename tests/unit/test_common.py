@@ -28,6 +28,21 @@ class TestCheckPythonVersion:
         with pytest.raises(PythonVersionError):
             check_python_version()
 
+    def test_check_python_version_valid_does_not_raise(self):
+        """check_python_version should not raise on current interpreter (>=3.10)."""
+        check_python_version()
+
+    def test_check_python_version_rejects_39(self):
+        """check_python_version raises PythonVersionError for 3.9."""
+        with patch("platform.python_version_tuple", return_value=("3", "9", "0")):
+            with pytest.raises(PythonVersionError):
+                check_python_version()
+
+    def test_check_python_version_accepts_310(self):
+        """check_python_version accepts exactly 3.10.0 (minimum)."""
+        with patch("platform.python_version_tuple", return_value=("3", "10", "0")):
+            check_python_version()
+
 
 class TestValidateUserAgent:
     def test_valid_caller(self):
@@ -73,6 +88,20 @@ class TestRejectV0BaseUrl:
         session._base_url = "https://api.meraki.com/api/v1/"
         reject_v0_base_url(session)
         assert session._base_url == "https://api.meraki.com/api/v1"
+
+    def test_reject_v0_strips_trailing_slash(self):
+        """reject_v0_base_url strips trailing slash from valid URLs."""
+        obj = MagicMock()
+        obj._base_url = "https://api.meraki.com/api/v1/"
+        reject_v0_base_url(obj)
+        assert obj._base_url == "https://api.meraki.com/api/v1"
+
+    def test_reject_v0_leaves_valid_url_unchanged(self):
+        """reject_v0_base_url leaves clean v1 URL untouched."""
+        obj = MagicMock()
+        obj._base_url = "https://api.meraki.com/api/v1"
+        reject_v0_base_url(obj)
+        assert obj._base_url == "https://api.meraki.com/api/v1"
 
 
 class TestValidateBaseUrl:
