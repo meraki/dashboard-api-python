@@ -1,6 +1,6 @@
 [project]
 name = "meraki"
-version = "3.0.1"
+version = "4.0.0b1"
 description = "Cisco Meraki Dashboard API library"
 authors = [
     {name = "Cisco Meraki", email = "api-feedback@meraki.net"}
@@ -38,7 +38,6 @@ dev = [
     "pytest-cov>=7.1.0,<8",
     "respx>=0.23.1,<1",
     "pytest-benchmark>=2.0.0",
-    "flake8>=7.0,<8",
     "pre-commit>=4.6.0",
     "ruff>=0.15.12",
     "pytest-json-report>=1.5.0",
