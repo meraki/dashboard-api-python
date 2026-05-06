@@ -652,6 +652,47 @@ class TestPaginationLegacyExtended:
 # --- Pagination iterator: extended coverage ---
 
 
+class TestBackoffStrategy:
+    @patch("time.sleep", return_value=None)
+    @patch("random.random", return_value=0.5)
+    def test_429_exponential_backoff_without_retry_after(self, mock_random, mock_sleep, session):
+        """Without Retry-After, backoff is 2^attempt * (1 + random), capped."""
+        session._maximum_retries = 4
+        session._nginx_429_retry_wait_time = 60
+        resp_429 = _mock_response(429, reason_phrase="Too Many Requests", headers={})
+        resp_200 = _mock_response(200)
+
+        session._client.request = MagicMock(side_effect=[resp_429, resp_429, resp_429, resp_200])
+
+        session.request(_metadata(), "GET", "/organizations")
+
+        sleep_calls = [call.args[0] for call in mock_sleep.call_args_list]
+        assert len(sleep_calls) == 3
+        # attempt 0: 2^0 * 1.5 = 1.5
+        # attempt 1: 2^1 * 1.5 = 3.0
+        # attempt 2: 2^2 * 1.5 = 6.0
+        assert sleep_calls[0] == pytest.approx(1.5)
+        assert sleep_calls[1] == pytest.approx(3.0)
+        assert sleep_calls[2] == pytest.approx(6.0)
+
+    @patch("time.sleep", return_value=None)
+    @patch("random.random", return_value=0.0)
+    def test_429_backoff_capped_at_nginx_wait_time(self, mock_random, mock_sleep, session):
+        """Backoff never exceeds nginx_429_retry_wait_time."""
+        session._maximum_retries = 10
+        session._nginx_429_retry_wait_time = 5
+        resp_429 = _mock_response(429, reason_phrase="Too Many Requests", headers={})
+        resp_200 = _mock_response(200)
+
+        session._client.request = MagicMock(side_effect=[resp_429] * 8 + [resp_200])
+
+        session.request(_metadata(), "GET", "/organizations")
+
+        sleep_calls = [call.args[0] for call in mock_sleep.call_args_list]
+        for wait in sleep_calls:
+            assert wait <= 5, f"Wait {wait} exceeds cap of 5"
+
+
 class TestPaginationIteratorExtended:
     @patch("time.sleep", return_value=None)
     def test_total_pages_numeric_string(self, mock_sleep, session):
