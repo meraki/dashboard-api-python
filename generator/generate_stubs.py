@@ -65,7 +65,8 @@ def generate_stub_modules(spec: dict, scopes: dict, jinja_env: jinja2.Environmen
     for scope in scopes:
         section = scopes[scope]
 
-        stub_path = f"meraki/api/{scope}.pyi"
+        repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        stub_path = os.path.join(repo_root, "meraki", "api", f"{scope}.pyi")
         with open(stub_path, "w", encoding="utf-8", newline=None) as stub_output:
             # Render class header
             with open(f"{template_dir}stub_template.jinja2", encoding="utf-8", newline=None) as fp:

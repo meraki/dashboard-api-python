@@ -157,7 +157,8 @@ def generate_library(
         print("Generating .pyi type stubs...")
         generate_stub_modules(spec, scopes, jinja_env, template_dir)
         # Write py.typed marker for PEP 561
-        open("meraki/py.typed", "w").close()
+        repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        open(os.path.join(repo_root, "meraki", "py.typed"), "w").close()
         print("Type stubs and py.typed marker created.")
 
     # Format generated code with ruff
@@ -589,7 +590,7 @@ def main(inputs):
     local_source = False
 
     try:
-        opts, args = getopt.getopt(inputs, "ho:k:v:a:g:s:l")
+        opts, args = getopt.getopt(inputs, "ho:k:v:a:g:sl")
     except getopt.GetoptError:
         print_help()
         sys.exit(2)
