@@ -46,6 +46,67 @@ class ActionBatchDevices(object):
         }
         return action
 
+    def updateDeviceCellularGeolocations(self, serial: str, enabled: bool, **kwargs):
+        """
+        **Update the enablement of the geolocation feature for a device**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-cellular-geolocations
+
+        - serial (string): Serial
+        - enabled (boolean): Required parameter for the state to update the geolocation settings to (true to enable, false to disable)
+        """
+
+        kwargs = locals()
+
+        serial = urllib.parse.quote(serial, safe="")
+        resource = f"/devices/{serial}/cellular/geolocations"
+
+        body_params = [
+            "enabled",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def createDeviceCellularUplinksBandsMasksUpdate(self, serial: str, slot: str, type: str, masked: list, **kwargs):
+        """
+        **Update the cellular band masks for a device**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-cellular-uplinks-bands-masks-update
+
+        - serial (string): Serial
+        - slot (string): Required parameter for the SIM slot to update the cellular band mask for
+        - type (string): Required parameter for the signal type to update the cellular band mask for
+        - masked (array): Required parameter for the band identifiers to mask for the given SIM slot and signal type. For LTE use bands identifiers like '30' and for 5G use band identifiers like 'n30'. Maximum 256 bands.
+        """
+
+        kwargs = locals()
+
+        if "slot" in kwargs:
+            options = ["sim1", "sim2", "sim3"]
+            assert kwargs["slot"] in options, f'''"slot" cannot be "{kwargs["slot"]}", & must be set to one of: {options}'''
+        if "type" in kwargs:
+            options = ["5GNSA", "5GSA", "LTE"]
+            assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
+
+        serial = urllib.parse.quote(serial, safe="")
+        resource = f"/devices/{serial}/cellular/uplinks/bands/masks/update"
+
+        body_params = [
+            "slot",
+            "type",
+            "masked",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
     def createDeviceLiveToolsLedsBlink(self, serial: str, duration: int, **kwargs):
         """
         **Enqueue a job to blink LEDs on a device. This endpoint has a rate limit of one request every 10 seconds.**

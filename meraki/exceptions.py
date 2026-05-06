@@ -39,7 +39,9 @@ class APIError(Exception):
         self.tag = metadata["tags"][0]
         self.operation = metadata["operation"]
         self.status = self.response.status_code if self.response is not None and self.response.status_code else None
-        self.reason = self.response.reason_phrase if self.response is not None and hasattr(self.response, "reason_phrase") else None
+        self.reason = (
+            self.response.reason_phrase if self.response is not None and hasattr(self.response, "reason_phrase") else None
+        )
         try:
             self.message = self.response.json() if self.response is not None and self.response.json() else None
         except ValueError:
@@ -65,10 +67,11 @@ class AsyncAPIError(APIError):
 
     def __init__(self, metadata, response, message=None):
         import warnings
+
         warnings.warn(
-            'AsyncAPIError is deprecated. Catch APIError instead, which now handles both sync and async errors.',
+            "AsyncAPIError is deprecated. Catch APIError instead, which now handles both sync and async errors.",
             DeprecationWarning,
-            stacklevel=2
+            stacklevel=2,
         )
 
         if message is not None:
