@@ -101,55 +101,35 @@ jobs:
           NEW_VERSION="${MAJOR}.${LIB_MINOR}.${API_PATCH}b${API_BETA}"
           echo "new_sdk_version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
 
-  trigger-ga:
-    needs: check-ga
-    if: needs.check-ga.outputs.has_new_release == 'true'
+  trigger:
+    needs: [check-ga, check-beta]
+    if: needs.check-ga.outputs.has_new_release == 'true' || needs.check-beta.outputs.has_new_release == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
 
-      - name: Record processed release
+      - name: Record processed releases
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          API_VERSION: ${{ needs.check-ga.outputs.api_version }}
         run: |
-          echo "v$API_VERSION" > .github/.last-openapi-ga-release
           git config user.name "GitHub Action"
           git config user.email "support@meraki.com"
-          git add .github/.last-openapi-ga-release
-          git commit -m "Record processed GA release v$API_VERSION"
-          git push
 
-      - name: Trigger regeneration
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh workflow run regenerate-library.yml \
-            -f library_version="${{ needs.check-ga.outputs.new_sdk_version }}" \
-            -f api_version="${{ needs.check-ga.outputs.api_version }}" \
-            -f branch_name="release" \
-            -f target_branch="main"
+          if [ "${{ needs.check-ga.outputs.has_new_release }}" = "true" ]; then
+            echo "v${{ needs.check-ga.outputs.api_version }}" > .github/.last-openapi-ga-release
+            git add .github/.last-openapi-ga-release
+          fi
 
-  trigger-beta:
-    needs: [check-beta, trigger-ga]
-    if: always() && needs.check-beta.outputs.has_new_release == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
+          if [ "${{ needs.check-beta.outputs.has_new_release }}" = "true" ]; then
+            echo "v${{ needs.check-beta.outputs.api_version }}" > .github/.last-openapi-beta-release
+            git add .github/.last-openapi-beta-release
+          fi
 
-      - name: Record processed release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          API_VERSION: ${{ needs.check-beta.outputs.api_version }}
-        run: |
-          echo "v$API_VERSION" > .github/.last-openapi-beta-release
-          git config user.name "GitHub Action"
-          git config user.email "support@meraki.com"
-          git add .github/.last-openapi-beta-release
-          git commit -m "Record processed beta release v$API_VERSION"
+          git commit -m "Record processed OpenAPI releases"
           git push
 
       - name: Enable early access
+        if: needs.check-beta.outputs.has_new_release == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -167,7 +147,19 @@ jobs:
           echo "Timed out waiting for enable-early-access run to appear"
           exit 1
 
-      - name: Trigger regeneration
+      - name: Trigger GA regeneration
+        if: needs.check-ga.outputs.has_new_release == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run regenerate-library.yml \
+            -f library_version="${{ needs.check-ga.outputs.new_sdk_version }}" \
+            -f api_version="${{ needs.check-ga.outputs.api_version }}" \
+            -f branch_name="release" \
+            -f target_branch="main"
+
+      - name: Trigger beta regeneration
+        if: needs.check-beta.outputs.has_new_release == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
