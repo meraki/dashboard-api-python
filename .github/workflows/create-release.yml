@@ -1,0 +1,41 @@
+name: Create GitHub Release
+
+on:
+  pull_request:
+    types: [closed]
+    branches: ['main', 'beta']
+
+jobs:
+  create-release:
+    if: github.event.pull_request.merged == true && (github.event.pull_request.head.ref == 'release' || github.event.pull_request.head.ref == 'beta-release')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Read version
+        id: version
+        run: |
+          VERSION=$(grep '^version' pyproject.toml | sed 's/version = "\(.*\)"/\1/')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+          if [[ "$VERSION" == *"b"* || "$VERSION" == *"rc"* || "$VERSION" == *"a"* ]]; then
+            echo "prerelease=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "prerelease=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          FLAGS=""
+          if [ "${{ steps.version.outputs.prerelease }}" = "true" ]; then
+            FLAGS="--prerelease"
+          fi
+
+          gh release create "v${{ steps.version.outputs.version }}" \
+            --title "v${{ steps.version.outputs.version }}" \
+            --generate-notes \
+            $FLAGS

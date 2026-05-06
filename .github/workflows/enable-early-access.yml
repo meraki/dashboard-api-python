@@ -1,0 +1,29 @@
+name: Enable early access features
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 18 * * 3'
+
+jobs:
+  enable-early-access:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v5
+      with:
+        enable-cache: true
+
+    - name: Set up Python
+      run: uv python install 3.13
+
+    - name: Install dependencies
+      run: uv sync --python 3.13
+
+    - name: Enable all early access features
+      env:
+        MERAKI_DASHBOARD_API_KEY: ${{ secrets.TEST_ORG_API_KEY }}
+        BETA_ORG_1_ID: ${{ secrets.BETA_ORG_1_ID }}
+      run: uv run python examples/ci/enable_all_early_access.py

@@ -8,6 +8,14 @@ on:
       api_version:
         description: 'The corresponding version of the API'
         required: true
+      branch_name:
+        description: 'Branch to commit changes to (release or beta-release)'
+        required: false
+        default: 'release'
+      target_branch:
+        description: 'Branch to merge into (main or beta)'
+        required: false
+        default: 'main'
 
 jobs:
   build:
@@ -33,7 +41,14 @@ jobs:
         env:
           LIBRARY_VERSION: ${{ github.event.inputs.library_version }}
           API_VERSION: ${{ github.event.inputs.api_version }}
-        run: uv run python generator/generate_library.py -g true -v "$LIBRARY_VERSION" -a "$API_VERSION"
+          MERAKI_DASHBOARD_API_KEY: ${{ github.event.inputs.target_branch == 'beta' && secrets.TEST_ORG_API_KEY || '' }}
+          BETA_ORG_ID: ${{ github.event.inputs.target_branch == 'beta' && secrets.BETA_ORG_1_ID || '' }}
+        run: |
+          ARGS="-g true -v $LIBRARY_VERSION -a $API_VERSION"
+          if [ -n "$BETA_ORG_ID" ]; then
+            ARGS="$ARGS -o $BETA_ORG_ID"
+          fi
+          uv run python generator/generate_library.py $ARGS
 
       - name: Set new version
         env:
@@ -48,4 +63,21 @@ jobs:
           author_name: GitHub Action
           author_email: support@meraki.com
           message: Auto-generated library v${{ github.event.inputs.library_version }} for API v${{ github.event.inputs.api_version }}.
-          new_branch: release
+          new_branch: ${{ github.event.inputs.branch_name }}
+
+      - name: Create pull request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr create \
+            --base "${{ github.event.inputs.target_branch }}" \
+            --head "${{ github.event.inputs.branch_name }}" \
+            --title "Release v${{ github.event.inputs.library_version }} (API v${{ github.event.inputs.api_version }})" \
+            --body "Auto-generated library v${{ github.event.inputs.library_version }} for API v${{ github.event.inputs.api_version }}."
+
+      - name: Enable auto-merge
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr merge "${{ github.event.inputs.branch_name }}" \
+            --auto --squash

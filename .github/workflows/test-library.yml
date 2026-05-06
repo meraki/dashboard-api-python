@@ -2,7 +2,7 @@ name: Test Python library
 
 on:
   push:
-    branches: ['main', 'release', 'dev_rest_session']
+    branches: ['main', 'beta']
     paths:
       - 'meraki/**'
       - 'tests/unit/**'
@@ -10,7 +10,7 @@ on:
       - 'pyproject.toml'
       - 'uv.lock'
   pull_request:
-    branches: ['main', 'release', 'dev_rest_session']
+    branches: ['main', 'beta']
     paths:
       - 'meraki/**'
       - 'tests/unit/**'
