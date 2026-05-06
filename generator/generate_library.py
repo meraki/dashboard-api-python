@@ -67,6 +67,11 @@ def generate_library(
     paths = spec["paths"]
     scopes = {tag["name"]: {} for tag in tags if tag["name"] in supported_scopes}
 
+    spec_scopes = {tag["name"] for tag in tags}
+    unsupported = spec_scopes - set(supported_scopes)
+    if unsupported:
+        sys.exit(f"ERROR: spec contains scopes not in supported_scopes: {sorted(unsupported)}")
+
     batchable_actions = spec["x-batchable-actions"]
 
     # Set template_dir if a GitHub action is invoking it
