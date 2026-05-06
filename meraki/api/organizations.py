@@ -2747,45 +2747,6 @@ class Organizations(object):
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def createOrganizationDevicesCellularDataProfile(
-        self, organizationId: str, name: str, description: str, rules: list, **kwargs
-    ):
-        """
-        **Add a cellular data management profile to this organization**
-        https://developer.cisco.com/meraki/api-v1/#!create-organization-devices-cellular-data-profile
-
-        - organizationId (string): Organization ID
-        - name (string): Name of the profile to be added. This must be unique.
-        - description (string): Description of the profile to be added.
-        - rules (array): The rules associated with this profile. At least one rule and no more than two rules may be defined for a profile.
-        """
-
-        kwargs = locals()
-
-        metadata = {
-            "tags": ["organizations", "configure", "devices", "cellular", "data", "profiles"],
-            "operation": "createOrganizationDevicesCellularDataProfile",
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/devices/cellular/data/profiles"
-
-        body_params = [
-            "name",
-            "description",
-            "rules",
-        ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-
-        if self._session._validate_kwargs:
-            all_params = [] + body_params
-            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
-            if invalid and self._session._logger:
-                self._session._logger.warning(
-                    f"createOrganizationDevicesCellularDataProfile: ignoring unrecognized kwargs: {invalid}"
-                )
-
-        return self._session.post(metadata, resource, payload)
-
     def getOrganizationDevicesCellularDataProfiles(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **List cellular data management profiles in this organization**
@@ -2838,24 +2799,164 @@ class Organizations(object):
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def deleteOrganizationDevicesCellularDataProfile(self, organizationId: str, profileId: str):
+    def createOrganizationDevicesCellularDataProfile(
+        self, organizationId: str, name: str, description: str, rules: list, **kwargs
+    ):
         """
-        **Delete a cellular data management profile from this organization**
-        https://developer.cisco.com/meraki/api-v1/#!delete-organization-devices-cellular-data-profile
+        **Add a cellular data management profile to this organization**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-devices-cellular-data-profile
 
         - organizationId (string): Organization ID
-        - profileId (string): Profile ID
+        - name (string): Name of the profile to be added. This must be unique.
+        - description (string): Description of the profile to be added.
+        - rules (array): The rules associated with this profile. At least one rule and no more than two rules may be defined for a profile.
         """
+
+        kwargs = locals()
 
         metadata = {
             "tags": ["organizations", "configure", "devices", "cellular", "data", "profiles"],
-            "operation": "deleteOrganizationDevicesCellularDataProfile",
+            "operation": "createOrganizationDevicesCellularDataProfile",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
-        profileId = urllib.parse.quote(str(profileId), safe="")
-        resource = f"/organizations/{organizationId}/devices/cellular/data/profiles/{profileId}"
+        resource = f"/organizations/{organizationId}/devices/cellular/data/profiles"
 
-        return self._session.delete(metadata, resource)
+        body_params = [
+            "name",
+            "description",
+            "rules",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationDevicesCellularDataProfile: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationDevicesCellularDataProfilesAssignments(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List Cellular Data Management Profile assignments in this organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-cellular-data-profiles-assignments
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - profileIds (array): Optional parameter to find assignments by Profile IDs. Maximum 1000 profile IDs.
+        - serials (array): Optional parameter to find assignments by Device Serials. Maximum 1000 serials.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "cellular", "data", "profiles", "assignments"],
+            "operation": "getOrganizationDevicesCellularDataProfilesAssignments",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/cellular/data/profiles/assignments"
+
+        query_params = [
+            "profileIds",
+            "serials",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "profileIds",
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesCellularDataProfilesAssignments: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def batchOrganizationDevicesCellularDataProfilesAssignmentsCreate(self, organizationId: str, items: list, **kwargs):
+        """
+        **Assign devices to a Cellular Data Management Profile in batch**
+        https://developer.cisco.com/meraki/api-v1/#!batch-organization-devices-cellular-data-profiles-assignments-create
+
+        - organizationId (string): Organization ID
+        - items (array): List of device-to-profile assignments to create.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "cellular", "data", "profiles", "assignments"],
+            "operation": "batchOrganizationDevicesCellularDataProfilesAssignmentsCreate",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/cellular/data/profiles/assignments/batchCreate"
+
+        body_params = [
+            "items",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"batchOrganizationDevicesCellularDataProfilesAssignmentsCreate: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def bulkOrganizationDevicesCellularDataProfilesAssignmentsDelete(self, organizationId: str, items: list, **kwargs):
+        """
+        **Unassign devices from a Cellular Data Management Profile in batch**
+        https://developer.cisco.com/meraki/api-v1/#!bulk-organization-devices-cellular-data-profiles-assignments-delete
+
+        - organizationId (string): Organization ID
+        - items (array): List of device-to-profile assignments to remove.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "cellular", "data", "profiles", "assignments"],
+            "operation": "bulkOrganizationDevicesCellularDataProfilesAssignmentsDelete",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/cellular/data/profiles/assignments/bulkDelete"
+
+        body_params = [
+            "items",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"bulkOrganizationDevicesCellularDataProfilesAssignmentsDelete: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
 
     def updateOrganizationDevicesCellularDataProfile(self, organizationId: str, rules: list, profileId: str, **kwargs):
         """
@@ -2894,6 +2995,284 @@ class Organizations(object):
                 )
 
         return self._session.put(metadata, resource, payload)
+
+    def deleteOrganizationDevicesCellularDataProfile(self, organizationId: str, profileId: str):
+        """
+        **Delete a cellular data management profile from this organization**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-devices-cellular-data-profile
+
+        - organizationId (string): Organization ID
+        - profileId (string): Profile ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "cellular", "data", "profiles"],
+            "operation": "deleteOrganizationDevicesCellularDataProfile",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        profileId = urllib.parse.quote(str(profileId), safe="")
+        resource = f"/organizations/{organizationId}/devices/cellular/data/profiles/{profileId}"
+
+        return self._session.delete(metadata, resource)
+
+    def getOrganizationDevicesCellularDataUsageByDevice(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List current cellular data usage for devices in this organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-cellular-data-usage-by-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - serials (array): Filter the results by device serials. Maximum 1000 serials.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "monitor", "devices", "cellular", "data", "usage", "byDevice"],
+            "operation": "getOrganizationDevicesCellularDataUsageByDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/cellular/data/usage/byDevice"
+
+        query_params = [
+            "serials",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesCellularDataUsageByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationDevicesCellularDataUsageHistoryByDeviceByInterval(
+        self, organizationId: str, serials: list, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List historical cellular data usage grouped by device and interval in this organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-cellular-data-usage-history-by-device-by-interval
+
+        - organizationId (string): Organization ID
+        - serials (array): Required parameter to filter the results by device serials. Maximum 10 serials.
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10. Default is 5.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 366 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day. If interval is provided, the timespan will be autocalculated.
+        - interval (integer): The time interval in seconds for returned data. The valid intervals are: 300, 1200, 14400, 86400. The default is 86400. Interval is calculated if time params are provided.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "monitor", "devices", "cellular", "data", "usage", "history", "byDevice", "byInterval"],
+            "operation": "getOrganizationDevicesCellularDataUsageHistoryByDeviceByInterval",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/cellular/data/usage/history/byDevice/byInterval"
+
+        query_params = [
+            "serials",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "t0",
+            "t1",
+            "timespan",
+            "interval",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesCellularDataUsageHistoryByDeviceByInterval: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationDevicesCellularGeolocations(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List the latest cellular geolocation telemetry for devices in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-cellular-geolocations
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - serials (array): Optional parameter to filter the results by device serials. Maximum 1000 serials.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "monitor", "devices", "cellular", "geolocations"],
+            "operation": "getOrganizationDevicesCellularGeolocations",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/cellular/geolocations"
+
+        query_params = [
+            "serials",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesCellularGeolocations: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationDevicesCellularUplinksBandsByDevice(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List the latest cellular uplink signal information for devices in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-cellular-uplinks-bands-by-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - serials (array): Optional parameter to filter the results by device serials. Maximum 1000 serials.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "monitor", "devices", "cellular", "uplinks", "bands", "byDevice"],
+            "operation": "getOrganizationDevicesCellularUplinksBandsByDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/cellular/uplinks/bands/byDevice"
+
+        query_params = [
+            "serials",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesCellularUplinksBandsByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationDevicesCellularUplinksTowersByDevice(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List the latest cellular tower information for devices in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-cellular-uplinks-towers-by-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - serials (array): Optional parameter to filter the results by device serials. Maximum 1000 serials.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "monitor", "devices", "cellular", "uplinks", "towers", "byDevice"],
+            "operation": "getOrganizationDevicesCellularUplinksTowersByDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/cellular/uplinks/towers/byDevice"
+
+        query_params = [
+            "serials",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesCellularUplinksTowersByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def createOrganizationDevicesControllerMigration(self, organizationId: str, serials: list, target: str, **kwargs):
         """

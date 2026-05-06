@@ -630,18 +630,44 @@ class ActionBatchOrganizations(object):
         }
         return action
 
-    def deleteOrganizationDevicesCellularDataProfile(self, organizationId: str, profileId: str):
+    def batchOrganizationDevicesCellularDataProfilesAssignmentsCreate(self, organizationId: str, items: list, **kwargs):
         """
-        **Delete a cellular data management profile from this organization. Removes the profile, including its associated rules and node assignments, and notifies affected devices of the resulting configuration change.**
-        https://developer.cisco.com/meraki/api-v1/#!delete-organization-devices-cellular-data-profile
+        **Assign devices to a Cellular Data Management Profile in batch. Creates up to 100 device-to-profile assignments and returns the created assignment IDs.**
+        https://developer.cisco.com/meraki/api-v1/#!batch-organization-devices-cellular-data-profiles-assignments-create
 
         - organizationId (string): Organization ID
-        - profileId (string): Profile ID
+        - items (array): List of device-to-profile assignments to create.
         """
 
+        kwargs = locals()
+
         organizationId = urllib.parse.quote(organizationId, safe="")
-        profileId = urllib.parse.quote(profileId, safe="")
-        resource = f"/organizations/{organizationId}/devices/cellular/data/profiles/{profileId}"
+        resource = f"/organizations/{organizationId}/devices/cellular/data/profiles/assignments/batchCreate"
+
+        body_params = [
+            "items",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def bulkOrganizationDevicesCellularDataProfilesAssignmentsDelete(self, organizationId: str, items: list, **kwargs):
+        """
+        **Unassign devices from a Cellular Data Management Profile in batch. Removes up to 100 device-to-profile assignments and returns no response body on success.**
+        https://developer.cisco.com/meraki/api-v1/#!bulk-organization-devices-cellular-data-profiles-assignments-delete
+
+        - organizationId (string): Organization ID
+        - items (array): List of device-to-profile assignments to remove.
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/devices/cellular/data/profiles/assignments/bulkDelete"
 
         action = {
             "resource": resource,
@@ -676,6 +702,25 @@ class ActionBatchOrganizations(object):
             "resource": resource,
             "operation": "update",
             "body": payload,
+        }
+        return action
+
+    def deleteOrganizationDevicesCellularDataProfile(self, organizationId: str, profileId: str):
+        """
+        **Delete a cellular data management profile from this organization. Removes the profile, including its associated rules and node assignments, and notifies affected devices of the resulting configuration change.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-devices-cellular-data-profile
+
+        - organizationId (string): Organization ID
+        - profileId (string): Profile ID
+        """
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        profileId = urllib.parse.quote(profileId, safe="")
+        resource = f"/organizations/{organizationId}/devices/cellular/data/profiles/{profileId}"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
         }
         return action
 

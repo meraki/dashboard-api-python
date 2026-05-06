@@ -7,7 +7,7 @@ class ActionBatchSwitch(object):
 
     def cycleDeviceSwitchPorts(self, serial: str, ports: list, **kwargs):
         """
-        **Cycle a set of switch ports**
+        **Cycle a set of switch ports on non-Catalyst MS devices. For Catalyst support, use /devices/{serial}/liveTools/ports/cycle, which supports all switch product families.**
         https://developer.cisco.com/meraki/api-v1/#!cycle-device-switch-ports
 
         - serial (string): Serial
