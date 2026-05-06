@@ -75,6 +75,12 @@ jobs:
             --title "Release v${{ github.event.inputs.library_version }} (API v${{ github.event.inputs.api_version }})" \
             --body "Auto-generated library v${{ github.event.inputs.library_version }} for API v${{ github.event.inputs.api_version }}."
 
+      - name: Trigger tests
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run test-library.yml --ref "${{ github.event.inputs.branch_name }}"
+
       - name: Enable auto-merge
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
