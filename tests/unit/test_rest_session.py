@@ -4,59 +4,8 @@ import httpx
 import pytest
 
 from meraki.exceptions import APIError, SessionInputError
-from meraki.session.sync import RestSession
 
-
-@pytest.fixture
-def session():
-    with patch("meraki.session.base.check_python_version"):
-        with patch("httpx.Client") as mock_client:
-            mock_instance = MagicMock()
-            mock_instance.headers = MagicMock(spec=dict)
-            mock_client.return_value = mock_instance
-            s = RestSession(
-                logger=None,
-                api_key="fake_api_key_1234567890123456789012345678901234567890",
-                base_url="https://api.meraki.com/api/v1",
-                single_request_timeout=60,
-                certificate_path="",
-                requests_proxy="",
-                wait_on_rate_limit=True,
-                nginx_429_retry_wait_time=2,
-                action_batch_retry_wait_time=2,
-                network_delete_retry_wait_time=2,
-                retry_4xx_error=False,
-                retry_4xx_error_wait_time=1,
-                maximum_retries=3,
-                simulate=False,
-                be_geo_id="",
-                caller="TestApp TestVendor",
-                use_iterator_for_get_pages=False,
-            )
-    return s
-
-
-def _metadata(operation="getOrganizations", tags=None):
-    return {"tags": tags or ["organizations"], "operation": operation}
-
-
-def _mock_response(
-    status_code=200,
-    json_data=None,
-    reason_phrase="OK",
-    headers=None,
-    content=b'{"ok":true}',
-    links=None,
-):
-    resp = MagicMock(spec=httpx.Response)
-    resp.status_code = status_code
-    resp.reason_phrase = reason_phrase
-    resp.headers = headers or {}
-    resp.content = content
-    resp.links = links or {}
-    resp.json.return_value = json_data if json_data is not None else {"ok": True}
-    resp.close = MagicMock()
-    return resp
+from tests.unit.conftest import make_metadata as _metadata, make_mock_response as _mock_response
 
 
 # --- Retry logic tests ---

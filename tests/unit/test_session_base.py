@@ -9,6 +9,7 @@ import pytest
 
 from meraki.exceptions import APIError
 from meraki.session.base import SessionBase
+from tests.unit.conftest import make_metadata as _metadata
 
 
 # ---------------------------------------------------------------------------
@@ -37,25 +38,9 @@ class ConcreteSession(SessionBase):
 
 def _make_session(**overrides):
     """Factory with sensible defaults."""
-    defaults = dict(
-        logger=None,
-        api_key="fake_api_key_1234567890123456789012345678901234567890",
-        base_url="https://api.meraki.com/api/v1",
-        single_request_timeout=60,
-        certificate_path="",
-        requests_proxy="",
-        wait_on_rate_limit=True,
-        nginx_429_retry_wait_time=2,
-        action_batch_retry_wait_time=2,
-        network_delete_retry_wait_time=60,
-        retry_4xx_error=False,
-        retry_4xx_error_wait_time=1,
-        maximum_retries=3,
-        simulate=False,
-        be_geo_id="",
-        caller="TestApp TestVendor",
-        use_iterator_for_get_pages=False,
-    )
+    from tests.unit.conftest import DEFAULT_SESSION_KWARGS, FAKE_API_KEY
+
+    defaults = {"logger": None, "api_key": FAKE_API_KEY, **DEFAULT_SESSION_KWARGS}
     defaults.update(overrides)
     return ConcreteSession(**defaults)
 
@@ -81,12 +66,6 @@ def _mock_response(
         except (json.JSONDecodeError, ValueError):
             resp.json.side_effect = ValueError("No JSON")
     return resp
-
-
-def _metadata(operation="getOrganizations", tags=None, **extra):
-    meta = {"tags": tags or ["organizations"], "operation": operation}
-    meta.update(extra)
-    return meta
 
 
 # ---------------------------------------------------------------------------
@@ -139,7 +118,7 @@ class TestRequestSuccess:
     def test_request_success_with_page(self):
         """200 response with page metadata logs page counter."""
         logger = MagicMock()
-        resp = _mock_response(status_code=200, content=b'[1,2,3]')
+        resp = _mock_response(status_code=200, content=b"[1,2,3]")
         session = _make_session(mock_response=resp, logger=logger)
         result = session.request(_metadata(page=2), "GET", "/test")
         assert result is resp
@@ -249,9 +228,7 @@ class TestClientErrorNetworkDelete:
 
         session = _make_session(network_delete_retry_wait_time=60)
         session._send_request = side_effect
-        result = session.request(
-            _metadata(operation="deleteNetwork"), "DELETE", "/test"
-        )
+        result = session.request(_metadata(operation="deleteNetwork"), "DELETE", "/test")
         assert result.status_code == 200
         assert len(session.sleeps) == 1
         assert 30 <= session.sleeps[0] <= 60
@@ -319,9 +296,7 @@ class TestComplexityAudit:
         for node in ast.walk(tree):
             if isinstance(node, ast.FunctionDef) and node.name in handler_methods:
                 complexity = _compute_complexity(node)
-                assert complexity < 10, (
-                    f"{node.name} has complexity {complexity} (must be < 10)"
-                )
+                assert complexity < 10, f"{node.name} has complexity {complexity} (must be < 10)"
 
 
 def _compute_complexity(func_node: ast.FunctionDef) -> int:
