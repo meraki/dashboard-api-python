@@ -163,7 +163,7 @@ jobs:
       run: uv run pytest tests/benchmarks --benchmark-json=benchmark-${{ matrix.python-version }}.json
 
     - name: Upload benchmark results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: benchmark-py${{ matrix.python-version }}
         path: benchmark-${{ matrix.python-version }}.json
