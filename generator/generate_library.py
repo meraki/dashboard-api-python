@@ -75,6 +75,7 @@ def _write_generation_report(version_number: str, api_version_number: str, is_gi
         if existing.startswith("# Generation Report"):
             existing = existing[existing.index("\n") + 1 :].lstrip("\n")
 
+    os.makedirs(os.path.dirname(report_path), exist_ok=True)
     with open(report_path, "w", encoding="utf-8", newline=None) as f:
         f.write(header + new_entry + "\n" + existing)
 
