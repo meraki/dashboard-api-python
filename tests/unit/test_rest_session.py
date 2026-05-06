@@ -693,6 +693,62 @@ class TestBackoffStrategy:
             assert wait <= 5, f"Wait {wait} exceeds cap of 5"
 
 
+class TestEdgeCases:
+    @patch("time.sleep", return_value=None)
+    def test_json_decode_failure_retries(self, mock_sleep, session):
+        """Invalid JSON on GET triggers retry, eventual success returns response."""
+        bad_resp = _mock_response(200, content=b"not json")
+        bad_resp.json.side_effect = ValueError("No JSON")
+        good_resp = _mock_response(200, json_data={"id": "123"})
+
+        session._client.request = MagicMock(side_effect=[bad_resp, good_resp])
+        result = session.request(_metadata(), "GET", "/organizations")
+        assert result.status_code == 200
+        assert session._client.request.call_count == 2
+
+    @patch("time.sleep", return_value=None)
+    def test_json_decode_failure_exhausts_retries(self, mock_sleep, session):
+        """Persistent invalid JSON exhausts retries and raises APIError."""
+        session._maximum_retries = 2
+        bad_resp = _mock_response(200, content=b"not json")
+        bad_resp.json.side_effect = ValueError("No JSON")
+
+        session._client.request = MagicMock(return_value=bad_resp)
+
+        with pytest.raises(APIError):
+            session.request(_metadata(), "GET", "/organizations")
+
+        assert session._client.request.call_count == 2
+
+    def test_simulate_mode_skips_post(self, session):
+        """Simulate mode returns None for POST without making HTTP call."""
+        session._simulate = True
+        session._client.request = MagicMock()
+
+        result = session.request(_metadata(), "POST", "/organizations")
+        assert result is None
+        session._client.request.assert_not_called()
+
+    def test_simulate_mode_allows_get(self, session):
+        """Simulate mode still executes GET requests."""
+        session._simulate = True
+        resp_200 = _mock_response(200)
+        session._client.request = MagicMock(return_value=resp_200)
+
+        result = session.request(_metadata(), "GET", "/organizations")
+        assert result.status_code == 200
+        session._client.request.assert_called_once()
+
+    def test_204_no_content_returns_response(self, session):
+        """204 No Content returns the response object (not None)."""
+        resp_204 = _mock_response(204, content=b"", reason_phrase="No Content")
+        resp_204.json.side_effect = ValueError("No JSON")
+        session._client.request = MagicMock(return_value=resp_204)
+
+        result = session.request(_metadata(), "DELETE", "/organizations/123")
+        assert result.status_code == 204
+
+
 class TestPaginationIteratorExtended:
     @patch("time.sleep", return_value=None)
     def test_total_pages_numeric_string(self, mock_sleep, session):
