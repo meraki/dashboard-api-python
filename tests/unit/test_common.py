@@ -141,6 +141,62 @@ class TestValidateBaseUrl:
         result = validate_base_url(session, "https://n1.gov-meraki.com/api/v1/x")
         assert result == "https://n1.gov-meraki.com/api/v1/x"
 
+    def test_meraki_com_absolute(self):
+        from meraki.common import validate_base_url
+
+        obj = MagicMock()
+        obj._base_url = "https://api.meraki.com/api/v1"
+        result = validate_base_url(obj, "https://n1.meraki.com/api/v1/networks")
+        assert result == "https://n1.meraki.com/api/v1/networks"
+
+    def test_relative_url_prepends_base(self):
+        from meraki.common import validate_base_url
+
+        obj = MagicMock()
+        obj._base_url = "https://api.meraki.com/api/v1"
+        result = validate_base_url(obj, "/organizations")
+        assert result == "https://api.meraki.com/api/v1/organizations"
+
+    def test_canada_domain_treated_as_absolute(self):
+        from meraki.common import validate_base_url
+
+        obj = MagicMock()
+        obj._base_url = "https://api.meraki.ca/api/v1"
+        result = validate_base_url(obj, "https://api.meraki.ca/api/v1/networks")
+        assert result == "https://api.meraki.ca/api/v1/networks"
+
+    def test_china_domain_treated_as_absolute(self):
+        from meraki.common import validate_base_url
+
+        obj = MagicMock()
+        obj._base_url = "https://api.meraki.cn/api/v1"
+        result = validate_base_url(obj, "https://api.meraki.cn/api/v1/networks")
+        assert result == "https://api.meraki.cn/api/v1/networks"
+
+    def test_india_domain_treated_as_absolute(self):
+        from meraki.common import validate_base_url
+
+        obj = MagicMock()
+        obj._base_url = "https://api.meraki.in/api/v1"
+        result = validate_base_url(obj, "https://api.meraki.in/api/v1/networks")
+        assert result == "https://api.meraki.in/api/v1/networks"
+
+    def test_gov_meraki_domain_treated_as_absolute(self):
+        from meraki.common import validate_base_url
+
+        obj = MagicMock()
+        obj._base_url = "https://api.gov-meraki.com/api/v1"
+        result = validate_base_url(obj, "https://api.gov-meraki.com/api/v1/networks")
+        assert result == "https://api.gov-meraki.com/api/v1/networks"
+
+    def test_unknown_domain_treated_as_relative(self):
+        from meraki.common import validate_base_url
+
+        obj = MagicMock()
+        obj._base_url = "https://api.meraki.com/api/v1"
+        result = validate_base_url(obj, "https://evil.com/steal")
+        assert result == "https://api.meraki.com/api/v1https://evil.com/steal"
+
 
 class TestIteratorForGetPages:
     def test_getter(self):
