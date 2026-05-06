@@ -167,7 +167,8 @@ def _mock_aio_response(status_code=200, json_data=None, reason_phrase="OK", head
     resp.content = json.dumps(json_data if json_data is not None else {"ok": True}).encode()
     resp.json.return_value = json_data if json_data is not None else {"ok": True}
     resp.text = json.dumps(json_data if json_data is not None else {"ok": True})
-    resp.close = MagicMock()
+    resp.close = MagicMock(side_effect=RuntimeError("Attempted to call an sync close on an async stream."))
+    resp.aclose = AsyncMock()
     return resp
 
 
@@ -294,6 +295,29 @@ class TestAsyncRetry429:
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
             with pytest.raises(AsyncAPIError):
                 await async_session.request(_metadata(), "GET", "/organizations")
+
+    @pytest.mark.asyncio
+    async def test_429_retry_count_matches_maximum_retries(self, async_session):
+        async_session._maximum_retries = 3
+        resp_429 = _mock_aio_response(status_code=429, reason_phrase="Too Many Requests", headers={"Retry-After": "1"})
+        async_session._client.request = AsyncMock(return_value=resp_429)
+
+        with patch(SLEEP_PATCH, side_effect=_noop_sleep):
+            with pytest.raises(AsyncAPIError):
+                await async_session.request(_metadata(), "GET", "/organizations")
+
+        assert async_session._client.request.call_count == 3
+
+    @pytest.mark.asyncio
+    async def test_429_uses_retry_after_header_value(self, async_session):
+        resp_429 = _mock_aio_response(status_code=429, reason_phrase="Too Many Requests", headers={"Retry-After": "42"})
+        resp_200 = _mock_aio_response(status_code=200)
+        async_session._client.request = AsyncMock(side_effect=[resp_429, resp_200])
+
+        with patch(SLEEP_PATCH, side_effect=_noop_sleep) as mock_sleep:
+            await async_session.request(_metadata(), "GET", "/organizations")
+
+        mock_sleep.assert_called_once_with(42)
 
 
 # --- Retry on 5xx ---
@@ -549,7 +573,8 @@ class TestAsync2xxResponse:
         resp_bad_json.headers = {}
         resp_bad_json.links = {}
         resp_bad_json.json = MagicMock(side_effect=json.decoder.JSONDecodeError("", "", 0))
-        resp_bad_json.close = MagicMock()
+        resp_bad_json.close = MagicMock(side_effect=RuntimeError("Attempted to call an sync close on an async stream."))
+        resp_bad_json.aclose = AsyncMock()
 
         resp_200 = _mock_aio_response(status_code=200, json_data={"ok": True})
 
@@ -646,7 +671,8 @@ class TestAsyncRequestLogging:
         resp_bad.headers = {}
         resp_bad.links = {}
         resp_bad.json = MagicMock(side_effect=ValueError("Invalid JSON"))
-        resp_bad.close = MagicMock()
+        resp_bad.close = MagicMock(side_effect=RuntimeError("Attempted to call an sync close on an async stream."))
+        resp_bad.aclose = AsyncMock()
 
         resp_200 = _mock_aio_response(status_code=200)
 
@@ -700,6 +726,17 @@ class TestAsyncHTTPVerbs:
 
         result = await async_session.delete(_metadata(), "/organizations/1")
         assert result is None
+
+    @pytest.mark.asyncio
+    async def test_delete_passes_query_params(self, async_session):
+        resp_204 = _mock_aio_response(status_code=204, json_data=None, reason_phrase="No Content")
+        async_session._client.request = AsyncMock(return_value=resp_204)
+
+        params = {"force": "true"}
+        result = await async_session.delete(_metadata(), "/networks/1/groupPolicies/1", params)
+        assert result is None
+        call_kwargs = async_session._client.request.call_args
+        assert call_kwargs.kwargs.get("params") == params
 
     @pytest.mark.asyncio
     async def test_close(self, async_session):
