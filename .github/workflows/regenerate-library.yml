@@ -83,3 +83,8 @@ jobs:
           gh pr merge "${{ github.event.inputs.branch_name }}" \
             --auto --squash
 
+  test:
+    needs: regenerate
+    uses: ./.github/workflows/test-library.yml
+    secrets: inherit
+
