@@ -4,7 +4,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import httpx
 import pytest
 
-from meraki.exceptions import APIError, AsyncAPIError
+from meraki.exceptions import APIError
 
 
 async def _noop_sleep(*args, **kwargs):
@@ -293,7 +293,7 @@ class TestAsyncRetry429:
         async_session._client.request = AsyncMock(return_value=resp_429)
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
-            with pytest.raises(AsyncAPIError):
+            with pytest.raises(APIError):
                 await async_session.request(_metadata(), "GET", "/organizations")
 
     @pytest.mark.asyncio
@@ -303,7 +303,7 @@ class TestAsyncRetry429:
         async_session._client.request = AsyncMock(return_value=resp_429)
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
-            with pytest.raises(AsyncAPIError):
+            with pytest.raises(APIError):
                 await async_session.request(_metadata(), "GET", "/organizations")
 
         assert async_session._client.request.call_count == 3
@@ -341,7 +341,7 @@ class TestAsyncRetry5xx:
         async_session._client.request = AsyncMock(return_value=resp_500)
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
-            with pytest.raises(AsyncAPIError):
+            with pytest.raises(APIError):
                 await async_session.request(_metadata(), "GET", "/organizations")
 
 
@@ -378,7 +378,7 @@ class TestAsync4xx:
         async_session._client.request = AsyncMock(return_value=resp_400)
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
-            with pytest.raises(AsyncAPIError):
+            with pytest.raises(APIError):
                 await async_session.request(_metadata(), "GET", "/organizations")
 
     @pytest.mark.asyncio
@@ -415,13 +415,11 @@ class TestAsync4xx:
         resp_400 = _mock_aio_response(status_code=400, json_data=error_msg, reason_phrase="Bad Request")
         async_session._client.request = AsyncMock(return_value=resp_400)
 
-        from meraki.exceptions import APIError
-
         with (
             patch(SLEEP_PATCH, side_effect=_noop_sleep),
             patch("random.randint", return_value=1),
         ):
-            with pytest.raises((APIError, AsyncAPIError)):
+            with pytest.raises(APIError):
                 await async_session.request(_metadata(operation="deleteNetwork"), "GET", "/networks")
 
     @pytest.mark.asyncio
@@ -451,7 +449,7 @@ class TestAsync4xx:
         async_session._client.request = AsyncMock(return_value=resp_400)
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
-            with pytest.raises(AsyncAPIError):
+            with pytest.raises(APIError):
                 await async_session.request(_metadata(), "GET", "/organizations")
 
     @pytest.mark.asyncio
@@ -468,7 +466,7 @@ class TestAsync4xx:
         async_session._client.request = AsyncMock(return_value=resp_400)
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
-            with pytest.raises(AsyncAPIError):
+            with pytest.raises(APIError):
                 await async_session.request(_metadata(), "GET", "/organizations")
 
     @pytest.mark.asyncio
@@ -477,7 +475,7 @@ class TestAsync4xx:
         async_session._client.request = AsyncMock(return_value=resp_400)
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
-            with pytest.raises(AsyncAPIError):
+            with pytest.raises(APIError):
                 await async_session.request(_metadata(), "GET", "/organizations")
 
 
@@ -659,7 +657,7 @@ class TestAsyncRequestLogging:
         async_session_with_logger._client.request = AsyncMock(return_value=resp_400)
 
         with patch(SLEEP_PATCH, side_effect=_noop_sleep):
-            with pytest.raises(AsyncAPIError):
+            with pytest.raises(APIError):
                 await async_session_with_logger.request(_metadata(), "GET", "/organizations")
         async_session_with_logger._logger.error.assert_called()
 

@@ -13,7 +13,7 @@ import httpx
 
 from meraki.common import validate_base_url, validate_user_agent
 from meraki.config import AIO_MAXIMUM_CONCURRENT_REQUESTS
-from meraki.exceptions import APIError, AsyncAPIError
+from meraki.exceptions import APIError, SessionInputError
 from meraki.session.base import SessionBase
 
 
@@ -122,7 +122,7 @@ class AsyncRestSession(SessionBase):
             # Attempt the request
             try:
                 if response:
-                    response.close()
+                    await response.aclose()
                 if self._logger:
                     self._logger.info(f"{method} {abs_url}")
                 response = await self._send_request(method, abs_url, **kwargs)
@@ -154,7 +154,7 @@ class AsyncRestSession(SessionBase):
                     # JSON decode failure, retry
                     retries -= 1
                     if retries == 0:
-                        raise AsyncAPIError(metadata, response, "JSON decode error after retries")
+                        raise APIError(metadata, response)
                     await self._sleep(1)
                     continue
                 return result
@@ -163,14 +163,14 @@ class AsyncRestSession(SessionBase):
                 await self._sleep(wait)
                 retries -= 1
                 if retries == 0:
-                    raise AsyncAPIError(metadata, response, "Rate limit retries exhausted")
+                    raise APIError(metadata, response)
             elif status >= 500:
                 if self._logger:
                     self._logger.warning(f"{tag}, {operation} - {status} {reason}, retrying in 1 second")
                 await self._sleep(1)
                 retries -= 1
                 if retries == 0:
-                    raise AsyncAPIError(metadata, response, "Server error retries exhausted")
+                    raise APIError(metadata, response)
             elif 400 <= status < 500:
                 retries = await self._handle_client_error_async(response, metadata, retries)
 
@@ -202,7 +202,7 @@ class AsyncRestSession(SessionBase):
 
         # For non-empty GET responses, validate JSON
         try:
-            if method == "GET":
+            if method == "GET" and response.content.strip():
                 response.json()
             return response
         except (json.decoder.JSONDecodeError, ValueError):
@@ -233,7 +233,7 @@ class AsyncRestSession(SessionBase):
         status = response.status_code
 
         if not self._wait_on_rate_limit or retries <= 0:
-            raise AsyncAPIError(metadata, response, "Rate limited")
+            raise APIError(metadata, response)
 
         if "Retry-After" in response.headers:
             wait = int(response.headers["Retry-After"])
@@ -285,7 +285,7 @@ class AsyncRestSession(SessionBase):
             await self._sleep(wait)
             retries -= 1
             if retries == 0:
-                raise AsyncAPIError(metadata, response, message)
+                raise APIError(metadata, response)
             return retries
 
         # Action batch concurrency error
@@ -296,7 +296,7 @@ class AsyncRestSession(SessionBase):
             await self._sleep(wait)
             retries -= 1
             if retries == 0:
-                raise AsyncAPIError(metadata, response, message)
+                raise APIError(metadata, response)
             return retries
 
         # Retry other 4xx if configured
@@ -307,13 +307,13 @@ class AsyncRestSession(SessionBase):
             await self._sleep(wait)
             retries -= 1
             if retries == 0:
-                raise AsyncAPIError(metadata, response, message)
+                raise APIError(metadata, response)
             return retries
 
         # Non-retryable client error
         if self._logger:
             self._logger.error(f"{tag}, {operation} - {status} {reason}, {message}")
-        raise AsyncAPIError(metadata, response, message)
+        raise APIError(metadata, response)
 
     # ------------------------------------------------------------------
     # Convenience HTTP methods
@@ -325,7 +325,8 @@ class AsyncRestSession(SessionBase):
         metadata["params"] = params
         response = await self.request(metadata, "GET", url, params=params)
         if response:
-            return response.json()
+            if response.content.strip():
+                return response.json()
         return None
 
     async def get_pages(self, metadata, url, params=None, total_pages=-1, direction="next", event_log_end_time=None):
@@ -349,6 +350,13 @@ class AsyncRestSession(SessionBase):
             total_pages = -1
         elif isinstance(total_pages, str) and total_pages.isnumeric():
             total_pages = int(total_pages)
+        elif not isinstance(total_pages, int):
+            raise SessionInputError(
+                "total_pages",
+                total_pages,
+                "total_pages must be either an integer or 'all' as a string (remember to add the quotation marks).",
+                None,
+            )
         metadata["page"] = 1
 
         request_task = asyncio.create_task(self._download_page(self.request(metadata, "GET", url, params=params)))
@@ -386,7 +394,7 @@ class AsyncRestSession(SessionBase):
             else:
                 total_pages = 1
 
-            response.close()
+            await response.aclose()
 
             total_pages = total_pages - 1
 
@@ -422,16 +430,28 @@ class AsyncRestSession(SessionBase):
             total_pages = -1
         elif isinstance(total_pages, str) and total_pages.isnumeric():
             total_pages = int(total_pages)
+        elif not isinstance(total_pages, int):
+            raise SessionInputError(
+                "total_pages",
+                total_pages,
+                "total_pages must be either an integer or 'all' as a string (remember to add the quotation marks).",
+                None,
+            )
         metadata["page"] = 1
 
         response = await self.request(metadata, "GET", url, params=params)
-        results = response.json()
+
+        if response.status_code == 204:
+            results = None
+        else:
+            results = response.json()
 
         # For event log endpoint when using 'next' direction
         if isinstance(results, dict) and metadata["operation"] == "getNetworkEvents" and direction == "next":
             results["events"] = results["events"][::-1]
 
         links = response.links
+        await response.aclose()
 
         # Get additional pages if more than one requested
         while total_pages != 1:
@@ -482,6 +502,7 @@ class AsyncRestSession(SessionBase):
                     results["pageEndAt"] = end
                 results["events"].extend(events)
 
+            await response.aclose()
             total_pages = total_pages - 1
 
         return results
@@ -506,11 +527,19 @@ class AsyncRestSession(SessionBase):
                 return response.json()
         return None
 
-    async def delete(self, metadata, url):
+    async def delete(self, metadata, url, params=None):
         metadata["method"] = "DELETE"
         metadata["url"] = url
-        await self.request(metadata, "DELETE", url)
+        metadata["params"] = params
+        await self.request(metadata, "DELETE", url, params=params)
         return None
 
     async def close(self):
+        """Close the underlying httpx.AsyncClient and release connections."""
         await self._client.aclose()
+
+    async def __aenter__(self):
+        return self
+
+    async def __aexit__(self, *args):
+        await self.close()

@@ -40,6 +40,16 @@ class RestSession(SessionBase):
         self._client = httpx.Client(**client_kwargs)
         self._client.headers.update(self._build_headers())
 
+    def close(self):
+        """Close the underlying httpx.Client and release connections."""
+        self._client.close()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args):
+        self.close()
+
     @property
     def use_iterator_for_get_pages(self):
         return iterator_for_get_pages_bool(self)
@@ -101,11 +111,11 @@ class RestSession(SessionBase):
             response.close()
         return ret
 
-    def delete(self, metadata, url, json=None):
+    def delete(self, metadata, url, params=None):
         metadata["method"] = "DELETE"
         metadata["url"] = url
-        metadata["json"] = json
-        response = self.request(metadata, "DELETE", url, json=json)
+        metadata["params"] = params
+        response = self.request(metadata, "DELETE", url, params=params)
         if response:
             response.close()
         return None
