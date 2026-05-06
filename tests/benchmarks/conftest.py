@@ -19,16 +19,10 @@ IDENTITY_RESPONSE = {"name": "Test User", "email": "test@example.com", "authenti
 @pytest.fixture
 def mock_routes():
     """Set up respx routes for benchmark tests."""
-    with respx.mock(assert_all_mocked=False, assert_all_called=False) as rsps:
-        rsps.get(f"{BASE}/organizations").mock(
-            return_value=httpx.Response(200, json=ORGS_RESPONSE)
-        )
-        rsps.get(f"{BASE}/organizations/{ORG_ID}/networks").mock(
-            return_value=httpx.Response(200, json=NETWORKS_RESPONSE)
-        )
-        rsps.get(f"{BASE}/administered/identities/me").mock(
-            return_value=httpx.Response(200, json=IDENTITY_RESPONSE)
-        )
+    with respx.mock(assert_all_mocked=True, assert_all_called=False) as rsps:
+        rsps.get(f"{BASE}/organizations").mock(return_value=httpx.Response(200, json=ORGS_RESPONSE))
+        rsps.get(f"{BASE}/organizations/{ORG_ID}/networks").mock(return_value=httpx.Response(200, json=NETWORKS_RESPONSE))
+        rsps.get(f"{BASE}/administered/identities/me").mock(return_value=httpx.Response(200, json=IDENTITY_RESPONSE))
         yield rsps
 
 

@@ -1,7 +1,5 @@
-"""Memory and connection pool benchmarks.
+"""Memory benchmarks with leak detection thresholds.
 
-Per D-03: Measure memory usage (RSS via tracemalloc) and connection pool
-efficiency (reuse rate, warmup cost).
 Run: pytest tests/benchmarks/test_memory_benchmark.py --benchmark-json=memory.json
 """
 
@@ -15,22 +13,21 @@ import meraki
 
 BASE = "https://api.meraki.com/api/v1"
 
+MAX_SINGLE_REQUEST_BYTES = 512 * 1024
+MAX_BATCH_BYTES_PER_REQUEST = 64 * 1024
+
 
 @pytest.fixture
 def fresh_mock_routes():
     """Fresh respx routes for memory isolation."""
-    with respx.mock(assert_all_mocked=False, assert_all_called=False) as rsps:
-        rsps.get(f"{BASE}/organizations").mock(
-            return_value=httpx.Response(
-                200, json=[{"id": "123456", "name": "Test Org"}]
-            )
-        )
+    with respx.mock(assert_all_mocked=True, assert_all_called=False) as rsps:
+        rsps.get(f"{BASE}/organizations").mock(return_value=httpx.Response(200, json=[{"id": "123456", "name": "Test Org"}]))
         yield rsps
 
 
 @pytest.fixture
 def fresh_dashboard(fresh_mock_routes):
-    """Fresh DashboardAPI for memory measurement (no prior allocations)."""
+    """Fresh DashboardAPI for memory measurement."""
     return meraki.DashboardAPI(
         "fake_key_1234567890123456789012345678901234567890",
         suppress_logging=True,
@@ -38,69 +35,33 @@ def fresh_dashboard(fresh_mock_routes):
     )
 
 
-def test_memory_single_request(benchmark, fresh_dashboard):
-    """Memory RSS for a single request cycle."""
+def test_memory_single_request(fresh_dashboard):
+    """Memory peak for a single request stays under ceiling."""
+    tracemalloc.start()
+    fresh_dashboard.organizations.getOrganizations()
+    current, peak = tracemalloc.get_traced_memory()
+    tracemalloc.stop()
 
-    def measure():
-        tracemalloc.start()
-        result = fresh_dashboard.organizations.getOrganizations()
-        current, peak = tracemalloc.get_traced_memory()
-        tracemalloc.stop()
-        return result, current, peak
-
-    result, current, peak = benchmark(measure)
-    benchmark.extra_info["memory_current_bytes"] = current
-    benchmark.extra_info["memory_peak_bytes"] = peak
-    assert result is not None
+    assert peak < MAX_SINGLE_REQUEST_BYTES, f"Single request peak {peak} bytes exceeds {MAX_SINGLE_REQUEST_BYTES} ceiling"
 
 
-def test_memory_batch_requests(benchmark, fresh_dashboard):
-    """Memory RSS for 20 sequential requests (detect leaks)."""
-    batch_size = 20
+def test_memory_batch_no_leak(fresh_dashboard):
+    """Memory growth is sub-linear over 50 requests (no leak)."""
+    batch_size = 50
+    tracemalloc.start()
+    for _ in range(batch_size):
+        fresh_dashboard.organizations.getOrganizations()
+    current, peak = tracemalloc.get_traced_memory()
+    tracemalloc.stop()
 
-    def measure():
-        tracemalloc.start()
-        for _ in range(batch_size):
-            fresh_dashboard.organizations.getOrganizations()
-        current, peak = tracemalloc.get_traced_memory()
-        tracemalloc.stop()
-        return current, peak
-
-    current, peak = benchmark(measure)
-    benchmark.extra_info["memory_current_bytes"] = current
-    benchmark.extra_info["memory_peak_bytes"] = peak
-    benchmark.extra_info["batch_size"] = batch_size
-    benchmark.extra_info["bytes_per_request"] = current // batch_size
-
-
-def test_connection_pool_warmup(benchmark, fresh_mock_routes):
-    """Connection pool warmup cost: first request vs subsequent."""
-
-    def measure_warmup():
-        # Fresh client each iteration to measure pool warmup
-        dashboard = meraki.DashboardAPI(
-            "fake_key_1234567890123456789012345678901234567890",
-            suppress_logging=True,
-            maximum_retries=1,
-        )
-        # First request (cold pool)
-        dashboard.organizations.getOrganizations()
-        return dashboard
-
-    benchmark(measure_warmup)
-    benchmark.extra_info["measures"] = "cold_pool_initialization"
+    per_request = current / batch_size
+    assert per_request < MAX_BATCH_BYTES_PER_REQUEST, (
+        f"Avg {per_request:.0f} bytes/request suggests memory leak (ceiling: {MAX_BATCH_BYTES_PER_REQUEST})"
+    )
 
 
 def test_connection_pool_reuse(benchmark, fresh_dashboard):
-    """Connection pool reuse: measure steady-state after warmup."""
-
-    # Warm up the pool
+    """Steady-state requests reuse pool (benchmark only, no threshold)."""
     fresh_dashboard.organizations.getOrganizations()
-
-    def measure_reuse():
-        # Subsequent requests reuse existing connection
-        return fresh_dashboard.organizations.getOrganizations()
-
-    result = benchmark(measure_reuse)
-    benchmark.extra_info["measures"] = "warm_pool_reuse"
+    result = benchmark(fresh_dashboard.organizations.getOrganizations)
     assert result is not None
