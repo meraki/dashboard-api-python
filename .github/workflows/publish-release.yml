@@ -2,6 +2,11 @@ name: Publish release to PyPI
 on:
   release:
     types: [created]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to publish (e.g. 3.1.0b0)'
+        required: true
 
 permissions:
   id-token: write
@@ -11,6 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.tag || github.event.release.tag_name }}
 
       - name: Install uv
         uses: astral-sh/setup-uv@v7
