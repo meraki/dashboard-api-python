@@ -4,6 +4,7 @@ This module provides encode_meraki_params(), a pure function replacement for
 the monkey-patched requests._encode_params in rest_session.py. Uses only
 urllib.parse (no requests dependency). See HTTP-04.
 """
+
 from urllib.parse import urlencode
 
 
@@ -48,17 +49,21 @@ def encode_meraki_params(data):
             for v in vs:
                 if v is not None and not isinstance(v, dict):
                     # Simple key-value pair
-                    result.append((
-                        k.encode("utf-8") if isinstance(k, str) else k,
-                        v.encode("utf-8") if isinstance(v, str) else v,
-                    ))
-                else:
+                    result.append(
+                        (
+                            k.encode("utf-8") if isinstance(k, str) else k,
+                            v.encode("utf-8") if isinstance(v, str) else v,
+                        )
+                    )
+                elif v is not None:
                     # Array-of-objects: concatenate dict keys to param name
                     for k_inner, v_inner in v.items():
-                        result.append((
-                            (k + k_inner).encode("utf-8") if isinstance(k, str) else k_inner,
-                            v_inner.encode("utf-8") if isinstance(v_inner, str) else v_inner,
-                        ))
+                        result.append(
+                            (
+                                (k + k_inner).encode("utf-8") if isinstance(k, str) else k_inner,
+                                v_inner.encode("utf-8") if isinstance(v_inner, str) else v_inner,
+                            )
+                        )
 
         return urlencode(result, doseq=True)
     else:
