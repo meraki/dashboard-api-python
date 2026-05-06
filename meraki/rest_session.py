@@ -595,11 +595,11 @@ class RestSession(object):
             response.close()
         return ret
 
-    def delete(self, metadata, url, json=None):
+    def delete(self, metadata, url, params=None):
         metadata["method"] = "DELETE"
         metadata["url"] = url
-        metadata["json"] = json
-        response = self.request(metadata, "DELETE", url, json=json)
+        metadata["params"] = params
+        response = self.request(metadata, "DELETE", url, params=params)
         if response:
             response.close()
         return None

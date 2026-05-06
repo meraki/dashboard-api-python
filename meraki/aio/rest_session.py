@@ -487,10 +487,11 @@ class AsyncRestSession:
         async with await self.request(metadata, "PUT", url, json=json) as response:
             return await response.json(content_type=None)
 
-    async def delete(self, metadata, url):
+    async def delete(self, metadata, url, params=None):
         metadata["method"] = "DELETE"
         metadata["url"] = url
-        async with await self.request(metadata, "DELETE", url):
+        metadata["params"] = params
+        async with await self.request(metadata, "DELETE", url, params=params):
             return None
 
     async def close(self):
