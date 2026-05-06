@@ -739,6 +739,97 @@ class AsyncCamera:
 
         return self._session.get(metadata, resource)
 
+    def createNetworkCameraVideoWall(self, networkId: str, name: str, tiles: list, **kwargs):
+        """
+        **Create a new video wall.**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-camera-video-wall
+
+        - networkId (string): Network ID
+        - name (string): The name of the video wall.
+        - tiles (array): The tiles that should appear on the video wall.
+        - index (integer): The order that this wall should appear on the video wall list.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["camera", "configure", "videoWalls"],
+            "operation": "createNetworkCameraVideoWall",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/camera/videoWalls"
+
+        body_params = [
+            "name",
+            "index",
+            "tiles",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkCameraVideoWall: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def updateNetworkCameraVideoWall(self, networkId: str, id: str, name: str, tiles: list, **kwargs):
+        """
+        **Update the specified video wall.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-camera-video-wall
+
+        - networkId (string): Network ID
+        - id (string): ID
+        - name (string): The name of the video wall.
+        - tiles (array): The tiles that should appear on the video wall.
+        - index (integer): The order that this wall should appear on the video wall list.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["camera", "configure", "videoWalls"],
+            "operation": "updateNetworkCameraVideoWall",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/networks/{networkId}/camera/videoWalls/{id}"
+
+        body_params = [
+            "name",
+            "index",
+            "tiles",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkCameraVideoWall: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteNetworkCameraVideoWall(self, networkId: str, id: str):
+        """
+        **Delete the specified video wall.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-camera-video-wall
+
+        - networkId (string): Network ID
+        - id (string): ID
+        """
+
+        metadata = {
+            "tags": ["camera", "configure", "videoWalls"],
+            "operation": "deleteNetworkCameraVideoWall",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/networks/{networkId}/camera/videoWalls/{id}"
+
+        return self._session.delete(metadata, resource)
+
     def createNetworkCameraWirelessProfile(self, networkId: str, name: str, ssid: dict, **kwargs):
         """
         **Creates a new camera wireless profile for this network.**
@@ -1091,6 +1182,45 @@ class AsyncCamera:
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
+    def getOrganizationCameraDevicesConfigurations(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **Lists all the capabilities of cameras in this organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-camera-devices-configurations
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 20.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["camera", "configure", "devices", "configurations"],
+            "operation": "getOrganizationCameraDevicesConfigurations",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/camera/devices/configurations"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationCameraDevicesConfigurations: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
     def getOrganizationCameraOnboardingStatuses(self, organizationId: str, **kwargs):
         """
         **Fetch onboarding status of cameras**
@@ -1336,3 +1466,104 @@ class AsyncCamera:
                 self._session._logger.warning(f"updateOrganizationCameraRole: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
+
+    def getOrganizationCameraVideoWalls(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **Return a list of video walls.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-camera-video-walls
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 10 - 250. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): A list of network ids to filter video walls on
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["camera", "configure", "videoWalls"],
+            "operation": "getOrganizationCameraVideoWalls",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/camera/videoWalls"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationCameraVideoWalls: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationCameraVideoWall(self, organizationId: str, id: str):
+        """
+        **Return the specified video wall.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-camera-video-wall
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        """
+
+        metadata = {
+            "tags": ["camera", "configure", "videoWalls"],
+            "operation": "getOrganizationCameraVideoWall",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/camera/videoWalls/{id}"
+
+        return self._session.get(metadata, resource)
+
+    def getOrganizationCameraVideoWallVideoLink(self, organizationId: str, id: str, **kwargs):
+        """
+        **Returns video wall link to the specified video wall id**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-camera-video-wall-video-link
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        - timestamp (string): [optional] The video link will start at this time. The timestamp should be a string in ISO8601 format. If no timestamp is specified, we will assume current time.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["camera", "configure", "videoWalls", "videoLink"],
+            "operation": "getOrganizationCameraVideoWallVideoLink",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/camera/videoWalls/{id}/videoLink"
+
+        query_params = [
+            "timestamp",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationCameraVideoWallVideoLink: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)

@@ -67,3 +67,36 @@ class AsyncAdministered:
         resource = f"/administered/identities/me/api/keys/{suffix}/revoke"
 
         return self._session.post(metadata, resource)
+
+    def getAdministeredSearchLive(self, query: str, organizationId: str, networkId: str, **kwargs):
+        """
+        **List the appropriate results for a given global search utilizing live_search_react**
+        https://developer.cisco.com/meraki/api-v1/#!get-administered-search-live
+
+        - query (string): Search keywords
+        - organizationId (string): Id of Organization you want to search with
+        - networkId (string): Id of NodeGroup you want to seach with
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["administered", "configure", "search", "live"],
+            "operation": "getAdministeredSearchLive",
+        }
+        resource = "/administered/search/live"
+
+        query_params = [
+            "query",
+            "organizationId",
+            "networkId",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getAdministeredSearchLive: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get(metadata, resource, params)
