@@ -57,6 +57,13 @@ jobs:
           sed -i "s/^version = \".*\"/version = \"$LIBRARY_VERSION\"/" pyproject.toml
           uv lock
 
+      - name: Generate app token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+
       - name: Commit changes to new branch
         uses: EndBug/add-and-commit@v10
         with:
@@ -64,11 +71,11 @@ jobs:
           author_email: support@meraki.com
           message: Auto-generated library v${{ github.event.inputs.library_version }} for API v${{ github.event.inputs.api_version }}.
           new_branch: ${{ github.event.inputs.branch_name }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ steps.app-token.outputs.token }}
 
       - name: Create pull request
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           gh pr create \
             --base "${{ github.event.inputs.target_branch }}" \
@@ -78,13 +85,8 @@ jobs:
 
       - name: Enable auto-merge
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           gh pr merge "${{ github.event.inputs.branch_name }}" \
             --auto --squash
-
-  test:
-    needs: regenerate
-    uses: ./.github/workflows/test-library.yml
-    secrets: inherit
 
