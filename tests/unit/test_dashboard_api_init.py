@@ -16,17 +16,13 @@ class TestDashboardAPIInit:
             suppress_logging=True,
             caller="TestApp TestVendor",
         )
-        assert (
-            d._session._api_key == "test_key_1234567890123456789012345678901234567890"
-        )
+        assert d._session._api_key == "test_key_1234567890123456789012345678901234567890"
 
     @patch("meraki.session.base.check_python_version")
     def test_api_key_from_env(self, mock_check):
         with patch.dict(
             os.environ,
-            {
-                "MERAKI_DASHBOARD_API_KEY": "env_key_12345678901234567890123456789012345678"
-            },
+            {"MERAKI_DASHBOARD_API_KEY": "env_key_12345678901234567890123456789012345678"},
         ):
             d = meraki.DashboardAPI(
                 suppress_logging=True,

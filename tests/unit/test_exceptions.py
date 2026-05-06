@@ -51,9 +51,7 @@ class TestAPIResponseError:
 
 
 class TestAPIError:
-    def _make_response(
-        self, status_code=400, reason_phrase="Bad Request", json_data=None, content=b""
-    ):
+    def _make_response(self, status_code=400, reason_phrase="Bad Request", json_data=None, content=b""):
         resp = MagicMock()
         resp.status_code = status_code
         resp.reason_phrase = reason_phrase
@@ -208,9 +206,7 @@ class TestPythonVersionError:
 
 class TestSessionInputError:
     def test_fields(self):
-        err = SessionInputError(
-            "CALLER", "bad!!!", "Format wrong", "https://docs.example.com"
-        )
+        err = SessionInputError("CALLER", "bad!!!", "Format wrong", "https://docs.example.com")
         assert err.argument == "CALLER"
         assert err.value == "bad!!!"
         assert err.message == "Format wrong"

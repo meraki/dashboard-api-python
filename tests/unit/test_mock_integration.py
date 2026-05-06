@@ -59,20 +59,14 @@ class TestGetAdministeredIdentitiesMe:
 
 class TestOrganizations:
     def test_get_organizations(self, mock_api, dashboard):
-        mock_api.get(f"{BASE}/organizations").mock(
-            return_value=httpx.Response(
-                200, json=[{"id": ORG_ID, "name": "Test Org"}]
-            )
-        )
+        mock_api.get(f"{BASE}/organizations").mock(return_value=httpx.Response(200, json=[{"id": ORG_ID, "name": "Test Org"}]))
         orgs = dashboard.organizations.getOrganizations()
         assert orgs is not None
         assert len(orgs) > 0
 
     def test_get_organization(self, mock_api, dashboard):
         mock_api.get(f"{BASE}/organizations/{ORG_ID}").mock(
-            return_value=httpx.Response(
-                200, json={"id": ORG_ID, "name": "Test Org"}
-            )
+            return_value=httpx.Response(200, json={"id": ORG_ID, "name": "Test Org"})
         )
         org = dashboard.organizations.getOrganization(ORG_ID)
         assert isinstance(org, dict)
@@ -108,9 +102,7 @@ class TestNetworks:
 
     def test_get_organization_networks(self, mock_api, dashboard):
         mock_api.get(f"{BASE}/organizations/{ORG_ID}/networks").mock(
-            return_value=httpx.Response(
-                200, json=[{"id": NETWORK_ID, "name": "_Test Network"}]
-            )
+            return_value=httpx.Response(200, json=[{"id": NETWORK_ID, "name": "_Test Network"}])
         )
         networks = dashboard.organizations.getOrganizationNetworks(ORG_ID)
         assert networks is not None
@@ -127,16 +119,12 @@ class TestNetworks:
                 },
             )
         )
-        updated = dashboard.networks.updateNetwork(
-            NETWORK_ID, name="_Test Network new", tags=["updated_test_tag"]
-        )
+        updated = dashboard.networks.updateNetwork(NETWORK_ID, name="_Test Network new", tags=["updated_test_tag"])
         assert updated is not None
         assert updated["name"] == "_Test Network new"
 
     def test_delete_network(self, mock_api, dashboard):
-        mock_api.delete(f"{BASE}/networks/{NETWORK_ID}").mock(
-            return_value=httpx.Response(204)
-        )
+        mock_api.delete(f"{BASE}/networks/{NETWORK_ID}").mock(return_value=httpx.Response(204))
         result = dashboard.networks.deleteNetwork(NETWORK_ID)
         assert result is None
 
@@ -179,12 +167,10 @@ class TestPolicyObjects:
         assert len(objs) > 0
 
     def test_delete_policy_object(self, mock_api, dashboard):
-        mock_api.delete(
-            f"{BASE}/organizations/{ORG_ID}/policyObjects/{POLICY_OBJ_1_ID}"
-        ).mock(return_value=httpx.Response(204))
-        result = dashboard.organizations.deleteOrganizationPolicyObject(
-            ORG_ID, POLICY_OBJ_1_ID
+        mock_api.delete(f"{BASE}/organizations/{ORG_ID}/policyObjects/{POLICY_OBJ_1_ID}").mock(
+            return_value=httpx.Response(204)
         )
+        result = dashboard.organizations.deleteOrganizationPolicyObject(ORG_ID, POLICY_OBJ_1_ID)
         assert result is None
 
 
@@ -193,9 +179,7 @@ class TestPolicyObjects:
 
 class TestAppliance:
     def test_get_l3_firewall_rules(self, mock_api, dashboard):
-        mock_api.get(
-            f"{BASE}/networks/{NETWORK_ID}/appliance/firewall/l3FirewallRules"
-        ).mock(
+        mock_api.get(f"{BASE}/networks/{NETWORK_ID}/appliance/firewall/l3FirewallRules").mock(
             return_value=httpx.Response(
                 200,
                 json={
@@ -209,19 +193,15 @@ class TestAppliance:
                 },
             )
         )
-        rules = dashboard.appliance.getNetworkApplianceFirewallL3FirewallRules(
-            NETWORK_ID
-        )
+        rules = dashboard.appliance.getNetworkApplianceFirewallL3FirewallRules(NETWORK_ID)
         assert rules is not None
         assert len(rules) > 0
 
     def test_update_vlan_settings(self, mock_api, dashboard):
-        mock_api.put(
-            f"{BASE}/networks/{NETWORK_ID}/appliance/vlans/settings"
-        ).mock(return_value=httpx.Response(200, json={"vlansEnabled": True}))
-        resp = dashboard.appliance.updateNetworkApplianceVlansSettings(
-            NETWORK_ID, vlansEnabled=True
+        mock_api.put(f"{BASE}/networks/{NETWORK_ID}/appliance/vlans/settings").mock(
+            return_value=httpx.Response(200, json={"vlansEnabled": True})
         )
+        resp = dashboard.appliance.updateNetworkApplianceVlansSettings(NETWORK_ID, vlansEnabled=True)
         assert resp is not None
         assert resp["vlansEnabled"]
 
@@ -248,9 +228,7 @@ class TestAppliance:
         assert vlan["name"] == "testy_vlan"
 
     def test_update_l3_firewall_rules(self, mock_api, dashboard):
-        mock_api.put(
-            f"{BASE}/networks/{NETWORK_ID}/appliance/firewall/l3FirewallRules"
-        ).mock(
+        mock_api.put(f"{BASE}/networks/{NETWORK_ID}/appliance/firewall/l3FirewallRules").mock(
             return_value=httpx.Response(
                 200,
                 json={
