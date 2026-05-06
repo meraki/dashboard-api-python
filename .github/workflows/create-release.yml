@@ -40,6 +40,22 @@ jobs:
             echo "prerelease=false" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Validate version matches branch
+        run: |
+          BRANCH="${{ inputs.branch || github.event.workflow_run.head_branch }}"
+          VERSION="${{ steps.version.outputs.version }}"
+          PRERELEASE="${{ steps.version.outputs.prerelease }}"
+
+          if [[ "$BRANCH" == "beta" && "$PRERELEASE" == "false" ]]; then
+            echo "::error::Beta branch must have a prerelease version (e.g. 3.1.0b0), got '$VERSION'"
+            exit 1
+          fi
+
+          if [[ "$BRANCH" == "main" && "$PRERELEASE" == "true" ]]; then
+            echo "::error::Main branch must not have a prerelease version, got '$VERSION'"
+            exit 1
+          fi
+
       - name: Create release
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
@@ -50,6 +66,7 @@ jobs:
           fi
 
           gh release create "${{ steps.version.outputs.version }}" \
+            --target "${{ inputs.branch || github.event.workflow_run.head_branch }}" \
             --title "${{ steps.version.outputs.version }}" \
             --generate-notes \
             $FLAGS
