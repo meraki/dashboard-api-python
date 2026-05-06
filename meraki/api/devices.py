@@ -105,6 +105,37 @@ class Devices(object):
 
         return self._session.post(metadata, resource, payload)
 
+    def updateDeviceCellularGeolocations(self, serial: str, enabled: bool, **kwargs):
+        """
+        **Update the enablement of the geolocation feature for a device**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-cellular-geolocations
+
+        - serial (string): Serial
+        - enabled (boolean): Required parameter for the state to update the geolocation settings to (true to enable, false to disable)
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["devices", "configure", "cellular", "geolocations"],
+            "operation": "updateDeviceCellularGeolocations",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/cellular/geolocations"
+
+        body_params = [
+            "enabled",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateDeviceCellularGeolocations: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
     def getDeviceCellularSims(self, serial: str):
         """
         **Return the SIM and APN configurations for a cellular device.**
@@ -156,6 +187,50 @@ class Devices(object):
                 self._session._logger.warning(f"updateDeviceCellularSims: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
+
+    def createDeviceCellularUplinksBandsMasksUpdate(self, serial: str, slot: str, type: str, masked: list, **kwargs):
+        """
+        **Update the cellular band masks for a device**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-cellular-uplinks-bands-masks-update
+
+        - serial (string): Serial
+        - slot (string): Required parameter for the SIM slot to update the cellular band mask for
+        - type (string): Required parameter for the signal type to update the cellular band mask for
+        - masked (array): Required parameter for the band identifiers to mask for the given SIM slot and signal type. For LTE use bands identifiers like '30' and for 5G use band identifiers like 'n30'. Maximum 256 bands.
+        """
+
+        kwargs = locals()
+
+        if "slot" in kwargs:
+            options = ["sim1", "sim2", "sim3"]
+            assert kwargs["slot"] in options, f'''"slot" cannot be "{kwargs["slot"]}", & must be set to one of: {options}'''
+        if "type" in kwargs:
+            options = ["5GNSA", "5GSA", "LTE"]
+            assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
+
+        metadata = {
+            "tags": ["devices", "configure", "cellular", "uplinks", "bands", "masks", "update"],
+            "operation": "createDeviceCellularUplinksBandsMasksUpdate",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/cellular/uplinks/bands/masks/update"
+
+        body_params = [
+            "slot",
+            "type",
+            "masked",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createDeviceCellularUplinksBandsMasksUpdate: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
 
     def getDeviceClients(self, serial: str, **kwargs):
         """

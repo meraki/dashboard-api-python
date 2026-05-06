@@ -2488,6 +2488,7 @@ class AsyncAppliance:
         - dhcpBootNextServer (string): DHCP boot option to direct boot clients to the server to load the boot file from
         - dhcpBootFilename (string): DHCP boot option for boot filename
         - dhcpOptions (array): The list of DHCP options that will be included in DHCP responses. Each object in the list should have "code", "type", and "value" properties.
+        - vrf (object): VRF configuration on the VLAN
         - uplinks (array): Per-uplink NAT exception override configuration on the VLAN. Applicable only for networks that support NAT exceptions.
         """
 
@@ -2534,6 +2535,7 @@ class AsyncAppliance:
             "dhcpBootNextServer",
             "dhcpBootFilename",
             "dhcpOptions",
+            "vrf",
             "uplinks",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
@@ -2640,6 +2642,7 @@ class AsyncAppliance:
         - mask (integer): Mask used for the subnet of all bound to the template networks. Applicable only for template network.
         - ipv6 (object): IPv6 configuration on the VLAN
         - mandatoryDhcp (object): Mandatory DHCP will enforce that clients connecting to this VLAN must use the IP address assigned by the DHCP server. Clients who use a static IP address won't be able to associate. Only available on firmware versions 17.0 and above
+        - vrf (object): VRF configuration on the VLAN
         - uplinks (array): Per-uplink NAT exception override configuration on the VLAN. Applicable only for networks that support NAT exceptions.
         """
 
@@ -2690,6 +2693,7 @@ class AsyncAppliance:
             "mask",
             "ipv6",
             "mandatoryDhcp",
+            "vrf",
             "uplinks",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
@@ -3627,6 +3631,56 @@ class AsyncAppliance:
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationApplianceRoutingVrfsSettings(self, organizationId: str):
+        """
+        **Return the VRF setting for an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-routing-vrfs-settings
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["appliance", "configure", "routing", "vrfs", "settings"],
+            "operation": "getOrganizationApplianceRoutingVrfsSettings",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/routing/vrfs/settings"
+
+        return self._session.get(metadata, resource)
+
+    def updateOrganizationApplianceRoutingVrfsSettings(self, organizationId: str, enabled: bool, **kwargs):
+        """
+        **Update the VRF setting for an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-appliance-routing-vrfs-settings
+
+        - organizationId (string): Organization ID
+        - enabled (boolean): Boolean indicating whether VRFs are enabled for the organization.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["appliance", "configure", "routing", "vrfs", "settings"],
+            "operation": "updateOrganizationApplianceRoutingVrfsSettings",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/routing/vrfs/settings"
+
+        body_params = [
+            "enabled",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationApplianceRoutingVrfsSettings: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
 
     def getOrganizationApplianceSecurityEvents(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
