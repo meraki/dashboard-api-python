@@ -10,6 +10,10 @@
 
         {% if kwarg_line|length > 0 %}
         {{ kwarg_line }}
+        {% for safe_name, original_name in renamed_params.items() %}
+        if "{{ safe_name }}" in kwargs:
+            kwargs["{{ original_name }}"] = kwargs.pop("{{ safe_name }}")
+        {% endfor %}
 
         {% endif %}
         {% if assert_blocks|length > 0 %}

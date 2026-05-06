@@ -1,5 +1,6 @@
 import getopt
 import json
+import keyword
 import os
 import re
 import subprocess
@@ -17,6 +18,68 @@ from generate_library_oasv2 import (
     return_params,
 )
 from generate_stubs import generate_stub_modules
+
+
+_keyword_param_violations = []
+
+
+def safe_param_name(name: str) -> str:
+    if keyword.iskeyword(name):
+        return name + "_"
+    return name
+
+
+def _write_generation_report(version_number: str, api_version_number: str, is_github_action: bool):
+    from datetime import date
+
+    report_path = "docs/generation-report.md" if is_github_action else "docs/generation-report.md"
+
+    # Deduplicate violations (same operation+param recorded from both standard and batch)
+    seen = set()
+    unique_violations = []
+    for v in _keyword_param_violations:
+        key = (v["operation"], v["param"])
+        if key not in seen:
+            seen.add(key)
+            unique_violations.append(v)
+
+    # Build the new entry
+    lines = []
+    lines.append(f"## {date.today().isoformat()} | Library v{version_number} | API {api_version_number}\n")
+    lines.append("")
+
+    if unique_violations:
+        lines.append("### Python keyword parameter conflicts\n")
+        lines.append("")
+        lines.append("The following operations have parameters whose names are Python reserved keywords.")
+        lines.append("The generator renames them with a trailing underscore (e.g., `from` -> `from_`).")
+        lines.append("These should be reported to the owning teams for resolution in the API spec.\n")
+        lines.append("")
+        lines.append("| Scope | Operation | Location | Param |")
+        lines.append("| --- | --- | --- | --- |")
+        for v in sorted(unique_violations, key=lambda x: (x["scope"], x["operation"])):
+            lines.append(f"| {v['scope']} | `{v['operation']}` | {v['location']} | `{v['param']}` |")
+        lines.append("")
+    else:
+        lines.append("No Python keyword parameter conflicts detected.\n")
+        lines.append("")
+
+    new_entry = "\n".join(lines)
+
+    # Read existing content (skip the title header if present)
+    existing = ""
+    header = "# Generation Report\n\n"
+    if os.path.isfile(report_path):
+        with open(report_path, "r", encoding="utf-8") as f:
+            existing = f.read()
+        if existing.startswith("# Generation Report"):
+            existing = existing[existing.index("\n") + 1 :].lstrip("\n")
+
+    with open(report_path, "w", encoding="utf-8", newline=None) as f:
+        f.write(header + new_entry + "\n" + existing)
+
+    print(f"Generation report written to {report_path}")
+
 
 READ_ME = """
 === PREREQUISITES ===
@@ -165,6 +228,9 @@ def generate_library(
     subprocess.run(["ruff", "check", "--fix", "--quiet", "meraki/"], check=False)
     subprocess.run(["ruff", "format", "--quiet", "meraki/"], check=False)
 
+    # Write generation report
+    _write_generation_report(version_number, api_version_number, is_github_action)
+
 
 def generate_modules(spec, batchable_actions, jinja_env, scopes, template_dir):
     for scope in scopes:
@@ -255,45 +321,55 @@ def generate_standard_and_async_functions(
             # Function definition
             definition = ""
             defined_params = set()
+            renamed_params = {}
 
             # Add required params to definition
             for p, values in return_params(operation, all_params, ["required"]).items():
                 defined_params.add(p)
+                safe_p = safe_param_name(p)
+                if safe_p != p:
+                    renamed_params[safe_p] = p
                 if values["type"] == "array":
-                    definition += f", {p}: list"
+                    definition += f", {safe_p}: list"
                 elif values["type"] == "number":
-                    definition += f", {p}: float"
+                    definition += f", {safe_p}: float"
                 elif values["type"] == "integer":
-                    definition += f", {p}: int"
+                    definition += f", {safe_p}: int"
                 elif values["type"] == "boolean":
-                    definition += f", {p}: bool"
+                    definition += f", {safe_p}: bool"
                 elif values["type"] == "object":
-                    definition += f", {p}: dict"
+                    definition += f", {safe_p}: dict"
                 elif values["type"] == "string":
-                    definition += f", {p}: str"
+                    definition += f", {safe_p}: str"
 
             # Path params must be in the signature for URL construction
             for p, values in return_params(operation, all_params, ["path"]).items():
                 if p not in defined_params:
                     defined_params.add(p)
+                    safe_p = safe_param_name(p)
+                    if safe_p != p:
+                        renamed_params[safe_p] = p
                     if values["type"] == "array":
-                        definition += f", {p}: list"
+                        definition += f", {safe_p}: list"
                     elif values["type"] == "number":
-                        definition += f", {p}: float"
+                        definition += f", {safe_p}: float"
                     elif values["type"] == "integer":
-                        definition += f", {p}: int"
+                        definition += f", {safe_p}: int"
                     elif values["type"] == "boolean":
-                        definition += f", {p}: bool"
+                        definition += f", {safe_p}: bool"
                     elif values["type"] == "object":
-                        definition += f", {p}: dict"
+                        definition += f", {safe_p}: dict"
                     elif values["type"] == "string":
-                        definition += f", {p}: str"
+                        definition += f", {safe_p}: str"
 
             # Catch params referenced in the URL but not declared as path params
             for p in re.findall(r"\{(\w+)\}", path):
                 if p not in defined_params:
                     defined_params.add(p)
-                    definition += f", {p}: str"
+                    safe_p = safe_param_name(p)
+                    if safe_p != p:
+                        renamed_params[safe_p] = p
+                    definition += f", {safe_p}: str"
 
             # Add pagination params if perPage exists
             if "perPage" in all_params:
@@ -376,6 +452,28 @@ def generate_standard_and_async_functions(
                 if p not in path_params:
                     path_params[p] = {"type": "string", "in": "path"}
 
+            # Sanitize path_params keys and resource path for Python keywords
+            safe_path_params = {}
+            safe_resource = path
+            for p, v in path_params.items():
+                safe_p = safe_param_name(p)
+                safe_path_params[safe_p] = v
+                if safe_p != p:
+                    safe_resource = safe_resource.replace("{" + p + "}", "{" + safe_p + "}")
+
+            # Record keyword param violations for the generation report
+            if renamed_params:
+                for safe_p, orig_p in renamed_params.items():
+                    location = all_params.get(orig_p, {}).get("in", "unknown")
+                    _keyword_param_violations.append(
+                        {
+                            "operation": operation,
+                            "param": orig_p,
+                            "location": location,
+                            "scope": tags[0] if tags else "unknown",
+                        }
+                    )
+
             # Add function to files
             with open(
                 f"{template_dir}function_template.jinja2",
@@ -394,12 +492,13 @@ def generate_standard_and_async_functions(
                     all_params=list(all_params_for_doc.keys()) if all_params_for_doc else [],
                     assert_blocks=assert_blocks,
                     tags=tags,
-                    resource=path,
+                    resource=safe_resource,
                     query_params=query_params,
                     array_params=array_params,
                     body_params=body_params,
-                    path_params=path_params,
+                    path_params=safe_path_params,
                     call_line=call_line,
+                    renamed_params=renamed_params,
                 )
                 output.write("\n\n" + rendered)
                 async_output.write("\n\n" + rendered)
@@ -456,50 +555,68 @@ def generate_action_batch_functions(
                     if p not in path_params:
                         path_params[p] = {"type": "string", "in": "path"}
 
+                # Sanitize path_params keys and resource path for Python keywords
+                safe_path_params = {}
+                safe_resource = path
+                for p, v in path_params.items():
+                    safe_p = safe_param_name(p)
+                    safe_path_params[safe_p] = v
+                    if safe_p != p:
+                        safe_resource = safe_resource.replace("{" + p + "}", "{" + safe_p + "}")
+
                 # Function definition
                 definition = ""
                 defined_params = set()
+                renamed_params = {}
 
                 for p, values in return_params(operation, all_params, ["required"]).items():
                     defined_params.add(p)
-                    # Match OAS schema types to Python types
+                    safe_p = safe_param_name(p)
+                    if safe_p != p:
+                        renamed_params[safe_p] = p
                     match values["type"]:
                         case "array":
-                            definition += f", {p}: list"
+                            definition += f", {safe_p}: list"
                         case "number":
-                            definition += f", {p}: float"
+                            definition += f", {safe_p}: float"
                         case "integer":
-                            definition += f", {p}: int"
+                            definition += f", {safe_p}: int"
                         case "boolean":
-                            definition += f", {p}: bool"
+                            definition += f", {safe_p}: bool"
                         case "object":
-                            definition += f", {p}: dict"
+                            definition += f", {safe_p}: dict"
                         case "string":
-                            definition += f", {p}: str"
+                            definition += f", {safe_p}: str"
 
                 # Path params must be in the signature for URL construction
                 for p, values in return_params(operation, all_params, ["path"]).items():
                     if p not in defined_params:
                         defined_params.add(p)
+                        safe_p = safe_param_name(p)
+                        if safe_p != p:
+                            renamed_params[safe_p] = p
                         match values["type"]:
                             case "array":
-                                definition += f", {p}: list"
+                                definition += f", {safe_p}: list"
                             case "number":
-                                definition += f", {p}: float"
+                                definition += f", {safe_p}: float"
                             case "integer":
-                                definition += f", {p}: int"
+                                definition += f", {safe_p}: int"
                             case "boolean":
-                                definition += f", {p}: bool"
+                                definition += f", {safe_p}: bool"
                             case "object":
-                                definition += f", {p}: dict"
+                                definition += f", {safe_p}: dict"
                             case "string":
-                                definition += f", {p}: str"
+                                definition += f", {safe_p}: str"
 
                 # Catch params referenced in the URL but not declared as path params
                 for p in re.findall(r"\{(\w+)\}", path):
                     if p not in defined_params:
                         defined_params.add(p)
-                        definition += f", {p}: str"
+                        safe_p = safe_param_name(p)
+                        if safe_p != p:
+                            renamed_params[safe_p] = p
+                        definition += f", {safe_p}: str"
 
                 # Add pagination params if perPage exists
                 if "perPage" in all_params:
@@ -541,6 +658,19 @@ def generate_action_batch_functions(
                 # Function return statement
                 call_line = "return action"
 
+                # Record keyword param violations for the generation report
+                if renamed_params:
+                    for safe_p, orig_p in renamed_params.items():
+                        location = all_params.get(orig_p, {}).get("in", "unknown")
+                        _keyword_param_violations.append(
+                            {
+                                "operation": operation,
+                                "param": orig_p,
+                                "location": location,
+                                "scope": tags[0] if tags else "unknown",
+                            }
+                        )
+
                 # Add function to files
                 with open(
                     f"{template_dir}batch_function_template.jinja2",
@@ -561,13 +691,14 @@ def generate_action_batch_functions(
                             all_params=list(all_params_for_doc.keys()) if all_params_for_doc else [],
                             assert_blocks=assert_blocks,
                             tags=tags,
-                            resource=path,
+                            resource=safe_resource,
                             query_params=query_params,
                             array_params=array_params,
                             body_params=body_params,
-                            path_params=path_params,
+                            path_params=safe_path_params,
                             call_line=call_line,
                             batch_operation=batch_operation,
+                            renamed_params=renamed_params,
                         )
                     )
 

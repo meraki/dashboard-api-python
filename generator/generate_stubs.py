@@ -4,11 +4,17 @@ Type stub (.pyi) generation for Meraki Dashboard API SDK.
 Produces .pyi files with typed method signatures from parsed OASv3 params.
 """
 
-import os
+import keyword
 import re
 import jinja2
 from parser_v3 import parse_params_v3
 from generate_library_oasv2 import return_params, REVERSE_PAGINATION
+
+
+def _safe_param_name(name: str) -> str:
+    if keyword.iskeyword(name):
+        return name + "_"
+    return name
 
 
 def _python_type_annotation(param_dict: dict) -> str:
@@ -96,20 +102,20 @@ def generate_stub_modules(spec: dict, scopes: dict, jinja_env: jinja2.Environmen
                     for p, values in return_params(operation, all_params, ["required"]).items():
                         defined_params.add(p)
                         annotation = _python_type_annotation(values)
-                        signature_parts.append(f"{p}: {annotation}")
+                        signature_parts.append(f"{_safe_param_name(p)}: {annotation}")
 
                     # Add path params (if not already in required)
                     for p, values in return_params(operation, all_params, ["path"]).items():
                         if p not in defined_params:
                             defined_params.add(p)
                             annotation = _python_type_annotation(values)
-                            signature_parts.append(f"{p}: {annotation}")
+                            signature_parts.append(f"{_safe_param_name(p)}: {annotation}")
 
                     # Catch params referenced in URL but not declared
                     for p in re.findall(r"\{(\w+)\}", path):
                         if p not in defined_params:
                             defined_params.add(p)
-                            signature_parts.append(f"{p}: str")
+                            signature_parts.append(f"{_safe_param_name(p)}: str")
 
                     # Add pagination params if perPage exists
                     if "perPage" in all_params:
@@ -127,8 +133,7 @@ def generate_stub_modules(spec: dict, scopes: dict, jinja_env: jinja2.Environmen
                     for p, values in optional_params.items():
                         if p not in defined_params:
                             annotation = _python_type_annotation(values)
-                            # Optional params always get = None default
-                            signature_parts.append(f"{p}: {annotation} = None")
+                            signature_parts.append(f"{_safe_param_name(p)}: {annotation} = None")
 
                     signature = ", ".join(signature_parts)
 
