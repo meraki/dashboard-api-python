@@ -1,22 +1,7 @@
 name: Test Python library
 
 on:
-  push:
-    branches: ['main', 'beta']
-    paths:
-      - 'meraki/**'
-      - 'tests/unit/**'
-      - 'tests/integration/**'
-      - 'pyproject.toml'
-      - 'uv.lock'
-  pull_request:
-    branches: ['main', 'beta']
-    paths:
-      - 'meraki/**'
-      - 'tests/unit/**'
-      - 'tests/integration/**'
-      - 'pyproject.toml'
-      - 'uv.lock'
+  workflow_call:
   workflow_dispatch:
 
 jobs:

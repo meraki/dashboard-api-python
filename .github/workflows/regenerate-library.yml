@@ -18,7 +18,7 @@ on:
         default: 'main'
 
 jobs:
-  build:
+  regenerate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -64,6 +64,7 @@ jobs:
           author_email: support@meraki.com
           message: Auto-generated library v${{ github.event.inputs.library_version }} for API v${{ github.event.inputs.api_version }}.
           new_branch: ${{ github.event.inputs.branch_name }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create pull request
         env:
@@ -75,15 +76,10 @@ jobs:
             --title "Release v${{ github.event.inputs.library_version }} (API v${{ github.event.inputs.api_version }})" \
             --body "Auto-generated library v${{ github.event.inputs.library_version }} for API v${{ github.event.inputs.api_version }}."
 
-      - name: Trigger tests
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh workflow run test-library.yml --ref "${{ github.event.inputs.branch_name }}"
-
       - name: Enable auto-merge
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh pr merge "${{ github.event.inputs.branch_name }}" \
             --auto --squash
+
