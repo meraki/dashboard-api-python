@@ -2,7 +2,7 @@ name: Test Python library
 
 on:
   push:
-    branches: ['main', 'release', 'dev_rest_session']
+    branches: ['main', 'release']
     paths:
       - 'meraki/**'
       - 'tests/unit/**'
@@ -11,7 +11,7 @@ on:
       - 'pyproject.toml'
       - 'uv.lock'
   pull_request:
-    branches: ['main', 'release', 'dev_rest_session']
+    branches: ['main', 'release']
     paths:
       - 'meraki/**'
       - 'tests/unit/**'
@@ -38,10 +38,10 @@ jobs:
     - name: Install dependencies
       run: uv sync --python 3.13
 
-    - name: Lint with flake8
+    - name: Lint with ruff
       run: |
-        uv run flake8 . --count --select=E9,F63,F7,F82 --ignore=F405,W391,W291,C901,E501,E303,W293 --exclude=examples,generator,.venv --show-source --statistics
-        uv run flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --exclude=examples,generator,.venv --statistics
+        uv run ruff check .
+        uv run ruff format --check .
 
   unit-test:
     runs-on: ubuntu-latest
