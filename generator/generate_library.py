@@ -67,8 +67,17 @@ def generate_library(
     paths = spec["paths"]
     scopes = {tag["name"]: {} for tag in tags if tag["name"] in supported_scopes}
 
-    spec_scopes = {tag["name"] for tag in tags}
-    unsupported = spec_scopes - set(supported_scopes)
+    used_scopes = set()
+    for path_item in paths.values():
+        for method, endpoint in path_item.items():
+            if method not in ("get", "post", "put", "delete", "patch"):
+                continue
+            ep_tags = endpoint.get("tags", [])
+            if len(ep_tags) > 2 and ep_tags[2] == "spaces":
+                used_scopes.add("spaces")
+            elif ep_tags:
+                used_scopes.add(ep_tags[0])
+    unsupported = used_scopes - set(supported_scopes)
     if unsupported:
         sys.exit(f"ERROR: spec contains scopes not in supported_scopes: {sorted(unsupported)}")
 
