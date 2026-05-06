@@ -1,7 +1,7 @@
 """Tests for meraki.encoding module (HTTP-04, QUAL-03)."""
+
 import inspect
 
-import pytest
 from hypothesis import given, strategies as st
 from urllib.parse import parse_qs
 
@@ -52,6 +52,7 @@ class TestNoRequestsDependency:
 
     def test_no_requests_import(self):
         import meraki.encoding
+
         source = inspect.getsource(meraki.encoding)
         assert "import requests" not in source
         assert "from requests" not in source
@@ -73,10 +74,12 @@ _value_strategy = st.text(
 )
 
 
-@given(st.dictionaries(
-    keys=_key_strategy,
-    values=st.lists(_value_strategy, min_size=1, max_size=5),
-))
+@given(
+    st.dictionaries(
+        keys=_key_strategy,
+        values=st.lists(_value_strategy, min_size=1, max_size=5),
+    )
+)
 def test_roundtrip_simple(data):
     """(D-04) Encoded output parsed back with parse_qs reconstructs keys and values."""
     encoded = encode_meraki_params(data)
@@ -89,19 +92,21 @@ def test_roundtrip_simple(data):
         assert decoded[k] == data[k]
 
 
-@given(st.dictionaries(
-    keys=_key_strategy,
-    values=st.lists(
-        st.dictionaries(
-            keys=_key_strategy,
-            values=_value_strategy,
+@given(
+    st.dictionaries(
+        keys=_key_strategy,
+        values=st.lists(
+            st.dictionaries(
+                keys=_key_strategy,
+                values=_value_strategy,
+                min_size=1,
+                max_size=3,
+            ),
             min_size=1,
             max_size=3,
         ),
-        min_size=1,
-        max_size=3,
-    ),
-))
+    )
+)
 def test_roundtrip_array_of_objects(data):
     """(D-04, D-05) Array-of-objects encoding roundtrips: param+inner_key maps to value."""
     encoded = encode_meraki_params(data)

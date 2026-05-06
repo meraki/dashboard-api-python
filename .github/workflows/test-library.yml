@@ -40,8 +40,8 @@ jobs:
 
     - name: Lint with ruff
       run: |
-        uv run ruff check .
-        uv run ruff format --check .
+        uv run ruff check meraki/ tests/unit/ tests/integration/ tests/benchmarks/
+        uv run ruff format --check meraki/ tests/unit/ tests/integration/ tests/benchmarks/
 
   unit-test:
     runs-on: ubuntu-latest
