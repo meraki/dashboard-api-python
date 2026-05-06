@@ -60,6 +60,7 @@ def generate_library(
         "campusGateway",
         "spaces",
         "nac",
+        "users",
     ]
 
     tags = spec["tags"]
