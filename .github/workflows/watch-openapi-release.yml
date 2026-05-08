@@ -1,0 +1,237 @@
+name: Watch OpenAPI Releases
+
+on:
+  schedule:
+    - cron: '0 14 * * *'
+  workflow_dispatch:
+
+jobs:
+  check-ga:
+    runs-on: ubuntu-latest
+    outputs:
+      has_new_release: ${{ steps.check.outputs.has_new_release }}
+      api_version: ${{ steps.check.outputs.api_version }}
+      new_sdk_version: ${{ steps.version.outputs.new_sdk_version }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Get latest GA release
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          LATEST=$(gh release list --repo meraki/openapi --exclude-pre-releases --limit 1 --json tagName -q '.[0].tagName')
+          API_VERSION="${LATEST#v}"
+          echo "api_version=$API_VERSION" >> "$GITHUB_OUTPUT"
+
+          LAST_PROCESSED=$(cat .github/.last-openapi-ga-release 2>/dev/null || echo "")
+          if [ "$LATEST" = "$LAST_PROCESSED" ]; then
+            echo "has_new_release=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_new_release=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Compute next SDK version
+        if: steps.check.outputs.has_new_release == 'true'
+        id: version
+        run: |
+          CURRENT=$(git show "origin/main:pyproject.toml" | grep '^version' | sed 's/version = "\(.*\)"/\1/')
+          BASE=$(echo "$CURRENT" | sed 's/\(a\|b\|rc\).*//')
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$BASE"
+          NEW_VERSION="${MAJOR}.$((MINOR + 1)).0"
+          echo "new_sdk_version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
+
+  check-beta:
+    runs-on: ubuntu-latest
+    outputs:
+      has_new_release: ${{ steps.check.outputs.has_new_release }}
+      api_version: ${{ steps.check.outputs.api_version }}
+      new_sdk_version: ${{ steps.version.outputs.new_sdk_version }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Get latest beta release
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          LATEST=$(gh release list --repo meraki/openapi --limit 20 --json tagName,isPrerelease -q '[.[] | select(.isPrerelease)] | .[0].tagName')
+          if [ -z "$LATEST" ]; then
+            echo "has_new_release=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          API_VERSION="${LATEST#v}"
+          echo "api_version=$API_VERSION" >> "$GITHUB_OUTPUT"
+
+          LAST_PROCESSED=$(cat .github/.last-openapi-beta-release 2>/dev/null || echo "")
+          if [ "$LATEST" = "$LAST_PROCESSED" ]; then
+            echo "has_new_release=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_new_release=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Compute next SDK version
+        if: steps.check.outputs.has_new_release == 'true'
+        id: version
+        run: |
+          API_VERSION="${{ steps.check.outputs.api_version }}"
+          CURRENT=$(git show "origin/beta:pyproject.toml" | grep '^version' | sed 's/version = "\(.*\)"/\1/')
+
+          API_MINOR=$(echo "$API_VERSION" | cut -d. -f2)
+          API_PATCH=$(echo "$API_VERSION" | cut -d. -f3 | sed 's/-.*//')
+          API_BETA=$(echo "$API_VERSION" | sed 's/.*beta\.\?//')
+
+          LAST_TAG=$(cat .github/.last-openapi-beta-release 2>/dev/null || echo "")
+          LAST_API_MINOR=$(echo "$LAST_TAG" | sed 's/^v//' | cut -d. -f2)
+
+          BASE=$(echo "$CURRENT" | sed 's/\(a\|b\|rc\).*//')
+          IFS='.' read -r MAJOR LIB_MINOR LIB_PATCH <<< "$BASE"
+
+          if [ "$API_MINOR" != "$LAST_API_MINOR" ]; then
+            LIB_MINOR=$((LIB_MINOR + 1))
+          fi
+
+          NEW_VERSION="${MAJOR}.${LIB_MINOR}.${API_PATCH}b${API_BETA}"
+          echo "new_sdk_version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
+
+  check-dev:
+    runs-on: ubuntu-latest
+    outputs:
+      has_new_release: ${{ steps.check.outputs.has_new_release }}
+      api_version: ${{ steps.check.outputs.api_version }}
+      new_sdk_version: ${{ steps.version.outputs.new_sdk_version }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Get latest beta release
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          LATEST=$(gh release list --repo meraki/openapi --limit 20 --json tagName,isPrerelease -q '[.[] | select(.isPrerelease)] | .[0].tagName')
+          if [ -z "$LATEST" ]; then
+            echo "has_new_release=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          API_VERSION="${LATEST#v}"
+          echo "api_version=$API_VERSION" >> "$GITHUB_OUTPUT"
+
+          LAST_PROCESSED=$(cat .github/.last-openapi-dev-release 2>/dev/null || echo "")
+          if [ "$LATEST" = "$LAST_PROCESSED" ]; then
+            echo "has_new_release=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_new_release=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Compute next SDK version
+        if: steps.check.outputs.has_new_release == 'true'
+        id: version
+        run: |
+          API_VERSION="${{ steps.check.outputs.api_version }}"
+          CURRENT=$(git show "origin/httpx:pyproject.toml" | grep '^version' | sed 's/version = "\(.*\)"/\1/')
+
+          API_MINOR=$(echo "$API_VERSION" | cut -d. -f2)
+          API_PATCH=$(echo "$API_VERSION" | cut -d. -f3 | sed 's/-.*//')
+          API_BETA=$(echo "$API_VERSION" | sed 's/.*beta\.\?//')
+
+          LAST_TAG=$(cat .github/.last-openapi-dev-release 2>/dev/null || echo "")
+          LAST_API_MINOR=$(echo "$LAST_TAG" | sed 's/^v//' | cut -d. -f2)
+
+          BASE=$(echo "$CURRENT" | sed 's/\(a\|b\|rc\).*//')
+          IFS='.' read -r MAJOR LIB_MINOR LIB_PATCH <<< "$BASE"
+
+          if [ "$API_MINOR" != "$LAST_API_MINOR" ]; then
+            LIB_MINOR=$((LIB_MINOR + 1))
+          fi
+
+          NEW_VERSION="${MAJOR}.${LIB_MINOR}.${API_PATCH}b${API_BETA}"
+          echo "new_sdk_version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
+
+  trigger:
+    needs: [check-ga, check-beta, check-dev]
+    if: needs.check-ga.outputs.has_new_release == 'true' || needs.check-beta.outputs.has_new_release == 'true' || needs.check-dev.outputs.has_new_release == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Record processed releases
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "GitHub Action"
+          git config user.email "support@meraki.com"
+
+          if [ "${{ needs.check-ga.outputs.has_new_release }}" = "true" ]; then
+            echo "v${{ needs.check-ga.outputs.api_version }}" > .github/.last-openapi-ga-release
+            git add .github/.last-openapi-ga-release
+          fi
+
+          if [ "${{ needs.check-beta.outputs.has_new_release }}" = "true" ]; then
+            echo "v${{ needs.check-beta.outputs.api_version }}" > .github/.last-openapi-beta-release
+            git add .github/.last-openapi-beta-release
+          fi
+
+          if [ "${{ needs.check-dev.outputs.has_new_release }}" = "true" ]; then
+            echo "v${{ needs.check-dev.outputs.api_version }}" > .github/.last-openapi-dev-release
+            git add .github/.last-openapi-dev-release
+          fi
+
+          git commit -m "Record processed OpenAPI releases"
+          git push
+
+      - name: Enable early access
+        if: needs.check-beta.outputs.has_new_release == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BEFORE_ID=$(gh run list --workflow=enable-early-access.yml --limit=1 --json databaseId -q '.[0].databaseId')
+          gh workflow run enable-early-access.yml
+
+          for i in $(seq 1 30); do
+            sleep 10
+            NEW_ID=$(gh run list --workflow=enable-early-access.yml --limit=1 --json databaseId -q '.[0].databaseId')
+            if [ "$NEW_ID" != "$BEFORE_ID" ]; then
+              gh run watch "$NEW_ID"
+              exit 0
+            fi
+          done
+          echo "Timed out waiting for enable-early-access run to appear"
+          exit 1
+
+      - name: Trigger GA regeneration
+        if: needs.check-ga.outputs.has_new_release == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run regenerate-library.yml \
+            -f library_version="${{ needs.check-ga.outputs.new_sdk_version }}" \
+            -f api_version="${{ needs.check-ga.outputs.api_version }}" \
+            -f release_stage="ga"
+
+      - name: Trigger beta regeneration
+        if: needs.check-beta.outputs.has_new_release == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run regenerate-library.yml \
+            -f library_version="${{ needs.check-beta.outputs.new_sdk_version }}" \
+            -f api_version="${{ needs.check-beta.outputs.api_version }}" \
+            -f release_stage="beta"
+
+      - name: Trigger dev regeneration
+        if: needs.check-dev.outputs.has_new_release == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run regenerate-library.yml \
+            -f library_version="${{ needs.check-dev.outputs.new_sdk_version }}" \
+            -f api_version="${{ needs.check-dev.outputs.api_version }}" \
+            -f release_stage="dev"

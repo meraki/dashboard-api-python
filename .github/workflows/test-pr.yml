@@ -1,0 +1,24 @@
+name: Test PR
+
+on:
+  push:
+    branches: ['main', 'beta', 'httpx']
+    paths:
+      - 'meraki/**'
+      - 'tests/unit/**'
+      - 'tests/integration/**'
+      - 'pyproject.toml'
+      - 'uv.lock'
+  pull_request:
+    branches: ['main', 'beta', 'httpx']
+    paths:
+      - 'meraki/**'
+      - 'tests/unit/**'
+      - 'tests/integration/**'
+      - 'pyproject.toml'
+      - 'uv.lock'
+
+jobs:
+  test:
+    uses: ./.github/workflows/test-library.yml
+    secrets: inherit
