@@ -155,8 +155,7 @@ jobs:
           gh workflow run regenerate-library.yml \
             -f library_version="${{ needs.check-ga.outputs.new_sdk_version }}" \
             -f api_version="${{ needs.check-ga.outputs.api_version }}" \
-            -f branch_name="release" \
-            -f target_branch="main"
+            -f release_stage="GA"
 
       - name: Trigger beta regeneration
         if: needs.check-beta.outputs.has_new_release == 'true'
@@ -166,5 +165,4 @@ jobs:
           gh workflow run regenerate-library.yml \
             -f library_version="${{ needs.check-beta.outputs.new_sdk_version }}" \
             -f api_version="${{ needs.check-beta.outputs.api_version }}" \
-            -f branch_name="beta-release" \
-            -f target_branch="beta"
+            -f release_stage="beta"
