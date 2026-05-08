@@ -102,6 +102,7 @@ def generate_library(
     is_github_action: bool,
     generate_stubs: bool = False,
     local_source: bool = False,
+    source_branch: str = "master",
 ):
     # Clear parser cache at entry
     clear_cache()
@@ -191,7 +192,7 @@ def generate_library(
         repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         local_meraki = os.path.join(repo_root, "meraki")
     else:
-        base_url = "https://raw.githubusercontent.com/meraki/dashboard-api-python/master/meraki/"
+        base_url = f"https://raw.githubusercontent.com/meraki/dashboard-api-python/{source_branch}/meraki/"
     for file in non_generated:
         if local_source:
             with open(os.path.join(local_meraki, file), encoding="utf-8") as src:
@@ -733,9 +734,10 @@ def main(inputs):
     is_github_action = False
     generate_stubs_flag = False
     local_source = False
+    source_branch = "master"
 
     try:
-        opts, args = getopt.getopt(inputs, "ho:k:v:a:g:sl")
+        opts, args = getopt.getopt(inputs, "ho:k:v:a:g:slb:")
     except getopt.GetoptError:
         print_help()
         sys.exit(2)
@@ -758,6 +760,8 @@ def main(inputs):
             generate_stubs_flag = True
         elif opt == "-l":
             local_source = True
+        elif opt == "-b":
+            source_branch = arg
 
     check_python_version()
 
@@ -796,6 +800,7 @@ def main(inputs):
         is_github_action,
         generate_stubs=generate_stubs_flag,
         local_source=local_source,
+        source_branch=source_branch,
     )
 
 

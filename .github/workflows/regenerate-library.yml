@@ -69,7 +69,7 @@ jobs:
         run: |
           ARGS="-g true -v $LIBRARY_VERSION -a $API_VERSION"
           if [ "${{ github.event.inputs.release_stage }}" = "dev" ]; then
-            ARGS="$ARGS -l"
+            ARGS="$ARGS -b httpx"
           fi
           if [ -n "$BETA_ORG_ID" ]; then
             ARGS="$ARGS -o $BETA_ORG_ID"
