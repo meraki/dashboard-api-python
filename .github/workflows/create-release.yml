@@ -40,7 +40,21 @@ jobs:
             echo "prerelease=false" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Check if release already exists
+        id: check-release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          if gh release view "$VERSION" > /dev/null 2>&1; then
+            echo "Release $VERSION already exists, skipping."
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Validate version matches branch
+        if: steps.check-release.outputs.exists == 'false'
         run: |
           BRANCH="${{ inputs.branch || github.event.workflow_run.head_branch }}"
           VERSION="${{ steps.version.outputs.version }}"
@@ -57,6 +71,7 @@ jobs:
           fi
 
       - name: Create release
+        if: steps.check-release.outputs.exists == 'false'
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
