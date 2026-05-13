@@ -26,7 +26,7 @@ jobs:
           API_VERSION="${LATEST#v}"
           echo "api_version=$API_VERSION" >> "$GITHUB_OUTPUT"
 
-          LAST_PROCESSED=$(cat .github/.last-openapi-ga-release 2>/dev/null || echo "")
+          LAST_PROCESSED="${{ vars.LAST_OPENAPI_GA_RELEASE }}"
           if [ "$LATEST" = "$LAST_PROCESSED" ]; then
             echo "has_new_release=false" >> "$GITHUB_OUTPUT"
           else
@@ -68,7 +68,7 @@ jobs:
           API_VERSION="${LATEST#v}"
           echo "api_version=$API_VERSION" >> "$GITHUB_OUTPUT"
 
-          LAST_PROCESSED=$(cat .github/.last-openapi-beta-release 2>/dev/null || echo "")
+          LAST_PROCESSED="${{ vars.LAST_OPENAPI_BETA_RELEASE }}"
           if [ "$LATEST" = "$LAST_PROCESSED" ]; then
             echo "has_new_release=false" >> "$GITHUB_OUTPUT"
           else
@@ -86,7 +86,7 @@ jobs:
           API_PATCH=$(echo "$API_VERSION" | cut -d. -f3 | sed 's/-.*//')
           API_BETA=$(echo "$API_VERSION" | sed 's/.*beta\.\?//')
 
-          LAST_TAG=$(cat .github/.last-openapi-beta-release 2>/dev/null || echo "")
+          LAST_TAG="${{ vars.LAST_OPENAPI_BETA_RELEASE }}"
           LAST_API_MINOR=$(echo "$LAST_TAG" | sed 's/^v//' | cut -d. -f2)
 
           BASE=$(echo "$CURRENT" | sed 's/\(a\|b\|rc\).*//')
@@ -124,7 +124,7 @@ jobs:
           API_VERSION="${LATEST#v}"
           echo "api_version=$API_VERSION" >> "$GITHUB_OUTPUT"
 
-          LAST_PROCESSED=$(cat .github/.last-openapi-dev-release 2>/dev/null || echo "")
+          LAST_PROCESSED="${{ vars.LAST_OPENAPI_DEV_RELEASE }}"
           if [ "$LATEST" = "$LAST_PROCESSED" ]; then
             echo "has_new_release=false" >> "$GITHUB_OUTPUT"
           else
@@ -142,7 +142,7 @@ jobs:
           API_PATCH=$(echo "$API_VERSION" | cut -d. -f3 | sed 's/-.*//')
           API_BETA=$(echo "$API_VERSION" | sed 's/.*beta\.\?//')
 
-          LAST_TAG=$(cat .github/.last-openapi-dev-release 2>/dev/null || echo "")
+          LAST_TAG="${{ vars.LAST_OPENAPI_DEV_RELEASE }}"
           LAST_API_MINOR=$(echo "$LAST_TAG" | sed 's/^v//' | cut -d. -f2)
 
           BASE=$(echo "$CURRENT" | sed 's/\(a\|b\|rc\).*//')
@@ -160,32 +160,21 @@ jobs:
     if: needs.check-ga.outputs.has_new_release == 'true' || needs.check-beta.outputs.has_new_release == 'true' || needs.check-dev.outputs.has_new_release == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-
       - name: Record processed releases
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git config user.name "GitHub Action"
-          git config user.email "support@meraki.com"
-
           if [ "${{ needs.check-ga.outputs.has_new_release }}" = "true" ]; then
-            echo "v${{ needs.check-ga.outputs.api_version }}" > .github/.last-openapi-ga-release
-            git add .github/.last-openapi-ga-release
+            gh variable set LAST_OPENAPI_GA_RELEASE --body "v${{ needs.check-ga.outputs.api_version }}"
           fi
 
           if [ "${{ needs.check-beta.outputs.has_new_release }}" = "true" ]; then
-            echo "v${{ needs.check-beta.outputs.api_version }}" > .github/.last-openapi-beta-release
-            git add .github/.last-openapi-beta-release
+            gh variable set LAST_OPENAPI_BETA_RELEASE --body "v${{ needs.check-beta.outputs.api_version }}"
           fi
 
           if [ "${{ needs.check-dev.outputs.has_new_release }}" = "true" ]; then
-            echo "v${{ needs.check-dev.outputs.api_version }}" > .github/.last-openapi-dev-release
-            git add .github/.last-openapi-dev-release
+            gh variable set LAST_OPENAPI_DEV_RELEASE --body "v${{ needs.check-dev.outputs.api_version }}"
           fi
-
-          git commit -m "Record processed OpenAPI releases"
-          git push
 
       - name: Enable early access
         if: needs.check-beta.outputs.has_new_release == 'true'
