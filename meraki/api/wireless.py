@@ -68,6 +68,7 @@ class Wireless(object):
           Dashboard's automatically generated value.
         - minor (integer): Desired minor value of the beacon. If the value is set to null it will reset to
           Dashboard's automatically generated value.
+        - transmit (object): Transmit settings including power, interval, and advertised power.
         """
 
         kwargs.update(locals())
@@ -83,6 +84,7 @@ class Wireless(object):
             "uuid",
             "major",
             "minor",
+            "transmit",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -196,6 +198,23 @@ class Wireless(object):
 
         return self._session.put(metadata, resource, payload)
 
+    def getDeviceWirelessHealthScores(self, serial: str):
+        """
+        **Fetch the health scores for a given AP on this network**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-wireless-health-scores
+
+        - serial (string): Serial
+        """
+
+        metadata = {
+            "tags": ["wireless", "monitor", "healthScores"],
+            "operation": "getDeviceWirelessHealthScores",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/wireless/healthScores"
+
+        return self._session.get(metadata, resource)
+
     def getDeviceWirelessLatencyStats(self, serial: str, **kwargs):
         """
         **Aggregated latency info for a given AP on this network**
@@ -248,6 +267,123 @@ class Wireless(object):
 
         return self._session.get(metadata, resource, params)
 
+    def getDeviceWirelessRadioAfcPosition(self, serial: str):
+        """
+        **Return the position for a wireless device**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-wireless-radio-afc-position
+
+        - serial (string): Serial
+        """
+
+        metadata = {
+            "tags": ["wireless", "configure", "radio", "afc", "position"],
+            "operation": "getDeviceWirelessRadioAfcPosition",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/wireless/radio/afc/position"
+
+        return self._session.get(metadata, resource)
+
+    def updateDeviceWirelessRadioAfcPosition(self, serial: str, **kwargs):
+        """
+        **Update the position attributes for this device**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-wireless-radio-afc-position
+
+        - serial (string): Serial
+        - height (object): Height attributes
+        - gps (object): GPS attributes
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "radio", "afc", "position"],
+            "operation": "updateDeviceWirelessRadioAfcPosition",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/wireless/radio/afc/position"
+
+        body_params = [
+            "height",
+            "gps",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateDeviceWirelessRadioAfcPosition: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
+    def getDeviceWirelessRadioAfcPowerLimits(self, serial: str):
+        """
+        **Return the AFC power limits for a wireless device**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-wireless-radio-afc-power-limits
+
+        - serial (string): Serial
+        """
+
+        metadata = {
+            "tags": ["wireless", "configure", "radio", "afc", "powerLimits"],
+            "operation": "getDeviceWirelessRadioAfcPowerLimits",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/wireless/radio/afc/powerLimits"
+
+        return self._session.get(metadata, resource)
+
+    def getDeviceWirelessRadioOverrides(self, serial: str):
+        """
+        **Return the radio overrides of a device**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-wireless-radio-overrides
+
+        - serial (string): Serial
+        """
+
+        metadata = {
+            "tags": ["wireless", "configure", "radio", "overrides"],
+            "operation": "getDeviceWirelessRadioOverrides",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/wireless/radio/overrides"
+
+        return self._session.get(metadata, resource)
+
+    def updateDeviceWirelessRadioOverrides(self, serial: str, **kwargs):
+        """
+        **Update 2.4 GHz, 5 GHz, and 6 GHz radio settings (channel, channel width, power, and enable/disable) that override RF profiles.**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-wireless-radio-overrides
+
+        - serial (string): Serial
+        - rfProfile (object): This device's RF profile
+        - radios (array): Radio overrides.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "radio", "overrides"],
+            "operation": "updateDeviceWirelessRadioOverrides",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/wireless/radio/overrides"
+
+        body_params = [
+            "rfProfile",
+            "radios",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateDeviceWirelessRadioOverrides: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
     def getDeviceWirelessRadioSettings(self, serial: str):
         """
         **Return the manually configured radio settings overrides of a device, which take precedence over RF profiles.**
@@ -299,6 +435,23 @@ class Wireless(object):
                 self._session._logger.warning(f"updateDeviceWirelessRadioSettings: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
+
+    def getDeviceWirelessRadioStatus(self, serial: str):
+        """
+        **Show the status of this device's radios**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-wireless-radio-status
+
+        - serial (string): Serial
+        """
+
+        metadata = {
+            "tags": ["wireless", "configure", "radio", "status"],
+            "operation": "getDeviceWirelessRadioStatus",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/wireless/radio/status"
+
+        return self._session.get(metadata, resource)
 
     def getDeviceWirelessStatus(self, serial: str):
         """
@@ -655,6 +808,7 @@ class Wireless(object):
         - majorMinorAssignmentMode (string): The way major and minor number should be assigned to nodes in the network. ('Unique', 'Non-unique')
         - major (integer): The major number to be used in the beacon identifier. Only valid in 'Non-unique' mode.
         - minor (integer): The minor number to be used in the beacon identifier. Only valid in 'Non-unique' mode.
+        - transmit (object): Transmit settings.
         """
 
         kwargs.update(locals())
@@ -679,6 +833,7 @@ class Wireless(object):
             "majorMinorAssignmentMode",
             "major",
             "minor",
+            "transmit",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -848,6 +1003,23 @@ class Wireless(object):
 
         return self._session.get(metadata, resource, params)
 
+    def getNetworkWirelessClientsHealthScores(self, networkId: str):
+        """
+        **Fetch the health scores for all clients on this network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-clients-health-scores
+
+        - networkId (string): Network ID
+        """
+
+        metadata = {
+            "tags": ["wireless", "monitor", "clients", "healthScores"],
+            "operation": "getNetworkWirelessClientsHealthScores",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/clients/healthScores"
+
+        return self._session.get(metadata, resource)
+
     def getNetworkWirelessClientsLatencyStats(self, networkId: str, **kwargs):
         """
         **Aggregated latency info for this network, grouped by clients**
@@ -898,6 +1070,53 @@ class Wireless(object):
             if invalid and self._session._logger:
                 self._session._logger.warning(
                     f"getNetworkWirelessClientsLatencyStats: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getNetworkWirelessClientsOnboardingHistory(self, networkId: str, **kwargs):
+        """
+        **Return counts of distinct wireless clients connecting to a network over time**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-clients-onboarding-history
+
+        - networkId (string): Network ID
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 7 days.
+        - resolution (integer): The time resolution in seconds for returned data. The valid resolutions are: 300. The default is 300.
+        - band (string): Filter results by band (either '2.4', '5' or '6'); this cannot be combined with the SSID filter.
+        - ssid (integer): Filter results by SSID number; this cannot be combined with the band filter.
+        """
+
+        kwargs.update(locals())
+
+        if "band" in kwargs:
+            options = ["2.4", "5", "6"]
+            assert kwargs["band"] in options, f'''"band" cannot be "{kwargs["band"]}", & must be set to one of: {options}'''
+
+        metadata = {
+            "tags": ["wireless", "monitor", "clients", "onboardingHistory"],
+            "operation": "getNetworkWirelessClientsOnboardingHistory",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/clients/onboardingHistory"
+
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "resolution",
+            "band",
+            "ssid",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getNetworkWirelessClientsOnboardingHistory: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.get(metadata, resource, params)
@@ -1038,6 +1257,25 @@ class Wireless(object):
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
+    def getNetworkWirelessClientHealthScores(self, networkId: str, clientId: str):
+        """
+        **Fetch the health scores for a given client on this network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-client-health-scores
+
+        - networkId (string): Network ID
+        - clientId (string): Client ID
+        """
+
+        metadata = {
+            "tags": ["wireless", "monitor", "clients", "healthScores"],
+            "operation": "getNetworkWirelessClientHealthScores",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        clientId = urllib.parse.quote(str(clientId), safe="")
+        resource = f"/networks/{networkId}/wireless/clients/{clientId}/healthScores"
+
+        return self._session.get(metadata, resource)
+
     def getNetworkWirelessClientLatencyHistory(self, networkId: str, clientId: str, **kwargs):
         """
         **Return the latency history for a client**
@@ -1132,6 +1370,53 @@ class Wireless(object):
                 self._session._logger.warning(f"getNetworkWirelessClientLatencyStats: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
+
+    def getNetworkWirelessClientRoamingHistory(self, networkId: str, clientId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **Get client roam events within the specified timespan.**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-client-roaming-history
+
+        - networkId (string): Network ID
+        - clientId (string): Client ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 30 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 30 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 30 days. The default is 7 days.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "clients", "roaming", "history"],
+            "operation": "getNetworkWirelessClientRoamingHistory",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        clientId = urllib.parse.quote(str(clientId), safe="")
+        resource = f"/networks/{networkId}/wireless/clients/{clientId}/roaming/history"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getNetworkWirelessClientRoamingHistory: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getNetworkWirelessConnectionStats(self, networkId: str, **kwargs):
         """
@@ -1283,6 +1568,23 @@ class Wireless(object):
                 )
 
         return self._session.get(metadata, resource, params)
+
+    def getNetworkWirelessDevicesHealthScores(self, networkId: str):
+        """
+        **Fetch the health scores of all APs on this network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-wireless-devices-health-scores
+
+        - networkId (string): Network ID
+        """
+
+        metadata = {
+            "tags": ["wireless", "monitor", "devices", "healthScores"],
+            "operation": "getNetworkWirelessDevicesHealthScores",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/devices/healthScores"
+
+        return self._session.get(metadata, resource)
 
     def getNetworkWirelessDevicesLatencyStats(self, networkId: str, **kwargs):
         """
@@ -1811,6 +2113,41 @@ class Wireless(object):
 
         return self._session.put(metadata, resource, payload)
 
+    def updateNetworkWirelessLocationWayfinding(self, networkId: str, **kwargs):
+        """
+        **Change client wayfinding settings**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-location-wayfinding
+
+        - networkId (string): Network ID
+        - enabled (boolean): Whether to enable client wayfinding on that network (only supported on Wireless networks).
+        - maintenanceWindow (object): Maintenance window during which optimization might take place to improve location accuracy.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "location", "wayfinding"],
+            "operation": "updateNetworkWirelessLocationWayfinding",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/location/wayfinding"
+
+        body_params = [
+            "enabled",
+            "maintenanceWindow",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkWirelessLocationWayfinding: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
     def getNetworkWirelessMeshStatuses(self, networkId: str, total_pages=1, direction="next", **kwargs):
         """
         **List wireless mesh statuses for repeaters**
@@ -1847,6 +2184,76 @@ class Wireless(object):
                 self._session._logger.warning(f"getNetworkWirelessMeshStatuses: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def updateNetworkWirelessOpportunisticPcap(self, networkId: str, **kwargs):
+        """
+        **Update the Opportunistic Pcap settings for a wireless network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-opportunistic-pcap
+
+        - networkId (string): Network ID
+        - enablement (object): Enablement settings
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "opportunisticPcap"],
+            "operation": "updateNetworkWirelessOpportunisticPcap",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/opportunisticPcap"
+
+        body_params = [
+            "enablement",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkWirelessOpportunisticPcap: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
+    def updateNetworkWirelessRadioAutoRf(self, networkId: str, **kwargs):
+        """
+        **Update the AutoRF settings for a wireless network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-radio-auto-rf
+
+        - networkId (string): Network ID
+        - busyHour (object): Busy Hour settings
+        - channel (object): Channel settings
+        - fra (object): FRA settings
+        - aiRrm (object): AI-RRM settings
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "radio", "autoRf"],
+            "operation": "updateNetworkWirelessRadioAutoRf",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/radio/autoRf"
+
+        body_params = [
+            "busyHour",
+            "channel",
+            "fra",
+            "aiRrm",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkWirelessRadioAutoRf: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
 
     def updateNetworkWirelessRadioRrm(self, networkId: str, **kwargs):
         """
@@ -2252,6 +2659,7 @@ class Wireless(object):
         - number (string): Number
         - name (string): The name of the SSID
         - enabled (boolean): Whether or not the SSID is enabled
+        - localAuth (boolean): Extended local auth flag for Enterprise NAC
         - authMode (string): The association control method for the SSID ('open', 'open-enhanced', 'psk', 'open-with-radius', 'open-enhanced-with-radius', 'open-with-nac', '8021x-meraki', '8021x-nac', '8021x-radius', '8021x-google', '8021x-entra', '8021x-localradius', 'ipsk-with-radius', 'ipsk-without-radius', 'ipsk-with-nac' or 'ipsk-with-radius-easy-psk')
         - enterpriseAdminAccess (string): Whether or not an SSID is accessible by 'enterprise' administrators ('access disabled' or 'access enabled')
         - ssidAdminAccessible (boolean): SSID Administrator access status
@@ -2283,6 +2691,7 @@ class Wireless(object):
         - radiusAccountingInterimInterval (integer): The interval (in seconds) in which accounting information is updated and sent to the RADIUS accounting server.
         - radiusAttributeForGroupPolicies (string): Specify the RADIUS attribute used to look up group policies ('Filter-Id', 'Reply-Message', 'Airespace-ACL-Name' or 'Aruba-User-Role'). Access points must receive this attribute in the RADIUS Access-Accept message
         - ipAssignmentMode (string): The client IP assignment mode ('NAT mode', 'Bridge mode', 'Layer 3 roaming', 'Ethernet over GRE', 'Layer 3 roaming with a concentrator', 'VPN' or 'Campus Gateway')
+        - campusGateway (object): Campus gateway settings
         - useVlanTagging (boolean): Whether or not traffic should be directed to use specific VLANs. This param is only valid if the ipAssignmentMode is 'Bridge mode' or 'Layer 3 roaming'
         - concentratorNetworkId (string): The concentrator to use when the ipAssignmentMode is 'Layer 3 roaming with a concentrator' or 'VPN'.
         - secondaryConcentratorNetworkId (string): The secondary concentrator to use when the ipAssignmentMode is 'VPN'. If configured, the APs will switch to using this concentrator if the primary concentrator is unreachable. This param is optional. ('disabled' represents no secondary concentrator.)
@@ -2312,6 +2721,7 @@ class Wireless(object):
         - dnsRewrite (object): DNS servers rewrite settings
         - speedBurst (object): The SpeedBurst setting for this SSID'
         - namedVlans (object): Named VLAN settings.
+        - security (object): Security settings for the SSID
         - localAuthFallback (object): The current configuration for Local Authentication Fallback. Enables the Access Point (AP) to store client authentication data for a specified duration that can be adjusted as needed.
         - radiusAccountingStartDelay (integer): The delay (in seconds) before sending the first RADIUS accounting start message. Must be between 0 and 60 seconds.
         """
@@ -2403,6 +2813,7 @@ class Wireless(object):
         body_params = [
             "name",
             "enabled",
+            "localAuth",
             "authMode",
             "enterpriseAdminAccess",
             "ssidAdminAccessible",
@@ -2434,6 +2845,7 @@ class Wireless(object):
             "radiusAccountingInterimInterval",
             "radiusAttributeForGroupPolicies",
             "ipAssignmentMode",
+            "campusGateway",
             "useVlanTagging",
             "concentratorNetworkId",
             "secondaryConcentratorNetworkId",
@@ -2463,6 +2875,7 @@ class Wireless(object):
             "dnsRewrite",
             "speedBurst",
             "namedVlans",
+            "security",
             "localAuthFallback",
             "radiusAccountingStartDelay",
         ]
@@ -3015,6 +3428,152 @@ class Wireless(object):
 
         return self._session.put(metadata, resource, payload)
 
+    def updateNetworkWirelessSsidPoliciesClientExclusion(self, networkId: str, number: str, static: dict, **kwargs):
+        """
+        **Update the client exclusion status configuration for a given SSID**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-policies-client-exclusion
+
+        - networkId (string): Network ID
+        - number (string): Number
+        - static (object): Static client exclusion status
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["wireless", "configure", "ssids", "policies", "clientExclusion"],
+            "operation": "updateNetworkWirelessSsidPoliciesClientExclusion",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/policies/clientExclusion"
+
+        body_params = [
+            "static",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkWirelessSsidPoliciesClientExclusion: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
+    def updateNetworkWirelessSsidPoliciesClientExclusionStaticExclusions(
+        self, networkId: str, number: str, macs: list, **kwargs
+    ):
+        """
+        **Set the static client exclusion list for the given SSID**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-policies-client-exclusion-static-exclusions
+
+        - networkId (string): Network ID
+        - number (string): Number
+        - macs (array): MAC addresses to set as static exclusion list
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["wireless", "configure", "ssids", "policies", "clientExclusion", "static", "exclusions"],
+            "operation": "updateNetworkWirelessSsidPoliciesClientExclusionStaticExclusions",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/policies/clientExclusion/static/exclusions"
+
+        body_params = [
+            "macs",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkWirelessSsidPoliciesClientExclusionStaticExclusions: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
+    def createNetworkWirelessSsidPoliciesClientExclusionStaticExclusionsBulkAdd(
+        self, networkId: str, number: str, macs: list, **kwargs
+    ):
+        """
+        **Add a list of MAC addresses to the static client exclusion list for the given SSID**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-wireless-ssid-policies-client-exclusion-static-exclusions-bulk-add
+
+        - networkId (string): Network ID
+        - number (string): Number
+        - macs (array): MAC addresses to add to static exclusion
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["wireless", "configure", "ssids", "policies", "clientExclusion", "static", "exclusions", "bulkAdd"],
+            "operation": "createNetworkWirelessSsidPoliciesClientExclusionStaticExclusionsBulkAdd",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/policies/clientExclusion/static/exclusions/bulkAdd"
+
+        body_params = [
+            "macs",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createNetworkWirelessSsidPoliciesClientExclusionStaticExclusionsBulkAdd: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def createNetworkWirelessSsidPoliciesClientExclusionStaticExclusionsBulkRemove(
+        self, networkId: str, number: str, macs: list, **kwargs
+    ):
+        """
+        **Delete a list of MAC addresses from the static client exclusion list for the given SSID**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-wireless-ssid-policies-client-exclusion-static-exclusions-bulk-remove
+
+        - networkId (string): Network ID
+        - number (string): Number
+        - macs (array): MAC addresses to remove from static exclusion
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["wireless", "configure", "ssids", "policies", "clientExclusion", "static", "exclusions", "bulkRemove"],
+            "operation": "createNetworkWirelessSsidPoliciesClientExclusionStaticExclusionsBulkRemove",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/policies/clientExclusion/static/exclusions/bulkRemove"
+
+        body_params = [
+            "macs",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createNetworkWirelessSsidPoliciesClientExclusionStaticExclusionsBulkRemove: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
     def getNetworkWirelessSsidSchedules(self, networkId: str, number: str):
         """
         **List the outage schedule for the SSID**
@@ -3103,6 +3662,8 @@ class Wireless(object):
         - redirectUrl (string): The custom redirect URL where the users will go after the splash page.
         - useRedirectUrl (boolean): The Boolean indicating whether the the user will be redirected to the custom redirect URL after the splash page. A custom redirect URL must be set if this is true.
         - welcomeMessage (string): The welcome message for the users on the splash page.
+        - language (string): Language of splash page.
+        - userConsent (object): User consent settings
         - themeId (string): The id of the selected splash theme.
         - splashLogo (object): The logo used in the splash page.
         - splashImage (object): The image used in the splash page.
@@ -3122,6 +3683,32 @@ class Wireless(object):
             options = [30, 60, 120, 240, 480, 720, 1080, 1440, 2880, 5760, 7200, 10080, 20160, 43200, 86400, 129600]
             assert kwargs["splashTimeout"] in options, (
                 f'''"splashTimeout" cannot be "{kwargs["splashTimeout"]}", & must be set to one of: {options}'''
+            )
+        if "language" in kwargs:
+            options = [
+                "DA",
+                "DE",
+                "EL",
+                "EN",
+                "ES",
+                "FI",
+                "FR",
+                "GL",
+                "IT",
+                "JA",
+                "KO",
+                "NL",
+                "NO",
+                "PL",
+                "PT",
+                "RU",
+                "SK",
+                "SV",
+                "UK",
+                "ZH",
+            ]
+            assert kwargs["language"] in options, (
+                f'''"language" cannot be "{kwargs["language"]}", & must be set to one of: {options}'''
             )
         if "controllerDisconnectionBehavior" in kwargs:
             options = ["default", "open", "restricted"]
@@ -3144,6 +3731,8 @@ class Wireless(object):
             "redirectUrl",
             "useRedirectUrl",
             "welcomeMessage",
+            "language",
+            "userConsent",
             "themeId",
             "splashLogo",
             "splashImage",
@@ -3375,6 +3964,2807 @@ class Wireless(object):
 
         return self._session.put(metadata, resource, payload)
 
+    def getOrganizationAssuranceConnectivityWirelessRfHealthByBand(self, organizationId: str, networkIds: list, **kwargs):
+        """
+        **Show the by-device RF Health score overview information for the organization in the given interval**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-connectivity-wireless-rf-health-by-band
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Networks for which information should be gathered.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days. The default is 1 day. If interval is provided, the timespan will be autocalculated.
+        - interval (integer): The time interval in seconds for returned data. The valid intervals are: 300, 3600, 14400, 86400. The default is 3600. Interval is calculated if time params are provided.
+        - minimumRfHealthScore (integer): Minimum RF Health score for an AP to be retrieved.
+        - maximumRfHealthScore (integer): Maximum RF Health score for an AP to be retrieved.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "connectivity", "rfHealth", "byBand"],
+            "operation": "getOrganizationAssuranceConnectivityWirelessRfHealthByBand",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/connectivity/wireless/rfHealth/byBand"
+
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "interval",
+            "networkIds",
+            "minimumRfHealthScore",
+            "maximumRfHealthScore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceConnectivityWirelessRfHealthByBand: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationAssuranceImpactedDeviceWirelessByNetwork(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Returns count of impacted wireless devices per network on a given organization and time range.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-impacted-device-wireless-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkGroupIds (array): Filter results by a list of network group IDs.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 2 hours and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 5000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "monitor", "impactedDevice", "byNetwork"],
+            "operation": "getOrganizationAssuranceImpactedDeviceWirelessByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/impactedDevice/wireless/byNetwork"
+
+        query_params = [
+            "networkGroupIds",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkGroupIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceImpactedDeviceWirelessByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceChannelAvailabilityByNetwork(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wireless post connection capacity successes and failures by network.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-channel-availability-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "channelAvailability", "byNetwork"],
+            "operation": "getOrganizationAssuranceWirelessExperienceChannelAvailabilityByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/channelAvailability/byNetwork"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceChannelAvailabilityByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceChannelAvailabilityByNetworkByBand(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wireless post connection capacity successes and failures by band.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-channel-availability-by-network-by-band
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "channelAvailability", "byNetwork", "byBand"],
+            "operation": "getOrganizationAssuranceWirelessExperienceChannelAvailabilityByNetworkByBand",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/channelAvailability/byNetwork/byBand"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceChannelAvailabilityByNetworkByBand: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceChannelAvailabilityByNetworkByClient(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wireless post connection capacity successes and failures by network.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-channel-availability-by-network-by-client
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "channelAvailability", "byNetwork", "byClient"],
+            "operation": "getOrganizationAssuranceWirelessExperienceChannelAvailabilityByNetworkByClient",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/channelAvailability/byNetwork/byClient"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceChannelAvailabilityByNetworkByClient: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceChannelAvailabilityByNetworkByClientOs(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wireless post connection capacity successes and failures by client OS and driver version.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-channel-availability-by-network-by-client-os
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "channelAvailability", "byNetwork", "byClientOs"],
+            "operation": "getOrganizationAssuranceWirelessExperienceChannelAvailabilityByNetworkByClientOs",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/channelAvailability/byNetwork/byClientOs"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceChannelAvailabilityByNetworkByClientOs: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceChannelAvailabilityByNetworkByClientType(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wireless post connection capacity successes and failures by network.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-channel-availability-by-network-by-client-type
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "channelAvailability", "byNetwork", "byClientType"],
+            "operation": "getOrganizationAssuranceWirelessExperienceChannelAvailabilityByNetworkByClientType",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/channelAvailability/byNetwork/byClientType"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceChannelAvailabilityByNetworkByClientType: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceChannelAvailabilityByNetworkByDevice(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wireless post connection capacity successes and failures by device.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-channel-availability-by-network-by-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "channelAvailability", "byNetwork", "byDevice"],
+            "operation": "getOrganizationAssuranceWirelessExperienceChannelAvailabilityByNetworkByDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/channelAvailability/byNetwork/byDevice"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceChannelAvailabilityByNetworkByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceChannelAvailabilityByNetworkByInterval(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Time-series of wireless post connection capacity successes and failures by network.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-channel-availability-by-network-by-interval
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 14 days. The default is 2 hours. If interval is provided, the timespan will be autocalculated.
+        - interval (integer): The time interval in seconds for returned data. The valid intervals are: 300, 600, 3600, 14400, 86400. The default is 300. Interval is calculated if time params are provided.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "monitor", "experience", "channelAvailability", "byNetwork", "byInterval"],
+            "operation": "getOrganizationAssuranceWirelessExperienceChannelAvailabilityByNetworkByInterval",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/channelAvailability/byNetwork/byInterval"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "interval",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceChannelAvailabilityByNetworkByInterval: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceChannelAvailabilityByNetworkBySsid(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wireless post connection capacity successes and failures by ssid.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-channel-availability-by-network-by-ssid
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "channelAvailability", "byNetwork", "bySsid"],
+            "operation": "getOrganizationAssuranceWirelessExperienceChannelAvailabilityByNetworkBySsid",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/channelAvailability/byNetwork/bySsid"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceChannelAvailabilityByNetworkBySsid: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceChannelAvailabilityInsightsByNetwork(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Provides insights into wireless capacity experience by network.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-channel-availability-insights-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - contributor (string): Contributor for which to retrieve insights. If not specified, returns overall insights.
+        - subContributor (string): Sub-contributor for which to retrieve insights. If not specified, returns all sub contributor insights.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        if "contributor" in kwargs:
+            options = ["Co-channel interference", "High traffic", "Non-wifi interference"]
+            assert kwargs["contributor"] in options, (
+                f'''"contributor" cannot be "{kwargs["contributor"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "channelAvailability", "insights", "byNetwork"],
+            "operation": "getOrganizationAssuranceWirelessExperienceChannelAvailabilityInsightsByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/channelAvailability/insights/byNetwork"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "contributor",
+            "subContributor",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceChannelAvailabilityInsightsByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceClientsInsights(self, organizationId: str, **kwargs):
+        """
+        **Returns the top wireless service-level insights for the specified time window, including each network and the impacted client count per metric.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-clients-insights
+
+        - organizationId (string): Organization ID
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 14 days.
+        - limit (integer): Number of top networks to return. Default is 5. Maximum is 10.
+        """
+
+        kwargs.update(locals())
+
+        if "limit" in kwargs:
+            options = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+            assert kwargs["limit"] in options, f'''"limit" cannot be "{kwargs["limit"]}", & must be set to one of: {options}'''
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "clients", "insights"],
+            "operation": "getOrganizationAssuranceWirelessExperienceClientsInsights",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/clients/insights"
+
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "limit",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceClientsInsights: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationAssuranceWirelessExperienceClientsOverviewHistoryByInterval(self, organizationId: str, **kwargs):
+        """
+        **Returns time series data for impacted and active clients for organization wireless experience metrics.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-clients-overview-history-by-interval
+
+        - organizationId (string): Organization ID
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - resolution (integer): The time resolution in seconds for returned data. The valid resolutions are: 300, 600, 900, 1800, 3600, 86400. The default is 300.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "monitor", "experience", "clients", "overview", "history", "byInterval"],
+            "operation": "getOrganizationAssuranceWirelessExperienceClientsOverviewHistoryByInterval",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/clients/overview/history/byInterval"
+
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "resolution",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceClientsOverviewHistoryByInterval: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationAssuranceWirelessExperienceCoverageByNetwork(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wireless coverage successes and failures by network.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-coverage-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "coverage", "byNetwork"],
+            "operation": "getOrganizationAssuranceWirelessExperienceCoverageByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/coverage/byNetwork"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceCoverageByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceCoverageByNetworkByBand(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wireless coverage successes and failures by band.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-coverage-by-network-by-band
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "coverage", "byNetwork", "byBand"],
+            "operation": "getOrganizationAssuranceWirelessExperienceCoverageByNetworkByBand",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/coverage/byNetwork/byBand"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceCoverageByNetworkByBand: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceCoverageByNetworkByClient(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wireless coverage successes and failures by client.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-coverage-by-network-by-client
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "coverage", "byNetwork", "byClient"],
+            "operation": "getOrganizationAssuranceWirelessExperienceCoverageByNetworkByClient",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/coverage/byNetwork/byClient"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceCoverageByNetworkByClient: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceCoverageByNetworkByClientOs(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wireless coverage successes and failures by client OS.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-coverage-by-network-by-client-os
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "coverage", "byNetwork", "byClientOs"],
+            "operation": "getOrganizationAssuranceWirelessExperienceCoverageByNetworkByClientOs",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/coverage/byNetwork/byClientOs"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceCoverageByNetworkByClientOs: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceCoverageByNetworkByClientType(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wireless coverage successes and failures by client type.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-coverage-by-network-by-client-type
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "coverage", "byNetwork", "byClientType"],
+            "operation": "getOrganizationAssuranceWirelessExperienceCoverageByNetworkByClientType",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/coverage/byNetwork/byClientType"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceCoverageByNetworkByClientType: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceCoverageByNetworkByDevice(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wireless coverage successes and failures by device.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-coverage-by-network-by-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "coverage", "byNetwork", "byDevice"],
+            "operation": "getOrganizationAssuranceWirelessExperienceCoverageByNetworkByDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/coverage/byNetwork/byDevice"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceCoverageByNetworkByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceCoverageByNetworkByInterval(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Time-series of wireless coverage successes and failures by network.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-coverage-by-network-by-interval
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 14 days. The default is 2 hours. If interval is provided, the timespan will be autocalculated.
+        - interval (integer): The time interval in seconds for returned data. The valid intervals are: 60, 300, 600, 3600, 14400, 86400. The default is 300. Interval is calculated if time params are provided.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "monitor", "experience", "coverage", "byNetwork", "byInterval"],
+            "operation": "getOrganizationAssuranceWirelessExperienceCoverageByNetworkByInterval",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/coverage/byNetwork/byInterval"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "interval",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceCoverageByNetworkByInterval: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceCoverageByNetworkBySsid(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wireless coverage successes and failures by SSID.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-coverage-by-network-by-ssid
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "coverage", "byNetwork", "bySsid"],
+            "operation": "getOrganizationAssuranceWirelessExperienceCoverageByNetworkBySsid",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/coverage/byNetwork/bySsid"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceCoverageByNetworkBySsid: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceCoverageInsightsByNetwork(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Provides insights into wireless coverage experience by network.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-coverage-insights-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - contributor (string): Contributor for which to retrieve insights. If not specified, returns overall insights.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        if "contributor" in kwargs:
+            options = ["Admin power restriction", "Insufficient AP density", "Sticky client", "Transient weak signal"]
+            assert kwargs["contributor"] in options, (
+                f'''"contributor" cannot be "{kwargs["contributor"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "coverage", "insights", "byNetwork"],
+            "operation": "getOrganizationAssuranceWirelessExperienceCoverageInsightsByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/coverage/insights/byNetwork"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "contributor",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceCoverageInsightsByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceMetricsOverviewHistoryByNetwork(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Returns organization wireless experience metrics overview grouped by network.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-metrics-overview-history-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 5000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "metrics", "overview", "history", "byNetwork"],
+            "operation": "getOrganizationAssuranceWirelessExperienceMetricsOverviewHistoryByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/metrics/overview/history/byNetwork"
+
+        query_params = [
+            "networkIds",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceMetricsOverviewHistoryByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetwork(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wireless connection successes and failures by network.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connects-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "successfulConnects", "byNetwork"],
+            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnects/byNetwork"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByBand(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wireless connection successes and failures by band.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connects-by-network-by-band
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "successfulConnects", "byNetwork", "byBand"],
+            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByBand",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnects/byNetwork/byBand"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByBand: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByClient(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wireless connection successes and failures by client.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connects-by-network-by-client
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 10000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "successfulConnects", "byNetwork", "byClient"],
+            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByClient",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnects/byNetwork/byClient"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByClient: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByClientOs(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wireless connection successes and failures by client OS.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connects-by-network-by-client-os
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "successfulConnects", "byNetwork", "byClientOs"],
+            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByClientOs",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnects/byNetwork/byClientOs"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByClientOs: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByClientType(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wireless connection successes and failures by client type.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connects-by-network-by-client-type
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "successfulConnects", "byNetwork", "byClientType"],
+            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByClientType",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnects/byNetwork/byClientType"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByClientType: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByDevice(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wireless connection successes and failures by device.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connects-by-network-by-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "successfulConnects", "byNetwork", "byDevice"],
+            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnects/byNetwork/byDevice"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByInterval(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Time-series of wireless connection successes and failures by network.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connects-by-network-by-interval
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 14 days. The default is 2 hours. If interval is provided, the timespan will be autocalculated.
+        - interval (integer): The time interval in seconds for returned data. The valid intervals are: 60, 300, 600, 3600, 14400, 86400. The default is 300. Interval is calculated if time params are provided.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "monitor", "experience", "successfulConnects", "byNetwork", "byInterval"],
+            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByInterval",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnects/byNetwork/byInterval"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "interval",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByInterval: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByServer(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wireless connection successes and failures by server.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connects-by-network-by-server
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "successfulConnects", "byNetwork", "byServer"],
+            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByServer",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnects/byNetwork/byServer"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkByServer: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkBySsid(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wireless connection successes and failures by ssid.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connects-by-network-by-ssid
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "successfulConnects", "byNetwork", "bySsid"],
+            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkBySsid",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnects/byNetwork/bySsid"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetworkBySsid: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectsInsightsByNetwork(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Provides insights into wireless successful connects experience by network.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connects-insights-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - contributor (string): Contributor for which to retrieve insights. If not specified, returns overall insights.
+        - subContributor (string): Sub-contributor for which to retrieve insights. If not specified, returns all sub contributor insights.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        if "contributor" in kwargs:
+            options = ["assoc", "auth", "dhcp", "dns"]
+            assert kwargs["contributor"] in options, (
+                f'''"contributor" cannot be "{kwargs["contributor"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "successfulConnects", "insights", "byNetwork"],
+            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectsInsightsByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnects/insights/byNetwork"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "contributor",
+            "subContributor",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectsInsightsByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceTimeToConnectByNetwork(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wireless time to connect metrics by network.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-time-to-connect-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "timeToConnect", "byNetwork"],
+            "operation": "getOrganizationAssuranceWirelessExperienceTimeToConnectByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/timeToConnect/byNetwork"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceTimeToConnectByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceTimeToConnectByNetworkByBand(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wireless connection successes and failures by band.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-time-to-connect-by-network-by-band
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "timeToConnect", "byNetwork", "byBand"],
+            "operation": "getOrganizationAssuranceWirelessExperienceTimeToConnectByNetworkByBand",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/timeToConnect/byNetwork/byBand"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceTimeToConnectByNetworkByBand: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceTimeToConnectByNetworkByClient(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wireless time to connect metrics by client.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-time-to-connect-by-network-by-client
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 10000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "timeToConnect", "byNetwork", "byClient"],
+            "operation": "getOrganizationAssuranceWirelessExperienceTimeToConnectByNetworkByClient",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/timeToConnect/byNetwork/byClient"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceTimeToConnectByNetworkByClient: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceTimeToConnectByNetworkByClientOs(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wireless connection successes and failures by client OS.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-time-to-connect-by-network-by-client-os
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "timeToConnect", "byNetwork", "byClientOs"],
+            "operation": "getOrganizationAssuranceWirelessExperienceTimeToConnectByNetworkByClientOs",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/timeToConnect/byNetwork/byClientOs"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceTimeToConnectByNetworkByClientOs: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceTimeToConnectByNetworkByClientType(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wireless connection successes and failures by client type.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-time-to-connect-by-network-by-client-type
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "timeToConnect", "byNetwork", "byClientType"],
+            "operation": "getOrganizationAssuranceWirelessExperienceTimeToConnectByNetworkByClientType",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/timeToConnect/byNetwork/byClientType"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceTimeToConnectByNetworkByClientType: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceTimeToConnectByNetworkByDevice(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wireless connection time to connect metrics by device.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-time-to-connect-by-network-by-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "timeToConnect", "byNetwork", "byDevice"],
+            "operation": "getOrganizationAssuranceWirelessExperienceTimeToConnectByNetworkByDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/timeToConnect/byNetwork/byDevice"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceTimeToConnectByNetworkByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceTimeToConnectByNetworkByInterval(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Time-series of wireless time to connect by network.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-time-to-connect-by-network-by-interval
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 14 days. The default is 2 hours. If interval is provided, the timespan will be autocalculated.
+        - interval (integer): The time interval in seconds for returned data. The valid intervals are: 60, 300, 600, 3600, 14400, 86400. The default is 300. Interval is calculated if time params are provided.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "monitor", "experience", "timeToConnect", "byNetwork", "byInterval"],
+            "operation": "getOrganizationAssuranceWirelessExperienceTimeToConnectByNetworkByInterval",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/timeToConnect/byNetwork/byInterval"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "interval",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceTimeToConnectByNetworkByInterval: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceTimeToConnectByNetworkByServer(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wireless connection time to connect metrics by server.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-time-to-connect-by-network-by-server
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "timeToConnect", "byNetwork", "byServer"],
+            "operation": "getOrganizationAssuranceWirelessExperienceTimeToConnectByNetworkByServer",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/timeToConnect/byNetwork/byServer"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceTimeToConnectByNetworkByServer: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceTimeToConnectByNetworkBySsid(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wireless connection time to connect metrics by ssid.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-time-to-connect-by-network-by-ssid
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "timeToConnect", "byNetwork", "bySsid"],
+            "operation": "getOrganizationAssuranceWirelessExperienceTimeToConnectByNetworkBySsid",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/timeToConnect/byNetwork/bySsid"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceTimeToConnectByNetworkBySsid: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceTimeToConnectInsightsByNetwork(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Provides insights into wireless time to connect experience by network.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-time-to-connect-insights-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - contributor (string): Contributor for which to retrieve insights. If not specified, returns overall insights.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        if "contributor" in kwargs:
+            options = ["assoc", "auth", "dhcp", "dns"]
+            assert kwargs["contributor"] in options, (
+                f'''"contributor" cannot be "{kwargs["contributor"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "timeToConnect", "insights", "byNetwork"],
+            "operation": "getOrganizationAssuranceWirelessExperienceTimeToConnectInsightsByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/timeToConnect/insights/byNetwork"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "contributor",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceTimeToConnectInsightsByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
     def getOrganizationWirelessAirMarshalRules(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Returns the current Air Marshal rules for this organization**
@@ -3475,6 +6865,347 @@ class Wireless(object):
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
+    def getOrganizationWirelessAlertsLowPowerByDevice(self, organizationId: str, networkIds: list, **kwargs):
+        """
+        **Gets all low power related alerts over a given network and returns information by device**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-alerts-low-power-by-device
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Filter results by network.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 8 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 5 minutes and be less than or equal to 7 days. The default is 2 hours.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "monitor", "alerts", "lowPower", "byDevice"],
+            "operation": "getOrganizationWirelessAlertsLowPowerByDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/alerts/lowPower/byDevice"
+
+        query_params = [
+            "networkIds",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessAlertsLowPowerByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationWirelessCertificatesOpenRoamingCertificateAuthority(self, organizationId: str):
+        """
+        **Query for details on the organization's OpenRoaming Certificate Authority certificate (CAs).**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-certificates-open-roaming-certificate-authority
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["wireless", "configure", "certificates", "openRoaming", "certificateAuthority"],
+            "operation": "getOrganizationWirelessCertificatesOpenRoamingCertificateAuthority",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/certificates/openRoaming/certificateAuthority"
+
+        return self._session.get(metadata, resource)
+
+    def getOrganizationWirelessClientsConnectionsAssociationByClient(self, organizationId: str, **kwargs):
+        """
+        **Summarize association outcomes per wireless client across an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-clients-connections-association-by-client
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Filter results by network.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 8 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 5 minutes and be less than or equal to 7 days. The default is 2 hours.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "monitor", "clients", "connections", "association", "byClient"],
+            "operation": "getOrganizationWirelessClientsConnectionsAssociationByClient",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/clients/connections/association/byClient"
+
+        query_params = [
+            "networkIds",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessClientsConnectionsAssociationByClient: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationWirelessClientsConnectionsAuthenticationByClient(self, organizationId: str, **kwargs):
+        """
+        **Summarize authentication outcomes per wireless client across an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-clients-connections-authentication-by-client
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Filter results by network.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 8 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 5 minutes and be less than or equal to 7 days. The default is 2 hours.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "monitor", "clients", "connections", "authentication", "byClient"],
+            "operation": "getOrganizationWirelessClientsConnectionsAuthenticationByClient",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/clients/connections/authentication/byClient"
+
+        query_params = [
+            "networkIds",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessClientsConnectionsAuthenticationByClient: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationWirelessClientsConnectionsDhcpByClient(self, organizationId: str, **kwargs):
+        """
+        **Get IP assignment for all clients in the organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-clients-connections-dhcp-by-client
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Filter results by network.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 7 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days. The default is 2 hours.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "monitor", "clients", "connections", "dhcp", "byClient"],
+            "operation": "getOrganizationWirelessClientsConnectionsDhcpByClient",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/clients/connections/dhcp/byClient"
+
+        query_params = [
+            "networkIds",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessClientsConnectionsDhcpByClient: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationWirelessClientsConnectionsFailuresHistoryByDevice(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Returns failed wireless client connections for this organization by device**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-clients-connections-failures-history-by-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - connectionTimeSortOrder (string): (optional) Sort order of events by connection start time. (default desc)
+        - failureSteps (array): (optional) The step in the connection process that failed
+        - clientMac (string): (optional) The MAC address of the client with which the list of events will be filtered.
+        - serials (array): (optional) Filter devices by serial number
+        - timespan (integer): (optional) The timespan, in seconds, for the failed connections. The period will be from [timespan] seconds ago until now. The maximum allowed timespan is 1 month. Default: 86400 (24 hours)
+        - ssidNumber (integer): (optional) The SSID number to include
+        - networkIds (array): (optional) The set of network IDs to include.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        if "connectionTimeSortOrder" in kwargs:
+            options = ["asc", "desc"]
+            assert kwargs["connectionTimeSortOrder"] in options, (
+                f'''"connectionTimeSortOrder" cannot be "{kwargs["connectionTimeSortOrder"]}", & must be set to one of: {options}'''
+            )
+        if "ssidNumber" in kwargs:
+            options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+            assert kwargs["ssidNumber"] in options, (
+                f'''"ssidNumber" cannot be "{kwargs["ssidNumber"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["wireless", "configure", "clients", "connections", "failures", "history", "byDevice"],
+            "operation": "getOrganizationWirelessClientsConnectionsFailuresHistoryByDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/clients/connections/failures/history/byDevice"
+
+        query_params = [
+            "connectionTimeSortOrder",
+            "failureSteps",
+            "clientMac",
+            "serials",
+            "timespan",
+            "ssidNumber",
+            "networkIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "failureSteps",
+            "serials",
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessClientsConnectionsFailuresHistoryByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessClientsConnectionsImpactedByNetworkBySsid(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarize the number of wireless clients impacted by connection failures on network SSIDs, across an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-clients-connections-impacted-by-network-by-ssid
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - networkGroupIds (array): Filter results by a list of network group IDs.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 8 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 5 minutes and be less than or equal to 7 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "monitor", "clients", "connections", "impacted", "byNetwork", "bySsid"],
+            "operation": "getOrganizationWirelessClientsConnectionsImpactedByNetworkBySsid",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/clients/connections/impacted/byNetwork/bySsid"
+
+        query_params = [
+            "networkIds",
+            "networkGroupIds",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "networkGroupIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessClientsConnectionsImpactedByNetworkBySsid: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
     def getOrganizationWirelessClientsOverviewByDevice(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **List access point client count at the moment in an organization**
@@ -3526,6 +7257,400 @@ class Wireless(object):
             if invalid and self._session._logger:
                 self._session._logger.warning(
                     f"getOrganizationWirelessClientsOverviewByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def byOrganizationWirelessClientsRfHealthOverviewNetwork(self, organizationId: str, **kwargs):
+        """
+        **Show the by-network client information for the organization in the given interval**
+        https://developer.cisco.com/meraki/api-v1/#!by-organization-wireless-clients-rf-health-overview-network
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Networks for which information should be gathered.
+        - bands (array): Bands for which information should be gathered. Valid bands are 2.4, 5, and 6.
+        - channels (array): Channel for which information should be gathered.
+        - serials (array): Serial number of the devices for which information should be gathered.
+        - gFloorplanId (string): Geoaligned floorplan ID nodes for which information is gathered belong to.
+        - tags (array): Access Point tags for which information should be gathered.
+        - models (array): Access Point models for which information should be gathered.
+        - rfProfiles (array): Rf Profiles for which information should be gathered.
+        - minimumRfHealthScore (integer): Minimum RF Health score for an AP to be retrieved.
+        - maximumRfHealthScore (integer): Maximum RF Health score for an AP to be retrieved.
+        - retryOnEmpty (boolean): If true, the query will be retried with a longer timeframe if the results are empty.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "clients", "rfHealth", "overview"],
+            "operation": "byOrganizationWirelessClientsRfHealthOverviewNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/clients/rfHealth/overview/byNetwork"
+
+        query_params = [
+            "networkIds",
+            "bands",
+            "channels",
+            "serials",
+            "gFloorplanId",
+            "tags",
+            "models",
+            "rfProfiles",
+            "minimumRfHealthScore",
+            "maximumRfHealthScore",
+            "retryOnEmpty",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "bands",
+            "channels",
+            "serials",
+            "tags",
+            "models",
+            "rfProfiles",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"byOrganizationWirelessClientsRfHealthOverviewNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationWirelessClientsStickyEvents(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **Get sticky client events within the specified timespan.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-clients-sticky-events
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - clientIds (array): Filter results by client id.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 30 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 30 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 30 days. The default is 7 days.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "clients", "stickyEvents"],
+            "operation": "getOrganizationWirelessClientsStickyEvents",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/clients/stickyEvents"
+
+        query_params = [
+            "networkIds",
+            "clientIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "clientIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessClientsStickyEvents: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessClientsUsageByNetwork(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **Returns client usage details for wireless networks within an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-clients-usage-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 8 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 1 hour and be less than or equal to 7 days. The default is 2 hours.
+        - networkIds (array): Filter results by a list of network IDs.
+        - networkGroupIds (array): Filter results by a list of network group IDs.
+        - gatewayNetworkIds (array): Limit the results to clients tunneled to campus gateways in the provided networks.
+        - usageUnits (string): Usage units to use in the response.
+        """
+
+        kwargs.update(locals())
+
+        if "usageUnits" in kwargs:
+            options = ["GB", "KB", "MB", "TB"]
+            assert kwargs["usageUnits"] in options, (
+                f'''"usageUnits" cannot be "{kwargs["usageUnits"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["wireless", "monitor", "clients", "usage", "byNetwork"],
+            "operation": "getOrganizationWirelessClientsUsageByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/clients/usage/byNetwork"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "t0",
+            "t1",
+            "timespan",
+            "networkIds",
+            "networkGroupIds",
+            "gatewayNetworkIds",
+            "usageUnits",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "networkGroupIds",
+            "gatewayNetworkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessClientsUsageByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessClientsUsageByNetworkBySsid(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Returns client usage details for wireless network SSIDs within an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-clients-usage-by-network-by-ssid
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 8 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 1 hour and be less than or equal to 7 days. The default is 2 hours.
+        - networkIds (array): Filter results by a list of network IDs.
+        - networkGroupIds (array): Filter results by a list of network group IDs.
+        - ssidIds (array): Filter results by a list of SSID IDs.
+        - ssidNames (array): Filter results by a list of SSID names.
+        - gatewayNetworkIds (array): Limit the results to clients tunneled to campus gateways in the provided networks.
+        - usageUnits (string): Usage units to use in the response.
+        """
+
+        kwargs.update(locals())
+
+        if "usageUnits" in kwargs:
+            options = ["GB", "KB", "MB", "TB"]
+            assert kwargs["usageUnits"] in options, (
+                f'''"usageUnits" cannot be "{kwargs["usageUnits"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["wireless", "monitor", "clients", "usage", "byNetwork", "bySsid"],
+            "operation": "getOrganizationWirelessClientsUsageByNetworkBySsid",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/clients/usage/byNetwork/bySsid"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "t0",
+            "t1",
+            "timespan",
+            "networkIds",
+            "networkGroupIds",
+            "ssidIds",
+            "ssidNames",
+            "gatewayNetworkIds",
+            "usageUnits",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "networkGroupIds",
+            "ssidIds",
+            "ssidNames",
+            "gatewayNetworkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessClientsUsageByNetworkBySsid: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessClientsUsageBySsid(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **Returns client usage details for SSIDs within an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-clients-usage-by-ssid
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 8 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 1 hour and be less than or equal to 7 days. The default is 2 hours.
+        - ssidNames (array): Filter results by a list of SSID names.
+        - networkIds (array): Limit the results to clients that belong to one of the provided networks.
+        - networkGroupIds (array): Limit the results to clients that belong to one of the provided network groups.
+        - gatewayNetworkIds (array): Limit the results to clients tunneled to campus gateways in the provided networks.
+        - usageUnits (string): Usage units to use in the response.
+        """
+
+        kwargs.update(locals())
+
+        if "usageUnits" in kwargs:
+            options = ["GB", "KB", "MB", "TB"]
+            assert kwargs["usageUnits"] in options, (
+                f'''"usageUnits" cannot be "{kwargs["usageUnits"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["wireless", "monitor", "clients", "usage", "bySsid"],
+            "operation": "getOrganizationWirelessClientsUsageBySsid",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/clients/usage/bySsid"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "t0",
+            "t1",
+            "timespan",
+            "ssidNames",
+            "networkIds",
+            "networkGroupIds",
+            "gatewayNetworkIds",
+            "usageUnits",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "ssidNames",
+            "networkIds",
+            "networkGroupIds",
+            "gatewayNetworkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessClientsUsageBySsid: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessDevicesAccelerometerStatuses(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List the most recent AP accelerometer status information for wireless devices that support it.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-accelerometer-statuses
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): A list of Meraki network IDs to filter results to contain only specified networks. E.g.: networkIds[]=N_12345678&networkIds[]=L_3456
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "monitor", "devices", "accelerometer", "statuses"],
+            "operation": "getOrganizationWirelessDevicesAccelerometerStatuses",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/accelerometer/statuses"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessDevicesAccelerometerStatuses: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -3778,6 +7903,73 @@ class Wireless(object):
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
+    def getOrganizationWirelessDevicesDataRateByClient(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **Get average uplink and downlink datarates for all clients in the organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-data-rate-by-client
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial number.
+        - ssids (array): Filter results by SSID number.
+        - bands (array): Filter results by band. Valid bands are: 2.4, 5, and 6.
+        - macs (array): Filter results by client mac address(es).
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 30 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 30 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 30 days. The default is 7 days.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "monitor", "devices", "dataRate", "byClient"],
+            "operation": "getOrganizationWirelessDevicesDataRateByClient",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/dataRate/byClient"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssids",
+            "bands",
+            "macs",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssids",
+            "bands",
+            "macs",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessDevicesDataRateByClient: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
     def getOrganizationWirelessDevicesEthernetStatuses(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **List the most recent Ethernet link speed, duplex, aggregation and power mode and status information for wireless devices.**
@@ -3826,6 +8018,233 @@ class Wireless(object):
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessDevicesLatencyByClient(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **Get latency summaries for all wireless devices in an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-latency-by-client
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 90 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 90 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 90 days. The default is 7 days.
+        - networkIds (array): Filter results by network.
+        - bands (array): Filter results by band. Valid bands are: 2.4, 5, and 6.
+        - ssids (array): Filter results by SSID number.
+        - macs (array): Filter results by client mac address(es).
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "devices", "latency", "byClient"],
+            "operation": "getOrganizationWirelessDevicesLatencyByClient",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/latency/byClient"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "t0",
+            "t1",
+            "timespan",
+            "networkIds",
+            "bands",
+            "ssids",
+            "macs",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "bands",
+            "ssids",
+            "macs",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessDevicesLatencyByClient: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessDevicesLatencyByDevice(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **Get latency summaries for all wireless devices in an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-latency-by-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 90 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 90 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 90 days. The default is 7 days.
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device.
+        - bands (array): Filter results by band. Valid bands are: 2.4, 5, and 6.
+        - ssids (array): Filter results by SSID number.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "devices", "latency", "byDevice"],
+            "operation": "getOrganizationWirelessDevicesLatencyByDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/latency/byDevice"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "t0",
+            "t1",
+            "timespan",
+            "networkIds",
+            "serials",
+            "bands",
+            "ssids",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "bands",
+            "ssids",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessDevicesLatencyByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessDevicesLatencyByNetwork(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **Get per-network latency summaries for all wireless networks in an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-latency-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 90 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 90 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 90 days. The default is 7 days.
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device.
+        - bands (array): Filter results by band. Valid bands are: 2.4, 5, and 6.
+        - ssids (array): Filter results by SSID number.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "devices", "latency", "byNetwork"],
+            "operation": "getOrganizationWirelessDevicesLatencyByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/latency/byNetwork"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "t0",
+            "t1",
+            "timespan",
+            "networkIds",
+            "serials",
+            "bands",
+            "ssids",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "bands",
+            "ssids",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessDevicesLatencyByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def createOrganizationWirelessDevicesLiveToolsClientDisconnect(self, organizationId: str, clientId: str, **kwargs):
+        """
+        **Enqueue a job to disconnect a client from an AP**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-wireless-devices-live-tools-client-disconnect
+
+        - organizationId (string): Organization ID
+        - clientId (string): Client ID
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "liveTools", "devices", "clients", "disconnect"],
+            "operation": "createOrganizationWirelessDevicesLiveToolsClientDisconnect",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        clientId = urllib.parse.quote(str(clientId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/liveTools/clients/{clientId}/disconnect"
+
+        body_params = [
+            "callback",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationWirelessDevicesLiveToolsClientDisconnect: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
 
     def getOrganizationWirelessDevicesPacketLossByClient(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
@@ -4214,6 +8633,57 @@ class Wireless(object):
 
         return self._session.put(metadata, resource, payload)
 
+    def getOrganizationWirelessDevicesProvisioningDeploymentsByNewDevice(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Returns deployment IDs for the given new node serial numbers**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-provisioning-deployments-by-new-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 80.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - serials (array): Array of new device serial numbers to query
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "devices", "provisioning", "deployments", "byNewDevice"],
+            "operation": "getOrganizationWirelessDevicesProvisioningDeploymentsByNewDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/provisioning/deployments/byNewDevice"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "serials",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessDevicesProvisioningDeploymentsByNewDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
     def deleteOrganizationWirelessDevicesProvisioningDeployment(self, organizationId: str, deploymentId: str):
         """
         **Delete a zero touch deployment**
@@ -4232,6 +8702,47 @@ class Wireless(object):
         resource = f"/organizations/{organizationId}/wireless/devices/provisioning/deployments/{deploymentId}"
 
         return self._session.delete(metadata, resource)
+
+    def getOrganizationWirelessDevicesProvisioningRecommendationsTags(self, organizationId: str, **kwargs):
+        """
+        **List the recommended device tags for zero touch deployments available for the organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-provisioning-recommendations-tags
+
+        - organizationId (string): Organization ID
+        - networkIds (array): The list of networks to use as hints for device tags recommendations.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "devices", "provisioning", "recommendations", "tags"],
+            "operation": "getOrganizationWirelessDevicesProvisioningRecommendationsTags",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/provisioning/recommendations/tags"
+
+        query_params = [
+            "networkIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessDevicesProvisioningRecommendationsTags: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
 
     def getOrganizationWirelessDevicesRadsecCertificatesAuthorities(self, organizationId: str, **kwargs):
         """
@@ -4408,6 +8919,207 @@ class Wireless(object):
 
         return self._session.get(metadata, resource, params)
 
+    def getOrganizationWirelessDevicesSignalQualityByClient(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Get average signal quality for all clients in the organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-signal-quality-by-client
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial number.
+        - ssids (array): Filter results by SSID number.
+        - bands (array): Filter results by band. Valid bands are: 2.4, 5, and 6.
+        - macs (array): Filter results by client mac address(es).
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 30 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 30 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 30 days. The default is 7 days.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "monitor", "devices", "signalQuality", "byClient"],
+            "operation": "getOrganizationWirelessDevicesSignalQualityByClient",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/signalQuality/byClient"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssids",
+            "bands",
+            "macs",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssids",
+            "bands",
+            "macs",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessDevicesSignalQualityByClient: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessDevicesSignalQualityByDevice(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Get average signal quality for all devices in the organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-signal-quality-by-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial number.
+        - ssids (array): Filter results by SSID number.
+        - bands (array): Filter results by band. Valid bands are: 2.4, 5, and 6.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 30 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 30 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 30 days. The default is 7 days.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "monitor", "devices", "signalQuality", "byDevice"],
+            "operation": "getOrganizationWirelessDevicesSignalQualityByDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/signalQuality/byDevice"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssids",
+            "bands",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssids",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessDevicesSignalQualityByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessDevicesSignalQualityByNetwork(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Get average signal quality for all networks in the organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-signal-quality-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial number.
+        - ssids (array): Filter results by SSID number.
+        - bands (array): Filter results by band. Valid bands are: 2.4, 5, and 6.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 30 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 30 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 30 days. The default is 7 days.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "monitor", "devices", "signalQuality", "byNetwork"],
+            "operation": "getOrganizationWirelessDevicesSignalQualityByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/signalQuality/byNetwork"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssids",
+            "bands",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssids",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessDevicesSignalQualityByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
     def getOrganizationWirelessDevicesSystemCpuLoadHistory(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):
@@ -4464,6 +9176,64 @@ class Wireless(object):
             if invalid and self._session._logger:
                 self._session._logger.warning(
                     f"getOrganizationWirelessDevicesSystemCpuLoadHistory: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessDevicesTelemetry(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List the wireless device telemetry of an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-telemetry
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 200. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 3 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 30 minutes after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 5 minutes and be less than or equal to 30 minutes. The default is 30 minutes.
+        - networkIds (array): Optional parameter to filter results by network.
+        - serials (array): Optional parameter to filter results by device serial.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "monitor", "devices", "telemetry"],
+            "operation": "getOrganizationWirelessDevicesTelemetry",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/telemetry"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "t0",
+            "t1",
+            "timespan",
+            "networkIds",
+            "serials",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessDevicesTelemetry: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -4724,6 +9494,57 @@ class Wireless(object):
 
         return self._session.delete(metadata, resource)
 
+    def getOrganizationWirelessLocationWayfindingByNetwork(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Return Client wayfinding settings**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-location-wayfinding-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter wayfinding settings by network ID.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "location", "wayfinding", "byNetwork"],
+            "operation": "getOrganizationWirelessLocationWayfindingByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/location/wayfinding/byNetwork"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessLocationWayfindingByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
     def getOrganizationWirelessMqttSettings(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Return MQTT Settings for networks**
@@ -4810,6 +9631,262 @@ class Wireless(object):
 
         return self._session.put(metadata, resource, payload)
 
+    def byOrganizationWirelessOpportunisticPcapLicenseNetwork(self, organizationId: str, **kwargs):
+        """
+        **Check the Opportunistic Pcap license status of an organization by network**
+        https://developer.cisco.com/meraki/api-v1/#!by-organization-wireless-opportunistic-pcap-license-network
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Optional parameter to filter results by network.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "opportunisticPcap", "license"],
+            "operation": "byOrganizationWirelessOpportunisticPcapLicenseNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/opportunisticPcap/license/byNetwork"
+
+        query_params = [
+            "networkIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"byOrganizationWirelessOpportunisticPcapLicenseNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationWirelessRadioAfcPositionByDevice(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List the AFC power limits of an organization by device**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-radio-afc-position-by-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter device's AFC position by network ID.         This filter uses multiple exact matches.
+        - serials (array): Optional parameter to filter device's AFC position by device serial numbers.         This filter uses multiple exact matches.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "radio", "afc", "position", "byDevice"],
+            "operation": "getOrganizationWirelessRadioAfcPositionByDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/radio/afc/position/byDevice"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "serials",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessRadioAfcPositionByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessRadioAfcPowerLimitsByDevice(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List the AFC power limits of an organization by device**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-radio-afc-power-limits-by-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter device's AFC power limits by network ID. This filter uses multiple exact matches.
+        - serials (array): Optional parameter to filter device's AFC power limits by device serial numbers. This filter uses multiple exact matches.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "radio", "afc", "powerLimits", "byDevice"],
+            "operation": "getOrganizationWirelessRadioAfcPowerLimitsByDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/radio/afc/powerLimits/byDevice"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "serials",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessRadioAfcPowerLimitsByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessRadioAutoRfByNetwork(self, organizationId: str, **kwargs):
+        """
+        **List the AutoRF settings of an organization by network**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-radio-auto-rf-by-network
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Optional parameter to filter results by network.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "radio", "autoRf", "byNetwork"],
+            "operation": "getOrganizationWirelessRadioAutoRfByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/radio/autoRf/byNetwork"
+
+        query_params = [
+            "networkIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessRadioAutoRfByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationWirelessRadioAutoRfChannelsPlanningActivities(self, organizationId: str, **kwargs):
+        """
+        **List the channel planning activities of an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-radio-auto-rf-channels-planning-activities
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Optional parameter to filter results by network.
+        - deviceSerials (array): Optional parameter to filter results by device serial.
+        - bands (array): Optional parameter to filter results by bands. Valid bands are 2.4, 5, and 6.
+        - channels (array): Optional parameter to filter results by channels.
+        - serials (array): Serial number of the devices for which information should be gathered.
+        - gFloorplanId (string): Geoaligned floorplan ID nodes for which information is gathered belong to.
+        - tags (array): Optional parameter to filter results by node tags.
+        - models (array): Optional parameter to filter results by access point models.
+        - rfProfiles (array): Optional parameter to filter results by RF Profiles.
+        - minimumRfHealthScore (integer): Minimum RF Health score for an AP to be retrieved.
+        - maximumRfHealthScore (integer): Maximum RF Health score for an AP to be retrieved.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "radio", "autoRf", "channels", "planning", "activities"],
+            "operation": "getOrganizationWirelessRadioAutoRfChannelsPlanningActivities",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/radio/autoRf/channels/planning/activities"
+
+        query_params = [
+            "networkIds",
+            "deviceSerials",
+            "bands",
+            "channels",
+            "serials",
+            "gFloorplanId",
+            "tags",
+            "models",
+            "rfProfiles",
+            "minimumRfHealthScore",
+            "maximumRfHealthScore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "deviceSerials",
+            "bands",
+            "channels",
+            "serials",
+            "tags",
+            "models",
+            "rfProfiles",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessRadioAutoRfChannelsPlanningActivities: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
     def recalculateOrganizationWirelessRadioAutoRfChannels(self, organizationId: str, networkIds: list, **kwargs):
         """
         **Recalculates automatically assigned channels for every AP within specified the specified network(s)**
@@ -4842,6 +9919,195 @@ class Wireless(object):
                 )
 
         return self._session.post(metadata, resource, payload)
+
+    def getOrganizationWirelessRadioOverridesByDevice(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **Return a list of radio overrides**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-radio-overrides-by-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): A list of network IDs. The returned radio overrides will be filtered to only include these networks.
+        - serials (array): A list of serial numbers. The returned radio overrides will be filtered to only include these serials.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "radio", "overrides", "byDevice"],
+            "operation": "getOrganizationWirelessRadioOverridesByDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/radio/overrides/byDevice"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "serials",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessRadioOverridesByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def byOrganizationWirelessRadioRfHealthNeighborsRssiDevice(self, organizationId: str, **kwargs):
+        """
+        **Show the by-device neighbor rssi information for the organization in the given interval**
+        https://developer.cisco.com/meraki/api-v1/#!by-organization-wireless-radio-rf-health-neighbors-rssi-device
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Networks for which information should be gathered.
+        - bands (array): Bands for which information should be gathered. Valid bands are 2.4, 5, and 6.
+        - channels (array): Channel for which information should be gathered.
+        - serials (array): Serial number of the devices for which information should be gathered.
+        - tags (array): Access Point tags for which information should be gathered.
+        - models (array): Access Point models for which information should be gathered.
+        - rfProfiles (array): Rf Profiles for which information should be gathered.
+        - gFloorplanId (string): Geoaligned floorplan ID nodes for which information is gathered belong to.
+        - minimumNeighborRssi (integer): Minimum Neighbor RSSI score for a neighbor entry to be retrieved.
+        - maximumNeighborRssi (integer): Maximum Neighbor RSSI score for a neighbor entry to be retrieved.
+        - minimumRfHealthScore (integer): Minimum RF Health score for an AP to be retrieved.
+        - maximumRfHealthScore (integer): Maximum RF Health score for an AP to be retrieved.
+        - rfScoreInterval (integer): Size of the rf score interval in seconds.
+        - rfScoreRetryOnEmpty (boolean): If true, the query will be retried further back if no data is present in the latest rf score interval.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "radio", "rfHealth", "neighbors", "rssi"],
+            "operation": "byOrganizationWirelessRadioRfHealthNeighborsRssiDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/radio/rfHealth/neighbors/rssi/byDevice"
+
+        query_params = [
+            "networkIds",
+            "bands",
+            "channels",
+            "serials",
+            "tags",
+            "models",
+            "rfProfiles",
+            "gFloorplanId",
+            "minimumNeighborRssi",
+            "maximumNeighborRssi",
+            "minimumRfHealthScore",
+            "maximumRfHealthScore",
+            "rfScoreInterval",
+            "rfScoreRetryOnEmpty",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "bands",
+            "channels",
+            "serials",
+            "tags",
+            "models",
+            "rfProfiles",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"byOrganizationWirelessRadioRfHealthNeighborsRssiDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationWirelessRadioRfHealthOverviewByNetworkByInterval(self, organizationId: str, **kwargs):
+        """
+        **Show the by-network RF Health score overview information for the organization in the given interval**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-radio-rf-health-overview-by-network-by-interval
+
+        - organizationId (string): Organization ID
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 182 days, 14 hours, 54 minutes, and 36 seconds from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 30 days, 10 hours, 29 minutes, and 6 seconds after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 30 days, 10 hours, 29 minutes, and 6 seconds. The default is 14 days. If interval is provided, the timespan will be autocalculated.
+        - interval (integer): The time interval in seconds for returned data. The valid intervals are: 7200, 86400. The default is 7200. Interval is calculated if time params are provided.
+        - networkIds (array): Networks for which information should be gathered.
+        - bands (array): Bands for which information should be gathered. Valid bands are 2.4, 5, and 6.
+        - minimumRfHealthScore (integer): Minimum RF Health score for a network to be retrieved.
+        - maximumRfHealthScore (integer): Maximum RF Health score for a network to be retrieved.
+        - minimumHighCciPercentage (integer): Minimum percentage of radios with high CCI for a network to be retrieved.
+        - maximumHighCciPercentage (integer): Maximum percentage of radios with high CCI for a network to be retrieved.
+        - minimumChannelChanges (integer): Minimum number of channel changes for a network to be retrieved.
+        - maximumChannelChanges (integer): Maximum number of channel changes for a network to be retrieved.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "radio", "rfHealth", "overview", "byNetwork", "byInterval"],
+            "operation": "getOrganizationWirelessRadioRfHealthOverviewByNetworkByInterval",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/radio/rfHealth/overview/byNetwork/byInterval"
+
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "interval",
+            "networkIds",
+            "bands",
+            "minimumRfHealthScore",
+            "maximumRfHealthScore",
+            "minimumHighCciPercentage",
+            "maximumHighCciPercentage",
+            "minimumChannelChanges",
+            "maximumChannelChanges",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessRadioRfHealthOverviewByNetworkByInterval: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
 
     def getOrganizationWirelessRadioRrmByNetwork(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
@@ -4899,6 +10165,50 @@ class Wireless(object):
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessRadioStatusByNetwork(self, organizationId: str, **kwargs):
+        """
+        **Show the status of this organization's radios, categorized by network and device**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-radio-status-by-network
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Networks for which radio status should be returned.
+        - serials (array): Serials for which radio status should be returned.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "radio", "status", "byNetwork"],
+            "operation": "getOrganizationWirelessRadioStatusByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/radio/status/byNetwork"
+
+        query_params = [
+            "networkIds",
+            "serials",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessRadioStatusByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
 
     def getOrganizationWirelessRfProfilesAssignmentsByDevice(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
@@ -4970,6 +10280,55 @@ class Wireless(object):
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessRoamingByNetworkByInterval(self, organizationId: str, networkIds: list, **kwargs):
+        """
+        **Get all wireless clients' roam events within the specified timespan grouped by network and time interval.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-roaming-by-network-by-interval
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Filter results by network.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days. The default is 7 days.
+        - interval (integer): The time interval in seconds for returned data. The valid intervals are: 300, 600, 1800, 3600, 7200, 10800, 14400, 18000, 21600, 25200, 28800, 32400, 36000, 39600, 43200, 86400, 604800. The default is 7200.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "monitor", "roaming", "byNetwork", "byInterval"],
+            "operation": "getOrganizationWirelessRoamingByNetworkByInterval",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/roaming/byNetwork/byInterval"
+
+        query_params = [
+            "networkIds",
+            "t0",
+            "t1",
+            "timespan",
+            "interval",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessRoamingByNetworkByInterval: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
 
     def getOrganizationWirelessSsidsFirewallIsolationAllowlistEntries(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
@@ -5172,6 +10531,533 @@ class Wireless(object):
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessSsidsPoliciesClientExclusionBySsid(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Returns an array of objects, each containing client exclusion enablement statuses for one SSID**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-ssids-policies-client-exclusion-by-ssid
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter by Network ID.
+        - includeDisabledSsids (boolean): Optional parameter to include disabled SSID's.
+        - ssidNumbers (array): Optional parameter to filter by SSID numbers.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "ssids", "policies", "clientExclusion", "bySsid"],
+            "operation": "getOrganizationWirelessSsidsPoliciesClientExclusionBySsid",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/policies/clientExclusion/bySsid"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "includeDisabledSsids",
+            "ssidNumbers",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "ssidNumbers",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessSsidsPoliciesClientExclusionBySsid: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessSsidsPoliciesClientExclusionStaticExclusionsBySsid(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Returns an array of objects, each containing a list of MAC's excluded from a given SSID**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-ssids-policies-client-exclusion-static-exclusions-by-ssid
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter Network ID.
+        - includeDisabledSsids (boolean): Optional parameter to include disabled SSID's.
+        - ssidNumbers (array): Optional parameter to filter by SSID numbers.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "ssids", "policies", "clientExclusion", "static", "exclusions", "bySsid"],
+            "operation": "getOrganizationWirelessSsidsPoliciesClientExclusionStaticExclusionsBySsid",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/policies/clientExclusion/static/exclusions/bySsid"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "includeDisabledSsids",
+            "ssidNumbers",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "ssidNumbers",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessSsidsPoliciesClientExclusionStaticExclusionsBySsid: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessSsidsProfiles(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **Returns the SSID profiles for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-ssids-profiles
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - name (string): (Optional) Filter results by name. Case insensitive substring match.
+        - sortBy (string): Column to sort results by. Default is `name`.
+        - sortOrder (string): Direction to sort results by. Default is `asc`.
+        - profileIds (array): (Optional) Filter results by a list of SSID profile IDs.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        if "sortBy" in kwargs:
+            options = ["name"]
+            assert kwargs["sortBy"] in options, (
+                f'''"sortBy" cannot be "{kwargs["sortBy"]}", & must be set to one of: {options}'''
+            )
+        if "sortOrder" in kwargs:
+            options = ["asc", "desc"]
+            assert kwargs["sortOrder"] in options, (
+                f'''"sortOrder" cannot be "{kwargs["sortOrder"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["wireless", "configure", "ssids", "profiles"],
+            "operation": "getOrganizationWirelessSsidsProfiles",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/profiles"
+
+        query_params = [
+            "name",
+            "sortBy",
+            "sortOrder",
+            "profileIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "profileIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationWirelessSsidsProfiles: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def createOrganizationWirelessSsidsProfile(self, organizationId: str, name: str, ssid: dict, **kwargs):
+        """
+        **Create a new SSID profile in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-wireless-ssids-profile
+
+        - organizationId (string): Organization ID
+        - name (string): Name of the SSID profile
+        - ssid (object): SSID configuration for the profile
+        - precedence (object): Precedence configuration for the SSID profile
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "ssids", "profiles"],
+            "operation": "createOrganizationWirelessSsidsProfile",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/profiles"
+
+        body_params = [
+            "name",
+            "precedence",
+            "ssid",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationWirelessSsidsProfile: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationWirelessSsidsProfilesAssignments(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List the SSID profile assignments in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-ssids-profiles-assignments
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): The network IDs to include in the result set.
+        - ssidIds (array): The SSID IDs to include in the result set.
+        - profileIds (array): The SSID profile IDs to include in the result set.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "ssids", "profiles", "assignments"],
+            "operation": "getOrganizationWirelessSsidsProfilesAssignments",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/profiles/assignments"
+
+        query_params = [
+            "networkIds",
+            "ssidIds",
+            "profileIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "ssidIds",
+            "profileIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessSsidsProfilesAssignments: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def createOrganizationWirelessSsidsProfilesAssignment(self, organizationId: str, profile: dict, ssid: dict, **kwargs):
+        """
+        **Assigns an SSID profile to an SSID in the organization**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-wireless-ssids-profiles-assignment
+
+        - organizationId (string): Organization ID
+        - profile (object): SSID profile to assign
+        - ssid (object): SSID to assign the SSID profile to
+        - network (object): Network containing the SSID (required if SSID number is used)
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "ssids", "profiles", "assignments"],
+            "operation": "createOrganizationWirelessSsidsProfilesAssignment",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/profiles/assignments"
+
+        body_params = [
+            "profile",
+            "ssid",
+            "network",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationWirelessSsidsProfilesAssignment: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def deleteOrganizationWirelessSsidsProfilesAssignments(self, organizationId: str, ssid: dict, **kwargs):
+        """
+        **Unassigns the SSID profile assigned to an SSID**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-wireless-ssids-profiles-assignments
+
+        - organizationId (string): Organization ID
+        - ssid (object): SSID to delete the SSID profile assignment of
+        - network (object): Network containing the SSID (required if SSID number is used)
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "ssids", "profiles", "assignments"],
+            "operation": "deleteOrganizationWirelessSsidsProfilesAssignments",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/profiles/assignments"
+
+        return self._session.delete(metadata, resource)
+
+    def getOrganizationWirelessSsidsProfilesAssignmentsByNetwork(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List the SSID profile assignments in an organization, grouped by network**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-ssids-profiles-assignments-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): The network IDs to include in the result set.
+        - profileIds (array): The SSID profile IDs to include in the result set.
+        - networkGroupIds (array): The network group IDs to include in the result set.
+        - includeAllNetworks (boolean): When set to true, include all networks in the organization, even those without any SSID profile assignments. Defaults to false.
+        - excludeProfileIds (array): The SSID profile IDs to exclude from the result set.
+        - sortBy (string): Optional parameter to specify the field used to sort results. (default: network)
+        - sortOrder (string): Optional parameter to specify the sort order. Default value is asc.
+        - search (string): Optional parameter to search on network name or network group name.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        if "sortBy" in kwargs:
+            options = ["group", "network"]
+            assert kwargs["sortBy"] in options, (
+                f'''"sortBy" cannot be "{kwargs["sortBy"]}", & must be set to one of: {options}'''
+            )
+        if "sortOrder" in kwargs:
+            options = ["asc", "desc"]
+            assert kwargs["sortOrder"] in options, (
+                f'''"sortOrder" cannot be "{kwargs["sortOrder"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["wireless", "configure", "ssids", "profiles", "assignments", "byNetwork"],
+            "operation": "getOrganizationWirelessSsidsProfilesAssignmentsByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/profiles/assignments/byNetwork"
+
+        query_params = [
+            "networkIds",
+            "profileIds",
+            "networkGroupIds",
+            "includeAllNetworks",
+            "excludeProfileIds",
+            "sortBy",
+            "sortOrder",
+            "search",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "profileIds",
+            "networkGroupIds",
+            "excludeProfileIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessSsidsProfilesAssignmentsByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWirelessSsidsProfilesOverviews(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **Returns the SSID profiles' overview information for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-ssids-profiles-overviews
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - name (string): (Optional) Filter results by name. Case insensitive substring match.
+        - sortBy (string): Column to sort results by. Default is `name`.
+        - sortOrder (string): Direction to sort results by. Default is `asc`.
+        - profileIds (array): (Optional) Filter results by a list of SSID profile IDs.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        if "sortBy" in kwargs:
+            options = ["name"]
+            assert kwargs["sortBy"] in options, (
+                f'''"sortBy" cannot be "{kwargs["sortBy"]}", & must be set to one of: {options}'''
+            )
+        if "sortOrder" in kwargs:
+            options = ["asc", "desc"]
+            assert kwargs["sortOrder"] in options, (
+                f'''"sortOrder" cannot be "{kwargs["sortOrder"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["wireless", "configure", "ssids", "profiles", "overviews"],
+            "operation": "getOrganizationWirelessSsidsProfilesOverviews",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/profiles/overviews"
+
+        query_params = [
+            "name",
+            "sortBy",
+            "sortOrder",
+            "profileIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "profileIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessSsidsProfilesOverviews: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def updateOrganizationWirelessSsidsProfile(self, organizationId: str, id: str, **kwargs):
+        """
+        **Update this SSID profile**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-wireless-ssids-profile
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        - name (string): Name of the SSID profile
+        - ssid (object): SSID configuration for the profile
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "ssids", "profiles"],
+            "operation": "updateOrganizationWirelessSsidsProfile",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/profiles/{id}"
+
+        body_params = [
+            "name",
+            "ssid",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationWirelessSsidsProfile: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteOrganizationWirelessSsidsProfile(self, organizationId: str, id: str):
+        """
+        **Delete an SSID profile**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-wireless-ssids-profile
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        """
+
+        metadata = {
+            "tags": ["wireless", "configure", "ssids", "profiles"],
+            "operation": "deleteOrganizationWirelessSsidsProfile",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/profiles/{id}"
+
+        return self._session.delete(metadata, resource)
 
     def getOrganizationWirelessSsidsStatusesByDevice(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """

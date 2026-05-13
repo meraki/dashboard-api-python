@@ -111,6 +111,108 @@ class ActionBatchSm(object):
         }
         return action
 
+    def createOrganizationSmAppleCloudEnrollmentSyncJob(self, organizationId: str, **kwargs):
+        """
+        **Enqueue a sync job for an ADE account**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-sm-apple-cloud-enrollment-sync-job
+
+        - organizationId (string): Organization ID
+        - adeAccountId (string): ADE Account ID
+        - fullSync (boolean): Whether or not job is full sync (defaults to full sync)
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/sm/apple/cloudEnrollment/syncJobs"
+
+        body_params = [
+            "adeAccountId",
+            "fullSync",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def createOrganizationSmBulkEnrollmentToken(self, organizationId: str, networkId: str, expiresAt: str, **kwargs):
+        """
+        **Create a PccBulkEnrollmentToken**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-sm-bulk-enrollment-token
+
+        - organizationId (string): Organization ID
+        - networkId (string): The id of the associated node_group.
+        - expiresAt (string): The expiration date.
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/sm/bulkEnrollment/token"
+
+        body_params = [
+            "networkId",
+            "expiresAt",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def updateOrganizationSmBulkEnrollmentToken(self, organizationId: str, tokenId: str, **kwargs):
+        """
+        **Update a PccBulkEnrollmentToken**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-sm-bulk-enrollment-token
+
+        - organizationId (string): Organization ID
+        - tokenId (string): Token ID
+        - networkId (string): The id of the associated node_group.
+        - expiresAt (string): The expiration date.
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        tokenId = urllib.parse.quote(tokenId, safe="")
+        resource = f"/organizations/{organizationId}/sm/bulkEnrollment/token/{tokenId}"
+
+        body_params = [
+            "networkId",
+            "expiresAt",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def deleteOrganizationSmBulkEnrollmentToken(self, organizationId: str, tokenId: str):
+        """
+        **Delete a PccBulkEnrollmentToken**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-sm-bulk-enrollment-token
+
+        - organizationId (string): Organization ID
+        - tokenId (string): Token ID
+        """
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        tokenId = urllib.parse.quote(tokenId, safe="")
+        resource = f"/organizations/{organizationId}/sm/bulkEnrollment/token/{tokenId}"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+
     def updateOrganizationSmSentryPoliciesAssignments(self, organizationId: str, items: list, **kwargs):
         """
         **Update an Organizations Sentry Policies using the provided list. Sentry Policies are ordered in descending order of priority (i.e. highest priority at the bottom, this is opposite the Dashboard UI). Policies not present in the request will be deleted.**

@@ -1396,6 +1396,187 @@ class Sm(object):
 
         return self._session.get(metadata, resource)
 
+    def createOrganizationSmAppleCloudEnrollmentSyncJob(self, organizationId: str, **kwargs):
+        """
+        **Enqueue a sync job for an ADE account**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-sm-apple-cloud-enrollment-sync-job
+
+        - organizationId (string): Organization ID
+        - adeAccountId (string): ADE Account ID
+        - fullSync (boolean): Whether or not job is full sync (defaults to full sync)
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["sm", "configure", "apple", "cloudEnrollment", "syncJobs"],
+            "operation": "createOrganizationSmAppleCloudEnrollmentSyncJob",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/sm/apple/cloudEnrollment/syncJobs"
+
+        body_params = [
+            "adeAccountId",
+            "fullSync",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationSmAppleCloudEnrollmentSyncJob: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationSmAppleCloudEnrollmentSyncJob(self, organizationId: str, syncJobId: str):
+        """
+        **Retrieve the status of an ADE sync job**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-sm-apple-cloud-enrollment-sync-job
+
+        - organizationId (string): Organization ID
+        - syncJobId (string): Sync job ID
+        """
+
+        metadata = {
+            "tags": ["sm", "configure", "apple", "cloudEnrollment", "syncJobs"],
+            "operation": "getOrganizationSmAppleCloudEnrollmentSyncJob",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        syncJobId = urllib.parse.quote(str(syncJobId), safe="")
+        resource = f"/organizations/{organizationId}/sm/apple/cloudEnrollment/syncJobs/{syncJobId}"
+
+        return self._session.get(metadata, resource)
+
+    def createOrganizationSmBulkEnrollmentToken(self, organizationId: str, networkId: str, expiresAt: str, **kwargs):
+        """
+        **Create a PccBulkEnrollmentToken**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-sm-bulk-enrollment-token
+
+        - organizationId (string): Organization ID
+        - networkId (string): The id of the associated node_group.
+        - expiresAt (string): The expiration date.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["sm", "configure", "bulkEnrollment", "token"],
+            "operation": "createOrganizationSmBulkEnrollmentToken",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/sm/bulkEnrollment/token"
+
+        body_params = [
+            "networkId",
+            "expiresAt",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationSmBulkEnrollmentToken: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationSmBulkEnrollmentToken(self, organizationId: str, tokenId: str):
+        """
+        **Return a BulkEnrollmentToken**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-sm-bulk-enrollment-token
+
+        - organizationId (string): Organization ID
+        - tokenId (string): Token ID
+        """
+
+        metadata = {
+            "tags": ["sm", "configure", "bulkEnrollment", "token"],
+            "operation": "getOrganizationSmBulkEnrollmentToken",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        tokenId = urllib.parse.quote(str(tokenId), safe="")
+        resource = f"/organizations/{organizationId}/sm/bulkEnrollment/token/{tokenId}"
+
+        return self._session.get(metadata, resource)
+
+    def updateOrganizationSmBulkEnrollmentToken(self, organizationId: str, tokenId: str, **kwargs):
+        """
+        **Update a PccBulkEnrollmentToken**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-sm-bulk-enrollment-token
+
+        - organizationId (string): Organization ID
+        - tokenId (string): Token ID
+        - networkId (string): The id of the associated node_group.
+        - expiresAt (string): The expiration date.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["sm", "configure", "bulkEnrollment", "token"],
+            "operation": "updateOrganizationSmBulkEnrollmentToken",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        tokenId = urllib.parse.quote(str(tokenId), safe="")
+        resource = f"/organizations/{organizationId}/sm/bulkEnrollment/token/{tokenId}"
+
+        body_params = [
+            "networkId",
+            "expiresAt",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationSmBulkEnrollmentToken: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteOrganizationSmBulkEnrollmentToken(self, organizationId: str, tokenId: str):
+        """
+        **Delete a PccBulkEnrollmentToken**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-sm-bulk-enrollment-token
+
+        - organizationId (string): Organization ID
+        - tokenId (string): Token ID
+        """
+
+        metadata = {
+            "tags": ["sm", "configure", "bulkEnrollment", "token"],
+            "operation": "deleteOrganizationSmBulkEnrollmentToken",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        tokenId = urllib.parse.quote(str(tokenId), safe="")
+        resource = f"/organizations/{organizationId}/sm/bulkEnrollment/token/{tokenId}"
+
+        return self._session.delete(metadata, resource)
+
+    def getOrganizationSmBulkEnrollmentTokens(self, organizationId: str):
+        """
+        **List all BulkEnrollmentTokens for an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-sm-bulk-enrollment-tokens
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["sm", "configure", "bulkEnrollment", "tokens"],
+            "operation": "getOrganizationSmBulkEnrollmentTokens",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/sm/bulkEnrollment/tokens"
+
+        return self._session.get(metadata, resource)
+
     def updateOrganizationSmSentryPoliciesAssignments(self, organizationId: str, items: list, **kwargs):
         """
         **Update an Organizations Sentry Policies using the provided list**
