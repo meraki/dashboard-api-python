@@ -31,7 +31,7 @@ jobs:
               echo "pr_base=httpx" >> "$GITHUB_OUTPUT"
               ;;
             beta)
-              echo "checkout_branch=main" >> "$GITHUB_OUTPUT"
+              echo "checkout_branch=beta" >> "$GITHUB_OUTPUT"
               echo "release_branch=beta-release" >> "$GITHUB_OUTPUT"
               echo "pr_base=beta" >> "$GITHUB_OUTPUT"
               ;;
