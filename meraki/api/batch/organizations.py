@@ -630,7 +630,7 @@ class ActionBatchOrganizations(object):
         https://developer.cisco.com/meraki/api-v1/#!import-organization-certificates
 
         - organizationId (string): Organization ID
-        - managedBy (string): Certificate managed by type [system_manager, mr, encrypted_syslog]
+        - managedBy (string): Certificate managed by type [system_manager, mr, encrypted_syslog, grpc_dial_out]
         - contents (string): Certificate content in valid PEM format
         - description (string): Certificate description
         """
@@ -638,7 +638,7 @@ class ActionBatchOrganizations(object):
         kwargs = locals()
 
         if "managedBy" in kwargs:
-            options = ["encrypted_syslog", "mr", "system_manager"]
+            options = ["encrypted_syslog", "grpc_dial_out", "mr", "system_manager"]
             assert kwargs["managedBy"] in options, (
                 f'''"managedBy" cannot be "{kwargs["managedBy"]}", & must be set to one of: {options}'''
             )
@@ -1761,6 +1761,25 @@ class ActionBatchOrganizations(object):
         }
         return action
 
+    def deleteOrganizationOpenRoamingCertificate(self, organizationId: str, id: str):
+        """
+        **Delete an open roaming certificate.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-open-roaming-certificate
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        """
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        id = urllib.parse.quote(id, safe="")
+        resource = f"/organizations/{organizationId}/openRoaming/certificates/{id}"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+
     def createOrganizationPoliciesGlobalFirewallRuleset(self, organizationId: str, name: str, **kwargs):
         """
         **Create an Organization-Wide Policy Firewall Ruleset**
@@ -2351,6 +2370,7 @@ class ActionBatchOrganizations(object):
         - description (string): Description of the VRF (Virtual Routing and Forwarding)
         - routeDistinguisher (string): RD (Route Distinguisher) for the VRF (Virtual Routing and Forwarding)
         - routeTarget (string): Route target are used to control the import and export of routes between VRFs
+        - appliance (object): This parameter is used to enable or disable the VRF on the WAN appliance
         """
 
         kwargs.update(locals())
@@ -2363,6 +2383,7 @@ class ActionBatchOrganizations(object):
             "description",
             "routeDistinguisher",
             "routeTarget",
+            "appliance",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -2383,6 +2404,7 @@ class ActionBatchOrganizations(object):
         - description (string): Description of the VRF (Virtual Routing and Forwarding)
         - routeDistinguisher (string): RD (Route Distinguisher) for the VRF (Virtual Routing and Forwarding)
         - routeTarget (string): Route target are used to control the import and export of routes between VRFs
+        - appliance (object): This parameter is used to enable or disable the VRF on the WAN appliance
         """
 
         kwargs.update(locals())
@@ -2396,6 +2418,7 @@ class ActionBatchOrganizations(object):
             "description",
             "routeDistinguisher",
             "routeTarget",
+            "appliance",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {

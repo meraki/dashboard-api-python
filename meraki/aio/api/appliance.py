@@ -2032,6 +2032,7 @@ class AsyncAppliance:
         - subnet (string): Subnet of the route
         - gatewayIp (string): Gateway IP address (next hop)
         - gatewayVlanId (integer): Gateway VLAN ID
+        - vrf (object): VRF settings for the static route.
         """
 
         kwargs.update(locals())
@@ -2048,6 +2049,7 @@ class AsyncAppliance:
             "subnet",
             "gatewayIp",
             "gatewayVlanId",
+            "vrf",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -2092,6 +2094,7 @@ class AsyncAppliance:
         - enabled (boolean): Whether the route should be enabled or not
         - fixedIpAssignments (object): Fixed DHCP IP assignments on the route
         - reservedIpRanges (array): DHCP reserved IP ranges
+        - vrf (object): VRF settings for the static route.
         """
 
         kwargs.update(locals())
@@ -2112,6 +2115,7 @@ class AsyncAppliance:
             "enabled",
             "fixedIpAssignments",
             "reservedIpRanges",
+            "vrf",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -3166,6 +3170,41 @@ class AsyncAppliance:
 
         return self._session.put(metadata, resource, payload)
 
+    def updateNetworkApplianceVpnSiteToSiteHubVrfs(self, networkId: str, hubNetworkId: str, _json: list, **kwargs):
+        """
+        **Update the VRF mappings for a source network and hub pair.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-vpn-site-to-site-hub-vrfs
+
+        - networkId (string): Network ID
+        - hubNetworkId (string): Hub network ID
+        - _json (array): The list of VRFs for this source and hub mapping.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["appliance", "configure", "vpn", "siteToSite", "hubs", "vrfs"],
+            "operation": "updateNetworkApplianceVpnSiteToSiteHubVrfs",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        hubNetworkId = urllib.parse.quote(str(hubNetworkId), safe="")
+        resource = f"/networks/{networkId}/appliance/vpn/siteToSite/hubs/{hubNetworkId}/vrfs"
+
+        body_params = [
+            "_json",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkApplianceVpnSiteToSiteHubVrfs: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
     def getNetworkApplianceVpnSiteToSiteVpn(self, networkId: str):
         """
         **Return the site-to-site VPN settings of a network**
@@ -3361,6 +3400,7 @@ class AsyncAppliance:
 
         - organizationId (string): Organization ID
         - serials (array): Parameter to filter the results by device serials
+        - interfaces (array): Parameter to filter the results by specific interfaces
         - numbers (array): Parameter to filter the results by specific ports
         """
 
@@ -3375,12 +3415,14 @@ class AsyncAppliance:
 
         query_params = [
             "serials",
+            "interfaces",
             "numbers",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = [
             "serials",
+            "interfaces",
             "numbers",
         ]
         for k, v in kwargs.items():
@@ -4892,6 +4934,55 @@ class AsyncAppliance:
                 )
 
         return self._session.get(metadata, resource, params)
+
+    def getOrganizationApplianceVpnSiteToSiteHubsVrfs(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **Return source-to-hub VRF mappings for site-to-site VPN within an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-vpn-site-to-site-hubs-vrfs
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 500. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter source-to-hub mappings by source network IDs.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["appliance", "configure", "vpn", "siteToSite", "hubs", "vrfs"],
+            "operation": "getOrganizationApplianceVpnSiteToSiteHubsVrfs",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/vpn/siteToSite/hubs/vrfs"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApplianceVpnSiteToSiteHubsVrfs: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationApplianceVpnSiteToSiteIpsecPeersSlas(self, organizationId: str):
         """

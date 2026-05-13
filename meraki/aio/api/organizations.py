@@ -2972,6 +2972,56 @@ class AsyncOrganizations:
 
         return self._session.get(metadata, resource, params)
 
+    def getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetworkByClientOs(self, organizationId: str, **kwargs):
+        """
+        **Summarizes wired connection successes and failures by client OS.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wired-experience-successful-connections-by-network-by-client-os
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "wired", "experience", "successfulConnections", "byNetwork", "byClientOs"],
+            "operation": "getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetworkByClientOs",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wired/experience/successfulConnections/byNetwork/byClientOs"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetworkByClientOs: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
     def getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetworkByDevice(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):
@@ -3553,7 +3603,7 @@ class AsyncOrganizations:
         https://developer.cisco.com/meraki/api-v1/#!import-organization-certificates
 
         - organizationId (string): Organization ID
-        - managedBy (string): Certificate managed by type [system_manager, mr, encrypted_syslog]
+        - managedBy (string): Certificate managed by type [system_manager, mr, encrypted_syslog, grpc_dial_out]
         - contents (string): Certificate content in valid PEM format
         - description (string): Certificate description
         """
@@ -3561,7 +3611,7 @@ class AsyncOrganizations:
         kwargs = locals()
 
         if "managedBy" in kwargs:
-            options = ["encrypted_syslog", "mr", "system_manager"]
+            options = ["encrypted_syslog", "grpc_dial_out", "mr", "system_manager"]
             assert kwargs["managedBy"] in options, (
                 f'''"managedBy" cannot be "{kwargs["managedBy"]}", & must be set to one of: {options}'''
             )
@@ -8587,6 +8637,25 @@ class AsyncOrganizations:
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
+    def deleteOrganizationOpenRoamingCertificate(self, organizationId: str, id: str):
+        """
+        **Delete an open roaming certificate.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-open-roaming-certificate
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "openRoaming", "certificates"],
+            "operation": "deleteOrganizationOpenRoamingCertificate",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/openRoaming/certificates/{id}"
+
+        return self._session.delete(metadata, resource)
+
     def getOrganizationOpenapiSpec(self, organizationId: str, **kwargs):
         """
         **Return the OpenAPI Specification of the organization's API documentation in JSON**
@@ -9813,6 +9882,7 @@ class AsyncOrganizations:
         - description (string): Description of the VRF (Virtual Routing and Forwarding)
         - routeDistinguisher (string): RD (Route Distinguisher) for the VRF (Virtual Routing and Forwarding)
         - routeTarget (string): Route target are used to control the import and export of routes between VRFs
+        - appliance (object): This parameter is used to enable or disable the VRF on the WAN appliance
         """
 
         kwargs.update(locals())
@@ -9829,6 +9899,7 @@ class AsyncOrganizations:
             "description",
             "routeDistinguisher",
             "routeTarget",
+            "appliance",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -9839,6 +9910,47 @@ class AsyncOrganizations:
                 self._session._logger.warning(f"createOrganizationRoutingVrf: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
+
+    def getOrganizationRoutingVrfsOverviewByVrf(self, organizationId: str, **kwargs):
+        """
+        **List existing organization-wide VRFs (Virtual Routing and Forwarding) overviews.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-routing-vrfs-overview-by-vrf
+
+        - organizationId (string): Organization ID
+        - vrfIds (array): IDs of the desired VRFs.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "monitor", "routing", "vrfs", "overview", "byVrf"],
+            "operation": "getOrganizationRoutingVrfsOverviewByVrf",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/routing/vrfs/overview/byVrf"
+
+        query_params = [
+            "vrfIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "vrfIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationRoutingVrfsOverviewByVrf: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
 
     def updateOrganizationRoutingVrf(self, organizationId: str, vrfId: str, **kwargs):
         """
@@ -9851,6 +9963,7 @@ class AsyncOrganizations:
         - description (string): Description of the VRF (Virtual Routing and Forwarding)
         - routeDistinguisher (string): RD (Route Distinguisher) for the VRF (Virtual Routing and Forwarding)
         - routeTarget (string): Route target are used to control the import and export of routes between VRFs
+        - appliance (object): This parameter is used to enable or disable the VRF on the WAN appliance
         """
 
         kwargs.update(locals())
@@ -9868,6 +9981,7 @@ class AsyncOrganizations:
             "description",
             "routeDistinguisher",
             "routeTarget",
+            "appliance",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 

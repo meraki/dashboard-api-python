@@ -808,7 +808,7 @@ class Wireless(object):
         - majorMinorAssignmentMode (string): The way major and minor number should be assigned to nodes in the network. ('Unique', 'Non-unique')
         - major (integer): The major number to be used in the beacon identifier. Only valid in 'Non-unique' mode.
         - minor (integer): The minor number to be used in the beacon identifier. Only valid in 'Non-unique' mode.
-        - transmit (object): Transmit settings including power, interval, and advertised power.
+        - transmit (object): Transmit settings.
         """
 
         kwargs.update(locals())
@@ -2721,6 +2721,7 @@ class Wireless(object):
         - dnsRewrite (object): DNS servers rewrite settings
         - speedBurst (object): The SpeedBurst setting for this SSID'
         - namedVlans (object): Named VLAN settings.
+        - security (object): Security settings for the SSID
         - localAuthFallback (object): The current configuration for Local Authentication Fallback. Enables the Access Point (AP) to store client authentication data for a specified duration that can be adjusted as needed.
         - radiusAccountingStartDelay (integer): The delay (in seconds) before sending the first RADIUS accounting start message. Must be between 0 and 60 seconds.
         """
@@ -2874,6 +2875,7 @@ class Wireless(object):
             "dnsRewrite",
             "speedBurst",
             "namedVlans",
+            "security",
             "localAuthFallback",
             "radiusAccountingStartDelay",
         ]
@@ -3661,7 +3663,7 @@ class Wireless(object):
         - useRedirectUrl (boolean): The Boolean indicating whether the the user will be redirected to the custom redirect URL after the splash page. A custom redirect URL must be set if this is true.
         - welcomeMessage (string): The welcome message for the users on the splash page.
         - language (string): Language of splash page.
-        - userConsent (object): User consent settings.
+        - userConsent (object): User consent settings
         - themeId (string): The id of the selected splash theme.
         - splashLogo (object): The logo used in the splash page.
         - splashImage (object): The image used in the splash page.
@@ -4274,7 +4276,7 @@ class Wireless(object):
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):
         """
-        **Summarizes wireless post connection capacity successes and failures by client OS.**
+        **Summarizes wireless post connection capacity successes and failures by client OS and driver version.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-channel-availability-by-network-by-client-os
 
         - organizationId (string): Organization ID
@@ -5316,7 +5318,7 @@ class Wireless(object):
         kwargs.update(locals())
 
         if "contributor" in kwargs:
-            options = ["Admin power restriction", "Insufficient AP density", "Sticky client", "Weak client signal"]
+            options = ["Admin power restriction", "Insufficient AP density", "Sticky client", "Transient weak signal"]
             assert kwargs["contributor"] in options, (
                 f'''"contributor" cannot be "{kwargs["contributor"]}", & must be set to one of: {options}'''
             )
