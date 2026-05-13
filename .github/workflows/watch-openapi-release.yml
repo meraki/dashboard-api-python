@@ -163,9 +163,16 @@ jobs:
     env:
       GH_REPO: ${{ github.repository }}
     steps:
+      - name: Generate app token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+
       - name: Record processed releases
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           if [ "${{ needs.check-ga.outputs.has_new_release }}" = "true" ]; then
             gh variable set LAST_OPENAPI_GA_RELEASE --body "v${{ needs.check-ga.outputs.api_version }}"
