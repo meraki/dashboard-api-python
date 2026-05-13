@@ -90,7 +90,62 @@ jobs:
           LAST_TAG="${{ vars.LAST_OPENAPI_BETA_RELEASE }}"
           LAST_API_MINOR=$(echo "$LAST_TAG" | sed 's/^v//' | cut -d. -f2)
 
-          # Determine library minor: bump if API minor changed
+          BASE=$(echo "$CURRENT" | sed 's/\(a\|b\|rc\).*//')
+          IFS='.' read -r MAJOR LIB_MINOR LIB_PATCH <<< "$BASE"
+
+          if [ "$API_MINOR" != "$LAST_API_MINOR" ]; then
+            LIB_MINOR=$((LIB_MINOR + 1))
+          fi
+
+          NEW_VERSION="${MAJOR}.${LIB_MINOR}.${API_PATCH}b${API_BETA}"
+          echo "new_sdk_version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
+
+  check-dev:
+    runs-on: ubuntu-latest
+    outputs:
+      has_new_release: ${{ steps.check.outputs.has_new_release }}
+      api_version: ${{ steps.check.outputs.api_version }}
+      new_sdk_version: ${{ steps.version.outputs.new_sdk_version }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Get latest beta release
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          LATEST=$(gh release list --repo meraki/openapi --limit 20 --json tagName,isPrerelease -q '[.[] | select(.isPrerelease)] | .[0].tagName')
+          if [ -z "$LATEST" ]; then
+            echo "has_new_release=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          API_VERSION="${LATEST#v}"
+          echo "api_version=$API_VERSION" >> "$GITHUB_OUTPUT"
+
+          LAST_PROCESSED="${{ vars.LAST_OPENAPI_DEV_RELEASE }}"
+          if [ "$LATEST" = "$LAST_PROCESSED" ]; then
+            echo "has_new_release=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_new_release=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Compute next SDK version
+        if: steps.check.outputs.has_new_release == 'true'
+        id: version
+        run: |
+          API_VERSION="${{ steps.check.outputs.api_version }}"
+          CURRENT=$(git show "origin/httpx:pyproject.toml" | grep '^version' | sed 's/version = "\(.*\)"/\1/')
+
+          API_MINOR=$(echo "$API_VERSION" | cut -d. -f2)
+          API_PATCH=$(echo "$API_VERSION" | cut -d. -f3 | sed 's/-.*//')
+          API_BETA=$(echo "$API_VERSION" | sed 's/.*beta\.\?//')
+
+          LAST_TAG="${{ vars.LAST_OPENAPI_DEV_RELEASE }}"
+          LAST_API_MINOR=$(echo "$LAST_TAG" | sed 's/^v//' | cut -d. -f2)
+
           BASE=$(echo "$CURRENT" | sed 's/\(a\|b\|rc\).*//')
           IFS='.' read -r MAJOR LIB_MINOR LIB_PATCH <<< "$BASE"
 
@@ -102,12 +157,10 @@ jobs:
           echo "new_sdk_version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
 
   trigger:
-    needs: [check-ga, check-beta]
-    if: needs.check-ga.outputs.has_new_release == 'true' || needs.check-beta.outputs.has_new_release == 'true'
+    needs: [check-ga, check-beta, check-dev]
+    if: needs.check-ga.outputs.has_new_release == 'true' || needs.check-beta.outputs.has_new_release == 'true' || needs.check-dev.outputs.has_new_release == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-
       - name: Record processed releases
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -118,6 +171,10 @@ jobs:
 
           if [ "${{ needs.check-beta.outputs.has_new_release }}" = "true" ]; then
             gh variable set LAST_OPENAPI_BETA_RELEASE --body "v${{ needs.check-beta.outputs.api_version }}"
+          fi
+
+          if [ "${{ needs.check-dev.outputs.has_new_release }}" = "true" ]; then
+            gh variable set LAST_OPENAPI_DEV_RELEASE --body "v${{ needs.check-dev.outputs.api_version }}"
           fi
 
       - name: Enable early access
@@ -158,3 +215,13 @@ jobs:
             -f library_version="${{ needs.check-beta.outputs.new_sdk_version }}" \
             -f api_version="${{ needs.check-beta.outputs.api_version }}" \
             -f release_stage="beta"
+
+      - name: Trigger dev regeneration
+        if: needs.check-dev.outputs.has_new_release == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run regenerate-library.yml \
+            -f library_version="${{ needs.check-dev.outputs.new_sdk_version }}" \
+            -f api_version="${{ needs.check-dev.outputs.api_version }}" \
+            -f release_stage="dev"
