@@ -160,6 +160,8 @@ jobs:
     needs: [check-ga, check-beta, check-dev]
     if: needs.check-ga.outputs.has_new_release == 'true' || needs.check-beta.outputs.has_new_release == 'true' || needs.check-dev.outputs.has_new_release == 'true'
     runs-on: ubuntu-latest
+    env:
+      GH_REPO: ${{ github.repository }}
     steps:
       - name: Record processed releases
         env:
