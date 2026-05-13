@@ -10,7 +10,7 @@ on:
   workflow_run:
     workflows: ['Test PR']
     types: [completed]
-    branches: ['main', 'beta']
+    branches: ['main', 'beta', 'httpx']
 
 jobs:
   create-release:
@@ -62,6 +62,11 @@ jobs:
 
           if [[ "$BRANCH" == "beta" && "$PRERELEASE" == "false" ]]; then
             echo "::error::Beta branch must have a prerelease version (e.g. 3.1.0b0), got '$VERSION'"
+            exit 1
+          fi
+
+          if [[ "$BRANCH" == "httpx" && "$PRERELEASE" == "false" ]]; then
+            echo "::error::httpx branch must have a prerelease version (e.g. 4.0.0b1), got '$VERSION'"
             exit 1
           fi
 

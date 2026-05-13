@@ -13,14 +13,38 @@ on:
         required: true
         type: choice
         options:
-          - GA
+          - ga
           - beta
+          - dev
 
 jobs:
   regenerate:
     runs-on: ubuntu-latest
     steps:
+      - name: Resolve branches
+        id: branches
+        run: |
+          case "${{ github.event.inputs.release_stage }}" in
+            dev)
+              echo "checkout_branch=httpx" >> "$GITHUB_OUTPUT"
+              echo "release_branch=httpx-release" >> "$GITHUB_OUTPUT"
+              echo "pr_base=httpx" >> "$GITHUB_OUTPUT"
+              ;;
+            beta)
+              echo "checkout_branch=main" >> "$GITHUB_OUTPUT"
+              echo "release_branch=beta-release" >> "$GITHUB_OUTPUT"
+              echo "pr_base=beta" >> "$GITHUB_OUTPUT"
+              ;;
+            ga)
+              echo "checkout_branch=main" >> "$GITHUB_OUTPUT"
+              echo "release_branch=release" >> "$GITHUB_OUTPUT"
+              echo "pr_base=main" >> "$GITHUB_OUTPUT"
+              ;;
+          esac
+
       - uses: actions/checkout@v6
+        with:
+          ref: ${{ steps.branches.outputs.checkout_branch }}
 
       - name: Install uv
         uses: astral-sh/setup-uv@v7
@@ -28,7 +52,7 @@ jobs:
           enable-cache: true
 
       - name: Set up Python
-        run: uv python install 3.12
+        run: uv python install 3.13
 
       - name: Install dependencies
         run: uv sync --group generator
@@ -44,6 +68,9 @@ jobs:
           BETA_ORG_ID: ${{ github.event.inputs.release_stage == 'beta' && secrets.BETA_ORG_1_ID || '' }}
         run: |
           ARGS="-g true -v $LIBRARY_VERSION -a $API_VERSION"
+          if [ "${{ github.event.inputs.release_stage }}" = "dev" ]; then
+            ARGS="$ARGS -b httpx"
+          fi
           if [ -n "$BETA_ORG_ID" ]; then
             ARGS="$ARGS -o $BETA_ORG_ID"
           fi
@@ -69,7 +96,7 @@ jobs:
           author_name: GitHub Action
           author_email: support@meraki.com
           message: Auto-generated library v${{ github.event.inputs.library_version }} for API v${{ github.event.inputs.api_version }}.
-          new_branch: ${{ github.event.inputs.release_stage == 'beta' && 'beta-release' || 'release' }}
+          new_branch: ${{ steps.branches.outputs.release_branch }}
           github_token: ${{ steps.app-token.outputs.token }}
 
       - name: Create pull request
@@ -77,8 +104,8 @@ jobs:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           gh pr create \
-            --base "${{ github.event.inputs.release_stage == 'beta' && 'beta' || 'main' }}" \
-            --head "${{ github.event.inputs.release_stage == 'beta' && 'beta-release' || 'release' }}" \
+            --base "${{ steps.branches.outputs.pr_base }}" \
+            --head "${{ steps.branches.outputs.release_branch }}" \
             --title "Release v${{ github.event.inputs.library_version }} (API v${{ github.event.inputs.api_version }})" \
             --body "Auto-generated library v${{ github.event.inputs.library_version }} for API v${{ github.event.inputs.api_version }}."
 
@@ -86,6 +113,5 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
-          gh pr merge "${{ github.event.inputs.release_stage == 'beta' && 'beta-release' || 'release' }}" \
+          gh pr merge "${{ steps.branches.outputs.release_branch }}" \
             --auto --squash
-
