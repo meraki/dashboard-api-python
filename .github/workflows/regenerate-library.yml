@@ -65,7 +65,7 @@ jobs:
           LIBRARY_VERSION: ${{ github.event.inputs.library_version }}
           API_VERSION: ${{ github.event.inputs.api_version }}
           MERAKI_DASHBOARD_API_KEY: ${{ github.event.inputs.release_stage == 'beta' && secrets.TEST_ORG_API_KEY || '' }}
-          BETA_ORG_ID: ${{ github.event.inputs.release_stage == 'beta' && secrets.BETA_ORG_1_ID || '' }}
+          BETA_ORG_ID: ${{ github.event.inputs.release_stage == 'beta' && secrets.TEST_ORG_BETA_00_ID || '' }}
         run: |
           ARGS="-g true -v $LIBRARY_VERSION -a $API_VERSION"
           if [ "${{ github.event.inputs.release_stage }}" = "dev" ]; then
