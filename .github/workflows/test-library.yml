@@ -92,12 +92,27 @@ jobs:
 
     - name: Integration tests
       env:
-        ORG_0: ${{ secrets.TEST_ORG_ID }}
-        ORG_1: ${{ secrets.TEST_ORG_ID_1 }}
-        ORG_2: ${{ secrets.TEST_ORG_ID_2 }}
-        ORG_3: ${{ secrets.TEST_ORG_ID_3 }}
+        ORG_GA_0: ${{ secrets.TEST_ORG_GA_00_ID }}
+        ORG_GA_1: ${{ secrets.TEST_ORG_GA_01_ID }}
+        ORG_GA_2: ${{ secrets.TEST_ORG_GA_02_ID }}
+        ORG_GA_3: ${{ secrets.TEST_ORG_GA_03_ID }}
+        ORG_BETA_0: ${{ secrets.TEST_ORG_BETA_00_ID }}
+        ORG_BETA_1: ${{ secrets.TEST_ORG_BETA_01_ID }}
+        ORG_BETA_2: ${{ secrets.TEST_ORG_BETA_02_ID }}
+        ORG_BETA_3: ${{ secrets.TEST_ORG_BETA_03_ID }}
+        ORG_DEV_0: ${{ secrets.TEST_ORG_DEV_00_ID }}
+        ORG_DEV_1: ${{ secrets.TEST_ORG_DEV_01_ID }}
+        ORG_DEV_2: ${{ secrets.TEST_ORG_DEV_02_ID }}
+        ORG_DEV_3: ${{ secrets.TEST_ORG_DEV_03_ID }}
       run: |
+        BRANCH="${{ github.head_ref || github.ref_name }}"
+        case "$BRANCH" in
+          main|release) PREFIX="GA" ;;
+          beta|beta-release) PREFIX="BETA" ;;
+          httpx|httpx-release) PREFIX="DEV" ;;
+          *) echo "Unknown branch: $BRANCH" && exit 1 ;;
+        esac
         INDEX=$(echo '${{ needs.assign-orgs.outputs.assignments }}' | jq -r '.["${{ matrix.python-version }}"]')
-        VAR_NAME="ORG_${INDEX}"
+        VAR_NAME="ORG_${PREFIX}_${INDEX}"
         ORG_ID="${!VAR_NAME}"
         uv run pytest tests/integration -v --tb=short --apikey ${{ secrets.TEST_ORG_API_KEY }} --o "$ORG_ID"
