@@ -855,6 +855,23 @@ class Networks(object):
 
         return self._session.post(metadata, resource, payload)
 
+    def getNetworkDevicesJson(self, networkId: str):
+        """
+        **Extraction of the legacy nodes JSON endpoint for a network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-devices-json
+
+        - networkId (string): Network ID
+        """
+
+        metadata = {
+            "tags": ["networks", "configure", "devices", "json"],
+            "operation": "getNetworkDevicesJson",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/devices/json"
+
+        return self._session.get(metadata, resource)
+
     def removeNetworkDevices(self, networkId: str, serial: str, **kwargs):
         """
         **Remove a single device**
@@ -2210,13 +2227,16 @@ class Networks(object):
 
         return self._session.put(metadata, resource, payload)
 
-    def getNetworkMqttBrokers(self, networkId: str):
+    def getNetworkMqttBrokers(self, networkId: str, **kwargs):
         """
         **List the MQTT brokers for this network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-mqtt-brokers
 
         - networkId (string): Network ID
+        - productTypes (array): Optional parameter to filter MQTT brokers by product type. If multiple types are provided, the query will return brokers that match any of the provided types.
         """
+
+        kwargs.update(locals())
 
         metadata = {
             "tags": ["networks", "configure", "mqttBrokers"],
@@ -2225,7 +2245,26 @@ class Networks(object):
         networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/mqttBrokers"
 
-        return self._session.get(metadata, resource)
+        query_params = [
+            "productTypes",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "productTypes",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkMqttBrokers: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get(metadata, resource, params)
 
     def createNetworkMqttBroker(self, networkId: str, name: str, host: str, port: int, **kwargs):
         """
@@ -2238,9 +2277,16 @@ class Networks(object):
         - port (integer): Host port though which the MQTT broker can be reached.
         - security (object): Security settings of the MQTT broker.
         - authentication (object): Authentication settings of the MQTT broker
+        - productType (string): The product type for which the MQTT broker is being created.
         """
 
         kwargs.update(locals())
+
+        if "productType" in kwargs:
+            options = ["camera", "wireless"]
+            assert kwargs["productType"] in options, (
+                f'''"productType" cannot be "{kwargs["productType"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
             "tags": ["networks", "configure", "mqttBrokers"],
@@ -2255,6 +2301,7 @@ class Networks(object):
             "port",
             "security",
             "authentication",
+            "productType",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
