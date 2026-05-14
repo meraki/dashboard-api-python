@@ -904,6 +904,7 @@ class ActionBatchWireless(object):
         - dnsRewrite (object): DNS servers rewrite settings
         - speedBurst (object): The SpeedBurst setting for this SSID'
         - namedVlans (object): Named VLAN settings.
+        - security (object): Security settings for the SSID
         - localAuthFallback (object): The current configuration for Local Authentication Fallback. Enables the Access Point (AP) to store client authentication data for a specified duration that can be adjusted as needed.
         - radiusAccountingStartDelay (integer): The delay (in seconds) before sending the first RADIUS accounting start message. Must be between 0 and 60 seconds.
         """
@@ -1053,6 +1054,7 @@ class ActionBatchWireless(object):
             "dnsRewrite",
             "speedBurst",
             "namedVlans",
+            "security",
             "localAuthFallback",
             "radiusAccountingStartDelay",
         ]
@@ -1541,7 +1543,7 @@ class ActionBatchWireless(object):
         - useRedirectUrl (boolean): The Boolean indicating whether the the user will be redirected to the custom redirect URL after the splash page. A custom redirect URL must be set if this is true.
         - welcomeMessage (string): The welcome message for the users on the splash page.
         - language (string): Language of splash page.
-        - userConsent (object): User consent settings.
+        - userConsent (object): User consent settings
         - themeId (string): The id of the selected splash theme.
         - splashLogo (object): The logo used in the splash page.
         - splashImage (object): The image used in the splash page.

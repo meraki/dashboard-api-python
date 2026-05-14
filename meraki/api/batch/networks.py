@@ -821,9 +821,16 @@ class ActionBatchNetworks(object):
         - port (integer): Host port though which the MQTT broker can be reached.
         - security (object): Security settings of the MQTT broker.
         - authentication (object): Authentication settings of the MQTT broker
+        - productType (string): The product type for which the MQTT broker is being created.
         """
 
         kwargs.update(locals())
+
+        if "productType" in kwargs:
+            options = ["camera", "wireless"]
+            assert kwargs["productType"] in options, (
+                f'''"productType" cannot be "{kwargs["productType"]}", & must be set to one of: {options}'''
+            )
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/mqttBrokers"
@@ -834,6 +841,7 @@ class ActionBatchNetworks(object):
             "port",
             "security",
             "authentication",
+            "productType",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {

@@ -1402,6 +1402,33 @@ class ActionBatchAppliance(object):
         }
         return action
 
+    def updateNetworkApplianceVpnSiteToSiteHubVrfs(self, networkId: str, hubNetworkId: str, _json: list, **kwargs):
+        """
+        **Update the VRF mappings for a source network and hub pair.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-vpn-site-to-site-hub-vrfs
+
+        - networkId (string): Network ID
+        - hubNetworkId (string): Hub network ID
+        - _json (array): The list of VRFs for this source and hub mapping.
+        """
+
+        kwargs = locals()
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        hubNetworkId = urllib.parse.quote(hubNetworkId, safe="")
+        resource = f"/networks/{networkId}/appliance/vpn/siteToSite/hubs/{hubNetworkId}/vrfs"
+
+        body_params = [
+            "_json",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
     def updateNetworkApplianceVpnSiteToSiteVpn(self, networkId: str, mode: str, **kwargs):
         """
         **Update the site-to-site VPN settings of a network. Only valid for MX networks in NAT mode.**
