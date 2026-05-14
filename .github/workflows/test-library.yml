@@ -105,7 +105,7 @@ jobs:
         ORG_DEV_2: ${{ secrets.TEST_ORG_DEV_02_ID }}
         ORG_DEV_3: ${{ secrets.TEST_ORG_DEV_03_ID }}
       run: |
-        BRANCH="${{ github.ref_name }}"
+        BRANCH="${{ github.head_ref || github.ref_name }}"
         case "$BRANCH" in
           main|release) PREFIX="GA" ;;
           beta|beta-release) PREFIX="BETA" ;;
