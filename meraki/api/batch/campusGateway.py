@@ -102,6 +102,35 @@ class ActionBatchCampusGateway(object):
         }
         return action
 
+    def updateNetworkCampusGatewaySsidMdns(self, networkId: str, number: str, **kwargs):
+        """
+        **Update the mDNS gateway settings and rules for a SSID and cluster**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-campus-gateway-ssid-mdns
+
+        - networkId (string): Network ID
+        - number (string): Number
+        - enabled (boolean): If true, mDNS gateway is enabled for this SSID and cluster.
+        - rules (array): List of mDNS forwarding rules.
+        """
+
+        kwargs.update(locals())
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        number = urllib.parse.quote(number, safe="")
+        resource = f"/networks/{networkId}/campusGateway/ssids/{number}/mdns"
+
+        body_params = [
+            "enabled",
+            "rules",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
     def provisionOrganizationCampusGatewayClusters(
         self,
         organizationId: str,
@@ -152,6 +181,31 @@ class ActionBatchCampusGateway(object):
         action = {
             "resource": resource,
             "operation": "provision",
+            "body": payload,
+        }
+        return action
+
+    def batchOrganizationCampusGatewayClustersTunnelingByClusterByNetworkUpdate(self, organizationId: str, **kwargs):
+        """
+        **Update MCG cluster-network tunnel settings for multiple networks**
+        https://developer.cisco.com/meraki/api-v1/#!batch-organization-campus-gateway-clusters-tunneling-by-cluster-by-network-update
+
+        - organizationId (string): Organization ID
+        - items (array): MCG cluster-network tunnel settings
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/campusGateway/clusters/tunneling/byCluster/byNetwork/batchUpdate"
+
+        body_params = [
+            "items",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "batch_update",
             "body": payload,
         }
         return action

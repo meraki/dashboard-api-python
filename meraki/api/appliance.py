@@ -1146,7 +1146,7 @@ class Appliance(object):
 
     def createNetworkApplianceInterfacesL3(self, networkId: str, ipv4: dict, **kwargs):
         """
-        **Create wired L3 interface configuration**
+        **Create wired L3 interface**
         https://developer.cisco.com/meraki/api-v1/#!create-network-appliance-interfaces-l-3
 
         - networkId (string): Network ID
@@ -1179,7 +1179,7 @@ class Appliance(object):
 
     def updateNetworkApplianceInterfacesL3(self, networkId: str, interfaceId: str, **kwargs):
         """
-        **Update wired L3 interface configuration**
+        **Update wired L3 interface**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-interfaces-l-3
 
         - networkId (string): Network ID
@@ -1214,7 +1214,7 @@ class Appliance(object):
 
     def deleteNetworkApplianceInterfacesL3(self, networkId: str, interfaceId: str):
         """
-        **Delete wired L3 interface configuration**
+        **Delete wired L3 interface**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-appliance-interfaces-l-3
 
         - networkId (string): Network ID
@@ -2681,13 +2681,13 @@ class Appliance(object):
 
         return self._session.put(metadata, resource, payload)
 
-    def addNetworkApplianceUmbrellaPolicies(self, networkId: str, policyId: str, **kwargs):
+    def addNetworkApplianceUmbrellaPolicies(self, networkId: str, policy: dict, **kwargs):
         """
         **Add one umbrella policy to your network.**
         https://developer.cisco.com/meraki/api-v1/#!add-network-appliance-umbrella-policies
 
         - networkId (string): Network ID
-        - policyId (string): Umbrella policy ID
+        - policy (object): Umbrella policy to add
         """
 
         kwargs = locals()
@@ -2700,7 +2700,7 @@ class Appliance(object):
         resource = f"/networks/{networkId}/appliance/umbrella/policies/add"
 
         body_params = [
-            "policyId",
+            "policy",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -2712,13 +2712,13 @@ class Appliance(object):
 
         return self._session.post(metadata, resource, payload)
 
-    def removeNetworkApplianceUmbrellaPolicies(self, networkId: str, policyId: str):
+    def removeNetworkApplianceUmbrellaPolicies(self, networkId: str, policy: dict, **kwargs):
         """
         **Remove one umbrella policy from your network.**
         https://developer.cisco.com/meraki/api-v1/#!remove-network-appliance-umbrella-policies
 
         - networkId (string): Network ID
-        - policyId (string): Umbrella policy ID
+        - policy (object): Umbrella policy to remove
         """
 
         kwargs = locals()
@@ -2730,7 +2730,20 @@ class Appliance(object):
         networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/appliance/umbrella/policies/remove"
 
-        return self._session.delete(metadata, resource)
+        body_params = [
+            "policy",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"removeNetworkApplianceUmbrellaPolicies: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
 
     def protectionNetworkApplianceUmbrella(self, networkId: str, enable: bool, **kwargs):
         """
@@ -3342,12 +3355,10 @@ class Appliance(object):
 
         return self._session.post(metadata, resource)
 
-    def getOrganizationApplianceDevicesInterfacesL3ByNetwork(
-        self, organizationId: str, total_pages=1, direction="next", **kwargs
-    ):
+    def getOrganizationApplianceDevicesInterfacesL3(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
-        **Listing of L3 Interface Configurations across networks for the organization**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-devices-interfaces-l-3-by-network
+        **List L3 interfaces across networks for the organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-devices-interfaces-l-3
 
         - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
@@ -3361,11 +3372,11 @@ class Appliance(object):
         kwargs.update(locals())
 
         metadata = {
-            "tags": ["appliance", "configure", "devices", "interfaces", "l3", "byNetwork"],
-            "operation": "getOrganizationApplianceDevicesInterfacesL3ByNetwork",
+            "tags": ["appliance", "configure", "devices", "interfaces", "l3"],
+            "operation": "getOrganizationApplianceDevicesInterfacesL3",
         }
         organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/appliance/devices/interfaces/l3/byNetwork"
+        resource = f"/organizations/{organizationId}/appliance/devices/interfaces/l3"
 
         query_params = [
             "networkIds",
@@ -3388,7 +3399,7 @@ class Appliance(object):
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
                 self._session._logger.warning(
-                    f"getOrganizationApplianceDevicesInterfacesL3ByNetwork: ignoring unrecognized kwargs: {invalid}"
+                    f"getOrganizationApplianceDevicesInterfacesL3: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -4478,9 +4489,9 @@ class Appliance(object):
         **List Umbrella policy IDs applied to MX networks in the organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-umbrella-policies-by-network
 
+        - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - organizationId (string): Organization identifier
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
@@ -4497,7 +4508,6 @@ class Appliance(object):
         resource = f"/organizations/{organizationId}/appliance/umbrella/policies/byNetwork"
 
         query_params = [
-            "organizationId",
             "perPage",
             "startingAfter",
             "endingBefore",
