@@ -115,6 +115,60 @@ class CampusGateway(object):
 
         return self._session.delete(metadata, resource)
 
+    def getNetworkCampusGatewaySsidMdns(self, networkId: str, number: str):
+        """
+        **List the currently configured mDNS settings for the SSID**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-campus-gateway-ssid-mdns
+
+        - networkId (string): Network ID
+        - number (string): Number
+        """
+
+        metadata = {
+            "tags": ["campusGateway", "configure", "ssids", "mdns"],
+            "operation": "getNetworkCampusGatewaySsidMdns",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/campusGateway/ssids/{number}/mdns"
+
+        return self._session.get(metadata, resource)
+
+    def updateNetworkCampusGatewaySsidMdns(self, networkId: str, number: str, **kwargs):
+        """
+        **Update the mDNS gateway settings and rules for a SSID and cluster**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-campus-gateway-ssid-mdns
+
+        - networkId (string): Network ID
+        - number (string): Number
+        - enabled (boolean): If true, mDNS gateway is enabled for this SSID and cluster.
+        - rules (array): List of mDNS forwarding rules.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["campusGateway", "configure", "ssids", "mdns"],
+            "operation": "updateNetworkCampusGatewaySsidMdns",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/campusGateway/ssids/{number}/mdns"
+
+        body_params = [
+            "enabled",
+            "rules",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkCampusGatewaySsidMdns: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
     def getOrganizationCampusGatewayClientsUsageByNetworkByCluster(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):
@@ -545,6 +599,95 @@ class CampusGateway(object):
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationCampusGatewayClustersTunnelingByClusterByNetwork(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List all the MCG cluster-network tunnel settings**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-campus-gateway-clusters-tunneling-by-cluster-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - clusterIds (array): Optional parameter to filter MCG clusters. This filter uses multiple exact matches
+        - dataEncryptionEnabled (boolean): Optional parameter to filter cluster-network tunnel settings by data encryption configuration
+        - networkIds (array): Optional parameter to filter networks. This filter uses multiple exact matches
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["campusGateway", "configure", "clusters", "tunneling", "byCluster", "byNetwork"],
+            "operation": "getOrganizationCampusGatewayClustersTunnelingByClusterByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/campusGateway/clusters/tunneling/byCluster/byNetwork"
+
+        query_params = [
+            "clusterIds",
+            "dataEncryptionEnabled",
+            "networkIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "clusterIds",
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationCampusGatewayClustersTunnelingByClusterByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def batchOrganizationCampusGatewayClustersTunnelingByClusterByNetworkUpdate(self, organizationId: str, **kwargs):
+        """
+        **Update MCG cluster-network tunnel settings for multiple networks**
+        https://developer.cisco.com/meraki/api-v1/#!batch-organization-campus-gateway-clusters-tunneling-by-cluster-by-network-update
+
+        - organizationId (string): Organization ID
+        - items (array): MCG cluster-network tunnel settings
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["campusGateway", "configure", "clusters", "tunneling", "byCluster", "byNetwork"],
+            "operation": "batchOrganizationCampusGatewayClustersTunnelingByClusterByNetworkUpdate",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/campusGateway/clusters/tunneling/byCluster/byNetwork/batchUpdate"
+
+        body_params = [
+            "items",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"batchOrganizationCampusGatewayClustersTunnelingByClusterByNetworkUpdate: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
 
     def getOrganizationCampusGatewayConnections(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """

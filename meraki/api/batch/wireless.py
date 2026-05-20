@@ -388,6 +388,7 @@ class ActionBatchWireless(object):
         - name (string): AP port profile name
         - ports (array): AP ports configuration
         - usbPorts (array): AP usb ports configuration
+        - security (object): AP port security configuration
         """
 
         kwargs.update(locals())
@@ -399,6 +400,7 @@ class ActionBatchWireless(object):
             "name",
             "ports",
             "usbPorts",
+            "security",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -470,6 +472,7 @@ class ActionBatchWireless(object):
         - name (string): AP port profile name
         - ports (array): AP ports configuration
         - usbPorts (array): AP usb ports configuration
+        - security (object): AP port security configuration
         """
 
         kwargs.update(locals())
@@ -482,6 +485,7 @@ class ActionBatchWireless(object):
             "name",
             "ports",
             "usbPorts",
+            "security",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {

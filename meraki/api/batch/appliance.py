@@ -297,7 +297,7 @@ class ActionBatchAppliance(object):
 
     def createNetworkApplianceInterfacesL3(self, networkId: str, ipv4: dict, **kwargs):
         """
-        **Create wired L3 interface configuration**
+        **Create wired L3 interface**
         https://developer.cisco.com/meraki/api-v1/#!create-network-appliance-interfaces-l-3
 
         - networkId (string): Network ID
@@ -324,7 +324,7 @@ class ActionBatchAppliance(object):
 
     def updateNetworkApplianceInterfacesL3(self, networkId: str, interfaceId: str, **kwargs):
         """
-        **Update wired L3 interface configuration**
+        **Update wired L3 interface**
         https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-interfaces-l-3
 
         - networkId (string): Network ID
@@ -353,7 +353,7 @@ class ActionBatchAppliance(object):
 
     def deleteNetworkApplianceInterfacesL3(self, networkId: str, interfaceId: str):
         """
-        **Delete wired L3 interface configuration**
+        **Delete wired L3 interface**
         https://developer.cisco.com/meraki/api-v1/#!delete-network-appliance-interfaces-l-3
 
         - networkId (string): Network ID
@@ -1064,13 +1064,13 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def addNetworkApplianceUmbrellaPolicies(self, networkId: str, policyId: str, **kwargs):
+    def addNetworkApplianceUmbrellaPolicies(self, networkId: str, policy: dict, **kwargs):
         """
         **Add one umbrella policy to your network.**
         https://developer.cisco.com/meraki/api-v1/#!add-network-appliance-umbrella-policies
 
         - networkId (string): Network ID
-        - policyId (string): Umbrella policy ID
+        - policy (object): Umbrella policy to add
         """
 
         kwargs = locals()
@@ -1079,7 +1079,7 @@ class ActionBatchAppliance(object):
         resource = f"/networks/{networkId}/appliance/umbrella/policies/add"
 
         body_params = [
-            "policyId",
+            "policy",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -1089,13 +1089,13 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def removeNetworkApplianceUmbrellaPolicies(self, networkId: str, policyId: str):
+    def removeNetworkApplianceUmbrellaPolicies(self, networkId: str, policy: dict, **kwargs):
         """
         **Remove one umbrella policy from your network.**
         https://developer.cisco.com/meraki/api-v1/#!remove-network-appliance-umbrella-policies
 
         - networkId (string): Network ID
-        - policyId (string): Umbrella policy ID
+        - policy (object): Umbrella policy to remove
         """
 
         kwargs = locals()
@@ -1103,9 +1103,14 @@ class ActionBatchAppliance(object):
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/appliance/umbrella/policies/remove"
 
+        body_params = [
+            "policy",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "policies_remove",
+            "body": payload,
         }
         return action
 

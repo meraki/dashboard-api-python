@@ -420,6 +420,172 @@ class ActionBatchOrganizations(object):
         }
         return action
 
+    def createOrganizationApiPushProfile(self, organizationId: str, iname: str, topic: dict, receiver: dict, **kwargs):
+        """
+        **Create a new push profile**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-api-push-profile
+
+        - organizationId (string): Organization ID
+        - iname (string): Immutable name of the resource. Must be unique within resources of this type.
+        - topic (object): Push topic
+        - receiver (object): Push receiver profile
+        - name (string): Name of push profile
+        - description (string): Description of push profile
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/api/push/profiles"
+
+        body_params = [
+            "iname",
+            "name",
+            "description",
+            "topic",
+            "receiver",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def updateOrganizationApiPushProfile(self, organizationId: str, iname: str, **kwargs):
+        """
+        **Update a push profile**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-api-push-profile
+
+        - organizationId (string): Organization ID
+        - iname (string): Iname
+        - name (string): Name of push profile
+        - description (string): Description of push profile
+        - topic (object): Push topic
+        - receiver (object): Push receiver profile
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        iname = urllib.parse.quote(iname, safe="")
+        resource = f"/organizations/{organizationId}/api/push/profiles/{iname}"
+
+        body_params = [
+            "name",
+            "description",
+            "topic",
+            "receiver",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def deleteOrganizationApiPushProfile(self, organizationId: str, iname: str):
+        """
+        **Delete a push profile**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-api-push-profile
+
+        - organizationId (string): Organization ID
+        - iname (string): Iname
+        """
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        iname = urllib.parse.quote(iname, safe="")
+        resource = f"/organizations/{organizationId}/api/push/profiles/{iname}"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+
+    def createOrganizationApiPushReceiversProfile(self, organizationId: str, iname: str, receiver: dict, **kwargs):
+        """
+        **Create a new push receiver profile**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-api-push-receivers-profile
+
+        - organizationId (string): Organization ID
+        - iname (string): Immutable name of the resource. Must be unique within resources of this type.
+        - receiver (object): Webhook receiver
+        - name (string): Name of receiver profile
+        - description (string): Description of receiver profile
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/api/push/receivers/profiles"
+
+        body_params = [
+            "iname",
+            "name",
+            "description",
+            "receiver",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def deleteOrganizationApiPushReceiversProfile(self, organizationId: str, iname: str):
+        """
+        **Delete a push receiver profile**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-api-push-receivers-profile
+
+        - organizationId (string): Organization ID
+        - iname (string): Iname
+        """
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        iname = urllib.parse.quote(iname, safe="")
+        resource = f"/organizations/{organizationId}/api/push/receivers/profiles/{iname}"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+
+    def updateOrganizationApiPushReceiversProfile(self, organizationId: str, iname: str, **kwargs):
+        """
+        **Update a push receiver profile**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-api-push-receivers-profile
+
+        - organizationId (string): Organization ID
+        - iname (string): Iname
+        - name (string): Name of the receiver profile
+        - description (string): Description of the receiver profile
+        - receiver (object): API Push Receiver details
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        iname = urllib.parse.quote(iname, safe="")
+        resource = f"/organizations/{organizationId}/api/push/receivers/profiles/{iname}"
+
+        body_params = [
+            "name",
+            "description",
+            "receiver",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
     def createOrganizationAuthRadiusServer(self, organizationId: str, address: str, secret: str, **kwargs):
         """
         **Add an organization-wide RADIUS server**
@@ -1297,6 +1463,39 @@ class ActionBatchOrganizations(object):
         action = {
             "resource": resource,
             "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def resolveOrganizationIamAdminsAdministratorsMePermissions(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List the authenticated caller admin's permissions for an organization. Org-wide read and write admins receive a single organization-scoped permission item instead of per-network items. Scoped callers receive the network resources they can access in the requested organization, along with the effective allowed action for each resource.**
+        https://developer.cisco.com/meraki/api-v1/#!resolve-organization-iam-admins-administrators-me-permissions
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/iam/admins/administrators/me/permissions/resolve"
+
+        body_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "permissions/resolve",
             "body": payload,
         }
         return action

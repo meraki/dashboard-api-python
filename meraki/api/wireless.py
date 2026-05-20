@@ -1741,6 +1741,7 @@ class Wireless(object):
         - name (string): AP port profile name
         - ports (array): AP ports configuration
         - usbPorts (array): AP usb ports configuration
+        - security (object): AP port security configuration
         """
 
         kwargs.update(locals())
@@ -1756,6 +1757,7 @@ class Wireless(object):
             "name",
             "ports",
             "usbPorts",
+            "security",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -1866,6 +1868,7 @@ class Wireless(object):
         - name (string): AP port profile name
         - ports (array): AP ports configuration
         - usbPorts (array): AP usb ports configuration
+        - security (object): AP port security configuration
         """
 
         kwargs.update(locals())
@@ -1882,6 +1885,7 @@ class Wireless(object):
             "name",
             "ports",
             "usbPorts",
+            "security",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -6091,6 +6095,82 @@ class Wireless(object):
             if invalid and self._session._logger:
                 self._session._logger.warning(
                     f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectsInsightsByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceSuccessfulConnectsInsightsV2ByNetwork(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Provides root-cause diagnostics for wireless successful connects experience by network.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-successful-connects-insights-v-2-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - ssidNumbers (array): Filter results by SSID number.
+        - bands (array): Filter results by band.
+        - contributor (string): Restrict RCA to a single contributor (assoc, auth, dhcp, dns). If omitted, all contributors are considered.
+        - subContributor (string): Restrict RCA to a single sub-contributor (failure reason). If omitted, all sub-contributors are considered.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        if "contributor" in kwargs:
+            options = ["assoc", "auth", "dhcp", "dns"]
+            assert kwargs["contributor"] in options, (
+                f'''"contributor" cannot be "{kwargs["contributor"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "successfulConnects", "insightsV2", "byNetwork"],
+            "operation": "getOrganizationAssuranceWirelessExperienceSuccessfulConnectsInsightsV2ByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/successfulConnects/insightsV2/byNetwork"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+            "contributor",
+            "subContributor",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "ssidNumbers",
+            "bands",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceSuccessfulConnectsInsightsV2ByNetwork: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)

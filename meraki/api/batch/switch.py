@@ -182,7 +182,7 @@ class ActionBatchSwitch(object):
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
         - vlanId (integer): The VLAN this L3 interface is on. VLAN must be between 1 and 4094.
         - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a L3 interface. Required if this is the first IPv4 interface.
-        - isSwitchDefaultGateway (boolean): When true, the switch uses the IPv4 uplink gateway as its IPv4 default gateway. This can only be set if the interface is designated as the IPv4 uplink.
+        - isSwitchDefaultGateway (boolean): When true, the switch uses the IPv4 uplink gateway as its IPv4 default gateway. This can only be set if the interface is designated as the IPv4 uplink and the switch is running IOS XE version >= 17.18.3.
         - uplinkV4 (boolean): When true, this interface is used as static IPv4 uplink.
         - candidateUplinkV4 (boolean): When true, this interface is a UAC candidate for IPv4 Uplink.
         - uplinkV6 (boolean): When true, this interface is used as static IPv6 uplink.
@@ -252,7 +252,7 @@ class ActionBatchSwitch(object):
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
         - vlanId (integer): The VLAN this L3 interface is on. VLAN must be between 1 and 4094.
         - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a L3 interface. Required if this is the first IPv4 interface.
-        - isSwitchDefaultGateway (boolean): When true, the switch uses the IPv4 uplink gateway as its IPv4 default gateway. This can only be set if the interface is designated as the IPv4 uplink.
+        - isSwitchDefaultGateway (boolean): When true, the switch uses the IPv4 uplink gateway as its IPv4 default gateway. This can only be set if the interface is designated as the IPv4 uplink and the switch is running IOS XE version >= 17.18.3.
         - uplinkV4 (boolean): When true, this interface is used as static IPv4 uplink.
         - candidateUplinkV4 (boolean): When true, this interface is a UAC candidate for IPv4 Uplink.
         - uplinkV6 (boolean): When true, this interface is used as static IPv6 uplink.
@@ -1511,7 +1511,7 @@ class ActionBatchSwitch(object):
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
         - vlanId (integer): The VLAN this L3 interface is on. VLAN must be between 1 and 4094.
         - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a L3 interface. Required if this is the first IPv4 interface.
-        - isSwitchDefaultGateway (boolean): When true, the switch uses the IPv4 uplink gateway as its IPv4 default gateway. This can only be set if the interface is designated as the IPv4 uplink.
+        - isSwitchDefaultGateway (boolean): When true, the switch uses the IPv4 uplink gateway as its IPv4 default gateway. This can only be set if the interface is designated as the IPv4 uplink and the switch is running IOS XE version >= 17.18.3.
         - uplinkV4 (boolean): When true, this interface is used as static IPv4 uplink.
         - candidateUplinkV4 (boolean): When true, this interface is a UAC candidate for IPv4 Uplink.
         - uplinkV6 (boolean): When true, this interface is used as static IPv6 uplink.
@@ -1583,7 +1583,7 @@ class ActionBatchSwitch(object):
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
         - vlanId (integer): The VLAN this L3 interface is on. VLAN must be between 1 and 4094.
         - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a L3 interface. Required if this is the first IPv4 interface.
-        - isSwitchDefaultGateway (boolean): When true, the switch uses the IPv4 uplink gateway as its IPv4 default gateway. This can only be set if the interface is designated as the IPv4 uplink.
+        - isSwitchDefaultGateway (boolean): When true, the switch uses the IPv4 uplink gateway as its IPv4 default gateway. This can only be set if the interface is designated as the IPv4 uplink and the switch is running IOS XE version >= 17.18.3.
         - uplinkV4 (boolean): When true, this interface is used as static IPv4 uplink.
         - candidateUplinkV4 (boolean): When true, this interface is a UAC candidate for IPv4 Uplink.
         - uplinkV6 (boolean): When true, this interface is used as static IPv6 uplink.
