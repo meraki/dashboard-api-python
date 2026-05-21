@@ -13,8 +13,8 @@
 
         {% endif %}
         {% if assert_blocks|length > 0 %}
-        {% for param, values in assert_blocks %}
-        if "{{ param }}" in kwargs:
+        {% for param, values, nullable in assert_blocks %}
+        if "{{ param }}" in kwargs{% if nullable %} and kwargs["{{ param }}"] is not None{% endif %}:
             options = {{ values }}
             assert kwargs["{{ param }}"] in options, f'''"{{ param }}" cannot be "{kwargs['{{ param }}']}", & must be set to one of: {options}'''
         {% endfor %}
