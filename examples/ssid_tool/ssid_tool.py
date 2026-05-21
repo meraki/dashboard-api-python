@@ -117,17 +117,43 @@ IDENTITY_PSK_CREATE_PARAMS = ["name", "passphrase", "groupPolicyId", "expiresAt"
 # Keys that are path parameters or read-only identifiers returned by GET
 PATH_PARAMS = {"networkId", "number", "ssidNumber"}
 
-# Keys to strip from sub-resource payloads before PUT (not predictable across networks)
 WRITE_EXCLUDE_KEYS = {
-    "splashSettings": ["sentryEnrollment"],
+    "splashSettings": {
+        "sentryEnrollment": "References network-specific Systems Manager network ID",
+        "guestSponsorship": "API returns null for durationInMinutes (expects integer)",
+        "billing": "API returns null for prepaidAccessFastLoginEnabled (expects boolean)",
+    },
+    "hotspot20": {
+        "operator": "API returns null for name (expects string)",
+        "venue": "API returns null for name/type (expects strings)",
+    },
+    "vpn": {
+        "failover": "API returns null for requestIp (expects string)",
+        "concentrator": "Requires a VPN concentrator configured on the network",
+        "splitTunnel": "Depends on concentrator; fails if VPN topology not present",
+    },
 }
 
 
-def prepare_payload(resource_name: str, raw: dict) -> dict:
-    payload = {k: v for k, v in raw.items() if k not in PATH_PARAMS and v is not None}
-    exclude = WRITE_EXCLUDE_KEYS.get(resource_name)
-    if exclude:
-        payload = {k: v for k, v in payload.items() if k not in exclude}
+def strip_nulls(obj: dict) -> dict:
+    def _recurse(val: object) -> object:
+        if isinstance(val, dict):
+            return {k: _recurse(v) for k, v in val.items() if v is not None}
+        if isinstance(val, list):
+            return [_recurse(item) for item in val]
+        return val
+
+    result = _recurse(obj)
+    assert isinstance(result, dict)
+    return result
+
+
+def prepare_payload(resource_name: str, raw: dict, apply_exclusions: bool = True) -> dict:
+    payload = strip_nulls({k: v for k, v in raw.items() if k not in PATH_PARAMS})
+    if apply_exclusions:
+        exclude = WRITE_EXCLUDE_KEYS.get(resource_name)
+        if exclude:
+            payload = {k: v for k, v in payload.items() if k not in exclude}
     if resource_name == "firewallL3" and "rules" in payload:
         payload["rules"] = [r for r in payload["rules"] if r.get("destCidr") not in ("Local LAN", "local_lan")]
     return payload
@@ -153,23 +179,34 @@ async def swap_identity_psks(
     success = []
     failed = []
 
-    for slot, psks_to_delete in [(slot_a, psks_a), (slot_b, psks_b)]:
-        for psk in psks_to_delete:
-            try:
-                await api.wireless.deleteNetworkWirelessSsidIdentityPsk(network_id, str(slot), psk["id"])
-            except AsyncAPIError as e:
-                failed.append(f"identityPsks: delete {psk['name']} from slot {slot} ({e.status})")
+    async def _delete(slot, psk):
+        try:
+            await api.wireless.deleteNetworkWirelessSsidIdentityPsk(network_id, str(slot), psk["id"])
+            return None
+        except AsyncAPIError as e:
+            return f"identityPsks: delete {psk['name']} from slot {slot} ({e.status})"
 
-    for slot, psks_to_create in [(slot_b, psks_a), (slot_a, psks_b)]:
-        for psk in psks_to_create:
-            payload = {k: v for k, v in psk.items() if k in IDENTITY_PSK_CREATE_PARAMS and v is not None}
-            if "name" not in payload or "groupPolicyId" not in payload:
-                continue
-            try:
-                await api.wireless.createNetworkWirelessSsidIdentityPsk(network_id, str(slot), **payload)
-                success.append(f"identityPsks: {psk['name']} -> slot {slot}")
-            except AsyncAPIError as e:
-                failed.append(f"identityPsks: create {psk['name']} on slot {slot} ({e.status})")
+    delete_tasks = [_delete(slot_a, p) for p in psks_a] + [_delete(slot_b, p) for p in psks_b]
+    if delete_tasks:
+        delete_results = await asyncio.gather(*delete_tasks)
+        failed.extend(r for r in delete_results if r)
+
+    async def _create(slot, psk):
+        payload = {k: v for k, v in psk.items() if k in IDENTITY_PSK_CREATE_PARAMS and v is not None}
+        if "name" not in payload or "groupPolicyId" not in payload:
+            return None
+        try:
+            await api.wireless.createNetworkWirelessSsidIdentityPsk(network_id, str(slot), **payload)
+            return ("success", f"identityPsks: {psk['name']} -> slot {slot}")
+        except AsyncAPIError as e:
+            return ("failed", f"identityPsks: create {psk['name']} on slot {slot} ({e.status})")
+
+    create_tasks = [_create(slot_b, p) for p in psks_a] + [_create(slot_a, p) for p in psks_b]
+    if create_tasks:
+        create_results = await asyncio.gather(*create_tasks)
+        for r in create_results:
+            if r:
+                (success if r[0] == "success" else failed).append(r[1])
 
     return success, failed
 
@@ -179,36 +216,49 @@ async def fetch_ssid_sub_resources(api: meraki.aio.AsyncDashboardAPI, network_id
     config = {}
     errors = []
 
-    for resource_name, resource_info in SSID_SUB_RESOURCES.items():
-        if resource_name == "main":
-            continue
+    async def _fetch_one(resource_name: str, resource_info: dict):
         getter = getattr(api.wireless, resource_info["get"])
         try:
-            data = await getter(network_id, str(ssid_number))
-            config[resource_name] = data
+            return resource_name, await getter(network_id, str(ssid_number)), None
         except AsyncAPIError as e:
             if e.status in (400, 404):
-                config[resource_name] = None
-                errors.append((resource_name, str(e)))
-            else:
-                raise
+                return resource_name, None, str(e)
+            raise
 
-    config["identityPsks"] = await fetch_identity_psks(api, network_id, ssid_number)
+    tasks = [_fetch_one(name, info) for name, info in SSID_SUB_RESOURCES.items() if name != "main"]
+    tasks.append(_fetch_psk_wrapper(api, network_id, ssid_number))
+
+    results = await asyncio.gather(*tasks)
+
+    for result in results:
+        name, data, err = result
+        config[name] = data
+        if err:
+            errors.append((name, err))
 
     return config, errors
 
 
+async def _fetch_psk_wrapper(api: meraki.aio.AsyncDashboardAPI, network_id: str, ssid_number: int):
+    data = await fetch_identity_psks(api, network_id, ssid_number)
+    return "identityPsks", data, None
+
+
 async def fetch_ssid_full_config(api: meraki.aio.AsyncDashboardAPI, network_id: str, ssid_number: int) -> tuple[dict, list]:
     """Fetch main config + all sub-resources for a single SSID slot."""
-    try:
-        main = await api.wireless.getNetworkWirelessSsid(network_id, str(ssid_number))
-    except AsyncAPIError as e:
-        if e.status in (400, 404):
-            main = None
-        else:
+
+    async def _fetch_main():
+        try:
+            return await api.wireless.getNetworkWirelessSsid(network_id, str(ssid_number))
+        except AsyncAPIError as e:
+            if e.status in (400, 404):
+                return None
             raise
 
-    sub, errors = await fetch_ssid_sub_resources(api, network_id, ssid_number)
+    main, (sub, errors) = await asyncio.gather(
+        _fetch_main(),
+        fetch_ssid_sub_resources(api, network_id, ssid_number),
+    )
     sub["main"] = main
     return sub, errors
 
@@ -224,10 +274,15 @@ async def backup_all_ssids(api: meraki.aio.AsyncDashboardAPI, network_id: str) -
 
     async with AsyncSpinner("Backing up SSIDs"):
         ssids = await api.wireless.getNetworkWirelessSsids(network_id)
-        for ssid in ssids:
+
+        async def _backup_slot(ssid: dict):
             slot = ssid["number"]
             sub, errors = await fetch_ssid_sub_resources(api, network_id, slot)
             sub["main"] = ssid
+            return slot, sub, errors
+
+        results = await asyncio.gather(*[_backup_slot(s) for s in ssids])
+        for slot, sub, errors in results:
             all_ssids[str(slot)] = sub
             all_errors.extend(errors)
 
@@ -250,31 +305,35 @@ async def swap_ssid_slots(
     cprint(f"  Saved: {backup_path.name}", Color.GREEN)
 
     async with AsyncSpinner(f"Reading slots {slot_a} and {slot_b}"):
-        config_a, _ = await fetch_ssid_full_config(api, network_id, slot_a)
-        config_b, _ = await fetch_ssid_full_config(api, network_id, slot_b)
+        (config_a, _), (config_b, _) = await asyncio.gather(
+            fetch_ssid_full_config(api, network_id, slot_a),
+            fetch_ssid_full_config(api, network_id, slot_b),
+        )
 
     results = {"success": [], "failed": []}
 
     async with AsyncSpinner("Swapping configurations"):
-        for resource_name, resource_info in SSID_SUB_RESOURCES.items():
-            updater = getattr(api.wireless, resource_info["update"])
 
-            payload_a = prepare_payload(resource_name, config_a.get(resource_name) or {})
-            payload_b = prepare_payload(resource_name, config_b.get(resource_name) or {})
+        async def _apply(resource_name, src_slot, dst_slot, config):
+            updater = getattr(api.wireless, SSID_SUB_RESOURCES[resource_name]["update"])
+            payload = prepare_payload(resource_name, config.get(resource_name) or {}, apply_exclusions=False)
+            if not payload:
+                return None
+            try:
+                await updater(network_id, str(dst_slot), **payload)
+                return ("success", f"{resource_name}: slot {src_slot} -> slot {dst_slot}")
+            except AsyncAPIError as e:
+                return ("failed", f"{resource_name}: slot {src_slot} -> slot {dst_slot} ({e.status})")
 
-            if payload_a:
-                try:
-                    await updater(network_id, str(slot_b), **payload_a)
-                    results["success"].append(f"{resource_name}: slot {slot_a} -> slot {slot_b}")
-                except AsyncAPIError as e:
-                    results["failed"].append(f"{resource_name}: slot {slot_a} -> slot {slot_b} ({e.status})")
+        swap_tasks = []
+        for resource_name in SSID_SUB_RESOURCES:
+            swap_tasks.append(_apply(resource_name, slot_a, slot_b, config_a))
+            swap_tasks.append(_apply(resource_name, slot_b, slot_a, config_b))
 
-            if payload_b:
-                try:
-                    await updater(network_id, str(slot_a), **payload_b)
-                    results["success"].append(f"{resource_name}: slot {slot_b} -> slot {slot_a}")
-                except AsyncAPIError as e:
-                    results["failed"].append(f"{resource_name}: slot {slot_b} -> slot {slot_a} ({e.status})")
+        swap_results = await asyncio.gather(*swap_tasks)
+        for r in swap_results:
+            if r:
+                results[r[0]].append(r[1])
 
         psks_a = config_a.get("identityPsks", [])
         psks_b = config_b.get("identityPsks", [])
@@ -315,36 +374,48 @@ async def reset_ssid_slot(api: meraki.aio.AsyncDashboardAPI, network_id: str, sl
     results = {"success": [], "failed": []}
 
     async with AsyncSpinner(f"Resetting slot {slot} to defaults"):
-        for resource_name, resource_info in SSID_SUB_RESOURCES.items():
+
+        async def _reset_resource(resource_name, resource_info):
             updater = getattr(api.wireless, resource_info["update"])
             payload = prepare_payload(resource_name, default_config.get(resource_name) or {})
-            if payload:
-                try:
-                    await updater(network_id, str(slot), **payload)
-                    results["success"].append(f"{resource_name}: reset to default")
-                except AsyncAPIError as e:
-                    results["failed"].append(f"{resource_name}: ({e.status})")
+            if not payload:
+                return None
+            try:
+                await updater(network_id, str(slot), **payload)
+                return ("success", f"{resource_name}: reset to default")
+            except AsyncAPIError as e:
+                return ("failed", f"{resource_name}: ({e.status})")
+
+        reset_results = await asyncio.gather(*[_reset_resource(name, info) for name, info in SSID_SUB_RESOURCES.items()])
+        for r in reset_results:
+            if r:
+                results[r[0]].append(r[1])
 
         current_psks = await fetch_identity_psks(api, network_id, slot)
-        for psk in current_psks:
+
+        async def _delete_psk(psk):
             try:
                 await api.wireless.deleteNetworkWirelessSsidIdentityPsk(network_id, str(slot), psk["id"])
-                results["success"].append(f"identityPsks: deleted {psk['name']}")
+                return ("success", f"identityPsks: deleted {psk['name']}")
             except AsyncAPIError as e:
-                results["failed"].append(f"identityPsks: delete {psk['name']} ({e.status})")
+                return ("failed", f"identityPsks: delete {psk['name']} ({e.status})")
+
+        if current_psks:
+            psk_results = await asyncio.gather(*[_delete_psk(p) for p in current_psks])
+            for r in psk_results:
+                results[r[0]].append(r[1])
 
     return results
 
 
 def display_caveats() -> None:
     cprint("\n  Write Exclusions (not restored during swap/reset):", Color.YELLOW)
-    cprint(f"  {'─' * 50}", Color.DIM)
+    cprint(f"  {'─' * 70}", Color.DIM)
     for resource, keys in WRITE_EXCLUDE_KEYS.items():
-        for key in keys:
+        for key, reason in keys.items():
             cprint(f"    {resource}.{key}", Color.RESET)
-    cprint(f"\n  {'Reason:':<10} These attributes reference network-specific IDs", Color.DIM)
-    cprint(f"  {'':>10} that are not portable across networks or slots.", Color.DIM)
-    cprint(f"  {'─' * 50}\n", Color.DIM)
+            cprint(f"      {reason}", Color.DIM)
+    cprint(f"  {'─' * 70}\n", Color.DIM)
 
 
 def display_menu() -> None:
@@ -390,6 +461,7 @@ async def main() -> None:
     async with meraki.aio.AsyncDashboardAPI(
         output_log=False,
         print_console=False,
+        maximum_retries=10,
     ) as api:
         while True:
             display_menu()
