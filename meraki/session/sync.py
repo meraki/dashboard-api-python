@@ -5,7 +5,7 @@ from __future__ import annotations
 import time
 import urllib.parse
 from datetime import datetime, timezone
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 import httpx
 
@@ -14,6 +14,7 @@ from meraki.common import (
     use_iterator_for_get_pages_setter,
 )
 from meraki.exceptions import SessionInputError
+from meraki.smart_limiter import OrgRateLimiter
 from meraki.session.base import SessionBase
 
 
@@ -39,6 +40,18 @@ class RestSession(SessionBase):
         # Persistent httpx client with connection pooling
         self._client = httpx.Client(**client_kwargs)
         self._client.headers.update(self._build_headers())
+
+        # Per-org smart limiter (opt-in)
+        if self._smart_limiting:
+            self._smart_limiter = OrgRateLimiter(
+                rate=self._smart_limit_requests_per_second,
+                capacity=int(self._smart_limit_requests_per_second),
+                cache_path=self._smart_limit_cache_path or None,
+                cache_ttl=self._smart_limit_cache_ttl,
+                logger=self._logger if self._smart_limit_logging else None,
+            )
+            self._smart_limiter.set_resolver(self._resolve_org_for_limiter)
+            self._smart_limiter.set_hydrator(self._hydrate_org_for_limiter)
 
     def close(self):
         """Close the underlying httpx.Client and release connections."""
@@ -70,6 +83,51 @@ class RestSession(SessionBase):
     def _transport_kwargs(self, kwargs: Dict[str, Any]) -> Dict[str, Any]:
         """No-op: httpx config handled at client initialization level."""
         return kwargs
+
+    # ------------------------------------------------------------------
+    # Smart limiter resolver
+    # ------------------------------------------------------------------
+
+    def _resolve_org_for_limiter(self, id_type: str, identifier: str) -> Optional[str]:
+        """Resolve a network/device ID to its org by calling the API directly."""
+        if id_type == "network":
+            endpoint = f"{self._base_url}/networks/{identifier}"
+        else:
+            endpoint = f"{self._base_url}/devices/{identifier}"
+        try:
+            response = self._client.request("GET", endpoint, follow_redirects=True)
+            if response.status_code == 200:
+                data = response.json()
+                return data.get("organizationId")
+        except Exception:
+            pass
+        return None
+
+    def _hydrate_org_for_limiter(self, org_id: str) -> None:
+        """Fetch all networks and devices for an org and register them with the limiter."""
+        networks = self._fetch_all_pages(f"{self._base_url}/organizations/{org_id}/networks?perPage=1000")
+        for net in networks:
+            if "id" in net:
+                self._smart_limiter.register_network(net["id"], org_id)
+
+        devices = self._fetch_all_pages(f"{self._base_url}/organizations/{org_id}/inventoryDevices?perPage=1000")
+        for dev in devices:
+            if "serial" in dev:
+                self._smart_limiter.register_device(dev["serial"], org_id)
+
+    def _fetch_all_pages(self, url: str) -> list:
+        """Paginate through a Meraki list endpoint using Link headers."""
+        results = []
+        while url:
+            response = self._client.request("GET", url, follow_redirects=True)
+            if response.status_code != 200:
+                break
+            page = response.json()
+            if isinstance(page, list):
+                results.extend(page)
+            next_link = response.links.get("next", {}).get("url")
+            url = next_link if next_link else None
+        return results
 
     # ------------------------------------------------------------------
     # Convenience HTTP methods

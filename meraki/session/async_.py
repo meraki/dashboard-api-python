@@ -14,6 +14,7 @@ import httpx
 from meraki.common import validate_base_url, validate_user_agent
 from meraki.config import AIO_MAXIMUM_CONCURRENT_REQUESTS
 from meraki.exceptions import APIError, SessionInputError
+from meraki.smart_limiter import AsyncOrgRateLimiter
 from meraki.session.base import SessionBase
 
 
@@ -53,6 +54,18 @@ class AsyncRestSession(SessionBase):
         # Persistent async client with connection pooling
         self._client = httpx.AsyncClient(**client_kwargs)
 
+        # Per-org smart limiter (opt-in)
+        if self._smart_limiting:
+            self._smart_limiter = AsyncOrgRateLimiter(
+                rate=self._smart_limit_requests_per_second,
+                capacity=int(self._smart_limit_requests_per_second),
+                cache_path=self._smart_limit_cache_path or None,
+                cache_ttl=self._smart_limit_cache_ttl,
+                logger=self._logger if self._smart_limit_logging else None,
+            )
+            self._smart_limiter.set_resolver(self._resolve_org_for_limiter)
+            self._smart_limiter.set_hydrator(self._hydrate_org_for_limiter)
+
         # Trigger the property setter to bind the correct get_pages implementation
         self.use_iterator_for_get_pages = self._use_iterator_for_get_pages
 
@@ -84,6 +97,51 @@ class AsyncRestSession(SessionBase):
     def _transport_kwargs(self, kwargs: Dict[str, Any]) -> Dict[str, Any]:
         """No-op: httpx config handled at client initialization level."""
         return kwargs
+
+    # ------------------------------------------------------------------
+    # Smart limiter resolver
+    # ------------------------------------------------------------------
+
+    async def _resolve_org_for_limiter(self, id_type: str, identifier: str) -> Optional[str]:
+        """Resolve a network/device ID to its org by calling the API directly."""
+        if id_type == "network":
+            endpoint = f"{self._base_url}/networks/{identifier}"
+        else:
+            endpoint = f"{self._base_url}/devices/{identifier}"
+        try:
+            response = await self._client.request("GET", endpoint, follow_redirects=True)
+            if response.status_code == 200:
+                data = response.json()
+                return data.get("organizationId")
+        except Exception:
+            pass
+        return None
+
+    async def _hydrate_org_for_limiter(self, org_id: str) -> None:
+        """Fetch all networks and devices for an org and register them with the limiter."""
+        networks = await self._fetch_all_pages(f"{self._base_url}/organizations/{org_id}/networks?perPage=1000")
+        for net in networks:
+            if "id" in net:
+                self._smart_limiter.register_network(net["id"], org_id)
+
+        devices = await self._fetch_all_pages(f"{self._base_url}/organizations/{org_id}/inventoryDevices?perPage=1000")
+        for dev in devices:
+            if "serial" in dev:
+                self._smart_limiter.register_device(dev["serial"], org_id)
+
+    async def _fetch_all_pages(self, url: str) -> list:
+        """Paginate through a Meraki list endpoint using Link headers."""
+        results = []
+        while url:
+            response = await self._client.request("GET", url, follow_redirects=True)
+            if response.status_code != 200:
+                break
+            page = response.json()
+            if isinstance(page, list):
+                results.extend(page)
+            next_link = response.links.get("next", {}).get("url")
+            url = next_link if next_link else None
+        return results
 
     # ------------------------------------------------------------------
     # Async request override (awaits abstract methods)
@@ -119,6 +177,10 @@ class AsyncRestSession(SessionBase):
         response: Optional[httpx.Response] = None
 
         while retries > 0:
+            # Per-org rate limiting (proactive throttle before sending)
+            if self._smart_limiter:
+                await self._smart_limiter.acquire(abs_url)
+
             # Attempt the request
             try:
                 if response:
@@ -149,6 +211,8 @@ class AsyncRestSession(SessionBase):
             if 300 <= status < 400:
                 abs_url = self._handle_redirect_async(response)
             elif 200 <= status < 300:
+                if self._smart_limiter:
+                    self._smart_limiter.on_success(abs_url)
                 result = await self._handle_success_async(response, metadata, method)
                 if result is None:
                     # JSON decode failure, retry
@@ -157,8 +221,15 @@ class AsyncRestSession(SessionBase):
                         raise APIError(metadata, response)
                     await self._sleep(1)
                     continue
+                if self._smart_limiter and method == "GET" and result.content.strip():
+                    try:
+                        self._smart_limiter.learn_from_response(abs_url, result.json())
+                    except (ValueError, AttributeError):
+                        pass
                 return result
             elif status == 429:
+                if self._smart_limiter:
+                    self._smart_limiter.on_rate_limited(abs_url)
                 wait = self._handle_rate_limit_async(response, metadata, retries)
                 await self._sleep(wait)
                 retries -= 1

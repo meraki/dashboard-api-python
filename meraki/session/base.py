@@ -23,6 +23,12 @@ from meraki.config import (
     MERAKI_PYTHON_SDK_CALLER,
     NETWORK_DELETE_RETRY_WAIT_TIME,
     NGINX_429_RETRY_WAIT_TIME,
+    SMART_LIMIT_CACHE_PATH,
+    SMART_LIMIT_CACHE_TTL,
+    SMART_LIMIT_EAGER_LOAD,
+    SMART_LIMIT_LOGGING,
+    SMART_LIMIT_REQUESTS_PER_SECOND,
+    SMART_LIMITING,
     REQUESTS_PROXY,
     RETRY_4XX_ERROR,
     RETRY_4XX_ERROR_WAIT_TIME,
@@ -66,6 +72,12 @@ class SessionBase(ABC):
         caller: str = MERAKI_PYTHON_SDK_CALLER,
         use_iterator_for_get_pages: bool = USE_ITERATOR_FOR_GET_PAGES,
         validate_kwargs: bool = False,
+        smart_limiting: bool = SMART_LIMITING,
+        smart_limit_requests_per_second: float = SMART_LIMIT_REQUESTS_PER_SECOND,
+        smart_limit_eager_load: bool = SMART_LIMIT_EAGER_LOAD,
+        smart_limit_cache_path: str = SMART_LIMIT_CACHE_PATH,
+        smart_limit_cache_ttl: Optional[float] = SMART_LIMIT_CACHE_TTL,
+        smart_limit_logging: bool = SMART_LIMIT_LOGGING,
     ) -> None:
         super().__init__()
 
@@ -88,6 +100,12 @@ class SessionBase(ABC):
         self._caller = caller
         self._use_iterator_for_get_pages = use_iterator_for_get_pages
         self._validate_kwargs = validate_kwargs
+        self._smart_limiting = smart_limiting
+        self._smart_limit_requests_per_second = smart_limit_requests_per_second
+        self._smart_limit_eager_load = smart_limit_eager_load
+        self._smart_limit_cache_path = smart_limit_cache_path
+        self._smart_limit_cache_ttl = smart_limit_cache_ttl
+        self._smart_limit_logging = smart_limit_logging
 
         # Check Python version
         check_python_version()
@@ -114,6 +132,11 @@ class SessionBase(ABC):
         self._parameters["be_geo_id"] = self._be_geo_id
         self._parameters["caller"] = self._caller
         self._parameters["use_iterator_for_get_pages"] = self._use_iterator_for_get_pages
+        self._parameters["smart_limiting"] = self._smart_limiting
+
+        # Rate limiter is initialized to None here; subclasses create the appropriate
+        # sync or async variant based on self._rate_limiting.
+        self._smart_limiter = None
 
         if self._logger:
             self._logger.info(f"Meraki dashboard API session initialized with these parameters: {self._parameters}")
@@ -174,6 +197,10 @@ class SessionBase(ABC):
         response: Optional["httpx.Response"] = None
 
         while retries > 0:
+            # Per-org rate limiting (proactive throttle before sending)
+            if self._smart_limiter:
+                self._smart_limiter.acquire(abs_url)
+
             # Attempt the request
             try:
                 if self._logger:
@@ -197,6 +224,8 @@ class SessionBase(ABC):
             if 300 <= status < 400:
                 abs_url = self._handle_redirect(response)
             elif 200 <= status < 300:
+                if self._smart_limiter:
+                    self._smart_limiter.on_success(abs_url)
                 result = self._handle_success(response, metadata, method, retries)
                 if result is None:
                     # JSON decode failure, retry
@@ -205,8 +234,15 @@ class SessionBase(ABC):
                         raise APIError(metadata, response)
                     self._sleep(1)
                     continue
+                if self._smart_limiter and method == "GET" and result.content.strip():
+                    try:
+                        self._smart_limiter.learn_from_response(abs_url, result.json())
+                    except (ValueError, AttributeError):
+                        pass
                 return result
             elif status == 429:
+                if self._smart_limiter:
+                    self._smart_limiter.on_rate_limited(abs_url)
                 wait = self._handle_rate_limit(response, metadata, retries)
                 self._sleep(wait)
                 retries -= 1
