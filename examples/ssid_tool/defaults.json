@@ -1,0 +1,2743 @@
+{
+  "0": {
+    "bonjourForwarding": {
+      "enabled": false,
+      "rules": [],
+      "exception": {
+        "enabled": false
+      }
+    },
+    "deviceTypeGroupPolicies": {
+      "enabled": false,
+      "deviceTypePolicies": []
+    },
+    "eapOverride": {},
+    "firewallL3": {
+      "rules": [
+        {
+          "comment": "Wireless clients accessing LAN",
+          "ipVer": "ipv4",
+          "policy": "deny",
+          "protocol": "Any",
+          "destPort": "Any",
+          "destCidr": "Local LAN"
+        },
+        {
+          "comment": "Default rule",
+          "ipVer": "ipv4",
+          "policy": "allow",
+          "protocol": "Any",
+          "destPort": "Any",
+          "destCidr": "Any"
+        }
+      ],
+      "allowLanAccess": false
+    },
+    "firewallL7": {
+      "rules": []
+    },
+    "hotspot20": {
+      "enabled": false,
+      "operator": {
+        "name": null
+      },
+      "venue": {
+        "name": null,
+        "type": null
+      },
+      "networkAccessType": null,
+      "domains": [],
+      "roamConsortOis": [],
+      "mccMncs": [],
+      "naiRealms": []
+    },
+    "schedules": {
+      "enabled": false,
+      "ranges": [],
+      "rangesInSeconds": []
+    },
+    "splashSettings": {
+      "splashMethod": "None",
+      "splashUrl": null,
+      "useSplashUrl": false,
+      "splashTimeout": 1440,
+      "redirectUrl": null,
+      "useRedirectUrl": false,
+      "themeId": null,
+      "language": "en",
+      "guestSponsorship": {
+        "durationInMinutes": null,
+        "guestCanRequestTimeframe": false
+      },
+      "blockAllTrafficBeforeSignOn": true,
+      "controllerDisconnectionBehavior": "default",
+      "allowSimultaneousLogins": true,
+      "billing": {
+        "freeAccess": {
+          "enabled": false,
+          "durationInMinutes": 20
+        },
+        "prepaidAccessFastLoginEnabled": null,
+        "replyToEmailAddress": "meraki@chir.us"
+      },
+      "welcomeMessage": null,
+      "userConsent": {
+        "required": false,
+        "message": null
+      },
+      "splashLogo": {
+        "md5": null
+      },
+      "splashImage": {
+        "md5": null
+      },
+      "splashPrepaidFront": {
+        "md5": null
+      },
+      "sentryEnrollment": {
+        "systemsManagerNetwork": {
+          "id": null,
+          "name": null
+        },
+        "strength": "focused",
+        "enforcedSystems": [
+          "iOS",
+          "Android"
+        ]
+      },
+      "selfRegistration": {
+        "enabled": true,
+        "authorizationType": "admin"
+      }
+    },
+    "trafficShapingRules": {
+      "trafficShapingEnabled": true,
+      "defaultRulesEnabled": true,
+      "rules": []
+    },
+    "vpn": {
+      "concentrator": {},
+      "failover": {
+        "requestIp": null,
+        "heartbeatInterval": 10,
+        "idleTimeout": 30
+      },
+      "splitTunnel": {
+        "enabled": false,
+        "rules": []
+      }
+    },
+    "identityPsks": [],
+    "main": {
+      "number": 0,
+      "name": "Default Settings - wireless WiFi",
+      "enabled": true,
+      "splashPage": "None",
+      "ssidAdminAccessible": false,
+      "accessControl": {
+        "encryption": {
+          "mode": "PSK (WPA2)"
+        },
+        "bandwidth": {
+          "limit": "unlimited"
+        },
+        "clientIpAssignment": {
+          "mode": "Local LAN"
+        },
+        "clientsBlockedFromUsingLan": true,
+        "wiredClientsPartOfWifiNetwork": false,
+        "tunnel": {
+          "enabled": false,
+          "summary": "Disabled"
+        },
+        "splashPage": {
+          "enabled": false,
+          "theme": "n/a"
+        }
+      },
+      "authMode": "psk",
+      "psk": ")S}8ol]=rj8h\\;OODWm3N'+wozGvan",
+      "dot11w": {
+        "enabled": false,
+        "required": false
+      },
+      "dot11r": {
+        "enabled": false,
+        "adaptive": false
+      },
+      "encryptionMode": "wpa",
+      "wpaEncryptionMode": "WPA2 only",
+      "ipAssignmentMode": "Bridge mode",
+      "useVlanTagging": false,
+      "minBitrate": 11,
+      "bandSelection": "Dual band operation",
+      "perClientBandwidthLimitUp": 0,
+      "perClientBandwidthLimitDown": 0,
+      "perSsidBandwidthLimitUp": 0,
+      "perSsidBandwidthLimitDown": 0,
+      "mandatoryDhcpEnabled": false,
+      "enterpriseAdminAccess": "access enabled",
+      "lanIsolationEnabled": false,
+      "visible": true,
+      "availableOnAllAps": true,
+      "availabilityTags": [],
+      "wifiPersonalNetworkEnabled": false,
+      "speedBurst": {
+        "enabled": false
+      },
+      "namedVlans": {
+        "tagging": {
+          "enabled": false
+        }
+      }
+    }
+  },
+  "1": {
+    "bonjourForwarding": {
+      "enabled": false,
+      "rules": [],
+      "exception": {
+        "enabled": false
+      }
+    },
+    "deviceTypeGroupPolicies": {
+      "enabled": false,
+      "deviceTypePolicies": []
+    },
+    "eapOverride": {},
+    "firewallL3": {
+      "rules": [
+        {
+          "comment": "Wireless clients accessing LAN",
+          "ipVer": "ipv4",
+          "policy": "allow",
+          "protocol": "Any",
+          "destPort": "Any",
+          "destCidr": "Local LAN"
+        },
+        {
+          "comment": "Default rule",
+          "ipVer": "ipv4",
+          "policy": "allow",
+          "protocol": "Any",
+          "destPort": "Any",
+          "destCidr": "Any"
+        }
+      ],
+      "allowLanAccess": true
+    },
+    "firewallL7": {
+      "rules": []
+    },
+    "hotspot20": {
+      "enabled": false,
+      "operator": {
+        "name": null
+      },
+      "venue": {
+        "name": null,
+        "type": null
+      },
+      "networkAccessType": null,
+      "domains": [],
+      "roamConsortOis": [],
+      "mccMncs": [],
+      "naiRealms": []
+    },
+    "schedules": {
+      "enabled": false,
+      "ranges": [],
+      "rangesInSeconds": []
+    },
+    "splashSettings": {
+      "splashMethod": "None",
+      "splashUrl": null,
+      "useSplashUrl": false,
+      "splashTimeout": 1440,
+      "redirectUrl": null,
+      "useRedirectUrl": false,
+      "themeId": null,
+      "language": "en",
+      "guestSponsorship": {
+        "durationInMinutes": null,
+        "guestCanRequestTimeframe": false
+      },
+      "blockAllTrafficBeforeSignOn": true,
+      "controllerDisconnectionBehavior": "default",
+      "allowSimultaneousLogins": true,
+      "billing": {
+        "freeAccess": {
+          "enabled": false,
+          "durationInMinutes": 20
+        },
+        "prepaidAccessFastLoginEnabled": null,
+        "replyToEmailAddress": "meraki@chir.us"
+      },
+      "welcomeMessage": null,
+      "userConsent": {
+        "required": false,
+        "message": null
+      },
+      "splashLogo": {
+        "md5": null
+      },
+      "splashImage": {
+        "md5": null
+      },
+      "splashPrepaidFront": {
+        "md5": null
+      },
+      "sentryEnrollment": {
+        "systemsManagerNetwork": {
+          "id": null,
+          "name": null
+        },
+        "strength": "focused",
+        "enforcedSystems": [
+          "iOS",
+          "Android"
+        ]
+      },
+      "selfRegistration": {
+        "enabled": true,
+        "authorizationType": "admin"
+      }
+    },
+    "trafficShapingRules": {
+      "trafficShapingEnabled": true,
+      "defaultRulesEnabled": true,
+      "rules": []
+    },
+    "vpn": {
+      "concentrator": {},
+      "failover": {
+        "requestIp": null,
+        "heartbeatInterval": 10,
+        "idleTimeout": 30
+      },
+      "splitTunnel": {
+        "enabled": false,
+        "rules": []
+      }
+    },
+    "identityPsks": [],
+    "main": {
+      "number": 1,
+      "name": "Unconfigured SSID 2",
+      "enabled": false,
+      "splashPage": "None",
+      "ssidAdminAccessible": false,
+      "accessControl": {
+        "encryption": {
+          "mode": "Open"
+        },
+        "bandwidth": {
+          "limit": "unlimited"
+        },
+        "clientIpAssignment": {
+          "mode": "Local LAN"
+        },
+        "clientsBlockedFromUsingLan": false,
+        "wiredClientsPartOfWifiNetwork": false,
+        "tunnel": {
+          "enabled": false,
+          "summary": "Disabled"
+        },
+        "splashPage": {
+          "enabled": false,
+          "theme": "n/a"
+        }
+      },
+      "authMode": "open",
+      "ipAssignmentMode": "Bridge mode",
+      "useVlanTagging": false,
+      "minBitrate": 11,
+      "bandSelection": "Dual band operation",
+      "perClientBandwidthLimitUp": 0,
+      "perClientBandwidthLimitDown": 0,
+      "perSsidBandwidthLimitUp": 0,
+      "perSsidBandwidthLimitDown": 0,
+      "mandatoryDhcpEnabled": false,
+      "enterpriseAdminAccess": "access enabled",
+      "lanIsolationEnabled": false,
+      "visible": true,
+      "availableOnAllAps": true,
+      "availabilityTags": [],
+      "wifiPersonalNetworkEnabled": false,
+      "speedBurst": {
+        "enabled": false
+      },
+      "namedVlans": {
+        "tagging": {
+          "enabled": false
+        }
+      }
+    }
+  },
+  "2": {
+    "bonjourForwarding": {
+      "enabled": false,
+      "rules": [],
+      "exception": {
+        "enabled": false
+      }
+    },
+    "deviceTypeGroupPolicies": {
+      "enabled": false,
+      "deviceTypePolicies": []
+    },
+    "eapOverride": {},
+    "firewallL3": {
+      "rules": [
+        {
+          "comment": "Wireless clients accessing LAN",
+          "ipVer": "ipv4",
+          "policy": "allow",
+          "protocol": "Any",
+          "destPort": "Any",
+          "destCidr": "Local LAN"
+        },
+        {
+          "comment": "Default rule",
+          "ipVer": "ipv4",
+          "policy": "allow",
+          "protocol": "Any",
+          "destPort": "Any",
+          "destCidr": "Any"
+        }
+      ],
+      "allowLanAccess": true
+    },
+    "firewallL7": {
+      "rules": []
+    },
+    "hotspot20": {
+      "enabled": false,
+      "operator": {
+        "name": null
+      },
+      "venue": {
+        "name": null,
+        "type": null
+      },
+      "networkAccessType": null,
+      "domains": [],
+      "roamConsortOis": [],
+      "mccMncs": [],
+      "naiRealms": []
+    },
+    "schedules": {
+      "enabled": false,
+      "ranges": [],
+      "rangesInSeconds": []
+    },
+    "splashSettings": {
+      "splashMethod": "None",
+      "splashUrl": null,
+      "useSplashUrl": false,
+      "splashTimeout": 1440,
+      "redirectUrl": null,
+      "useRedirectUrl": false,
+      "themeId": null,
+      "language": "en",
+      "guestSponsorship": {
+        "durationInMinutes": null,
+        "guestCanRequestTimeframe": false
+      },
+      "blockAllTrafficBeforeSignOn": true,
+      "controllerDisconnectionBehavior": "default",
+      "allowSimultaneousLogins": true,
+      "billing": {
+        "freeAccess": {
+          "enabled": false,
+          "durationInMinutes": 20
+        },
+        "prepaidAccessFastLoginEnabled": null,
+        "replyToEmailAddress": "meraki@chir.us"
+      },
+      "welcomeMessage": null,
+      "userConsent": {
+        "required": false,
+        "message": null
+      },
+      "splashLogo": {
+        "md5": null
+      },
+      "splashImage": {
+        "md5": null
+      },
+      "splashPrepaidFront": {
+        "md5": null
+      },
+      "sentryEnrollment": {
+        "systemsManagerNetwork": {
+          "id": null,
+          "name": null
+        },
+        "strength": "focused",
+        "enforcedSystems": [
+          "iOS",
+          "Android"
+        ]
+      },
+      "selfRegistration": {
+        "enabled": true,
+        "authorizationType": "admin"
+      }
+    },
+    "trafficShapingRules": {
+      "trafficShapingEnabled": true,
+      "defaultRulesEnabled": true,
+      "rules": []
+    },
+    "vpn": {
+      "concentrator": {},
+      "failover": {
+        "requestIp": null,
+        "heartbeatInterval": 10,
+        "idleTimeout": 30
+      },
+      "splitTunnel": {
+        "enabled": false,
+        "rules": []
+      }
+    },
+    "identityPsks": [],
+    "main": {
+      "number": 2,
+      "name": "Unconfigured SSID 3",
+      "enabled": false,
+      "splashPage": "None",
+      "ssidAdminAccessible": false,
+      "accessControl": {
+        "encryption": {
+          "mode": "Open"
+        },
+        "bandwidth": {
+          "limit": "unlimited"
+        },
+        "clientIpAssignment": {
+          "mode": "Local LAN"
+        },
+        "clientsBlockedFromUsingLan": false,
+        "wiredClientsPartOfWifiNetwork": false,
+        "tunnel": {
+          "enabled": false,
+          "summary": "Disabled"
+        },
+        "splashPage": {
+          "enabled": false,
+          "theme": "n/a"
+        }
+      },
+      "authMode": "open",
+      "ipAssignmentMode": "Bridge mode",
+      "useVlanTagging": false,
+      "minBitrate": 11,
+      "bandSelection": "Dual band operation",
+      "perClientBandwidthLimitUp": 0,
+      "perClientBandwidthLimitDown": 0,
+      "perSsidBandwidthLimitUp": 0,
+      "perSsidBandwidthLimitDown": 0,
+      "mandatoryDhcpEnabled": false,
+      "enterpriseAdminAccess": "access enabled",
+      "lanIsolationEnabled": false,
+      "visible": true,
+      "availableOnAllAps": true,
+      "availabilityTags": [],
+      "wifiPersonalNetworkEnabled": false,
+      "speedBurst": {
+        "enabled": false
+      },
+      "namedVlans": {
+        "tagging": {
+          "enabled": false
+        }
+      }
+    }
+  },
+  "3": {
+    "bonjourForwarding": {
+      "enabled": false,
+      "rules": [],
+      "exception": {
+        "enabled": false
+      }
+    },
+    "deviceTypeGroupPolicies": {
+      "enabled": false,
+      "deviceTypePolicies": []
+    },
+    "eapOverride": {},
+    "firewallL3": {
+      "rules": [
+        {
+          "comment": "Wireless clients accessing LAN",
+          "ipVer": "ipv4",
+          "policy": "allow",
+          "protocol": "Any",
+          "destPort": "Any",
+          "destCidr": "Local LAN"
+        },
+        {
+          "comment": "Default rule",
+          "ipVer": "ipv4",
+          "policy": "allow",
+          "protocol": "Any",
+          "destPort": "Any",
+          "destCidr": "Any"
+        }
+      ],
+      "allowLanAccess": true
+    },
+    "firewallL7": {
+      "rules": []
+    },
+    "hotspot20": {
+      "enabled": false,
+      "operator": {
+        "name": null
+      },
+      "venue": {
+        "name": null,
+        "type": null
+      },
+      "networkAccessType": null,
+      "domains": [],
+      "roamConsortOis": [],
+      "mccMncs": [],
+      "naiRealms": []
+    },
+    "schedules": {
+      "enabled": false,
+      "ranges": [],
+      "rangesInSeconds": []
+    },
+    "splashSettings": {
+      "splashMethod": "None",
+      "splashUrl": null,
+      "useSplashUrl": false,
+      "splashTimeout": 1440,
+      "redirectUrl": null,
+      "useRedirectUrl": false,
+      "themeId": null,
+      "language": "en",
+      "guestSponsorship": {
+        "durationInMinutes": null,
+        "guestCanRequestTimeframe": false
+      },
+      "blockAllTrafficBeforeSignOn": true,
+      "controllerDisconnectionBehavior": "default",
+      "allowSimultaneousLogins": true,
+      "billing": {
+        "freeAccess": {
+          "enabled": false,
+          "durationInMinutes": 20
+        },
+        "prepaidAccessFastLoginEnabled": null,
+        "replyToEmailAddress": "meraki@chir.us"
+      },
+      "welcomeMessage": null,
+      "userConsent": {
+        "required": false,
+        "message": null
+      },
+      "splashLogo": {
+        "md5": null
+      },
+      "splashImage": {
+        "md5": null
+      },
+      "splashPrepaidFront": {
+        "md5": null
+      },
+      "sentryEnrollment": {
+        "systemsManagerNetwork": {
+          "id": null,
+          "name": null
+        },
+        "strength": "focused",
+        "enforcedSystems": [
+          "iOS",
+          "Android"
+        ]
+      },
+      "selfRegistration": {
+        "enabled": true,
+        "authorizationType": "admin"
+      }
+    },
+    "trafficShapingRules": {
+      "trafficShapingEnabled": true,
+      "defaultRulesEnabled": true,
+      "rules": []
+    },
+    "vpn": {
+      "concentrator": {},
+      "failover": {
+        "requestIp": null,
+        "heartbeatInterval": 10,
+        "idleTimeout": 30
+      },
+      "splitTunnel": {
+        "enabled": false,
+        "rules": []
+      }
+    },
+    "identityPsks": [],
+    "main": {
+      "number": 3,
+      "name": "Unconfigured SSID 4",
+      "enabled": false,
+      "splashPage": "None",
+      "ssidAdminAccessible": false,
+      "accessControl": {
+        "encryption": {
+          "mode": "Open"
+        },
+        "bandwidth": {
+          "limit": "unlimited"
+        },
+        "clientIpAssignment": {
+          "mode": "Local LAN"
+        },
+        "clientsBlockedFromUsingLan": false,
+        "wiredClientsPartOfWifiNetwork": false,
+        "tunnel": {
+          "enabled": false,
+          "summary": "Disabled"
+        },
+        "splashPage": {
+          "enabled": false,
+          "theme": "n/a"
+        }
+      },
+      "authMode": "open",
+      "ipAssignmentMode": "Bridge mode",
+      "useVlanTagging": false,
+      "minBitrate": 11,
+      "bandSelection": "Dual band operation",
+      "perClientBandwidthLimitUp": 0,
+      "perClientBandwidthLimitDown": 0,
+      "perSsidBandwidthLimitUp": 0,
+      "perSsidBandwidthLimitDown": 0,
+      "mandatoryDhcpEnabled": false,
+      "enterpriseAdminAccess": "access enabled",
+      "lanIsolationEnabled": false,
+      "visible": true,
+      "availableOnAllAps": true,
+      "availabilityTags": [],
+      "wifiPersonalNetworkEnabled": false,
+      "speedBurst": {
+        "enabled": false
+      },
+      "namedVlans": {
+        "tagging": {
+          "enabled": false
+        }
+      }
+    }
+  },
+  "4": {
+    "bonjourForwarding": {
+      "enabled": false,
+      "rules": [],
+      "exception": {
+        "enabled": false
+      }
+    },
+    "deviceTypeGroupPolicies": {
+      "enabled": false,
+      "deviceTypePolicies": []
+    },
+    "eapOverride": {},
+    "firewallL3": {
+      "rules": [
+        {
+          "comment": "Wireless clients accessing LAN",
+          "ipVer": "ipv4",
+          "policy": "allow",
+          "protocol": "Any",
+          "destPort": "Any",
+          "destCidr": "Local LAN"
+        },
+        {
+          "comment": "Default rule",
+          "ipVer": "ipv4",
+          "policy": "allow",
+          "protocol": "Any",
+          "destPort": "Any",
+          "destCidr": "Any"
+        }
+      ],
+      "allowLanAccess": true
+    },
+    "firewallL7": {
+      "rules": []
+    },
+    "hotspot20": {
+      "enabled": false,
+      "operator": {
+        "name": null
+      },
+      "venue": {
+        "name": null,
+        "type": null
+      },
+      "networkAccessType": null,
+      "domains": [],
+      "roamConsortOis": [],
+      "mccMncs": [],
+      "naiRealms": []
+    },
+    "schedules": {
+      "enabled": false,
+      "ranges": [],
+      "rangesInSeconds": []
+    },
+    "splashSettings": {
+      "splashMethod": "None",
+      "splashUrl": null,
+      "useSplashUrl": false,
+      "splashTimeout": 1440,
+      "redirectUrl": null,
+      "useRedirectUrl": false,
+      "themeId": null,
+      "language": "en",
+      "guestSponsorship": {
+        "durationInMinutes": null,
+        "guestCanRequestTimeframe": false
+      },
+      "blockAllTrafficBeforeSignOn": true,
+      "controllerDisconnectionBehavior": "default",
+      "allowSimultaneousLogins": true,
+      "billing": {
+        "freeAccess": {
+          "enabled": false,
+          "durationInMinutes": 20
+        },
+        "prepaidAccessFastLoginEnabled": null,
+        "replyToEmailAddress": "meraki@chir.us"
+      },
+      "welcomeMessage": null,
+      "userConsent": {
+        "required": false,
+        "message": null
+      },
+      "splashLogo": {
+        "md5": null
+      },
+      "splashImage": {
+        "md5": null
+      },
+      "splashPrepaidFront": {
+        "md5": null
+      },
+      "sentryEnrollment": {
+        "systemsManagerNetwork": {
+          "id": null,
+          "name": null
+        },
+        "strength": "focused",
+        "enforcedSystems": [
+          "iOS",
+          "Android"
+        ]
+      },
+      "selfRegistration": {
+        "enabled": true,
+        "authorizationType": "admin"
+      }
+    },
+    "trafficShapingRules": {
+      "trafficShapingEnabled": true,
+      "defaultRulesEnabled": true,
+      "rules": []
+    },
+    "vpn": {
+      "concentrator": {},
+      "failover": {
+        "requestIp": null,
+        "heartbeatInterval": 10,
+        "idleTimeout": 30
+      },
+      "splitTunnel": {
+        "enabled": false,
+        "rules": []
+      }
+    },
+    "identityPsks": [],
+    "main": {
+      "number": 4,
+      "name": "Unconfigured SSID 5",
+      "enabled": false,
+      "splashPage": "None",
+      "ssidAdminAccessible": false,
+      "accessControl": {
+        "encryption": {
+          "mode": "Open"
+        },
+        "bandwidth": {
+          "limit": "unlimited"
+        },
+        "clientIpAssignment": {
+          "mode": "Local LAN"
+        },
+        "clientsBlockedFromUsingLan": false,
+        "wiredClientsPartOfWifiNetwork": false,
+        "tunnel": {
+          "enabled": false,
+          "summary": "Disabled"
+        },
+        "splashPage": {
+          "enabled": false,
+          "theme": "n/a"
+        }
+      },
+      "authMode": "open",
+      "ipAssignmentMode": "Bridge mode",
+      "useVlanTagging": false,
+      "minBitrate": 11,
+      "bandSelection": "Dual band operation",
+      "perClientBandwidthLimitUp": 0,
+      "perClientBandwidthLimitDown": 0,
+      "perSsidBandwidthLimitUp": 0,
+      "perSsidBandwidthLimitDown": 0,
+      "mandatoryDhcpEnabled": false,
+      "enterpriseAdminAccess": "access enabled",
+      "lanIsolationEnabled": false,
+      "visible": true,
+      "availableOnAllAps": true,
+      "availabilityTags": [],
+      "wifiPersonalNetworkEnabled": false,
+      "speedBurst": {
+        "enabled": false
+      },
+      "namedVlans": {
+        "tagging": {
+          "enabled": false
+        }
+      }
+    }
+  },
+  "5": {
+    "bonjourForwarding": {
+      "enabled": false,
+      "rules": [],
+      "exception": {
+        "enabled": false
+      }
+    },
+    "deviceTypeGroupPolicies": {
+      "enabled": false,
+      "deviceTypePolicies": []
+    },
+    "eapOverride": {},
+    "firewallL3": {
+      "rules": [
+        {
+          "comment": "Wireless clients accessing LAN",
+          "ipVer": "ipv4",
+          "policy": "allow",
+          "protocol": "Any",
+          "destPort": "Any",
+          "destCidr": "Local LAN"
+        },
+        {
+          "comment": "Default rule",
+          "ipVer": "ipv4",
+          "policy": "allow",
+          "protocol": "Any",
+          "destPort": "Any",
+          "destCidr": "Any"
+        }
+      ],
+      "allowLanAccess": true
+    },
+    "firewallL7": {
+      "rules": []
+    },
+    "hotspot20": {
+      "enabled": false,
+      "operator": {
+        "name": null
+      },
+      "venue": {
+        "name": null,
+        "type": null
+      },
+      "networkAccessType": null,
+      "domains": [],
+      "roamConsortOis": [],
+      "mccMncs": [],
+      "naiRealms": []
+    },
+    "schedules": {
+      "enabled": false,
+      "ranges": [],
+      "rangesInSeconds": []
+    },
+    "splashSettings": {
+      "splashMethod": "None",
+      "splashUrl": null,
+      "useSplashUrl": false,
+      "splashTimeout": 1440,
+      "redirectUrl": null,
+      "useRedirectUrl": false,
+      "themeId": null,
+      "language": "en",
+      "guestSponsorship": {
+        "durationInMinutes": null,
+        "guestCanRequestTimeframe": false
+      },
+      "blockAllTrafficBeforeSignOn": true,
+      "controllerDisconnectionBehavior": "default",
+      "allowSimultaneousLogins": true,
+      "billing": {
+        "freeAccess": {
+          "enabled": false,
+          "durationInMinutes": 20
+        },
+        "prepaidAccessFastLoginEnabled": null,
+        "replyToEmailAddress": "meraki@chir.us"
+      },
+      "welcomeMessage": null,
+      "userConsent": {
+        "required": false,
+        "message": null
+      },
+      "splashLogo": {
+        "md5": null
+      },
+      "splashImage": {
+        "md5": null
+      },
+      "splashPrepaidFront": {
+        "md5": null
+      },
+      "sentryEnrollment": {
+        "systemsManagerNetwork": {
+          "id": null,
+          "name": null
+        },
+        "strength": "focused",
+        "enforcedSystems": [
+          "iOS",
+          "Android"
+        ]
+      },
+      "selfRegistration": {
+        "enabled": true,
+        "authorizationType": "admin"
+      }
+    },
+    "trafficShapingRules": {
+      "trafficShapingEnabled": true,
+      "defaultRulesEnabled": true,
+      "rules": []
+    },
+    "vpn": {
+      "concentrator": {},
+      "failover": {
+        "requestIp": null,
+        "heartbeatInterval": 10,
+        "idleTimeout": 30
+      },
+      "splitTunnel": {
+        "enabled": false,
+        "rules": []
+      }
+    },
+    "identityPsks": [],
+    "main": {
+      "number": 5,
+      "name": "Unconfigured SSID 6",
+      "enabled": false,
+      "splashPage": "None",
+      "ssidAdminAccessible": false,
+      "accessControl": {
+        "encryption": {
+          "mode": "Open"
+        },
+        "bandwidth": {
+          "limit": "unlimited"
+        },
+        "clientIpAssignment": {
+          "mode": "Local LAN"
+        },
+        "clientsBlockedFromUsingLan": false,
+        "wiredClientsPartOfWifiNetwork": false,
+        "tunnel": {
+          "enabled": false,
+          "summary": "Disabled"
+        },
+        "splashPage": {
+          "enabled": false,
+          "theme": "n/a"
+        }
+      },
+      "authMode": "open",
+      "ipAssignmentMode": "Bridge mode",
+      "useVlanTagging": false,
+      "minBitrate": 11,
+      "bandSelection": "Dual band operation",
+      "perClientBandwidthLimitUp": 0,
+      "perClientBandwidthLimitDown": 0,
+      "perSsidBandwidthLimitUp": 0,
+      "perSsidBandwidthLimitDown": 0,
+      "mandatoryDhcpEnabled": false,
+      "enterpriseAdminAccess": "access enabled",
+      "lanIsolationEnabled": false,
+      "visible": true,
+      "availableOnAllAps": true,
+      "availabilityTags": [],
+      "wifiPersonalNetworkEnabled": false,
+      "speedBurst": {
+        "enabled": false
+      },
+      "namedVlans": {
+        "tagging": {
+          "enabled": false
+        }
+      }
+    }
+  },
+  "6": {
+    "bonjourForwarding": {
+      "enabled": false,
+      "rules": [],
+      "exception": {
+        "enabled": false
+      }
+    },
+    "deviceTypeGroupPolicies": {
+      "enabled": false,
+      "deviceTypePolicies": []
+    },
+    "eapOverride": {},
+    "firewallL3": {
+      "rules": [
+        {
+          "comment": "Wireless clients accessing LAN",
+          "ipVer": "ipv4",
+          "policy": "allow",
+          "protocol": "Any",
+          "destPort": "Any",
+          "destCidr": "Local LAN"
+        },
+        {
+          "comment": "Default rule",
+          "ipVer": "ipv4",
+          "policy": "allow",
+          "protocol": "Any",
+          "destPort": "Any",
+          "destCidr": "Any"
+        }
+      ],
+      "allowLanAccess": true
+    },
+    "firewallL7": {
+      "rules": []
+    },
+    "hotspot20": {
+      "enabled": false,
+      "operator": {
+        "name": null
+      },
+      "venue": {
+        "name": null,
+        "type": null
+      },
+      "networkAccessType": null,
+      "domains": [],
+      "roamConsortOis": [],
+      "mccMncs": [],
+      "naiRealms": []
+    },
+    "schedules": {
+      "enabled": false,
+      "ranges": [],
+      "rangesInSeconds": []
+    },
+    "splashSettings": {
+      "splashMethod": "None",
+      "splashUrl": null,
+      "useSplashUrl": false,
+      "splashTimeout": 1440,
+      "redirectUrl": null,
+      "useRedirectUrl": false,
+      "themeId": null,
+      "language": "en",
+      "guestSponsorship": {
+        "durationInMinutes": null,
+        "guestCanRequestTimeframe": false
+      },
+      "blockAllTrafficBeforeSignOn": true,
+      "controllerDisconnectionBehavior": "default",
+      "allowSimultaneousLogins": true,
+      "billing": {
+        "freeAccess": {
+          "enabled": false,
+          "durationInMinutes": 20
+        },
+        "prepaidAccessFastLoginEnabled": null,
+        "replyToEmailAddress": "meraki@chir.us"
+      },
+      "welcomeMessage": null,
+      "userConsent": {
+        "required": false,
+        "message": null
+      },
+      "splashLogo": {
+        "md5": null
+      },
+      "splashImage": {
+        "md5": null
+      },
+      "splashPrepaidFront": {
+        "md5": null
+      },
+      "sentryEnrollment": {
+        "systemsManagerNetwork": {
+          "id": null,
+          "name": null
+        },
+        "strength": "focused",
+        "enforcedSystems": [
+          "iOS",
+          "Android"
+        ]
+      },
+      "selfRegistration": {
+        "enabled": true,
+        "authorizationType": "admin"
+      }
+    },
+    "trafficShapingRules": {
+      "trafficShapingEnabled": true,
+      "defaultRulesEnabled": true,
+      "rules": []
+    },
+    "vpn": {
+      "concentrator": {},
+      "failover": {
+        "requestIp": null,
+        "heartbeatInterval": 10,
+        "idleTimeout": 30
+      },
+      "splitTunnel": {
+        "enabled": false,
+        "rules": []
+      }
+    },
+    "identityPsks": [],
+    "main": {
+      "number": 6,
+      "name": "Unconfigured SSID 7",
+      "enabled": false,
+      "splashPage": "None",
+      "ssidAdminAccessible": false,
+      "accessControl": {
+        "encryption": {
+          "mode": "Open"
+        },
+        "bandwidth": {
+          "limit": "unlimited"
+        },
+        "clientIpAssignment": {
+          "mode": "Local LAN"
+        },
+        "clientsBlockedFromUsingLan": false,
+        "wiredClientsPartOfWifiNetwork": false,
+        "tunnel": {
+          "enabled": false,
+          "summary": "Disabled"
+        },
+        "splashPage": {
+          "enabled": false,
+          "theme": "n/a"
+        }
+      },
+      "authMode": "open",
+      "ipAssignmentMode": "Bridge mode",
+      "useVlanTagging": false,
+      "minBitrate": 11,
+      "bandSelection": "Dual band operation",
+      "perClientBandwidthLimitUp": 0,
+      "perClientBandwidthLimitDown": 0,
+      "perSsidBandwidthLimitUp": 0,
+      "perSsidBandwidthLimitDown": 0,
+      "mandatoryDhcpEnabled": false,
+      "enterpriseAdminAccess": "access enabled",
+      "lanIsolationEnabled": false,
+      "visible": true,
+      "availableOnAllAps": true,
+      "availabilityTags": [],
+      "wifiPersonalNetworkEnabled": false,
+      "speedBurst": {
+        "enabled": false
+      },
+      "namedVlans": {
+        "tagging": {
+          "enabled": false
+        }
+      }
+    }
+  },
+  "7": {
+    "bonjourForwarding": {
+      "enabled": false,
+      "rules": [],
+      "exception": {
+        "enabled": false
+      }
+    },
+    "deviceTypeGroupPolicies": {
+      "enabled": false,
+      "deviceTypePolicies": []
+    },
+    "eapOverride": {},
+    "firewallL3": {
+      "rules": [
+        {
+          "comment": "Wireless clients accessing LAN",
+          "ipVer": "ipv4",
+          "policy": "allow",
+          "protocol": "Any",
+          "destPort": "Any",
+          "destCidr": "Local LAN"
+        },
+        {
+          "comment": "Default rule",
+          "ipVer": "ipv4",
+          "policy": "allow",
+          "protocol": "Any",
+          "destPort": "Any",
+          "destCidr": "Any"
+        }
+      ],
+      "allowLanAccess": true
+    },
+    "firewallL7": {
+      "rules": []
+    },
+    "hotspot20": {
+      "enabled": false,
+      "operator": {
+        "name": null
+      },
+      "venue": {
+        "name": null,
+        "type": null
+      },
+      "networkAccessType": null,
+      "domains": [],
+      "roamConsortOis": [],
+      "mccMncs": [],
+      "naiRealms": []
+    },
+    "schedules": {
+      "enabled": false,
+      "ranges": [],
+      "rangesInSeconds": []
+    },
+    "splashSettings": {
+      "splashMethod": "None",
+      "splashUrl": null,
+      "useSplashUrl": false,
+      "splashTimeout": 1440,
+      "redirectUrl": null,
+      "useRedirectUrl": false,
+      "themeId": null,
+      "language": "en",
+      "guestSponsorship": {
+        "durationInMinutes": null,
+        "guestCanRequestTimeframe": false
+      },
+      "blockAllTrafficBeforeSignOn": true,
+      "controllerDisconnectionBehavior": "default",
+      "allowSimultaneousLogins": true,
+      "billing": {
+        "freeAccess": {
+          "enabled": false,
+          "durationInMinutes": 20
+        },
+        "prepaidAccessFastLoginEnabled": null,
+        "replyToEmailAddress": "meraki@chir.us"
+      },
+      "welcomeMessage": null,
+      "userConsent": {
+        "required": false,
+        "message": null
+      },
+      "splashLogo": {
+        "md5": null
+      },
+      "splashImage": {
+        "md5": null
+      },
+      "splashPrepaidFront": {
+        "md5": null
+      },
+      "sentryEnrollment": {
+        "systemsManagerNetwork": {
+          "id": null,
+          "name": null
+        },
+        "strength": "focused",
+        "enforcedSystems": [
+          "iOS",
+          "Android"
+        ]
+      },
+      "selfRegistration": {
+        "enabled": true,
+        "authorizationType": "admin"
+      }
+    },
+    "trafficShapingRules": {
+      "trafficShapingEnabled": true,
+      "defaultRulesEnabled": true,
+      "rules": []
+    },
+    "vpn": {
+      "concentrator": {},
+      "failover": {
+        "requestIp": null,
+        "heartbeatInterval": 10,
+        "idleTimeout": 30
+      },
+      "splitTunnel": {
+        "enabled": false,
+        "rules": []
+      }
+    },
+    "identityPsks": [],
+    "main": {
+      "number": 7,
+      "name": "Unconfigured SSID 8",
+      "enabled": false,
+      "splashPage": "None",
+      "ssidAdminAccessible": false,
+      "accessControl": {
+        "encryption": {
+          "mode": "Open"
+        },
+        "bandwidth": {
+          "limit": "unlimited"
+        },
+        "clientIpAssignment": {
+          "mode": "Local LAN"
+        },
+        "clientsBlockedFromUsingLan": false,
+        "wiredClientsPartOfWifiNetwork": false,
+        "tunnel": {
+          "enabled": false,
+          "summary": "Disabled"
+        },
+        "splashPage": {
+          "enabled": false,
+          "theme": "n/a"
+        }
+      },
+      "authMode": "open",
+      "ipAssignmentMode": "Bridge mode",
+      "useVlanTagging": false,
+      "minBitrate": 11,
+      "bandSelection": "Dual band operation",
+      "perClientBandwidthLimitUp": 0,
+      "perClientBandwidthLimitDown": 0,
+      "perSsidBandwidthLimitUp": 0,
+      "perSsidBandwidthLimitDown": 0,
+      "mandatoryDhcpEnabled": false,
+      "enterpriseAdminAccess": "access enabled",
+      "lanIsolationEnabled": false,
+      "visible": true,
+      "availableOnAllAps": true,
+      "availabilityTags": [],
+      "wifiPersonalNetworkEnabled": false,
+      "speedBurst": {
+        "enabled": false
+      },
+      "namedVlans": {
+        "tagging": {
+          "enabled": false
+        }
+      }
+    }
+  },
+  "8": {
+    "bonjourForwarding": {
+      "enabled": false,
+      "rules": [],
+      "exception": {
+        "enabled": false
+      }
+    },
+    "deviceTypeGroupPolicies": {
+      "enabled": false,
+      "deviceTypePolicies": []
+    },
+    "eapOverride": {},
+    "firewallL3": {
+      "rules": [
+        {
+          "comment": "Wireless clients accessing LAN",
+          "ipVer": "ipv4",
+          "policy": "allow",
+          "protocol": "Any",
+          "destPort": "Any",
+          "destCidr": "Local LAN"
+        },
+        {
+          "comment": "Default rule",
+          "ipVer": "ipv4",
+          "policy": "allow",
+          "protocol": "Any",
+          "destPort": "Any",
+          "destCidr": "Any"
+        }
+      ],
+      "allowLanAccess": true
+    },
+    "firewallL7": {
+      "rules": []
+    },
+    "hotspot20": {
+      "enabled": false,
+      "operator": {
+        "name": null
+      },
+      "venue": {
+        "name": null,
+        "type": null
+      },
+      "networkAccessType": null,
+      "domains": [],
+      "roamConsortOis": [],
+      "mccMncs": [],
+      "naiRealms": []
+    },
+    "schedules": {
+      "enabled": false,
+      "ranges": [],
+      "rangesInSeconds": []
+    },
+    "splashSettings": {
+      "splashMethod": "None",
+      "splashUrl": null,
+      "useSplashUrl": false,
+      "splashTimeout": 1440,
+      "redirectUrl": null,
+      "useRedirectUrl": false,
+      "themeId": null,
+      "language": "en",
+      "guestSponsorship": {
+        "durationInMinutes": null,
+        "guestCanRequestTimeframe": false
+      },
+      "blockAllTrafficBeforeSignOn": true,
+      "controllerDisconnectionBehavior": "default",
+      "allowSimultaneousLogins": true,
+      "billing": {
+        "freeAccess": {
+          "enabled": false,
+          "durationInMinutes": 20
+        },
+        "prepaidAccessFastLoginEnabled": null,
+        "replyToEmailAddress": "meraki@chir.us"
+      },
+      "welcomeMessage": null,
+      "userConsent": {
+        "required": false,
+        "message": null
+      },
+      "splashLogo": {
+        "md5": null
+      },
+      "splashImage": {
+        "md5": null
+      },
+      "splashPrepaidFront": {
+        "md5": null
+      },
+      "sentryEnrollment": {
+        "systemsManagerNetwork": {
+          "id": null,
+          "name": null
+        },
+        "strength": "focused",
+        "enforcedSystems": [
+          "iOS",
+          "Android"
+        ]
+      },
+      "selfRegistration": {
+        "enabled": true,
+        "authorizationType": "admin"
+      }
+    },
+    "trafficShapingRules": {
+      "trafficShapingEnabled": true,
+      "defaultRulesEnabled": true,
+      "rules": []
+    },
+    "vpn": {
+      "concentrator": {},
+      "failover": {
+        "requestIp": null,
+        "heartbeatInterval": 10,
+        "idleTimeout": 30
+      },
+      "splitTunnel": {
+        "enabled": false,
+        "rules": []
+      }
+    },
+    "identityPsks": [],
+    "main": {
+      "number": 8,
+      "name": "Unconfigured SSID 9",
+      "enabled": false,
+      "splashPage": "None",
+      "ssidAdminAccessible": false,
+      "accessControl": {
+        "encryption": {
+          "mode": "Open"
+        },
+        "bandwidth": {
+          "limit": "unlimited"
+        },
+        "clientIpAssignment": {
+          "mode": "Local LAN"
+        },
+        "clientsBlockedFromUsingLan": false,
+        "wiredClientsPartOfWifiNetwork": false,
+        "tunnel": {
+          "enabled": false,
+          "summary": "Disabled"
+        },
+        "splashPage": {
+          "enabled": false,
+          "theme": "n/a"
+        }
+      },
+      "authMode": "open",
+      "ipAssignmentMode": "Bridge mode",
+      "useVlanTagging": false,
+      "minBitrate": 11,
+      "bandSelection": "Dual band operation",
+      "perClientBandwidthLimitUp": 0,
+      "perClientBandwidthLimitDown": 0,
+      "perSsidBandwidthLimitUp": 0,
+      "perSsidBandwidthLimitDown": 0,
+      "mandatoryDhcpEnabled": false,
+      "enterpriseAdminAccess": "access enabled",
+      "lanIsolationEnabled": false,
+      "visible": true,
+      "availableOnAllAps": true,
+      "availabilityTags": [],
+      "wifiPersonalNetworkEnabled": false,
+      "speedBurst": {
+        "enabled": false
+      },
+      "namedVlans": {
+        "tagging": {
+          "enabled": false
+        }
+      }
+    }
+  },
+  "9": {
+    "bonjourForwarding": {
+      "enabled": false,
+      "rules": [],
+      "exception": {
+        "enabled": false
+      }
+    },
+    "deviceTypeGroupPolicies": {
+      "enabled": false,
+      "deviceTypePolicies": []
+    },
+    "eapOverride": {},
+    "firewallL3": {
+      "rules": [
+        {
+          "comment": "Wireless clients accessing LAN",
+          "ipVer": "ipv4",
+          "policy": "allow",
+          "protocol": "Any",
+          "destPort": "Any",
+          "destCidr": "Local LAN"
+        },
+        {
+          "comment": "Default rule",
+          "ipVer": "ipv4",
+          "policy": "allow",
+          "protocol": "Any",
+          "destPort": "Any",
+          "destCidr": "Any"
+        }
+      ],
+      "allowLanAccess": true
+    },
+    "firewallL7": {
+      "rules": []
+    },
+    "hotspot20": {
+      "enabled": false,
+      "operator": {
+        "name": null
+      },
+      "venue": {
+        "name": null,
+        "type": null
+      },
+      "networkAccessType": null,
+      "domains": [],
+      "roamConsortOis": [],
+      "mccMncs": [],
+      "naiRealms": []
+    },
+    "schedules": {
+      "enabled": false,
+      "ranges": [],
+      "rangesInSeconds": []
+    },
+    "splashSettings": {
+      "splashMethod": "None",
+      "splashUrl": null,
+      "useSplashUrl": false,
+      "splashTimeout": 1440,
+      "redirectUrl": null,
+      "useRedirectUrl": false,
+      "themeId": null,
+      "language": "en",
+      "guestSponsorship": {
+        "durationInMinutes": null,
+        "guestCanRequestTimeframe": false
+      },
+      "blockAllTrafficBeforeSignOn": true,
+      "controllerDisconnectionBehavior": "default",
+      "allowSimultaneousLogins": true,
+      "billing": {
+        "freeAccess": {
+          "enabled": false,
+          "durationInMinutes": 20
+        },
+        "prepaidAccessFastLoginEnabled": null,
+        "replyToEmailAddress": "meraki@chir.us"
+      },
+      "welcomeMessage": null,
+      "userConsent": {
+        "required": false,
+        "message": null
+      },
+      "splashLogo": {
+        "md5": null
+      },
+      "splashImage": {
+        "md5": null
+      },
+      "splashPrepaidFront": {
+        "md5": null
+      },
+      "sentryEnrollment": {
+        "systemsManagerNetwork": {
+          "id": null,
+          "name": null
+        },
+        "strength": "focused",
+        "enforcedSystems": [
+          "iOS",
+          "Android"
+        ]
+      },
+      "selfRegistration": {
+        "enabled": true,
+        "authorizationType": "admin"
+      }
+    },
+    "trafficShapingRules": {
+      "trafficShapingEnabled": true,
+      "defaultRulesEnabled": true,
+      "rules": []
+    },
+    "vpn": {
+      "concentrator": {},
+      "failover": {
+        "requestIp": null,
+        "heartbeatInterval": 10,
+        "idleTimeout": 30
+      },
+      "splitTunnel": {
+        "enabled": false,
+        "rules": []
+      }
+    },
+    "identityPsks": [],
+    "main": {
+      "number": 9,
+      "name": "Unconfigured SSID 10",
+      "enabled": false,
+      "splashPage": "None",
+      "ssidAdminAccessible": false,
+      "accessControl": {
+        "encryption": {
+          "mode": "Open"
+        },
+        "bandwidth": {
+          "limit": "unlimited"
+        },
+        "clientIpAssignment": {
+          "mode": "Local LAN"
+        },
+        "clientsBlockedFromUsingLan": false,
+        "wiredClientsPartOfWifiNetwork": false,
+        "tunnel": {
+          "enabled": false,
+          "summary": "Disabled"
+        },
+        "splashPage": {
+          "enabled": false,
+          "theme": "n/a"
+        }
+      },
+      "authMode": "open",
+      "ipAssignmentMode": "Bridge mode",
+      "useVlanTagging": false,
+      "minBitrate": 11,
+      "bandSelection": "Dual band operation",
+      "perClientBandwidthLimitUp": 0,
+      "perClientBandwidthLimitDown": 0,
+      "perSsidBandwidthLimitUp": 0,
+      "perSsidBandwidthLimitDown": 0,
+      "mandatoryDhcpEnabled": false,
+      "enterpriseAdminAccess": "access enabled",
+      "lanIsolationEnabled": false,
+      "visible": true,
+      "availableOnAllAps": true,
+      "availabilityTags": [],
+      "wifiPersonalNetworkEnabled": false,
+      "speedBurst": {
+        "enabled": false
+      },
+      "namedVlans": {
+        "tagging": {
+          "enabled": false
+        }
+      }
+    }
+  },
+  "10": {
+    "bonjourForwarding": {
+      "enabled": false,
+      "rules": [],
+      "exception": {
+        "enabled": false
+      }
+    },
+    "deviceTypeGroupPolicies": {
+      "enabled": false,
+      "deviceTypePolicies": []
+    },
+    "eapOverride": {},
+    "firewallL3": {
+      "rules": [
+        {
+          "comment": "Wireless clients accessing LAN",
+          "ipVer": "ipv4",
+          "policy": "allow",
+          "protocol": "Any",
+          "destPort": "Any",
+          "destCidr": "Local LAN"
+        },
+        {
+          "comment": "Default rule",
+          "ipVer": "ipv4",
+          "policy": "allow",
+          "protocol": "Any",
+          "destPort": "Any",
+          "destCidr": "Any"
+        }
+      ],
+      "allowLanAccess": true
+    },
+    "firewallL7": {
+      "rules": []
+    },
+    "hotspot20": {
+      "enabled": false,
+      "operator": {
+        "name": null
+      },
+      "venue": {
+        "name": null,
+        "type": null
+      },
+      "networkAccessType": null,
+      "domains": [],
+      "roamConsortOis": [],
+      "mccMncs": [],
+      "naiRealms": []
+    },
+    "schedules": {
+      "enabled": false,
+      "ranges": [],
+      "rangesInSeconds": []
+    },
+    "splashSettings": {
+      "splashMethod": "None",
+      "splashUrl": null,
+      "useSplashUrl": false,
+      "splashTimeout": 1440,
+      "redirectUrl": null,
+      "useRedirectUrl": false,
+      "themeId": null,
+      "language": "en",
+      "guestSponsorship": {
+        "durationInMinutes": null,
+        "guestCanRequestTimeframe": false
+      },
+      "blockAllTrafficBeforeSignOn": true,
+      "controllerDisconnectionBehavior": "default",
+      "allowSimultaneousLogins": true,
+      "billing": {
+        "freeAccess": {
+          "enabled": false,
+          "durationInMinutes": 20
+        },
+        "prepaidAccessFastLoginEnabled": null,
+        "replyToEmailAddress": "meraki@chir.us"
+      },
+      "welcomeMessage": null,
+      "userConsent": {
+        "required": false,
+        "message": null
+      },
+      "splashLogo": {
+        "md5": null
+      },
+      "splashImage": {
+        "md5": null
+      },
+      "splashPrepaidFront": {
+        "md5": null
+      },
+      "sentryEnrollment": {
+        "systemsManagerNetwork": {
+          "id": null,
+          "name": null
+        },
+        "strength": "focused",
+        "enforcedSystems": [
+          "iOS",
+          "Android"
+        ]
+      },
+      "selfRegistration": {
+        "enabled": true,
+        "authorizationType": "admin"
+      }
+    },
+    "trafficShapingRules": {
+      "trafficShapingEnabled": true,
+      "defaultRulesEnabled": true,
+      "rules": []
+    },
+    "vpn": {
+      "concentrator": {},
+      "failover": {
+        "requestIp": null,
+        "heartbeatInterval": 10,
+        "idleTimeout": 30
+      },
+      "splitTunnel": {
+        "enabled": false,
+        "rules": []
+      }
+    },
+    "identityPsks": [],
+    "main": {
+      "number": 10,
+      "name": "Unconfigured SSID 11",
+      "enabled": false,
+      "splashPage": "None",
+      "ssidAdminAccessible": false,
+      "accessControl": {
+        "encryption": {
+          "mode": "Open"
+        },
+        "bandwidth": {
+          "limit": "unlimited"
+        },
+        "clientIpAssignment": {
+          "mode": "Local LAN"
+        },
+        "clientsBlockedFromUsingLan": false,
+        "wiredClientsPartOfWifiNetwork": false,
+        "tunnel": {
+          "enabled": false,
+          "summary": "Disabled"
+        },
+        "splashPage": {
+          "enabled": false,
+          "theme": "n/a"
+        }
+      },
+      "authMode": "open",
+      "ipAssignmentMode": "Bridge mode",
+      "useVlanTagging": false,
+      "minBitrate": 11,
+      "bandSelection": "Dual band operation",
+      "perClientBandwidthLimitUp": 0,
+      "perClientBandwidthLimitDown": 0,
+      "perSsidBandwidthLimitUp": 0,
+      "perSsidBandwidthLimitDown": 0,
+      "mandatoryDhcpEnabled": false,
+      "enterpriseAdminAccess": "access enabled",
+      "lanIsolationEnabled": false,
+      "visible": true,
+      "availableOnAllAps": true,
+      "availabilityTags": [],
+      "wifiPersonalNetworkEnabled": false,
+      "speedBurst": {
+        "enabled": false
+      },
+      "namedVlans": {
+        "tagging": {
+          "enabled": false
+        }
+      }
+    }
+  },
+  "11": {
+    "bonjourForwarding": {
+      "enabled": false,
+      "rules": [],
+      "exception": {
+        "enabled": false
+      }
+    },
+    "deviceTypeGroupPolicies": {
+      "enabled": false,
+      "deviceTypePolicies": []
+    },
+    "eapOverride": {},
+    "firewallL3": {
+      "rules": [
+        {
+          "comment": "Wireless clients accessing LAN",
+          "ipVer": "ipv4",
+          "policy": "allow",
+          "protocol": "Any",
+          "destPort": "Any",
+          "destCidr": "Local LAN"
+        },
+        {
+          "comment": "Default rule",
+          "ipVer": "ipv4",
+          "policy": "allow",
+          "protocol": "Any",
+          "destPort": "Any",
+          "destCidr": "Any"
+        }
+      ],
+      "allowLanAccess": true
+    },
+    "firewallL7": {
+      "rules": []
+    },
+    "hotspot20": {
+      "enabled": false,
+      "operator": {
+        "name": null
+      },
+      "venue": {
+        "name": null,
+        "type": null
+      },
+      "networkAccessType": null,
+      "domains": [],
+      "roamConsortOis": [],
+      "mccMncs": [],
+      "naiRealms": []
+    },
+    "schedules": {
+      "enabled": false,
+      "ranges": [],
+      "rangesInSeconds": []
+    },
+    "splashSettings": {
+      "splashMethod": "None",
+      "splashUrl": null,
+      "useSplashUrl": false,
+      "splashTimeout": 1440,
+      "redirectUrl": null,
+      "useRedirectUrl": false,
+      "themeId": null,
+      "language": "en",
+      "guestSponsorship": {
+        "durationInMinutes": null,
+        "guestCanRequestTimeframe": false
+      },
+      "blockAllTrafficBeforeSignOn": true,
+      "controllerDisconnectionBehavior": "default",
+      "allowSimultaneousLogins": true,
+      "billing": {
+        "freeAccess": {
+          "enabled": false,
+          "durationInMinutes": 20
+        },
+        "prepaidAccessFastLoginEnabled": null,
+        "replyToEmailAddress": "meraki@chir.us"
+      },
+      "welcomeMessage": null,
+      "userConsent": {
+        "required": false,
+        "message": null
+      },
+      "splashLogo": {
+        "md5": null
+      },
+      "splashImage": {
+        "md5": null
+      },
+      "splashPrepaidFront": {
+        "md5": null
+      },
+      "sentryEnrollment": {
+        "systemsManagerNetwork": {
+          "id": null,
+          "name": null
+        },
+        "strength": "focused",
+        "enforcedSystems": [
+          "iOS",
+          "Android"
+        ]
+      },
+      "selfRegistration": {
+        "enabled": true,
+        "authorizationType": "admin"
+      }
+    },
+    "trafficShapingRules": {
+      "trafficShapingEnabled": true,
+      "defaultRulesEnabled": true,
+      "rules": []
+    },
+    "vpn": {
+      "concentrator": {},
+      "failover": {
+        "requestIp": null,
+        "heartbeatInterval": 10,
+        "idleTimeout": 30
+      },
+      "splitTunnel": {
+        "enabled": false,
+        "rules": []
+      }
+    },
+    "identityPsks": [],
+    "main": {
+      "number": 11,
+      "name": "Unconfigured SSID 12",
+      "enabled": false,
+      "splashPage": "None",
+      "ssidAdminAccessible": false,
+      "accessControl": {
+        "encryption": {
+          "mode": "Open"
+        },
+        "bandwidth": {
+          "limit": "unlimited"
+        },
+        "clientIpAssignment": {
+          "mode": "Local LAN"
+        },
+        "clientsBlockedFromUsingLan": false,
+        "wiredClientsPartOfWifiNetwork": false,
+        "tunnel": {
+          "enabled": false,
+          "summary": "Disabled"
+        },
+        "splashPage": {
+          "enabled": false,
+          "theme": "n/a"
+        }
+      },
+      "authMode": "open",
+      "ipAssignmentMode": "Bridge mode",
+      "useVlanTagging": false,
+      "minBitrate": 11,
+      "bandSelection": "Dual band operation",
+      "perClientBandwidthLimitUp": 0,
+      "perClientBandwidthLimitDown": 0,
+      "perSsidBandwidthLimitUp": 0,
+      "perSsidBandwidthLimitDown": 0,
+      "mandatoryDhcpEnabled": false,
+      "enterpriseAdminAccess": "access enabled",
+      "lanIsolationEnabled": false,
+      "visible": true,
+      "availableOnAllAps": true,
+      "availabilityTags": [],
+      "wifiPersonalNetworkEnabled": false,
+      "speedBurst": {
+        "enabled": false
+      },
+      "namedVlans": {
+        "tagging": {
+          "enabled": false
+        }
+      }
+    }
+  },
+  "12": {
+    "bonjourForwarding": {
+      "enabled": false,
+      "rules": [],
+      "exception": {
+        "enabled": false
+      }
+    },
+    "deviceTypeGroupPolicies": {
+      "enabled": false,
+      "deviceTypePolicies": []
+    },
+    "eapOverride": {},
+    "firewallL3": {
+      "rules": [
+        {
+          "comment": "Wireless clients accessing LAN",
+          "ipVer": "ipv4",
+          "policy": "allow",
+          "protocol": "Any",
+          "destPort": "Any",
+          "destCidr": "Local LAN"
+        },
+        {
+          "comment": "Default rule",
+          "ipVer": "ipv4",
+          "policy": "allow",
+          "protocol": "Any",
+          "destPort": "Any",
+          "destCidr": "Any"
+        }
+      ],
+      "allowLanAccess": true
+    },
+    "firewallL7": {
+      "rules": []
+    },
+    "hotspot20": {
+      "enabled": false,
+      "operator": {
+        "name": null
+      },
+      "venue": {
+        "name": null,
+        "type": null
+      },
+      "networkAccessType": null,
+      "domains": [],
+      "roamConsortOis": [],
+      "mccMncs": [],
+      "naiRealms": []
+    },
+    "schedules": {
+      "enabled": false,
+      "ranges": [],
+      "rangesInSeconds": []
+    },
+    "splashSettings": {
+      "splashMethod": "None",
+      "splashUrl": null,
+      "useSplashUrl": false,
+      "splashTimeout": 1440,
+      "redirectUrl": null,
+      "useRedirectUrl": false,
+      "themeId": null,
+      "language": "en",
+      "guestSponsorship": {
+        "durationInMinutes": null,
+        "guestCanRequestTimeframe": false
+      },
+      "blockAllTrafficBeforeSignOn": true,
+      "controllerDisconnectionBehavior": "default",
+      "allowSimultaneousLogins": true,
+      "billing": {
+        "freeAccess": {
+          "enabled": false,
+          "durationInMinutes": 20
+        },
+        "prepaidAccessFastLoginEnabled": null,
+        "replyToEmailAddress": "meraki@chir.us"
+      },
+      "welcomeMessage": null,
+      "userConsent": {
+        "required": false,
+        "message": null
+      },
+      "splashLogo": {
+        "md5": null
+      },
+      "splashImage": {
+        "md5": null
+      },
+      "splashPrepaidFront": {
+        "md5": null
+      },
+      "sentryEnrollment": {
+        "systemsManagerNetwork": {
+          "id": null,
+          "name": null
+        },
+        "strength": "focused",
+        "enforcedSystems": [
+          "iOS",
+          "Android"
+        ]
+      },
+      "selfRegistration": {
+        "enabled": true,
+        "authorizationType": "admin"
+      }
+    },
+    "trafficShapingRules": {
+      "trafficShapingEnabled": true,
+      "defaultRulesEnabled": true,
+      "rules": []
+    },
+    "vpn": {
+      "concentrator": {},
+      "failover": {
+        "requestIp": null,
+        "heartbeatInterval": 10,
+        "idleTimeout": 30
+      },
+      "splitTunnel": {
+        "enabled": false,
+        "rules": []
+      }
+    },
+    "identityPsks": [],
+    "main": {
+      "number": 12,
+      "name": "Unconfigured SSID 13",
+      "enabled": false,
+      "splashPage": "None",
+      "ssidAdminAccessible": false,
+      "accessControl": {
+        "encryption": {
+          "mode": "Open"
+        },
+        "bandwidth": {
+          "limit": "unlimited"
+        },
+        "clientIpAssignment": {
+          "mode": "Local LAN"
+        },
+        "clientsBlockedFromUsingLan": false,
+        "wiredClientsPartOfWifiNetwork": false,
+        "tunnel": {
+          "enabled": false,
+          "summary": "Disabled"
+        },
+        "splashPage": {
+          "enabled": false,
+          "theme": "n/a"
+        }
+      },
+      "authMode": "open",
+      "ipAssignmentMode": "Bridge mode",
+      "useVlanTagging": false,
+      "minBitrate": 11,
+      "bandSelection": "Dual band operation",
+      "perClientBandwidthLimitUp": 0,
+      "perClientBandwidthLimitDown": 0,
+      "perSsidBandwidthLimitUp": 0,
+      "perSsidBandwidthLimitDown": 0,
+      "mandatoryDhcpEnabled": false,
+      "enterpriseAdminAccess": "access enabled",
+      "lanIsolationEnabled": false,
+      "visible": true,
+      "availableOnAllAps": true,
+      "availabilityTags": [],
+      "wifiPersonalNetworkEnabled": false,
+      "speedBurst": {
+        "enabled": false
+      },
+      "namedVlans": {
+        "tagging": {
+          "enabled": false
+        }
+      }
+    }
+  },
+  "13": {
+    "bonjourForwarding": {
+      "enabled": false,
+      "rules": [],
+      "exception": {
+        "enabled": false
+      }
+    },
+    "deviceTypeGroupPolicies": {
+      "enabled": false,
+      "deviceTypePolicies": []
+    },
+    "eapOverride": {},
+    "firewallL3": {
+      "rules": [
+        {
+          "comment": "Wireless clients accessing LAN",
+          "ipVer": "ipv4",
+          "policy": "allow",
+          "protocol": "Any",
+          "destPort": "Any",
+          "destCidr": "Local LAN"
+        },
+        {
+          "comment": "Default rule",
+          "ipVer": "ipv4",
+          "policy": "allow",
+          "protocol": "Any",
+          "destPort": "Any",
+          "destCidr": "Any"
+        }
+      ],
+      "allowLanAccess": true
+    },
+    "firewallL7": {
+      "rules": []
+    },
+    "hotspot20": {
+      "enabled": false,
+      "operator": {
+        "name": null
+      },
+      "venue": {
+        "name": null,
+        "type": null
+      },
+      "networkAccessType": null,
+      "domains": [],
+      "roamConsortOis": [],
+      "mccMncs": [],
+      "naiRealms": []
+    },
+    "schedules": {
+      "enabled": false,
+      "ranges": [],
+      "rangesInSeconds": []
+    },
+    "splashSettings": {
+      "splashMethod": "None",
+      "splashUrl": null,
+      "useSplashUrl": false,
+      "splashTimeout": 1440,
+      "redirectUrl": null,
+      "useRedirectUrl": false,
+      "themeId": null,
+      "language": "en",
+      "guestSponsorship": {
+        "durationInMinutes": null,
+        "guestCanRequestTimeframe": false
+      },
+      "blockAllTrafficBeforeSignOn": true,
+      "controllerDisconnectionBehavior": "default",
+      "allowSimultaneousLogins": true,
+      "billing": {
+        "freeAccess": {
+          "enabled": false,
+          "durationInMinutes": 20
+        },
+        "prepaidAccessFastLoginEnabled": null,
+        "replyToEmailAddress": "meraki@chir.us"
+      },
+      "welcomeMessage": null,
+      "userConsent": {
+        "required": false,
+        "message": null
+      },
+      "splashLogo": {
+        "md5": null
+      },
+      "splashImage": {
+        "md5": null
+      },
+      "splashPrepaidFront": {
+        "md5": null
+      },
+      "sentryEnrollment": {
+        "systemsManagerNetwork": {
+          "id": null,
+          "name": null
+        },
+        "strength": "focused",
+        "enforcedSystems": [
+          "iOS",
+          "Android"
+        ]
+      },
+      "selfRegistration": {
+        "enabled": true,
+        "authorizationType": "admin"
+      }
+    },
+    "trafficShapingRules": {
+      "trafficShapingEnabled": true,
+      "defaultRulesEnabled": true,
+      "rules": []
+    },
+    "vpn": {
+      "concentrator": {},
+      "failover": {
+        "requestIp": null,
+        "heartbeatInterval": 10,
+        "idleTimeout": 30
+      },
+      "splitTunnel": {
+        "enabled": false,
+        "rules": []
+      }
+    },
+    "identityPsks": [],
+    "main": {
+      "number": 13,
+      "name": "Unconfigured SSID 14",
+      "enabled": false,
+      "splashPage": "None",
+      "ssidAdminAccessible": false,
+      "accessControl": {
+        "encryption": {
+          "mode": "Open"
+        },
+        "bandwidth": {
+          "limit": "unlimited"
+        },
+        "clientIpAssignment": {
+          "mode": "Local LAN"
+        },
+        "clientsBlockedFromUsingLan": false,
+        "wiredClientsPartOfWifiNetwork": false,
+        "tunnel": {
+          "enabled": false,
+          "summary": "Disabled"
+        },
+        "splashPage": {
+          "enabled": false,
+          "theme": "n/a"
+        }
+      },
+      "authMode": "open",
+      "ipAssignmentMode": "Bridge mode",
+      "useVlanTagging": false,
+      "minBitrate": 11,
+      "bandSelection": "Dual band operation",
+      "perClientBandwidthLimitUp": 0,
+      "perClientBandwidthLimitDown": 0,
+      "perSsidBandwidthLimitUp": 0,
+      "perSsidBandwidthLimitDown": 0,
+      "mandatoryDhcpEnabled": false,
+      "enterpriseAdminAccess": "access enabled",
+      "lanIsolationEnabled": false,
+      "visible": true,
+      "availableOnAllAps": true,
+      "availabilityTags": [],
+      "wifiPersonalNetworkEnabled": false,
+      "speedBurst": {
+        "enabled": false
+      },
+      "namedVlans": {
+        "tagging": {
+          "enabled": false
+        }
+      }
+    }
+  },
+  "14": {
+    "bonjourForwarding": {
+      "enabled": false,
+      "rules": [],
+      "exception": {
+        "enabled": false
+      }
+    },
+    "deviceTypeGroupPolicies": {
+      "enabled": false,
+      "deviceTypePolicies": []
+    },
+    "eapOverride": {},
+    "firewallL3": {
+      "rules": [
+        {
+          "comment": "Wireless clients accessing LAN",
+          "ipVer": "ipv4",
+          "policy": "allow",
+          "protocol": "Any",
+          "destPort": "Any",
+          "destCidr": "Local LAN"
+        },
+        {
+          "comment": "Default rule",
+          "ipVer": "ipv4",
+          "policy": "allow",
+          "protocol": "Any",
+          "destPort": "Any",
+          "destCidr": "Any"
+        }
+      ],
+      "allowLanAccess": true
+    },
+    "firewallL7": {
+      "rules": []
+    },
+    "hotspot20": {
+      "enabled": false,
+      "operator": {
+        "name": null
+      },
+      "venue": {
+        "name": null,
+        "type": null
+      },
+      "networkAccessType": null,
+      "domains": [],
+      "roamConsortOis": [],
+      "mccMncs": [],
+      "naiRealms": []
+    },
+    "schedules": {
+      "enabled": false,
+      "ranges": [],
+      "rangesInSeconds": []
+    },
+    "splashSettings": {
+      "splashMethod": "None",
+      "splashUrl": null,
+      "useSplashUrl": false,
+      "splashTimeout": 1440,
+      "redirectUrl": null,
+      "useRedirectUrl": false,
+      "themeId": null,
+      "language": "en",
+      "guestSponsorship": {
+        "durationInMinutes": null,
+        "guestCanRequestTimeframe": false
+      },
+      "blockAllTrafficBeforeSignOn": true,
+      "controllerDisconnectionBehavior": "default",
+      "allowSimultaneousLogins": true,
+      "billing": {
+        "freeAccess": {
+          "enabled": false,
+          "durationInMinutes": 20
+        },
+        "prepaidAccessFastLoginEnabled": null,
+        "replyToEmailAddress": "meraki@chir.us"
+      },
+      "welcomeMessage": null,
+      "userConsent": {
+        "required": false,
+        "message": null
+      },
+      "splashLogo": {
+        "md5": null
+      },
+      "splashImage": {
+        "md5": null
+      },
+      "splashPrepaidFront": {
+        "md5": null
+      },
+      "sentryEnrollment": {
+        "systemsManagerNetwork": {
+          "id": null,
+          "name": null
+        },
+        "strength": "focused",
+        "enforcedSystems": [
+          "iOS",
+          "Android"
+        ]
+      },
+      "selfRegistration": {
+        "enabled": true,
+        "authorizationType": "admin"
+      }
+    },
+    "trafficShapingRules": {
+      "trafficShapingEnabled": true,
+      "defaultRulesEnabled": true,
+      "rules": []
+    },
+    "vpn": {
+      "concentrator": {},
+      "failover": {
+        "requestIp": null,
+        "heartbeatInterval": 10,
+        "idleTimeout": 30
+      },
+      "splitTunnel": {
+        "enabled": false,
+        "rules": []
+      }
+    },
+    "identityPsks": [],
+    "main": {
+      "number": 14,
+      "name": "Unconfigured SSID 15",
+      "enabled": false,
+      "splashPage": "None",
+      "ssidAdminAccessible": false,
+      "accessControl": {
+        "encryption": {
+          "mode": "Open"
+        },
+        "bandwidth": {
+          "limit": "unlimited"
+        },
+        "clientIpAssignment": {
+          "mode": "Local LAN"
+        },
+        "clientsBlockedFromUsingLan": false,
+        "wiredClientsPartOfWifiNetwork": false,
+        "tunnel": {
+          "enabled": false,
+          "summary": "Disabled"
+        },
+        "splashPage": {
+          "enabled": false,
+          "theme": "n/a"
+        }
+      },
+      "authMode": "open",
+      "ipAssignmentMode": "Bridge mode",
+      "useVlanTagging": false,
+      "minBitrate": 11,
+      "bandSelection": "Dual band operation",
+      "perClientBandwidthLimitUp": 0,
+      "perClientBandwidthLimitDown": 0,
+      "perSsidBandwidthLimitUp": 0,
+      "perSsidBandwidthLimitDown": 0,
+      "mandatoryDhcpEnabled": false,
+      "enterpriseAdminAccess": "access enabled",
+      "lanIsolationEnabled": false,
+      "visible": true,
+      "availableOnAllAps": true,
+      "availabilityTags": [],
+      "wifiPersonalNetworkEnabled": false,
+      "speedBurst": {
+        "enabled": false
+      },
+      "namedVlans": {
+        "tagging": {
+          "enabled": false
+        }
+      }
+    }
+  }
+}
