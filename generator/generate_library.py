@@ -420,7 +420,7 @@ def generate_standard_and_async_functions(
             assert_blocks = list()
             if enum_params:
                 for p, values in enum_params.items():
-                    assert_blocks.append((p, values["enum"]))
+                    assert_blocks.append((p, values["enum"], values.get("nullable", False)))
 
             # Generate call_line based on method
             if method == "get":
@@ -654,7 +654,7 @@ def generate_action_batch_functions(
                 assert_blocks = list()
                 if enum_params:
                     for p, values in enum_params.items():
-                        assert_blocks.append((p, values["enum"]))
+                        assert_blocks.append((p, values["enum"], values.get("nullable", False)))
 
                 # Function return statement
                 call_line = "return action"
