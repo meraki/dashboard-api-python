@@ -141,7 +141,7 @@ RETRY_4XX_ERROR_WAIT_TIME = 60
 
 # --- Pagination ---
 # Use iterator for pages. May offer improved performance in some instances.
-USE_ITERATOR_FOR_GET_PAGES = True
+USE_ITERATOR_FOR_GET_PAGES = False
 
 
 # =============================================================================
