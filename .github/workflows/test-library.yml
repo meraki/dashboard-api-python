@@ -106,11 +106,19 @@ jobs:
         ORG_DEV_3: ${{ secrets.TEST_ORG_DEV_03_ID }}
       run: |
         BRANCH="${{ github.head_ref || github.ref_name }}"
+        BASE="${{ github.base_ref }}"
         case "$BRANCH" in
           main|release) PREFIX="GA" ;;
           beta|beta-release) PREFIX="BETA" ;;
           httpx|httpx-release) PREFIX="DEV" ;;
-          *) echo "Unknown branch: $BRANCH" && exit 1 ;;
+          *)
+            case "$BASE" in
+              main) PREFIX="GA" ;;
+              beta) PREFIX="BETA" ;;
+              httpx) PREFIX="DEV" ;;
+              *) echo "Unknown branch: $BRANCH (base: $BASE)" && exit 1 ;;
+            esac
+            ;;
         esac
         INDEX=$(echo '${{ needs.assign-orgs.outputs.assignments }}' | jq -r '.["${{ matrix.python-version }}"]')
         VAR_NAME="ORG_${PREFIX}_${INDEX}"
