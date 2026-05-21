@@ -50,6 +50,12 @@ from meraki.config import (
     USE_ITERATOR_FOR_GET_PAGES,
     AIO_MAXIMUM_CONCURRENT_REQUESTS,
     VALIDATE_KWARGS,
+    SMART_LIMITING,
+    SMART_LIMIT_REQUESTS_PER_SECOND,
+    SMART_LIMIT_EAGER_LOAD,
+    SMART_LIMIT_CACHE_PATH,
+    SMART_LIMIT_CACHE_TTL,
+    SMART_LIMIT_LOGGING,
 )
 
 
@@ -81,6 +87,10 @@ class AsyncDashboardAPI:
     - caller (string): optional identifier for API usage tracking; can also be set as an environment variable MERAKI_PYTHON_SDK_CALLER
     - use_iterator_for_get_pages (boolean): list* methods will return an iterator with each object instead of a complete list with all items
     - validate_kwargs (boolean): log warnings when unrecognized kwargs are passed to API methods
+    - smart_limiting (boolean): enable per-org proactive smart limiting via token buckets?
+    - smart_limit_requests_per_second (float): max requests per second per org (Meraki default: 10)
+    - smart_limit_eager_load (boolean): eagerly load org/network/device mappings at init?
+    - smart_limit_cache_path (string): path to persist smart limit mapping cache across sessions
     """
 
     def __init__(
@@ -109,6 +119,12 @@ class AsyncDashboardAPI:
         inherit_logging_config=INHERIT_LOGGING_CONFIG,
         maximum_concurrent_requests=AIO_MAXIMUM_CONCURRENT_REQUESTS,
         validate_kwargs=VALIDATE_KWARGS,
+        smart_limiting=SMART_LIMITING,
+        smart_limit_requests_per_second=SMART_LIMIT_REQUESTS_PER_SECOND,
+        smart_limit_eager_load=SMART_LIMIT_EAGER_LOAD,
+        smart_limit_cache_path=SMART_LIMIT_CACHE_PATH,
+        smart_limit_cache_ttl=SMART_LIMIT_CACHE_TTL,
+        smart_limit_logging=SMART_LIMIT_LOGGING,
     ):
         # Check API key
         api_key = api_key or os.environ.get(API_KEY_ENVIRONMENT_VARIABLE)
@@ -176,7 +192,17 @@ class AsyncDashboardAPI:
             use_iterator_for_get_pages=use_iterator_for_get_pages,
             maximum_concurrent_requests=maximum_concurrent_requests,
             validate_kwargs=validate_kwargs,
+            smart_limiting=smart_limiting,
+            smart_limit_requests_per_second=smart_limit_requests_per_second,
+            smart_limit_eager_load=smart_limit_eager_load,
+            smart_limit_cache_path=smart_limit_cache_path,
+            smart_limit_cache_ttl=smart_limit_cache_ttl,
+            smart_limit_logging=smart_limit_logging,
         )
+
+        # Store for eager load access
+        self._smart_limiting = smart_limiting
+        self._smart_limit_eager_load = smart_limit_eager_load
 
         # API endpoints by section
         self.administered = AsyncAdministered(self._session)
@@ -200,7 +226,45 @@ class AsyncDashboardAPI:
         self.batch = Batch()
 
     async def __aenter__(self):
+        if self._smart_limiting and self._smart_limit_eager_load:
+            limiter = self._session._smart_limiter
+            if limiter and not limiter.cache_fresh:
+                await self._eager_load_rate_limit_cache()
         return self
 
     async def __aexit__(self, exc_type, exc, tb):
+        if self._session._smart_limiter:
+            await self._session._smart_limiter.save_cache()
         await self._session.close()
+
+    async def _eager_load_rate_limit_cache(self) -> None:
+        """Populate the smart limiter's org/network/device cache at startup."""
+        rate_limiter = self._session._smart_limiter
+        if not rate_limiter:
+            return
+
+        try:
+            orgs = await self.organizations.getOrganizations()
+        except Exception:
+            return
+
+        for org in orgs:
+            org_id = org["id"]
+            rate_limiter.register_org(org_id)
+
+            try:
+                networks = await self.organizations.getOrganizationNetworks(org_id, total_pages="all", perPage=1000)
+                for net in networks:
+                    rate_limiter.register_network(net["id"], org_id)
+            except Exception:
+                pass
+
+            try:
+                devices = await self.organizations.getOrganizationInventoryDevices(org_id, total_pages="all", perPage=1000)
+                for device in devices:
+                    if device.get("serial"):
+                        rate_limiter.register_device(device["serial"], org_id)
+            except Exception:
+                pass
+
+        await rate_limiter.save_cache()
