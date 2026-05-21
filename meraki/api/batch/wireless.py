@@ -1288,6 +1288,7 @@ class ActionBatchWireless(object):
         - redirectUrl (string): The custom redirect URL where the users will go after the splash page.
         - useRedirectUrl (boolean): The Boolean indicating whether the the user will be redirected to the custom redirect URL after the splash page. A custom redirect URL must be set if this is true.
         - welcomeMessage (string): The welcome message for the users on the splash page.
+        - userConsent (object): User consent settings
         - themeId (string): The id of the selected splash theme.
         - splashLogo (object): The logo used in the splash page.
         - splashImage (object): The image used in the splash page.
@@ -1325,6 +1326,7 @@ class ActionBatchWireless(object):
             "redirectUrl",
             "useRedirectUrl",
             "welcomeMessage",
+            "userConsent",
             "themeId",
             "splashLogo",
             "splashImage",
