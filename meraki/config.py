@@ -1,17 +1,25 @@
-# Package Constants
+from pathlib import Path
 
+
+# =============================================================================
+# CONNECTION & AUTH
+# =============================================================================
+
+# --- API Key ---
 # Meraki dashboard API key, set either at instantiation or as an environment variable
 API_KEY_ENVIRONMENT_VARIABLE = "MERAKI_DASHBOARD_API_KEY"
 
+# --- Base URL ---
 # Base URL preceding all endpoint resources
 DEFAULT_BASE_URL = "https://api.meraki.com/api/v1"
 
-# Alternate base URLs
+# Regional base URLs
 CANADA_BASE_URL = "https://api.meraki.ca/api/v1"
 CHINA_BASE_URL = "https://api.meraki.cn/api/v1"
 INDIA_BASE_URL = "https://api.meraki.in/api/v1"
 UNITED_STATES_FED_BASE_URL = "https://api.gov-meraki.com/api/v1"
 
+# --- Transport ---
 # Maximum number of seconds for each API call
 SINGLE_REQUEST_TIMEOUT = 60
 
@@ -21,61 +29,12 @@ CERTIFICATE_PATH = ""
 # Proxy server and port, if needed, for HTTPS
 REQUESTS_PROXY = ""
 
-# Retry if 429 rate limit error encountered?
-# Please note, setting to False means your application will not retry upon a 429. Not intended for production apps.
-WAIT_ON_RATE_LIMIT = True
 
-# Nginx 429 retry wait time
-NGINX_429_RETRY_WAIT_TIME = 60
+# =============================================================================
+# IDENTITY & ATTESTATION
+# =============================================================================
 
-# Action batch concurrency error retry wait time
-ACTION_BATCH_RETRY_WAIT_TIME = 60
-
-# Network deletion concurrency error retry wait time
-NETWORK_DELETE_RETRY_WAIT_TIME = 240
-
-# Retry if encountering other 4XX error (besides 429)?
-RETRY_4XX_ERROR = False
-
-# Other 4XX error retry wait time
-RETRY_4XX_ERROR_WAIT_TIME = 60
-
-# Retry up to this many times when encountering 429s or other server-side errors
-MAXIMUM_RETRIES = 2
-
-# Create an output log file?
-OUTPUT_LOG = True
-
-# Path to output log; by default, working directory of script if not specified
-LOG_PATH = ""
-
-# Log file name appended with date and timestamp
-LOG_FILE_PREFIX = "meraki_api_"
-
-# Print output logging to console?
-PRINT_TO_CONSOLE = True
-
-# Disable all logging? You're on your own then!
-SUPPRESS_LOGGING = False
-
-# You might integrate the library in an application with a predefined logging scheme. If so, you may not need the
-# library's default logging handlers, formatters etc.--instead, you can inherit an external logger instance.
-INHERIT_LOGGING_CONFIG = False
-
-# Use iterator for pages. May offer improved performance in some instances. Off by default for backwards compatibility.
-USE_ITERATOR_FOR_GET_PAGES = False
-
-# Simulate POST/PUT/DELETE calls to prevent changes?
-SIMULATE_API_CALLS = False
-
-# Number of concurrent API requests for asynchronous class
-# Maps to httpx.Limits(max_connections=N) in AsyncRestSession
-AIO_MAXIMUM_CONCURRENT_REQUESTS = 8
-
-# Legacy partner identifier for API usage tracking; can also be set as an environment variable BE_GEO_ID
-# This is no longer used. Please use MERAKI_PYTHON_SDK_CALLER instead.
-BE_GEO_ID = ""
-
+# --- SDK Caller ---
 # Optional identifier for API usage tracking; can also be set as an environment variable MERAKI_PYTHON_SDK_CALLER
 # It's good practice to use this to identify your application using the format:
 # CamelCasedApplicationName/OptionalVersionNumber CamelCasedVendorName
@@ -96,5 +55,130 @@ BE_GEO_ID = ""
 # For more guidance, please refer to https://developer.cisco.com/meraki/api-v1/user-agents-overview/
 MERAKI_PYTHON_SDK_CALLER = ""
 
+# --- Legacy ---
+# Legacy partner identifier for API usage tracking; can also be set as an environment variable BE_GEO_ID
+# This is no longer used. Please use MERAKI_PYTHON_SDK_CALLER instead.
+BE_GEO_ID = ""
+
+
+# =============================================================================
+# REQUEST HANDLING
+# =============================================================================
+
+# --- Concurrency ---
+# Maximum concurrent connections for the async HTTP client (httpx.Limits(max_connections=N)).
+# This is a local resource constraint (open sockets), NOT a rate limit. It controls how many
+# requests can be in-flight simultaneously. For rate limiting, see Smart Limiting below.
+AIO_MAXIMUM_CONCURRENT_REQUESTS = 90
+
+# --- Smart Limiting ---
+# Proactive per-org rate limiting via token buckets. Unlike AIO_MAXIMUM_CONCURRENT_REQUESTS
+# (which caps how many requests are in-flight at once), smart limiting caps how many requests
+# per second are sent to each organization, preventing 429s before they happen.
+# The SDK parses request URLs to determine which org a request targets, using a cache of
+# network -> org and device serial -> org mappings gathered via getOrganizationInventoryDevices()
+# and getOrganizationNetworks().
+
+# Enable per-org rate limiting? When False, the SDK relies solely on 429 retry logic.
+# If you disable this feature, you will produce more 429 errors, which in turn wastes API budget
+# and unnecessarily interferes with other applications interacting with your organization(s).
+SMART_LIMITING = True
+
+# Maximum requests per second per organization. Meraki's default org-level limit is 10 req/s.
+# The default setting is 9, which helps reserve a minimum budget for other applications. You
+# can further reduce this if you are working in an organization with lots of other applications.
+SMART_LIMIT_REQUESTS_PER_SECOND = 9
+
+# Path to the rate limit mapping cache file. The cache persists network -> org and
+# serial -> org mappings across sessions so subsequent runs skip the eager load API calls
+# if the cache is fresh. Set to empty string to disable persistence.
+# Default: ~/.meraki/.cache/rate_limit_cache.json (platform-agnostic)
+SMART_LIMIT_CACHE_PATH = str(Path.home() / ".meraki" / ".cache" / "rate_limit_cache.json")
+
+# How long (in seconds) before the disk cache is considered stale and re-fetched.
+# Default is 604800 (7 days). Set to None to never expire.
+# Organizations with frequent cross-org device or network movement may consider
+# reducing this value to better match their real-world use and improve the effectiveness.
+SMART_LIMIT_CACHE_TTL = 604800.0
+
+# Whether to eagerly load org/network/device mappings for each organization the client
+# can access at session init, based on the output of getOrganizations().
+# Costs more API calls at startup for large deployments, but reduces cache misses during operation.
+# When this is on, you may notice a brief delay as the cache is created, which indicates either
+# that your environment did not previously have a cache, or the previous cache had expired.
+# Default is False, in which case those mappings are collected based on which organization,
+# networks or devices are called via API.
+SMART_LIMIT_EAGER_LOAD = False
+
+# Log smart limiter activity (bucket creation, rate adjustments, learned mappings, cache events)
+# to the standard session log. Disable this if you don't want to see smart_limit log messages
+# in your logs.
+SMART_LIMIT_LOGGING = True
+
+
+# --- Retry Behavior ---
+# Retry if 429 rate limit error encountered?
+# Please note, setting to False means your application will not retry upon a 429. Not intended for production apps.
+WAIT_ON_RATE_LIMIT = True
+
+# Retry up to this many times when encountering 429s or other server-side errors
+MAXIMUM_RETRIES = 5
+
+# Nginx 429 retry wait time
+NGINX_429_RETRY_WAIT_TIME = 60
+
+# Action batch concurrency error retry wait time
+ACTION_BATCH_RETRY_WAIT_TIME = 60
+
+# Network deletion concurrency error retry wait time
+NETWORK_DELETE_RETRY_WAIT_TIME = 240
+
+# Retry if encountering other 4XX error (besides 429)?
+RETRY_4XX_ERROR = False
+
+# Other 4XX error retry wait time
+RETRY_4XX_ERROR_WAIT_TIME = 60
+
+# --- Pagination ---
+# Use iterator for pages. May offer improved performance in some instances.
+USE_ITERATOR_FOR_GET_PAGES = True
+
+
+# =============================================================================
+# LOGGING & OBSERVABILITY
+# =============================================================================
+
+# --- File Logging ---
+# Create an output log file?
+OUTPUT_LOG = True
+
+# Path to output log; by default, working directory of script if not specified
+LOG_PATH = ""
+
+# Log file name appended with date and timestamp
+LOG_FILE_PREFIX = "meraki_api_"
+
+# --- Console ---
+# Print output logging to console?
+PRINT_TO_CONSOLE = True
+
+# --- Control ---
+# Disable all logging? You're on your own then!
+SUPPRESS_LOGGING = False
+
+# You might integrate the library in an application with a predefined logging scheme. If so, you may not need the
+# library's default logging handlers, formatters etc.--instead, you can inherit an external logger instance.
+INHERIT_LOGGING_CONFIG = False
+
+
+# =============================================================================
+# DEVELOPMENT
+# =============================================================================
+
+# --- Simulation ---
+# Simulate POST/PUT/DELETE calls to prevent changes?
+SIMULATE_API_CALLS = False
+
+# --- Validation ---
 # Log a warning when unrecognized kwargs are passed to API methods?
 VALIDATE_KWARGS = False
