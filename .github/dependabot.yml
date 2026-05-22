@@ -4,13 +4,25 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+    groups:
+      all-deps:
+        patterns:
+          - "*"
   - package-ecosystem: "uv"
     directory: "/"
     target-branch: "beta"
     schedule:
       interval: "daily"
+    groups:
+      all-deps:
+        patterns:
+          - "*"
   - package-ecosystem: "uv"
     directory: "/"
     target-branch: "httpx"
     schedule:
       interval: "daily"
+    groups:
+      all-deps:
+        patterns:
+          - "*"
