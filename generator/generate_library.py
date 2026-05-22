@@ -10,13 +10,8 @@ import jinja2
 import httpx
 
 import common as common
+from common import REVERSE_PAGINATION, docs_url, check_python_version, return_params
 from parser_v3 import parse_params_v3, clear_cache
-from generate_library_oasv2 import (
-    REVERSE_PAGINATION,
-    docs_url,
-    check_python_version,
-    return_params,
-)
 from generate_stubs import generate_stub_modules
 
 

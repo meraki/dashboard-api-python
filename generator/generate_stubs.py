@@ -9,7 +9,7 @@ import os
 import re
 import jinja2
 from parser_v3 import parse_params_v3
-from generate_library_oasv2 import return_params, REVERSE_PAGINATION
+from common import return_params, REVERSE_PAGINATION
 
 
 def _safe_param_name(name: str) -> str:
