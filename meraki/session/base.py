@@ -26,7 +26,7 @@ from meraki.config import (
     SMART_FLOW,
     SMART_FLOW_CACHE_PATH,
     SMART_FLOW_CACHE_TTL,
-    SMART_FLOW_LOAD_METHOD,
+    SMART_FLOW_CACHE_MODE,
     SMART_FLOW_GLOBAL_RATE,
     SMART_FLOW_LOGGING,
     SMART_FLOW_ORG_RATE,
@@ -76,7 +76,7 @@ class SessionBase(ABC):
         smart_flow: bool = SMART_FLOW,
         smart_flow_org_rate: float = SMART_FLOW_ORG_RATE,
         smart_flow_global_rate: float = SMART_FLOW_GLOBAL_RATE,
-        smart_flow_load_method: str = SMART_FLOW_LOAD_METHOD,
+        smart_flow_cache_mode: str = SMART_FLOW_CACHE_MODE,
         smart_flow_cache_path: str = SMART_FLOW_CACHE_PATH,
         smart_flow_cache_ttl: Optional[float] = SMART_FLOW_CACHE_TTL,
         smart_flow_logging: bool = SMART_FLOW_LOGGING,
@@ -105,7 +105,7 @@ class SessionBase(ABC):
         self._smart_flow = smart_flow
         self._smart_flow_org_rate = smart_flow_org_rate
         self._smart_flow_global_rate = smart_flow_global_rate
-        self._smart_flow_load_method = smart_flow_load_method
+        self._smart_flow_cache_mode = smart_flow_cache_mode
         self._smart_flow_cache_path = smart_flow_cache_path
         self._smart_flow_cache_ttl = smart_flow_cache_ttl
         self._smart_flow_logging = smart_flow_logging

@@ -112,7 +112,7 @@ SMART_FLOW_CACHE_TTL = 604800.0
 #   Costs more API calls at startup for large deployments, but reduces cache misses during operation.
 #   You may notice a brief delay as the cache is created, which indicates either
 #   that your environment did not previously have a cache, or the previous cache had expired.
-SMART_FLOW_LOAD_METHOD = "lazy"
+SMART_FLOW_CACHE_MODE = "lazy"
 
 # Log smart limiter activity (bucket creation, rate adjustments, learned mappings, cache events)
 # to the standard session log. Disable this if you don't want to see smart_flow log messages

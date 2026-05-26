@@ -49,7 +49,7 @@ from meraki.config import (
     SMART_FLOW,
     SMART_FLOW_ORG_RATE,
     SMART_FLOW_GLOBAL_RATE,
-    SMART_FLOW_LOAD_METHOD,
+    SMART_FLOW_CACHE_MODE,
     SMART_FLOW_CACHE_PATH,
     SMART_FLOW_CACHE_TTL,
     SMART_FLOW_LOGGING,
@@ -100,7 +100,7 @@ class DashboardAPI(object):
     - smart_flow (boolean): enable per-org proactive smart limiting via token buckets?
     - smart_flow_org_rate (float): max requests per second per org (Meraki default: 10)
     - smart_flow_global_rate (float): max requests per second across all orgs (source IP limit, Meraki default: 100)
-    - smart_flow_load_method (string): "lazy" (default) or "eager" - how org/network/device mappings are loaded
+    - smart_flow_cache_mode (string): "lazy" (default) or "eager" - how org/network/device mappings are loaded
     - smart_flow_cache_path (string): path to persist smart flow mapping cache across sessions
     """
 
@@ -132,7 +132,7 @@ class DashboardAPI(object):
         smart_flow=SMART_FLOW,
         smart_flow_org_rate=SMART_FLOW_ORG_RATE,
         smart_flow_global_rate=SMART_FLOW_GLOBAL_RATE,
-        smart_flow_load_method=SMART_FLOW_LOAD_METHOD,
+        smart_flow_cache_mode=SMART_FLOW_CACHE_MODE,
         smart_flow_cache_path=SMART_FLOW_CACHE_PATH,
         smart_flow_cache_ttl=SMART_FLOW_CACHE_TTL,
         smart_flow_logging=SMART_FLOW_LOGGING,
@@ -205,7 +205,7 @@ class DashboardAPI(object):
             smart_flow=smart_flow,
             smart_flow_org_rate=smart_flow_org_rate,
             smart_flow_global_rate=smart_flow_global_rate,
-            smart_flow_load_method=smart_flow_load_method,
+            smart_flow_cache_mode=smart_flow_cache_mode,
             smart_flow_cache_path=smart_flow_cache_path,
             smart_flow_cache_ttl=smart_flow_cache_ttl,
             smart_flow_logging=smart_flow_logging,
@@ -233,7 +233,7 @@ class DashboardAPI(object):
         self.batch = Batch()
 
         # Eager load smart limit cache if enabled (skip if disk cache was fresh)
-        if smart_flow and smart_flow_load_method == "eager":
+        if smart_flow and smart_flow_cache_mode == "eager":
             limiter = self._session._smart_limiter
             if limiter and not limiter.cache_fresh:
                 self._eager_load_rate_limit_cache()
