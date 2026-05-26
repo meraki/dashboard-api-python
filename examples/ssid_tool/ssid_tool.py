@@ -464,7 +464,7 @@ async def main() -> None:
         sys.exit(1)
 
     async with meraki.aio.AsyncDashboardAPI(
-        output_log=True, print_console=False, maximum_retries=10, smart_limiting=True, smart_limit_logging=True
+        output_log=True, print_console=False, maximum_retries=10, smart_flow=True, smart_flow_logging=True
     ) as api:
         while True:
             display_menu()

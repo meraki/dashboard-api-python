@@ -42,13 +42,14 @@ class RestSession(SessionBase):
         self._client.headers.update(self._build_headers())
 
         # Per-org smart limiter (opt-in)
-        if self._smart_limiting:
+        if self._smart_flow:
             self._smart_limiter = OrgRateLimiter(
-                rate=self._smart_limit_requests_per_second,
-                capacity=int(self._smart_limit_requests_per_second),
-                cache_path=self._smart_limit_cache_path or None,
-                cache_ttl=self._smart_limit_cache_ttl,
-                logger=self._logger if self._smart_limit_logging else None,
+                rate=self._smart_flow_org_rate,
+                capacity=int(self._smart_flow_org_rate),
+                global_rate=self._smart_flow_global_rate,
+                cache_path=self._smart_flow_cache_path or None,
+                cache_ttl=self._smart_flow_cache_ttl,
+                logger=self._logger if self._smart_flow_logging else None,
             )
             self._smart_limiter.set_resolver(self._resolve_org_for_limiter)
             self._smart_limiter.set_hydrator(self._hydrate_org_for_limiter)

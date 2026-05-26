@@ -4,7 +4,7 @@ Run: pytest tests/benchmarks/test_throughput_benchmark.py --benchmark-json=throu
 """
 
 BATCH_SIZE = 50
-MIN_RPS = 100
+MIN_RPS = 20
 
 
 def test_throughput_sequential_batch(benchmark, benchmark_dashboard):

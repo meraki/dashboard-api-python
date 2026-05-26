@@ -82,24 +82,29 @@ AIO_MAXIMUM_CONCURRENT_REQUESTS = 90
 # Enable per-org rate limiting? When False, the SDK relies solely on 429 retry logic.
 # If you disable this feature, you will produce more 429 errors, which in turn wastes API budget
 # and unnecessarily interferes with other applications interacting with your organization(s).
-SMART_LIMITING = True
+SMART_FLOW = True
 
 # Maximum requests per second per organization. Meraki's default org-level limit is 10 req/s.
 # The default setting is 9, which helps reserve a minimum budget for other applications. You
 # can further reduce this if you are working in an organization with lots of other applications.
-SMART_LIMIT_REQUESTS_PER_SECOND = 9
+SMART_FLOW_ORG_RATE = 9
+
+# Maximum requests per second across all organizations (source IP limit).
+# Meraki enforces a global 100 req/s limit per source IP, independent of per-org limits.
+# All requests deduct from this budget; per-org buckets provide additional throttling.
+SMART_FLOW_GLOBAL_RATE = 100
 
 # Path to the rate limit mapping cache file. The cache persists network -> org and
 # serial -> org mappings across sessions so subsequent runs skip the eager load API calls
 # if the cache is fresh. Set to empty string to disable persistence.
 # Default: ~/.meraki/.cache/rate_limit_cache.json (platform-agnostic)
-SMART_LIMIT_CACHE_PATH = str(Path.home() / ".meraki" / ".cache" / "rate_limit_cache.json")
+SMART_FLOW_CACHE_PATH = str(Path.home() / ".meraki" / ".cache" / "rate_limit_cache.json")
 
 # How long (in seconds) before the disk cache is considered stale and re-fetched.
 # Default is 604800 (7 days). Set to None to never expire.
 # Organizations with frequent cross-org device or network movement may consider
 # reducing this value to better match their real-world use and improve the effectiveness.
-SMART_LIMIT_CACHE_TTL = 604800.0
+SMART_FLOW_CACHE_TTL = 604800.0
 
 # Whether to eagerly load org/network/device mappings for each organization the client
 # can access at session init, based on the output of getOrganizations().
@@ -108,12 +113,12 @@ SMART_LIMIT_CACHE_TTL = 604800.0
 # that your environment did not previously have a cache, or the previous cache had expired.
 # Default is False, in which case those mappings are collected based on which organization,
 # networks or devices are called via API.
-SMART_LIMIT_EAGER_LOAD = False
+SMART_FLOW_EAGER_LOAD = False
 
 # Log smart limiter activity (bucket creation, rate adjustments, learned mappings, cache events)
-# to the standard session log. Disable this if you don't want to see smart_limit log messages
+# to the standard session log. Disable this if you don't want to see smart_flow log messages
 # in your logs.
-SMART_LIMIT_LOGGING = True
+SMART_FLOW_LOGGING = True
 
 
 # --- Retry Behavior ---

@@ -122,12 +122,14 @@ class OrgRateLimiter:
         self,
         rate: float = 10.0,
         capacity: int = 10,
+        global_rate: float = 100.0,
         cache_path: Optional[str] = None,
         cache_ttl: Optional[float] = 604800.0,
         logger: Any = None,
     ):
         self._rate = rate
         self._capacity = capacity
+        self._global_rate = global_rate
         self._logger = logger
         self._cache_path = Path(cache_path) if cache_path else None
         self._cache_ttl = cache_ttl
@@ -137,8 +139,8 @@ class OrgRateLimiter:
         # network_id -> org_id, serial -> org_id
         self._network_to_org: Dict[str, str] = {}
         self._serial_to_org: Dict[str, str] = {}
-        # Conservative bucket for unresolved requests
-        self._unknown_bucket = TokenBucket(rate=max(3.0, rate / 3), capacity=3)
+        # Global bucket: source IP limit shared by all requests
+        self._global_bucket = TokenBucket(rate=global_rate, capacity=int(global_rate))
 
         self._cache_fresh = False
         self._dirty = 0
@@ -200,7 +202,9 @@ class OrgRateLimiter:
         return None
 
     def acquire(self, url: str) -> None:
-        """Block until a token is available for the org associated with this URL."""
+        """Block until tokens are available from both global and per-org buckets."""
+        self._global_bucket.acquire()
+
         org_id = self.resolve_org(url)
         if org_id:
             self._get_or_create_bucket(org_id).acquire()
@@ -209,8 +213,6 @@ class OrgRateLimiter:
             org_id = self.resolve_org(url)
             if org_id:
                 self._get_or_create_bucket(org_id).acquire()
-            else:
-                self._unknown_bucket.acquire()
 
     def _resolve_inline(self, url: str) -> None:
         """Attempt a synchronous lookup for an unresolved network/device ID."""
@@ -255,20 +257,25 @@ class OrgRateLimiter:
             self._pending_lookups.discard(identifier)
 
     def on_rate_limited(self, url: str) -> None:
-        """Tighten the bucket for the affected org (multiplicative decrease)."""
+        """Tighten the appropriate bucket (multiplicative decrease)."""
         org_id = self.resolve_org(url)
         if org_id and org_id in self._org_buckets:
             bucket = self._org_buckets[org_id]
             bucket.rate = bucket.rate * 0.7
             self._log(f"rate limited org {org_id}, decreased to {bucket.rate:.1f} req/s")
+        else:
+            self._global_bucket.rate = self._global_bucket.rate * 0.7
+            self._log(f"rate limited (global), decreased to {self._global_bucket.rate:.1f} req/s")
 
     def on_success(self, url: str) -> None:
-        """Slowly widen the bucket back toward configured rate (additive increase)."""
+        """Slowly widen buckets back toward configured rates (additive increase)."""
         org_id = self.resolve_org(url)
         if org_id and org_id in self._org_buckets:
             bucket = self._org_buckets[org_id]
             if bucket.rate < self._rate:
                 bucket.rate = min(self._rate, bucket.rate + 0.2)
+        if self._global_bucket.rate < self._global_rate:
+            self._global_bucket.rate = min(self._global_rate, self._global_bucket.rate + 0.5)
 
     def register_org(self, org_id: str) -> None:
         """Ensure a bucket exists for this org."""
@@ -414,12 +421,14 @@ class AsyncOrgRateLimiter:
         self,
         rate: float = 10.0,
         capacity: int = 10,
+        global_rate: float = 100.0,
         cache_path: Optional[str] = None,
         cache_ttl: Optional[float] = 604800.0,
         logger: Any = None,
     ):
         self._rate = rate
         self._capacity = capacity
+        self._global_rate = global_rate
         self._logger = logger
         self._cache_path = Path(cache_path) if cache_path else None
         self._cache_ttl = cache_ttl
@@ -427,7 +436,7 @@ class AsyncOrgRateLimiter:
         self._org_buckets: Dict[str, AsyncTokenBucket] = {}
         self._network_to_org: Dict[str, str] = {}
         self._serial_to_org: Dict[str, str] = {}
-        self._unknown_bucket = AsyncTokenBucket(rate=max(3.0, rate / 3), capacity=3)
+        self._global_bucket = AsyncTokenBucket(rate=global_rate, capacity=int(global_rate))
 
         self._cache_fresh = False
         self._dirty = 0
@@ -490,13 +499,14 @@ class AsyncOrgRateLimiter:
         return None
 
     async def acquire(self, url: str) -> None:
-        """Await until a token is available for the org associated with this URL."""
+        """Await until tokens from both global and per-org buckets are available."""
+        await self._global_bucket.acquire()
+
         org_id = self.resolve_org(url)
         if org_id:
             await self._get_or_create_bucket(org_id).acquire()
         else:
             self._trigger_background_resolve(url)
-            await self._unknown_bucket.acquire()
 
     def _trigger_background_resolve(self, url: str) -> None:
         """Fire a one-shot background lookup for an unresolved network/device ID."""
@@ -545,20 +555,25 @@ class AsyncOrgRateLimiter:
             self._pending_lookups.discard(identifier)
 
     def on_rate_limited(self, url: str) -> None:
-        """Tighten the bucket for the affected org (multiplicative decrease)."""
+        """Tighten the appropriate bucket (multiplicative decrease)."""
         org_id = self.resolve_org(url)
         if org_id and org_id in self._org_buckets:
             bucket = self._org_buckets[org_id]
             bucket.rate = bucket.rate * 0.7
             self._log(f"rate limited org {org_id}, decreased to {bucket.rate:.1f} req/s")
+        else:
+            self._global_bucket.rate = self._global_bucket.rate * 0.7
+            self._log(f"rate limited (global), decreased to {self._global_bucket.rate:.1f} req/s")
 
     def on_success(self, url: str) -> None:
-        """Slowly widen the bucket back toward configured rate (additive increase)."""
+        """Slowly widen buckets back toward configured rates (additive increase)."""
         org_id = self.resolve_org(url)
         if org_id and org_id in self._org_buckets:
             bucket = self._org_buckets[org_id]
             if bucket.rate < self._rate:
                 bucket.rate = min(self._rate, bucket.rate + 0.2)
+        if self._global_bucket.rate < self._global_rate:
+            self._global_bucket.rate = min(self._global_rate, self._global_bucket.rate + 0.5)
 
     def register_org(self, org_id: str) -> None:
         """Ensure a bucket exists for this org."""

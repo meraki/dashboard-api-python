@@ -152,28 +152,46 @@ class TestOrgAIMD:
         bucket = limiter._org_buckets["org_1"]
         assert bucket.rate == 10.0
 
-    def test_on_rate_limited_noop_for_unknown_org(self):
-        limiter = OrgRateLimiter()
+    def test_on_rate_limited_unknown_org_decreases_global(self):
+        limiter = OrgRateLimiter(global_rate=100.0)
         limiter.on_rate_limited("/organizations/ghost/networks")
+        assert limiter._global_bucket.rate == pytest.approx(70.0, abs=0.1)
 
-    def test_on_success_noop_for_unknown_org(self):
-        limiter = OrgRateLimiter()
+    def test_on_success_unknown_org_nudges_global(self):
+        limiter = OrgRateLimiter(global_rate=100.0)
+        limiter._global_bucket.rate = 90.0
         limiter.on_success("/organizations/ghost/networks")
+        assert limiter._global_bucket.rate == pytest.approx(90.5, abs=0.01)
 
-    def test_on_success_noop_for_unresolvable_url(self):
-        limiter = OrgRateLimiter()
+    def test_on_success_unresolvable_url_nudges_global(self):
+        limiter = OrgRateLimiter(global_rate=100.0)
+        limiter._global_bucket.rate = 80.0
         limiter.on_success("/admin/something")
+        assert limiter._global_bucket.rate == pytest.approx(80.5, abs=0.01)
 
-    def test_on_rate_limited_noop_for_unresolvable_url(self):
-        limiter = OrgRateLimiter()
+    def test_on_rate_limited_unresolvable_url_decreases_global(self):
+        limiter = OrgRateLimiter(global_rate=100.0)
         limiter.on_rate_limited("/admin/something")
+        assert limiter._global_bucket.rate == pytest.approx(70.0, abs=0.1)
+
+    def test_on_success_global_caps_at_configured(self):
+        limiter = OrgRateLimiter(global_rate=100.0)
+        for _ in range(1000):
+            limiter.on_success("/admin/something")
+        assert limiter._global_bucket.rate == 100.0
 
 
 class TestOrgAcquire:
     def test_acquire_with_org_url(self):
-        limiter = OrgRateLimiter(rate=10.0)
+        limiter = OrgRateLimiter(rate=10.0, global_rate=100.0)
         limiter.acquire("/organizations/org_1/networks")
         assert "org_1" in limiter._org_buckets
+
+    def test_acquire_org_url_deducts_from_both(self):
+        limiter = OrgRateLimiter(rate=10.0, global_rate=100.0)
+        limiter.acquire("/organizations/org_1/networks")
+        assert limiter._global_bucket._tokens < 100.0
+        assert limiter._org_buckets["org_1"]._tokens < 10.0
 
     def test_acquire_with_cached_network(self):
         limiter = OrgRateLimiter(rate=10.0)
@@ -181,9 +199,11 @@ class TestOrgAcquire:
         limiter.acquire("/networks/N_1/ssids")
         assert "org_1" in limiter._org_buckets
 
-    def test_acquire_unknown_url_uses_unknown_bucket(self):
-        limiter = OrgRateLimiter(rate=10.0)
+    def test_acquire_unresolvable_url_uses_global_only(self):
+        limiter = OrgRateLimiter(rate=10.0, global_rate=100.0)
         limiter.acquire("/admin/something")
+        assert len(limiter._org_buckets) == 0
+        assert limiter._global_bucket._tokens < 100.0
 
     def test_acquire_unknown_network_with_resolver(self):
         limiter = OrgRateLimiter(rate=10.0)
@@ -197,19 +217,21 @@ class TestOrgAcquire:
         limiter.acquire("/devices/QXYZ-1234-ABCD/clients")
         assert limiter._serial_to_org.get("QXYZ-1234-ABCD") == "org_dev"
 
-    def test_acquire_resolver_returns_none_uses_unknown(self):
-        limiter = OrgRateLimiter(rate=10.0)
+    def test_acquire_resolver_returns_none_uses_global_only(self):
+        limiter = OrgRateLimiter(rate=10.0, global_rate=100.0)
         limiter.set_resolver(lambda id_type, ident: None)
         limiter.acquire("/networks/N_mystery/ssids")
         assert "N_mystery" not in limiter._network_to_org
+        assert len(limiter._org_buckets) == 0
 
-    def test_acquire_resolver_exception_uses_unknown(self):
+    def test_acquire_resolver_exception_uses_global_only(self):
         def bad_resolver(id_type, ident):
             raise RuntimeError("boom")
 
-        limiter = OrgRateLimiter(rate=10.0)
+        limiter = OrgRateLimiter(rate=10.0, global_rate=100.0)
         limiter.set_resolver(bad_resolver)
         limiter.acquire("/networks/N_err/ssids")
+        assert len(limiter._org_buckets) == 0
 
     def test_acquire_deduplicates_pending_lookups(self):
         call_count = 0
@@ -549,9 +571,11 @@ class TestAsyncOrgRateLimiter:
         assert limiter._serial_to_org.get("QABC-0000-1111") == "org_dev"
 
     @pytest.mark.asyncio
-    async def test_acquire_no_resolver_uses_unknown_bucket(self):
-        limiter = AsyncOrgRateLimiter(rate=10.0)
+    async def test_acquire_no_resolver_uses_global_only(self):
+        limiter = AsyncOrgRateLimiter(rate=10.0, global_rate=100.0)
         await limiter.acquire("/networks/N_mystery/ssids")
+        assert len(limiter._org_buckets) == 0
+        assert limiter._global_bucket._tokens < 100.0
 
     @pytest.mark.asyncio
     async def test_background_resolve_deduplicates(self):
@@ -636,9 +660,10 @@ class TestAsyncOrgRateLimiter:
         assert bucket.rate == pytest.approx(7.0, abs=0.01)
 
     @pytest.mark.asyncio
-    async def test_on_rate_limited_noop_unknown(self):
-        limiter = AsyncOrgRateLimiter(rate=10.0)
+    async def test_on_rate_limited_unknown_decreases_global(self):
+        limiter = AsyncOrgRateLimiter(rate=10.0, global_rate=100.0)
         limiter.on_rate_limited("/organizations/ghost/x")
+        assert limiter._global_bucket.rate == pytest.approx(70.0, abs=0.1)
 
     @pytest.mark.asyncio
     async def test_on_success(self):
@@ -659,9 +684,11 @@ class TestAsyncOrgRateLimiter:
         assert bucket.rate == 10.0
 
     @pytest.mark.asyncio
-    async def test_on_success_noop_unknown(self):
-        limiter = AsyncOrgRateLimiter(rate=10.0)
+    async def test_on_success_unknown_nudges_global(self):
+        limiter = AsyncOrgRateLimiter(rate=10.0, global_rate=100.0)
+        limiter._global_bucket.rate = 80.0
         limiter.on_success("/organizations/ghost/x")
+        assert limiter._global_bucket.rate == pytest.approx(80.5, abs=0.01)
 
     @pytest.mark.asyncio
     async def test_register_org(self):

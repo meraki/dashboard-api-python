@@ -23,12 +23,13 @@ from meraki.config import (
     MERAKI_PYTHON_SDK_CALLER,
     NETWORK_DELETE_RETRY_WAIT_TIME,
     NGINX_429_RETRY_WAIT_TIME,
-    SMART_LIMIT_CACHE_PATH,
-    SMART_LIMIT_CACHE_TTL,
-    SMART_LIMIT_EAGER_LOAD,
-    SMART_LIMIT_LOGGING,
-    SMART_LIMIT_REQUESTS_PER_SECOND,
-    SMART_LIMITING,
+    SMART_FLOW,
+    SMART_FLOW_CACHE_PATH,
+    SMART_FLOW_CACHE_TTL,
+    SMART_FLOW_EAGER_LOAD,
+    SMART_FLOW_GLOBAL_RATE,
+    SMART_FLOW_LOGGING,
+    SMART_FLOW_ORG_RATE,
     REQUESTS_PROXY,
     RETRY_4XX_ERROR,
     RETRY_4XX_ERROR_WAIT_TIME,
@@ -72,12 +73,13 @@ class SessionBase(ABC):
         caller: str = MERAKI_PYTHON_SDK_CALLER,
         use_iterator_for_get_pages: bool = USE_ITERATOR_FOR_GET_PAGES,
         validate_kwargs: bool = False,
-        smart_limiting: bool = SMART_LIMITING,
-        smart_limit_requests_per_second: float = SMART_LIMIT_REQUESTS_PER_SECOND,
-        smart_limit_eager_load: bool = SMART_LIMIT_EAGER_LOAD,
-        smart_limit_cache_path: str = SMART_LIMIT_CACHE_PATH,
-        smart_limit_cache_ttl: Optional[float] = SMART_LIMIT_CACHE_TTL,
-        smart_limit_logging: bool = SMART_LIMIT_LOGGING,
+        smart_flow: bool = SMART_FLOW,
+        smart_flow_org_rate: float = SMART_FLOW_ORG_RATE,
+        smart_flow_global_rate: float = SMART_FLOW_GLOBAL_RATE,
+        smart_flow_eager_load: bool = SMART_FLOW_EAGER_LOAD,
+        smart_flow_cache_path: str = SMART_FLOW_CACHE_PATH,
+        smart_flow_cache_ttl: Optional[float] = SMART_FLOW_CACHE_TTL,
+        smart_flow_logging: bool = SMART_FLOW_LOGGING,
     ) -> None:
         super().__init__()
 
@@ -100,12 +102,13 @@ class SessionBase(ABC):
         self._caller = caller
         self._use_iterator_for_get_pages = use_iterator_for_get_pages
         self._validate_kwargs = validate_kwargs
-        self._smart_limiting = smart_limiting
-        self._smart_limit_requests_per_second = smart_limit_requests_per_second
-        self._smart_limit_eager_load = smart_limit_eager_load
-        self._smart_limit_cache_path = smart_limit_cache_path
-        self._smart_limit_cache_ttl = smart_limit_cache_ttl
-        self._smart_limit_logging = smart_limit_logging
+        self._smart_flow = smart_flow
+        self._smart_flow_org_rate = smart_flow_org_rate
+        self._smart_flow_global_rate = smart_flow_global_rate
+        self._smart_flow_eager_load = smart_flow_eager_load
+        self._smart_flow_cache_path = smart_flow_cache_path
+        self._smart_flow_cache_ttl = smart_flow_cache_ttl
+        self._smart_flow_logging = smart_flow_logging
 
         # Check Python version
         check_python_version()
@@ -132,7 +135,7 @@ class SessionBase(ABC):
         self._parameters["be_geo_id"] = self._be_geo_id
         self._parameters["caller"] = self._caller
         self._parameters["use_iterator_for_get_pages"] = self._use_iterator_for_get_pages
-        self._parameters["smart_limiting"] = self._smart_limiting
+        self._parameters["smart_flow"] = self._smart_flow
 
         # Rate limiter is initialized to None here; subclasses create the appropriate
         # sync or async variant based on self._rate_limiting.
