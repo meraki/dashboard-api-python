@@ -106,14 +106,13 @@ SMART_FLOW_CACHE_PATH = str(Path.home() / ".meraki" / ".cache" / "rate_limit_cac
 # reducing this value to better match their real-world use and improve the effectiveness.
 SMART_FLOW_CACHE_TTL = 604800.0
 
-# Whether to eagerly load org/network/device mappings for each organization the client
-# can access at session init, based on the output of getOrganizations().
-# Costs more API calls at startup for large deployments, but reduces cache misses during operation.
-# When this is on, you may notice a brief delay as the cache is created, which indicates either
-# that your environment did not previously have a cache, or the previous cache had expired.
-# Default is False, in which case those mappings are collected based on which organization,
-# networks or devices are called via API.
-SMART_FLOW_EAGER_LOAD = False
+# How org/network/device mappings are loaded. Options: "lazy", "eager".
+# "lazy" (default): mappings are collected passively as API calls are made.
+# "eager": all mappings are fetched at session init via getOrganizations().
+#   Costs more API calls at startup for large deployments, but reduces cache misses during operation.
+#   You may notice a brief delay as the cache is created, which indicates either
+#   that your environment did not previously have a cache, or the previous cache had expired.
+SMART_FLOW_LOAD_METHOD = "lazy"
 
 # Log smart limiter activity (bucket creation, rate adjustments, learned mappings, cache events)
 # to the standard session log. Disable this if you don't want to see smart_flow log messages

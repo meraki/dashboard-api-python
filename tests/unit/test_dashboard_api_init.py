@@ -316,7 +316,7 @@ class TestDashboardAPISmartLimiting:
             "test_key_1234567890123456789012345678901234567890",
             suppress_logging=True,
             smart_flow=True,
-            smart_flow_eager_load=False,
+            smart_flow_load_method="lazy",
             caller="TestApp TestVendor",
         )
         assert d._session._smart_limiter is not None
@@ -328,7 +328,7 @@ class TestDashboardAPISmartLimiting:
             "test_key_1234567890123456789012345678901234567890",
             suppress_logging=True,
             smart_flow=True,
-            smart_flow_eager_load=False,
+            smart_flow_load_method="lazy",
             smart_flow_cache_path=cache_file,
             caller="TestApp TestVendor",
         )
@@ -342,7 +342,7 @@ class TestDashboardAPIEagerLoad:
             "test_key_1234567890123456789012345678901234567890",
             suppress_logging=True,
             smart_flow=True,
-            smart_flow_eager_load=False,
+            smart_flow_load_method="lazy",
             caller="TestApp TestVendor",
         )
         mock_orgs = [{"id": "org_1"}, {"id": "org_2"}]
@@ -365,7 +365,7 @@ class TestDashboardAPIEagerLoad:
             "test_key_1234567890123456789012345678901234567890",
             suppress_logging=True,
             smart_flow=True,
-            smart_flow_eager_load=False,
+            smart_flow_load_method="lazy",
             caller="TestApp TestVendor",
         )
         with patch.object(d.organizations, "getOrganizations", side_effect=Exception("API error")):
@@ -377,7 +377,7 @@ class TestDashboardAPIEagerLoad:
             "test_key_1234567890123456789012345678901234567890",
             suppress_logging=True,
             smart_flow=True,
-            smart_flow_eager_load=False,
+            smart_flow_load_method="lazy",
             caller="TestApp TestVendor",
         )
         mock_orgs = [{"id": "org_1"}]
@@ -393,7 +393,7 @@ class TestDashboardAPIEagerLoad:
             "test_key_1234567890123456789012345678901234567890",
             suppress_logging=True,
             smart_flow=True,
-            smart_flow_eager_load=False,
+            smart_flow_load_method="lazy",
             caller="TestApp TestVendor",
         )
         mock_orgs = [{"id": "org_1"}]
@@ -410,7 +410,7 @@ class TestDashboardAPIEagerLoad:
             "test_key_1234567890123456789012345678901234567890",
             suppress_logging=True,
             smart_flow=True,
-            smart_flow_eager_load=False,
+            smart_flow_load_method="lazy",
             caller="TestApp TestVendor",
         )
         mock_orgs = [{"id": "org_1"}]
@@ -440,7 +440,7 @@ class TestDashboardAPIEagerLoad:
                 "test_key_1234567890123456789012345678901234567890",
                 suppress_logging=True,
                 smart_flow=True,
-                smart_flow_eager_load=True,
+                smart_flow_load_method="eager",
                 smart_flow_cache_path=cache_file,
                 caller="TestApp TestVendor",
             )
@@ -464,7 +464,7 @@ class TestDashboardAPIEagerLoad:
             "test_key_1234567890123456789012345678901234567890",
             suppress_logging=True,
             smart_flow=True,
-            smart_flow_eager_load=True,
+            smart_flow_load_method="eager",
             smart_flow_cache_path=str(cache_file),
             caller="TestApp TestVendor",
         )

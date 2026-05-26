@@ -53,7 +53,7 @@ from meraki.config import (
     SMART_FLOW,
     SMART_FLOW_ORG_RATE,
     SMART_FLOW_GLOBAL_RATE,
-    SMART_FLOW_EAGER_LOAD,
+    SMART_FLOW_LOAD_METHOD,
     SMART_FLOW_CACHE_PATH,
     SMART_FLOW_CACHE_TTL,
     SMART_FLOW_LOGGING,
@@ -91,7 +91,7 @@ class AsyncDashboardAPI:
     - smart_flow (boolean): enable per-org proactive smart limiting via token buckets?
     - smart_flow_org_rate (float): max requests per second per org (Meraki default: 10)
     - smart_flow_global_rate (float): max requests per second across all orgs (source IP limit, Meraki default: 100)
-    - smart_flow_eager_load (boolean): eagerly load org/network/device mappings at init?
+    - smart_flow_load_method (string): "lazy" (default) or "eager" - how org/network/device mappings are loaded
     - smart_flow_cache_path (string): path to persist smart flow mapping cache across sessions
     """
 
@@ -124,7 +124,7 @@ class AsyncDashboardAPI:
         smart_flow=SMART_FLOW,
         smart_flow_org_rate=SMART_FLOW_ORG_RATE,
         smart_flow_global_rate=SMART_FLOW_GLOBAL_RATE,
-        smart_flow_eager_load=SMART_FLOW_EAGER_LOAD,
+        smart_flow_load_method=SMART_FLOW_LOAD_METHOD,
         smart_flow_cache_path=SMART_FLOW_CACHE_PATH,
         smart_flow_cache_ttl=SMART_FLOW_CACHE_TTL,
         smart_flow_logging=SMART_FLOW_LOGGING,
@@ -198,7 +198,7 @@ class AsyncDashboardAPI:
             smart_flow=smart_flow,
             smart_flow_org_rate=smart_flow_org_rate,
             smart_flow_global_rate=smart_flow_global_rate,
-            smart_flow_eager_load=smart_flow_eager_load,
+            smart_flow_load_method=smart_flow_load_method,
             smart_flow_cache_path=smart_flow_cache_path,
             smart_flow_cache_ttl=smart_flow_cache_ttl,
             smart_flow_logging=smart_flow_logging,
@@ -206,7 +206,7 @@ class AsyncDashboardAPI:
 
         # Store for eager load access
         self._smart_flow = smart_flow
-        self._smart_flow_eager_load = smart_flow_eager_load
+        self._smart_flow_load_method = smart_flow_load_method
 
         # API endpoints by section
         self.administered = AsyncAdministered(self._session)
@@ -230,7 +230,7 @@ class AsyncDashboardAPI:
         self.batch = Batch()
 
     async def __aenter__(self):
-        if self._smart_flow and self._smart_flow_eager_load:
+        if self._smart_flow and self._smart_flow_load_method == "eager":
             limiter = self._session._smart_limiter
             if limiter and not limiter.cache_fresh:
                 await self._eager_load_rate_limit_cache()
