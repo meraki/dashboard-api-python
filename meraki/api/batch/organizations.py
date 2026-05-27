@@ -420,6 +420,255 @@ class ActionBatchOrganizations(object):
         }
         return action
 
+    def createOrganizationApiPushProfile(self, organizationId: str, iname: str, topic: dict, receiver: dict, **kwargs):
+        """
+        **Create a new push profile**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-api-push-profile
+
+        - organizationId (string): Organization ID
+        - iname (string): Immutable name of the resource. Must be unique within resources of this type.
+        - topic (object): Push topic
+        - receiver (object): Push receiver profile
+        - name (string): Name of push profile
+        - description (string): Description of push profile
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/api/push/profiles"
+
+        body_params = [
+            "iname",
+            "name",
+            "description",
+            "topic",
+            "receiver",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def updateOrganizationApiPushProfile(self, organizationId: str, iname: str, **kwargs):
+        """
+        **Update a push profile**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-api-push-profile
+
+        - organizationId (string): Organization ID
+        - iname (string): Iname
+        - name (string): Name of push profile
+        - description (string): Description of push profile
+        - topic (object): Push topic
+        - receiver (object): Push receiver profile
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        iname = urllib.parse.quote(iname, safe="")
+        resource = f"/organizations/{organizationId}/api/push/profiles/{iname}"
+
+        body_params = [
+            "name",
+            "description",
+            "topic",
+            "receiver",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def deleteOrganizationApiPushProfile(self, organizationId: str, iname: str):
+        """
+        **Delete a push profile**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-api-push-profile
+
+        - organizationId (string): Organization ID
+        - iname (string): Iname
+        """
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        iname = urllib.parse.quote(iname, safe="")
+        resource = f"/organizations/{organizationId}/api/push/profiles/{iname}"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+
+    def createOrganizationApiPushReceiversProfile(self, organizationId: str, iname: str, receiver: dict, **kwargs):
+        """
+        **Create a new push receiver profile**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-api-push-receivers-profile
+
+        - organizationId (string): Organization ID
+        - iname (string): Immutable name of the resource. Must be unique within resources of this type.
+        - receiver (object): Webhook receiver
+        - name (string): Name of receiver profile
+        - description (string): Description of receiver profile
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/api/push/receivers/profiles"
+
+        body_params = [
+            "iname",
+            "name",
+            "description",
+            "receiver",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def deleteOrganizationApiPushReceiversProfile(self, organizationId: str, iname: str):
+        """
+        **Delete a push receiver profile**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-api-push-receivers-profile
+
+        - organizationId (string): Organization ID
+        - iname (string): Iname
+        """
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        iname = urllib.parse.quote(iname, safe="")
+        resource = f"/organizations/{organizationId}/api/push/receivers/profiles/{iname}"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+
+    def updateOrganizationApiPushReceiversProfile(self, organizationId: str, iname: str, **kwargs):
+        """
+        **Update a push receiver profile**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-api-push-receivers-profile
+
+        - organizationId (string): Organization ID
+        - iname (string): Iname
+        - name (string): Name of the receiver profile
+        - description (string): Description of the receiver profile
+        - receiver (object): API Push Receiver details
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        iname = urllib.parse.quote(iname, safe="")
+        resource = f"/organizations/{organizationId}/api/push/receivers/profiles/{iname}"
+
+        body_params = [
+            "name",
+            "description",
+            "receiver",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def createOrganizationAuthRadiusServer(self, organizationId: str, address: str, secret: str, **kwargs):
+        """
+        **Add an organization-wide RADIUS server**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-auth-radius-server
+
+        - organizationId (string): Organization ID
+        - address (string): The IP address or FQDN of the RADIUS server
+        - secret (string): Shared secret of the RADIUS server
+        - name (string): The name of the RADIUS server
+        - modes (array): Available server modes
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/auth/radius/servers"
+
+        body_params = [
+            "name",
+            "address",
+            "modes",
+            "secret",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def updateOrganizationAuthRadiusServer(self, organizationId: str, serverId: str, **kwargs):
+        """
+        **Update an organization-wide RADIUS server**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-auth-radius-server
+
+        - organizationId (string): Organization ID
+        - serverId (string): Server ID
+        - name (string): The name of the RADIUS server
+        - address (string): The IP address or FQDN of the RADIUS server
+        - modes (array): Available server modes
+        - secret (string): Shared secret of the RADIUS server
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        serverId = urllib.parse.quote(serverId, safe="")
+        resource = f"/organizations/{organizationId}/auth/radius/servers/{serverId}"
+
+        body_params = [
+            "name",
+            "address",
+            "modes",
+            "secret",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def deleteOrganizationAuthRadiusServer(self, organizationId: str, serverId: str):
+        """
+        **Delete an organization-wide RADIUS server from a organization**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-auth-radius-server
+
+        - organizationId (string): Organization ID
+        - serverId (string): Server ID
+        """
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        serverId = urllib.parse.quote(serverId, safe="")
+        resource = f"/organizations/{organizationId}/auth/radius/servers/{serverId}"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+
     def createOrganizationBrandingPolicy(self, organizationId: str, name: str, **kwargs):
         """
                **Add a new branding policy to an organization**
@@ -538,6 +787,41 @@ class ActionBatchOrganizations(object):
         action = {
             "resource": resource,
             "operation": "destroy",
+        }
+        return action
+
+    def importOrganizationCertificates(self, organizationId: str, managedBy: str, contents: str, description: str, **kwargs):
+        """
+        **Import certificate for this organization**
+        https://developer.cisco.com/meraki/api-v1/#!import-organization-certificates
+
+        - organizationId (string): Organization ID
+        - managedBy (string): Certificate managed by type [system_manager, mr, encrypted_syslog, grpc_dial_out]
+        - contents (string): Certificate content in valid PEM format
+        - description (string): Certificate description
+        """
+
+        kwargs = locals()
+
+        if "managedBy" in kwargs:
+            options = ["encrypted_syslog", "grpc_dial_out", "mr", "system_manager"]
+            assert kwargs["managedBy"] in options, (
+                f'''"managedBy" cannot be "{kwargs["managedBy"]}", & must be set to one of: {options}'''
+            )
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/certificates/import"
+
+        body_params = [
+            "managedBy",
+            "contents",
+            "description",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
         }
         return action
 
@@ -860,6 +1144,26 @@ class ActionBatchOrganizations(object):
         }
         return action
 
+    def bulkOrganizationDevicesPacketCaptureSchedulesDelete(self, organizationId: str, scheduleIds: list, **kwargs):
+        """
+        **Delete packet capture schedules**
+        https://developer.cisco.com/meraki/api-v1/#!bulk-organization-devices-packet-capture-schedules-delete
+
+        - organizationId (string): Organization ID
+        - scheduleIds (array): Delete the packet capture schedules of the specified schedule ids
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/devices/packetCapture/schedules/bulkDelete"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+
     def reorderOrganizationDevicesPacketCaptureSchedules(self, organizationId: str, order: list, **kwargs):
         """
         **Bulk update priorities of pcap schedules**
@@ -945,6 +1249,66 @@ class ActionBatchOrganizations(object):
         }
         return action
 
+    def tasksOrganizationDevicesPacketCapture(self, organizationId: str, packetId: str, task: str, **kwargs):
+        """
+        **Enqueues a task for a specific packet capture. This endpoint has a sustained rate limit of one request every 60 seconds.**
+        https://developer.cisco.com/meraki/api-v1/#!tasks-organization-devices-packet-capture
+
+        - organizationId (string): Organization ID
+        - packetId (string): Packet ID
+        - task (string): Type of task to enqueue. It can be one of: ["analysis", "reasoning", "summary", "highlights", "title", "flow"]
+        - networkId (string): Parameter to validate authorization by network access
+        """
+
+        kwargs.update(locals())
+
+        if "task" in kwargs:
+            options = ["analysis", "flow", "highlights", "reasoning", "summary", "title"]
+            assert kwargs["task"] in options, f'''"task" cannot be "{kwargs["task"]}", & must be set to one of: {options}'''
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        packetId = urllib.parse.quote(packetId, safe="")
+        resource = f"/organizations/{organizationId}/devices/packetCaptures/{packetId}/tasks"
+
+        body_params = [
+            "networkId",
+            "task",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "enqueue_task",
+            "body": payload,
+        }
+        return action
+
+    def bulkOrganizationDevicesPlacementPositionsUpdate(self, organizationId: str, serials: list, **kwargs):
+        """
+        **Bulk update the attributes related to positions for provided devices**
+        https://developer.cisco.com/meraki/api-v1/#!bulk-organization-devices-placement-positions-update
+
+        - organizationId (string): Organization ID
+        - serials (array): List of device serials on a floor plan to update
+        - height (object): Height of the devices on the floor plan
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/devices/placement/positions/bulkUpdate"
+
+        body_params = [
+            "serials",
+            "height",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "bulk_update",
+            "body": payload,
+        }
+        return action
+
     def updateOrganizationEarlyAccessFeaturesOptIn(self, organizationId: str, optInId: str, **kwargs):
         """
         **Update an early access feature opt-in for an organization**
@@ -968,6 +1332,170 @@ class ActionBatchOrganizations(object):
         action = {
             "resource": resource,
             "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def updateOrganizationExtensionsSdwanmanagerInterconnect(
+        self, organizationId: str, interconnectId: str, name: str, status: str, **kwargs
+    ):
+        """
+        **Update name and status of an Interconnect**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-extensions-sdwanmanager-interconnect
+
+        - organizationId (string): Organization ID
+        - interconnectId (string): Interconnect ID
+        - name (string): Interconnect name
+        - status (string): Interconnect status
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        interconnectId = urllib.parse.quote(interconnectId, safe="")
+        resource = f"/organizations/{organizationId}/extensions/sdwanmanager/interconnects/{interconnectId}"
+
+        body_params = [
+            "name",
+            "status",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def createOrganizationExtensionsThousandEyesNetwork(self, organizationId: str, enabled: bool, networkId: str, **kwargs):
+        """
+        **Add a ThousandEyes agent for this network. Only valid for networks with access to Meraki Insight. Organization must have a ThousandEyes account connected to perform this action.**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-extensions-thousand-eyes-network
+
+        - organizationId (string): Organization ID
+        - enabled (boolean): Whether or not the ThousandEyes agent is enabled for the network.
+        - networkId (string): Network that will have the ThousandEyes agent installed on.
+        - tests (array): An array of tests to be created
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/extensions/thousandEyes/networks"
+
+        body_params = [
+            "enabled",
+            "networkId",
+            "tests",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def updateOrganizationExtensionsThousandEyesNetwork(self, organizationId: str, networkId: str, enabled: bool, **kwargs):
+        """
+        **Update a ThousandEyes agent from this network. Only valid for networks with access to Meraki Insight. Organization must have a ThousandEyes account connected to perform this action.**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-extensions-thousand-eyes-network
+
+        - organizationId (string): Organization ID
+        - networkId (string): Network ID
+        - enabled (boolean): Whether or not the ThousandEyes agent is enabled for the network.
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/organizations/{organizationId}/extensions/thousandEyes/networks/{networkId}"
+
+        body_params = [
+            "enabled",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def deleteOrganizationExtensionsThousandEyesNetwork(self, organizationId: str, networkId: str):
+        """
+        **Delete a ThousandEyes agent from this network. Only valid for networks with access to Meraki Insight. Organization must have a ThousandEyes account connected to perform this action.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-extensions-thousand-eyes-network
+
+        - organizationId (string): Organization ID
+        - networkId (string): Network ID
+        """
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/organizations/{organizationId}/extensions/thousandEyes/networks/{networkId}"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+
+    def createOrganizationExtensionsThousandEyesTest(self, organizationId: str, **kwargs):
+        """
+        **Create a ThousandEyes test based on a provided test template. Only valid for networks with access to Meraki Insight. Organization must have a ThousandEyes account connected to perform this action.**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-extensions-thousand-eyes-test
+
+        - organizationId (string): Organization ID
+        - tests (array): An array of tests to be created
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/extensions/thousandEyes/tests"
+
+        body_params = [
+            "tests",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def resolveOrganizationIamAdminsAdministratorsMePermissions(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List the authenticated caller admin's permissions for an organization. Org-wide read and write admins receive a single organization-scoped permission item instead of per-network items. Scoped callers receive the network resources they can access in the requested organization, along with the effective allowed action for each resource.**
+        https://developer.cisco.com/meraki/api-v1/#!resolve-organization-iam-admins-administrators-me-permissions
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/iam/admins/administrators/me/permissions/resolve"
+
+        body_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "permissions/resolve",
             "body": payload,
         }
         return action
@@ -1253,6 +1781,7 @@ class ActionBatchOrganizations(object):
         - timeZone (string): The timezone of the network. For a list of allowed timezones, please see the 'TZ' column in the table in <a target='_blank' href='https://en.wikipedia.org/wiki/List_of_tz_database_time_zones'>this article.</a>
         - copyFromNetworkId (string): The ID of the network to copy configuration from. Other provided parameters will override the copied configuration, except type which must match this network's type exactly.
         - notes (string): Add any notes or additional information about this network here.
+        - details (array): An array of details
         """
 
         kwargs.update(locals())
@@ -1267,6 +1796,7 @@ class ActionBatchOrganizations(object):
             "timeZone",
             "copyFromNetworkId",
             "notes",
+            "details",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -1302,6 +1832,150 @@ class ActionBatchOrganizations(object):
             "resource": resource,
             "operation": "combine",
             "body": payload,
+        }
+        return action
+
+    def createOrganizationNetworksGroup(self, organizationId: str, name: str, **kwargs):
+        """
+        **Create a network group**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-networks-group
+
+        - organizationId (string): Organization ID
+        - name (string): The name of the network group
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/networks/groups"
+
+        body_params = [
+            "name",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def updateOrganizationNetworksGroup(self, organizationId: str, groupId: str, name: str, **kwargs):
+        """
+        **Update a network group**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-networks-group
+
+        - organizationId (string): Organization ID
+        - groupId (string): Group ID
+        - name (string): The new name of the network group
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        groupId = urllib.parse.quote(groupId, safe="")
+        resource = f"/organizations/{organizationId}/networks/groups/{groupId}"
+
+        body_params = [
+            "name",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def deleteOrganizationNetworksGroup(self, organizationId: str, groupId: str):
+        """
+        **Delete a network group**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-networks-group
+
+        - organizationId (string): Organization ID
+        - groupId (string): Group ID
+        """
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        groupId = urllib.parse.quote(groupId, safe="")
+        resource = f"/organizations/{organizationId}/networks/groups/{groupId}"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+
+    def bulkOrganizationNetworksGroupAssign(self, organizationId: str, groupId: str, networkIds: list, **kwargs):
+        """
+        **Add networks to a network group**
+        https://developer.cisco.com/meraki/api-v1/#!bulk-organization-networks-group-assign
+
+        - organizationId (string): Organization ID
+        - groupId (string): Group ID
+        - networkIds (array): A list of network IDs to add to the network group
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        groupId = urllib.parse.quote(groupId, safe="")
+        resource = f"/organizations/{organizationId}/networks/groups/{groupId}/bulkAssign"
+
+        body_params = [
+            "networkIds",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "bulk_assign",
+            "body": payload,
+        }
+        return action
+
+    def bulkOrganizationNetworksGroupUnassign(self, organizationId: str, groupId: str, networkIds: list, **kwargs):
+        """
+        **Remove networks from a network group**
+        https://developer.cisco.com/meraki/api-v1/#!bulk-organization-networks-group-unassign
+
+        - organizationId (string): Organization ID
+        - groupId (string): Group ID
+        - networkIds (array): A list of network IDs to remove from the network group
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        groupId = urllib.parse.quote(groupId, safe="")
+        resource = f"/organizations/{organizationId}/networks/groups/{groupId}/bulkUnassign"
+
+        body_params = [
+            "networkIds",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "bulk_unassign",
+            "body": payload,
+        }
+        return action
+
+    def deleteOrganizationOpenRoamingCertificate(self, organizationId: str, id: str):
+        """
+        **Delete an open roaming certificate.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-open-roaming-certificate
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        """
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        id = urllib.parse.quote(id, safe="")
+        resource = f"/organizations/{organizationId}/openRoaming/certificates/{id}"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
         }
         return action
 
@@ -1885,6 +2559,93 @@ class ActionBatchOrganizations(object):
         }
         return action
 
+    def createOrganizationRoutingVrf(self, organizationId: str, name: str, **kwargs):
+        """
+        **Add an organization-wide VRF (Virtual Routing and Forwarding)**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-routing-vrf
+
+        - organizationId (string): Organization ID
+        - name (string): The name of the VRF (Virtual Routing and Forwarding)
+        - description (string): Description of the VRF (Virtual Routing and Forwarding)
+        - routeDistinguisher (string): RD (Route Distinguisher) for the VRF (Virtual Routing and Forwarding)
+        - routeTarget (string): Route target are used to control the import and export of routes between VRFs
+        - appliance (object): This parameter is used to enable or disable the VRF on the WAN appliance
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/routing/vrfs"
+
+        body_params = [
+            "name",
+            "description",
+            "routeDistinguisher",
+            "routeTarget",
+            "appliance",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def updateOrganizationRoutingVrf(self, organizationId: str, vrfId: str, **kwargs):
+        """
+        **Update an organization-wide VRF (Virtual Routing and Forwarding)**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-routing-vrf
+
+        - organizationId (string): Organization ID
+        - vrfId (string): Vrf ID
+        - name (string): The name of the VRF (Virtual Routing and Forwarding)
+        - description (string): Description of the VRF (Virtual Routing and Forwarding)
+        - routeDistinguisher (string): RD (Route Distinguisher) for the VRF (Virtual Routing and Forwarding)
+        - routeTarget (string): Route target are used to control the import and export of routes between VRFs
+        - appliance (object): This parameter is used to enable or disable the VRF on the WAN appliance
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        vrfId = urllib.parse.quote(vrfId, safe="")
+        resource = f"/organizations/{organizationId}/routing/vrfs/{vrfId}"
+
+        body_params = [
+            "name",
+            "description",
+            "routeDistinguisher",
+            "routeTarget",
+            "appliance",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def deleteOrganizationRoutingVrf(self, organizationId: str, vrfId: str):
+        """
+        **Delete a VRF (Virtual Routing and Forwarding) from a organization**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-routing-vrf
+
+        - organizationId (string): Organization ID
+        - vrfId (string): Vrf ID
+        """
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        vrfId = urllib.parse.quote(vrfId, safe="")
+        resource = f"/organizations/{organizationId}/routing/vrfs/{vrfId}"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+
     def createOrganizationSamlIdp(self, organizationId: str, x509certSha1Fingerprint: str, **kwargs):
         """
         **Create a SAML IdP for your organization.**
@@ -2081,6 +2842,33 @@ class ActionBatchOrganizations(object):
         }
         return action
 
+    def enrollOrganizationSaseSites(self, organizationId: str, **kwargs):
+        """
+        **Enroll sites in this organization to Secure Access. For an organization, a maximum of 2500 sites can be enrolled if they are in spoke mode or a maximum of 10 sites can be enrolled in hub mode.**
+        https://developer.cisco.com/meraki/api-v1/#!enroll-organization-sase-sites
+
+        - organizationId (string): Organization ID
+        - items (array): List of Meraki SD-WAN sites with the associated regions to be enrolled.
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/sase/sites/enroll"
+
+        body_params = [
+            "items",
+            "callback",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
     def updateOrganizationSaseSite(self, organizationId: str, siteId: str, **kwargs):
         """
         **Update the configuration for a site. Currently, only supports updating default route enablement.**
@@ -2199,6 +2987,97 @@ class ActionBatchOrganizations(object):
         action = {
             "resource": resource,
             "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def createOrganizationWebhooksPayloadTemplate(self, organizationId: str, name: str, **kwargs):
+        """
+        **Create a webhook payload template for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-webhooks-payload-template
+
+        - organizationId (string): Organization ID
+        - name (string): The name of the new template
+        - body (string): The liquid template used for the body of the webhook message. Either `body` or `bodyFile` must be specified.
+        - headers (array): The liquid template used with the webhook headers.
+        - bodyFile (string): A file containing liquid template used for the body of the webhook message. Either `body` or `bodyFile` must be specified.
+        - headersFile (string): A file containing the liquid template used with the webhook headers.
+        - sharing (object): Information on which entities have access to the template
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/webhooks/payloadTemplates"
+
+        body_params = [
+            "name",
+            "body",
+            "headers",
+            "bodyFile",
+            "headersFile",
+            "sharing",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def deleteOrganizationWebhooksPayloadTemplate(self, organizationId: str, payloadTemplateId: str):
+        """
+        **Destroy a webhook payload template for an organization. Does not work for included templates ('wpt_00001', 'wpt_00002', 'wpt_00003', 'wpt_00004', 'wpt_00005', 'wpt_00006', 'wpt_00007' or 'wpt_00008')**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-webhooks-payload-template
+
+        - organizationId (string): Organization ID
+        - payloadTemplateId (string): Payload template ID
+        """
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        payloadTemplateId = urllib.parse.quote(payloadTemplateId, safe="")
+        resource = f"/organizations/{organizationId}/webhooks/payloadTemplates/{payloadTemplateId}"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+
+    def updateOrganizationWebhooksPayloadTemplate(self, organizationId: str, payloadTemplateId: str, **kwargs):
+        """
+        **Update a webhook payload template for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-webhooks-payload-template
+
+        - organizationId (string): Organization ID
+        - payloadTemplateId (string): Payload template ID
+        - name (string): The name of the template
+        - body (string): The liquid template used for the body of the webhook message.
+        - headers (array): The liquid template used with the webhook headers.
+        - bodyFile (string): A file containing liquid template used for the body of the webhook message.
+        - headersFile (string): A file containing the liquid template used with the webhook headers.
+        - sharing (object): Information on which entities have access to the template
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        payloadTemplateId = urllib.parse.quote(payloadTemplateId, safe="")
+        resource = f"/organizations/{organizationId}/webhooks/payloadTemplates/{payloadTemplateId}"
+
+        body_params = [
+            "name",
+            "body",
+            "headers",
+            "bodyFile",
+            "headersFile",
+            "sharing",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
             "body": payload,
         }
         return action
