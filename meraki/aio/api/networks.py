@@ -855,6 +855,23 @@ class AsyncNetworks:
 
         return self._session.post(metadata, resource, payload)
 
+    def getNetworkDevicesJson(self, networkId: str):
+        """
+        **Extraction of the legacy nodes JSON endpoint for a network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-devices-json
+
+        - networkId (string): Network ID
+        """
+
+        metadata = {
+            "tags": ["networks", "configure", "devices", "json"],
+            "operation": "getNetworkDevicesJson",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/devices/json"
+
+        return self._session.get(metadata, resource)
+
     def removeNetworkDevices(self, networkId: str, serial: str, **kwargs):
         """
         **Remove a single device**
@@ -885,6 +902,37 @@ class AsyncNetworks:
                 self._session._logger.warning(f"removeNetworkDevices: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
+
+    def updateNetworkDevicesSyslogServers(self, networkId: str, servers: list, **kwargs):
+        """
+        **Updates the syslog servers configuration for a network.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-devices-syslog-servers
+
+        - networkId (string): Network ID
+        - servers (array): A list of the syslog servers for this network; suggested maximum array size is 10
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["networks", "configure", "devices", "syslog", "servers"],
+            "operation": "updateNetworkDevicesSyslogServers",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/devices/syslog/servers"
+
+        body_params = [
+            "servers",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkDevicesSyslogServers: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
 
     def getNetworkEvents(self, networkId: str, total_pages=1, direction="prev", event_log_end_time=None, **kwargs):
         """
@@ -1455,6 +1503,7 @@ class AsyncNetworks:
         - topLeftCorner (object): The longitude and latitude of the top left corner of your floor plan.
         - topRightCorner (object): The longitude and latitude of the top right corner of your floor plan.
         - floorNumber (number): The floor number of the floors within the building
+        - buildingId (string): The ID of the building that this floor belongs to.
         """
 
         kwargs.update(locals())
@@ -1474,6 +1523,7 @@ class AsyncNetworks:
             "topLeftCorner",
             "topRightCorner",
             "floorNumber",
+            "buildingId",
             "imageContents",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
@@ -1670,6 +1720,7 @@ class AsyncNetworks:
         - topLeftCorner (object): The longitude and latitude of the top left corner of your floor plan.
         - topRightCorner (object): The longitude and latitude of the top right corner of your floor plan.
         - floorNumber (number): The floor number of the floors within the building
+        - buildingId (string): The ID of the building that this floor belongs to.
         - imageContents (string): The file contents (a base 64 encoded string) of your new image. Supported formats are PNG, GIF, and JPG. Note that all images are saved as PNG files, regardless of the format they are uploaded in. If you upload a new image, and you do NOT specify any new geolocation fields ('center, 'topLeftCorner', etc), the floor plan will be recentered with no rotation in order to maintain the aspect ratio of your new image.
         """
 
@@ -1691,6 +1742,7 @@ class AsyncNetworks:
             "topLeftCorner",
             "topRightCorner",
             "floorNumber",
+            "buildingId",
             "imageContents",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
@@ -1918,6 +1970,106 @@ class AsyncNetworks:
 
         return self._session.get(metadata, resource)
 
+    def getNetworkLocationScanning(self, networkId: str):
+        """
+        **Return scanning API settings**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-location-scanning
+
+        - networkId (string): Network ID
+        """
+
+        metadata = {
+            "tags": ["networks", "configure", "locationScanning"],
+            "operation": "getNetworkLocationScanning",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/locationScanning"
+
+        return self._session.get(metadata, resource)
+
+    def updateNetworkLocationScanning(self, networkId: str, **kwargs):
+        """
+        **Change scanning API settings**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-location-scanning
+
+        - networkId (string): Network ID
+        - analyticsEnabled (boolean): Collect location and scanning analytics
+        - scanningApiEnabled (boolean): Enable push API for scanning events, analytics must be enabled
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["networks", "configure", "locationScanning"],
+            "operation": "updateNetworkLocationScanning",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/locationScanning"
+
+        body_params = [
+            "analyticsEnabled",
+            "scanningApiEnabled",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkLocationScanning: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
+    def getNetworkLocationScanningHttpServers(self, networkId: str):
+        """
+        **Return list of scanning API receivers**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-location-scanning-http-servers
+
+        - networkId (string): Network ID
+        """
+
+        metadata = {
+            "tags": ["networks", "configure", "locationScanning", "httpServers"],
+            "operation": "getNetworkLocationScanningHttpServers",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/locationScanning/httpServers"
+
+        return self._session.get(metadata, resource)
+
+    def updateNetworkLocationScanningHttpServers(self, networkId: str, endpoints: list, **kwargs):
+        """
+        **Set the list of scanning API receivers**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-location-scanning-http-servers
+
+        - networkId (string): Network ID
+        - endpoints (array): A set of http server configurations
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["networks", "configure", "locationScanning", "httpServers"],
+            "operation": "updateNetworkLocationScanningHttpServers",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/locationScanning/httpServers"
+
+        body_params = [
+            "endpoints",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkLocationScanningHttpServers: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
     def getNetworkMerakiAuthUsers(self, networkId: str):
         """
         **List the authorized users configured under Meraki Authentication for a network (splash guest or RADIUS users for a wireless network, or client VPN users for a MX network)**
@@ -2075,13 +2227,16 @@ class AsyncNetworks:
 
         return self._session.put(metadata, resource, payload)
 
-    def getNetworkMqttBrokers(self, networkId: str):
+    def getNetworkMqttBrokers(self, networkId: str, **kwargs):
         """
         **List the MQTT brokers for this network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-mqtt-brokers
 
         - networkId (string): Network ID
+        - productTypes (array): Optional parameter to filter MQTT brokers by product type. If multiple types are provided, the query will return brokers that match any of the provided types.
         """
+
+        kwargs.update(locals())
 
         metadata = {
             "tags": ["networks", "configure", "mqttBrokers"],
@@ -2090,7 +2245,26 @@ class AsyncNetworks:
         networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/mqttBrokers"
 
-        return self._session.get(metadata, resource)
+        query_params = [
+            "productTypes",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "productTypes",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkMqttBrokers: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get(metadata, resource, params)
 
     def createNetworkMqttBroker(self, networkId: str, name: str, host: str, port: int, **kwargs):
         """
@@ -2103,9 +2277,16 @@ class AsyncNetworks:
         - port (integer): Host port though which the MQTT broker can be reached.
         - security (object): Security settings of the MQTT broker.
         - authentication (object): Authentication settings of the MQTT broker
+        - productType (string): The product type for which the MQTT broker is being created.
         """
 
         kwargs.update(locals())
+
+        if "productType" in kwargs:
+            options = ["camera", "wireless"]
+            assert kwargs["productType"] in options, (
+                f'''"productType" cannot be "{kwargs["productType"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
             "tags": ["networks", "configure", "mqttBrokers"],
@@ -2120,6 +2301,7 @@ class AsyncNetworks:
             "port",
             "security",
             "authentication",
+            "productType",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -2606,6 +2788,7 @@ class AsyncNetworks:
         - remoteStatusPageEnabled (boolean): Enables / disables access to the device status page (<a target='_blank'>http://[device's LAN IP])</a>. Optional. Can only be set if localStatusPageEnabled is set to true
         - localStatusPage (object): A hash of Local Status page(s)' authentication options applied to the Network.
         - securePort (object): A hash of SecureConnect options applied to the Network.
+        - fips (object): A hash of FIPS options applied to the Network
         - namedVlans (object): A hash of Named VLANs options applied to the Network.
         """
 
@@ -2623,6 +2806,7 @@ class AsyncNetworks:
             "remoteStatusPageEnabled",
             "localStatusPage",
             "securePort",
+            "fips",
             "namedVlans",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
@@ -2632,6 +2816,93 @@ class AsyncNetworks:
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
                 self._session._logger.warning(f"updateNetworkSettings: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
+    def createNetworkSitesBuilding(self, networkId: str, name: str, **kwargs):
+        """
+        **Create a new building**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-sites-building
+
+        - networkId (string): Network ID
+        - name (string): The name of the building
+        - floors (array): The floors of the building
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["networks", "configure", "sites", "buildings"],
+            "operation": "createNetworkSitesBuilding",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/sites/buildings"
+
+        body_params = [
+            "name",
+            "floors",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkSitesBuilding: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def deleteNetworkSitesBuilding(self, networkId: str, buildingId: str):
+        """
+        **Delete a building**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-sites-building
+
+        - networkId (string): Network ID
+        - buildingId (string): Building ID
+        """
+
+        metadata = {
+            "tags": ["networks", "configure", "sites", "buildings"],
+            "operation": "deleteNetworkSitesBuilding",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        buildingId = urllib.parse.quote(str(buildingId), safe="")
+        resource = f"/networks/{networkId}/sites/buildings/{buildingId}"
+
+        return self._session.delete(metadata, resource)
+
+    def updateNetworkSitesBuilding(self, networkId: str, buildingId: str, **kwargs):
+        """
+        **Update a building**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-sites-building
+
+        - networkId (string): Network ID
+        - buildingId (string): Building ID
+        - name (string): The name of the building
+        - floors (array): The floors of the building
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["networks", "configure", "sites", "buildings"],
+            "operation": "updateNetworkSitesBuilding",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        buildingId = urllib.parse.quote(str(buildingId), safe="")
+        resource = f"/networks/{networkId}/sites/buildings/{buildingId}"
+
+        body_params = [
+            "name",
+            "floors",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSitesBuilding: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -2661,6 +2932,8 @@ class AsyncNetworks:
         - access (string): The type of SNMP access. Can be one of 'none' (disabled), 'community' (V1/V2c), or 'users' (V3).
         - communityString (string): The SNMP community string. Only relevant if 'access' is set to 'community'.
         - users (array): The list of SNMP users. Only relevant if 'access' is set to 'users'.
+        - authentication (object): SNMPv3 authentication settings. Only relevant if 'access' is set to 'users'.
+        - privacy (object): SNMPv3 privacy settings. Only relevant if 'access' is set to 'users'.
         """
 
         kwargs.update(locals())
@@ -2682,6 +2955,8 @@ class AsyncNetworks:
             "access",
             "communityString",
             "users",
+            "authentication",
+            "privacy",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -2690,6 +2965,47 @@ class AsyncNetworks:
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
                 self._session._logger.warning(f"updateNetworkSnmp: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
+    def updateNetworkSnmpTraps(self, networkId: str, **kwargs):
+        """
+        **Update the SNMP trap configuration for the specified network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-snmp-traps
+
+        - networkId (string): Network ID
+        - mode (string): SNMP trap protocol version
+        - receiver (object): Stores the port and address
+        - v2 (object): V2 mode
+        - v3 (object): V3 mode
+        """
+
+        kwargs.update(locals())
+
+        if "mode" in kwargs:
+            options = ["disabled", "v1/v2c", "v3"]
+            assert kwargs["mode"] in options, f'''"mode" cannot be "{kwargs["mode"]}", & must be set to one of: {options}'''
+
+        metadata = {
+            "tags": ["networks", "configure", "snmp", "traps"],
+            "operation": "updateNetworkSnmpTraps",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/snmp/traps"
+
+        body_params = [
+            "mode",
+            "receiver",
+            "v2",
+            "v3",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSnmpTraps: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -3005,9 +3321,10 @@ class AsyncNetworks:
         - vlanNames (array): An array of named VLANs
         - vlanGroups (array): An array of VLAN groups
         - iname (string): IName of the profile
+        - allowedVlans (string): The VLANs allowed on the VLAN profile. Only applicable to trunk ports. The given range must be inclusive of all named VLANs.
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         metadata = {
             "tags": ["networks", "configure", "vlanProfiles"],
@@ -3018,6 +3335,7 @@ class AsyncNetworks:
 
         body_params = [
             "name",
+            "allowedVlans",
             "vlanNames",
             "vlanGroups",
             "iname",
@@ -3153,9 +3471,10 @@ class AsyncNetworks:
         - name (string): Name of the profile, string length must be from 1 to 255 characters
         - vlanNames (array): An array of named VLANs
         - vlanGroups (array): An array of VLAN groups
+        - allowedVlans (string): The VLANs allowed on the VLAN profile. Only applicable to trunk ports. The given range must be inclusive of all named VLANs.
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         metadata = {
             "tags": ["networks", "configure", "vlanProfiles"],
@@ -3167,6 +3486,7 @@ class AsyncNetworks:
 
         body_params = [
             "name",
+            "allowedVlans",
             "vlanNames",
             "vlanGroups",
         ]

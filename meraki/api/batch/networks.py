@@ -203,6 +203,31 @@ class ActionBatchNetworks(object):
         }
         return action
 
+    def updateNetworkDevicesSyslogServers(self, networkId: str, servers: list, **kwargs):
+        """
+        **Updates the syslog servers configuration for a network.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-devices-syslog-servers
+
+        - networkId (string): Network ID
+        - servers (array): A list of the syslog servers for this network; suggested maximum array size is 10
+        """
+
+        kwargs = locals()
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/devices/syslog/servers"
+
+        body_params = [
+            "servers",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "servers",
+            "body": payload,
+        }
+        return action
+
     def updateNetworkFirmwareUpgrades(self, networkId: str, **kwargs):
         """
         **Update firmware upgrade information for a network**
@@ -467,6 +492,7 @@ class ActionBatchNetworks(object):
         - topLeftCorner (object): The longitude and latitude of the top left corner of your floor plan.
         - topRightCorner (object): The longitude and latitude of the top right corner of your floor plan.
         - floorNumber (number): The floor number of the floors within the building
+        - buildingId (string): The ID of the building that this floor belongs to.
         - imageContents (string): The file contents (a base 64 encoded string) of your new image. Supported formats are PNG, GIF, and JPG. Note that all images are saved as PNG files, regardless of the format they are uploaded in. If you upload a new image, and you do NOT specify any new geolocation fields ('center, 'topLeftCorner', etc), the floor plan will be recentered with no rotation in order to maintain the aspect ratio of your new image.
         """
 
@@ -484,6 +510,7 @@ class ActionBatchNetworks(object):
             "topLeftCorner",
             "topRightCorner",
             "floorNumber",
+            "buildingId",
             "imageContents",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
@@ -633,6 +660,58 @@ class ActionBatchNetworks(object):
         }
         return action
 
+    def updateNetworkLocationScanning(self, networkId: str, **kwargs):
+        """
+        **Change scanning API settings**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-location-scanning
+
+        - networkId (string): Network ID
+        - analyticsEnabled (boolean): Collect location and scanning analytics
+        - scanningApiEnabled (boolean): Enable push API for scanning events, analytics must be enabled
+        """
+
+        kwargs.update(locals())
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/locationScanning"
+
+        body_params = [
+            "analyticsEnabled",
+            "scanningApiEnabled",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def updateNetworkLocationScanningHttpServers(self, networkId: str, endpoints: list, **kwargs):
+        """
+        **Set the list of scanning API receivers. Old receivers will be removed**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-location-scanning-http-servers
+
+        - networkId (string): Network ID
+        - endpoints (array): A set of http server configurations
+        """
+
+        kwargs = locals()
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/locationScanning/httpServers"
+
+        body_params = [
+            "endpoints",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
     def createNetworkMerakiAuthUser(self, networkId: str, email: str, authorizations: list, **kwargs):
         """
         **Authorize a user configured with Meraki Authentication for a network (currently supports 802.1X, splash guest, and client VPN users, and currently, organizations have a 50,000 user cap)**
@@ -742,9 +821,16 @@ class ActionBatchNetworks(object):
         - port (integer): Host port though which the MQTT broker can be reached.
         - security (object): Security settings of the MQTT broker.
         - authentication (object): Authentication settings of the MQTT broker
+        - productType (string): The product type for which the MQTT broker is being created.
         """
 
         kwargs.update(locals())
+
+        if "productType" in kwargs:
+            options = ["camera", "wireless"]
+            assert kwargs["productType"] in options, (
+                f'''"productType" cannot be "{kwargs["productType"]}", & must be set to one of: {options}'''
+            )
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/mqttBrokers"
@@ -755,6 +841,7 @@ class ActionBatchNetworks(object):
             "port",
             "security",
             "authentication",
+            "productType",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -828,6 +915,7 @@ class ActionBatchNetworks(object):
         - remoteStatusPageEnabled (boolean): Enables / disables access to the device status page (<a target='_blank'>http://[device's LAN IP])</a>. Optional. Can only be set if localStatusPageEnabled is set to true
         - localStatusPage (object): A hash of Local Status page(s)' authentication options applied to the Network.
         - securePort (object): A hash of SecureConnect options applied to the Network.
+        - fips (object): A hash of FIPS options applied to the Network
         - namedVlans (object): A hash of Named VLANs options applied to the Network.
         """
 
@@ -841,7 +929,118 @@ class ActionBatchNetworks(object):
             "remoteStatusPageEnabled",
             "localStatusPage",
             "securePort",
+            "fips",
             "namedVlans",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def createNetworkSitesBuilding(self, networkId: str, name: str, **kwargs):
+        """
+        **Create a new building**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-sites-building
+
+        - networkId (string): Network ID
+        - name (string): The name of the building
+        - floors (array): The floors of the building
+        """
+
+        kwargs.update(locals())
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/sites/buildings"
+
+        body_params = [
+            "name",
+            "floors",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def deleteNetworkSitesBuilding(self, networkId: str, buildingId: str):
+        """
+        **Delete a building**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-sites-building
+
+        - networkId (string): Network ID
+        - buildingId (string): Building ID
+        """
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        buildingId = urllib.parse.quote(buildingId, safe="")
+        resource = f"/networks/{networkId}/sites/buildings/{buildingId}"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+
+    def updateNetworkSitesBuilding(self, networkId: str, buildingId: str, **kwargs):
+        """
+        **Update a building**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-sites-building
+
+        - networkId (string): Network ID
+        - buildingId (string): Building ID
+        - name (string): The name of the building
+        - floors (array): The floors of the building
+        """
+
+        kwargs.update(locals())
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        buildingId = urllib.parse.quote(buildingId, safe="")
+        resource = f"/networks/{networkId}/sites/buildings/{buildingId}"
+
+        body_params = [
+            "name",
+            "floors",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def updateNetworkSnmpTraps(self, networkId: str, **kwargs):
+        """
+        **Update the SNMP trap configuration for the specified network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-snmp-traps
+
+        - networkId (string): Network ID
+        - mode (string): SNMP trap protocol version
+        - receiver (object): Stores the port and address
+        - v2 (object): V2 mode
+        - v3 (object): V3 mode
+        """
+
+        kwargs.update(locals())
+
+        if "mode" in kwargs:
+            options = ["disabled", "v1/v2c", "v3"]
+            assert kwargs["mode"] in options, f'''"mode" cannot be "{kwargs["mode"]}", & must be set to one of: {options}'''
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/snmp/traps"
+
+        body_params = [
+            "mode",
+            "receiver",
+            "v2",
+            "v3",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -903,15 +1102,17 @@ class ActionBatchNetworks(object):
         - vlanNames (array): An array of named VLANs
         - vlanGroups (array): An array of VLAN groups
         - iname (string): IName of the profile
+        - allowedVlans (string): The VLANs allowed on the VLAN profile. Only applicable to trunk ports. The given range must be inclusive of all named VLANs.
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/vlanProfiles"
 
         body_params = [
             "name",
+            "allowedVlans",
             "vlanNames",
             "vlanGroups",
             "iname",

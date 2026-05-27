@@ -107,6 +107,60 @@ class ActionBatchDevices(object):
         }
         return action
 
+    def updateDeviceCliConfigFavorite(self, serial: str, configId: str, favorite: bool, **kwargs):
+        """
+        **Favorite or unfavorite a configuration for an IOS-XE device**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-cli-config-favorite
+
+        - serial (string): Serial
+        - configId (string): Config ID
+        - favorite (boolean): Whether the config should be favorited
+        """
+
+        kwargs = locals()
+
+        serial = urllib.parse.quote(serial, safe="")
+        configId = urllib.parse.quote(configId, safe="")
+        resource = f"/devices/{serial}/cli/configs/{configId}"
+
+        body_params = [
+            "favorite",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def createDeviceConfigRestore(self, serial: str, configId: str, **kwargs):
+        """
+        **Create a restore request for a specific config history record**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-config-restore
+
+        - serial (string): Serial
+        - configId (string): Config ID
+        - scheduledFor (string): Requested ISO 8601 UTC timestamp for when the restore should be scheduled
+        """
+
+        kwargs.update(locals())
+
+        serial = urllib.parse.quote(serial, safe="")
+        configId = urllib.parse.quote(configId, safe="")
+        resource = f"/devices/{serial}/cli/configs/{configId}/restores"
+
+        body_params = [
+            "scheduledFor",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "restore",
+            "body": payload,
+        }
+        return action
+
     def createDeviceLiveToolsLedsBlink(self, serial: str, duration: int, **kwargs):
         """
         **Enqueue a job to blink LEDs on a device. This endpoint has a rate limit of one request every 10 seconds.**
@@ -130,6 +184,134 @@ class ActionBatchDevices(object):
         action = {
             "resource": resource,
             "operation": "blink",
+            "body": payload,
+        }
+        return action
+
+    def createDeviceLiveToolsPortsStatus(self, serial: str, **kwargs):
+        """
+        **Enqueue a job to retrieve port status for a device. This endpoint has a sustained rate limit of one request every five seconds per device, with an allowed burst of five requests.**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-ports-status
+
+        - serial (string): Serial
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        serial = urllib.parse.quote(serial, safe="")
+        resource = f"/devices/{serial}/liveTools/ports/status"
+
+        body_params = [
+            "callback",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "status",
+            "body": payload,
+        }
+        return action
+
+    def createDeviceLiveToolsReboot(self, serial: str, **kwargs):
+        """
+        **Enqueue a job to reboot a device. This endpoint has a rate limit of one request every 60 seconds.**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-reboot
+
+        - serial (string): Serial
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        serial = urllib.parse.quote(serial, safe="")
+        resource = f"/devices/{serial}/liveTools/reboot"
+
+        body_params = [
+            "callback",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "device",
+            "body": payload,
+        }
+        return action
+
+    def createDeviceLiveToolsRoutingTableLookup(self, serial: str, **kwargs):
+        """
+        **Enqueue a job to perform a routing table lookup request for a device. The routing table lookup request fetches a specific set of routes based on filters. Any combination of search filters can be applied. Only Cisco Secure Routers are supported.**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-routing-table-lookup
+
+        - serial (string): Serial
+        - type (string): The type of route defined
+        - destination (object): The destination IP or subnet to lookup
+        - nextHop (object): The next hop to lookup
+        - vpn (object): VPN related search criteria
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        if "type" in kwargs:
+            options = [
+                "BGP",
+                "EIGRP",
+                "HSRP",
+                "IGRP",
+                "ISIS",
+                "LISP",
+                "NAT",
+                "ND",
+                "NHRP",
+                "OMP",
+                "OSPF",
+                "RIP",
+                "default WAN",
+                "direct",
+                "static",
+            ]
+            assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
+
+        serial = urllib.parse.quote(serial, safe="")
+        resource = f"/devices/{serial}/liveTools/routingTable/lookups"
+
+        body_params = [
+            "type",
+            "destination",
+            "nextHop",
+            "vpn",
+            "callback",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "lookup",
+            "body": payload,
+        }
+        return action
+
+    def createDeviceLiveToolsRoutingTableSummary(self, serial: str, **kwargs):
+        """
+        **Enqueue a routing table summary job for a device. The job fetches summary data such as route counts by VRF and protocol. Only Cisco Secure Routers are supported.**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-routing-table-summary
+
+        - serial (string): Serial
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        serial = urllib.parse.quote(serial, safe="")
+        resource = f"/devices/{serial}/liveTools/routingTable/summaries"
+
+        body_params = [
+            "callback",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "summary",
             "body": payload,
         }
         return action

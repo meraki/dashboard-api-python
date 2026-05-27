@@ -5,6 +5,98 @@ class ActionBatchAppliance(object):
     def __init__(self):
         super(ActionBatchAppliance, self).__init__()
 
+    def createDeviceApplianceInterfacesPortsUpdate(self, serial: str, **kwargs):
+        """
+        **Update configurations for an appliance's specified port**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-appliance-interfaces-ports-update
+
+        - serial (string): Serial
+        - interface (object): The interface tuple used to identify the port
+        - enabled (boolean): Indicates whether the port is enabled
+        - personality (object): Describes the port's configurability
+        - uplink (object): The port's settings when in WAN mode
+        - downlink (object): The port's VLAN settings when in LAN mode
+        - speed (string): Link speed for the port, in Mbps
+        - duplex (string): Duplex configuration for the port
+        """
+
+        kwargs.update(locals())
+
+        if "speed" in kwargs and kwargs["speed"] is not None:
+            options = ["10", "100", "1000", "10000", "2500", "25000", "5000", "auto"]
+            assert kwargs["speed"] in options, f'''"speed" cannot be "{kwargs["speed"]}", & must be set to one of: {options}'''
+        if "duplex" in kwargs and kwargs["duplex"] is not None:
+            options = ["auto", "full", "half"]
+            assert kwargs["duplex"] in options, (
+                f'''"duplex" cannot be "{kwargs["duplex"]}", & must be set to one of: {options}'''
+            )
+
+        serial = urllib.parse.quote(serial, safe="")
+        resource = f"/devices/{serial}/appliance/interfaces/ports/update"
+
+        body_params = [
+            "interface",
+            "enabled",
+            "personality",
+            "uplink",
+            "downlink",
+            "speed",
+            "duplex",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def updateDeviceApplianceInterfacesPort(self, serial: str, number: str, **kwargs):
+        """
+        **Update configurations for an appliance's specified port**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-appliance-interfaces-port
+
+        - serial (string): Serial
+        - number (string): Number
+        - enabled (boolean): Indicates whether the port is enabled
+        - personality (object): Describes the port's configurability
+        - uplink (object): The port's settings when in WAN mode
+        - downlink (object): The port's VLAN settings when in LAN mode
+        - speed (string): Link speed for the port, in Mbps
+        - duplex (string): Duplex configuration for the port
+        """
+
+        kwargs.update(locals())
+
+        if "speed" in kwargs and kwargs["speed"] is not None:
+            options = ["10", "100", "1000", "10000", "2500", "25000", "5000", "auto"]
+            assert kwargs["speed"] in options, f'''"speed" cannot be "{kwargs["speed"]}", & must be set to one of: {options}'''
+        if "duplex" in kwargs and kwargs["duplex"] is not None:
+            options = ["auto", "full", "half"]
+            assert kwargs["duplex"] in options, (
+                f'''"duplex" cannot be "{kwargs["duplex"]}", & must be set to one of: {options}'''
+            )
+
+        serial = urllib.parse.quote(serial, safe="")
+        number = urllib.parse.quote(number, safe="")
+        resource = f"/devices/{serial}/appliance/interfaces/ports/{number}"
+
+        body_params = [
+            "enabled",
+            "personality",
+            "uplink",
+            "downlink",
+            "speed",
+            "duplex",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
     def updateDeviceApplianceRadioSettings(self, serial: str, **kwargs):
         """
         **Update the radio settings of an appliance**
@@ -203,6 +295,81 @@ class ActionBatchAppliance(object):
         }
         return action
 
+    def createNetworkApplianceInterfacesL3(self, networkId: str, ipv4: dict, **kwargs):
+        """
+        **Create wired L3 interface**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-appliance-interfaces-l-3
+
+        - networkId (string): Network ID
+        - ipv4 (object): IPv4 configuration
+        - port (object): Port configuration
+        """
+
+        kwargs.update(locals())
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/appliance/interfaces/l3"
+
+        body_params = [
+            "port",
+            "ipv4",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def updateNetworkApplianceInterfacesL3(self, networkId: str, interfaceId: str, **kwargs):
+        """
+        **Update wired L3 interface**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-interfaces-l-3
+
+        - networkId (string): Network ID
+        - interfaceId (string): Interface ID
+        - port (object): Port configuration
+        - ipv4 (object): IPv4 configuration
+        """
+
+        kwargs.update(locals())
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        interfaceId = urllib.parse.quote(interfaceId, safe="")
+        resource = f"/networks/{networkId}/appliance/interfaces/l3/{interfaceId}"
+
+        body_params = [
+            "port",
+            "ipv4",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def deleteNetworkApplianceInterfacesL3(self, networkId: str, interfaceId: str):
+        """
+        **Delete wired L3 interface**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-appliance-interfaces-l-3
+
+        - networkId (string): Network ID
+        - interfaceId (string): Interface ID
+        """
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        interfaceId = urllib.parse.quote(interfaceId, safe="")
+        resource = f"/networks/{networkId}/appliance/interfaces/l3/{interfaceId}"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+
     def updateNetworkAppliancePort(self, networkId: str, portId: str, **kwargs):
         """
         **Update the per-port VLAN settings for a single secure router or security appliance port.**
@@ -216,6 +383,9 @@ class ActionBatchAppliance(object):
         - vlan (integer): Native VLAN when the port is in Trunk mode. Access VLAN when the port is in Access mode.
         - allowedVlans (string): Comma-delimited list of VLAN IDs (e.g. '2,15') for all devices. Secure Routers also support VLAN ranges (e.g. '2-10,15'). Use 'all' to permit all VLANs on the port.
         - accessPolicy (string): The name of the policy. Only applicable to Access ports. Valid values are: 'open', '8021x-radius', 'mac-radius', 'hybris-radius' for MX64 or Z3 or any MX supporting the per port authentication feature. Otherwise, 'open' is the only valid value and 'open' is the default value if the field is missing.
+        - peerSgtCapable (boolean): If true, Peer SGT is enabled for traffic through this port. Applicable to trunk port only, not access port.
+        - adaptivePolicyGroupId (string): Adaptive policy group ID that all traffic originating from this port is assigned to.
+        - sgt (object): Security Group Tag settings for the port.
         """
 
         kwargs.update(locals())
@@ -231,6 +401,9 @@ class ActionBatchAppliance(object):
             "vlan",
             "allowedVlans",
             "accessPolicy",
+            "peerSgtCapable",
+            "adaptivePolicyGroupId",
+            "sgt",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -477,6 +650,7 @@ class ActionBatchAppliance(object):
         - applianceIp (string): The appliance IP address of the single LAN
         - ipv6 (object): IPv6 configuration on the VLAN
         - mandatoryDhcp (object): Mandatory DHCP will enforce that clients connecting to this LAN must use the IP address assigned by the DHCP server. Clients who use a static IP address won't be able to associate. Only available on firmware versions 17.0 and above
+        - vrf (object): VRF configuration on the Single LAN
         """
 
         kwargs.update(locals())
@@ -489,6 +663,7 @@ class ActionBatchAppliance(object):
             "applianceIp",
             "ipv6",
             "mandatoryDhcp",
+            "vrf",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -744,6 +919,7 @@ class ActionBatchAppliance(object):
         - networkId (string): Network ID
         - custom (array): Custom VPN exclusion rules. Pass an empty array to clear existing rules.
         - majorApplications (array): Major Application based VPN exclusion rules. Pass an empty array to clear existing rules.
+        - applications (array): NBAR Application based VPN exclusion rules. Available for networks on >=19.2 firmware
         """
 
         kwargs.update(locals())
@@ -754,6 +930,7 @@ class ActionBatchAppliance(object):
         body_params = [
             "custom",
             "majorApplications",
+            "applications",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -805,6 +982,165 @@ class ActionBatchAppliance(object):
         }
         return action
 
+    def disableNetworkApplianceUmbrellaProtection(self, networkId: str):
+        """
+        **Disable umbrella protection for an MX network**
+        https://developer.cisco.com/meraki/api-v1/#!disable-network-appliance-umbrella-protection
+
+        - networkId (string): Network ID
+        """
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/appliance/umbrella/disableProtection"
+
+        action = {
+            "resource": resource,
+            "operation": "action",
+        }
+        return action
+
+    def exclusionsNetworkApplianceUmbrellaDomains(self, networkId: str, domains: list, **kwargs):
+        """
+        **Specify one or more domain names to be excluded from being routed to Cisco Umbrella.**
+        https://developer.cisco.com/meraki/api-v1/#!exclusions-network-appliance-umbrella-domains
+
+        - networkId (string): Network ID
+        - domains (array): Domain names to exclude from Umbrella DNS routing (e.g., 'example.com', 'corp.example.org'). Standard FQDNs only — wildcards are not supported. Values are lowercased before saving. Each call replaces the full exclusion list.
+        """
+
+        kwargs = locals()
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/appliance/umbrella/domains/exclusions"
+
+        body_params = [
+            "domains",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "action",
+            "body": payload,
+        }
+        return action
+
+    def enableNetworkApplianceUmbrellaProtection(self, networkId: str):
+        """
+        **Enable umbrella protection for an MX network**
+        https://developer.cisco.com/meraki/api-v1/#!enable-network-appliance-umbrella-protection
+
+        - networkId (string): Network ID
+        """
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/appliance/umbrella/enableProtection"
+
+        action = {
+            "resource": resource,
+            "operation": "action",
+        }
+        return action
+
+    def policiesNetworkApplianceUmbrella(self, networkId: str, policyIds: list, **kwargs):
+        """
+        **Update umbrella policies applied to MX network.**
+        https://developer.cisco.com/meraki/api-v1/#!policies-network-appliance-umbrella
+
+        - networkId (string): Network ID
+        - policyIds (array): Array of umbrella policy IDs
+        """
+
+        kwargs = locals()
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/appliance/umbrella/policies"
+
+        body_params = [
+            "policyIds",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "action",
+            "body": payload,
+        }
+        return action
+
+    def addNetworkApplianceUmbrellaPolicies(self, networkId: str, policy: dict, **kwargs):
+        """
+        **Add one Cisco Umbrella DNS security policy to an MX network by policy ID. Idempotent — if the policy is already applied, the request succeeds and returns the current policy set unchanged.**
+        https://developer.cisco.com/meraki/api-v1/#!add-network-appliance-umbrella-policies
+
+        - networkId (string): Network ID
+        - policy (object): Umbrella policy to add
+        """
+
+        kwargs = locals()
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/appliance/umbrella/policies/add"
+
+        body_params = [
+            "policy",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "policies_add",
+            "body": payload,
+        }
+        return action
+
+    def removeNetworkApplianceUmbrellaPolicies(self, networkId: str, policy: dict, **kwargs):
+        """
+        **Remove one Cisco Umbrella DNS security policy from an MX network by policy ID. Returns 204 No Content on success. Behavior when the policy is not currently applied depends on the Cisco Umbrella API response.**
+        https://developer.cisco.com/meraki/api-v1/#!remove-network-appliance-umbrella-policies
+
+        - networkId (string): Network ID
+        - policy (object): Umbrella policy to remove
+        """
+
+        kwargs = locals()
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/appliance/umbrella/policies/remove"
+
+        body_params = [
+            "policy",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "policies_remove",
+            "body": payload,
+        }
+        return action
+
+    def protectionNetworkApplianceUmbrella(self, networkId: str, enabled: bool, **kwargs):
+        """
+        **Enable or disable umbrella protection for an appliance network. When 'enabled' is false, 'umbrella.organization.id' and 'umbrella.origin.id' are null in the response.**
+        https://developer.cisco.com/meraki/api-v1/#!protection-network-appliance-umbrella
+
+        - networkId (string): Network ID
+        - enabled (boolean): Enable or disable umbrella protection
+        """
+
+        kwargs = locals()
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/appliance/umbrella/protection"
+
+        body_params = [
+            "enabled",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "action",
+            "body": payload,
+        }
+        return action
+
     def updateNetworkApplianceUplinksNat(self, networkId: str, uplinks: list, **kwargs):
         """
         **Update uplink NAT settings of the specified network**
@@ -853,6 +1189,8 @@ class ActionBatchAppliance(object):
         - dhcpBootNextServer (string): DHCP boot option to direct boot clients to the server to load the boot file from
         - dhcpBootFilename (string): DHCP boot option for boot filename
         - dhcpOptions (array): The list of DHCP options that will be included in DHCP responses. Each object in the list should have "code", "type", and "value" properties.
+        - adaptivePolicyGroupId (string): Adaptive policy group ID this VLAN is assigned to.
+        - sgt (object): Security Group Tag settings for the VLAN.
         - vrf (object): VRF configuration on the VLAN
         - uplinks (array): Per-uplink NAT exception override configuration on the VLAN. Applicable only for networks that support NAT exceptions.
         """
@@ -896,6 +1234,8 @@ class ActionBatchAppliance(object):
             "dhcpBootNextServer",
             "dhcpBootFilename",
             "dhcpOptions",
+            "adaptivePolicyGroupId",
+            "sgt",
             "vrf",
             "uplinks",
         ]
@@ -959,6 +1299,8 @@ class ActionBatchAppliance(object):
         - mask (integer): Mask used for the subnet of all bound to the template networks. Applicable only for template network.
         - ipv6 (object): IPv6 configuration on the VLAN
         - mandatoryDhcp (object): Mandatory DHCP will enforce that clients connecting to this VLAN must use the IP address assigned by the DHCP server. Clients who use a static IP address won't be able to associate. Only available on firmware versions 17.0 and above
+        - adaptivePolicyGroupId (string): Adaptive policy group ID that all traffic originating from this VLAN is assigned to.
+        - sgt (object): Security Group Tag settings for the VLAN.
         - vrf (object): VRF configuration on the VLAN
         - uplinks (array): Per-uplink NAT exception override configuration on the VLAN. Applicable only for networks that support NAT exceptions.
         """
@@ -1006,6 +1348,8 @@ class ActionBatchAppliance(object):
             "mask",
             "ipv6",
             "mandatoryDhcp",
+            "adaptivePolicyGroupId",
+            "sgt",
             "vrf",
             "uplinks",
         ]
@@ -1069,6 +1413,33 @@ class ActionBatchAppliance(object):
         }
         return action
 
+    def updateNetworkApplianceVpnSiteToSiteHubVrfs(self, networkId: str, hubNetworkId: str, _json: list, **kwargs):
+        """
+        **Update the VRF mappings for a source network and hub pair.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-vpn-site-to-site-hub-vrfs
+
+        - networkId (string): Network ID
+        - hubNetworkId (string): Hub network ID
+        - _json (array): The list of VRFs for this source and hub mapping.
+        """
+
+        kwargs = locals()
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        hubNetworkId = urllib.parse.quote(hubNetworkId, safe="")
+        resource = f"/networks/{networkId}/appliance/vpn/siteToSite/hubs/{hubNetworkId}/vrfs"
+
+        body_params = [
+            "_json",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
     def updateNetworkApplianceVpnSiteToSiteVpn(self, networkId: str, mode: str, **kwargs):
         """
         **Update the site-to-site VPN settings of a network. Only valid for MX networks in NAT mode.**
@@ -1078,6 +1449,8 @@ class ActionBatchAppliance(object):
         - mode (string): The site-to-site VPN mode. Can be one of 'none', 'spoke' or 'hub'
         - hubs (array): The list of VPN hubs, in order of preference. In spoke mode, at least 1 hub is required.
         - subnets (array): The list of subnets and their VPN presence.
+        - peerSgtCapable (boolean): Whether or not Peer SGT is enabled for traffic to this VPN peer.
+        - sgt (object): Security Group Tag settings for the VPN peer.
         - subnet (object): Configuration of subnet features
         - hostTranslations (array): The list of VPN host translations. Host translations are supported starting from MX firmware version 26.1.2
         """
@@ -1095,6 +1468,8 @@ class ActionBatchAppliance(object):
             "mode",
             "hubs",
             "subnets",
+            "peerSgtCapable",
+            "sgt",
             "subnet",
             "hostTranslations",
         ]
