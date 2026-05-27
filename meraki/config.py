@@ -82,7 +82,7 @@ AIO_MAXIMUM_CONCURRENT_REQUESTS = 90
 # Enable per-org rate limiting? When False, the SDK relies solely on 429 retry logic.
 # If you disable this feature, you will produce more 429 errors, which in turn wastes API budget
 # and unnecessarily interferes with other applications interacting with your organization(s).
-SMART_FLOW = True
+SMART_FLOW_ENABLED = True
 
 # Maximum requests per second per organization. Meraki's default org-level limit is 10 req/s.
 # The default setting is 9, which helps reserve a minimum budget for other applications. You
