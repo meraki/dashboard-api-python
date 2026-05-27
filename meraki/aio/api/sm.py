@@ -894,6 +894,379 @@ class AsyncSm:
 
         return self._session.get(metadata, resource, params)
 
+    def getNetworkSmScripts(self, networkId: str):
+        """
+        **List the scripts for this network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-sm-scripts
+
+        - networkId (string): Network ID
+        """
+
+        metadata = {
+            "tags": ["sm", "configure", "scripts"],
+            "operation": "getNetworkSmScripts",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/sm/scripts"
+
+        return self._session.get(metadata, resource)
+
+    def createNetworkSmScript(self, networkId: str, name: str, platform: str, **kwargs):
+        """
+        **Create a new script**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-sm-script
+
+        - networkId (string): Network ID
+        - name (string): Unique name to identify this script.
+        - platform (string): Platform that this script will run on.
+        - scope (string): The target scope of the script. (Either scope or targetGroupId must be present.)
+        - tags (array): The target tags of the script as an array of strings. Required if scope is one of withAny, withoutAny, withAll, withoutAll.
+        - targetGroupId (string): The tag target group ID that should be used to scope devices. Either scope or targetGroupId must be present.
+        - description (string): Description of this script.
+        - runAsUsername (string): Username that script should run as.
+        - externalSource (object): Properties for a script provided by a url instead of an upload
+        - upload (object): Properties for a script provided as an upload instead of a url
+        - schedule (object): When the script is intended to run
+        """
+
+        kwargs.update(locals())
+
+        if "platform" in kwargs and kwargs["platform"] is not None:
+            options = ["Windows", "macOS"]
+            assert kwargs["platform"] in options, (
+                f'''"platform" cannot be "{kwargs["platform"]}", & must be set to one of: {options}'''
+            )
+        if "scope" in kwargs:
+            options = ["all", "none", "withAll", "withAny", "withoutAll", "withoutAny"]
+            assert kwargs["scope"] in options, f'''"scope" cannot be "{kwargs["scope"]}", & must be set to one of: {options}'''
+
+        metadata = {
+            "tags": ["sm", "configure", "scripts"],
+            "operation": "createNetworkSmScript",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/sm/scripts"
+
+        body_params = [
+            "name",
+            "platform",
+            "scope",
+            "tags",
+            "targetGroupId",
+            "description",
+            "runAsUsername",
+            "externalSource",
+            "upload",
+            "schedule",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkSmScript: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def createNetworkSmScriptsJob(self, networkId: str, scriptId: str, **kwargs):
+        """
+        **Create a job that will run a script on a set of devices**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-sm-scripts-job
+
+        - networkId (string): Network ID
+        - scriptId (string): ID of script that should be run on the matching devices
+        - deviceIds (array): List of device IDs to run that should run this script
+        - deviceFilter (string): Create job on all devices in-scope or devices that have failed to run this script
+        """
+
+        kwargs.update(locals())
+
+        if "deviceFilter" in kwargs:
+            options = ["All", "Failed"]
+            assert kwargs["deviceFilter"] in options, (
+                f'''"deviceFilter" cannot be "{kwargs["deviceFilter"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["sm", "configure", "scripts", "jobs"],
+            "operation": "createNetworkSmScriptsJob",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/sm/scripts/jobs"
+
+        body_params = [
+            "scriptId",
+            "deviceIds",
+            "deviceFilter",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkSmScriptsJob: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def getNetworkSmScriptsJobsStatusesLatestByScriptByInterval(self, networkId: str, **kwargs):
+        """
+        **List the latest script job statuses by script and by interval**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-sm-scripts-jobs-statuses-latest-by-script-by-interval
+
+        - networkId (string): Network ID
+        - scriptIds (array): List of script IDs to fetch statuses
+        - t0 (string): The beginning of the timespan for the data.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 180 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 180 days. The default is 1 day.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["sm", "configure", "scripts", "jobs", "statuses", "latest", "byScript", "byInterval"],
+            "operation": "getNetworkSmScriptsJobsStatusesLatestByScriptByInterval",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/sm/scripts/jobs/statuses/latest/byScript/byInterval"
+
+        query_params = [
+            "scriptIds",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "scriptIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getNetworkSmScriptsJobsStatusesLatestByScriptByInterval: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getNetworkSmScriptsJobsStatusesLatestByScriptAndDevice(
+        self, networkId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List jobs for a given script and/or device**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-sm-scripts-jobs-statuses-latest-by-script-and-device
+
+        - networkId (string): Network ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - deviceId (string): Query parameter for filtering the list of script job statuses to those belonging to the specified deviceId.
+        - scriptId (string): Query parameter for filtering the list of script job statuses to those belonging to the specified script.
+        - inScopeOnly (boolean): If true, show only job statuses for scripts or devices that are in scope. This only applies when either deviceId or scriptId are given.
+        - status (string): Query parameter for filtering the list of job statuses to those having the specified status.
+        - sortOrder (string): Query parameter for specifying the direction of sorting to use for the given sortKey. This param is overridden if startingAfter or endingBefore is provided.
+        - sortKey (string): Query parameter to sort the script tasks by the value of the specified key. This param is overridden if startingAfter or endingBefore is provided.
+        - perPage (integer): Number of results to show per page.
+        - startingAfter (string): A statusId. Start the search cursor after the specified Status record.
+        - endingBefore (string): A statusId. Search backward with the cursor starting before the specified Status record.
+        """
+
+        kwargs.update(locals())
+
+        if "status" in kwargs:
+            options = [
+                "cancelled",
+                "command failed",
+                "completed",
+                "created",
+                "enqueued",
+                "error",
+                "failed",
+                "pending",
+                "running",
+                "success",
+                "unknown",
+            ]
+            assert kwargs["status"] in options, (
+                f'''"status" cannot be "{kwargs["status"]}", & must be set to one of: {options}'''
+            )
+        if "sortOrder" in kwargs:
+            options = ["ascending", "descending"]
+            assert kwargs["sortOrder"] in options, (
+                f'''"sortOrder" cannot be "{kwargs["sortOrder"]}", & must be set to one of: {options}'''
+            )
+        if "sortKey" in kwargs:
+            options = ["completedAt", "createdAt", "enqueuedAt", "status", "updatedAt"]
+            assert kwargs["sortKey"] in options, (
+                f'''"sortKey" cannot be "{kwargs["sortKey"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["sm", "configure", "scripts", "jobs", "statuses", "latest", "byScriptAndDevice"],
+            "operation": "getNetworkSmScriptsJobsStatusesLatestByScriptAndDevice",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/sm/scripts/jobs/statuses/latest/byScriptAndDevice"
+
+        query_params = [
+            "deviceId",
+            "scriptId",
+            "inScopeOnly",
+            "status",
+            "sortOrder",
+            "sortKey",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getNetworkSmScriptsJobsStatusesLatestByScriptAndDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def createNetworkSmScriptsUpload(self, networkId: str, size: str, **kwargs):
+        """
+        **Creates an upload URL that can be used to upload a script**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-sm-scripts-upload
+
+        - networkId (string): Network ID
+        - size (string): Size of the file in bytes that will be uploaded.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["sm", "configure", "scripts", "uploads"],
+            "operation": "createNetworkSmScriptsUpload",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/sm/scripts/uploads"
+
+        body_params = [
+            "size",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkSmScriptsUpload: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def getNetworkSmScript(self, networkId: str, scriptId: str):
+        """
+        **Return a script**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-sm-script
+
+        - networkId (string): Network ID
+        - scriptId (string): Script ID
+        """
+
+        metadata = {
+            "tags": ["sm", "configure", "scripts"],
+            "operation": "getNetworkSmScript",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        scriptId = urllib.parse.quote(str(scriptId), safe="")
+        resource = f"/networks/{networkId}/sm/scripts/{scriptId}"
+
+        return self._session.get(metadata, resource)
+
+    def updateNetworkSmScript(self, networkId: str, scriptId: str, **kwargs):
+        """
+        **Update an existing script**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-sm-script
+
+        - networkId (string): Network ID
+        - scriptId (string): Script ID
+        - name (string): Unique name to identify this script.
+        - platform (string): Platform that this script will run on.
+        - scope (string): The target scope of the script. (Either scope or targetGroupId must be present.)
+        - tags (array): The target tags of the script as an array of strings. Required if scope is one of withAny, withoutAny, withAll, withoutAll.
+        - targetGroupId (string): The tag target group ID that should be used to scope devices. Either scope or targetGroupId must be present.
+        - description (string): Description of this script.
+        - runAsUsername (string): Username that script should run as.
+        - externalSource (object): Properties for a script provided by a url instead of an upload
+        - upload (object): Properties for a script provided as an upload instead of a url
+        - schedule (object): When the script is intended to run
+        """
+
+        kwargs.update(locals())
+
+        if "platform" in kwargs and kwargs["platform"] is not None:
+            options = ["Windows", "macOS"]
+            assert kwargs["platform"] in options, (
+                f'''"platform" cannot be "{kwargs["platform"]}", & must be set to one of: {options}'''
+            )
+        if "scope" in kwargs:
+            options = ["all", "none", "withAll", "withAny", "withoutAll", "withoutAny"]
+            assert kwargs["scope"] in options, f'''"scope" cannot be "{kwargs["scope"]}", & must be set to one of: {options}'''
+
+        metadata = {
+            "tags": ["sm", "configure", "scripts"],
+            "operation": "updateNetworkSmScript",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        scriptId = urllib.parse.quote(str(scriptId), safe="")
+        resource = f"/networks/{networkId}/sm/scripts/{scriptId}"
+
+        body_params = [
+            "name",
+            "platform",
+            "scope",
+            "tags",
+            "targetGroupId",
+            "description",
+            "runAsUsername",
+            "externalSource",
+            "upload",
+            "schedule",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSmScript: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteNetworkSmScript(self, networkId: str, scriptId: str):
+        """
+        **Delete a script**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-sm-script
+
+        - networkId (string): Network ID
+        - scriptId (string): Script ID
+        """
+
+        metadata = {
+            "tags": ["sm", "configure", "scripts"],
+            "operation": "deleteNetworkSmScript",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        scriptId = urllib.parse.quote(str(scriptId), safe="")
+        resource = f"/networks/{networkId}/sm/scripts/{scriptId}"
+
+        return self._session.delete(metadata, resource)
+
     def getNetworkSmTargetGroups(self, networkId: str, **kwargs):
         """
         **List the target groups in this network**

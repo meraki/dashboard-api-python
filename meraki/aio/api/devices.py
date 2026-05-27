@@ -862,56 +862,6 @@ class AsyncDevices:
 
         return self._session.get(metadata, resource)
 
-    def createDeviceLiveToolsPortStatus(self, serial: str, **kwargs):
-        """
-        **Enqueue a job to retrieve port status for a device**
-        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-port-status
-
-        - serial (string): Serial
-        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            "tags": ["devices", "liveTools", "portStatus"],
-            "operation": "createDeviceLiveToolsPortStatus",
-        }
-        serial = urllib.parse.quote(str(serial), safe="")
-        resource = f"/devices/{serial}/liveTools/portStatus"
-
-        body_params = [
-            "callback",
-        ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-
-        if self._session._validate_kwargs:
-            all_params = [] + body_params
-            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
-            if invalid and self._session._logger:
-                self._session._logger.warning(f"createDeviceLiveToolsPortStatus: ignoring unrecognized kwargs: {invalid}")
-
-        return self._session.post(metadata, resource, payload)
-
-    def getDeviceLiveToolsPortStatus(self, serial: str, portStatusId: str):
-        """
-        **Return a port status live tool job.**
-        https://developer.cisco.com/meraki/api-v1/#!get-device-live-tools-port-status
-
-        - serial (string): Serial
-        - portStatusId (string): Port status ID
-        """
-
-        metadata = {
-            "tags": ["devices", "liveTools", "portStatus"],
-            "operation": "getDeviceLiveToolsPortStatus",
-        }
-        serial = urllib.parse.quote(str(serial), safe="")
-        portStatusId = urllib.parse.quote(str(portStatusId), safe="")
-        resource = f"/devices/{serial}/liveTools/portStatus/{portStatusId}"
-
-        return self._session.get(metadata, resource)
-
     def createDeviceLiveToolsPortsCycle(self, serial: str, ports: list, **kwargs):
         """
         **Enqueue a job to perform a cycle port for the device on the specified ports**
@@ -961,6 +911,56 @@ class AsyncDevices:
         serial = urllib.parse.quote(str(serial), safe="")
         id = urllib.parse.quote(str(id), safe="")
         resource = f"/devices/{serial}/liveTools/ports/cycle/{id}"
+
+        return self._session.get(metadata, resource)
+
+    def createDeviceLiveToolsPortsStatus(self, serial: str, **kwargs):
+        """
+        **Enqueue a job to retrieve port status for a device**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-ports-status
+
+        - serial (string): Serial
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["devices", "liveTools", "ports", "status"],
+            "operation": "createDeviceLiveToolsPortsStatus",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/liveTools/ports/status"
+
+        body_params = [
+            "callback",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createDeviceLiveToolsPortsStatus: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def getDeviceLiveToolsPortsStatus(self, serial: str, jobId: str):
+        """
+        **Return a port status live tool job.**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-live-tools-ports-status
+
+        - serial (string): Serial
+        - jobId (string): Job ID
+        """
+
+        metadata = {
+            "tags": ["devices", "liveTools", "ports", "status"],
+            "operation": "getDeviceLiveToolsPortsStatus",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        jobId = urllib.parse.quote(str(jobId), safe="")
+        resource = f"/devices/{serial}/liveTools/ports/status/{jobId}"
 
         return self._session.get(metadata, resource)
 
@@ -1047,7 +1047,7 @@ class AsyncDevices:
 
     def createDeviceLiveToolsRoutingTableLookup(self, serial: str, **kwargs):
         """
-        **Enqueue a job to perform a routing table lookup request for the device**
+        **Enqueue a job to perform a routing table lookup request for a device**
         https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-routing-table-lookup
 
         - serial (string): Serial
@@ -1108,7 +1108,7 @@ class AsyncDevices:
 
     def getDeviceLiveToolsRoutingTableLookup(self, serial: str, id: str):
         """
-        **Return a routing table live tool lookup job.**
+        **Return a routing table live tool lookup job for a device**
         https://developer.cisco.com/meraki/api-v1/#!get-device-live-tools-routing-table-lookup
 
         - serial (string): Serial
@@ -1127,7 +1127,7 @@ class AsyncDevices:
 
     def createDeviceLiveToolsRoutingTableSummary(self, serial: str, **kwargs):
         """
-        **Enqueue a job to perform a routing table summary request for the device**
+        **Enqueue a routing table summary job for a device**
         https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-routing-table-summary
 
         - serial (string): Serial
@@ -1160,7 +1160,7 @@ class AsyncDevices:
 
     def getDeviceLiveToolsRoutingTableSummary(self, serial: str, id: str):
         """
-        **Return a routing table live tool summary job.**
+        **Return the status and result of a routing table summary job**
         https://developer.cisco.com/meraki/api-v1/#!get-device-live-tools-routing-table-summary
 
         - serial (string): Serial

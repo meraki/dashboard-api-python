@@ -408,6 +408,7 @@ class CampusGateway(object):
         - clusterIds (array): Optional parameter to filter by MCG cluster IDs. This filter uses multiple exact matches.
         - siteIds (array): Optional parameter to filter by site IDs. This filter uses multiple exact matches.
         - networkIds (array): Optional parameter to filter networks. This filter uses multiple exact matches.
+        - tunnelingSources (array): Optional parameter to filter networks by tunneling source. 'configured' returns networks explicitly set up to tunnel through the campus gateway. 'roaming' returns networks tunneling due to AP roaming or disaster recovery. 'roaming' is only effective when 'clusterIds' is also provided; without 'clusterIds', the filter defaults to configured-only behavior. Defaults to 'configured' if omitted.
         - search (string): Optional parameter to filter networks by wireless network name. This filter uses case-insensitive substring matching.
         - sortBy (string): Optional parameter to sort results. Default is 'name'. Use 'siteName' to sort by site name.
         - sortOrder (string): Optional parameter to specify sort direction. Default is 'asc'.
@@ -440,6 +441,7 @@ class CampusGateway(object):
             "clusterIds",
             "siteIds",
             "networkIds",
+            "tunnelingSources",
             "search",
             "sortBy",
             "sortOrder",
@@ -453,6 +455,7 @@ class CampusGateway(object):
             "clusterIds",
             "siteIds",
             "networkIds",
+            "tunnelingSources",
         ]
         for k, v in kwargs.items():
             if k.strip() in array_params:

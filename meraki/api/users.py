@@ -252,7 +252,7 @@ class Users(object):
         if "type" in kwargs:
             options = ["Azure AD"]
             assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
-        if "syncType" in kwargs:
+        if "syncType" in kwargs and kwargs["syncType"] is not None:
             options = ["proactive"]
             assert kwargs["syncType"] in options, (
                 f'''"syncType" cannot be "{kwargs["syncType"]}", & must be set to one of: {options}'''
@@ -688,7 +688,7 @@ class Users(object):
 
         kwargs.update(locals())
 
-        if "syncType" in kwargs:
+        if "syncType" in kwargs and kwargs["syncType"] is not None:
             options = ["proactive"]
             assert kwargs["syncType"] in options, (
                 f'''"syncType" cannot be "{kwargs["syncType"]}", & must be set to one of: {options}'''

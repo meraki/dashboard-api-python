@@ -5,6 +5,166 @@ class ActionBatchSm(object):
     def __init__(self):
         super(ActionBatchSm, self).__init__()
 
+    def createNetworkSmScript(self, networkId: str, name: str, platform: str, **kwargs):
+        """
+        **Create a new script**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-sm-script
+
+        - networkId (string): Network ID
+        - name (string): Unique name to identify this script.
+        - platform (string): Platform that this script will run on.
+        - scope (string): The target scope of the script. (Either scope or targetGroupId must be present.)
+        - tags (array): The target tags of the script as an array of strings. Required if scope is one of withAny, withoutAny, withAll, withoutAll.
+        - targetGroupId (string): The tag target group ID that should be used to scope devices. Either scope or targetGroupId must be present.
+        - description (string): Description of this script.
+        - runAsUsername (string): Username that script should run as.
+        - externalSource (object): Properties for a script provided by a url instead of an upload
+        - upload (object): Properties for a script provided as an upload instead of a url
+        - schedule (object): When the script is intended to run
+        """
+
+        kwargs.update(locals())
+
+        if "platform" in kwargs and kwargs["platform"] is not None:
+            options = ["Windows", "macOS"]
+            assert kwargs["platform"] in options, (
+                f'''"platform" cannot be "{kwargs["platform"]}", & must be set to one of: {options}'''
+            )
+        if "scope" in kwargs:
+            options = ["all", "none", "withAll", "withAny", "withoutAll", "withoutAny"]
+            assert kwargs["scope"] in options, f'''"scope" cannot be "{kwargs["scope"]}", & must be set to one of: {options}'''
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/sm/scripts"
+
+        body_params = [
+            "name",
+            "platform",
+            "scope",
+            "tags",
+            "targetGroupId",
+            "description",
+            "runAsUsername",
+            "externalSource",
+            "upload",
+            "schedule",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def createNetworkSmScriptsJob(self, networkId: str, scriptId: str, **kwargs):
+        """
+        **Create a job that will run a script on a set of devices**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-sm-scripts-job
+
+        - networkId (string): Network ID
+        - scriptId (string): ID of script that should be run on the matching devices
+        - deviceIds (array): List of device IDs to run that should run this script
+        - deviceFilter (string): Create job on all devices in-scope or devices that have failed to run this script
+        """
+
+        kwargs.update(locals())
+
+        if "deviceFilter" in kwargs:
+            options = ["All", "Failed"]
+            assert kwargs["deviceFilter"] in options, (
+                f'''"deviceFilter" cannot be "{kwargs["deviceFilter"]}", & must be set to one of: {options}'''
+            )
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/sm/scripts/jobs"
+
+        body_params = [
+            "scriptId",
+            "deviceIds",
+            "deviceFilter",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def updateNetworkSmScript(self, networkId: str, scriptId: str, **kwargs):
+        """
+        **Update an existing script**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-sm-script
+
+        - networkId (string): Network ID
+        - scriptId (string): Script ID
+        - name (string): Unique name to identify this script.
+        - platform (string): Platform that this script will run on.
+        - scope (string): The target scope of the script. (Either scope or targetGroupId must be present.)
+        - tags (array): The target tags of the script as an array of strings. Required if scope is one of withAny, withoutAny, withAll, withoutAll.
+        - targetGroupId (string): The tag target group ID that should be used to scope devices. Either scope or targetGroupId must be present.
+        - description (string): Description of this script.
+        - runAsUsername (string): Username that script should run as.
+        - externalSource (object): Properties for a script provided by a url instead of an upload
+        - upload (object): Properties for a script provided as an upload instead of a url
+        - schedule (object): When the script is intended to run
+        """
+
+        kwargs.update(locals())
+
+        if "platform" in kwargs and kwargs["platform"] is not None:
+            options = ["Windows", "macOS"]
+            assert kwargs["platform"] in options, (
+                f'''"platform" cannot be "{kwargs["platform"]}", & must be set to one of: {options}'''
+            )
+        if "scope" in kwargs:
+            options = ["all", "none", "withAll", "withAny", "withoutAll", "withoutAny"]
+            assert kwargs["scope"] in options, f'''"scope" cannot be "{kwargs["scope"]}", & must be set to one of: {options}'''
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        scriptId = urllib.parse.quote(scriptId, safe="")
+        resource = f"/networks/{networkId}/sm/scripts/{scriptId}"
+
+        body_params = [
+            "name",
+            "platform",
+            "scope",
+            "tags",
+            "targetGroupId",
+            "description",
+            "runAsUsername",
+            "externalSource",
+            "upload",
+            "schedule",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def deleteNetworkSmScript(self, networkId: str, scriptId: str):
+        """
+        **Delete a script**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-sm-script
+
+        - networkId (string): Network ID
+        - scriptId (string): Script ID
+        """
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        scriptId = urllib.parse.quote(scriptId, safe="")
+        resource = f"/networks/{networkId}/sm/scripts/{scriptId}"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+
     def deleteNetworkSmUserAccessDevice(self, networkId: str, userAccessDeviceId: str):
         """
         **Delete a User Access Device**
