@@ -188,10 +188,10 @@ class ActionBatchDevices(object):
         }
         return action
 
-    def createDeviceLiveToolsPortStatus(self, serial: str, **kwargs):
+    def createDeviceLiveToolsPortsStatus(self, serial: str, **kwargs):
         """
         **Enqueue a job to retrieve port status for a device. This endpoint has a sustained rate limit of one request every five seconds per device, with an allowed burst of five requests.**
-        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-port-status
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-ports-status
 
         - serial (string): Serial
         - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
@@ -200,7 +200,7 @@ class ActionBatchDevices(object):
         kwargs.update(locals())
 
         serial = urllib.parse.quote(serial, safe="")
-        resource = f"/devices/{serial}/liveTools/portStatus"
+        resource = f"/devices/{serial}/liveTools/ports/status"
 
         body_params = [
             "callback",
@@ -240,7 +240,7 @@ class ActionBatchDevices(object):
 
     def createDeviceLiveToolsRoutingTableLookup(self, serial: str, **kwargs):
         """
-        **Enqueue a job to perform a routing table lookup request for the device. Only Cisco routers are supported. Any combination of search filters can be applied.**
+        **Enqueue a job to perform a routing table lookup request for a device. The routing table lookup request fetches a specific set of routes based on filters. Any combination of search filters can be applied. Only Cisco Secure Routers are supported.**
         https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-routing-table-lookup
 
         - serial (string): Serial
@@ -293,7 +293,7 @@ class ActionBatchDevices(object):
 
     def createDeviceLiveToolsRoutingTableSummary(self, serial: str, **kwargs):
         """
-        **Enqueue a job to perform a routing table summary request for the device. Only Cisco routers are supported.**
+        **Enqueue a routing table summary job for a device. The job fetches summary data such as route counts by VRF and protocol. Only Cisco Secure Routers are supported.**
         https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-routing-table-summary
 
         - serial (string): Serial

@@ -862,6 +862,7 @@ class ActionBatchSwitch(object):
         - networkId (string): Network ID
         - switchPorts (array): Array of switch or stack ports for creating aggregation group. Minimum 2 and maximum 8 ports are supported.
         - switchProfilePorts (array): Array of switch profile ports for creating aggregation group. Minimum 2 and maximum 8 ports are supported.
+        - esiMhPairId (string): ESI-MH pair ID. Required when creating a downstream aggregation across ESI-MH pair member switches.
         """
 
         kwargs.update(locals())
@@ -872,6 +873,7 @@ class ActionBatchSwitch(object):
         body_params = [
             "switchPorts",
             "switchProfilePorts",
+            "esiMhPairId",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {

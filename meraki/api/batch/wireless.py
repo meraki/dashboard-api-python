@@ -1393,7 +1393,7 @@ class ActionBatchWireless(object):
         }
         return action
 
-    def updateNetworkWirelessSsidPoliciesClientExclusion(self, networkId: str, number: str, static: dict, **kwargs):
+    def updateNetworkWirelessSsidPoliciesClientExclusion(self, networkId: str, number: str, **kwargs):
         """
         **Update the client exclusion status configuration for a given SSID**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-policies-client-exclusion
@@ -1401,9 +1401,10 @@ class ActionBatchWireless(object):
         - networkId (string): Network ID
         - number (string): Number
         - static (object): Static client exclusion status
+        - dynamic (object): Dynamic client exclusion configuration
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         number = urllib.parse.quote(number, safe="")
@@ -1411,6 +1412,7 @@ class ActionBatchWireless(object):
 
         body_params = [
             "static",
+            "dynamic",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -1424,7 +1426,7 @@ class ActionBatchWireless(object):
         self, networkId: str, number: str, macs: list, **kwargs
     ):
         """
-        **Set the static client exclusion list for the given SSID**
+        **Replace the static client exclusion list for the given SSID (use PUT /exclusions)**
         https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-policies-client-exclusion-static-exclusions
 
         - networkId (string): Network ID
@@ -1453,7 +1455,7 @@ class ActionBatchWireless(object):
         self, networkId: str, number: str, macs: list, **kwargs
     ):
         """
-        **Add a list of MAC addresses to the static client exclusion list for the given SSID**
+        **Add MAC addresses to the existing static client exclusion list for the given SSID (use POST /bulkAdd)**
         https://developer.cisco.com/meraki/api-v1/#!create-network-wireless-ssid-policies-client-exclusion-static-exclusions-bulk-add
 
         - networkId (string): Network ID
@@ -1482,7 +1484,7 @@ class ActionBatchWireless(object):
         self, networkId: str, number: str, macs: list, **kwargs
     ):
         """
-        **Delete a list of MAC addresses from the static client exclusion list for the given SSID**
+        **Remove MAC addresses from the existing static client exclusion list for the given SSID (use POST /bulkRemove)**
         https://developer.cisco.com/meraki/api-v1/#!create-network-wireless-ssid-policies-client-exclusion-static-exclusions-bulk-remove
 
         - networkId (string): Network ID

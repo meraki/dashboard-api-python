@@ -887,19 +887,19 @@ class AsyncSecureConnect:
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def createOrganizationSecureConnectRemoteAccessLogsExport(self, organizationId: str, from_: int, to: int, **kwargs):
+    def createOrganizationSecureConnectRemoteAccessLogsExport(self, organizationId: str, **kwargs):
         """
-        **Creates a export for a provided timestamp interval.**
+        **Creates an export for a provided timestamp interval.**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-secure-connect-remote-access-logs-export
 
         - organizationId (string): Organization ID
-        - from (integer): The start of the interval, must be within the past 30 days.
-        - to (integer): The end of the interval, must not exceed the current date.
+        - t0 (string): The start of the interval, must be within the past 30 days. Must be provided with t1.
+        - t1 (string): The end of the interval, must not exceed the current date. Must be provided with t0.
+        - from (integer): Legacy start of the interval in epoch seconds, must be within the past 30 days. Must be provided with to.
+        - to (integer): Legacy end of the interval in epoch seconds, must not exceed the current date. Must be provided with from.
         """
 
-        kwargs = locals()
-        if "from_" in kwargs:
-            kwargs["from"] = kwargs.pop("from_")
+        kwargs.update(locals())
 
         metadata = {
             "tags": ["secureConnect", "configure", "remoteAccessLogsExports"],
@@ -909,6 +909,8 @@ class AsyncSecureConnect:
         resource = f"/organizations/{organizationId}/secureConnect/remoteAccessLogsExports"
 
         body_params = [
+            "t0",
+            "t1",
             "from",
             "to",
         ]

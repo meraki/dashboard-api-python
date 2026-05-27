@@ -22,10 +22,10 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        if "speed" in kwargs:
+        if "speed" in kwargs and kwargs["speed"] is not None:
             options = ["10", "100", "1000", "10000", "2500", "25000", "5000", "auto"]
             assert kwargs["speed"] in options, f'''"speed" cannot be "{kwargs["speed"]}", & must be set to one of: {options}'''
-        if "duplex" in kwargs:
+        if "duplex" in kwargs and kwargs["duplex"] is not None:
             options = ["auto", "full", "half"]
             assert kwargs["duplex"] in options, (
                 f'''"duplex" cannot be "{kwargs["duplex"]}", & must be set to one of: {options}'''
@@ -68,10 +68,10 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        if "speed" in kwargs:
+        if "speed" in kwargs and kwargs["speed"] is not None:
             options = ["10", "100", "1000", "10000", "2500", "25000", "5000", "auto"]
             assert kwargs["speed"] in options, f'''"speed" cannot be "{kwargs["speed"]}", & must be set to one of: {options}'''
-        if "duplex" in kwargs:
+        if "duplex" in kwargs and kwargs["duplex"] is not None:
             options = ["auto", "full", "half"]
             assert kwargs["duplex"] in options, (
                 f'''"duplex" cannot be "{kwargs["duplex"]}", & must be set to one of: {options}'''
@@ -385,6 +385,7 @@ class ActionBatchAppliance(object):
         - accessPolicy (string): The name of the policy. Only applicable to Access ports. Valid values are: 'open', '8021x-radius', 'mac-radius', 'hybris-radius' for MX64 or Z3 or any MX supporting the per port authentication feature. Otherwise, 'open' is the only valid value and 'open' is the default value if the field is missing.
         - peerSgtCapable (boolean): If true, Peer SGT is enabled for traffic through this port. Applicable to trunk port only, not access port.
         - adaptivePolicyGroupId (string): Adaptive policy group ID that all traffic originating from this port is assigned to.
+        - sgt (object): Security Group Tag settings for the port.
         """
 
         kwargs.update(locals())
@@ -402,6 +403,7 @@ class ActionBatchAppliance(object):
             "accessPolicy",
             "peerSgtCapable",
             "adaptivePolicyGroupId",
+            "sgt",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -997,6 +999,31 @@ class ActionBatchAppliance(object):
         }
         return action
 
+    def exclusionsNetworkApplianceUmbrellaDomains(self, networkId: str, domains: list, **kwargs):
+        """
+        **Specify one or more domain names to be excluded from being routed to Cisco Umbrella.**
+        https://developer.cisco.com/meraki/api-v1/#!exclusions-network-appliance-umbrella-domains
+
+        - networkId (string): Network ID
+        - domains (array): Domain names to exclude from Umbrella DNS routing (e.g., 'example.com', 'corp.example.org'). Standard FQDNs only — wildcards are not supported. Values are lowercased before saving. Each call replaces the full exclusion list.
+        """
+
+        kwargs = locals()
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/appliance/umbrella/domains/exclusions"
+
+        body_params = [
+            "domains",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "action",
+            "body": payload,
+        }
+        return action
+
     def enableNetworkApplianceUmbrellaProtection(self, networkId: str):
         """
         **Enable umbrella protection for an MX network**
@@ -1011,31 +1038,6 @@ class ActionBatchAppliance(object):
         action = {
             "resource": resource,
             "operation": "action",
-        }
-        return action
-
-    def excludeNetworkApplianceUmbrellaDomains(self, networkId: str, domains: list, **kwargs):
-        """
-        **Specify one or more domain names to be excluded from being routed to Cisco Umbrella.**
-        https://developer.cisco.com/meraki/api-v1/#!exclude-network-appliance-umbrella-domains
-
-        - networkId (string): Network ID
-        - domains (array): Array of domain names
-        """
-
-        kwargs = locals()
-
-        networkId = urllib.parse.quote(networkId, safe="")
-        resource = f"/networks/{networkId}/appliance/umbrella/excludeDomains"
-
-        body_params = [
-            "domains",
-        ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-        action = {
-            "resource": resource,
-            "operation": "action",
-            "body": payload,
         }
         return action
 
@@ -1066,7 +1068,7 @@ class ActionBatchAppliance(object):
 
     def addNetworkApplianceUmbrellaPolicies(self, networkId: str, policy: dict, **kwargs):
         """
-        **Add one umbrella policy to your network.**
+        **Add one Cisco Umbrella DNS security policy to an MX network by policy ID. Idempotent — if the policy is already applied, the request succeeds and returns the current policy set unchanged.**
         https://developer.cisco.com/meraki/api-v1/#!add-network-appliance-umbrella-policies
 
         - networkId (string): Network ID
@@ -1091,7 +1093,7 @@ class ActionBatchAppliance(object):
 
     def removeNetworkApplianceUmbrellaPolicies(self, networkId: str, policy: dict, **kwargs):
         """
-        **Remove one umbrella policy from your network.**
+        **Remove one Cisco Umbrella DNS security policy from an MX network by policy ID. Returns 204 No Content on success. Behavior when the policy is not currently applied depends on the Cisco Umbrella API response.**
         https://developer.cisco.com/meraki/api-v1/#!remove-network-appliance-umbrella-policies
 
         - networkId (string): Network ID
@@ -1114,13 +1116,13 @@ class ActionBatchAppliance(object):
         }
         return action
 
-    def protectionNetworkApplianceUmbrella(self, networkId: str, enable: bool, **kwargs):
+    def protectionNetworkApplianceUmbrella(self, networkId: str, enabled: bool, **kwargs):
         """
-        **Enable or disable umbrella protection for an MX network. When disabling, the umbrella property will be omitted from the response.**
+        **Enable or disable umbrella protection for an appliance network. When 'enabled' is false, 'umbrella.organization.id' and 'umbrella.origin.id' are null in the response.**
         https://developer.cisco.com/meraki/api-v1/#!protection-network-appliance-umbrella
 
         - networkId (string): Network ID
-        - enable (boolean): Enable or disable umbrella protection
+        - enabled (boolean): Enable or disable umbrella protection
         """
 
         kwargs = locals()
@@ -1129,7 +1131,7 @@ class ActionBatchAppliance(object):
         resource = f"/networks/{networkId}/appliance/umbrella/protection"
 
         body_params = [
-            "enable",
+            "enabled",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -1188,6 +1190,7 @@ class ActionBatchAppliance(object):
         - dhcpBootFilename (string): DHCP boot option for boot filename
         - dhcpOptions (array): The list of DHCP options that will be included in DHCP responses. Each object in the list should have "code", "type", and "value" properties.
         - adaptivePolicyGroupId (string): Adaptive policy group ID this VLAN is assigned to.
+        - sgt (object): Security Group Tag settings for the VLAN.
         - vrf (object): VRF configuration on the VLAN
         - uplinks (array): Per-uplink NAT exception override configuration on the VLAN. Applicable only for networks that support NAT exceptions.
         """
@@ -1232,6 +1235,7 @@ class ActionBatchAppliance(object):
             "dhcpBootFilename",
             "dhcpOptions",
             "adaptivePolicyGroupId",
+            "sgt",
             "vrf",
             "uplinks",
         ]
@@ -1296,6 +1300,7 @@ class ActionBatchAppliance(object):
         - ipv6 (object): IPv6 configuration on the VLAN
         - mandatoryDhcp (object): Mandatory DHCP will enforce that clients connecting to this VLAN must use the IP address assigned by the DHCP server. Clients who use a static IP address won't be able to associate. Only available on firmware versions 17.0 and above
         - adaptivePolicyGroupId (string): Adaptive policy group ID that all traffic originating from this VLAN is assigned to.
+        - sgt (object): Security Group Tag settings for the VLAN.
         - vrf (object): VRF configuration on the VLAN
         - uplinks (array): Per-uplink NAT exception override configuration on the VLAN. Applicable only for networks that support NAT exceptions.
         """
@@ -1344,6 +1349,7 @@ class ActionBatchAppliance(object):
             "ipv6",
             "mandatoryDhcp",
             "adaptivePolicyGroupId",
+            "sgt",
             "vrf",
             "uplinks",
         ]
@@ -1444,6 +1450,7 @@ class ActionBatchAppliance(object):
         - hubs (array): The list of VPN hubs, in order of preference. In spoke mode, at least 1 hub is required.
         - subnets (array): The list of subnets and their VPN presence.
         - peerSgtCapable (boolean): Whether or not Peer SGT is enabled for traffic to this VPN peer.
+        - sgt (object): Security Group Tag settings for the VPN peer.
         - subnet (object): Configuration of subnet features
         - hostTranslations (array): The list of VPN host translations. Host translations are supported starting from MX firmware version 26.1.2
         """
@@ -1462,6 +1469,7 @@ class ActionBatchAppliance(object):
             "hubs",
             "subnets",
             "peerSgtCapable",
+            "sgt",
             "subnet",
             "hostTranslations",
         ]

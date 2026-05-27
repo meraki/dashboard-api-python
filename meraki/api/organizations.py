@@ -3691,6 +3691,23 @@ class Organizations(object):
 
         return self._session.delete(metadata, resource)
 
+    def codeOrganizationAutomateIdentity(self, organizationId: str):
+        """
+        **Generate a single use short lived code that can be used to retrieve the identity of the current user in the organization.**
+        https://developer.cisco.com/meraki/api-v1/#!code-organization-automate-identity
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "automate", "identity"],
+            "operation": "codeOrganizationAutomateIdentity",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/automate/identity/code"
+
+        return self._session.post(metadata, resource)
+
     def getOrganizationBrandingPolicies(self, organizationId: str):
         """
         **List the branding policies of an organization**
