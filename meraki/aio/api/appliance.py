@@ -23,6 +23,112 @@ class AsyncAppliance:
 
         return self._session.get(metadata, resource)
 
+    def createDeviceApplianceInterfacesPortsUpdate(self, serial: str, **kwargs):
+        """
+        **Update configurations for an appliance's specified port**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-appliance-interfaces-ports-update
+
+        - serial (string): Serial
+        - interface (object): The interface tuple used to identify the port
+        - enabled (boolean): Indicates whether the port is enabled
+        - personality (object): Describes the port's configurability
+        - uplink (object): The port's settings when in WAN mode
+        - downlink (object): The port's VLAN settings when in LAN mode
+        - speed (string): Link speed for the port, in Mbps
+        - duplex (string): Duplex configuration for the port
+        """
+
+        kwargs.update(locals())
+
+        if "speed" in kwargs and kwargs["speed"] is not None:
+            options = ["10", "100", "1000", "10000", "2500", "25000", "5000", "auto"]
+            assert kwargs["speed"] in options, f'''"speed" cannot be "{kwargs["speed"]}", & must be set to one of: {options}'''
+        if "duplex" in kwargs and kwargs["duplex"] is not None:
+            options = ["auto", "full", "half"]
+            assert kwargs["duplex"] in options, (
+                f'''"duplex" cannot be "{kwargs["duplex"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["appliance", "configure", "interfaces", "ports", "update"],
+            "operation": "createDeviceApplianceInterfacesPortsUpdate",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/appliance/interfaces/ports/update"
+
+        body_params = [
+            "interface",
+            "enabled",
+            "personality",
+            "uplink",
+            "downlink",
+            "speed",
+            "duplex",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createDeviceApplianceInterfacesPortsUpdate: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def updateDeviceApplianceInterfacesPort(self, serial: str, number: str, **kwargs):
+        """
+        **Update configurations for an appliance's specified port**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-appliance-interfaces-port
+
+        - serial (string): Serial
+        - number (string): Number
+        - enabled (boolean): Indicates whether the port is enabled
+        - personality (object): Describes the port's configurability
+        - uplink (object): The port's settings when in WAN mode
+        - downlink (object): The port's VLAN settings when in LAN mode
+        - speed (string): Link speed for the port, in Mbps
+        - duplex (string): Duplex configuration for the port
+        """
+
+        kwargs.update(locals())
+
+        if "speed" in kwargs and kwargs["speed"] is not None:
+            options = ["10", "100", "1000", "10000", "2500", "25000", "5000", "auto"]
+            assert kwargs["speed"] in options, f'''"speed" cannot be "{kwargs["speed"]}", & must be set to one of: {options}'''
+        if "duplex" in kwargs and kwargs["duplex"] is not None:
+            options = ["auto", "full", "half"]
+            assert kwargs["duplex"] in options, (
+                f'''"duplex" cannot be "{kwargs["duplex"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["appliance", "configure", "interfaces", "ports"],
+            "operation": "updateDeviceApplianceInterfacesPort",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/devices/{serial}/appliance/interfaces/ports/{number}"
+
+        body_params = [
+            "enabled",
+            "personality",
+            "uplink",
+            "downlink",
+            "speed",
+            "duplex",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateDeviceApplianceInterfacesPort: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
     def getDeviceAppliancePerformance(self, serial: str, **kwargs):
         """
         **Return the performance score for a single MX**
@@ -1038,6 +1144,93 @@ class AsyncAppliance:
 
         return self._session.put(metadata, resource, payload)
 
+    def createNetworkApplianceInterfacesL3(self, networkId: str, ipv4: dict, **kwargs):
+        """
+        **Create wired L3 interface**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-appliance-interfaces-l-3
+
+        - networkId (string): Network ID
+        - ipv4 (object): IPv4 configuration
+        - port (object): Port configuration
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["appliance", "configure", "interfaces", "l3"],
+            "operation": "createNetworkApplianceInterfacesL3",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/appliance/interfaces/l3"
+
+        body_params = [
+            "port",
+            "ipv4",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkApplianceInterfacesL3: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def updateNetworkApplianceInterfacesL3(self, networkId: str, interfaceId: str, **kwargs):
+        """
+        **Update wired L3 interface**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-interfaces-l-3
+
+        - networkId (string): Network ID
+        - interfaceId (string): Interface ID
+        - port (object): Port configuration
+        - ipv4 (object): IPv4 configuration
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["appliance", "configure", "interfaces", "l3"],
+            "operation": "updateNetworkApplianceInterfacesL3",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        interfaceId = urllib.parse.quote(str(interfaceId), safe="")
+        resource = f"/networks/{networkId}/appliance/interfaces/l3/{interfaceId}"
+
+        body_params = [
+            "port",
+            "ipv4",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkApplianceInterfacesL3: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteNetworkApplianceInterfacesL3(self, networkId: str, interfaceId: str):
+        """
+        **Delete wired L3 interface**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-appliance-interfaces-l-3
+
+        - networkId (string): Network ID
+        - interfaceId (string): Interface ID
+        """
+
+        metadata = {
+            "tags": ["appliance", "configure", "interfaces", "l3"],
+            "operation": "deleteNetworkApplianceInterfacesL3",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        interfaceId = urllib.parse.quote(str(interfaceId), safe="")
+        resource = f"/networks/{networkId}/appliance/interfaces/l3/{interfaceId}"
+
+        return self._session.delete(metadata, resource)
+
     def getNetworkAppliancePorts(self, networkId: str):
         """
         **List per-port VLAN settings for all ports of a secure router or security appliance.**
@@ -1087,6 +1280,9 @@ class AsyncAppliance:
         - vlan (integer): Native VLAN when the port is in Trunk mode. Access VLAN when the port is in Access mode.
         - allowedVlans (string): Comma-delimited list of VLAN IDs (e.g. '2,15') for all devices. Secure Routers also support VLAN ranges (e.g. '2-10,15'). Use 'all' to permit all VLANs on the port.
         - accessPolicy (string): The name of the policy. Only applicable to Access ports. Valid values are: 'open', '8021x-radius', 'mac-radius', 'hybris-radius' for MX64 or Z3 or any MX supporting the per port authentication feature. Otherwise, 'open' is the only valid value and 'open' is the default value if the field is missing.
+        - peerSgtCapable (boolean): If true, Peer SGT is enabled for traffic through this port. Applicable to trunk port only, not access port.
+        - adaptivePolicyGroupId (string): Adaptive policy group ID that all traffic originating from this port is assigned to.
+        - sgt (object): Security Group Tag settings for the port.
         """
 
         kwargs.update(locals())
@@ -1106,6 +1302,9 @@ class AsyncAppliance:
             "vlan",
             "allowedVlans",
             "accessPolicy",
+            "peerSgtCapable",
+            "adaptivePolicyGroupId",
+            "sgt",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -1674,6 +1873,7 @@ class AsyncAppliance:
         - applianceIp (string): The appliance IP address of the single LAN
         - ipv6 (object): IPv6 configuration on the VLAN
         - mandatoryDhcp (object): Mandatory DHCP will enforce that clients connecting to this LAN must use the IP address assigned by the DHCP server. Clients who use a static IP address won't be able to associate. Only available on firmware versions 17.0 and above
+        - vrf (object): VRF configuration on the Single LAN
         """
 
         kwargs.update(locals())
@@ -1690,6 +1890,7 @@ class AsyncAppliance:
             "applianceIp",
             "ipv6",
             "mandatoryDhcp",
+            "vrf",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -1833,6 +2034,7 @@ class AsyncAppliance:
         - subnet (string): Subnet of the route
         - gatewayIp (string): Gateway IP address (next hop)
         - gatewayVlanId (integer): Gateway VLAN ID
+        - vrf (object): VRF settings for the static route.
         """
 
         kwargs.update(locals())
@@ -1849,6 +2051,7 @@ class AsyncAppliance:
             "subnet",
             "gatewayIp",
             "gatewayVlanId",
+            "vrf",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -1893,6 +2096,7 @@ class AsyncAppliance:
         - enabled (boolean): Whether the route should be enabled or not
         - fixedIpAssignments (object): Fixed DHCP IP assignments on the route
         - reservedIpRanges (array): DHCP reserved IP ranges
+        - vrf (object): VRF settings for the static route.
         """
 
         kwargs.update(locals())
@@ -1913,6 +2117,7 @@ class AsyncAppliance:
             "enabled",
             "fixedIpAssignments",
             "reservedIpRanges",
+            "vrf",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -2301,6 +2506,7 @@ class AsyncAppliance:
         - networkId (string): Network ID
         - custom (array): Custom VPN exclusion rules. Pass an empty array to clear existing rules.
         - majorApplications (array): Major Application based VPN exclusion rules. Pass an empty array to clear existing rules.
+        - applications (array): NBAR Application based VPN exclusion rules. Available for networks on >=19.2 firmware
         """
 
         kwargs.update(locals())
@@ -2315,6 +2521,7 @@ class AsyncAppliance:
         body_params = [
             "custom",
             "majorApplications",
+            "applications",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -2377,6 +2584,199 @@ class AsyncAppliance:
         resource = f"/networks/{networkId}/appliance/umbrella/account/disconnect"
 
         return self._session.post(metadata, resource)
+
+    def disableNetworkApplianceUmbrellaProtection(self, networkId: str):
+        """
+        **Disable umbrella protection for an MX network**
+        https://developer.cisco.com/meraki/api-v1/#!disable-network-appliance-umbrella-protection
+
+        - networkId (string): Network ID
+        """
+
+        metadata = {
+            "tags": ["appliance", "configure", "umbrella"],
+            "operation": "disableNetworkApplianceUmbrellaProtection",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/appliance/umbrella/disableProtection"
+
+        return self._session.delete(metadata, resource)
+
+    def exclusionsNetworkApplianceUmbrellaDomains(self, networkId: str, domains: list, **kwargs):
+        """
+        **Specify one or more domain names to be excluded from being routed to Cisco Umbrella.**
+        https://developer.cisco.com/meraki/api-v1/#!exclusions-network-appliance-umbrella-domains
+
+        - networkId (string): Network ID
+        - domains (array): Domain names to exclude from Umbrella DNS routing (e.g., 'example.com', 'corp.example.org'). Standard FQDNs only — wildcards are not supported. Values are lowercased before saving. Each call replaces the full exclusion list.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["appliance", "configure", "umbrella", "domains"],
+            "operation": "exclusionsNetworkApplianceUmbrellaDomains",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/appliance/umbrella/domains/exclusions"
+
+        body_params = [
+            "domains",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"exclusionsNetworkApplianceUmbrellaDomains: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
+    def enableNetworkApplianceUmbrellaProtection(self, networkId: str):
+        """
+        **Enable umbrella protection for an MX network**
+        https://developer.cisco.com/meraki/api-v1/#!enable-network-appliance-umbrella-protection
+
+        - networkId (string): Network ID
+        """
+
+        metadata = {
+            "tags": ["appliance", "configure", "umbrella"],
+            "operation": "enableNetworkApplianceUmbrellaProtection",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/appliance/umbrella/enableProtection"
+
+        return self._session.post(metadata, resource)
+
+    def policiesNetworkApplianceUmbrella(self, networkId: str, policyIds: list, **kwargs):
+        """
+        **Update umbrella policies applied to MX network.**
+        https://developer.cisco.com/meraki/api-v1/#!policies-network-appliance-umbrella
+
+        - networkId (string): Network ID
+        - policyIds (array): Array of umbrella policy IDs
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["appliance", "configure", "umbrella"],
+            "operation": "policiesNetworkApplianceUmbrella",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/appliance/umbrella/policies"
+
+        body_params = [
+            "policyIds",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"policiesNetworkApplianceUmbrella: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
+    def addNetworkApplianceUmbrellaPolicies(self, networkId: str, policy: dict, **kwargs):
+        """
+        **Add one Cisco Umbrella DNS security policy to an MX network by policy ID**
+        https://developer.cisco.com/meraki/api-v1/#!add-network-appliance-umbrella-policies
+
+        - networkId (string): Network ID
+        - policy (object): Umbrella policy to add
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["appliance", "configure", "umbrella", "policies"],
+            "operation": "addNetworkApplianceUmbrellaPolicies",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/appliance/umbrella/policies/add"
+
+        body_params = [
+            "policy",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"addNetworkApplianceUmbrellaPolicies: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def removeNetworkApplianceUmbrellaPolicies(self, networkId: str, policy: dict, **kwargs):
+        """
+        **Remove one Cisco Umbrella DNS security policy from an MX network by policy ID**
+        https://developer.cisco.com/meraki/api-v1/#!remove-network-appliance-umbrella-policies
+
+        - networkId (string): Network ID
+        - policy (object): Umbrella policy to remove
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["appliance", "configure", "umbrella", "policies"],
+            "operation": "removeNetworkApplianceUmbrellaPolicies",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/appliance/umbrella/policies/remove"
+
+        body_params = [
+            "policy",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"removeNetworkApplianceUmbrellaPolicies: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def protectionNetworkApplianceUmbrella(self, networkId: str, enabled: bool, **kwargs):
+        """
+        **Enable or disable umbrella protection for an appliance network**
+        https://developer.cisco.com/meraki/api-v1/#!protection-network-appliance-umbrella
+
+        - networkId (string): Network ID
+        - enabled (boolean): Enable or disable umbrella protection
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["appliance", "configure", "umbrella"],
+            "operation": "protectionNetworkApplianceUmbrella",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/appliance/umbrella/protection"
+
+        body_params = [
+            "enabled",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"protectionNetworkApplianceUmbrella: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
 
     def updateNetworkApplianceUplinksNat(self, networkId: str, uplinks: list, **kwargs):
         """
@@ -2488,6 +2888,8 @@ class AsyncAppliance:
         - dhcpBootNextServer (string): DHCP boot option to direct boot clients to the server to load the boot file from
         - dhcpBootFilename (string): DHCP boot option for boot filename
         - dhcpOptions (array): The list of DHCP options that will be included in DHCP responses. Each object in the list should have "code", "type", and "value" properties.
+        - adaptivePolicyGroupId (string): Adaptive policy group ID this VLAN is assigned to.
+        - sgt (object): Security Group Tag settings for the VLAN.
         - vrf (object): VRF configuration on the VLAN
         - uplinks (array): Per-uplink NAT exception override configuration on the VLAN. Applicable only for networks that support NAT exceptions.
         """
@@ -2535,6 +2937,8 @@ class AsyncAppliance:
             "dhcpBootNextServer",
             "dhcpBootFilename",
             "dhcpOptions",
+            "adaptivePolicyGroupId",
+            "sgt",
             "vrf",
             "uplinks",
         ]
@@ -2642,6 +3046,8 @@ class AsyncAppliance:
         - mask (integer): Mask used for the subnet of all bound to the template networks. Applicable only for template network.
         - ipv6 (object): IPv6 configuration on the VLAN
         - mandatoryDhcp (object): Mandatory DHCP will enforce that clients connecting to this VLAN must use the IP address assigned by the DHCP server. Clients who use a static IP address won't be able to associate. Only available on firmware versions 17.0 and above
+        - adaptivePolicyGroupId (string): Adaptive policy group ID that all traffic originating from this VLAN is assigned to.
+        - sgt (object): Security Group Tag settings for the VLAN.
         - vrf (object): VRF configuration on the VLAN
         - uplinks (array): Per-uplink NAT exception override configuration on the VLAN. Applicable only for networks that support NAT exceptions.
         """
@@ -2693,6 +3099,8 @@ class AsyncAppliance:
             "mask",
             "ipv6",
             "mandatoryDhcp",
+            "adaptivePolicyGroupId",
+            "sgt",
             "vrf",
             "uplinks",
         ]
@@ -2781,6 +3189,41 @@ class AsyncAppliance:
 
         return self._session.put(metadata, resource, payload)
 
+    def updateNetworkApplianceVpnSiteToSiteHubVrfs(self, networkId: str, hubNetworkId: str, _json: list, **kwargs):
+        """
+        **Update the VRF mappings for a source network and hub pair.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-vpn-site-to-site-hub-vrfs
+
+        - networkId (string): Network ID
+        - hubNetworkId (string): Hub network ID
+        - _json (array): The list of VRFs for this source and hub mapping.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["appliance", "configure", "vpn", "siteToSite", "hubs", "vrfs"],
+            "operation": "updateNetworkApplianceVpnSiteToSiteHubVrfs",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        hubNetworkId = urllib.parse.quote(str(hubNetworkId), safe="")
+        resource = f"/networks/{networkId}/appliance/vpn/siteToSite/hubs/{hubNetworkId}/vrfs"
+
+        body_params = [
+            "_json",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkApplianceVpnSiteToSiteHubVrfs: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
     def getNetworkApplianceVpnSiteToSiteVpn(self, networkId: str):
         """
         **Return the site-to-site VPN settings of a network**
@@ -2807,6 +3250,8 @@ class AsyncAppliance:
         - mode (string): The site-to-site VPN mode. Can be one of 'none', 'spoke' or 'hub'
         - hubs (array): The list of VPN hubs, in order of preference. In spoke mode, at least 1 hub is required.
         - subnets (array): The list of subnets and their VPN presence.
+        - peerSgtCapable (boolean): Whether or not Peer SGT is enabled for traffic to this VPN peer.
+        - sgt (object): Security Group Tag settings for the VPN peer.
         - subnet (object): Configuration of subnet features
         - hostTranslations (array): The list of VPN host translations. Host translations are supported starting from MX firmware version 26.1.2
         """
@@ -2828,6 +3273,8 @@ class AsyncAppliance:
             "mode",
             "hubs",
             "subnets",
+            "peerSgtCapable",
+            "sgt",
             "subnet",
             "hostTranslations",
         ]
@@ -2916,6 +3363,167 @@ class AsyncAppliance:
 
         return self._session.post(metadata, resource)
 
+    def getOrganizationApplianceDevicesInterfacesL3(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List L3 interfaces across networks for the organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-devices-interfaces-l-3
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Optional Network IDs to filter results
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["appliance", "configure", "devices", "interfaces", "l3"],
+            "operation": "getOrganizationApplianceDevicesInterfacesL3",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/devices/interfaces/l3"
+
+        query_params = [
+            "networkIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApplianceDevicesInterfacesL3: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationApplianceDevicesInterfacesPortsByDevice(self, organizationId: str, **kwargs):
+        """
+        **Returns port configurations for appliances in a given organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-devices-interfaces-ports-by-device
+
+        - organizationId (string): Organization ID
+        - serials (array): Parameter to filter the results by device serials
+        - interfaces (array): Parameter to filter the results by specific interfaces
+        - numbers (array): Parameter to filter the results by specific ports
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["appliance", "configure", "devices", "interfaces", "ports", "byDevice"],
+            "operation": "getOrganizationApplianceDevicesInterfacesPortsByDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/devices/interfaces/ports/byDevice"
+
+        query_params = [
+            "serials",
+            "interfaces",
+            "numbers",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "serials",
+            "interfaces",
+            "numbers",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApplianceDevicesInterfacesPortsByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationApplianceDevicesPortsTransceiversReadingsHistoryByDevice(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Return time-series digital optical monitoring (DOM) readings for ports on each DOM-enabled Catalyst appliance in an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-devices-ports-transceivers-readings-history-by-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10. Default is 5.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 30 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 30 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 30 days. The default is 1 day. If interval is provided, the timespan will be autocalculated.
+        - interval (integer): The time interval in seconds for returned data. The valid intervals are: 300, 1200, 14400, 86400. The default is 1200. Interval is calculated if time params are provided.
+        - networkIds (array): Networks for which information should be gathered.
+        - serials (array): Optional parameter to filter usage by appliance serial.
+        - portIds (array): Optional parameter to filter usage by port ID.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["appliance", "monitor", "devices", "ports", "transceivers", "readings", "history", "byDevice"],
+            "operation": "getOrganizationApplianceDevicesPortsTransceiversReadingsHistoryByDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/devices/ports/transceivers/readings/history/byDevice"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "t0",
+            "t1",
+            "timespan",
+            "interval",
+            "networkIds",
+            "serials",
+            "portIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "portIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApplianceDevicesPortsTransceiversReadingsHistoryByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
     def getOrganizationApplianceDevicesRedundancyByNetwork(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):
@@ -2953,6 +3561,68 @@ class AsyncAppliance:
             if invalid and self._session._logger:
                 self._session._logger.warning(
                     f"getOrganizationApplianceDevicesRedundancyByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationApplianceDevicesSystemUtilizationByInterval(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Return the appliance utilization history for devices in the organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-devices-system-utilization-by-interval
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 90 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 90 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 90 days. The default is 2 hours.
+        - interval (integer): The time interval in seconds for returned data. The valid intervals are: 1200. The default is 1200.
+        - networkIds (array): Optional parameter to filter the result set by the included set of network IDs
+        - serials (array): Optional parameter to filter device utilization history by device serial numbers
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["appliance", "monitor", "devices", "system", "utilization", "byInterval"],
+            "operation": "getOrganizationApplianceDevicesSystemUtilizationByInterval",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/devices/system/utilization/byInterval"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "t0",
+            "t1",
+            "timespan",
+            "interval",
+            "networkIds",
+            "serials",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApplianceDevicesSystemUtilizationByInterval: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -3632,6 +4302,66 @@ class AsyncAppliance:
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
+    def getOrganizationApplianceInterfacesPacketsOverviewsByDevice(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Returns packet counter overviews for all interfaces on Secure Routers in the organization, including totals and average rates by packet type over the requested timespan.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-interfaces-packets-overviews-by-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 14 days. The default is 1 day.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 50. Default is 10.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter Secure Routers in the provided networks
+        - serials (array): Optional parameter to filter Secure Routers by their serial numbers
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["appliance", "monitor", "interfaces", "packets", "overviews", "byDevice"],
+            "operation": "getOrganizationApplianceInterfacesPacketsOverviewsByDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/interfaces/packets/overviews/byDevice"
+
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "serials",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApplianceInterfacesPacketsOverviewsByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
     def getOrganizationApplianceRoutingVrfsSettings(self, organizationId: str):
         """
         **Return the VRF setting for an organization.**
@@ -3681,6 +4411,55 @@ class AsyncAppliance:
                 )
 
         return self._session.put(metadata, resource, payload)
+
+    def getOrganizationApplianceSdwanInternetPolicies(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **Get the SDWAN internet traffic preferences for an MX network**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-sdwan-internet-policies
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 200. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - wanTrafficUplinkPreferences (array): policies with respective traffic filters for an MX network
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["appliance", "configure", "sdwan", "internetPolicies"],
+            "operation": "getOrganizationApplianceSdwanInternetPolicies",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/sdwan/internetPolicies"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "wanTrafficUplinkPreferences",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "wanTrafficUplinkPreferences",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApplianceSdwanInternetPolicies: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationApplianceSecurityEvents(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
@@ -3832,6 +4611,57 @@ class AsyncAppliance:
             if invalid and self._session._logger:
                 self._session._logger.warning(
                     f"getOrganizationApplianceTrafficShapingVpnExclusionsByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationApplianceUmbrellaPoliciesByNetwork(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List Umbrella policy IDs applied to MX networks in the organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-umbrella-policies-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Filter results to only the given network IDs
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["appliance", "configure", "umbrella", "policies", "byNetwork"],
+            "operation": "getOrganizationApplianceUmbrellaPoliciesByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/umbrella/policies/byNetwork"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApplianceUmbrellaPoliciesByNetwork: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -4020,6 +4850,282 @@ class AsyncAppliance:
                 )
 
         return self._session.get(metadata, resource, params)
+
+    def getOrganizationApplianceVlans(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List the VLANs for an Organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-vlans
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["appliance", "configure", "vlans"],
+            "operation": "getOrganizationApplianceVlans",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/vlans"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationApplianceVlans: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationApplianceVpnConnectivityVpnPeersByNetwork(self, organizationId: str, **kwargs):
+        """
+        **Summarizes by-device vpn peers for the organization in the given interval.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-vpn-connectivity-vpn-peers-by-network
+
+        - organizationId (string): Organization ID
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days. The default is 1 day. If interval is provided, the timespan will be autocalculated.
+        - interval (integer): The time interval in seconds for returned data. The valid intervals are: 300, 3600, 14400, 86400. The default is 3600. Interval is calculated if time params are provided.
+        - networkIds (array): Filter results by network.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["appliance", "monitor", "vpn", "connectivity", "vpnPeers", "byNetwork"],
+            "operation": "getOrganizationApplianceVpnConnectivityVpnPeersByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/vpn/connectivity/vpnPeers/byNetwork"
+
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "interval",
+            "networkIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApplianceVpnConnectivityVpnPeersByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationApplianceVpnRemoteAccessSecureClientAuthenticationByClient(self, organizationId: str, **kwargs):
+        """
+        **Get authentication for all clients in organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-vpn-remote-access-secure-client-authentication-by-client
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Filter results by network.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 8 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 5 minutes and be less than or equal to 7 days. The default is 2 hours.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["appliance", "monitor", "vpn", "remoteAccess", "secureClient", "authentication", "byClient"],
+            "operation": "getOrganizationApplianceVpnRemoteAccessSecureClientAuthenticationByClient",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/vpn/remoteAccess/secureClient/authentication/byClient"
+
+        query_params = [
+            "networkIds",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApplianceVpnRemoteAccessSecureClientAuthenticationByClient: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationApplianceVpnRemoteAccessSecureClientIpAssignmentByClient(self, organizationId: str, **kwargs):
+        """
+        **Get IP assignment for all clients in the organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-vpn-remote-access-secure-client-ip-assignment-by-client
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Filter results by network.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 7 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days. The default is 2 hours.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["appliance", "monitor", "vpn", "remoteAccess", "secureClient", "ipAssignment", "byClient"],
+            "operation": "getOrganizationApplianceVpnRemoteAccessSecureClientIpAssignmentByClient",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/vpn/remoteAccess/secureClient/ipAssignment/byClient"
+
+        query_params = [
+            "networkIds",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApplianceVpnRemoteAccessSecureClientIpAssignmentByClient: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationApplianceVpnRemoteAccessSecureClientTunnelCreationByClient(self, organizationId: str, **kwargs):
+        """
+        **Get tunnel creation events for all clients in the organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-vpn-remote-access-secure-client-tunnel-creation-by-client
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Filter results by network.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 7 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days. The default is 2 hours.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["appliance", "monitor", "vpn", "remoteAccess", "secureClient", "tunnelCreation", "byClient"],
+            "operation": "getOrganizationApplianceVpnRemoteAccessSecureClientTunnelCreationByClient",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/vpn/remoteAccess/secureClient/tunnelCreation/byClient"
+
+        query_params = [
+            "networkIds",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApplianceVpnRemoteAccessSecureClientTunnelCreationByClient: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationApplianceVpnSiteToSiteHubsVrfs(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **Return source-to-hub VRF mappings for site-to-site VPN within an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-vpn-site-to-site-hubs-vrfs
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 500. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter source-to-hub mappings by source network IDs.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["appliance", "configure", "vpn", "siteToSite", "hubs", "vrfs"],
+            "operation": "getOrganizationApplianceVpnSiteToSiteHubsVrfs",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/vpn/siteToSite/hubs/vrfs"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApplianceVpnSiteToSiteHubsVrfs: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationApplianceVpnSiteToSiteIpsecPeersSlas(self, organizationId: str):
         """
