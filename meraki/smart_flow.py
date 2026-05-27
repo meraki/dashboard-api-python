@@ -1,4 +1,4 @@
-"""Per-org token bucket rate limiter for Meraki Dashboard API.
+"""Per-org token bucket rate limiter for Meraki Dashboard API (smart flow).
 
 The Meraki API enforces rate limits per organization (default 10 req/s). This module
 provides proactive rate limiting that prevents 429 errors before they happen by
@@ -172,7 +172,7 @@ class OrgRateLimiter:
 
     def _log(self, msg: str) -> None:
         if self._logger:
-            self._logger.debug(f"smart_limiter, {msg}")
+            self._logger.debug(f"smart_flow, {msg}")
 
     def _maybe_flush(self) -> None:
         if self._dirty >= 50:
@@ -469,7 +469,7 @@ class AsyncOrgRateLimiter:
 
     def _log(self, msg: str) -> None:
         if self._logger:
-            self._logger.debug(f"smart_limiter, {msg}")
+            self._logger.debug(f"smart_flow, {msg}")
 
     def _maybe_flush(self) -> None:
         if self._dirty >= 50 and (self._flush_task is None or self._flush_task.done()):

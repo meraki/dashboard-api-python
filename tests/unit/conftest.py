@@ -88,8 +88,8 @@ def make_sync_session(logger=None, **overrides):
             mock_instance.headers = MagicMock(spec=dict)
             mock_client.return_value = mock_instance
             s = RestSession(logger=logger, api_key=FAKE_API_KEY, **kwargs)
-    if s._smart_limiter:
-        s._smart_limiter = MagicMock()
+    if s._smart_flow:
+        s._smart_flow = MagicMock()
     return s
 
 

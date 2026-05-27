@@ -114,7 +114,7 @@ SMART_FLOW_CACHE_TTL = 604800.0
 #   that your environment did not previously have a cache, or the previous cache had expired.
 SMART_FLOW_CACHE_MODE = "lazy"
 
-# Log smart limiter activity (bucket creation, rate adjustments, learned mappings, cache events)
+# Log smart flow activity (bucket creation, rate adjustments, learned mappings, cache events)
 # to the standard session log. Disable this if you don't want to see smart_flow log messages
 # in your logs.
 SMART_FLOW_LOGGING = True

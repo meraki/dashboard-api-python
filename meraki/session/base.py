@@ -73,7 +73,7 @@ class SessionBase(ABC):
         caller: str = MERAKI_PYTHON_SDK_CALLER,
         use_iterator_for_get_pages: bool = USE_ITERATOR_FOR_GET_PAGES,
         validate_kwargs: bool = False,
-        smart_flow: bool = SMART_FLOW,
+        smart_flow_enabled: bool = SMART_FLOW,
         smart_flow_org_rate: float = SMART_FLOW_ORG_RATE,
         smart_flow_global_rate: float = SMART_FLOW_GLOBAL_RATE,
         smart_flow_cache_mode: str = SMART_FLOW_CACHE_MODE,
@@ -102,7 +102,7 @@ class SessionBase(ABC):
         self._caller = caller
         self._use_iterator_for_get_pages = use_iterator_for_get_pages
         self._validate_kwargs = validate_kwargs
-        self._smart_flow = smart_flow
+        self._smart_flow_enabled = smart_flow_enabled
         self._smart_flow_org_rate = smart_flow_org_rate
         self._smart_flow_global_rate = smart_flow_global_rate
         self._smart_flow_cache_mode = smart_flow_cache_mode
@@ -135,11 +135,11 @@ class SessionBase(ABC):
         self._parameters["be_geo_id"] = self._be_geo_id
         self._parameters["caller"] = self._caller
         self._parameters["use_iterator_for_get_pages"] = self._use_iterator_for_get_pages
-        self._parameters["smart_flow"] = self._smart_flow
+        self._parameters["smart_flow"] = self._smart_flow_enabled
 
-        # Rate limiter is initialized to None here; subclasses create the appropriate
-        # sync or async variant based on self._rate_limiting.
-        self._smart_limiter = None
+        # Smart flow limiter is initialized to None here; subclasses create the
+        # appropriate sync or async variant when smart_flow is enabled.
+        self._smart_flow = None
 
         if self._logger:
             self._logger.info(f"Meraki dashboard API session initialized with these parameters: {self._parameters}")
@@ -201,8 +201,8 @@ class SessionBase(ABC):
 
         while retries > 0:
             # Per-org rate limiting (proactive throttle before sending)
-            if self._smart_limiter:
-                self._smart_limiter.acquire(abs_url)
+            if self._smart_flow:
+                self._smart_flow.acquire(abs_url)
 
             # Attempt the request
             try:
@@ -227,8 +227,8 @@ class SessionBase(ABC):
             if 300 <= status < 400:
                 abs_url = self._handle_redirect(response)
             elif 200 <= status < 300:
-                if self._smart_limiter:
-                    self._smart_limiter.on_success(abs_url)
+                if self._smart_flow:
+                    self._smart_flow.on_success(abs_url)
                 result = self._handle_success(response, metadata, method, retries)
                 if result is None:
                     # JSON decode failure, retry
@@ -237,15 +237,15 @@ class SessionBase(ABC):
                         raise APIError(metadata, response)
                     self._sleep(1)
                     continue
-                if self._smart_limiter and method == "GET" and result.content.strip():
+                if self._smart_flow and method == "GET" and result.content.strip():
                     try:
-                        self._smart_limiter.learn_from_response(abs_url, result.json())
+                        self._smart_flow.learn_from_response(abs_url, result.json())
                     except (ValueError, AttributeError):
                         pass
                 return result
             elif status == 429:
-                if self._smart_limiter:
-                    self._smart_limiter.on_rate_limited(abs_url)
+                if self._smart_flow:
+                    self._smart_flow.on_rate_limited(abs_url)
                 wait = self._handle_rate_limit(response, metadata, retries)
                 self._sleep(wait)
                 retries -= 1

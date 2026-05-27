@@ -14,7 +14,7 @@ from meraki.common import (
     use_iterator_for_get_pages_setter,
 )
 from meraki.exceptions import SessionInputError
-from meraki.smart_limiter import OrgRateLimiter
+from meraki.smart_flow import OrgRateLimiter
 from meraki.session.base import SessionBase
 
 
@@ -41,9 +41,9 @@ class RestSession(SessionBase):
         self._client = httpx.Client(**client_kwargs)
         self._client.headers.update(self._build_headers())
 
-        # Per-org smart limiter (opt-in)
-        if self._smart_flow:
-            self._smart_limiter = OrgRateLimiter(
+        # Per-org smart flow (opt-in)
+        if self._smart_flow_enabled:
+            self._smart_flow = OrgRateLimiter(
                 rate=self._smart_flow_org_rate,
                 capacity=int(self._smart_flow_org_rate),
                 global_rate=self._smart_flow_global_rate,
@@ -51,8 +51,8 @@ class RestSession(SessionBase):
                 cache_ttl=self._smart_flow_cache_ttl,
                 logger=self._logger if self._smart_flow_logging else None,
             )
-            self._smart_limiter.set_resolver(self._resolve_org_for_limiter)
-            self._smart_limiter.set_hydrator(self._hydrate_org_for_limiter)
+            self._smart_flow.set_resolver(self._resolve_org_for_limiter)
+            self._smart_flow.set_hydrator(self._hydrate_org_for_limiter)
 
     def close(self):
         """Close the underlying httpx.Client and release connections."""
@@ -86,7 +86,7 @@ class RestSession(SessionBase):
         return kwargs
 
     # ------------------------------------------------------------------
-    # Smart limiter resolver
+    # Smart flow resolver
     # ------------------------------------------------------------------
 
     def _resolve_org_for_limiter(self, id_type: str, identifier: str) -> Optional[str]:
@@ -109,12 +109,12 @@ class RestSession(SessionBase):
         networks = self._fetch_all_pages(f"{self._base_url}/organizations/{org_id}/networks?perPage=1000")
         for net in networks:
             if "id" in net:
-                self._smart_limiter.register_network(net["id"], org_id)
+                self._smart_flow.register_network(net["id"], org_id)
 
         devices = self._fetch_all_pages(f"{self._base_url}/organizations/{org_id}/inventoryDevices?perPage=1000")
         for dev in devices:
             if "serial" in dev:
-                self._smart_limiter.register_device(dev["serial"], org_id)
+                self._smart_flow.register_device(dev["serial"], org_id)
 
     def _fetch_all_pages(self, url: str) -> list:
         """Paginate through a Meraki list endpoint using Link headers."""

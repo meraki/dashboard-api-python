@@ -88,7 +88,7 @@ class AsyncDashboardAPI:
     - caller (string): optional identifier for API usage tracking; can also be set as an environment variable MERAKI_PYTHON_SDK_CALLER
     - use_iterator_for_get_pages (boolean): list* methods will return an iterator with each object instead of a complete list with all items
     - validate_kwargs (boolean): log warnings when unrecognized kwargs are passed to API methods
-    - smart_flow (boolean): enable per-org proactive smart limiting via token buckets?
+    - smart_flow_enabled (boolean): enable per-org proactive smart flow via token buckets?
     - smart_flow_org_rate (float): max requests per second per org (Meraki default: 10)
     - smart_flow_global_rate (float): max requests per second across all orgs (source IP limit, Meraki default: 100)
     - smart_flow_cache_mode (string): "lazy" (default) or "eager" - how org/network/device mappings are loaded
@@ -121,7 +121,7 @@ class AsyncDashboardAPI:
         inherit_logging_config=INHERIT_LOGGING_CONFIG,
         maximum_concurrent_requests=AIO_MAXIMUM_CONCURRENT_REQUESTS,
         validate_kwargs=VALIDATE_KWARGS,
-        smart_flow=SMART_FLOW,
+        smart_flow_enabled=SMART_FLOW,
         smart_flow_org_rate=SMART_FLOW_ORG_RATE,
         smart_flow_global_rate=SMART_FLOW_GLOBAL_RATE,
         smart_flow_cache_mode=SMART_FLOW_CACHE_MODE,
@@ -195,7 +195,7 @@ class AsyncDashboardAPI:
             use_iterator_for_get_pages=use_iterator_for_get_pages,
             maximum_concurrent_requests=maximum_concurrent_requests,
             validate_kwargs=validate_kwargs,
-            smart_flow=smart_flow,
+            smart_flow_enabled=smart_flow_enabled,
             smart_flow_org_rate=smart_flow_org_rate,
             smart_flow_global_rate=smart_flow_global_rate,
             smart_flow_cache_mode=smart_flow_cache_mode,
@@ -205,7 +205,7 @@ class AsyncDashboardAPI:
         )
 
         # Store for eager load access
-        self._smart_flow = smart_flow
+        self._smart_flow_enabled = smart_flow_enabled
         self._smart_flow_cache_mode = smart_flow_cache_mode
 
         # API endpoints by section
@@ -230,20 +230,20 @@ class AsyncDashboardAPI:
         self.batch = Batch()
 
     async def __aenter__(self):
-        if self._smart_flow and self._smart_flow_cache_mode == "eager":
-            limiter = self._session._smart_limiter
+        if self._smart_flow_enabled and self._smart_flow_cache_mode == "eager":
+            limiter = self._session._smart_flow
             if limiter and not limiter.cache_fresh:
                 await self._eager_load_rate_limit_cache()
         return self
 
     async def __aexit__(self, exc_type, exc, tb):
-        if self._session._smart_limiter:
-            await self._session._smart_limiter.save_cache()
+        if self._session._smart_flow:
+            await self._session._smart_flow.save_cache()
         await self._session.close()
 
     async def _eager_load_rate_limit_cache(self) -> None:
-        """Populate the smart limiter's org/network/device cache at startup."""
-        rate_limiter = self._session._smart_limiter
+        """Populate the smart flow's org/network/device cache at startup."""
+        rate_limiter = self._session._smart_flow
         if not rate_limiter:
             return
 

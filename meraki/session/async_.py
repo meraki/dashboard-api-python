@@ -14,7 +14,7 @@ import httpx
 from meraki.common import validate_base_url, validate_user_agent
 from meraki.config import AIO_MAXIMUM_CONCURRENT_REQUESTS
 from meraki.exceptions import APIError, SessionInputError
-from meraki.smart_limiter import AsyncOrgRateLimiter
+from meraki.smart_flow import AsyncOrgRateLimiter
 from meraki.session.base import SessionBase
 
 
@@ -54,9 +54,9 @@ class AsyncRestSession(SessionBase):
         # Persistent async client with connection pooling
         self._client = httpx.AsyncClient(**client_kwargs)
 
-        # Per-org smart limiter (opt-in)
-        if self._smart_flow:
-            self._smart_limiter = AsyncOrgRateLimiter(
+        # Per-org smart flow (opt-in)
+        if self._smart_flow_enabled:
+            self._smart_flow = AsyncOrgRateLimiter(
                 rate=self._smart_flow_org_rate,
                 capacity=int(self._smart_flow_org_rate),
                 global_rate=self._smart_flow_global_rate,
@@ -64,8 +64,8 @@ class AsyncRestSession(SessionBase):
                 cache_ttl=self._smart_flow_cache_ttl,
                 logger=self._logger if self._smart_flow_logging else None,
             )
-            self._smart_limiter.set_resolver(self._resolve_org_for_limiter)
-            self._smart_limiter.set_hydrator(self._hydrate_org_for_limiter)
+            self._smart_flow.set_resolver(self._resolve_org_for_limiter)
+            self._smart_flow.set_hydrator(self._hydrate_org_for_limiter)
 
         # Trigger the property setter to bind the correct get_pages implementation
         self.use_iterator_for_get_pages = self._use_iterator_for_get_pages
@@ -100,7 +100,7 @@ class AsyncRestSession(SessionBase):
         return kwargs
 
     # ------------------------------------------------------------------
-    # Smart limiter resolver
+    # Smart flow resolver
     # ------------------------------------------------------------------
 
     async def _resolve_org_for_limiter(self, id_type: str, identifier: str) -> Optional[str]:
@@ -123,12 +123,12 @@ class AsyncRestSession(SessionBase):
         networks = await self._fetch_all_pages(f"{self._base_url}/organizations/{org_id}/networks?perPage=1000")
         for net in networks:
             if "id" in net:
-                self._smart_limiter.register_network(net["id"], org_id)
+                self._smart_flow.register_network(net["id"], org_id)
 
         devices = await self._fetch_all_pages(f"{self._base_url}/organizations/{org_id}/inventoryDevices?perPage=1000")
         for dev in devices:
             if "serial" in dev:
-                self._smart_limiter.register_device(dev["serial"], org_id)
+                self._smart_flow.register_device(dev["serial"], org_id)
 
     async def _fetch_all_pages(self, url: str) -> list:
         """Paginate through a Meraki list endpoint using Link headers."""
@@ -179,8 +179,8 @@ class AsyncRestSession(SessionBase):
 
         while retries > 0:
             # Per-org rate limiting (proactive throttle before sending)
-            if self._smart_limiter:
-                await self._smart_limiter.acquire(abs_url)
+            if self._smart_flow:
+                await self._smart_flow.acquire(abs_url)
 
             # Attempt the request
             try:
@@ -212,8 +212,8 @@ class AsyncRestSession(SessionBase):
             if 300 <= status < 400:
                 abs_url = self._handle_redirect_async(response)
             elif 200 <= status < 300:
-                if self._smart_limiter:
-                    self._smart_limiter.on_success(abs_url)
+                if self._smart_flow:
+                    self._smart_flow.on_success(abs_url)
                 result = await self._handle_success_async(response, metadata, method)
                 if result is None:
                     # JSON decode failure, retry
@@ -222,15 +222,15 @@ class AsyncRestSession(SessionBase):
                         raise APIError(metadata, response)
                     await self._sleep(1)
                     continue
-                if self._smart_limiter and method == "GET" and result.content.strip():
+                if self._smart_flow and method == "GET" and result.content.strip():
                     try:
-                        self._smart_limiter.learn_from_response(abs_url, result.json())
+                        self._smart_flow.learn_from_response(abs_url, result.json())
                     except (ValueError, AttributeError):
                         pass
                 return result
             elif status == 429:
-                if self._smart_limiter:
-                    self._smart_limiter.on_rate_limited(abs_url)
+                if self._smart_flow:
+                    self._smart_flow.on_rate_limited(abs_url)
                 wait = self._handle_rate_limit_async(response, metadata, retries)
                 await self._sleep(wait)
                 retries -= 1

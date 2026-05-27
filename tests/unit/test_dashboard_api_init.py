@@ -298,28 +298,28 @@ class TestDashboardAPISmartLimiting:
             suppress_logging=True,
             caller="TestApp TestVendor",
         )
-        assert d._session._smart_limiter is not None
+        assert d._session._smart_flow is not None
 
     @patch("meraki.session.base.check_python_version")
     def test_smart_flow_disabled_explicitly(self, mock_check):
         d = meraki.DashboardAPI(
             "test_key_1234567890123456789012345678901234567890",
             suppress_logging=True,
-            smart_flow=False,
+            smart_flow_enabled=False,
             caller="TestApp TestVendor",
         )
-        assert d._session._smart_limiter is None
+        assert d._session._smart_flow is None
 
     @patch("meraki.session.base.check_python_version")
     def test_smart_flow_creates_limiter(self, mock_check):
         d = meraki.DashboardAPI(
             "test_key_1234567890123456789012345678901234567890",
             suppress_logging=True,
-            smart_flow=True,
+            smart_flow_enabled=True,
             smart_flow_cache_mode="lazy",
             caller="TestApp TestVendor",
         )
-        assert d._session._smart_limiter is not None
+        assert d._session._smart_flow is not None
 
     @patch("meraki.session.base.check_python_version")
     def test_smart_flow_with_cache_path(self, mock_check, tmp_path):
@@ -327,12 +327,12 @@ class TestDashboardAPISmartLimiting:
         d = meraki.DashboardAPI(
             "test_key_1234567890123456789012345678901234567890",
             suppress_logging=True,
-            smart_flow=True,
+            smart_flow_enabled=True,
             smart_flow_cache_mode="lazy",
             smart_flow_cache_path=cache_file,
             caller="TestApp TestVendor",
         )
-        assert d._session._smart_limiter is not None
+        assert d._session._smart_flow is not None
 
 
 class TestDashboardAPIEagerLoad:
@@ -341,7 +341,7 @@ class TestDashboardAPIEagerLoad:
         d = meraki.DashboardAPI(
             "test_key_1234567890123456789012345678901234567890",
             suppress_logging=True,
-            smart_flow=True,
+            smart_flow_enabled=True,
             smart_flow_cache_mode="lazy",
             caller="TestApp TestVendor",
         )
@@ -354,7 +354,7 @@ class TestDashboardAPIEagerLoad:
                 with patch.object(d.organizations, "getOrganizationInventoryDevices", return_value=mock_devices):
                     d._eager_load_rate_limit_cache()
 
-        limiter = d._session._smart_limiter
+        limiter = d._session._smart_flow
         assert limiter.resolve_org("/organizations/org_1/x") == "org_1"
         assert limiter.resolve_org("/networks/N_1/x") is not None
         assert limiter.resolve_org("/devices/QABC-1234-5678/x") is not None
@@ -364,7 +364,7 @@ class TestDashboardAPIEagerLoad:
         d = meraki.DashboardAPI(
             "test_key_1234567890123456789012345678901234567890",
             suppress_logging=True,
-            smart_flow=True,
+            smart_flow_enabled=True,
             smart_flow_cache_mode="lazy",
             caller="TestApp TestVendor",
         )
@@ -376,7 +376,7 @@ class TestDashboardAPIEagerLoad:
         d = meraki.DashboardAPI(
             "test_key_1234567890123456789012345678901234567890",
             suppress_logging=True,
-            smart_flow=True,
+            smart_flow_enabled=True,
             smart_flow_cache_mode="lazy",
             caller="TestApp TestVendor",
         )
@@ -385,14 +385,14 @@ class TestDashboardAPIEagerLoad:
             with patch.object(d.organizations, "getOrganizationNetworks", side_effect=Exception("net fail")):
                 with patch.object(d.organizations, "getOrganizationInventoryDevices", return_value=[]):
                     d._eager_load_rate_limit_cache()
-        assert d._session._smart_limiter.resolve_org("/organizations/org_1/x") == "org_1"
+        assert d._session._smart_flow.resolve_org("/organizations/org_1/x") == "org_1"
 
     @patch("meraki.session.base.check_python_version")
     def test_eager_load_handles_device_failure(self, mock_check):
         d = meraki.DashboardAPI(
             "test_key_1234567890123456789012345678901234567890",
             suppress_logging=True,
-            smart_flow=True,
+            smart_flow_enabled=True,
             smart_flow_cache_mode="lazy",
             caller="TestApp TestVendor",
         )
@@ -402,14 +402,14 @@ class TestDashboardAPIEagerLoad:
             with patch.object(d.organizations, "getOrganizationNetworks", return_value=mock_networks):
                 with patch.object(d.organizations, "getOrganizationInventoryDevices", side_effect=Exception("dev fail")):
                     d._eager_load_rate_limit_cache()
-        assert d._session._smart_limiter.resolve_org("/networks/N_1/x") == "org_1"
+        assert d._session._smart_flow.resolve_org("/networks/N_1/x") == "org_1"
 
     @patch("meraki.session.base.check_python_version")
     def test_eager_load_skips_devices_without_serial(self, mock_check):
         d = meraki.DashboardAPI(
             "test_key_1234567890123456789012345678901234567890",
             suppress_logging=True,
-            smart_flow=True,
+            smart_flow_enabled=True,
             smart_flow_cache_mode="lazy",
             caller="TestApp TestVendor",
         )
@@ -419,7 +419,7 @@ class TestDashboardAPIEagerLoad:
             with patch.object(d.organizations, "getOrganizationNetworks", return_value=[]):
                 with patch.object(d.organizations, "getOrganizationInventoryDevices", return_value=mock_devices):
                     d._eager_load_rate_limit_cache()
-        limiter = d._session._smart_limiter
+        limiter = d._session._smart_flow
         assert limiter.resolve_org("/devices/QABC-1234-5678/x") == "org_1"
 
     @patch("meraki.session.base.check_python_version")
@@ -427,7 +427,7 @@ class TestDashboardAPIEagerLoad:
         d = meraki.DashboardAPI(
             "test_key_1234567890123456789012345678901234567890",
             suppress_logging=True,
-            smart_flow=False,
+            smart_flow_enabled=False,
             caller="TestApp TestVendor",
         )
         d._eager_load_rate_limit_cache()
@@ -439,7 +439,7 @@ class TestDashboardAPIEagerLoad:
             meraki.DashboardAPI(
                 "test_key_1234567890123456789012345678901234567890",
                 suppress_logging=True,
-                smart_flow=True,
+                smart_flow_enabled=True,
                 smart_flow_cache_mode="eager",
                 smart_flow_cache_path=cache_file,
                 caller="TestApp TestVendor",
@@ -463,9 +463,9 @@ class TestDashboardAPIEagerLoad:
         d = meraki.DashboardAPI(
             "test_key_1234567890123456789012345678901234567890",
             suppress_logging=True,
-            smart_flow=True,
+            smart_flow_enabled=True,
             smart_flow_cache_mode="eager",
             smart_flow_cache_path=str(cache_file),
             caller="TestApp TestVendor",
         )
-        assert d._session._smart_limiter.resolve_org("/networks/N_cached/x") == "org_cached"
+        assert d._session._smart_flow.resolve_org("/networks/N_cached/x") == "org_cached"

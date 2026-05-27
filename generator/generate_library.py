@@ -182,6 +182,7 @@ def generate_library(
         "aio/__init__.py",
         "aio/api/__init__.py",
         "api/batch/__init__.py",
+        "smart_flow.py",
     ]
     if local_source:
         repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

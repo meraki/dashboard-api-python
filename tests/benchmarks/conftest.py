@@ -33,5 +33,5 @@ def benchmark_dashboard(mock_routes):
         "fake_key_1234567890123456789012345678901234567890",
         suppress_logging=True,
         maximum_retries=1,
-        smart_flow=False,
+        smart_flow_enabled=False,
     )

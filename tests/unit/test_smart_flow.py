@@ -1,4 +1,4 @@
-"""Tests for meraki.smart_limiter module."""
+"""Tests for meraki.smart_flow module."""
 
 import asyncio
 import json
@@ -7,7 +7,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from meraki.smart_limiter import (
+from meraki.smart_flow import (
     AsyncOrgRateLimiter,
     AsyncTokenBucket,
     OrgRateLimiter,
@@ -297,7 +297,7 @@ class TestOrgLogger:
         logger = MagicMock()
         limiter = OrgRateLimiter(logger=logger)
         limiter._log("test message")
-        logger.debug.assert_called_once_with("smart_limiter, test message")
+        logger.debug.assert_called_once_with("smart_flow, test message")
 
     def test_log_without_logger(self):
         limiter = OrgRateLimiter()
@@ -793,7 +793,7 @@ class TestAsyncOrgRateLimiter:
         logger = MagicMock()
         limiter = AsyncOrgRateLimiter(logger=logger)
         limiter._log("hello")
-        logger.debug.assert_called_with("smart_limiter, hello")
+        logger.debug.assert_called_with("smart_flow, hello")
 
     @pytest.mark.asyncio
     async def test_log_without_logger(self):
