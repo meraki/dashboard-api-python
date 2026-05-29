@@ -140,9 +140,6 @@ class AsyncDashboardAPI:
         # Pull the caller from an environment variable if present
         caller = caller or os.environ.get("MERAKI_PYTHON_SDK_CALLER")
 
-        use_iterator_for_get_pages = use_iterator_for_get_pages
-        inherit_logging_config = inherit_logging_config
-
         # Configure logging
         if not suppress_logging:
             self._logger = logging.getLogger(__name__)
@@ -237,8 +234,13 @@ class AsyncDashboardAPI:
         return self
 
     async def __aexit__(self, exc_type, exc, tb):
+        # Drain/cancel in-flight background resolve/hydrate + flush tasks and
+        # persist the cache BEFORE closing the httpx client. Closing first would
+        # cause those background tasks to fail with "client has been closed".
+        # shutdown() performs the final save itself, so it is called instead of
+        # save_cache() to keep the persist exactly once.
         if self._session._smart_flow:
-            await self._session._smart_flow.save_cache()
+            await self._session._smart_flow.shutdown()
         await self._session.close()
 
     async def _eager_load_rate_limit_cache(self) -> None:

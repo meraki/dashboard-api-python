@@ -148,9 +148,6 @@ class DashboardAPI(object):
         # Pull the caller from an environment variable if present
         caller = caller or os.environ.get("MERAKI_PYTHON_SDK_CALLER")
 
-        use_iterator_for_get_pages = use_iterator_for_get_pages
-        inherit_logging_config = inherit_logging_config
-
         # Configure logging
         if not suppress_logging:
             self._logger = logging.getLogger(__name__)

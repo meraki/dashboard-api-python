@@ -86,6 +86,33 @@ class TestDashboardAPIInit:
         assert d._session.use_iterator_for_get_pages is True
 
     @patch("meraki.session.base.check_python_version")
+    def test_use_iterator_default_false_propagates(self, mock_check):
+        # Regression for removed dead self-assignment
+        # `use_iterator_for_get_pages = use_iterator_for_get_pages`: param
+        # must still reach the session unchanged.
+        d = meraki.DashboardAPI(
+            "test_key_1234567890123456789012345678901234567890",
+            suppress_logging=True,
+            use_iterator_for_get_pages=False,
+            caller="TestApp TestVendor",
+        )
+        assert d._session.use_iterator_for_get_pages is False
+
+    @patch("meraki.session.base.check_python_version")
+    def test_inherit_logging_config_param_takes_effect(self, mock_check):
+        # Regression for removed dead self-assignment
+        # `inherit_logging_config = inherit_logging_config`: passing True must
+        # leave the logger at its inherited (non-DEBUG-forced) level.
+        d = meraki.DashboardAPI(
+            "test_key_1234567890123456789012345678901234567890",
+            suppress_logging=False,
+            inherit_logging_config=True,
+            caller="TestApp TestVendor",
+        )
+        assert d._logger is not None
+        d._logger.handlers.clear()
+
+    @patch("meraki.session.base.check_python_version")
     def test_caller_from_env(self, mock_check):
         with patch.dict(os.environ, {"MERAKI_PYTHON_SDK_CALLER": "EnvApp EnvVendor"}):
             d = meraki.DashboardAPI(
