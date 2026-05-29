@@ -15,7 +15,7 @@ from meraki.common import validate_base_url, validate_user_agent
 from meraki.config import AIO_MAXIMUM_CONCURRENT_REQUESTS
 from meraki.exceptions import APIError, SessionInputError
 from meraki.smart_flow import AsyncOrgRateLimiter
-from meraki.session.base import SessionBase
+from meraki.session.base import SessionBase, apply_meraki_param_encoding
 
 
 class AsyncRestSession(SessionBase):
@@ -88,6 +88,8 @@ class AsyncRestSession(SessionBase):
 
     async def _send_request(self, method: str, url: str, **kwargs: Any) -> httpx.Response:
         """Send HTTP request via httpx.AsyncClient (pool limits enforce concurrency per D-02)."""
+        # Pre-encode Meraki array-of-objects params; httpx mishandles them.
+        url = apply_meraki_param_encoding(url, kwargs)
         response = await self._client.request(method, url, follow_redirects=False, **kwargs)
         return response
 
@@ -103,6 +105,19 @@ class AsyncRestSession(SessionBase):
     # Smart flow resolver
     # ------------------------------------------------------------------
 
+    async def _acquire_global_bucket(self) -> None:
+        """Gate internal hydration/resolution traffic on the global bucket.
+
+        These internal GETs bypass self.request() to avoid resolver reentrancy,
+        but must still account against the global (source IP) bucket they help
+        populate. Defensive: no-op if smart flow or the bucket is unavailable.
+        """
+        if not self._smart_flow:
+            return
+        bucket = getattr(self._smart_flow, "_global_bucket", None)
+        if bucket is not None:
+            await bucket.acquire()
+
     async def _resolve_org_for_limiter(self, id_type: str, identifier: str) -> Optional[str]:
         """Resolve a network/device ID to its org by calling the API directly."""
         if id_type == "network":
@@ -110,6 +125,7 @@ class AsyncRestSession(SessionBase):
         else:
             endpoint = f"{self._base_url}/devices/{identifier}"
         try:
+            await self._acquire_global_bucket()
             response = await self._client.request("GET", endpoint, follow_redirects=True)
             if response.status_code == 200:
                 data = response.json()
@@ -134,6 +150,7 @@ class AsyncRestSession(SessionBase):
         """Paginate through a Meraki list endpoint using Link headers."""
         results = []
         while url:
+            await self._acquire_global_bucket()
             response = await self._client.request("GET", url, follow_redirects=True)
             if response.status_code != 200:
                 break
@@ -214,7 +231,9 @@ class AsyncRestSession(SessionBase):
             elif 200 <= status < 300:
                 if self._smart_flow:
                     self._smart_flow.on_success(abs_url)
-                result = await self._handle_success_async(response, metadata, method)
+                # _handle_success_async returns (response, parsed_body); parsed_body
+                # is the decoded GET body (or None) so we don't parse JSON twice.
+                result, parsed_body = await self._handle_success_async(response, metadata, method)
                 if result is None:
                     # JSON decode failure, retry
                     retries -= 1
@@ -222,9 +241,9 @@ class AsyncRestSession(SessionBase):
                         raise APIError(metadata, response)
                     await self._sleep(1)
                     continue
-                if self._smart_flow and method == "GET" and result.content.strip():
+                if self._smart_flow and method == "GET" and parsed_body is not None:
                     try:
-                        self._smart_flow.learn_from_response(abs_url, result.json())
+                        self._smart_flow.learn_from_response(abs_url, parsed_body)
                     except (ValueError, AttributeError):
                         pass
                 return result
@@ -257,8 +276,13 @@ class AsyncRestSession(SessionBase):
         response: Any,
         metadata: Dict[str, Any],
         method: str,
-    ) -> Optional[Any]:
-        """Handle 2xx responses (async). Returns response or None if JSON validation fails."""
+    ) -> tuple[Optional[Any], Optional[Any]]:
+        """Handle 2xx responses (async).
+
+        Returns (response, parsed_body). parsed_body is the decoded GET JSON body
+        (or None for non-GET / empty bodies), parsed once here so callers do not
+        re-parse. On JSON decode failure returns (None, None) to signal a retry.
+        """
         tag = metadata["tags"][0]
         operation = metadata["operation"]
         reason = response.reason_phrase if response.reason_phrase else ""
@@ -272,15 +296,15 @@ class AsyncRestSession(SessionBase):
             if self._logger:
                 self._logger.info(f"{tag}, {operation} - {status} {reason}")
 
-        # For non-empty GET responses, validate JSON
+        # For non-empty GET responses, validate (and capture) the JSON once.
         try:
             if method == "GET" and response.content.strip():
-                response.json()
-            return response
+                return response, response.json()
+            return response, None
         except (json.decoder.JSONDecodeError, ValueError):
             if self._logger:
                 self._logger.warning(f"{tag}, {operation} - JSON decode error, retrying in 1 second")
-            return None
+            return None, None
 
     def _handle_redirect_async(self, response: Any) -> str:
         """Handle 3xx redirects for aiohttp responses."""
@@ -406,7 +430,11 @@ class AsyncRestSession(SessionBase):
 
     async def _download_page(self, request):
         response = await request
-        result = response.json()
+        # Guard against 204 No Content pages (empty body -> no JSON to parse).
+        if response.status_code == 204:
+            result = None
+        else:
+            result = response.json()
         return response, result
 
     async def _get_pages_iterator(
@@ -433,61 +461,87 @@ class AsyncRestSession(SessionBase):
 
         request_task = asyncio.create_task(self._download_page(self.request(metadata, "GET", url, params=params)))
 
-        # Get additional pages if more than one requested
-        while total_pages != 0:
-            response, results = await request_task
-            links = response.links
+        # Wrap in try/finally so an in-flight prefetch task is cancelled if the
+        # consumer breaks early (avoids an orphaned request and "Task pending" warning).
+        try:
+            # Get additional pages if more than one requested
+            while total_pages != 0:
+                response, results = await request_task
 
-            # GET the subsequent page
-            if direction == "next" and "next" in links:
-                # Prevent getNetworkEvents from infinite loop as time goes forward
-                if metadata["operation"] == "getNetworkEvents":
-                    starting_after = urllib.parse.unquote(str(links["next"]["url"]).split("startingAfter=")[1])
-                    delta = datetime.now(timezone.utc) - datetime.fromisoformat(starting_after)
-                    # Break out of loop if startingAfter returned from next link is within 5 minutes of current time
-                    if delta.total_seconds() < 300:
-                        break
-                    # Or if next page is past the specified window's end time
-                    elif event_log_end_time and starting_after > event_log_end_time:
-                        break
+                # Guard against 204 No Content pages (empty body -> stop cleanly).
+                if response.status_code == 204:
+                    await response.aclose()
+                    return
 
-                metadata["page"] += 1
-                nextlink = links["next"]["url"]
-            elif direction == "prev" and "prev" in links:
-                # Prevent getNetworkEvents from infinite loop as time goes backward (to epoch 0)
-                if metadata["operation"] == "getNetworkEvents":
-                    ending_before = urllib.parse.unquote(str(links["prev"]["url"]).split("endingBefore=")[1])
-                    # Break out of loop if endingBefore returned from prev link is before 2014
-                    if ending_before < "2014-01-01":
-                        break
+                links = response.links
 
-                metadata["page"] += 1
-                nextlink = links["prev"]["url"]
-            else:
-                total_pages = 1
+                # GET the subsequent page
+                if direction == "next" and "next" in links:
+                    # Prevent getNetworkEvents from infinite loop as time goes forward
+                    if metadata["operation"] == "getNetworkEvents":
+                        starting_after = urllib.parse.unquote(str(links["next"]["url"]).split("startingAfter=")[1])
+                        delta = datetime.now(timezone.utc) - datetime.fromisoformat(starting_after)
+                        # Break out of loop if startingAfter returned from next link is within 5 minutes of current time
+                        if delta.total_seconds() < 300:
+                            break
+                        # Or if next page is past the specified window's end time
+                        elif event_log_end_time and starting_after > event_log_end_time:
+                            break
 
-            await response.aclose()
+                    metadata["page"] += 1
+                    nextlink = links["next"]["url"]
+                elif direction == "prev" and "prev" in links:
+                    # Prevent getNetworkEvents from infinite loop as time goes backward (to epoch 0)
+                    if metadata["operation"] == "getNetworkEvents":
+                        ending_before = urllib.parse.unquote(str(links["prev"]["url"]).split("endingBefore=")[1])
+                        # Break out of loop if endingBefore returned from prev link is before 2014
+                        if ending_before < "2014-01-01":
+                            break
 
-            total_pages = total_pages - 1
-
-            if total_pages != 0:
-                request_task = asyncio.create_task(self._download_page(self.request(metadata, "GET", nextlink)))
-
-            return_items = []
-            # just prepare the list
-            if isinstance(results, list):
-                return_items = results
-            elif isinstance(results, dict) and "items" in results:
-                return_items = results["items"]
-            # For event log endpoint
-            elif isinstance(results, dict):
-                if direction == "next":
-                    return_items = results["events"][::-1]
+                    metadata["page"] += 1
+                    nextlink = links["prev"]["url"]
                 else:
-                    return_items = results["events"]
+                    total_pages = 1
 
-            for item in return_items:
-                yield item
+                await response.aclose()
+
+                total_pages = total_pages - 1
+
+                if total_pages != 0:
+                    request_task = asyncio.create_task(self._download_page(self.request(metadata, "GET", nextlink)))
+
+                return_items = []
+                # just prepare the list
+                if isinstance(results, list):
+                    return_items = results
+                elif isinstance(results, dict) and "items" in results:
+                    return_items = results["items"]
+                # For event log endpoint
+                elif isinstance(results, dict):
+                    if direction == "next":
+                        return_items = results["events"][::-1]
+                    else:
+                        return_items = results["events"]
+
+                for item in return_items:
+                    yield item
+        finally:
+            # Cancel and drain any still-pending prefetch (e.g. consumer broke early).
+            if request_task is not None and not request_task.done():
+                request_task.cancel()
+                try:
+                    await request_task
+                except asyncio.CancelledError:
+                    pass
+                except Exception:
+                    pass
+            elif request_task is not None and request_task.cancelled() is False:
+                # Task completed: close its response to release the connection.
+                try:
+                    resolved_response, _ = request_task.result()
+                    await resolved_response.aclose()
+                except Exception:
+                    pass
 
     async def _get_pages_legacy(
         self,
@@ -594,6 +648,16 @@ class AsyncRestSession(SessionBase):
         metadata["url"] = url
         metadata["json"] = json
         response = await self.request(metadata, "PUT", url, json=json)
+        if response:
+            if response.content.strip():
+                return response.json()
+        return None
+
+    async def patch(self, metadata, url, json=None):
+        metadata["method"] = "PATCH"
+        metadata["url"] = url
+        metadata["json"] = json
+        response = await self.request(metadata, "PATCH", url, json=json)
         if response:
             if response.content.strip():
                 return response.json()

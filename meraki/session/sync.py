@@ -15,7 +15,7 @@ from meraki.common import (
 )
 from meraki.exceptions import SessionInputError
 from meraki.smart_flow import OrgRateLimiter
-from meraki.session.base import SessionBase
+from meraki.session.base import SessionBase, apply_meraki_param_encoding
 
 
 class RestSession(SessionBase):
@@ -74,6 +74,8 @@ class RestSession(SessionBase):
 
     def _send_request(self, method: str, url: str, **kwargs: Any) -> httpx.Response:
         """Send HTTP request via persistent httpx.Client."""
+        # Pre-encode Meraki array-of-objects params; httpx mishandles them.
+        url = apply_meraki_param_encoding(url, kwargs)
         response = self._client.request(method, url, follow_redirects=False, **kwargs)
         return response
 
@@ -89,6 +91,19 @@ class RestSession(SessionBase):
     # Smart flow resolver
     # ------------------------------------------------------------------
 
+    def _acquire_global_bucket(self) -> None:
+        """Gate internal hydration/resolution traffic on the global bucket.
+
+        These internal GETs bypass self.request() to avoid resolver reentrancy,
+        but must still account against the global (source IP) bucket they help
+        populate. Defensive: no-op if smart flow or the bucket is unavailable.
+        """
+        if not self._smart_flow:
+            return
+        bucket = getattr(self._smart_flow, "_global_bucket", None)
+        if bucket is not None:
+            bucket.acquire()
+
     def _resolve_org_for_limiter(self, id_type: str, identifier: str) -> Optional[str]:
         """Resolve a network/device ID to its org by calling the API directly."""
         if id_type == "network":
@@ -96,6 +111,7 @@ class RestSession(SessionBase):
         else:
             endpoint = f"{self._base_url}/devices/{identifier}"
         try:
+            self._acquire_global_bucket()
             response = self._client.request("GET", endpoint, follow_redirects=True)
             if response.status_code == 200:
                 data = response.json()
@@ -120,6 +136,7 @@ class RestSession(SessionBase):
         """Paginate through a Meraki list endpoint using Link headers."""
         results = []
         while url:
+            self._acquire_global_bucket()
             response = self._client.request("GET", url, follow_redirects=True)
             if response.status_code != 200:
                 break
@@ -163,6 +180,18 @@ class RestSession(SessionBase):
         metadata["url"] = url
         metadata["json"] = json
         response = self.request(metadata, "PUT", url, json=json)
+        ret = None
+        if response:
+            if response.content.strip():
+                ret = response.json()
+            response.close()
+        return ret
+
+    def patch(self, metadata, url, json=None):
+        metadata["method"] = "PATCH"
+        metadata["url"] = url
+        metadata["json"] = json
+        response = self.request(metadata, "PATCH", url, json=json)
         ret = None
         if response:
             if response.content.strip():
@@ -215,6 +244,11 @@ class RestSession(SessionBase):
 
         # Get additional pages if more than one requested
         while total_pages != 0:
+            # Guard against 204 No Content pages (empty body -> stop cleanly),
+            # matching the legacy paginator's behavior.
+            if response.status_code == 204:
+                response.close()
+                return
             results = response.json()
             links = response.links
 

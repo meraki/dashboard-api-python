@@ -299,6 +299,53 @@ class TestComplexityAudit:
                 assert complexity < 10, f"{node.name} has complexity {complexity} (must be < 10)"
 
 
+class TestMerakiParamEncodingHelpers:
+    """Fix #15: shared param-encoding helpers in base.py."""
+
+    def test_detects_list_of_dict(self):
+        from meraki.session.base import params_need_meraki_encoding
+
+        assert params_need_meraki_encoding({"variables[]": [{"name": "n"}]}) is True
+
+    def test_ignores_scalar_list(self):
+        from meraki.session.base import params_need_meraki_encoding
+
+        assert params_need_meraki_encoding({"networkIds[]": ["a", "b"]}) is False
+
+    def test_ignores_scalars_and_non_dict(self):
+        from meraki.session.base import params_need_meraki_encoding
+
+        assert params_need_meraki_encoding({"perPage": 10}) is False
+        assert params_need_meraki_encoding(None) is False
+        assert params_need_meraki_encoding("a=b") is False
+
+    def test_apply_folds_query_and_drops_params(self):
+        from meraki.session.base import apply_meraki_param_encoding
+
+        kwargs = {"params": {"variables[]": [{"name": "n1", "value": "v1"}]}}
+        url = apply_meraki_param_encoding("https://x/api/v1/things", kwargs)
+        assert "variables%5B%5Dname=n1" in url
+        assert "variables%5B%5Dvalue=v1" in url
+        assert url.count("?") == 1
+        assert kwargs["params"] is None
+
+    def test_apply_appends_with_ampersand_when_query_exists(self):
+        from meraki.session.base import apply_meraki_param_encoding
+
+        kwargs = {"params": {"variables[]": [{"name": "n1"}]}}
+        url = apply_meraki_param_encoding("https://x/api/v1/things?foo=bar", kwargs)
+        assert "?foo=bar&variables%5B%5Dname=n1" in url
+        assert kwargs["params"] is None
+
+    def test_apply_leaves_scalar_params_untouched(self):
+        from meraki.session.base import apply_meraki_param_encoding
+
+        kwargs = {"params": {"perPage": 10}}
+        url = apply_meraki_param_encoding("https://x/api/v1/things", kwargs)
+        assert url == "https://x/api/v1/things"
+        assert kwargs["params"] == {"perPage": 10}
+
+
 def _compute_complexity(func_node: ast.FunctionDef) -> int:
     """Approximate McCabe cyclomatic complexity: count decision points + 1."""
     complexity = 1

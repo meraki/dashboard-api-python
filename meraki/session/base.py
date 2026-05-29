@@ -44,6 +44,44 @@ from meraki.exceptions import APIError, APIResponseError
 from meraki.response_handler import handle_3xx
 
 
+def params_need_meraki_encoding(params: Any) -> bool:
+    """Return True if params is a dict containing list-of-dict values.
+
+    Meraki's array-of-objects query encoding (param[]k1=v1&param[]k2=v2) is only
+    needed for this shape. Scalars and scalar lists (e.g. networkIds[]=a&b) are
+    encoded correctly by httpx and must be left untouched.
+    """
+    if not isinstance(params, dict):
+        return False
+    for value in params.values():
+        if isinstance(value, (list, tuple)):
+            if any(isinstance(item, dict) for item in value):
+                return True
+    return False
+
+
+def apply_meraki_param_encoding(url: str, kwargs: Dict[str, Any]) -> str:
+    """Pre-encode list-of-dict params via encode_meraki_params and fold into URL.
+
+    When params contains array-of-objects values, httpx stringifies them
+    incorrectly. We build the query string ourselves, append it to the URL, and
+    drop params so httpx does not re-encode. Scalar / scalar-list params are left
+    for httpx to handle as before.
+    """
+    from meraki.encoding import encode_meraki_params
+
+    params = kwargs.get("params")
+    if not params_need_meraki_encoding(params):
+        return url
+
+    query = encode_meraki_params(params)
+    kwargs["params"] = None
+    if not query:
+        return url
+    separator = "&" if "?" in url else "?"
+    return f"{url}{separator}{query}"
+
+
 class SessionBase(ABC):
     """Abstract base class providing config storage, URL resolution, retry loop, and status dispatch.
 

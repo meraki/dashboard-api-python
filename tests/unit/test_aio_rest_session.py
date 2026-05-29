@@ -1024,3 +1024,217 @@ class TestAsyncDownloadPage:
         response, result = await async_session._download_page(request_coro)
         assert result == [{"id": 1}]
         assert response.status_code == 200
+
+    @pytest.mark.asyncio
+    async def test_download_page_204_no_json(self, async_session):
+        """A 204 page yields result=None without calling .json()."""
+        resp = _mock_aio_response(status_code=204, reason_phrase="No Content", content=b"")
+        resp.json = MagicMock(side_effect=json.decoder.JSONDecodeError("", "", 0))
+        request_coro = AsyncMock(return_value=resp)()
+        response, result = await async_session._download_page(request_coro)
+        assert result is None
+        resp.json.assert_not_called()
+
+
+# --- Fix #4: async iterator 204 guard ---
+
+
+class TestAsyncIterator204Guard:
+    @pytest.mark.asyncio
+    async def test_204_page_terminates_iterator_cleanly(self, async_session):
+        """A 204 page terminates the async iterator without JSONDecodeError."""
+        resp_204 = _mock_aio_response(status_code=204, reason_phrase="No Content", content=b"")
+        resp_204.links = {}
+        resp_204.json = MagicMock(side_effect=json.decoder.JSONDecodeError("", "", 0))
+        async_session._client.request = AsyncMock(return_value=resp_204)
+
+        items = []
+        async for item in async_session._get_pages_iterator(_metadata(), "/organizations"):
+            items.append(item)
+        assert items == []
+        resp_204.json.assert_not_called()
+
+
+# --- Fix #5: smart-flow GET parses JSON only once ---
+
+
+class TestAsyncSuccessSingleParse:
+    @pytest.mark.asyncio
+    async def test_smart_flow_get_parses_json_once(self, async_session):
+        """With smart flow on, a successful GET must call response.json() exactly once."""
+        async_session._smart_flow = MagicMock()
+        async_session._smart_flow.acquire = AsyncMock()
+
+        body = {"organizationId": "42", "id": "N_1"}
+        resp = _mock_aio_response(status_code=200, json_data=body)
+        async_session._client.request = AsyncMock(return_value=resp)
+
+        await async_session.request(_metadata(), "GET", "/networks/N_1")
+
+        assert resp.json.call_count == 1
+        # learn_from_response receives the already-decoded body (same object)
+        async_session._smart_flow.learn_from_response.assert_called_once()
+        passed_body = async_session._smart_flow.learn_from_response.call_args.args[1]
+        assert passed_body == body
+
+    @pytest.mark.asyncio
+    async def test_handle_success_async_returns_response_and_body(self, async_session):
+        body = [{"id": 1}]
+        resp = _mock_aio_response(status_code=200, json_data=body)
+        result, parsed = await async_session._handle_success_async(resp, _metadata(), "GET")
+        assert result is resp
+        assert parsed == body
+        assert resp.json.call_count == 1
+
+    @pytest.mark.asyncio
+    async def test_handle_success_async_non_get_no_body(self, async_session):
+        resp = _mock_aio_response(status_code=201, json_data={"id": "x"})
+        result, parsed = await async_session._handle_success_async(resp, _metadata(), "POST")
+        assert result is resp
+        assert parsed is None
+        resp.json.assert_not_called()
+
+
+# --- Fix #9: early consumer break cancels the prefetch task ---
+
+
+class TestAsyncIteratorPrefetchCancel:
+    @pytest.mark.asyncio
+    async def test_early_break_cancels_prefetch(self, async_session):
+        """Breaking out of the iterator early cancels the in-flight prefetch task."""
+        import asyncio
+
+        resp1 = _mock_aio_response(status_code=200, json_data=[{"id": 1}])
+        resp1.links = {"next": {"url": "https://api.meraki.com/api/v1/orgs?startingAfter=1"}}
+
+        # Second request hangs forever so the prefetch task is genuinely pending at break.
+        never = asyncio.Event()
+
+        call_count = [0]
+
+        async def fake_request(*args, **kwargs):
+            call_count[0] += 1
+            if call_count[0] == 1:
+                return resp1
+            await never.wait()  # never resolves
+            return _mock_aio_response(status_code=200, json_data=[{"id": 2}])
+
+        async_session._client.request = AsyncMock(side_effect=fake_request)
+
+        captured = {}
+        orig_create_task = asyncio.create_task
+
+        def capture_create_task(coro):
+            task = orig_create_task(coro)
+            captured.setdefault("tasks", []).append(task)
+            return task
+
+        agen = async_session._get_pages_iterator(_metadata(), "/orgs", total_pages=-1)
+        with patch("meraki.session.async_.asyncio.create_task", side_effect=capture_create_task):
+            first = await agen.__anext__()
+            assert first == {"id": 1}
+            # Break early: close the generator, triggering finally -> cancel prefetch.
+            await agen.aclose()
+
+        # The second (prefetch) task should have been cancelled.
+        prefetch_tasks = captured["tasks"]
+        assert len(prefetch_tasks) >= 2
+        assert prefetch_tasks[-1].cancelled()
+
+
+# --- Fix #12: internal resolver/hydrator GETs drain the global bucket ---
+
+
+def _make_async_smart_flow_session():
+    from tests.unit.conftest import DEFAULT_SESSION_KWARGS, FAKE_API_KEY
+
+    kwargs = {"maximum_concurrent_requests": 8, **DEFAULT_SESSION_KWARGS, "smart_flow_enabled": True}
+    with (
+        patch("meraki.session.base.check_python_version"),
+        patch("httpx.AsyncClient") as mock_client,
+    ):
+        mock_instance = MagicMock()
+        mock_instance.headers = {}
+        mock_instance.request = AsyncMock()
+        mock_client.return_value = mock_instance
+        from meraki.session.async_ import AsyncRestSession
+
+        return AsyncRestSession(logger=None, api_key=FAKE_API_KEY, **kwargs)
+
+
+class TestAsyncGlobalBucketAccounting:
+    @pytest.mark.asyncio
+    async def test_resolver_acquires_global_bucket(self):
+        s = _make_async_smart_flow_session()
+        s._smart_flow._global_bucket = MagicMock()
+        s._smart_flow._global_bucket.acquire = AsyncMock()
+        resp = _mock_aio_response(status_code=200, json_data={"organizationId": "999"})
+        s._client.request = AsyncMock(return_value=resp)
+
+        org = await s._resolve_org_for_limiter("network", "N_1")
+        assert org == "999"
+        s._smart_flow._global_bucket.acquire.assert_awaited_once()
+
+    @pytest.mark.asyncio
+    async def test_hydrator_acquires_global_bucket_per_page(self):
+        s = _make_async_smart_flow_session()
+        s._smart_flow._global_bucket = MagicMock()
+        s._smart_flow._global_bucket.acquire = AsyncMock()
+
+        page1 = _mock_aio_response(status_code=200, json_data=[{"id": "N_1"}])
+        page1.links = {"next": {"url": "https://api.meraki.com/api/v1/organizations/9/networks?page=2"}}
+        page2 = _mock_aio_response(status_code=200, json_data=[{"id": "N_2"}])
+        page2.links = {}
+        empty = _mock_aio_response(status_code=200, json_data=[])
+        empty.links = {}
+        s._client.request = AsyncMock(side_effect=[page1, page2, empty])
+
+        await s._hydrate_org_for_limiter("9")
+        assert s._smart_flow._global_bucket.acquire.await_count == 3
+
+    @pytest.mark.asyncio
+    async def test_acquire_global_bucket_defensive(self, async_session):
+        async_session._smart_flow = None
+        await async_session._acquire_global_bucket()  # must not raise
+
+
+# --- Fix #15: Meraki array-of-objects param encoding on the wire (async) ---
+
+
+class TestMerakiParamEncodingAsync:
+    @pytest.mark.asyncio
+    async def test_list_of_dict_params_use_meraki_encoding(self, async_session):
+        resp = _mock_aio_response(status_code=200)
+        async_session._client.request = AsyncMock(return_value=resp)
+
+        params = {"variables[]": [{"name": "n1", "value": "v1"}]}
+        await async_session.request(_metadata(), "GET", "/things", params=params)
+
+        call = async_session._client.request.call_args
+        sent_url = call.args[1]
+        assert "variables%5B%5Dname=n1" in sent_url
+        assert "variables%5B%5Dvalue=v1" in sent_url
+        assert call.kwargs.get("params") is None
+
+    @pytest.mark.asyncio
+    async def test_scalar_list_params_unchanged(self, async_session):
+        resp = _mock_aio_response(status_code=200)
+        async_session._client.request = AsyncMock(return_value=resp)
+
+        params = {"networkIds[]": ["a", "b"]}
+        await async_session.request(_metadata(), "GET", "/things", params=params)
+
+        call = async_session._client.request.call_args
+        assert call.kwargs.get("params") == params
+        assert "networkIds" not in call.args[1]
+
+    @pytest.mark.asyncio
+    async def test_scalar_params_unchanged(self, async_session):
+        resp = _mock_aio_response(status_code=200)
+        async_session._client.request = AsyncMock(return_value=resp)
+
+        params = {"perPage": 10}
+        await async_session.request(_metadata(), "GET", "/things", params=params)
+
+        call = async_session._client.request.call_args
+        assert call.kwargs.get("params") == params

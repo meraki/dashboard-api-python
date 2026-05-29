@@ -877,3 +877,118 @@ class TestPaginationIteratorExtended:
         results = list(session._get_pages_iterator(metadata, "/events", direction="prev"))
         # Only page 1 yielded
         assert results == [{"ts": "a"}]
+
+
+# --- Fix #4: sync iterator 204 guard ---
+
+
+class TestSyncIterator204Guard:
+    @patch("time.sleep", return_value=None)
+    def test_204_page_terminates_iterator_cleanly(self, mock_sleep, session):
+        """A 204 No Content page must terminate the iterator without JSONDecodeError."""
+        import json as json_mod
+
+        resp_204 = _mock_response(204, reason_phrase="No Content", content=b"", links={})
+        # A 204 body would raise on .json() in the real client; ensure we never call it.
+        resp_204.json.side_effect = json_mod.decoder.JSONDecodeError("", "", 0)
+        session._client.request = MagicMock(return_value=resp_204)
+
+        results = list(session._get_pages_iterator(_metadata(), "/organizations"))
+        assert results == []
+        resp_204.json.assert_not_called()
+
+
+# --- Fix #15: Meraki array-of-objects param encoding on the wire ---
+
+
+class TestMerakiParamEncodingSync:
+    def test_list_of_dict_params_use_meraki_encoding(self, session):
+        """params dict with list-of-dict values is pre-encoded into the URL, params dropped."""
+        resp = _mock_response(200)
+        session._client.request = MagicMock(return_value=resp)
+
+        params = {"variables[]": [{"name": "n1", "value": "v1"}]}
+        session.request(_metadata(), "GET", "/things", params=params)
+
+        call = session._client.request.call_args
+        sent_url = call.args[1]
+        # array-of-objects: param[] keys concatenated with inner dict keys
+        assert "variables%5B%5Dname=n1" in sent_url
+        assert "variables%5B%5Dvalue=v1" in sent_url
+        # params must be dropped so httpx does not re-encode
+        assert call.kwargs.get("params") is None
+
+    def test_scalar_list_params_unchanged(self, session):
+        """Scalar-list params (networkIds[]=a&b) are left for httpx (repeated keys)."""
+        resp = _mock_response(200)
+        session._client.request = MagicMock(return_value=resp)
+
+        params = {"networkIds[]": ["a", "b"]}
+        session.request(_metadata(), "GET", "/things", params=params)
+
+        call = session._client.request.call_args
+        # Not folded into URL; passed through untouched to httpx
+        assert call.kwargs.get("params") == params
+        assert "networkIds" not in call.args[1]
+
+    def test_scalar_params_unchanged(self, session):
+        """Plain scalar params pass straight through to httpx."""
+        resp = _mock_response(200)
+        session._client.request = MagicMock(return_value=resp)
+
+        params = {"perPage": 10, "total_pages": "all"}
+        session.request(_metadata(), "GET", "/things", params=params)
+
+        call = session._client.request.call_args
+        assert call.kwargs.get("params") == params
+
+
+# --- Fix #12: internal resolver/hydrator GETs drain the global bucket ---
+
+
+class TestSyncGlobalBucketAccounting:
+    def _smart_flow_session(self):
+        from tests.unit.conftest import DEFAULT_SESSION_KWARGS, FAKE_API_KEY
+        from meraki.session.sync import RestSession
+
+        kwargs = {**DEFAULT_SESSION_KWARGS, "smart_flow_enabled": True}
+        with patch("meraki.session.base.check_python_version"):
+            with patch("httpx.Client") as mock_client:
+                mock_instance = MagicMock()
+                mock_instance.headers = MagicMock(spec=dict)
+                mock_client.return_value = mock_instance
+                s = RestSession(logger=None, api_key=FAKE_API_KEY, **kwargs)
+        return s
+
+    def test_resolver_acquires_global_bucket(self):
+        s = self._smart_flow_session()
+        s._smart_flow._global_bucket = MagicMock()
+        resp = _mock_response(200, json_data={"organizationId": "999"})
+        s._client.request = MagicMock(return_value=resp)
+
+        org = s._resolve_org_for_limiter("network", "N_1")
+        assert org == "999"
+        s._smart_flow._global_bucket.acquire.assert_called_once()
+
+    def test_hydrator_acquires_global_bucket_per_page(self):
+        s = self._smart_flow_session()
+        s._smart_flow._global_bucket = MagicMock()
+        page1 = _mock_response(
+            200,
+            json_data=[{"id": "N_1"}],
+            links={"next": {"url": "https://api.meraki.com/api/v1/organizations/9/networks?page=2"}},
+        )
+        page2 = _mock_response(200, json_data=[{"id": "N_2"}], links={})
+        # _fetch_all_pages is called twice (networks then devices); supply enough responses
+        empty = _mock_response(200, json_data=[], links={})
+        s._client.request = MagicMock(side_effect=[page1, page2, empty])
+
+        s._hydrate_org_for_limiter("9")
+        # one acquire per internal GET: 2 network pages + 1 devices page = 3
+        assert s._smart_flow._global_bucket.acquire.call_count == 3
+
+    def test_acquire_global_bucket_defensive_no_smart_flow(self, session):
+        """Helper is a no-op when smart flow is disabled (no bucket present)."""
+        session._smart_flow = None
+        # Should not raise
+        session._acquire_global_bucket()
