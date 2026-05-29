@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import asyncio
 import re
+import threading
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -48,6 +49,7 @@ class TokenBucket:
         self._capacity = capacity
         self._tokens = float(capacity)
         self._last = time.monotonic()
+        self._lock = threading.Lock()
 
     @property
     def rate(self) -> float:
@@ -58,18 +60,23 @@ class TokenBucket:
         self._rate = max(0.5, value)
 
     def acquire(self) -> None:
-        now = time.monotonic()
-        elapsed = now - self._last
-        self._tokens = min(self._capacity, self._tokens + elapsed * self._rate)
-        self._last = now
-
-        if self._tokens < 1.0:
-            wait = (1.0 - self._tokens) / self._rate
-            time.sleep(wait)
-            self._tokens = 0.0
-            self._last = time.monotonic()
-        else:
+        # Reserve the token (read-modify-write) under the lock, then sleep
+        # outside it so concurrent callers don't serialize behind one sleeper.
+        with self._lock:
+            now = time.monotonic()
+            # Refill, then deduct this request unconditionally. Tokens may go
+            # negative: that deficit IS the reservation, so concurrent callers
+            # each compute their own wait against the accumulated deficit rather
+            # than all colliding on the same instant.
+            elapsed = now - self._last
+            self._tokens = min(self._capacity, self._tokens + elapsed * self._rate)
+            self._last = now
             self._tokens -= 1.0
+
+            wait = -self._tokens / self._rate if self._tokens < 0 else 0.0
+
+        if wait > 0.0:
+            time.sleep(wait)
 
 
 class AsyncTokenBucket:
@@ -91,23 +98,28 @@ class AsyncTokenBucket:
         self._rate = max(0.5, value)
 
     async def acquire(self) -> None:
+        # Reserve the token under the lock, then await the sleep OUTSIDE the
+        # lock so concurrent coroutines on the same bucket aren't serialized
+        # behind a single sleeper (preserving burst/parallelism).
+        loop = asyncio.get_event_loop()
         async with self._lock:
-            loop = asyncio.get_event_loop()
             now = loop.time()
             if self._last is None:
                 self._last = now
 
+            # Refill, then deduct this request unconditionally. Tokens may go
+            # negative: that deficit IS the reservation, so concurrent callers
+            # each compute their own wait against the accumulated deficit rather
+            # than all colliding on the same instant.
             elapsed = now - self._last
             self._tokens = min(self._capacity, self._tokens + elapsed * self._rate)
             self._last = now
+            self._tokens -= 1.0
 
-            if self._tokens < 1.0:
-                wait = (1.0 - self._tokens) / self._rate
-                await asyncio.sleep(wait)
-                self._tokens = 0.0
-                self._last = loop.time()
-            else:
-                self._tokens -= 1.0
+            wait = -self._tokens / self._rate if self._tokens < 0 else 0.0
+
+        if wait > 0.0:
+            await asyncio.sleep(wait)
 
 
 class OrgRateLimiter:
@@ -263,9 +275,27 @@ class OrgRateLimiter:
             bucket = self._org_buckets[org_id]
             bucket.rate = bucket.rate * 0.7
             self._log(f"rate limited org {org_id}, decreased to {bucket.rate:.1f} req/s")
+        elif self._is_unresolved_scoped_url(url):
+            # URL targets a specific network/device whose org isn't resolved
+            # yet. Penalizing the global bucket would punish every other org for
+            # one org's 429, so skip and let background resolution catch up.
+            self._log("rate limited on unresolved network/device url, skipping global penalty")
         else:
             self._global_bucket.rate = self._global_bucket.rate * 0.7
             self._log(f"rate limited (global), decreased to {self._global_bucket.rate:.1f} req/s")
+
+    @staticmethod
+    def _is_unresolved_scoped_url(url: str) -> bool:
+        """True if the URL has a network/device component but no explicit org.
+
+        These are the URLs whose org we can't yet attribute the 429 to; the
+        offending org is specific (just unknown), so the global bucket must not
+        be punished on its behalf. An explicit /organizations/<id> URL is NOT
+        considered unresolved (it names its org directly).
+        """
+        if OrgRateLimiter._org_id_from_url(url):
+            return False
+        return bool(OrgRateLimiter._network_id_from_url(url) or OrgRateLimiter._serial_from_url(url))
 
     def on_success(self, url: str) -> None:
         """Slowly widen buckets back toward configured rates (additive increase)."""
@@ -441,6 +471,9 @@ class AsyncOrgRateLimiter:
         self._cache_fresh = False
         self._dirty = 0
         self._flush_task: Optional[asyncio.Task] = None
+        # Hold strong refs to in-flight background tasks; the event loop only
+        # keeps weak refs, so without this they can be GC'd mid-flight.
+        self._bg_tasks: Set[asyncio.Task] = set()
         self._pending_lookups: Set[str] = set()
         self._hydrated_orgs: Set[str] = set()
         self._resolver: Optional[Callable[[str, str], Coroutine[Any, Any, Optional[str]]]] = None
@@ -473,8 +506,20 @@ class AsyncOrgRateLimiter:
 
     def _maybe_flush(self) -> None:
         if self._dirty >= 50 and (self._flush_task is None or self._flush_task.done()):
-            self._dirty = 0
+            pending = self._dirty
             self._flush_task = asyncio.ensure_future(self.save_cache())
+            self._flush_task.add_done_callback(lambda t: self._on_flush_done(t, pending))
+
+    def _on_flush_done(self, task: asyncio.Task, pending: int) -> None:
+        # Only zero the dirty counter if the save actually succeeded; otherwise
+        # the unsaved mappings would be silently lost.
+        exc = task.exception()
+        if exc is not None:
+            self._log(f"cache flush failed, retaining {pending} dirty mappings: {exc!r}")
+            return
+        # Subtract what we flushed rather than hard-zeroing, in case more
+        # mappings were learned while the save was in flight.
+        self._dirty = max(0, self._dirty - pending)
 
     def _get_or_create_bucket(self, org_id: str) -> AsyncTokenBucket:
         if org_id not in self._org_buckets:
@@ -526,7 +571,9 @@ class AsyncOrgRateLimiter:
         if identifier in self._pending_lookups:
             return
         self._pending_lookups.add(identifier)
-        asyncio.ensure_future(self._resolve_and_cache(id_type, identifier))
+        t = asyncio.ensure_future(self._resolve_and_cache(id_type, identifier))
+        self._bg_tasks.add(t)
+        t.add_done_callback(self._bg_tasks.discard)
 
     async def _resolve_and_cache(self, id_type: str, identifier: str) -> None:
         """Background task: call resolver, cache result, then hydrate the full org."""
@@ -549,8 +596,8 @@ class AsyncOrgRateLimiter:
                     f"hydrated org {org_id} ({len(self._network_to_org)} networks, {len(self._serial_to_org)} devices total)"
                 )
             self._maybe_flush()
-        except Exception:
-            pass
+        except Exception as e:
+            self._log(f"background resolve of {id_type} {identifier} failed: {e!r}")
         finally:
             self._pending_lookups.discard(identifier)
 
@@ -561,6 +608,11 @@ class AsyncOrgRateLimiter:
             bucket = self._org_buckets[org_id]
             bucket.rate = bucket.rate * 0.7
             self._log(f"rate limited org {org_id}, decreased to {bucket.rate:.1f} req/s")
+        elif OrgRateLimiter._is_unresolved_scoped_url(url):
+            # URL targets a specific network/device whose org isn't resolved
+            # yet. Penalizing the global bucket would punish every other org for
+            # one org's 429, so skip and let background resolution catch up.
+            self._log("rate limited on unresolved network/device url, skipping global penalty")
         else:
             self._global_bucket.rate = self._global_bucket.rate * 0.7
             self._log(f"rate limited (global), decreased to {self._global_bucket.rate:.1f} req/s")
@@ -574,6 +626,22 @@ class AsyncOrgRateLimiter:
                 bucket.rate = min(self._rate, bucket.rate + 0.2)
         if self._global_bucket.rate < self._global_rate:
             self._global_bucket.rate = min(self._global_rate, self._global_bucket.rate + 0.5)
+
+    async def shutdown(self) -> None:
+        """Gracefully drain background work and persist the cache.
+
+        Awaits/cancels all in-flight resolve tasks, awaits any pending flush,
+        then does a final save. Idempotent and safe to call when there is no
+        outstanding work (e.g. from an __aexit__ handler).
+        """
+        if self._bg_tasks:
+            await asyncio.gather(*list(self._bg_tasks), return_exceptions=True)
+        if self._flush_task is not None and not self._flush_task.done():
+            try:
+                await self._flush_task
+            except Exception as e:
+                self._log(f"flush task errored during shutdown: {e!r}")
+        await self.save_cache()
 
     def register_org(self, org_id: str) -> None:
         """Ensure a bucket exists for this org."""

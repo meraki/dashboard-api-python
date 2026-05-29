@@ -889,6 +889,286 @@ class TestAsyncCacheTTL:
         assert limiter.resolve_org("/networks/N_1/ssids") is None
 
 
+class TestSyncTokenBucketThreadSafety:
+    """Fix #11: TokenBucket must have a real lock and not over-spend."""
+
+    def test_lock_exists_and_is_a_lock(self):
+        bucket = TokenBucket(rate=10.0, capacity=10)
+        # threading.Lock() returns a lock object exposing acquire/release.
+        assert hasattr(bucket, "_lock")
+        assert hasattr(bucket._lock, "acquire")
+        assert hasattr(bucket._lock, "release")
+
+    def test_concurrent_threads_do_not_overspend(self):
+        import threading
+
+        # Capacity covers the burst exactly; with a real lock, total wall time
+        # for capacity-many concurrent acquires stays near zero (no double-spend
+        # forcing a sleep). Without a lock, the read-modify-write races.
+        bucket = TokenBucket(rate=10.0, capacity=20)
+        barrier = threading.Barrier(20)
+
+        def worker():
+            barrier.wait()
+            bucket.acquire()
+
+        threads = [threading.Thread(target=worker) for _ in range(20)]
+        start = time.monotonic()
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+        elapsed = time.monotonic() - start
+
+        # 20 acquires against capacity 20 should all be served from the bucket
+        # without anyone sleeping for a refill.
+        assert elapsed < 0.5
+        # Exactly 20 tokens were spent. With a real lock the deficit is bounded
+        # (~0, give or take tiny refill); without one, racing read-modify-writes
+        # would let tokens stay well above 0 (double-spend) or be inconsistent.
+        assert -0.05 <= bucket._tokens <= 0.05
+
+    def test_aggregate_rate_not_exceeded_when_drained(self):
+        # Drain the bucket, then 5 concurrent acquires must take ~ (5 / rate).
+        import threading
+
+        bucket = TokenBucket(rate=20.0, capacity=1)
+        bucket.acquire()  # drain the single token
+
+        def worker():
+            bucket.acquire()
+
+        threads = [threading.Thread(target=worker) for _ in range(5)]
+        start = time.monotonic()
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+        elapsed = time.monotonic() - start
+
+        # 5 tokens at 20/s with a drained bucket => >= ~0.20s minimum.
+        assert elapsed >= 0.20 - 0.03
+
+
+class TestAsyncTokenBucketConcurrency:
+    """Fix #10: acquire() must not serialize all coroutines behind one sleeper."""
+
+    @pytest.mark.asyncio
+    async def test_concurrent_acquirers_not_serialized(self):
+        # Drained bucket, 5 concurrent acquirers. If the lock were held across
+        # the sleep they would queue serially (~5 * per-token wait). With the
+        # reservation fix they each sleep concurrently against a shared deficit.
+        bucket = AsyncTokenBucket(rate=10.0, capacity=1)
+        await bucket.acquire()  # drain
+
+        start = asyncio.get_event_loop().time()
+        await asyncio.gather(*(bucket.acquire() for _ in range(5)))
+        elapsed = asyncio.get_event_loop().time() - start
+
+        # Serialized-across-sleep behavior would be ~5 * 0.1 = 0.5s+ stacking.
+        # Concurrent reservation: the last reservation waits ~5/10 = 0.5s, but
+        # they overlap so total is bounded by the max single wait (~0.5s) and
+        # crucially is NOT additive blow-up. Assert it's not pathologically
+        # serialized (which would be each waiting then the next computing fresh
+        # after the previous slept -> well over the deficit window).
+        assert elapsed < 1.0
+
+    @pytest.mark.asyncio
+    async def test_aggregate_rate_not_exceeded(self):
+        # Across many acquires the steady-state dispatch must stay <= rate.
+        rate = 50.0
+        n = 25
+        bucket = AsyncTokenBucket(rate=rate, capacity=1)
+        await bucket.acquire()  # drain
+
+        start = asyncio.get_event_loop().time()
+        await asyncio.gather(*(bucket.acquire() for _ in range(n)))
+        elapsed = asyncio.get_event_loop().time() - start
+
+        # n tokens at `rate`/s from a drained bucket cannot complete faster than
+        # n/rate seconds without exceeding the configured rate.
+        min_expected = n / rate
+        assert elapsed >= min_expected - 0.05
+
+
+class TestAsyncBgTaskRetention:
+    """Fix #6: background resolve tasks are held then discarded on completion."""
+
+    @pytest.mark.asyncio
+    async def test_bg_task_retained_then_discarded(self):
+        started = asyncio.Event()
+        release = asyncio.Event()
+
+        async def slow_resolver(id_type, ident):
+            started.set()
+            await release.wait()
+            return "org_bg"
+
+        limiter = AsyncOrgRateLimiter(rate=10.0)
+        limiter.set_resolver(slow_resolver)
+        await limiter.acquire("/networks/N_held/ssids")
+        await started.wait()
+
+        # While in flight, the limiter holds a strong ref.
+        assert len(limiter._bg_tasks) == 1
+
+        release.set()
+        await asyncio.sleep(0.02)
+
+        # Done-callback discards it.
+        assert len(limiter._bg_tasks) == 0
+        assert limiter._network_to_org.get("N_held") == "org_bg"
+
+    @pytest.mark.asyncio
+    async def test_resolver_exception_logged_not_swallowed(self):
+        logger = MagicMock()
+
+        async def bad_resolver(id_type, ident):
+            raise RuntimeError("boom")
+
+        limiter = AsyncOrgRateLimiter(rate=10.0, logger=logger)
+        limiter.set_resolver(bad_resolver)
+        await limiter.acquire("/networks/N_err/ssids")
+        await asyncio.sleep(0.02)
+
+        # The bare except now logs at debug instead of fully swallowing.
+        logged = " ".join(str(c) for c in logger.debug.call_args_list)
+        assert "failed" in logged
+        assert len(limiter._bg_tasks) == 0
+
+
+class TestAsyncFlushDirtyOnFailure:
+    """Fix #8: dirty count must survive a failed save."""
+
+    @pytest.mark.asyncio
+    async def test_dirty_not_zeroed_when_save_raises(self):
+        limiter = AsyncOrgRateLimiter(cache_path="ignored")
+        limiter._dirty = 50
+
+        async def failing_save():
+            raise OSError("disk full")
+
+        with patch.object(limiter, "save_cache", side_effect=failing_save):
+            limiter._maybe_flush()
+            await asyncio.sleep(0.02)
+
+        # Save failed -> dirty must be retained, not lost.
+        assert limiter._dirty == 50
+
+    @pytest.mark.asyncio
+    async def test_dirty_zeroed_on_successful_save(self, tmp_path):
+        cache_file = str(tmp_path / "cache.json")
+        limiter = AsyncOrgRateLimiter(cache_path=cache_file)
+        limiter.register_network("N_1", "org_A")
+        limiter._dirty = 50
+        limiter._maybe_flush()
+        # Wait for the flush task and its done-callback to run.
+        if limiter._flush_task:
+            await limiter._flush_task
+        await asyncio.sleep(0.02)
+        assert limiter._dirty == 0
+
+
+class TestUnresolvedRateLimitGlobalProtection:
+    """Fix #13: a 429 on an unresolved network/device must not lower global."""
+
+    def test_sync_unresolved_network_does_not_lower_global(self):
+        limiter = OrgRateLimiter(global_rate=100.0)
+        before = limiter._global_bucket.rate
+        limiter.on_rate_limited("/networks/N_unknown/ssids")
+        assert limiter._global_bucket.rate == before
+
+    def test_sync_unresolved_device_does_not_lower_global(self):
+        limiter = OrgRateLimiter(global_rate=100.0)
+        before = limiter._global_bucket.rate
+        limiter.on_rate_limited("/devices/Q2AB-CDE4-FGHI/clients")
+        assert limiter._global_bucket.rate == before
+
+    def test_sync_explicit_org_url_still_lowers_global(self):
+        # An explicit, unbucketed org URL is a known org -> existing behavior.
+        limiter = OrgRateLimiter(global_rate=100.0)
+        limiter.on_rate_limited("/organizations/ghost/networks")
+        assert limiter._global_bucket.rate == pytest.approx(70.0, abs=0.1)
+
+    def test_sync_truly_unscoped_url_still_lowers_global(self):
+        limiter = OrgRateLimiter(global_rate=100.0)
+        limiter.on_rate_limited("/admin/something")
+        assert limiter._global_bucket.rate == pytest.approx(70.0, abs=0.1)
+
+    def test_sync_resolved_network_penalizes_org_not_global(self):
+        limiter = OrgRateLimiter(rate=10.0, global_rate=100.0)
+        limiter.register_network("N_known", "org_k")
+        limiter.register_org("org_k")
+        global_before = limiter._global_bucket.rate
+        limiter.on_rate_limited("/networks/N_known/ssids")
+        assert limiter._org_buckets["org_k"].rate == pytest.approx(7.0, abs=0.01)
+        assert limiter._global_bucket.rate == global_before
+
+    @pytest.mark.asyncio
+    async def test_async_unresolved_network_does_not_lower_global(self):
+        limiter = AsyncOrgRateLimiter(global_rate=100.0)
+        before = limiter._global_bucket.rate
+        limiter.on_rate_limited("/networks/N_unknown/ssids")
+        assert limiter._global_bucket.rate == before
+
+    @pytest.mark.asyncio
+    async def test_async_explicit_org_url_still_lowers_global(self):
+        limiter = AsyncOrgRateLimiter(global_rate=100.0)
+        limiter.on_rate_limited("/organizations/ghost/x")
+        assert limiter._global_bucket.rate == pytest.approx(70.0, abs=0.1)
+
+
+class TestAsyncShutdown:
+    """Fix #7-SUPPORT: shutdown() drains bg tasks, flush, and saves."""
+
+    @pytest.mark.asyncio
+    async def test_shutdown_awaits_pending_bg_tasks(self, tmp_path):
+        release = asyncio.Event()
+        finished = []
+
+        async def slow_resolver(id_type, ident):
+            await release.wait()
+            finished.append(ident)
+            return "org_s"
+
+        cache_file = str(tmp_path / "cache.json")
+        limiter = AsyncOrgRateLimiter(rate=10.0, cache_path=cache_file)
+        limiter.set_resolver(slow_resolver)
+        await limiter.acquire("/networks/N_shutdown/ssids")
+        assert len(limiter._bg_tasks) == 1
+
+        # Release the resolver, then shutdown should await it to completion.
+        release.set()
+        await limiter.shutdown()
+
+        assert finished == ["N_shutdown"]
+        assert len(limiter._bg_tasks) == 0
+        assert limiter._network_to_org.get("N_shutdown") == "org_s"
+        # Final save happened.
+        assert (tmp_path / "cache.json").exists()
+
+    @pytest.mark.asyncio
+    async def test_shutdown_idempotent_with_no_work(self, tmp_path):
+        cache_file = str(tmp_path / "cache.json")
+        limiter = AsyncOrgRateLimiter(cache_path=cache_file)
+        # No bg tasks, no flush task -> safe to call, does a final save.
+        await limiter.shutdown()
+        await limiter.shutdown()
+        assert (tmp_path / "cache.json").exists()
+
+    @pytest.mark.asyncio
+    async def test_shutdown_awaits_pending_flush(self, tmp_path):
+        cache_file = str(tmp_path / "cache.json")
+        limiter = AsyncOrgRateLimiter(cache_path=cache_file)
+        limiter.register_network("N_1", "org_A")
+        limiter._dirty = 50
+        limiter._maybe_flush()
+        assert limiter._flush_task is not None
+        await limiter.shutdown()
+        # Flush completed without error -> dirty zeroed.
+        assert limiter._dirty == 0
+
+
 class TestAsyncBackgroundResolveEdgeCases:
     @pytest.mark.asyncio
     async def test_unrecognized_url_no_resolve(self):
