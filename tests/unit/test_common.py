@@ -197,6 +197,55 @@ class TestValidateBaseUrl:
         result = validate_base_url(obj, "https://evil.com/steal")
         assert result == "https://api.meraki.com/api/v1https://evil.com/steal"
 
+    # --- Fix #14: host-boundary trusted-domain check (SSRF / key-exfil) ---
+
+    def test_legit_api_host_trusted(self):
+        obj = MagicMock()
+        obj._base_url = "https://api.meraki.com/api/v1"
+        result = validate_base_url(obj, "https://api.meraki.com/api/v1/orgs")
+        assert result == "https://api.meraki.com/api/v1/orgs"
+
+    def test_legit_shard_subdomain_trusted(self):
+        obj = MagicMock()
+        obj._base_url = "https://api.meraki.com/api/v1"
+        result = validate_base_url(obj, "https://n123.meraki.com/api/v1/orgs")
+        assert result == "https://n123.meraki.com/api/v1/orgs"
+
+    def test_legit_cn_host_trusted(self):
+        obj = MagicMock()
+        obj._base_url = "https://api.meraki.cn/api/v1"
+        result = validate_base_url(obj, "https://api.meraki.cn/api/v1/orgs")
+        assert result == "https://api.meraki.cn/api/v1/orgs"
+
+    def test_lookalike_suffix_rejected(self):
+        # "meraki.com" appears as a substring but not on a host boundary.
+        obj = MagicMock()
+        obj._base_url = "https://api.meraki.com/api/v1"
+        evil = "https://api.meraki.com.attacker.net/steal"
+        result = validate_base_url(obj, evil)
+        assert result == "https://api.meraki.com/api/v1" + evil
+
+    def test_lookalike_evil_example_rejected(self):
+        obj = MagicMock()
+        obj._base_url = "https://api.meraki.com/api/v1"
+        evil = "https://meraki.com.evil.example/steal"
+        result = validate_base_url(obj, evil)
+        assert result == "https://api.meraki.com/api/v1" + evil
+
+    def test_lookalike_prefix_rejected(self):
+        # "evil-meraki.com" embeds the domain but is a different host.
+        obj = MagicMock()
+        obj._base_url = "https://api.meraki.com/api/v1"
+        evil = "https://evil-meraki.com/steal"
+        result = validate_base_url(obj, evil)
+        assert result == "https://api.meraki.com/api/v1" + evil
+
+    def test_trusted_host_with_port(self):
+        obj = MagicMock()
+        obj._base_url = "https://api.meraki.com/api/v1"
+        result = validate_base_url(obj, "https://api.meraki.com:443/api/v1/orgs")
+        assert result == "https://api.meraki.com:443/api/v1/orgs"
+
 
 class TestIteratorForGetPages:
     def test_getter(self):
