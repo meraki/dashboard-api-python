@@ -11,6 +11,13 @@
         {% if kwarg_line|length > 0 %}
         {{ kwarg_line }}
 
+        {% if renamed_params|length > 0 %}
+        {% for safe, orig in renamed_params.items() %}
+        if "{{ safe }}" in kwargs:
+            kwargs["{{ orig }}"] = kwargs.pop("{{ safe }}")
+        {% endfor %}
+
+        {% endif %}
         {% endif %}
         {% if assert_blocks|length > 0 %}
         {% for param, values, nullable in assert_blocks %}

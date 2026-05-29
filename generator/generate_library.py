@@ -391,6 +391,10 @@ def generate_standard_and_async_functions(
                 if operation == "getNetworkEvents":
                     definition += ", event_log_end_time=None"
 
+            # call_line is bound per-method below; initialize to fail loudly if a
+            # method slips through without setting it (rather than raising NameError).
+            call_line = None
+
             # Function body for GET endpoints
             query_params = array_params = body_params = path_params = {}
             if method == "get":
@@ -398,8 +402,8 @@ def generate_standard_and_async_functions(
                 array_params = return_params(operation, all_params, ["array"])
                 path_params = return_params(operation, all_params, ["path"])
 
-            # Function body for POST/PUT endpoints
-            elif method == "post" or method == "put":
+            # Function body for POST/PUT/PATCH endpoints
+            elif method == "post" or method == "put" or method == "patch":
                 body_params = return_params(operation, all_params, ["body"])
                 path_params = return_params(operation, all_params, ["path"])
 
@@ -446,7 +450,7 @@ def generate_standard_and_async_functions(
                 else:
                     call_line = "return self._session.get(metadata, resource)"
 
-            elif method == "post" or method == "put":
+            elif method == "post" or method == "put" or method == "patch":
                 if body_params:
                     call_line = f"return self._session.{method}(metadata, resource, payload)"
                 else:
@@ -457,6 +461,8 @@ def generate_standard_and_async_functions(
                     call_line = "return self._session.delete(metadata, resource, params)"
                 else:
                     call_line = "return self._session.delete(metadata, resource)"
+
+            assert call_line is not None, f"call_line was not set for {operation} (method={method})"
 
             # Ensure all URL-referenced params get quote lines in the template
             for p in re.findall(r"\{(\w+)\}", path):

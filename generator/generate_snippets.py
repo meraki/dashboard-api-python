@@ -4,6 +4,7 @@ import sys
 import httpx
 from jinja2 import Template
 import common as common
+from parser_v3 import parse_params_v3, clear_cache
 
 CALL_TEMPLATE = Template(
     """import meraki
@@ -39,110 +40,16 @@ def snakify(param):
     return ret
 
 
-# Helper function to return pagination parameters depending on endpoint
-def generate_pagination_parameters(operation):
-    ret = {
-        "total_pages": {
-            "type": "integer or string",
-            "description": 'total number of pages to retrieve, -1 or "all" for all pages',
-        },
-        "direction": {
-            "type": "string",
-            "description": 'direction to paginate, either "next" or "prev" (default) page'
-            if operation in REVERSE_PAGINATION
-            else 'direction to paginate, either "next" (default) or "prev" page',
-        },
-    }
-    return ret
-
-
-# Helper function to return parameters within OAS spec, optionally based on list of input filters
-def parse_params(operation, parameters, param_filters=None):
+# Helper function to return parameters within the OASv3 spec, optionally based on
+# a list of input filters. Delegates parsing/$ref-resolution/requestBody handling to
+# parser_v3.parse_params_v3 (the same parser used by the library/stub generators) so
+# snippets stay consistent with generated code. parse_params_v3 applies the filters via
+# common.return_params and injects pagination params when perPage is present.
+def parse_params(endpoint, path_item, spec, param_filters=None):
     if param_filters is None:
         param_filters = []
-    if parameters is None:
-        return {}
-
-    # Create dict with information on endpoint's parameters
-    params = {}
-    for p in parameters:
-        name = p["name"]
-        if "schema" in p:
-            keys = p["schema"]["properties"]
-            for k in keys:
-                if "required" in p["schema"] and k in p["schema"]["required"]:
-                    params[k] = {"required": True}
-                else:
-                    params[k] = {"required": False}
-                params[k]["in"] = p["in"]
-                params[k]["type"] = keys[k]["type"]
-                params[k]["description"] = keys[k]["description"]
-                if "enum" in keys[k]:
-                    params[k]["enum"] = keys[k]["enum"]
-                if "example" in p["schema"] and k in p["schema"]["example"]:
-                    params[k]["example"] = p["schema"]["example"][k]
-        elif "required" in p and p["required"]:
-            params[name] = {"required": True}
-            params[name]["in"] = p["in"]
-            params[name]["type"] = p["type"]
-            if "description" in p:
-                params[name]["description"] = p["description"]
-            else:
-                params[name]["description"] = "(required)"
-            if "enum" in p:
-                params[name]["enum"] = p["enum"]
-        else:
-            params[name] = {"required": False}
-            params[name]["in"] = p["in"]
-            params[name]["type"] = p["type"]
-            params[name]["description"] = p["description"]
-            if "enum" in p:
-                params[name]["enum"] = p["enum"]
-
-    # Add custom library parameters to handle pagination
-    if "perPage" in params:
-        params.update(generate_pagination_parameters(operation))
-
-    # Return parameters based on matching input filters
-    if not param_filters:
-        return params
-    else:
-        ret = {}
-        if "required" in param_filters:
-            ret.update(
-                {k: v for k, v in params.items() if "required" in v and v["required"]}
-            )
-        if "pagination" in param_filters:
-            ret.update(
-                generate_pagination_parameters(operation) if "perPage" in params else {}
-            )
-        if "optional" in param_filters:
-            ret.update(
-                {
-                    k: v
-                    for k, v in params.items()
-                    if "required" in v and not v["required"]
-                }
-            )
-        if "path" in param_filters:
-            ret.update(
-                {k: v for k, v in params.items() if "in" in v and v["in"] == "path"}
-            )
-        if "query" in param_filters:
-            ret.update(
-                {k: v for k, v in params.items() if "in" in v and v["in"] == "query"}
-            )
-        if "body" in param_filters:
-            ret.update(
-                {k: v for k, v in params.items() if "in" in v and v["in"] == "body"}
-            )
-        if "array" in param_filters:
-            ret.update(
-                {k: v for k, v in params.items() if "in" in v and v["type"] == "array"}
-            )
-        if "enum" in param_filters:
-            ret.update({k: v for k, v in params.items() if "enum" in v})
-        return ret
+    params, _metadata = parse_params_v3(endpoint, path_item, spec, param_filters)
+    return params
 
 
 # Generate text for parameter assignments
@@ -177,8 +84,13 @@ def process_assignments(parameters):
 
 
 def main():
-    # Get latest OpenAPI specification
-    spec = httpx.get("https://api.meraki.com/api/v1/openapiSpec").json()
+    # Get the latest OpenAPI v3 specification (version=3 selects OASv3 over the legacy v2 shape)
+    spec = httpx.get(
+        "https://api.meraki.com/api/v1/openapiSpec", params={"version": 3}
+    ).json()
+
+    # Reset parser_v3's $ref cache at entry, matching the library generator
+    clear_cache()
 
     # Supported scopes list will include organizations, networks, devices, and all product types.
     supported_scopes = [
@@ -208,8 +120,17 @@ def main():
     # Scopes used when generating the library will depend on the provided version of the API spec.
     scopes = {tag["name"]: {} for tag in tags if tag["name"] in supported_scopes}
 
+    # Filter paths to remove the path-level "parameters" key before organize_spec, which
+    # expects only HTTP method keys. The original path_item (incl. path-level params) is
+    # passed to parse_params_v3 separately via spec["paths"][path].
+    filtered_paths = {}
+    for path, path_item in paths.items():
+        filtered_paths[path] = {
+            k: v for k, v in path_item.items() if k in ["get", "post", "put", "delete", "patch"]
+        }
+
     # Organize data from OpenAPI specification
-    operations, scopes = common.organize_spec(paths, scopes)
+    operations, scopes = common.organize_spec(filtered_paths, scopes)
 
     # Generate API libraries
     for scope in scopes:
@@ -221,25 +142,25 @@ def main():
                 # Get metadata
                 tags = endpoint["tags"]
                 operation = endpoint["operationId"]
-                description = endpoint["summary"]
-                parameters = (
-                    endpoint["parameters"] if "parameters" in endpoint else None
-                )
-                responses = endpoint[
-                    "responses"
-                ]  # not actually used here for library generation
+                description = endpoint.get("summary", endpoint.get("description", ""))
+
+                # Full path_item (incl. path-level parameters) for parse_params_v3
+                path_item = spec["paths"][path]
+
+                # An endpoint contributes params if it declares parameters or a requestBody
+                has_params = "parameters" in endpoint or "requestBody" in endpoint
 
                 required = {}
                 optional = {}
 
-                if parameters:
-                    if "perPage" in parse_params(operation, parameters):
+                if has_params:
+                    if "perPage" in parse_params(endpoint, path_item, spec):
                         pagination = True
                     else:
                         pagination = False
 
                     for p, values in parse_params(
-                        operation, parameters, "required"
+                        endpoint, path_item, spec, ["required"]
                     ).items():
                         if "example" in values:
                             required[p] = values["example"]
@@ -263,7 +184,7 @@ def main():
                         elif values["type"] == "string":
                             required[p] = "str"
                         else:
-                            sys.exit(p, values)
+                            sys.exit(f"Unhandled param type for {p}: {values}")
 
                     if pagination:
                         if operation not in REVERSE_PAGINATION:
@@ -272,7 +193,7 @@ def main():
                             optional["total_pages"] = 3
 
                     for p, values in parse_params(
-                        operation, parameters, "optional"
+                        endpoint, path_item, spec, ["optional"]
                     ).items():
                         if "example" in values:
                             optional[p] = values["example"]
