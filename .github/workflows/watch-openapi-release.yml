@@ -5,6 +5,9 @@ on:
     - cron: '0 14 * * *'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   check-ga:
     runs-on: ubuntu-latest
@@ -24,6 +27,12 @@ jobs:
         run: |
           LATEST=$(gh release list --repo meraki/openapi --exclude-pre-releases --limit 1 --json tagName -q '.[0].tagName')
           API_VERSION="${LATEST#v}"
+          # Reject anything that isn't a clean semver tag before it flows into
+          # downstream run: steps / workflow_dispatch inputs (script injection guard).
+          if ! [[ "$API_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$ ]]; then
+            echo "::error::Unexpected OpenAPI release tag: '$LATEST'"
+            exit 1
+          fi
           echo "api_version=$API_VERSION" >> "$GITHUB_OUTPUT"
 
           LAST_PROCESSED="${{ vars.LAST_OPENAPI_GA_RELEASE }}"
@@ -66,6 +75,12 @@ jobs:
           fi
 
           API_VERSION="${LATEST#v}"
+          # Reject anything that isn't a clean semver tag before it flows into
+          # downstream run: steps / workflow_dispatch inputs (script injection guard).
+          if ! [[ "$API_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$ ]]; then
+            echo "::error::Unexpected OpenAPI release tag: '$LATEST'"
+            exit 1
+          fi
           echo "api_version=$API_VERSION" >> "$GITHUB_OUTPUT"
 
           LAST_PROCESSED="${{ vars.LAST_OPENAPI_BETA_RELEASE }}"
@@ -78,8 +93,9 @@ jobs:
       - name: Compute next SDK version
         if: steps.check.outputs.has_new_release == 'true'
         id: version
+        env:
+          API_VERSION: ${{ steps.check.outputs.api_version }}
         run: |
-          API_VERSION="${{ steps.check.outputs.api_version }}"
           CURRENT=$(git show "origin/beta:pyproject.toml" | grep '^version' | sed 's/version = "\(.*\)"/\1/')
 
           API_MINOR=$(echo "$API_VERSION" | cut -d. -f2)
@@ -122,6 +138,12 @@ jobs:
           fi
 
           API_VERSION="${LATEST#v}"
+          # Reject anything that isn't a clean semver tag before it flows into
+          # downstream run: steps / workflow_dispatch inputs (script injection guard).
+          if ! [[ "$API_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$ ]]; then
+            echo "::error::Unexpected OpenAPI release tag: '$LATEST'"
+            exit 1
+          fi
           echo "api_version=$API_VERSION" >> "$GITHUB_OUTPUT"
 
           LAST_PROCESSED="${{ vars.LAST_OPENAPI_DEV_RELEASE }}"
@@ -134,8 +156,9 @@ jobs:
       - name: Compute next SDK version
         if: steps.check.outputs.has_new_release == 'true'
         id: version
+        env:
+          API_VERSION: ${{ steps.check.outputs.api_version }}
         run: |
-          API_VERSION="${{ steps.check.outputs.api_version }}"
           CURRENT=$(git show "origin/httpx:pyproject.toml" | grep '^version' | sed 's/version = "\(.*\)"/\1/')
 
           API_MINOR=$(echo "$API_VERSION" | cut -d. -f2)
