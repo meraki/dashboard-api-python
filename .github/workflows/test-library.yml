@@ -166,7 +166,7 @@ jobs:
           exit 1
         fi
         EXPECTED_TOTAL=32
-        ACTUAL=$(uv run pytest tests/integration --co -q --apikey ${{ secrets.TEST_ORG_API_KEY }} --o "$ORG_ID" 2>/dev/null | tail -1 | grep -oP '\d+')
+        ACTUAL=$(uv run pytest tests/integration --co -q --apikey ${{ secrets.TEST_ORG_API_KEY }} --o "$ORG_ID" 2>/dev/null | grep -oP '^\d+(?= tests? collected)' | tail -1)
         ACTUAL="${ACTUAL:-0}"
         if ! [[ "$ACTUAL" =~ ^[0-9]+$ ]]; then
           echo "::error::Could not parse collected test count (got '$ACTUAL')"
