@@ -18,6 +18,9 @@ on:
       - 'pyproject.toml'
       - 'uv.lock'
 
+permissions:
+  contents: read
+
 jobs:
   test:
     uses: ./.github/workflows/test-library.yml

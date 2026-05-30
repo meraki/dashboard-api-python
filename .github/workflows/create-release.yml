@@ -12,6 +12,11 @@ on:
     types: [completed]
     branches: ['main', 'beta']
 
+# The release is created with a GitHub App token; the default token only needs
+# read access for checkout and `gh release view`.
+permissions:
+  contents: read
+
 jobs:
   create-release:
     if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')

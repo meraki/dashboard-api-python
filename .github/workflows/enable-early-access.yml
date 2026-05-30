@@ -5,6 +5,9 @@ on:
   schedule:
     - cron: '0 18 * * 3'
 
+permissions:
+  contents: read
+
 jobs:
   enable-early-access:
     runs-on: ubuntu-latest

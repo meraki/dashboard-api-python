@@ -5,6 +5,9 @@ on:
     - cron: '0 14 * * *'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   check-ga:
     runs-on: ubuntu-latest
@@ -24,6 +27,12 @@ jobs:
         run: |
           LATEST=$(gh release list --repo meraki/openapi --exclude-pre-releases --limit 1 --json tagName -q '.[0].tagName')
           API_VERSION="${LATEST#v}"
+          # Reject anything that isn't a clean semver tag before it flows into
+          # downstream run: steps / workflow_dispatch inputs (script injection guard).
+          if ! [[ "$API_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$ ]]; then
+            echo "::error::Unexpected OpenAPI release tag: '$LATEST'"
+            exit 1
+          fi
           echo "api_version=$API_VERSION" >> "$GITHUB_OUTPUT"
 
           LAST_PROCESSED=$(cat .github/.last-openapi-ga-release 2>/dev/null || echo "")
@@ -66,6 +75,12 @@ jobs:
           fi
 
           API_VERSION="${LATEST#v}"
+          # Reject anything that isn't a clean semver tag before it flows into
+          # downstream run: steps / workflow_dispatch inputs (script injection guard).
+          if ! [[ "$API_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$ ]]; then
+            echo "::error::Unexpected OpenAPI release tag: '$LATEST'"
+            exit 1
+          fi
           echo "api_version=$API_VERSION" >> "$GITHUB_OUTPUT"
 
           LAST_PROCESSED=$(cat .github/.last-openapi-beta-release 2>/dev/null || echo "")
@@ -78,8 +93,9 @@ jobs:
       - name: Compute next SDK version
         if: steps.check.outputs.has_new_release == 'true'
         id: version
+        env:
+          API_VERSION: ${{ steps.check.outputs.api_version }}
         run: |
-          API_VERSION="${{ steps.check.outputs.api_version }}"
           CURRENT=$(git show "origin/beta:pyproject.toml" | grep '^version' | sed 's/version = "\(.*\)"/\1/')
 
           # Parse API version: e.g. "1.81.2-beta.3" -> minor=81, patch=2, beta=3
@@ -105,6 +121,8 @@ jobs:
     needs: check-ga
     if: needs.check-ga.outputs.has_new_release == 'true'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v6
 
@@ -134,6 +152,8 @@ jobs:
     needs: [check-beta, trigger-ga]
     if: always() && needs.check-beta.outputs.has_new_release == 'true'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v6
 

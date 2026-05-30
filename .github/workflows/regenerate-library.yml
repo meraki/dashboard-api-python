@@ -17,6 +17,11 @@ on:
           - beta
           - dev
 
+# Writes (commit, PR, auto-merge) are performed with a GitHub App token, not
+# GITHUB_TOKEN, so the default token only needs read access for checkout.
+permissions:
+  contents: read
+
 jobs:
   regenerate:
     runs-on: ubuntu-latest
