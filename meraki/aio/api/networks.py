@@ -2661,6 +2661,8 @@ class AsyncNetworks:
         - access (string): The type of SNMP access. Can be one of 'none' (disabled), 'community' (V1/V2c), or 'users' (V3).
         - communityString (string): The SNMP community string. Only relevant if 'access' is set to 'community'.
         - users (array): The list of SNMP users. Only relevant if 'access' is set to 'users'.
+        - authentication (object): SNMPv3 authentication settings. Only relevant if 'access' is set to 'users'.
+        - privacy (object): SNMPv3 privacy settings. Only relevant if 'access' is set to 'users'.
         """
 
         kwargs.update(locals())
@@ -2682,6 +2684,8 @@ class AsyncNetworks:
             "access",
             "communityString",
             "users",
+            "authentication",
+            "privacy",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 

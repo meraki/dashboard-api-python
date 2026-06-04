@@ -679,6 +679,238 @@ class Devices(object):
 
         return self._session.get(metadata, resource)
 
+    def createDeviceLiveToolsPortsStatus(self, serial: str, **kwargs):
+        """
+        **Enqueue a job to retrieve port status for a device**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-ports-status
+
+        - serial (string): Serial
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["devices", "liveTools", "ports", "status"],
+            "operation": "createDeviceLiveToolsPortsStatus",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/liveTools/ports/status"
+
+        body_params = [
+            "callback",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createDeviceLiveToolsPortsStatus: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def getDeviceLiveToolsPortsStatus(self, serial: str, jobId: str):
+        """
+        **Return a port status live tool job.**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-live-tools-ports-status
+
+        - serial (string): Serial
+        - jobId (string): Job ID
+        """
+
+        metadata = {
+            "tags": ["devices", "liveTools", "ports", "status"],
+            "operation": "getDeviceLiveToolsPortsStatus",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        jobId = urllib.parse.quote(str(jobId), safe="")
+        resource = f"/devices/{serial}/liveTools/ports/status/{jobId}"
+
+        return self._session.get(metadata, resource)
+
+    def createDeviceLiveToolsPowerUsage(self, serial: str, **kwargs):
+        """
+        **Enqueues a live tool job that retrieves details about a device's overall power usage**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-power-usage
+
+        - serial (string): Serial
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["devices", "liveTools", "power", "usage"],
+            "operation": "createDeviceLiveToolsPowerUsage",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/liveTools/power/usage"
+
+        body_params = [
+            "callback",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createDeviceLiveToolsPowerUsage: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def getDeviceLiveToolsPowerUsage(self, serial: str, jobId: str):
+        """
+        **Retrieve the status and results of a previously created live tool job fetching details about a device's overall power usage.**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-live-tools-power-usage
+
+        - serial (string): Serial
+        - jobId (string): Job ID
+        """
+
+        metadata = {
+            "tags": ["devices", "liveTools", "power", "usage"],
+            "operation": "getDeviceLiveToolsPowerUsage",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        jobId = urllib.parse.quote(str(jobId), safe="")
+        resource = f"/devices/{serial}/liveTools/power/usage/{jobId}"
+
+        return self._session.get(metadata, resource)
+
+    def createDeviceLiveToolsRoutingTableLookup(self, serial: str, **kwargs):
+        """
+        **Enqueue a job to perform a routing table lookup request for a device**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-routing-table-lookup
+
+        - serial (string): Serial
+        - type (string): The type of route defined
+        - destination (object): The destination IP or subnet to lookup
+        - nextHop (object): The next hop to lookup
+        - vpn (object): VPN related search criteria
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        if "type" in kwargs:
+            options = [
+                "BGP",
+                "EIGRP",
+                "HSRP",
+                "IGRP",
+                "ISIS",
+                "LISP",
+                "NAT",
+                "ND",
+                "NHRP",
+                "OMP",
+                "OSPF",
+                "RIP",
+                "default WAN",
+                "direct",
+                "static",
+            ]
+            assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
+
+        metadata = {
+            "tags": ["devices", "liveTools", "routingTable", "lookups"],
+            "operation": "createDeviceLiveToolsRoutingTableLookup",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/liveTools/routingTable/lookups"
+
+        body_params = [
+            "type",
+            "destination",
+            "nextHop",
+            "vpn",
+            "callback",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createDeviceLiveToolsRoutingTableLookup: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def getDeviceLiveToolsRoutingTableLookup(self, serial: str, id: str):
+        """
+        **Return a routing table live tool lookup job for a device**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-live-tools-routing-table-lookup
+
+        - serial (string): Serial
+        - id (string): ID
+        """
+
+        metadata = {
+            "tags": ["devices", "liveTools", "routingTable", "lookups"],
+            "operation": "getDeviceLiveToolsRoutingTableLookup",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/devices/{serial}/liveTools/routingTable/lookups/{id}"
+
+        return self._session.get(metadata, resource)
+
+    def createDeviceLiveToolsRoutingTableSummary(self, serial: str, **kwargs):
+        """
+        **Enqueue a routing table summary job for a device**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-routing-table-summary
+
+        - serial (string): Serial
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["devices", "liveTools", "routingTable", "summaries"],
+            "operation": "createDeviceLiveToolsRoutingTableSummary",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/liveTools/routingTable/summaries"
+
+        body_params = [
+            "callback",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createDeviceLiveToolsRoutingTableSummary: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def getDeviceLiveToolsRoutingTableSummary(self, serial: str, id: str):
+        """
+        **Return the status and result of a routing table summary job**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-live-tools-routing-table-summary
+
+        - serial (string): Serial
+        - id (string): ID
+        """
+
+        metadata = {
+            "tags": ["devices", "liveTools", "routingTable", "summaries"],
+            "operation": "getDeviceLiveToolsRoutingTableSummary",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/devices/{serial}/liveTools/routingTable/summaries/{id}"
+
+        return self._session.get(metadata, resource)
+
     def createDeviceLiveToolsThroughputTest(self, serial: str, **kwargs):
         """
         **Enqueue a job to test a device throughput, the test will run for 10 secs to test throughput**
