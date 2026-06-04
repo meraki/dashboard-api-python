@@ -2274,7 +2274,7 @@ class AsyncWireless:
         - radiusServerTimeout (integer): The amount of time for which a RADIUS client waits for a reply from the RADIUS server (must be between 1-10 seconds).
         - radiusServerAttemptsLimit (integer): The maximum number of transmit attempts after which a RADIUS server is failed over (must be between 1-5).
         - radiusFallbackEnabled (boolean): Whether or not higher priority RADIUS servers should be retried after 60 seconds.
-        - radiusRadsec (object): The current settings for RADIUS RADSec
+        - radiusRadsec (object): The current settings for RADIUS RadSec
         - radiusCoaEnabled (boolean): If true, Meraki devices will act as a RADIUS Dynamic Authorization Server and will respond to RADIUS Change-of-Authorization and Disconnect messages sent by the RADIUS server.
         - radiusFailoverPolicy (string): This policy determines how authentication requests should be handled in the event that all of the configured RADIUS servers are unreachable ('Deny access' or 'Allow access')
         - radiusLoadBalancingPolicy (string): This policy determines which RADIUS server will be contacted first in an authentication attempt and the ordering of any necessary retry attempts ('Strict priority order' or 'Round robin')
@@ -3103,6 +3103,7 @@ class AsyncWireless:
         - redirectUrl (string): The custom redirect URL where the users will go after the splash page.
         - useRedirectUrl (boolean): The Boolean indicating whether the the user will be redirected to the custom redirect URL after the splash page. A custom redirect URL must be set if this is true.
         - welcomeMessage (string): The welcome message for the users on the splash page.
+        - userConsent (object): User consent settings
         - themeId (string): The id of the selected splash theme.
         - splashLogo (object): The logo used in the splash page.
         - splashImage (object): The image used in the splash page.
@@ -3144,6 +3145,7 @@ class AsyncWireless:
             "redirectUrl",
             "useRedirectUrl",
             "welcomeMessage",
+            "userConsent",
             "themeId",
             "splashLogo",
             "splashImage",
@@ -4235,7 +4237,7 @@ class AsyncWireless:
 
     def getOrganizationWirelessDevicesRadsecCertificatesAuthorities(self, organizationId: str, **kwargs):
         """
-        **Query for details on the organization's RADSEC device Certificate Authority certificates (CAs)**
+        **Query for details on the organization's RadSec device Certificate Authority certificates (CAs)**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-radsec-certificates-authorities
 
         - organizationId (string): Organization ID
@@ -4276,7 +4278,7 @@ class AsyncWireless:
 
     def updateOrganizationWirelessDevicesRadsecCertificatesAuthorities(self, organizationId: str, **kwargs):
         """
-        **Update an organization's RADSEC device Certificate Authority (CA) state**
+        **Update an organization's RadSec device Certificate Authority (CA) state**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-wireless-devices-radsec-certificates-authorities
 
         - organizationId (string): Organization ID
@@ -4311,7 +4313,7 @@ class AsyncWireless:
 
     def createOrganizationWirelessDevicesRadsecCertificatesAuthority(self, organizationId: str):
         """
-        **Create an organization's RADSEC device Certificate Authority (CA)**
+        **Create an organization's RadSec device Certificate Authority (CA)**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-wireless-devices-radsec-certificates-authority
 
         - organizationId (string): Organization ID
@@ -4328,7 +4330,7 @@ class AsyncWireless:
 
     def getOrganizationWirelessDevicesRadsecCertificatesAuthoritiesCrls(self, organizationId: str, **kwargs):
         """
-        **Query for certificate revocation list (CRL) for the organization's RADSEC device Certificate Authorities (CAs).**
+        **Query for certificate revocation list (CRL) for the organization's RadSec device Certificate Authorities (CAs).**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-radsec-certificates-authorities-crls
 
         - organizationId (string): Organization ID
@@ -4369,7 +4371,7 @@ class AsyncWireless:
 
     def getOrganizationWirelessDevicesRadsecCertificatesAuthoritiesCrlsDeltas(self, organizationId: str, **kwargs):
         """
-        **Query for all delta certificate revocation list (CRL) for the organization's RADSEC device Certificate Authority (CA) with the given id.**
+        **Query for all delta certificate revocation list (CRL) for the organization's RadSec device Certificate Authority (CA) with the given id.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-radsec-certificates-authorities-crls-deltas
 
         - organizationId (string): Organization ID
