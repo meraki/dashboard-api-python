@@ -25,7 +25,7 @@ class ActionBatchOrganizations(object):
                 f'''"ipVersion" cannot be "{kwargs["ipVersion"]}", & must be set to one of: {options}'''
             )
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/adaptivePolicy/acls"
 
         body_params = [
@@ -63,8 +63,8 @@ class ActionBatchOrganizations(object):
                 f'''"ipVersion" cannot be "{kwargs["ipVersion"]}", & must be set to one of: {options}'''
             )
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        aclId = urllib.parse.quote(aclId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        aclId = urllib.parse.quote(str(aclId), safe="")
         resource = f"/organizations/{organizationId}/adaptivePolicy/acls/{aclId}"
 
         body_params = [
@@ -90,8 +90,8 @@ class ActionBatchOrganizations(object):
         - aclId (string): Acl ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        aclId = urllib.parse.quote(aclId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        aclId = urllib.parse.quote(str(aclId), safe="")
         resource = f"/organizations/{organizationId}/adaptivePolicy/acls/{aclId}"
 
         action = {
@@ -114,7 +114,7 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/adaptivePolicy/groups"
 
         body_params = [
@@ -146,8 +146,8 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        id = urllib.parse.quote(id, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
         resource = f"/organizations/{organizationId}/adaptivePolicy/groups/{id}"
 
         body_params = [
@@ -173,8 +173,8 @@ class ActionBatchOrganizations(object):
         - id (string): ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        id = urllib.parse.quote(id, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
         resource = f"/organizations/{organizationId}/adaptivePolicy/groups/{id}"
 
         action = {
@@ -203,7 +203,7 @@ class ActionBatchOrganizations(object):
                 f'''"lastEntryRule" cannot be "{kwargs["lastEntryRule"]}", & must be set to one of: {options}'''
             )
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/adaptivePolicy/policies"
 
         body_params = [
@@ -241,8 +241,8 @@ class ActionBatchOrganizations(object):
                 f'''"lastEntryRule" cannot be "{kwargs["lastEntryRule"]}", & must be set to one of: {options}'''
             )
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        id = urllib.parse.quote(id, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
         resource = f"/organizations/{organizationId}/adaptivePolicy/policies/{id}"
 
         body_params = [
@@ -268,8 +268,8 @@ class ActionBatchOrganizations(object):
         - id (string): ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        id = urllib.parse.quote(id, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
         resource = f"/organizations/{organizationId}/adaptivePolicy/policies/{id}"
 
         action = {
@@ -289,7 +289,7 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/adaptivePolicy/settings"
 
         body_params = [
@@ -333,7 +333,7 @@ class ActionBatchOrganizations(object):
             ]
             assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/alerts/profiles"
 
         body_params = [
@@ -381,8 +381,8 @@ class ActionBatchOrganizations(object):
             ]
             assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        alertConfigId = urllib.parse.quote(alertConfigId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        alertConfigId = urllib.parse.quote(str(alertConfigId), safe="")
         resource = f"/organizations/{organizationId}/alerts/profiles/{alertConfigId}"
 
         body_params = [
@@ -410,8 +410,8 @@ class ActionBatchOrganizations(object):
         - alertConfigId (string): Alert config ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        alertConfigId = urllib.parse.quote(alertConfigId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        alertConfigId = urllib.parse.quote(str(alertConfigId), safe="")
         resource = f"/organizations/{organizationId}/alerts/profiles/{alertConfigId}"
 
         action = {
@@ -435,7 +435,7 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/api/push/profiles"
 
         body_params = [
@@ -468,8 +468,8 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        iname = urllib.parse.quote(iname, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        iname = urllib.parse.quote(str(iname), safe="")
         resource = f"/organizations/{organizationId}/api/push/profiles/{iname}"
 
         body_params = [
@@ -495,8 +495,8 @@ class ActionBatchOrganizations(object):
         - iname (string): Iname
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        iname = urllib.parse.quote(iname, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        iname = urllib.parse.quote(str(iname), safe="")
         resource = f"/organizations/{organizationId}/api/push/profiles/{iname}"
 
         action = {
@@ -519,7 +519,7 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/api/push/receivers/profiles"
 
         body_params = [
@@ -545,8 +545,8 @@ class ActionBatchOrganizations(object):
         - iname (string): Iname
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        iname = urllib.parse.quote(iname, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        iname = urllib.parse.quote(str(iname), safe="")
         resource = f"/organizations/{organizationId}/api/push/receivers/profiles/{iname}"
 
         action = {
@@ -569,8 +569,8 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        iname = urllib.parse.quote(iname, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        iname = urllib.parse.quote(str(iname), safe="")
         resource = f"/organizations/{organizationId}/api/push/receivers/profiles/{iname}"
 
         body_params = [
@@ -600,7 +600,7 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/auth/radius/servers"
 
         body_params = [
@@ -632,8 +632,8 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        serverId = urllib.parse.quote(serverId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        serverId = urllib.parse.quote(str(serverId), safe="")
         resource = f"/organizations/{organizationId}/auth/radius/servers/{serverId}"
 
         body_params = [
@@ -659,8 +659,8 @@ class ActionBatchOrganizations(object):
         - serverId (string): Server ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        serverId = urllib.parse.quote(serverId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        serverId = urllib.parse.quote(str(serverId), safe="")
         resource = f"/organizations/{organizationId}/auth/radius/servers/{serverId}"
 
         action = {
@@ -688,7 +688,7 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/brandingPolicies"
 
         body_params = [
@@ -718,7 +718,7 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/brandingPolicies/priorities"
 
         body_params = [
@@ -752,8 +752,8 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        brandingPolicyId = urllib.parse.quote(brandingPolicyId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        brandingPolicyId = urllib.parse.quote(str(brandingPolicyId), safe="")
         resource = f"/organizations/{organizationId}/brandingPolicies/{brandingPolicyId}"
 
         body_params = [
@@ -780,8 +780,8 @@ class ActionBatchOrganizations(object):
         - brandingPolicyId (string): Branding policy ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        brandingPolicyId = urllib.parse.quote(brandingPolicyId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        brandingPolicyId = urllib.parse.quote(str(brandingPolicyId), safe="")
         resource = f"/organizations/{organizationId}/brandingPolicies/{brandingPolicyId}"
 
         action = {
@@ -809,7 +809,7 @@ class ActionBatchOrganizations(object):
                 f'''"managedBy" cannot be "{kwargs["managedBy"]}", & must be set to one of: {options}'''
             )
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/certificates/import"
 
         body_params = [
@@ -838,7 +838,7 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/configTemplates"
 
         body_params = [
@@ -867,8 +867,8 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        configTemplateId = urllib.parse.quote(configTemplateId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        configTemplateId = urllib.parse.quote(str(configTemplateId), safe="")
         resource = f"/organizations/{organizationId}/configTemplates/{configTemplateId}"
 
         body_params = [
@@ -898,7 +898,7 @@ class ActionBatchOrganizations(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/devices/cellular/data/profiles"
 
         body_params = [
@@ -925,7 +925,7 @@ class ActionBatchOrganizations(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/devices/cellular/data/profiles/assignments/batchCreate"
 
         body_params = [
@@ -950,7 +950,7 @@ class ActionBatchOrganizations(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/devices/cellular/data/profiles/assignments/bulkDelete"
 
         action = {
@@ -972,8 +972,8 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        profileId = urllib.parse.quote(profileId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        profileId = urllib.parse.quote(str(profileId), safe="")
         resource = f"/organizations/{organizationId}/devices/cellular/data/profiles/{profileId}"
 
         body_params = [
@@ -998,8 +998,8 @@ class ActionBatchOrganizations(object):
         - profileId (string): Profile ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        profileId = urllib.parse.quote(profileId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        profileId = urllib.parse.quote(str(profileId), safe="")
         resource = f"/organizations/{organizationId}/devices/cellular/data/profiles/{profileId}"
 
         action = {
@@ -1026,7 +1026,7 @@ class ActionBatchOrganizations(object):
                 f'''"target" cannot be "{kwargs["target"]}", & must be set to one of: {options}'''
             )
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/devices/controller/migrations"
 
         body_params = [
@@ -1053,7 +1053,7 @@ class ActionBatchOrganizations(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/devices/details/bulkUpdate"
 
         body_params = [
@@ -1079,7 +1079,7 @@ class ActionBatchOrganizations(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/devices/packetCapture/captures/bulkDelete"
 
         action = {
@@ -1097,8 +1097,8 @@ class ActionBatchOrganizations(object):
         - captureId (string): Capture ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        captureId = urllib.parse.quote(captureId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        captureId = urllib.parse.quote(str(captureId), safe="")
         resource = f"/organizations/{organizationId}/devices/packetCapture/captures/{captureId}"
 
         action = {
@@ -1124,7 +1124,7 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/devices/packetCapture/schedules"
 
         body_params = [
@@ -1155,7 +1155,7 @@ class ActionBatchOrganizations(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/devices/packetCapture/schedules/bulkDelete"
 
         action = {
@@ -1175,7 +1175,7 @@ class ActionBatchOrganizations(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/devices/packetCapture/schedules/reorder"
 
         body_params = [
@@ -1207,8 +1207,8 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        scheduleId = urllib.parse.quote(scheduleId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        scheduleId = urllib.parse.quote(str(scheduleId), safe="")
         resource = f"/organizations/{organizationId}/devices/packetCapture/schedules/{scheduleId}"
 
         body_params = [
@@ -1239,8 +1239,8 @@ class ActionBatchOrganizations(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        scheduleId = urllib.parse.quote(scheduleId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        scheduleId = urllib.parse.quote(str(scheduleId), safe="")
         resource = f"/organizations/{organizationId}/devices/packetCapture/schedules/{scheduleId}"
 
         action = {
@@ -1266,8 +1266,8 @@ class ActionBatchOrganizations(object):
             options = ["analysis", "flow", "highlights", "reasoning", "summary", "title"]
             assert kwargs["task"] in options, f'''"task" cannot be "{kwargs["task"]}", & must be set to one of: {options}'''
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        packetId = urllib.parse.quote(packetId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        packetId = urllib.parse.quote(str(packetId), safe="")
         resource = f"/organizations/{organizationId}/devices/packetCaptures/{packetId}/tasks"
 
         body_params = [
@@ -1294,7 +1294,7 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/devices/placement/positions/bulkUpdate"
 
         body_params = [
@@ -1321,8 +1321,8 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        optInId = urllib.parse.quote(optInId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        optInId = urllib.parse.quote(str(optInId), safe="")
         resource = f"/organizations/{organizationId}/earlyAccess/features/optIns/{optInId}"
 
         body_params = [
@@ -1351,8 +1351,8 @@ class ActionBatchOrganizations(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        interconnectId = urllib.parse.quote(interconnectId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        interconnectId = urllib.parse.quote(str(interconnectId), safe="")
         resource = f"/organizations/{organizationId}/extensions/sdwanmanager/interconnects/{interconnectId}"
 
         body_params = [
@@ -1380,7 +1380,7 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/extensions/thousandEyes/networks"
 
         body_params = [
@@ -1408,8 +1408,8 @@ class ActionBatchOrganizations(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        networkId = urllib.parse.quote(networkId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/organizations/{organizationId}/extensions/thousandEyes/networks/{networkId}"
 
         body_params = [
@@ -1432,8 +1432,8 @@ class ActionBatchOrganizations(object):
         - networkId (string): Network ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        networkId = urllib.parse.quote(networkId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/organizations/{organizationId}/extensions/thousandEyes/networks/{networkId}"
 
         action = {
@@ -1453,7 +1453,7 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/extensions/thousandEyes/tests"
 
         body_params = [
@@ -1484,7 +1484,7 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/iam/admins/administrators/me/permissions/resolve"
 
         body_params = [
@@ -1511,7 +1511,7 @@ class ActionBatchOrganizations(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/integrations/xdr/networks/disable"
 
         body_params = [
@@ -1536,7 +1536,7 @@ class ActionBatchOrganizations(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/integrations/xdr/networks/enable"
 
         body_params = [
@@ -1562,7 +1562,7 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/inventory/orders/claim"
 
         body_params = [
@@ -1590,7 +1590,7 @@ class ActionBatchOrganizations(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/licenses/assignSeats"
 
         body_params = [
@@ -1618,7 +1618,7 @@ class ActionBatchOrganizations(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/licenses/move"
 
         body_params = [
@@ -1648,7 +1648,7 @@ class ActionBatchOrganizations(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/licenses/moveSeats"
 
         body_params = [
@@ -1676,7 +1676,7 @@ class ActionBatchOrganizations(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/licenses/renewSeats"
 
         body_params = [
@@ -1703,8 +1703,8 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        licenseId = urllib.parse.quote(licenseId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        licenseId = urllib.parse.quote(str(licenseId), safe="")
         resource = f"/organizations/{organizationId}/licenses/{licenseId}"
 
         body_params = [
@@ -1737,12 +1737,13 @@ class ActionBatchOrganizations(object):
         - enforceTwoFactorAuth (boolean): Boolean indicating whether users in this organization will be required to use an extra verification code when logging in to Dashboard. This code will be sent to their mobile phone via SMS, or can be generated by the authenticator application.
         - enforceLoginIpRanges (boolean): Boolean indicating whether organization will restrict access to Dashboard (including the API) from certain IP addresses.
         - loginIpRanges (array): List of acceptable IP ranges. Entries can be single IP addresses, IP address ranges, and CIDR subnets.
+        - enforceLockedIpSessions (boolean): Boolean indicating whether Dashboard sessions are locked to the IP address from which they were established. Only applicable to organizations that support locked-IP sessions; otherwise the parameter is ignored.
         - apiAuthentication (object): Details for indicating whether organization will restrict access to API (but not Dashboard) to certain IP addresses.
         """
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/loginSecurity"
 
         body_params = [
@@ -1759,6 +1760,7 @@ class ActionBatchOrganizations(object):
             "enforceTwoFactorAuth",
             "enforceLoginIpRanges",
             "loginIpRanges",
+            "enforceLockedIpSessions",
             "apiAuthentication",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
@@ -1786,7 +1788,7 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/networks"
 
         body_params = [
@@ -1819,7 +1821,7 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/networks/combine"
 
         body_params = [
@@ -1846,7 +1848,7 @@ class ActionBatchOrganizations(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/networks/groups"
 
         body_params = [
@@ -1872,8 +1874,8 @@ class ActionBatchOrganizations(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        groupId = urllib.parse.quote(groupId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        groupId = urllib.parse.quote(str(groupId), safe="")
         resource = f"/organizations/{organizationId}/networks/groups/{groupId}"
 
         body_params = [
@@ -1896,8 +1898,8 @@ class ActionBatchOrganizations(object):
         - groupId (string): Group ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        groupId = urllib.parse.quote(groupId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        groupId = urllib.parse.quote(str(groupId), safe="")
         resource = f"/organizations/{organizationId}/networks/groups/{groupId}"
 
         action = {
@@ -1918,8 +1920,8 @@ class ActionBatchOrganizations(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        groupId = urllib.parse.quote(groupId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        groupId = urllib.parse.quote(str(groupId), safe="")
         resource = f"/organizations/{organizationId}/networks/groups/{groupId}/bulkAssign"
 
         body_params = [
@@ -1945,8 +1947,8 @@ class ActionBatchOrganizations(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        groupId = urllib.parse.quote(groupId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        groupId = urllib.parse.quote(str(groupId), safe="")
         resource = f"/organizations/{organizationId}/networks/groups/{groupId}/bulkUnassign"
 
         body_params = [
@@ -1969,8 +1971,8 @@ class ActionBatchOrganizations(object):
         - id (string): ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        id = urllib.parse.quote(id, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
         resource = f"/organizations/{organizationId}/openRoaming/certificates/{id}"
 
         action = {
@@ -1991,7 +1993,7 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/policies/global/firewall/rulesets"
 
         body_params = [
@@ -2032,7 +2034,7 @@ class ActionBatchOrganizations(object):
                 f'''"policy" cannot be "{kwargs["policy"]}", & must be set to one of: {options}'''
             )
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/policies/global/firewall/rulesets/rules"
 
         body_params = [
@@ -2062,8 +2064,8 @@ class ActionBatchOrganizations(object):
         - ruleId (string): Rule ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        ruleId = urllib.parse.quote(ruleId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        ruleId = urllib.parse.quote(str(ruleId), safe="")
         resource = f"/organizations/{organizationId}/policies/global/firewall/rulesets/rules/{ruleId}"
 
         action = {
@@ -2097,8 +2099,8 @@ class ActionBatchOrganizations(object):
                 f'''"policy" cannot be "{kwargs["policy"]}", & must be set to one of: {options}'''
             )
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        ruleId = urllib.parse.quote(ruleId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        ruleId = urllib.parse.quote(str(ruleId), safe="")
         resource = f"/organizations/{organizationId}/policies/global/firewall/rulesets/rules/{ruleId}"
 
         body_params = [
@@ -2132,8 +2134,8 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        rulesetId = urllib.parse.quote(rulesetId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        rulesetId = urllib.parse.quote(str(rulesetId), safe="")
         resource = f"/organizations/{organizationId}/policies/global/firewall/rulesets/{rulesetId}"
 
         body_params = [
@@ -2157,8 +2159,8 @@ class ActionBatchOrganizations(object):
         - rulesetId (string): Ruleset ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        rulesetId = urllib.parse.quote(rulesetId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        rulesetId = urllib.parse.quote(str(rulesetId), safe="")
         resource = f"/organizations/{organizationId}/policies/global/firewall/rulesets/{rulesetId}"
 
         action = {
@@ -2179,7 +2181,7 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/policies/global/group/policies"
 
         body_params = [
@@ -2208,7 +2210,7 @@ class ActionBatchOrganizations(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/policies/global/group/policies/adaptivePolicyGroups/assign"
 
         body_params = [
@@ -2237,7 +2239,7 @@ class ActionBatchOrganizations(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/policies/global/group/policies/adaptivePolicyGroups/remove"
 
         body_params = [
@@ -2267,7 +2269,7 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/policies/global/group/policies/firewall/rulesets/assignments"
 
         body_params = [
@@ -2299,8 +2301,8 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        assignmentId = urllib.parse.quote(assignmentId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        assignmentId = urllib.parse.quote(str(assignmentId), safe="")
         resource = (
             f"/organizations/{organizationId}/policies/global/group/policies/firewall/rulesets/assignments/{assignmentId}"
         )
@@ -2327,8 +2329,8 @@ class ActionBatchOrganizations(object):
         - assignmentId (string): Assignment ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        assignmentId = urllib.parse.quote(assignmentId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        assignmentId = urllib.parse.quote(str(assignmentId), safe="")
         resource = (
             f"/organizations/{organizationId}/policies/global/group/policies/firewall/rulesets/assignments/{assignmentId}"
         )
@@ -2352,8 +2354,8 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        policyId = urllib.parse.quote(policyId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        policyId = urllib.parse.quote(str(policyId), safe="")
         resource = f"/organizations/{organizationId}/policies/global/group/policies/{policyId}"
 
         body_params = [
@@ -2377,8 +2379,8 @@ class ActionBatchOrganizations(object):
         - policyId (string): Policy ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        policyId = urllib.parse.quote(policyId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        policyId = urllib.parse.quote(str(policyId), safe="")
         resource = f"/organizations/{organizationId}/policies/global/group/policies/{policyId}"
 
         action = {
@@ -2405,7 +2407,7 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/policyObjects"
 
         body_params = [
@@ -2439,7 +2441,7 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/policyObjects/groups"
 
         body_params = [
@@ -2468,8 +2470,8 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        policyObjectGroupId = urllib.parse.quote(policyObjectGroupId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        policyObjectGroupId = urllib.parse.quote(str(policyObjectGroupId), safe="")
         resource = f"/organizations/{organizationId}/policyObjects/groups/{policyObjectGroupId}"
 
         body_params = [
@@ -2493,8 +2495,8 @@ class ActionBatchOrganizations(object):
         - policyObjectGroupId (string): Policy object group ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        policyObjectGroupId = urllib.parse.quote(policyObjectGroupId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        policyObjectGroupId = urllib.parse.quote(str(policyObjectGroupId), safe="")
         resource = f"/organizations/{organizationId}/policyObjects/groups/{policyObjectGroupId}"
 
         action = {
@@ -2520,8 +2522,8 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        policyObjectId = urllib.parse.quote(policyObjectId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        policyObjectId = urllib.parse.quote(str(policyObjectId), safe="")
         resource = f"/organizations/{organizationId}/policyObjects/{policyObjectId}"
 
         body_params = [
@@ -2549,8 +2551,8 @@ class ActionBatchOrganizations(object):
         - policyObjectId (string): Policy object ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        policyObjectId = urllib.parse.quote(policyObjectId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        policyObjectId = urllib.parse.quote(str(policyObjectId), safe="")
         resource = f"/organizations/{organizationId}/policyObjects/{policyObjectId}"
 
         action = {
@@ -2574,7 +2576,7 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/routing/vrfs"
 
         body_params = [
@@ -2608,8 +2610,8 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        vrfId = urllib.parse.quote(vrfId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        vrfId = urllib.parse.quote(str(vrfId), safe="")
         resource = f"/organizations/{organizationId}/routing/vrfs/{vrfId}"
 
         body_params = [
@@ -2636,8 +2638,8 @@ class ActionBatchOrganizations(object):
         - vrfId (string): Vrf ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        vrfId = urllib.parse.quote(vrfId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        vrfId = urllib.parse.quote(str(vrfId), safe="")
         resource = f"/organizations/{organizationId}/routing/vrfs/{vrfId}"
 
         action = {
@@ -2659,7 +2661,7 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/saml/idps"
 
         body_params = [
@@ -2689,8 +2691,8 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        idpId = urllib.parse.quote(idpId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        idpId = urllib.parse.quote(str(idpId), safe="")
         resource = f"/organizations/{organizationId}/saml/idps/{idpId}"
 
         body_params = [
@@ -2715,8 +2717,8 @@ class ActionBatchOrganizations(object):
         - idpId (string): Idp ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        idpId = urllib.parse.quote(idpId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        idpId = urllib.parse.quote(str(idpId), safe="")
         resource = f"/organizations/{organizationId}/saml/idps/{idpId}"
 
         action = {
@@ -2736,7 +2738,7 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/sase/connectors/batchDelete"
 
         body_params = [
@@ -2761,7 +2763,7 @@ class ActionBatchOrganizations(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/sase/integrations"
 
         body_params = [
@@ -2784,8 +2786,8 @@ class ActionBatchOrganizations(object):
         - integrationId (string): Integration ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        integrationId = urllib.parse.quote(integrationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        integrationId = urllib.parse.quote(str(integrationId), safe="")
         resource = f"/organizations/{organizationId}/sase/integrations/{integrationId}"
 
         action = {
@@ -2806,7 +2808,7 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/sase/sites/attach"
 
         body_params = [
@@ -2833,7 +2835,7 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/sase/sites/detach"
 
         action = {
@@ -2854,7 +2856,7 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/sase/sites/enroll"
 
         body_params = [
@@ -2881,8 +2883,8 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        siteId = urllib.parse.quote(siteId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        siteId = urllib.parse.quote(str(siteId), safe="")
         resource = f"/organizations/{organizationId}/sase/sites/{siteId}"
 
         body_params = [
@@ -2906,8 +2908,8 @@ class ActionBatchOrganizations(object):
         - id (string): ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        id = urllib.parse.quote(id, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
         resource = f"/organizations/{organizationId}/splash/assets/{id}"
 
         action = {
@@ -2928,7 +2930,7 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/splash/themes"
 
         body_params = [
@@ -2952,8 +2954,8 @@ class ActionBatchOrganizations(object):
         - id (string): ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        id = urllib.parse.quote(id, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
         resource = f"/organizations/{organizationId}/splash/themes/{id}"
 
         action = {
@@ -2975,8 +2977,8 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        themeIdentifier = urllib.parse.quote(themeIdentifier, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        themeIdentifier = urllib.parse.quote(str(themeIdentifier), safe="")
         resource = f"/organizations/{organizationId}/splash/themes/{themeIdentifier}/assets"
 
         body_params = [
@@ -3007,7 +3009,7 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/webhooks/payloadTemplates"
 
         body_params = [
@@ -3035,8 +3037,8 @@ class ActionBatchOrganizations(object):
         - payloadTemplateId (string): Payload template ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        payloadTemplateId = urllib.parse.quote(payloadTemplateId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        payloadTemplateId = urllib.parse.quote(str(payloadTemplateId), safe="")
         resource = f"/organizations/{organizationId}/webhooks/payloadTemplates/{payloadTemplateId}"
 
         action = {
@@ -3062,8 +3064,8 @@ class ActionBatchOrganizations(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        payloadTemplateId = urllib.parse.quote(payloadTemplateId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        payloadTemplateId = urllib.parse.quote(str(payloadTemplateId), safe="")
         resource = f"/organizations/{organizationId}/webhooks/payloadTemplates/{payloadTemplateId}"
 
         body_params = [

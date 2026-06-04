@@ -17,7 +17,7 @@ class ActionBatchCellularGateway(object):
 
         kwargs.update(locals())
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/cellularGateway/lan"
 
         body_params = [
@@ -43,7 +43,7 @@ class ActionBatchCellularGateway(object):
 
         kwargs.update(locals())
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/cellularGateway/portForwardingRules"
 
         body_params = [
@@ -68,7 +68,7 @@ class ActionBatchCellularGateway(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/cellularGateway/connectivityMonitoringDestinations"
 
         body_params = [
@@ -95,7 +95,7 @@ class ActionBatchCellularGateway(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/cellularGateway/dhcp"
 
         body_params = [
@@ -123,7 +123,7 @@ class ActionBatchCellularGateway(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/cellularGateway/subnetPool"
 
         body_params = [
@@ -149,7 +149,7 @@ class ActionBatchCellularGateway(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/cellularGateway/uplink"
 
         body_params = [
@@ -175,8 +175,8 @@ class ActionBatchCellularGateway(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        id = urllib.parse.quote(id, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
         resource = f"/organizations/{organizationId}/cellularGateway/esims/inventory/{id}"
 
         body_params = [
@@ -207,7 +207,7 @@ class ActionBatchCellularGateway(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/cellularGateway/esims/serviceProviders/accounts"
 
         body_params = [
@@ -238,8 +238,8 @@ class ActionBatchCellularGateway(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        accountId = urllib.parse.quote(accountId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        accountId = urllib.parse.quote(str(accountId), safe="")
         resource = f"/organizations/{organizationId}/cellularGateway/esims/serviceProviders/accounts/{accountId}"
 
         body_params = [
@@ -263,8 +263,8 @@ class ActionBatchCellularGateway(object):
         - accountId (string): Account ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        accountId = urllib.parse.quote(accountId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        accountId = urllib.parse.quote(str(accountId), safe="")
         resource = f"/organizations/{organizationId}/cellularGateway/esims/serviceProviders/accounts/{accountId}"
 
         action = {
@@ -284,7 +284,7 @@ class ActionBatchCellularGateway(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/cellularGateway/esims/swap"
 
         body_params = [
@@ -307,8 +307,8 @@ class ActionBatchCellularGateway(object):
         - organizationId (string): Organization ID
         """
 
-        id = urllib.parse.quote(id, safe="")
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/cellularGateway/esims/swap/{id}"
 
         action = {

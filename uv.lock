@@ -302,7 +302,7 @@ wheels = [
 
 [[package]]
 name = "meraki"
-version = "4.1.0b3"
+version = "4.2.0b0"
 source = { editable = "." }
 dependencies = [
     { name = "httpx" },

@@ -16,7 +16,7 @@ class ActionBatchSwitch(object):
 
         kwargs = locals()
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/switch/ports/cycle"
 
         body_params = [
@@ -45,7 +45,7 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/switch/ports/mirror"
 
         body_params = [
@@ -123,8 +123,8 @@ class ActionBatchSwitch(object):
                 f'''"accessPolicyType" cannot be "{kwargs["accessPolicyType"]}", & must be set to one of: {options}'''
             )
 
-        serial = urllib.parse.quote(serial, safe="")
-        portId = urllib.parse.quote(portId, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
+        portId = urllib.parse.quote(str(portId), safe="")
         resource = f"/devices/{serial}/switch/ports/{portId}"
 
         body_params = [
@@ -205,7 +205,7 @@ class ActionBatchSwitch(object):
                 f'''"multicastRouting" cannot be "{kwargs["multicastRouting"]}", & must be set to one of: {options}'''
             )
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/switch/routing/interfaces"
 
         body_params = [
@@ -272,8 +272,8 @@ class ActionBatchSwitch(object):
                 f'''"multicastRouting" cannot be "{kwargs["multicastRouting"]}", & must be set to one of: {options}'''
             )
 
-        serial = urllib.parse.quote(serial, safe="")
-        interfaceId = urllib.parse.quote(interfaceId, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
+        interfaceId = urllib.parse.quote(str(interfaceId), safe="")
         resource = f"/devices/{serial}/switch/routing/interfaces/{interfaceId}"
 
         body_params = [
@@ -313,8 +313,8 @@ class ActionBatchSwitch(object):
         - interfaceId (string): Interface ID
         """
 
-        serial = urllib.parse.quote(serial, safe="")
-        interfaceId = urllib.parse.quote(interfaceId, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
+        interfaceId = urllib.parse.quote(str(interfaceId), safe="")
         resource = f"/devices/{serial}/switch/routing/interfaces/{interfaceId}"
 
         action = {
@@ -366,8 +366,8 @@ class ActionBatchSwitch(object):
                 f'''"dnsNameserversOption" cannot be "{kwargs["dnsNameserversOption"]}", & must be set to one of: {options}'''
             )
 
-        serial = urllib.parse.quote(serial, safe="")
-        interfaceId = urllib.parse.quote(interfaceId, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
+        interfaceId = urllib.parse.quote(str(interfaceId), safe="")
         resource = f"/devices/{serial}/switch/routing/interfaces/{interfaceId}/dhcp"
 
         body_params = [
@@ -407,7 +407,7 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/switch/routing/staticRoutes"
 
         body_params = [
@@ -444,8 +444,8 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        serial = urllib.parse.quote(serial, safe="")
-        staticRouteId = urllib.parse.quote(staticRouteId, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
+        staticRouteId = urllib.parse.quote(str(staticRouteId), safe="")
         resource = f"/devices/{serial}/switch/routing/staticRoutes/{staticRouteId}"
 
         body_params = [
@@ -474,8 +474,8 @@ class ActionBatchSwitch(object):
         - staticRouteId (string): Static route ID
         """
 
-        serial = urllib.parse.quote(serial, safe="")
-        staticRouteId = urllib.parse.quote(staticRouteId, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
+        staticRouteId = urllib.parse.quote(str(staticRouteId), safe="")
         resource = f"/devices/{serial}/switch/routing/staticRoutes/{staticRouteId}"
 
         action = {
@@ -496,7 +496,7 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/switch/warmSpare"
 
         body_params = [
@@ -553,7 +553,7 @@ class ActionBatchSwitch(object):
                 f'''"accessPolicyType" cannot be "{kwargs["accessPolicyType"]}", & must be set to one of: {options}'''
             )
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/switch/accessPolicies"
 
         body_params = [
@@ -626,8 +626,8 @@ class ActionBatchSwitch(object):
                 f'''"accessPolicyType" cannot be "{kwargs["accessPolicyType"]}", & must be set to one of: {options}'''
             )
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        accessPolicyNumber = urllib.parse.quote(accessPolicyNumber, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        accessPolicyNumber = urllib.parse.quote(str(accessPolicyNumber), safe="")
         resource = f"/networks/{networkId}/switch/accessPolicies/{accessPolicyNumber}"
 
         body_params = [
@@ -668,8 +668,8 @@ class ActionBatchSwitch(object):
         - accessPolicyNumber (string): Access policy number
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        accessPolicyNumber = urllib.parse.quote(accessPolicyNumber, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        accessPolicyNumber = urllib.parse.quote(str(accessPolicyNumber), safe="")
         resource = f"/networks/{networkId}/switch/accessPolicies/{accessPolicyNumber}"
 
         action = {
@@ -692,7 +692,7 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/switch/alternateManagementInterface"
 
         body_params = [
@@ -730,7 +730,7 @@ class ActionBatchSwitch(object):
                 f'''"defaultPolicy" cannot be "{kwargs["defaultPolicy"]}", & must be set to one of: {options}'''
             )
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/switch/dhcpServerPolicy"
 
         body_params = [
@@ -763,7 +763,7 @@ class ActionBatchSwitch(object):
 
         kwargs = locals()
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/trustedServers"
 
         body_params = [
@@ -793,8 +793,8 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        trustedServerId = urllib.parse.quote(trustedServerId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        trustedServerId = urllib.parse.quote(str(trustedServerId), safe="")
         resource = f"/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/trustedServers/{trustedServerId}"
 
         body_params = [
@@ -819,8 +819,8 @@ class ActionBatchSwitch(object):
         - trustedServerId (string): Trusted server ID
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        trustedServerId = urllib.parse.quote(trustedServerId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        trustedServerId = urllib.parse.quote(str(trustedServerId), safe="")
         resource = f"/networks/{networkId}/switch/dhcpServerPolicy/arpInspection/trustedServers/{trustedServerId}"
 
         action = {
@@ -840,7 +840,7 @@ class ActionBatchSwitch(object):
 
         kwargs = locals()
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/switch/dscpToCosMappings"
 
         body_params = [
@@ -867,7 +867,7 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/switch/linkAggregations"
 
         body_params = [
@@ -896,8 +896,8 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        linkAggregationId = urllib.parse.quote(linkAggregationId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        linkAggregationId = urllib.parse.quote(str(linkAggregationId), safe="")
         resource = f"/networks/{networkId}/switch/linkAggregations/{linkAggregationId}"
 
         body_params = [
@@ -921,8 +921,8 @@ class ActionBatchSwitch(object):
         - linkAggregationId (string): Link aggregation ID
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        linkAggregationId = urllib.parse.quote(linkAggregationId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        linkAggregationId = urllib.parse.quote(str(linkAggregationId), safe="")
         resource = f"/networks/{networkId}/switch/linkAggregations/{linkAggregationId}"
 
         action = {
@@ -943,7 +943,7 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/switch/mtu"
 
         body_params = [
@@ -974,8 +974,8 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        portScheduleId = urllib.parse.quote(portScheduleId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        portScheduleId = urllib.parse.quote(str(portScheduleId), safe="")
         resource = f"/networks/{networkId}/switch/portSchedules/{portScheduleId}"
 
         body_params = [
@@ -1006,7 +1006,7 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/switch/ports/profiles"
 
         body_params = [
@@ -1042,8 +1042,8 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        id = urllib.parse.quote(id, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
         resource = f"/networks/{networkId}/switch/ports/profiles/{id}"
 
         body_params = [
@@ -1071,8 +1071,8 @@ class ActionBatchSwitch(object):
         - id (string): ID
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        id = urllib.parse.quote(id, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
         resource = f"/networks/{networkId}/switch/ports/profiles/{id}"
 
         action = {
@@ -1104,7 +1104,7 @@ class ActionBatchSwitch(object):
                 f'''"protocol" cannot be "{kwargs["protocol"]}", & must be set to one of: {options}'''
             )
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/switch/qosRules"
 
         body_params = [
@@ -1135,7 +1135,7 @@ class ActionBatchSwitch(object):
 
         kwargs = locals()
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/switch/qosRules/order"
 
         body_params = [
@@ -1158,8 +1158,8 @@ class ActionBatchSwitch(object):
         - qosRuleId (string): Qos rule ID
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        qosRuleId = urllib.parse.quote(qosRuleId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        qosRuleId = urllib.parse.quote(str(qosRuleId), safe="")
         resource = f"/networks/{networkId}/switch/qosRules/{qosRuleId}"
 
         action = {
@@ -1192,8 +1192,8 @@ class ActionBatchSwitch(object):
                 f'''"protocol" cannot be "{kwargs["protocol"]}", & must be set to one of: {options}'''
             )
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        qosRuleId = urllib.parse.quote(qosRuleId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        qosRuleId = urllib.parse.quote(str(qosRuleId), safe="")
         resource = f"/networks/{networkId}/switch/qosRules/{qosRuleId}"
 
         body_params = [
@@ -1225,7 +1225,7 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/switch/routing/multicast"
 
         body_params = [
@@ -1255,7 +1255,7 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/switch/routing/multicast/rendezvousPoints"
 
         body_params = [
@@ -1280,8 +1280,8 @@ class ActionBatchSwitch(object):
         - rendezvousPointId (string): Rendezvous point ID
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        rendezvousPointId = urllib.parse.quote(rendezvousPointId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        rendezvousPointId = urllib.parse.quote(str(rendezvousPointId), safe="")
         resource = f"/networks/{networkId}/switch/routing/multicast/rendezvousPoints/{rendezvousPointId}"
 
         action = {
@@ -1306,8 +1306,8 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        rendezvousPointId = urllib.parse.quote(rendezvousPointId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        rendezvousPointId = urllib.parse.quote(str(rendezvousPointId), safe="")
         resource = f"/networks/{networkId}/switch/routing/multicast/rendezvousPoints/{rendezvousPointId}"
 
         body_params = [
@@ -1341,7 +1341,7 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/switch/routing/ospf"
 
         body_params = [
@@ -1378,7 +1378,7 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/switch/settings"
 
         body_params = [
@@ -1415,7 +1415,7 @@ class ActionBatchSwitch(object):
             options = ["mst", "rpvst+"]
             assert kwargs["mode"] in options, f'''"mode" cannot be "{kwargs["mode"]}", & must be set to one of: {options}'''
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/switch/spanningTree"
 
         body_params = [
@@ -1444,8 +1444,8 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        switchStackId = urllib.parse.quote(switchStackId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        switchStackId = urllib.parse.quote(str(switchStackId), safe="")
         resource = f"/networks/{networkId}/switch/stacks/{switchStackId}"
 
         body_params = [
@@ -1478,8 +1478,8 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        switchStackId = urllib.parse.quote(switchStackId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        switchStackId = urllib.parse.quote(str(switchStackId), safe="")
         resource = f"/networks/{networkId}/switch/stacks/{switchStackId}/ports/mirror"
 
         body_params = [
@@ -1536,8 +1536,8 @@ class ActionBatchSwitch(object):
                 f'''"multicastRouting" cannot be "{kwargs["multicastRouting"]}", & must be set to one of: {options}'''
             )
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        switchStackId = urllib.parse.quote(switchStackId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        switchStackId = urllib.parse.quote(str(switchStackId), safe="")
         resource = f"/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces"
 
         body_params = [
@@ -1605,9 +1605,9 @@ class ActionBatchSwitch(object):
                 f'''"multicastRouting" cannot be "{kwargs["multicastRouting"]}", & must be set to one of: {options}'''
             )
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        switchStackId = urllib.parse.quote(switchStackId, safe="")
-        interfaceId = urllib.parse.quote(interfaceId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        switchStackId = urllib.parse.quote(str(switchStackId), safe="")
+        interfaceId = urllib.parse.quote(str(interfaceId), safe="")
         resource = f"/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}"
 
         body_params = [
@@ -1648,9 +1648,9 @@ class ActionBatchSwitch(object):
         - interfaceId (string): Interface ID
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        switchStackId = urllib.parse.quote(switchStackId, safe="")
-        interfaceId = urllib.parse.quote(interfaceId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        switchStackId = urllib.parse.quote(str(switchStackId), safe="")
+        interfaceId = urllib.parse.quote(str(interfaceId), safe="")
         resource = f"/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}"
 
         action = {
@@ -1704,9 +1704,9 @@ class ActionBatchSwitch(object):
                 f'''"dnsNameserversOption" cannot be "{kwargs["dnsNameserversOption"]}", & must be set to one of: {options}'''
             )
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        switchStackId = urllib.parse.quote(switchStackId, safe="")
-        interfaceId = urllib.parse.quote(interfaceId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        switchStackId = urllib.parse.quote(str(switchStackId), safe="")
+        interfaceId = urllib.parse.quote(str(interfaceId), safe="")
         resource = f"/networks/{networkId}/switch/stacks/{switchStackId}/routing/interfaces/{interfaceId}/dhcp"
 
         body_params = [
@@ -1749,8 +1749,8 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        switchStackId = urllib.parse.quote(switchStackId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        switchStackId = urllib.parse.quote(str(switchStackId), safe="")
         resource = f"/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes"
 
         body_params = [
@@ -1788,9 +1788,9 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        switchStackId = urllib.parse.quote(switchStackId, safe="")
-        staticRouteId = urllib.parse.quote(staticRouteId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        switchStackId = urllib.parse.quote(str(switchStackId), safe="")
+        staticRouteId = urllib.parse.quote(str(staticRouteId), safe="")
         resource = f"/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes/{staticRouteId}"
 
         body_params = [
@@ -1820,9 +1820,9 @@ class ActionBatchSwitch(object):
         - staticRouteId (string): Static route ID
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        switchStackId = urllib.parse.quote(switchStackId, safe="")
-        staticRouteId = urllib.parse.quote(staticRouteId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        switchStackId = urllib.parse.quote(str(switchStackId), safe="")
+        staticRouteId = urllib.parse.quote(str(staticRouteId), safe="")
         resource = f"/networks/{networkId}/switch/stacks/{switchStackId}/routing/staticRoutes/{staticRouteId}"
 
         action = {
@@ -1845,7 +1845,7 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/switch/stormControl"
 
         body_params = [
@@ -1874,7 +1874,7 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/switch/stp"
 
         body_params = [
@@ -1908,9 +1908,9 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        configTemplateId = urllib.parse.quote(configTemplateId, safe="")
-        profileId = urllib.parse.quote(profileId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        configTemplateId = urllib.parse.quote(str(configTemplateId), safe="")
+        profileId = urllib.parse.quote(str(profileId), safe="")
         resource = (
             f"/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles/{profileId}/ports/mirror"
         )
@@ -1991,10 +1991,10 @@ class ActionBatchSwitch(object):
                 f'''"accessPolicyType" cannot be "{kwargs["accessPolicyType"]}", & must be set to one of: {options}'''
             )
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        configTemplateId = urllib.parse.quote(configTemplateId, safe="")
-        profileId = urllib.parse.quote(profileId, safe="")
-        portId = urllib.parse.quote(portId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        configTemplateId = urllib.parse.quote(str(configTemplateId), safe="")
+        profileId = urllib.parse.quote(str(profileId), safe="")
+        portId = urllib.parse.quote(str(portId), safe="")
         resource = (
             f"/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles/{profileId}/ports/{portId}"
         )
@@ -2049,7 +2049,7 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/switch/cloneProfilesToTemplateNetwork"
 
         body_params = [
@@ -2076,7 +2076,7 @@ class ActionBatchSwitch(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/switch/devices/clone"
 
         body_params = [
@@ -2110,7 +2110,7 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/switch/ports/profiles"
 
         body_params = [
@@ -2143,7 +2143,7 @@ class ActionBatchSwitch(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/switch/ports/profiles/assignments/batchAssign"
 
         body_params = [
@@ -2172,7 +2172,7 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/switch/ports/profiles/automations"
 
         body_params = [
@@ -2206,8 +2206,8 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        id = urllib.parse.quote(id, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
         resource = f"/organizations/{organizationId}/switch/ports/profiles/automations/{id}"
 
         body_params = [
@@ -2234,8 +2234,8 @@ class ActionBatchSwitch(object):
         - id (string): ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        id = urllib.parse.quote(id, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
         resource = f"/organizations/{organizationId}/switch/ports/profiles/automations/{id}"
 
         action = {
@@ -2259,7 +2259,7 @@ class ActionBatchSwitch(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/switch/ports/profiles/networks/assignments"
 
         body_params = [
@@ -2286,7 +2286,7 @@ class ActionBatchSwitch(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/switch/ports/profiles/networks/assignments/batchCreate"
 
         body_params = [
@@ -2311,7 +2311,7 @@ class ActionBatchSwitch(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/switch/ports/profiles/networks/assignments/bulkDelete"
 
         body_params = [
@@ -2334,8 +2334,8 @@ class ActionBatchSwitch(object):
         - assignmentId (string): Assignment ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        assignmentId = urllib.parse.quote(assignmentId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        assignmentId = urllib.parse.quote(str(assignmentId), safe="")
         resource = f"/organizations/{organizationId}/switch/ports/profiles/networks/assignments/{assignmentId}"
 
         action = {
@@ -2357,7 +2357,7 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/switch/ports/profiles/radius/assignments"
 
         body_params = [
@@ -2387,8 +2387,8 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        id = urllib.parse.quote(id, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
         resource = f"/organizations/{organizationId}/switch/ports/profiles/radius/assignments/{id}"
 
         body_params = [
@@ -2413,8 +2413,8 @@ class ActionBatchSwitch(object):
         - id (string): ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        id = urllib.parse.quote(id, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
         resource = f"/organizations/{organizationId}/switch/ports/profiles/radius/assignments/{id}"
 
         action = {
@@ -2443,8 +2443,8 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        id = urllib.parse.quote(id, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
         resource = f"/organizations/{organizationId}/switch/ports/profiles/{id}"
 
         body_params = [
@@ -2475,8 +2475,8 @@ class ActionBatchSwitch(object):
         - id (string): ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        id = urllib.parse.quote(id, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
         resource = f"/organizations/{organizationId}/switch/ports/profiles/{id}"
 
         action = {
@@ -2497,7 +2497,7 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/switch/routing/bgp/autonomousSystems"
 
         body_params = [
@@ -2525,8 +2525,8 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        autonomousSystemId = urllib.parse.quote(autonomousSystemId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        autonomousSystemId = urllib.parse.quote(str(autonomousSystemId), safe="")
         resource = f"/organizations/{organizationId}/switch/routing/bgp/autonomousSystems/{autonomousSystemId}"
 
         body_params = [
@@ -2550,8 +2550,8 @@ class ActionBatchSwitch(object):
         - autonomousSystemId (string): Autonomous system ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        autonomousSystemId = urllib.parse.quote(autonomousSystemId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        autonomousSystemId = urllib.parse.quote(str(autonomousSystemId), safe="")
         resource = f"/organizations/{organizationId}/switch/routing/bgp/autonomousSystems/{autonomousSystemId}"
 
         action = {
@@ -2575,7 +2575,7 @@ class ActionBatchSwitch(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/switch/routing/bgp/filters/filterLists/deploy"
 
         body_params = [
@@ -2600,8 +2600,8 @@ class ActionBatchSwitch(object):
         - listId (string): List ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        listId = urllib.parse.quote(listId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        listId = urllib.parse.quote(str(listId), safe="")
         resource = f"/organizations/{organizationId}/switch/routing/bgp/filters/filterLists/{listId}"
 
         action = {
@@ -2625,7 +2625,7 @@ class ActionBatchSwitch(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/switch/routing/bgp/filters/prefixLists/deploy"
 
         body_params = [
@@ -2650,8 +2650,8 @@ class ActionBatchSwitch(object):
         - listId (string): List ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        listId = urllib.parse.quote(listId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        listId = urllib.parse.quote(str(listId), safe="")
         resource = f"/organizations/{organizationId}/switch/routing/bgp/filters/prefixLists/{listId}"
 
         action = {
@@ -2689,7 +2689,7 @@ class ActionBatchSwitch(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/switch/routing/bgp/peers/groups/deploy"
 
         body_params = [
@@ -2736,7 +2736,7 @@ class ActionBatchSwitch(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/switch/routing/bgp/peers/neighbors/deploy"
 
         body_params = [
@@ -2781,7 +2781,7 @@ class ActionBatchSwitch(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/switch/routing/bgp/routers/deploy"
 
         body_params = [
@@ -2815,7 +2815,7 @@ class ActionBatchSwitch(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/switch/routing/bgp/routers/peers/deploy"
 
         body_params = [
@@ -2840,8 +2840,8 @@ class ActionBatchSwitch(object):
         - routerId (string): Router ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        routerId = urllib.parse.quote(routerId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        routerId = urllib.parse.quote(str(routerId), safe="")
         resource = f"/organizations/{organizationId}/switch/routing/bgp/routers/{routerId}"
 
         action = {

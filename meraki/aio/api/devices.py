@@ -964,6 +964,56 @@ class AsyncDevices:
 
         return self._session.get(metadata, resource)
 
+    def createDeviceLiveToolsPowerUsage(self, serial: str, **kwargs):
+        """
+        **Enqueues a live tool job that retrieves details about a device's overall power usage**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-power-usage
+
+        - serial (string): Serial
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["devices", "liveTools", "power", "usage"],
+            "operation": "createDeviceLiveToolsPowerUsage",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/liveTools/power/usage"
+
+        body_params = [
+            "callback",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createDeviceLiveToolsPowerUsage: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def getDeviceLiveToolsPowerUsage(self, serial: str, jobId: str):
+        """
+        **Retrieve the status and results of a previously created live tool job fetching details about a device's overall power usage.**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-live-tools-power-usage
+
+        - serial (string): Serial
+        - jobId (string): Job ID
+        """
+
+        metadata = {
+            "tags": ["devices", "liveTools", "power", "usage"],
+            "operation": "getDeviceLiveToolsPowerUsage",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        jobId = urllib.parse.quote(str(jobId), safe="")
+        resource = f"/devices/{serial}/liveTools/power/usage/{jobId}"
+
+        return self._session.get(metadata, resource)
+
     def createDeviceLiveToolsReboot(self, serial: str, **kwargs):
         """
         **Enqueue a job to reboot a device**
