@@ -213,6 +213,31 @@ class ActionBatchDevices(object):
         }
         return action
 
+    def createDeviceLiveToolsPowerUsage(self, serial: str, **kwargs):
+        """
+        **Enqueues a live tool job that retrieves details about a device's overall power usage. This endpoint has a sustained rate limit of one request every five seconds per device, with an allowed burst of five requests.**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-power-usage
+
+        - serial (string): Serial
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        serial = urllib.parse.quote(serial, safe="")
+        resource = f"/devices/{serial}/liveTools/power/usage"
+
+        body_params = [
+            "callback",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "job",
+            "body": payload,
+        }
+        return action
+
     def createDeviceLiveToolsReboot(self, serial: str, **kwargs):
         """
         **Enqueue a job to reboot a device. This endpoint has a rate limit of one request every 60 seconds.**
