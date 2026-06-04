@@ -47,12 +47,22 @@ jobs:
               ;;
           esac
 
+      # Generate the App token before checkout so checkout persists *it* (not the
+      # read-only GITHUB_TOKEN) as the git credential used for the later push.
+      - name: Generate app token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ secrets.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+
       - uses: actions/checkout@v6
         with:
           ref: ${{ steps.branches.outputs.checkout_branch }}
-          # Don't persist the read-only GITHUB_TOKEN in git config; otherwise it
-          # overrides the App token below and the push is rejected with 403.
-          persist-credentials: false
+          # Persist the App token (write access) so EndBug/add-and-commit can push.
+          # add-and-commit does NOT set up push auth from its github_token input —
+          # it relies on whatever credential checkout wrote to git config.
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Install uv
         uses: astral-sh/setup-uv@v7
@@ -91,13 +101,6 @@ jobs:
           sed -i "s/^version = \".*\"/version = \"$LIBRARY_VERSION\"/" pyproject.toml
           uv lock
 
-      - name: Generate app token
-        id: app-token
-        uses: actions/create-github-app-token@v2
-        with:
-          app-id: ${{ secrets.RELEASE_APP_ID }}
-          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
-
       - name: Commit changes to new branch
         uses: EndBug/add-and-commit@v10
         with:
@@ -105,7 +108,6 @@ jobs:
           author_email: support@meraki.com
           message: Auto-generated library v${{ github.event.inputs.library_version }} for API v${{ github.event.inputs.api_version }}.
           new_branch: ${{ steps.branches.outputs.release_branch }}
-          github_token: ${{ steps.app-token.outputs.token }}
 
       - name: Create pull request
         env:
