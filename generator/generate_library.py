@@ -124,6 +124,7 @@ def generate_library(
         "nac",
         "users",
         "support",
+        "assistant",
     ]
 
     tags = spec["tags"]
