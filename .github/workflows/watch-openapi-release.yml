@@ -188,7 +188,7 @@ jobs:
     steps:
       - name: Generate app token
         id: app-token
-        uses: actions/create-github-app-token@v2
+        uses: actions/create-github-app-token@v3
         with:
           app-id: ${{ secrets.RELEASE_APP_ID }}
           private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
@@ -212,7 +212,7 @@ jobs:
       - name: Enable early access
         if: needs.check-beta.outputs.has_new_release == 'true'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           BEFORE_ID=$(gh run list --workflow=enable-early-access.yml --limit=1 --json databaseId -q '.[0].databaseId')
           gh workflow run enable-early-access.yml
@@ -231,7 +231,7 @@ jobs:
       - name: Trigger GA regeneration
         if: needs.check-ga.outputs.has_new_release == 'true'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           gh workflow run regenerate-library.yml \
             -f library_version="${{ needs.check-ga.outputs.new_sdk_version }}" \
@@ -241,7 +241,7 @@ jobs:
       - name: Trigger beta regeneration
         if: needs.check-beta.outputs.has_new_release == 'true'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           gh workflow run regenerate-library.yml \
             -f library_version="${{ needs.check-beta.outputs.new_sdk_version }}" \
@@ -251,7 +251,7 @@ jobs:
       - name: Trigger dev regeneration
         if: needs.check-dev.outputs.has_new_release == 'true'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           gh workflow run regenerate-library.yml \
             -f library_version="${{ needs.check-dev.outputs.new_sdk_version }}" \
