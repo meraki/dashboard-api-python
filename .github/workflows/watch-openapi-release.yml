@@ -25,7 +25,18 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          LATEST=$(gh release list --repo meraki/openapi --exclude-pre-releases --limit 1 --json tagName -q '.[0].tagName')
+          # Retry: api.github.com occasionally 401s a job's freshly-minted token.
+          for attempt in 1 2 3 4 5; do
+            if LATEST=$(gh release list --repo meraki/openapi --exclude-pre-releases --limit 1 --json tagName -q '.[0].tagName'); then
+              break
+            fi
+            if [ "$attempt" = 5 ]; then
+              echo "::error::gh release list failed after 5 attempts"
+              exit 1
+            fi
+            echo "::warning::gh release list failed (attempt $attempt/5); retrying in $((attempt * 3))s"
+            sleep $((attempt * 3))
+          done
           API_VERSION="${LATEST#v}"
           # Reject anything that isn't a clean semver tag before it flows into
           # downstream run: steps / workflow_dispatch inputs (script injection guard).
@@ -68,7 +79,18 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          LATEST=$(gh release list --repo meraki/openapi --limit 20 --json tagName,isPrerelease -q '[.[] | select(.isPrerelease)] | .[0].tagName')
+          # Retry: api.github.com occasionally 401s a job's freshly-minted token.
+          for attempt in 1 2 3 4 5; do
+            if LATEST=$(gh release list --repo meraki/openapi --limit 20 --json tagName,isPrerelease -q '[.[] | select(.isPrerelease)] | .[0].tagName'); then
+              break
+            fi
+            if [ "$attempt" = 5 ]; then
+              echo "::error::gh release list failed after 5 attempts"
+              exit 1
+            fi
+            echo "::warning::gh release list failed (attempt $attempt/5); retrying in $((attempt * 3))s"
+            sleep $((attempt * 3))
+          done
           if [ -z "$LATEST" ]; then
             echo "has_new_release=false" >> "$GITHUB_OUTPUT"
             exit 0
@@ -132,7 +154,18 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          LATEST=$(gh release list --repo meraki/openapi --limit 20 --json tagName,isPrerelease -q '[.[] | select(.isPrerelease)] | .[0].tagName')
+          # Retry: api.github.com occasionally 401s a job's freshly-minted token.
+          for attempt in 1 2 3 4 5; do
+            if LATEST=$(gh release list --repo meraki/openapi --limit 20 --json tagName,isPrerelease -q '[.[] | select(.isPrerelease)] | .[0].tagName'); then
+              break
+            fi
+            if [ "$attempt" = 5 ]; then
+              echo "::error::gh release list failed after 5 attempts"
+              exit 1
+            fi
+            echo "::warning::gh release list failed (attempt $attempt/5); retrying in $((attempt * 3))s"
+            sleep $((attempt * 3))
+          done
           if [ -z "$LATEST" ]; then
             echo "has_new_release=false" >> "$GITHUB_OUTPUT"
             exit 0
