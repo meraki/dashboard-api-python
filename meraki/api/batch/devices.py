@@ -107,6 +107,50 @@ class ActionBatchDevices(object):
         }
         return action
 
+    def revokeDeviceCertificate(self, serial: str, certificateSerial: str, **kwargs):
+        """
+        **Revoke a device certificate. The device and certificate are identified by the path parameters. You may supply a revocation reason in the request body; if omitted, a default reason is applied.**
+        https://developer.cisco.com/meraki/api-v1/#!revoke-device-certificate
+
+        - serial (string): Serial
+        - certificateSerial (string): Certificate serial
+        - reason (string): Revocation reason per RFC 5280; omit to use `unspecified`
+        """
+
+        kwargs.update(locals())
+
+        if "reason" in kwargs:
+            options = [
+                "aACompromise",
+                "affiliationChanged",
+                "cACompromise",
+                "certificateHold",
+                "cessationOfOperation",
+                "keyCompromise",
+                "privilegeWithdrawn",
+                "removeFromCRL",
+                "superseded",
+                "unspecified",
+            ]
+            assert kwargs["reason"] in options, (
+                f'''"reason" cannot be "{kwargs["reason"]}", & must be set to one of: {options}'''
+            )
+
+        serial = urllib.parse.quote(str(serial), safe="")
+        certificateSerial = urllib.parse.quote(str(certificateSerial), safe="")
+        resource = f"/devices/{serial}/certificates/{certificateSerial}/revoke"
+
+        body_params = [
+            "reason",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "revoke",
+            "body": payload,
+        }
+        return action
+
     def createDeviceLiveToolsLedsBlink(self, serial: str, duration: int, **kwargs):
         """
         **Enqueue a job to blink LEDs on a device. This endpoint has a rate limit of one request every 10 seconds.**
