@@ -20,7 +20,7 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}"
 
         body_params = [
@@ -46,7 +46,7 @@ class ActionBatchNetworks(object):
         - networkId (string): Network ID
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}"
 
         action = {
@@ -67,7 +67,7 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/bind"
 
         body_params = [
@@ -103,7 +103,7 @@ class ActionBatchNetworks(object):
                 f'''"devicePolicy" cannot be "{kwargs["devicePolicy"]}", & must be set to one of: {options}'''
             )
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/clients/provision"
 
         body_params = [
@@ -134,7 +134,7 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/devices/claim"
 
         body_params = [
@@ -164,7 +164,7 @@ class ActionBatchNetworks(object):
             options = ["100", "large", "medium", "small", "xlarge"]
             assert kwargs["size"] in options, f'''"size" cannot be "{kwargs["size"]}", & must be set to one of: {options}'''
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/devices/claim/vmx"
 
         body_params = [
@@ -189,7 +189,7 @@ class ActionBatchNetworks(object):
 
         kwargs = locals()
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/devices/remove"
 
         body_params = [
@@ -214,7 +214,7 @@ class ActionBatchNetworks(object):
 
         kwargs = locals()
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/devices/syslog/servers"
 
         body_params = [
@@ -241,7 +241,7 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/firmwareUpgrades"
 
         body_params = [
@@ -287,7 +287,7 @@ class ActionBatchNetworks(object):
                 f'''"product" cannot be "{kwargs["product"]}", & must be set to one of: {options}'''
             )
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/firmwareUpgrades/rollbacks"
 
         body_params = [
@@ -319,7 +319,7 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/firmwareUpgrades/staged/groups"
 
         body_params = [
@@ -345,8 +345,8 @@ class ActionBatchNetworks(object):
         - groupId (string): Group ID
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        groupId = urllib.parse.quote(groupId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        groupId = urllib.parse.quote(str(groupId), safe="")
         resource = f"/networks/{networkId}/firmwareUpgrades/staged/groups/{groupId}"
 
         action = {
@@ -366,7 +366,7 @@ class ActionBatchNetworks(object):
 
         kwargs = locals()
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/floorPlans/autoLocate/jobs/batch"
 
         body_params = [
@@ -389,8 +389,8 @@ class ActionBatchNetworks(object):
         - jobId (string): Job ID
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        jobId = urllib.parse.quote(jobId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        jobId = urllib.parse.quote(str(jobId), safe="")
         resource = f"/networks/{networkId}/floorPlans/autoLocate/jobs/{jobId}/cancel"
 
         action = {
@@ -411,8 +411,8 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        jobId = urllib.parse.quote(jobId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        jobId = urllib.parse.quote(str(jobId), safe="")
         resource = f"/networks/{networkId}/floorPlans/autoLocate/jobs/{jobId}/publish"
 
         body_params = [
@@ -438,8 +438,8 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        jobId = urllib.parse.quote(jobId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        jobId = urllib.parse.quote(str(jobId), safe="")
         resource = f"/networks/{networkId}/floorPlans/autoLocate/jobs/{jobId}/recalculate"
 
         body_params = [
@@ -464,7 +464,7 @@ class ActionBatchNetworks(object):
 
         kwargs = locals()
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/floorPlans/devices/batchUpdate"
 
         body_params = [
@@ -498,8 +498,8 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        floorPlanId = urllib.parse.quote(floorPlanId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        floorPlanId = urllib.parse.quote(str(floorPlanId), safe="")
         resource = f"/networks/{networkId}/floorPlans/{floorPlanId}"
 
         body_params = [
@@ -530,8 +530,8 @@ class ActionBatchNetworks(object):
         - floorPlanId (string): Floor plan ID
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        floorPlanId = urllib.parse.quote(floorPlanId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        floorPlanId = urllib.parse.quote(str(floorPlanId), safe="")
         resource = f"/networks/{networkId}/floorPlans/{floorPlanId}"
 
         action = {
@@ -567,7 +567,7 @@ class ActionBatchNetworks(object):
                 f'''"splashAuthSettings" cannot be "{kwargs["splashAuthSettings"]}", & must be set to one of: {options}'''
             )
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/groupPolicies"
 
         body_params = [
@@ -616,8 +616,8 @@ class ActionBatchNetworks(object):
                 f'''"splashAuthSettings" cannot be "{kwargs["splashAuthSettings"]}", & must be set to one of: {options}'''
             )
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        groupPolicyId = urllib.parse.quote(groupPolicyId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        groupPolicyId = urllib.parse.quote(str(groupPolicyId), safe="")
         resource = f"/networks/{networkId}/groupPolicies/{groupPolicyId}"
 
         body_params = [
@@ -650,8 +650,8 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        groupPolicyId = urllib.parse.quote(groupPolicyId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        groupPolicyId = urllib.parse.quote(str(groupPolicyId), safe="")
         resource = f"/networks/{networkId}/groupPolicies/{groupPolicyId}"
 
         action = {
@@ -672,7 +672,7 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/locationScanning"
 
         body_params = [
@@ -698,7 +698,7 @@ class ActionBatchNetworks(object):
 
         kwargs = locals()
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/locationScanning/httpServers"
 
         body_params = [
@@ -735,7 +735,7 @@ class ActionBatchNetworks(object):
                 f'''"accountType" cannot be "{kwargs["accountType"]}", & must be set to one of: {options}'''
             )
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/merakiAuthUsers"
 
         body_params = [
@@ -767,8 +767,8 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        merakiAuthUserId = urllib.parse.quote(merakiAuthUserId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        merakiAuthUserId = urllib.parse.quote(str(merakiAuthUserId), safe="")
         resource = f"/networks/{networkId}/merakiAuthUsers/{merakiAuthUserId}"
 
         action = {
@@ -792,8 +792,8 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        merakiAuthUserId = urllib.parse.quote(merakiAuthUserId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        merakiAuthUserId = urllib.parse.quote(str(merakiAuthUserId), safe="")
         resource = f"/networks/{networkId}/merakiAuthUsers/{merakiAuthUserId}"
 
         body_params = [
@@ -832,7 +832,7 @@ class ActionBatchNetworks(object):
                 f'''"productType" cannot be "{kwargs["productType"]}", & must be set to one of: {options}'''
             )
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/mqttBrokers"
 
         body_params = [
@@ -867,8 +867,8 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        mqttBrokerId = urllib.parse.quote(mqttBrokerId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        mqttBrokerId = urllib.parse.quote(str(mqttBrokerId), safe="")
         resource = f"/networks/{networkId}/mqttBrokers/{mqttBrokerId}"
 
         body_params = [
@@ -895,8 +895,8 @@ class ActionBatchNetworks(object):
         - mqttBrokerId (string): Mqtt broker ID
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        mqttBrokerId = urllib.parse.quote(mqttBrokerId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        mqttBrokerId = urllib.parse.quote(str(mqttBrokerId), safe="")
         resource = f"/networks/{networkId}/mqttBrokers/{mqttBrokerId}"
 
         action = {
@@ -921,7 +921,7 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/settings"
 
         body_params = [
@@ -952,7 +952,7 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/sites/buildings"
 
         body_params = [
@@ -976,8 +976,8 @@ class ActionBatchNetworks(object):
         - buildingId (string): Building ID
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        buildingId = urllib.parse.quote(buildingId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        buildingId = urllib.parse.quote(str(buildingId), safe="")
         resource = f"/networks/{networkId}/sites/buildings/{buildingId}"
 
         action = {
@@ -999,8 +999,8 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        buildingId = urllib.parse.quote(buildingId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        buildingId = urllib.parse.quote(str(buildingId), safe="")
         resource = f"/networks/{networkId}/sites/buildings/{buildingId}"
 
         body_params = [
@@ -1033,7 +1033,7 @@ class ActionBatchNetworks(object):
             options = ["disabled", "v1/v2c", "v3"]
             assert kwargs["mode"] in options, f'''"mode" cannot be "{kwargs["mode"]}", & must be set to one of: {options}'''
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/snmp/traps"
 
         body_params = [
@@ -1058,7 +1058,7 @@ class ActionBatchNetworks(object):
         - networkId (string): Network ID
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/split"
 
         action = {
@@ -1078,7 +1078,7 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/unbind"
 
         body_params = [
@@ -1107,7 +1107,7 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/vlanProfiles"
 
         body_params = [
@@ -1134,8 +1134,8 @@ class ActionBatchNetworks(object):
         - iname (string): Iname
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        iname = urllib.parse.quote(iname, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        iname = urllib.parse.quote(str(iname), safe="")
         resource = f"/networks/{networkId}/vlanProfiles/{iname}"
 
         action = {
@@ -1159,7 +1159,7 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/webhooks/payloadTemplates"
 
         body_params = [
@@ -1186,8 +1186,8 @@ class ActionBatchNetworks(object):
         - payloadTemplateId (string): Payload template ID
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        payloadTemplateId = urllib.parse.quote(payloadTemplateId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        payloadTemplateId = urllib.parse.quote(str(payloadTemplateId), safe="")
         resource = f"/networks/{networkId}/webhooks/payloadTemplates/{payloadTemplateId}"
 
         action = {
@@ -1212,8 +1212,8 @@ class ActionBatchNetworks(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        payloadTemplateId = urllib.parse.quote(payloadTemplateId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        payloadTemplateId = urllib.parse.quote(str(payloadTemplateId), safe="")
         resource = f"/networks/{networkId}/webhooks/payloadTemplates/{payloadTemplateId}"
 
         body_params = [

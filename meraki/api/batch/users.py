@@ -20,7 +20,7 @@ class ActionBatchUsers(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/iam/users/authorizations"
 
         body_params = [
@@ -53,7 +53,7 @@ class ActionBatchUsers(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/iam/users/authorizations"
 
         body_params = [
@@ -84,7 +84,7 @@ class ActionBatchUsers(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/iam/users/authorizations/authorization/revoke"
 
         body_params = [
@@ -109,8 +109,8 @@ class ActionBatchUsers(object):
         - authorizationId (string): Authorization ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        authorizationId = urllib.parse.quote(authorizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        authorizationId = urllib.parse.quote(str(authorizationId), safe="")
         resource = f"/organizations/{organizationId}/iam/users/authorizations/{authorizationId}"
 
         action = {
@@ -143,7 +143,7 @@ class ActionBatchUsers(object):
                 f'''"syncType" cannot be "{kwargs["syncType"]}", & must be set to one of: {options}'''
             )
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/iam/users/idps"
 
         body_params = [
@@ -173,7 +173,7 @@ class ActionBatchUsers(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/iam/users/idps/testConnectivity"
 
         body_params = [
@@ -202,7 +202,7 @@ class ActionBatchUsers(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/iam/users/idps/users"
 
         body_params = [
@@ -234,8 +234,8 @@ class ActionBatchUsers(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        id = urllib.parse.quote(id, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
         resource = f"/organizations/{organizationId}/iam/users/idps/users/{id}"
 
         body_params = [
@@ -261,8 +261,8 @@ class ActionBatchUsers(object):
         - id (string): ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        id = urllib.parse.quote(id, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
         resource = f"/organizations/{organizationId}/iam/users/idps/users/{id}"
 
         action = {
@@ -284,8 +284,8 @@ class ActionBatchUsers(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        idpId = urllib.parse.quote(idpId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        idpId = urllib.parse.quote(str(idpId), safe="")
         resource = f"/organizations/{organizationId}/iam/users/idps/{idpId}/sync"
 
         body_params = [
@@ -321,8 +321,8 @@ class ActionBatchUsers(object):
                 f'''"syncType" cannot be "{kwargs["syncType"]}", & must be set to one of: {options}'''
             )
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        id = urllib.parse.quote(id, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
         resource = f"/organizations/{organizationId}/iam/users/idps/{id}"
 
         body_params = [
@@ -348,8 +348,8 @@ class ActionBatchUsers(object):
         - id (string): ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        id = urllib.parse.quote(id, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
         resource = f"/organizations/{organizationId}/iam/users/idps/{id}"
 
         action = {

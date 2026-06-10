@@ -20,7 +20,7 @@ class ActionBatchNac(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/nac/certificates/authorities/crls"
 
         body_params = [
@@ -45,8 +45,8 @@ class ActionBatchNac(object):
         - crlId (string): Crl ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        crlId = urllib.parse.quote(crlId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        crlId = urllib.parse.quote(str(crlId), safe="")
         resource = f"/organizations/{organizationId}/nac/certificates/authorities/crls/{crlId}"
 
         action = {
@@ -68,7 +68,7 @@ class ActionBatchNac(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/nac/certificates/import"
 
         body_params = [
@@ -96,8 +96,8 @@ class ActionBatchNac(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        certificateId = urllib.parse.quote(certificateId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        certificateId = urllib.parse.quote(str(certificateId), safe="")
         resource = f"/organizations/{organizationId}/nac/certificates/{certificateId}"
 
         body_params = [
@@ -122,7 +122,7 @@ class ActionBatchNac(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/nac/clients/bulkDelete"
 
         action = {
@@ -144,7 +144,7 @@ class ActionBatchNac(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/nac/clients/bulkEdit"
 
         body_params = [
@@ -175,7 +175,7 @@ class ActionBatchNac(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/nac/clients/bulkUpload"
 
         body_params = [
@@ -204,7 +204,7 @@ class ActionBatchNac(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/nac/clients/groups"
 
         body_params = [
@@ -234,8 +234,8 @@ class ActionBatchNac(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        groupId = urllib.parse.quote(groupId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        groupId = urllib.parse.quote(str(groupId), safe="")
         resource = f"/organizations/{organizationId}/nac/clients/groups/{groupId}"
 
         body_params = [
@@ -260,8 +260,8 @@ class ActionBatchNac(object):
         - groupId (string): Group ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        groupId = urllib.parse.quote(groupId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        groupId = urllib.parse.quote(str(groupId), safe="")
         resource = f"/organizations/{organizationId}/nac/clients/groups/{groupId}"
 
         action = {
@@ -293,8 +293,8 @@ class ActionBatchNac(object):
             options = ["BYOD", "corporate"]
             assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        clientId = urllib.parse.quote(clientId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        clientId = urllib.parse.quote(str(clientId), safe="")
         resource = f"/organizations/{organizationId}/nac/clients/{clientId}"
 
         body_params = [

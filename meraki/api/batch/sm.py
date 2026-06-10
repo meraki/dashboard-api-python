@@ -34,7 +34,7 @@ class ActionBatchSm(object):
             options = ["all", "none", "withAll", "withAny", "withoutAll", "withoutAny"]
             assert kwargs["scope"] in options, f'''"scope" cannot be "{kwargs["scope"]}", & must be set to one of: {options}'''
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/sm/scripts"
 
         body_params = [
@@ -76,7 +76,7 @@ class ActionBatchSm(object):
                 f'''"deviceFilter" cannot be "{kwargs["deviceFilter"]}", & must be set to one of: {options}'''
             )
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/sm/scripts/jobs"
 
         body_params = [
@@ -122,8 +122,8 @@ class ActionBatchSm(object):
             options = ["all", "none", "withAll", "withAny", "withoutAll", "withoutAny"]
             assert kwargs["scope"] in options, f'''"scope" cannot be "{kwargs["scope"]}", & must be set to one of: {options}'''
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        scriptId = urllib.parse.quote(scriptId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        scriptId = urllib.parse.quote(str(scriptId), safe="")
         resource = f"/networks/{networkId}/sm/scripts/{scriptId}"
 
         body_params = [
@@ -155,8 +155,8 @@ class ActionBatchSm(object):
         - scriptId (string): Script ID
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        scriptId = urllib.parse.quote(scriptId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        scriptId = urllib.parse.quote(str(scriptId), safe="")
         resource = f"/networks/{networkId}/sm/scripts/{scriptId}"
 
         action = {
@@ -174,8 +174,8 @@ class ActionBatchSm(object):
         - userAccessDeviceId (string): User access device ID
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        userAccessDeviceId = urllib.parse.quote(userAccessDeviceId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        userAccessDeviceId = urllib.parse.quote(str(userAccessDeviceId), safe="")
         resource = f"/networks/{networkId}/sm/userAccessDevices/{userAccessDeviceId}"
 
         action = {
@@ -201,7 +201,7 @@ class ActionBatchSm(object):
             options = ["all_tags", "some", "without_all_tags", "without_some"]
             assert kwargs["scope"] in options, f'''"scope" cannot be "{kwargs["scope"]}", & must be set to one of: {options}'''
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/sm/admins/roles"
 
         body_params = [
@@ -235,8 +235,8 @@ class ActionBatchSm(object):
             options = ["all_tags", "some", "without_all_tags", "without_some"]
             assert kwargs["scope"] in options, f'''"scope" cannot be "{kwargs["scope"]}", & must be set to one of: {options}'''
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        roleId = urllib.parse.quote(roleId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        roleId = urllib.parse.quote(str(roleId), safe="")
         resource = f"/organizations/{organizationId}/sm/admins/roles/{roleId}"
 
         body_params = [
@@ -261,8 +261,8 @@ class ActionBatchSm(object):
         - roleId (string): Role ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        roleId = urllib.parse.quote(roleId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        roleId = urllib.parse.quote(str(roleId), safe="")
         resource = f"/organizations/{organizationId}/sm/admins/roles/{roleId}"
 
         action = {
@@ -283,7 +283,7 @@ class ActionBatchSm(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/sm/apple/cloudEnrollment/syncJobs"
 
         body_params = [
@@ -310,7 +310,7 @@ class ActionBatchSm(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/sm/bulkEnrollment/token"
 
         body_params = [
@@ -338,8 +338,8 @@ class ActionBatchSm(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        tokenId = urllib.parse.quote(tokenId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        tokenId = urllib.parse.quote(str(tokenId), safe="")
         resource = f"/organizations/{organizationId}/sm/bulkEnrollment/token/{tokenId}"
 
         body_params = [
@@ -363,8 +363,8 @@ class ActionBatchSm(object):
         - tokenId (string): Token ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        tokenId = urllib.parse.quote(tokenId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        tokenId = urllib.parse.quote(str(tokenId), safe="")
         resource = f"/organizations/{organizationId}/sm/bulkEnrollment/token/{tokenId}"
 
         action = {
@@ -384,7 +384,7 @@ class ActionBatchSm(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/sm/sentry/policies/assignments"
 
         body_params = [

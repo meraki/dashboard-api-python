@@ -18,7 +18,7 @@ class ActionBatchSecureConnect(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/secureConnect/privateResourceGroups"
 
         body_params = [
@@ -48,8 +48,8 @@ class ActionBatchSecureConnect(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        id = urllib.parse.quote(id, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
         resource = f"/organizations/{organizationId}/secureConnect/privateResourceGroups/{id}"
 
         body_params = [
@@ -74,8 +74,8 @@ class ActionBatchSecureConnect(object):
         - id (string): ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        id = urllib.parse.quote(id, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
         resource = f"/organizations/{organizationId}/secureConnect/privateResourceGroups/{id}"
 
         action = {
@@ -101,7 +101,7 @@ class ActionBatchSecureConnect(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/secureConnect/privateResources"
 
         body_params = [
@@ -137,8 +137,8 @@ class ActionBatchSecureConnect(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        id = urllib.parse.quote(id, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
         resource = f"/organizations/{organizationId}/secureConnect/privateResources/{id}"
 
         body_params = [
@@ -165,8 +165,8 @@ class ActionBatchSecureConnect(object):
         - id (string): ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        id = urllib.parse.quote(id, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
         resource = f"/organizations/{organizationId}/secureConnect/privateResources/{id}"
 
         action = {
@@ -187,7 +187,7 @@ class ActionBatchSecureConnect(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/secureConnect/sites"
 
         body_params = [
@@ -214,7 +214,7 @@ class ActionBatchSecureConnect(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/secureConnect/sites"
 
         action = {
