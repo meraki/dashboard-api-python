@@ -39,6 +39,27 @@ uv sync
 - Generated API scope files (`meraki/api/`, `meraki/aio/api/`) are auto-generated from the OpenAPI spec. Changes here will be overwritten. Fix the generator instead.
 - Do not vendor or bundle dependencies.
 
+## Changelog Fragments
+
+Every user-facing change needs a news fragment in `changelog.d/`. Do not edit `CHANGELOG.md` by hand; towncrier builds it at release time.
+
+File name: `changelog.d/{issue}.{type}.md`. With no issue, use a slug prefixed with `+`: `changelog.d/+httpx-migration.changed.md`.
+
+Types: `added`, `changed`, `deprecated`, `removed`, `fixed`, `security`.
+
+```bash
+# Issue-linked
+echo "Retry on 429 now honors Retry-After." > changelog.d/1234.fixed.md
+
+# Or via towncrier
+uv run towncrier create -c "Retry on 429 now honors Retry-After." 1234.fixed.md
+
+# Preview the rendered changelog without consuming fragments
+uv run towncrier build --draft --version "$(grep '^version' pyproject.toml | sed 's/version = "\(.*\)"/\1/')"
+```
+
+One fragment per change. Multiple fragments per issue are fine (e.g. `1234.added.md` and `1234.fixed.md`). Fragments are not wiped by library regeneration; they survive until the next release build.
+
 ## Running the Generator
 
 ```bash
