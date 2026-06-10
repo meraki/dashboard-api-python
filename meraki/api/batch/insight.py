@@ -18,7 +18,7 @@ class ActionBatchInsight(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/insight/applications"
 
         body_params = [
@@ -47,8 +47,8 @@ class ActionBatchInsight(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        applicationId = urllib.parse.quote(applicationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        applicationId = urllib.parse.quote(str(applicationId), safe="")
         resource = f"/organizations/{organizationId}/insight/applications/{applicationId}"
 
         body_params = [
@@ -72,8 +72,8 @@ class ActionBatchInsight(object):
         - applicationId (string): Application ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        applicationId = urllib.parse.quote(applicationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        applicationId = urllib.parse.quote(str(applicationId), safe="")
         resource = f"/organizations/{organizationId}/insight/applications/{applicationId}"
 
         action = {
@@ -95,7 +95,7 @@ class ActionBatchInsight(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/insight/monitoredMediaServers"
 
         body_params = [
@@ -125,8 +125,8 @@ class ActionBatchInsight(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        monitoredMediaServerId = urllib.parse.quote(monitoredMediaServerId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        monitoredMediaServerId = urllib.parse.quote(str(monitoredMediaServerId), safe="")
         resource = f"/organizations/{organizationId}/insight/monitoredMediaServers/{monitoredMediaServerId}"
 
         body_params = [
@@ -151,8 +151,8 @@ class ActionBatchInsight(object):
         - monitoredMediaServerId (string): Monitored media server ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        monitoredMediaServerId = urllib.parse.quote(monitoredMediaServerId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        monitoredMediaServerId = urllib.parse.quote(str(monitoredMediaServerId), safe="")
         resource = f"/organizations/{organizationId}/insight/monitoredMediaServers/{monitoredMediaServerId}"
 
         action = {
@@ -173,7 +173,7 @@ class ActionBatchInsight(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/insight/webApps"
 
         body_params = [
@@ -201,8 +201,8 @@ class ActionBatchInsight(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        customCounterSetRuleId = urllib.parse.quote(customCounterSetRuleId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        customCounterSetRuleId = urllib.parse.quote(str(customCounterSetRuleId), safe="")
         resource = f"/organizations/{organizationId}/insight/webApps/{customCounterSetRuleId}"
 
         body_params = [
@@ -226,8 +226,8 @@ class ActionBatchInsight(object):
         - customCounterSetRuleId (string): Custom counter set rule ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        customCounterSetRuleId = urllib.parse.quote(customCounterSetRuleId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        customCounterSetRuleId = urllib.parse.quote(str(customCounterSetRuleId), safe="")
         resource = f"/organizations/{organizationId}/insight/webApps/{customCounterSetRuleId}"
 
         action = {

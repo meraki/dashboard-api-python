@@ -24,7 +24,7 @@ class ActionBatchDevices(object):
 
         kwargs.update(locals())
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}"
 
         body_params = [
@@ -57,7 +57,7 @@ class ActionBatchDevices(object):
 
         kwargs = locals()
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/cellular/geolocations"
 
         body_params = [
@@ -79,7 +79,7 @@ class ActionBatchDevices(object):
         - serial (string): Serial
         - slot (string): Required parameter for the SIM slot to update the cellular band mask for
         - type (string): Required parameter for the signal type to update the cellular band mask for
-        - masked (array): Required parameter for the band identifiers to mask for the given SIM slot and signal type. For LTE use bands identifiers like '30' and for 5G use band identifiers like 'n30'. Maximum 256 bands.
+        - masked (array): Required parameter for the band identifiers to mask for the given SIM slot and signal type. For LTE use bands identifiers like '30', for 5G use band identifiers like 'n30', or use 'all' to mask all bands for that signal type. Maximum 256 bands.
         """
 
         kwargs = locals()
@@ -91,7 +91,7 @@ class ActionBatchDevices(object):
             options = ["5GNSA", "5GSA", "LTE"]
             assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/cellular/uplinks/bands/masks/update"
 
         body_params = [
@@ -103,60 +103,6 @@ class ActionBatchDevices(object):
         action = {
             "resource": resource,
             "operation": "update",
-            "body": payload,
-        }
-        return action
-
-    def updateDeviceCliConfigFavorite(self, serial: str, configId: str, favorite: bool, **kwargs):
-        """
-        **Favorite or unfavorite a configuration for an IOS-XE device**
-        https://developer.cisco.com/meraki/api-v1/#!update-device-cli-config-favorite
-
-        - serial (string): Serial
-        - configId (string): Config ID
-        - favorite (boolean): Whether the config should be favorited
-        """
-
-        kwargs = locals()
-
-        serial = urllib.parse.quote(serial, safe="")
-        configId = urllib.parse.quote(configId, safe="")
-        resource = f"/devices/{serial}/cli/configs/{configId}"
-
-        body_params = [
-            "favorite",
-        ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-        action = {
-            "resource": resource,
-            "operation": "update",
-            "body": payload,
-        }
-        return action
-
-    def createDeviceConfigRestore(self, serial: str, configId: str, **kwargs):
-        """
-        **Create a restore request for a specific config history record**
-        https://developer.cisco.com/meraki/api-v1/#!create-device-config-restore
-
-        - serial (string): Serial
-        - configId (string): Config ID
-        - scheduledFor (string): Requested ISO 8601 UTC timestamp for when the restore should be scheduled
-        """
-
-        kwargs.update(locals())
-
-        serial = urllib.parse.quote(serial, safe="")
-        configId = urllib.parse.quote(configId, safe="")
-        resource = f"/devices/{serial}/cli/configs/{configId}/restores"
-
-        body_params = [
-            "scheduledFor",
-        ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-        action = {
-            "resource": resource,
-            "operation": "restore",
             "body": payload,
         }
         return action
@@ -173,7 +119,7 @@ class ActionBatchDevices(object):
 
         kwargs.update(locals())
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/liveTools/leds/blink"
 
         body_params = [
@@ -199,7 +145,7 @@ class ActionBatchDevices(object):
 
         kwargs.update(locals())
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/liveTools/ports/status"
 
         body_params = [
@@ -209,6 +155,31 @@ class ActionBatchDevices(object):
         action = {
             "resource": resource,
             "operation": "status",
+            "body": payload,
+        }
+        return action
+
+    def createDeviceLiveToolsPowerUsage(self, serial: str, **kwargs):
+        """
+        **Enqueues a live tool job that retrieves details about a device's overall power usage. This endpoint has a sustained rate limit of one request every five seconds per device, with an allowed burst of five requests.**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-power-usage
+
+        - serial (string): Serial
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/liveTools/power/usage"
+
+        body_params = [
+            "callback",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "job",
             "body": payload,
         }
         return action
@@ -224,7 +195,7 @@ class ActionBatchDevices(object):
 
         kwargs.update(locals())
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/liveTools/reboot"
 
         body_params = [
@@ -273,7 +244,7 @@ class ActionBatchDevices(object):
             ]
             assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/liveTools/routingTable/lookups"
 
         body_params = [
@@ -302,7 +273,7 @@ class ActionBatchDevices(object):
 
         kwargs.update(locals())
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/liveTools/routingTable/summaries"
 
         body_params = [
@@ -327,7 +298,7 @@ class ActionBatchDevices(object):
 
         kwargs.update(locals())
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/liveTools/throughputTest"
 
         body_params = [
@@ -353,7 +324,7 @@ class ActionBatchDevices(object):
 
         kwargs.update(locals())
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/managementInterface"
 
         body_params = [

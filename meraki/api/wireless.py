@@ -2686,7 +2686,7 @@ class Wireless(object):
         - radiusServerTimeout (integer): The amount of time for which a RADIUS client waits for a reply from the RADIUS server (must be between 1-10 seconds).
         - radiusServerAttemptsLimit (integer): The maximum number of transmit attempts after which a RADIUS server is failed over (must be between 1-5).
         - radiusFallbackEnabled (boolean): Whether or not higher priority RADIUS servers should be retried after 60 seconds.
-        - radiusRadsec (object): The current settings for RADIUS RADSec
+        - radiusRadsec (object): The current settings for RADIUS RadSec
         - radiusCoaEnabled (boolean): If true, Meraki devices will act as a RADIUS Dynamic Authorization Server and will respond to RADIUS Change-of-Authorization and Disconnect messages sent by the RADIUS server.
         - radiusFailoverPolicy (string): This policy determines how authentication requests should be handled in the event that all of the configured RADIUS servers are unreachable ('Deny access' or 'Allow access')
         - radiusLoadBalancingPolicy (string): This policy determines which RADIUS server will be contacted first in an authentication attempt and the ordering of any necessary retry attempts ('Strict priority order' or 'Round robin')
@@ -5428,6 +5428,49 @@ class Wireless(object):
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWirelessExperienceMostImpactedNetworks(self, organizationId: str, **kwargs):
+        """
+        **Returns the most impacted wireless experience networks and the top failure contributor for each network.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-most-impacted-networks
+
+        - organizationId (string): Organization ID
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - limit (integer): Number of most impacted networks to return. Default is 5. Maximum is 10.
+        """
+
+        kwargs.update(locals())
+
+        if "limit" in kwargs:
+            options = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+            assert kwargs["limit"] in options, f'''"limit" cannot be "{kwargs["limit"]}", & must be set to one of: {options}'''
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "mostImpactedNetworks"],
+            "operation": "getOrganizationAssuranceWirelessExperienceMostImpactedNetworks",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/mostImpactedNetworks"
+
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "limit",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceMostImpactedNetworks: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
 
     def getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetwork(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
@@ -8759,7 +8802,7 @@ class Wireless(object):
 
     def getOrganizationWirelessDevicesRadsecCertificatesAuthorities(self, organizationId: str, **kwargs):
         """
-        **Query for details on the organization's RADSEC device Certificate Authority certificates (CAs)**
+        **Query for details on the organization's RadSec device Certificate Authority certificates (CAs)**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-radsec-certificates-authorities
 
         - organizationId (string): Organization ID
@@ -8800,7 +8843,7 @@ class Wireless(object):
 
     def updateOrganizationWirelessDevicesRadsecCertificatesAuthorities(self, organizationId: str, **kwargs):
         """
-        **Update an organization's RADSEC device Certificate Authority (CA) state**
+        **Update an organization's RadSec device Certificate Authority (CA) state**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-wireless-devices-radsec-certificates-authorities
 
         - organizationId (string): Organization ID
@@ -8835,7 +8878,7 @@ class Wireless(object):
 
     def createOrganizationWirelessDevicesRadsecCertificatesAuthority(self, organizationId: str):
         """
-        **Create an organization's RADSEC device Certificate Authority (CA)**
+        **Create an organization's RadSec device Certificate Authority (CA)**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-wireless-devices-radsec-certificates-authority
 
         - organizationId (string): Organization ID
@@ -8852,7 +8895,7 @@ class Wireless(object):
 
     def getOrganizationWirelessDevicesRadsecCertificatesAuthoritiesCrls(self, organizationId: str, **kwargs):
         """
-        **Query for certificate revocation list (CRL) for the organization's RADSEC device Certificate Authorities (CAs).**
+        **Query for certificate revocation list (CRL) for the organization's RadSec device Certificate Authorities (CAs).**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-radsec-certificates-authorities-crls
 
         - organizationId (string): Organization ID
@@ -8893,7 +8936,7 @@ class Wireless(object):
 
     def getOrganizationWirelessDevicesRadsecCertificatesAuthoritiesCrlsDeltas(self, organizationId: str, **kwargs):
         """
-        **Query for all delta certificate revocation list (CRL) for the organization's RADSEC device Certificate Authority (CA) with the given id.**
+        **Query for all delta certificate revocation list (CRL) for the organization's RadSec device Certificate Authority (CA) with the given id.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-devices-radsec-certificates-authorities-crls-deltas
 
         - organizationId (string): Organization ID

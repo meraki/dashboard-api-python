@@ -160,7 +160,7 @@ class AsyncDevices:
 
         - serial (string): Serial
         - sims (array): List of SIMs. If a SIM was previously configured and not specified in this request, it will remain unchanged.
-        - simOrdering (array): Specifies the ordering of all SIMs for an MG: primary, secondary, and not-in-use (when applicable). It's required for devices with 3 or more SIMs and can be used in place of 'isPrimary' for dual-SIM devices. To indicate eSIM, use 'sim3'. Sim failover will occur only between primary and secondary sim slots.
+        - simOrdering (array): Specifies the ordering of all SIMs for an MG: primary, secondary, and not-in-use (when applicable). It's required for devices with 3 or more SIMs and can be used in place of 'isPrimary' for dual-SIM devices. Use the raw eSIM slot value for the device, such as 'sim2' or 'sim3'. Sim failover will occur only between primary and secondary sim slots.
         - simFailover (object): SIM Failover settings.
         """
 
@@ -196,7 +196,7 @@ class AsyncDevices:
         - serial (string): Serial
         - slot (string): Required parameter for the SIM slot to update the cellular band mask for
         - type (string): Required parameter for the signal type to update the cellular band mask for
-        - masked (array): Required parameter for the band identifiers to mask for the given SIM slot and signal type. For LTE use bands identifiers like '30' and for 5G use band identifiers like 'n30'. Maximum 256 bands.
+        - masked (array): Required parameter for the band identifiers to mask for the given SIM slot and signal type. For LTE use bands identifiers like '30', for 5G use band identifiers like 'n30', or use 'all' to mask all bands for that signal type. Maximum 256 bands.
         """
 
         kwargs = locals()
@@ -229,72 +229,6 @@ class AsyncDevices:
                 self._session._logger.warning(
                     f"createDeviceCellularUplinksBandsMasksUpdate: ignoring unrecognized kwargs: {invalid}"
                 )
-
-        return self._session.post(metadata, resource, payload)
-
-    def updateDeviceCliConfigFavorite(self, serial: str, configId: str, favorite: bool, **kwargs):
-        """
-        **Favorite or unfavorite a configuration for an IOS-XE device**
-        https://developer.cisco.com/meraki/api-v1/#!update-device-cli-config-favorite
-
-        - serial (string): Serial
-        - configId (string): Config ID
-        - favorite (boolean): Whether the config should be favorited
-        """
-
-        kwargs = locals()
-
-        metadata = {
-            "tags": ["devices", "configure", "cli", "configs"],
-            "operation": "updateDeviceCliConfigFavorite",
-        }
-        serial = urllib.parse.quote(str(serial), safe="")
-        configId = urllib.parse.quote(str(configId), safe="")
-        resource = f"/devices/{serial}/cli/configs/{configId}"
-
-        body_params = [
-            "favorite",
-        ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-
-        if self._session._validate_kwargs:
-            all_params = [] + body_params
-            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
-            if invalid and self._session._logger:
-                self._session._logger.warning(f"updateDeviceCliConfigFavorite: ignoring unrecognized kwargs: {invalid}")
-
-        return self._session.put(metadata, resource, payload)
-
-    def createDeviceConfigRestore(self, serial: str, configId: str, **kwargs):
-        """
-        **Create a restore request for a specific config history record**
-        https://developer.cisco.com/meraki/api-v1/#!create-device-config-restore
-
-        - serial (string): Serial
-        - configId (string): Config ID
-        - scheduledFor (string): Requested ISO 8601 UTC timestamp for when the restore should be scheduled
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            "tags": ["devices", "configure", "cli", "configs"],
-            "operation": "createDeviceConfigRestore",
-        }
-        serial = urllib.parse.quote(str(serial), safe="")
-        configId = urllib.parse.quote(str(configId), safe="")
-        resource = f"/devices/{serial}/cli/configs/{configId}/restores"
-
-        body_params = [
-            "scheduledFor",
-        ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-
-        if self._session._validate_kwargs:
-            all_params = [] + body_params
-            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
-            if invalid and self._session._logger:
-                self._session._logger.warning(f"createDeviceConfigRestore: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
 
@@ -961,6 +895,56 @@ class AsyncDevices:
         serial = urllib.parse.quote(str(serial), safe="")
         jobId = urllib.parse.quote(str(jobId), safe="")
         resource = f"/devices/{serial}/liveTools/ports/status/{jobId}"
+
+        return self._session.get(metadata, resource)
+
+    def createDeviceLiveToolsPowerUsage(self, serial: str, **kwargs):
+        """
+        **Enqueues a live tool job that retrieves details about a device's overall power usage**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-power-usage
+
+        - serial (string): Serial
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["devices", "liveTools", "power", "usage"],
+            "operation": "createDeviceLiveToolsPowerUsage",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/liveTools/power/usage"
+
+        body_params = [
+            "callback",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createDeviceLiveToolsPowerUsage: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def getDeviceLiveToolsPowerUsage(self, serial: str, jobId: str):
+        """
+        **Retrieve the status and results of a previously created live tool job fetching details about a device's overall power usage.**
+        https://developer.cisco.com/meraki/api-v1/#!get-device-live-tools-power-usage
+
+        - serial (string): Serial
+        - jobId (string): Job ID
+        """
+
+        metadata = {
+            "tags": ["devices", "liveTools", "power", "usage"],
+            "operation": "getDeviceLiveToolsPowerUsage",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        jobId = urllib.parse.quote(str(jobId), safe="")
+        resource = f"/devices/{serial}/liveTools/power/usage/{jobId}"
 
         return self._session.get(metadata, resource)
 

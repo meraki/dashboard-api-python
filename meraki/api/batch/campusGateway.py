@@ -24,7 +24,7 @@ class ActionBatchCampusGateway(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/campusGateway/clusters"
 
         body_params = [
@@ -62,8 +62,8 @@ class ActionBatchCampusGateway(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        clusterId = urllib.parse.quote(clusterId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        clusterId = urllib.parse.quote(str(clusterId), safe="")
         resource = f"/networks/{networkId}/campusGateway/clusters/{clusterId}"
 
         body_params = [
@@ -92,8 +92,8 @@ class ActionBatchCampusGateway(object):
         - clusterId (string): Cluster ID
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        clusterId = urllib.parse.quote(clusterId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        clusterId = urllib.parse.quote(str(clusterId), safe="")
         resource = f"/networks/{networkId}/campusGateway/clusters/{clusterId}"
 
         action = {
@@ -115,8 +115,8 @@ class ActionBatchCampusGateway(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        number = urllib.parse.quote(number, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
         resource = f"/networks/{networkId}/campusGateway/ssids/{number}/mdns"
 
         body_params = [
@@ -162,7 +162,7 @@ class ActionBatchCampusGateway(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/campusGateway/clusters/provision"
 
         body_params = [
@@ -196,7 +196,7 @@ class ActionBatchCampusGateway(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/campusGateway/clusters/tunneling/byCluster/byNetwork/batchUpdate"
 
         body_params = [
