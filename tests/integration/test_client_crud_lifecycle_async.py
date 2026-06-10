@@ -201,6 +201,7 @@ async def test_delete_policy_objects(dashboard, org_id, version_salt):
 async def test_delete_network(dashboard, org_id, network):
     import asyncio
     from meraki.api.batch.networks import ActionBatchNetworks
+    from meraki.exceptions import AsyncAPIError
 
     action = ActionBatchNetworks().deleteNetwork(network["id"])
     max_attempts = 5
@@ -209,12 +210,21 @@ async def test_delete_network(dashboard, org_id, network):
         delay = 2**attempt
 
         await asyncio.sleep(delay)
-        batch = await dashboard.organizations.createOrganizationActionBatch(
-            organizationId=org_id,
-            actions=[action],
-            confirmed=False,
-            synchronous=False,
-        )
+        try:
+            batch = await dashboard.organizations.createOrganizationActionBatch(
+                organizationId=org_id,
+                actions=[action],
+                confirmed=False,
+                synchronous=False,
+            )
+        except AsyncAPIError as e:
+            # Action batches are asynchronous: a prior attempt's batch can
+            # finish deleting the network after we stopped observing it. The
+            # network being gone is the desired end state, so a "not found"
+            # here means the delete already succeeded.
+            if e.status == 400 and "not found" in str(e.message).lower():
+                return
+            raise
         assert batch is not None
         assert batch["id"]
 
