@@ -81,34 +81,12 @@ jobs:
             exit 1
           fi
 
-      # Render changelog.d/ fragments into CHANGELOG.md and commit before the
-      # release is cut. Reuses the version already read from pyproject.toml, so
-      # there is no separate towncrier version to keep in sync. --generate-notes
-      # below remains as a fallback for the GitHub release body.
-      - name: Build changelog
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: |
-          VERSION="${{ steps.version.outputs.version }}"
-          BRANCH="${{ inputs.branch || github.event.workflow_run.head_branch }}"
-
-          # Nothing to do if there are no fragments to consume.
-          if ! ls changelog.d/*.md >/dev/null 2>&1; then
-            echo "No changelog fragments; skipping towncrier build."
-            exit 0
-          fi
-
-          pip install --quiet towncrier
-          towncrier build --yes --version "$VERSION"
-
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add CHANGELOG.md changelog.d/
-          if ! git diff --cached --quiet; then
-            git commit -m "docs: update changelog for $VERSION"
-            git push origin "HEAD:$BRANCH"
-          fi
-
+      # CHANGELOG.md is rendered from changelog.d/ fragments inside the
+      # regeneration PR (see regenerate-library.yml), so it is already on the
+      # branch by the time the release is cut. Committing/pushing here would
+      # bypass the branch's required status checks and be rejected by the
+      # ruleset, so no git write happens in this workflow. --generate-notes
+      # below produces the GitHub release body.
       - name: Create release
         if: steps.check-release.outputs.exists == 'false'
         env:
