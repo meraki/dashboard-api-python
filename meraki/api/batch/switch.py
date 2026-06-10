@@ -1235,7 +1235,7 @@ class ActionBatchSwitch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "update",
+            "operation": "ms/multicast/actions/update",
             "body": payload,
         }
         return action

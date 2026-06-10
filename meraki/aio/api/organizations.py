@@ -98,6 +98,7 @@ class AsyncOrganizations:
         - name (string): The name of the organization
         - management (object): Information about the organization's management system
         - api (object): API-specific settings
+        - privacy (object): Privacy-related settings for the organization.
         """
 
         kwargs.update(locals())
@@ -113,6 +114,7 @@ class AsyncOrganizations:
             "name",
             "management",
             "api",
+            "privacy",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -1923,7 +1925,7 @@ class AsyncOrganizations:
         https://developer.cisco.com/meraki/api-v1/#!dismiss-organization-assurance-alerts
 
         - organizationId (string): Organization ID
-        - alertIds (array): Array of alert IDs to dismiss
+        - alertIds (array): Array of alert IDs in this organization to dismiss. Missing or inaccessible alert IDs return 404.
         """
 
         kwargs = locals()
@@ -2284,7 +2286,7 @@ class AsyncOrganizations:
         https://developer.cisco.com/meraki/api-v1/#!restore-organization-assurance-alerts
 
         - organizationId (string): Organization ID
-        - alertIds (array): Array of alert IDs to restore
+        - alertIds (array): Array of alert IDs in this organization to restore. Missing or inaccessible alert IDs return 404.
         """
 
         kwargs = locals()
@@ -2369,6 +2371,9 @@ class AsyncOrganizations:
 
         - organizationId (string): Organization ID
         - networkId (string): Network ID to query.
+        - serials (array): A list of serials of AP devices
+        - bands (array): Filter results by band. Valid bands are: 2.4, 5, and 6.
+        - ssidNumbers (array): Filter results by SSID number
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days. The default is 8 hours. If interval is provided, the timespan will be autocalculated.
@@ -2386,6 +2391,9 @@ class AsyncOrganizations:
 
         query_params = [
             "networkId",
+            "serials",
+            "bands",
+            "ssidNumbers",
             "t0",
             "t1",
             "timespan",
@@ -2393,8 +2401,18 @@ class AsyncOrganizations:
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
+        array_params = [
+            "serials",
+            "bands",
+            "ssidNumbers",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
         if self._session._validate_kwargs:
-            all_params = query_params
+            all_params = query_params + array_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
                 self._session._logger.warning(
@@ -5419,147 +5437,6 @@ class AsyncOrganizations:
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-
-    def getOrganizationDevicesCliConfigs(self, organizationId: str, serials: list, total_pages=1, direction="next", **kwargs):
-        """
-        **Retrieve the history of running configurations for IOS-XE devices**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-cli-configs
-
-        - organizationId (string): Organization ID
-        - serials (array): Device serials to include in the response
-        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
-        - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 20. Default is 20.
-        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - isFavorite (boolean): Whether to return only favorited configs
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            "tags": ["organizations", "configure", "devices", "cli", "configs"],
-            "operation": "getOrganizationDevicesCliConfigs",
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/devices/cli/configs"
-
-        query_params = [
-            "perPage",
-            "startingAfter",
-            "endingBefore",
-            "serials",
-            "isFavorite",
-        ]
-        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
-
-        array_params = [
-            "serials",
-        ]
-        for k, v in kwargs.items():
-            if k.strip() in array_params:
-                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
-                params.pop(k.strip())
-
-        if self._session._validate_kwargs:
-            all_params = query_params + array_params
-            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
-            if invalid and self._session._logger:
-                self._session._logger.warning(f"getOrganizationDevicesCliConfigs: ignoring unrecognized kwargs: {invalid}")
-
-        return self._session.get_pages(metadata, resource, params, total_pages, direction)
-
-    def getOrganizationDevicesCliConfigsDetails(
-        self, organizationId: str, configId: str, serials: list, total_pages=1, direction="next", **kwargs
-    ):
-        """
-        **Retrieve the full contents for a given IOS-XE device configuration**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-cli-configs-details
-
-        - organizationId (string): Organization ID
-        - configId (string): Config ID
-        - serials (array): Device serials to use when locating the config record
-        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
-        - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 5. Default is 5.
-        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            "tags": ["organizations", "configure", "devices", "cli", "configs", "details"],
-            "operation": "getOrganizationDevicesCliConfigsDetails",
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/devices/cli/configs/details"
-
-        query_params = [
-            "perPage",
-            "startingAfter",
-            "endingBefore",
-            "configId",
-            "serials",
-        ]
-        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
-
-        array_params = [
-            "serials",
-        ]
-        for k, v in kwargs.items():
-            if k.strip() in array_params:
-                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
-                params.pop(k.strip())
-
-        if self._session._validate_kwargs:
-            all_params = query_params + array_params
-            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
-            if invalid and self._session._logger:
-                self._session._logger.warning(
-                    f"getOrganizationDevicesCliConfigsDetails: ignoring unrecognized kwargs: {invalid}"
-                )
-
-        return self._session.get_pages(metadata, resource, params, total_pages, direction)
-
-    def getDeviceConfigRestores(self, organizationId: str, serials: list, **kwargs):
-        """
-        **Return restore status entries for IOS-XE device configurations**
-        https://developer.cisco.com/meraki/api-v1/#!get-device-config-restores
-
-        - organizationId (string): Organization ID
-        - serials (array): Device serial numbers
-        """
-
-        kwargs = locals()
-
-        metadata = {
-            "tags": ["organizations", "configure", "devices", "cli", "configs", "restores"],
-            "operation": "getDeviceConfigRestores",
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/devices/cli/configs/restores"
-
-        query_params = [
-            "serials",
-        ]
-        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
-
-        array_params = [
-            "serials",
-        ]
-        for k, v in kwargs.items():
-            if k.strip() in array_params:
-                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
-                params.pop(k.strip())
-
-        if self._session._validate_kwargs:
-            all_params = query_params + array_params
-            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
-            if invalid and self._session._logger:
-                self._session._logger.warning(f"getDeviceConfigRestores: ignoring unrecognized kwargs: {invalid}")
-
-        return self._session.get(metadata, resource, params)
 
     def createOrganizationDevicesControllerMigration(self, organizationId: str, serials: list, target: str, **kwargs):
         """
@@ -8752,6 +8629,7 @@ class AsyncOrganizations:
         - enforceTwoFactorAuth (boolean): Boolean indicating whether users in this organization will be required to use an extra verification code when logging in to Dashboard. This code will be sent to their mobile phone via SMS, or can be generated by the authenticator application.
         - enforceLoginIpRanges (boolean): Boolean indicating whether organization will restrict access to Dashboard (including the API) from certain IP addresses.
         - loginIpRanges (array): List of acceptable IP ranges. Entries can be single IP addresses, IP address ranges, and CIDR subnets.
+        - enforceLockedIpSessions (boolean): Boolean indicating whether Dashboard sessions are locked to the IP address from which they were established. Only applicable to organizations that support locked-IP sessions; otherwise the parameter is ignored.
         - apiAuthentication (object): Details for indicating whether organization will restrict access to API (but not Dashboard) to certain IP addresses.
         """
 
@@ -8778,6 +8656,7 @@ class AsyncOrganizations:
             "enforceTwoFactorAuth",
             "enforceLoginIpRanges",
             "loginIpRanges",
+            "enforceLockedIpSessions",
             "apiAuthentication",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
@@ -10184,21 +10063,25 @@ class AsyncOrganizations:
 
     def createOrganizationPolicyObject(self, organizationId: str, name: str, category: str, type: str, **kwargs):
         """
-        **Creates a new Policy Object.**
+        **Creates a new Policy Object**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-policy-object
 
         - organizationId (string): Organization ID
         - name (string): Name of a policy object, unique within the organization (alphanumeric, space, dash, or underscore characters only)
         - category (string): Category of a policy object (one of: adaptivePolicy, network)
-        - type (string): Type of a policy object (one of: adaptivePolicyIpv4Cidr, cidr, fqdn, ipAndMask)
+        - type (string): Type of a policy object (one of: adaptivePolicyIpv4Cidr, cidr, fqdn). DEPRECATED: `ipAndMask` is deprecated and will be removed in a future release. Use `cidr` instead.
         - cidr (string): CIDR Value of a policy object (e.g. 10.11.12.1/24")
         - fqdn (string): Fully qualified domain name of policy object (e.g. "example.com")
-        - mask (string): Mask of a policy object (e.g. "255.255.0.0")
-        - ip (string): IP Address of a policy object (e.g. "1.2.3.4")
+        - mask (string): Mask of a policy object (e.g. "255.255.0.0"). Used only with deprecated `type=ipAndMask`.
+        - ip (string): IP Address of a policy object (e.g. "1.2.3.4"). Used only with deprecated `type=ipAndMask`.
         - groupIds (array): The IDs of policy object groups the policy object belongs to
         """
 
         kwargs.update(locals())
+
+        if "type" in kwargs:
+            options = ["adaptivePolicyIpv4Cidr", "cidr", "fqdn"]
+            assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
 
         metadata = {
             "tags": ["organizations", "configure", "policyObjects"],
@@ -10393,7 +10276,7 @@ class AsyncOrganizations:
 
     def updateOrganizationPolicyObject(self, organizationId: str, policyObjectId: str, **kwargs):
         """
-        **Updates a Policy Object.**
+        **Updates a Policy Object**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-policy-object
 
         - organizationId (string): Organization ID
@@ -10401,8 +10284,8 @@ class AsyncOrganizations:
         - name (string): Name of a policy object, unique within the organization (alphanumeric, space, dash, or underscore characters only)
         - cidr (string): CIDR Value of a policy object (e.g. 10.11.12.1/24")
         - fqdn (string): Fully qualified domain name of policy object (e.g. "example.com")
-        - mask (string): Mask of a policy object (e.g. "255.255.0.0")
-        - ip (string): IP Address of a policy object (e.g. "1.2.3.4")
+        - mask (string): Mask of a policy object (e.g. "255.255.0.0"). Used only with deprecated `type=ipAndMask`.
+        - ip (string): IP Address of a policy object (e.g. "1.2.3.4"). Used only with deprecated `type=ipAndMask`.
         - groupIds (array): The IDs of policy object groups the policy object belongs to
         """
 
@@ -10939,72 +10822,6 @@ class AsyncOrganizations:
         resource = f"/organizations/{organizationId}/samlRoles/{samlRoleId}"
 
         return self._session.delete(metadata, resource)
-
-    def getOrganizationSaseBatch(self, organizationId: str, batchId: str):
-        """
-        **Retrieves a batch summary with aggregated job status counts**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-sase-batch
-
-        - organizationId (string): Organization ID
-        - batchId (string): Batch ID
-        """
-
-        metadata = {
-            "tags": ["organizations", "configure", "sase", "batches"],
-            "operation": "getOrganizationSaseBatch",
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe="")
-        batchId = urllib.parse.quote(str(batchId), safe="")
-        resource = f"/organizations/{organizationId}/sase/batches/{batchId}"
-
-        return self._session.get(metadata, resource)
-
-    def getOrganizationSaseBatchJobs(self, organizationId: str, batchId: str, total_pages=1, direction="next", **kwargs):
-        """
-        **List jobs within a batch, with optional status filtering**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-sase-batch-jobs
-
-        - organizationId (string): Organization ID
-        - batchId (string): Batch ID
-        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
-        - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 10.
-        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - status (string): If provided, filters jobs by status
-        """
-
-        kwargs.update(locals())
-
-        if "status" in kwargs:
-            options = ["complete", "deferred", "failed", "new", "ready", "running", "scheduled"]
-            assert kwargs["status"] in options, (
-                f'''"status" cannot be "{kwargs["status"]}", & must be set to one of: {options}'''
-            )
-
-        metadata = {
-            "tags": ["organizations", "configure", "sase", "batches", "jobs"],
-            "operation": "getOrganizationSaseBatchJobs",
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe="")
-        batchId = urllib.parse.quote(str(batchId), safe="")
-        resource = f"/organizations/{organizationId}/sase/batches/{batchId}/jobs"
-
-        query_params = [
-            "perPage",
-            "startingAfter",
-            "endingBefore",
-            "status",
-        ]
-        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
-
-        if self._session._validate_kwargs:
-            all_params = query_params
-            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
-            if invalid and self._session._logger:
-                self._session._logger.warning(f"getOrganizationSaseBatchJobs: ignoring unrecognized kwargs: {invalid}")
-
-        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationSaseConnectors(self, organizationId: str):
         """
