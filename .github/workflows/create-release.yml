@@ -10,7 +10,7 @@ on:
   workflow_run:
     workflows: ['Test PR']
     types: [completed]
-    branches: ['main', 'beta']
+    branches: ['main', 'beta', 'httpx']
 
 # The release is created with a GitHub App token. This workflow no longer
 # commits anything back to the branch (the changelog is rendered in the
@@ -29,7 +29,7 @@ jobs:
 
       - name: Generate app token
         id: app-token
-        uses: actions/create-github-app-token@v2
+        uses: actions/create-github-app-token@v3
         with:
           app-id: ${{ secrets.RELEASE_APP_ID }}
           private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
@@ -46,7 +46,21 @@ jobs:
             echo "prerelease=false" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Check if release already exists
+        id: check-release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          if gh release view "$VERSION" > /dev/null 2>&1; then
+            echo "Release $VERSION already exists, skipping."
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Validate version matches branch
+        if: steps.check-release.outputs.exists == 'false'
         run: |
           BRANCH="${{ inputs.branch || github.event.workflow_run.head_branch }}"
           VERSION="${{ steps.version.outputs.version }}"
@@ -54,6 +68,11 @@ jobs:
 
           if [[ "$BRANCH" == "beta" && "$PRERELEASE" == "false" ]]; then
             echo "::error::Beta branch must have a prerelease version (e.g. 3.1.0b0), got '$VERSION'"
+            exit 1
+          fi
+
+          if [[ "$BRANCH" == "httpx" && "$PRERELEASE" == "false" ]]; then
+            echo "::error::httpx branch must have a prerelease version (e.g. 4.0.0b1), got '$VERSION'"
             exit 1
           fi
 
@@ -69,6 +88,7 @@ jobs:
       # ruleset, so no git write happens in this workflow. --generate-notes
       # below produces the GitHub release body.
       - name: Create release
+        if: steps.check-release.outputs.exists == 'false'
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
