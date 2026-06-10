@@ -790,6 +790,102 @@ class ActionBatchOrganizations(object):
         }
         return action
 
+    def createOrganizationCertificatesAuthority(self, organizationId: str, featureType: str, **kwargs):
+        """
+        **Create a certificate authority for an organization. The response includes job information for tracking progress.**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-certificates-authority
+
+        - organizationId (string): Organization ID
+        - featureType (string): Feature this CA serves (e.g., radsec, openroaming, zigbee)
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/certificates/authorities"
+
+        body_params = [
+            "featureType",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def updateOrganizationCertificatesAuthorities(self, organizationId: str, authorityId: str, **kwargs):
+        """
+        **Trust a newly created certificate authority (transition from untrusted to trusted).**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-certificates-authorities
+
+        - organizationId (string): Organization ID
+        - authorityId (string): ID of the certificate authority to trust. The CA must currently be untrusted.
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/certificates/authorities"
+
+        body_params = [
+            "authorityId",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def deleteOrganizationCertificatesAuthorities(self, organizationId: str, authorityId: str, name: str):
+        """
+        **Delete a certificate authority. The feature CA must be untrusted or revoked. Deletion takes effect immediately and the response confirms the deleted authority.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-certificates-authorities
+
+        - organizationId (string): Organization ID
+        - authorityId (string): ID of the certificate authority to delete
+        - name (string): Certificate authority name
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/certificates/authorities"
+
+        action = {
+            "resource": resource,
+            "operation": "delete",
+        }
+        return action
+
+    def revokeOrganizationCertificatesAuthorities(self, organizationId: str, authorityId: str, **kwargs):
+        """
+        **Revoke a trusted feature certificate authority.**
+        https://developer.cisco.com/meraki/api-v1/#!revoke-organization-certificates-authorities
+
+        - organizationId (string): Organization ID
+        - authorityId (string): ID of the feature certificate authority to revoke
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/certificates/authorities/revoke"
+
+        body_params = [
+            "authorityId",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "revoke",
+            "body": payload,
+        }
+        return action
+
     def importOrganizationCertificates(self, organizationId: str, managedBy: str, contents: str, description: str, **kwargs):
         """
         **Import certificate for this organization**

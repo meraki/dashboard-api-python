@@ -232,6 +232,56 @@ class AsyncDevices:
 
         return self._session.post(metadata, resource, payload)
 
+    def revokeDeviceCertificate(self, serial: str, certificateSerial: str, **kwargs):
+        """
+        **Revoke a device certificate**
+        https://developer.cisco.com/meraki/api-v1/#!revoke-device-certificate
+
+        - serial (string): Serial
+        - certificateSerial (string): Certificate serial
+        - reason (string): Revocation reason per RFC 5280; omit to use `unspecified`
+        """
+
+        kwargs.update(locals())
+
+        if "reason" in kwargs:
+            options = [
+                "aACompromise",
+                "affiliationChanged",
+                "cACompromise",
+                "certificateHold",
+                "cessationOfOperation",
+                "keyCompromise",
+                "privilegeWithdrawn",
+                "removeFromCRL",
+                "superseded",
+                "unspecified",
+            ]
+            assert kwargs["reason"] in options, (
+                f'''"reason" cannot be "{kwargs["reason"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["devices", "configure", "certificates"],
+            "operation": "revokeDeviceCertificate",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        certificateSerial = urllib.parse.quote(str(certificateSerial), safe="")
+        resource = f"/devices/{serial}/certificates/{certificateSerial}/revoke"
+
+        body_params = [
+            "reason",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"revokeDeviceCertificate: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
     def getDeviceClients(self, serial: str, **kwargs):
         """
         **List the clients of a device, up to a maximum of a month ago**
