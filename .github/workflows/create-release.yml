@@ -12,11 +12,11 @@ on:
     types: [completed]
     branches: ['main', 'beta']
 
-# The release is created with a GitHub App token. The "Build changelog" step
-# commits the rendered CHANGELOG.md back to the release branch, so the default
-# token needs write access to contents.
+# The release is created with a GitHub App token. This workflow no longer
+# commits anything back to the branch (the changelog is rendered in the
+# regeneration PR), so the default token only needs read access for checkout.
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   create-release:
