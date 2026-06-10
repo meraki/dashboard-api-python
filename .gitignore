@@ -20,3 +20,6 @@ venv/
 
 # Project
 .scratch/
+
+# Git worktrees
+.worktrees/

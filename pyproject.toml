@@ -41,6 +41,7 @@ dev = [
     "flake8>=7.0,<8",
     "pre-commit>=4.6.0",
     "ruff>=0.15.12",
+    "towncrier>=24.8.0",
 ]
 generator = ["jinja2==3.1.6"]
 
@@ -63,3 +64,46 @@ omit = ["meraki/api/*", "meraki/aio/api/*", "meraki/aio/__init__.py"]
 fail_under = 90
 show_missing = true
 exclude_lines = ["pragma: no cover", "if __name__"]
+
+[tool.towncrier]
+directory = "changelog.d"
+filename = "CHANGELOG.md"
+name = "meraki"
+title_format = "## {version} ({project_date})"
+issue_format = "[#{issue}](https://github.com/meraki/dashboard-api-python/issues/{issue})"
+start_string = "<!-- towncrier release notes start -->\n"
+wrap = false
+all_bullets = true
+
+# Version is passed via `--version` from a single source of truth (pyproject
+# [project].version) at build time, so there is no version pinned here to drift.
+
+[[tool.towncrier.type]]
+directory = "added"
+name = "Added"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "changed"
+name = "Changed"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "deprecated"
+name = "Deprecated"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "removed"
+name = "Removed"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "fixed"
+name = "Fixed"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "security"
+name = "Security"
+showcontent = true
