@@ -2344,6 +2344,7 @@ class AsyncWireless:
         - transmission (object): Settings related to radio transmission.
         - perSsidSettings (object): Per-SSID radio settings by number.
         - flexRadios (object): Flex radio settings.
+        - dot11be (object): 802.11be settings
         """
 
         kwargs.update(locals())
@@ -2378,6 +2379,7 @@ class AsyncWireless:
             "transmission",
             "perSsidSettings",
             "flexRadios",
+            "dot11be",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -2409,6 +2411,7 @@ class AsyncWireless:
         - transmission (object): Settings related to radio transmission.
         - perSsidSettings (object): Per-SSID radio settings by number.
         - flexRadios (object): Flex radio settings.
+        - dot11be (object): 802.11be settings
         """
 
         kwargs.update(locals())
@@ -2446,6 +2449,7 @@ class AsyncWireless:
             "transmission",
             "perSsidSettings",
             "flexRadios",
+            "dot11be",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -5472,6 +5476,49 @@ class AsyncWireless:
 
         return self._session.get(metadata, resource, params)
 
+    def getOrganizationAssuranceWirelessExperienceMostImpactedXMs(self, organizationId: str, **kwargs):
+        """
+        **Returns the most impacted wireless experience metrics and the top failure contributor for each metric/network pair.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-most-impacted-x-ms
+
+        - organizationId (string): Organization ID
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - limit (integer): Number of most impacted XMs to return. Default is 5. Maximum is 10.
+        """
+
+        kwargs.update(locals())
+
+        if "limit" in kwargs:
+            options = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+            assert kwargs["limit"] in options, f'''"limit" cannot be "{kwargs["limit"]}", & must be set to one of: {options}'''
+
+        metadata = {
+            "tags": ["wireless", "configure", "experience", "mostImpactedXMs"],
+            "operation": "getOrganizationAssuranceWirelessExperienceMostImpactedXMs",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wireless/experience/mostImpactedXMs"
+
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "limit",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWirelessExperienceMostImpactedXMs: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
     def getOrganizationAssuranceWirelessExperienceSuccessfulConnectsByNetwork(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):
@@ -6762,6 +6809,8 @@ class AsyncWireless:
         - ssidNumbers (array): Filter results by SSID number.
         - bands (array): Filter results by band.
         - contributor (string): Contributor for which to retrieve insights. If not specified, returns overall insights.
+        - subContributor (string): Sub-contributor for which to retrieve insights. If not specified, returns all sub contributor insights.
+        - insights (string): Insights version to use.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -6777,6 +6826,11 @@ class AsyncWireless:
             assert kwargs["contributor"] in options, (
                 f'''"contributor" cannot be "{kwargs["contributor"]}", & must be set to one of: {options}'''
             )
+        if "insights" in kwargs:
+            options = ["1", "2"]
+            assert kwargs["insights"] in options, (
+                f'''"insights" cannot be "{kwargs["insights"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
             "tags": ["wireless", "configure", "experience", "timeToConnect", "insights", "byNetwork"],
@@ -6791,6 +6845,8 @@ class AsyncWireless:
             "ssidNumbers",
             "bands",
             "contributor",
+            "subContributor",
+            "insights",
             "t0",
             "t1",
             "timespan",

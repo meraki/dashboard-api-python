@@ -5,6 +5,37 @@ class ActionBatchOrganizations(object):
     def __init__(self):
         super(ActionBatchOrganizations, self).__init__()
 
+    def updateOrganization(self, organizationId: str, **kwargs):
+        """
+        **Update an organization**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization
+
+        - organizationId (string): Organization ID
+        - name (string): The name of the organization
+        - management (object): Information about the organization's management system
+        - api (object): API-specific settings
+        - privacy (object): Privacy-related settings for the organization.
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}"
+
+        body_params = [
+            "name",
+            "management",
+            "api",
+            "privacy",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
     def createOrganizationAdaptivePolicyAcl(self, organizationId: str, name: str, rules: list, ipVersion: str, **kwargs):
         """
         **Creates new adaptive policy ACL**
@@ -2990,6 +3021,54 @@ class ActionBatchOrganizations(object):
         body_params = [
             "siteId",
             "routing",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def updateOrganizationSnmp(self, organizationId: str, **kwargs):
+        """
+        **Update the SNMP settings for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-snmp
+
+        - organizationId (string): Organization ID
+        - v2cEnabled (boolean): Boolean indicating whether SNMP version 2c is enabled for the organization.
+        - v3Enabled (boolean): Boolean indicating whether SNMP version 3 is enabled for the organization.
+        - v3AuthMode (string): The SNMP version 3 authentication mode. Can be either 'MD5' or 'SHA'.
+        - v3AuthPass (string): The SNMP version 3 authentication password. Must be at least 8 characters if specified.
+        - v3PrivMode (string): The SNMP version 3 privacy mode. Can be either 'DES' or 'AES128'.
+        - v3PrivPass (string): The SNMP version 3 privacy password. Must be at least 8 characters if specified.
+        - peerIps (array): The list of IPv4 addresses that are allowed to access the SNMP server.
+        """
+
+        kwargs.update(locals())
+
+        if "v3AuthMode" in kwargs:
+            options = ["MD5", "SHA"]
+            assert kwargs["v3AuthMode"] in options, (
+                f'''"v3AuthMode" cannot be "{kwargs["v3AuthMode"]}", & must be set to one of: {options}'''
+            )
+        if "v3PrivMode" in kwargs:
+            options = ["AES128", "DES"]
+            assert kwargs["v3PrivMode"] in options, (
+                f'''"v3PrivMode" cannot be "{kwargs["v3PrivMode"]}", & must be set to one of: {options}'''
+            )
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/snmp"
+
+        body_params = [
+            "v2cEnabled",
+            "v3Enabled",
+            "v3AuthMode",
+            "v3AuthPass",
+            "v3PrivMode",
+            "v3PrivPass",
+            "peerIps",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {

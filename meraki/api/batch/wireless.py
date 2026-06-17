@@ -672,6 +672,7 @@ class ActionBatchWireless(object):
         - transmission (object): Settings related to radio transmission.
         - perSsidSettings (object): Per-SSID radio settings by number.
         - flexRadios (object): Flex radio settings.
+        - dot11be (object): 802.11be settings
         """
 
         kwargs.update(locals())
@@ -702,6 +703,7 @@ class ActionBatchWireless(object):
             "transmission",
             "perSsidSettings",
             "flexRadios",
+            "dot11be",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -731,6 +733,7 @@ class ActionBatchWireless(object):
         - transmission (object): Settings related to radio transmission.
         - perSsidSettings (object): Per-SSID radio settings by number.
         - flexRadios (object): Flex radio settings.
+        - dot11be (object): 802.11be settings
         """
 
         kwargs.update(locals())
@@ -764,6 +767,7 @@ class ActionBatchWireless(object):
             "transmission",
             "perSsidSettings",
             "flexRadios",
+            "dot11be",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {

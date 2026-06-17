@@ -131,7 +131,7 @@ class Appliance(object):
 
     def getDeviceAppliancePerformance(self, serial: str, **kwargs):
         """
-        **Return the performance score for a single MX**
+        **Return the performance score for a single Secure Appliance or Secure Router**
         https://developer.cisco.com/meraki/api-v1/#!get-device-appliance-performance
 
         - serial (string): Serial
