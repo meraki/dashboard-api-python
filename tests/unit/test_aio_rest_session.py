@@ -364,6 +364,59 @@ class TestAsyncRetry5xx:
         assert result.status == 200
 
     @pytest.mark.asyncio
+    async def test_request_id_logged_in_warning(self, async_session_with_logger):
+        session = async_session_with_logger
+        resp_500 = _mock_aio_response(
+            500,
+            reason="Internal Server Error",
+            headers={"X-Request-Id": "abc123def456"},
+        )
+        resp_200 = _mock_aio_response(200)
+        session._req_session.request = AsyncMock(side_effect=[resp_500, resp_200])
+
+        with patch(SLEEP_PATCH, side_effect=_noop_sleep):
+            result = await session._request(_metadata(), "GET", "/organizations")
+
+        assert result.status == 200
+        warning_messages = [c.args[0] for c in session._logger.warning.call_args_list]
+        assert any("X-Request-Id: abc123def456" in m for m in warning_messages)
+
+    @pytest.mark.asyncio
+    async def test_request_id_logged_as_error_after_exhausting_retries(self, async_session_with_logger):
+        session = async_session_with_logger
+        session._maximum_retries = 2
+        resp_500 = _mock_aio_response(
+            500,
+            reason="Internal Server Error",
+            headers={"X-Request-Id": "deadbeef00112233"},
+        )
+        session._req_session.request = AsyncMock(return_value=resp_500)
+
+        with patch(SLEEP_PATCH, side_effect=_noop_sleep):
+            with pytest.raises(AsyncAPIError):
+                await session._request(_metadata(), "GET", "/organizations")
+
+        error_messages = [c.args[0] for c in session._logger.error.call_args_list]
+        assert any("deadbeef00112233" in m for m in error_messages)
+        assert any("Provide this X-Request-Id to Meraki" in m for m in error_messages)
+
+    @pytest.mark.asyncio
+    async def test_no_request_id_logs_none(self, async_session_with_logger):
+        session = async_session_with_logger
+        session._maximum_retries = 2
+        resp_500 = _mock_aio_response(500, reason="Internal Server Error", headers={})
+        session._req_session.request = AsyncMock(return_value=resp_500)
+
+        with patch(SLEEP_PATCH, side_effect=_noop_sleep):
+            with pytest.raises(AsyncAPIError):
+                await session._request(_metadata(), "GET", "/organizations")
+
+        warning_messages = [c.args[0] for c in session._logger.warning.call_args_list]
+        assert any("X-Request-Id: none" in m for m in warning_messages)
+        error_messages = [c.args[0] for c in session._logger.error.call_args_list]
+        assert any("log lookup: none" in m for m in error_messages)
+
+    @pytest.mark.asyncio
     async def test_5xx_raises_after_max_retries(self, async_session):
         async_session._maximum_retries = 2
         resp_500 = _mock_aio_response(500, reason="Internal Server Error")
