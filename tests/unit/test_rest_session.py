@@ -32,6 +32,31 @@ def session():
     return s
 
 
+@pytest.fixture
+def session_with_logger():
+    with patch("meraki.rest_session.check_python_version"):
+        s = RestSession(
+            logger=MagicMock(),
+            api_key="fake_api_key_1234567890123456789012345678901234567890",
+            base_url="https://api.meraki.com/api/v1",
+            single_request_timeout=60,
+            certificate_path="",
+            requests_proxy="",
+            wait_on_rate_limit=True,
+            nginx_429_retry_wait_time=2,
+            action_batch_retry_wait_time=2,
+            network_delete_retry_wait_time=2,
+            retry_4xx_error=False,
+            retry_4xx_error_wait_time=1,
+            maximum_retries=2,
+            simulate=False,
+            be_geo_id="",
+            caller="TestApp TestVendor",
+            use_iterator_for_get_pages=False,
+        )
+    return s
+
+
 def _metadata(operation="getOrganizations", tags=None):
     return {"tags": tags or ["organizations"], "operation": operation}
 
@@ -171,6 +196,61 @@ class TestRetryLogic:
 
         with pytest.raises(APIError):
             session.request(_metadata(), "GET", "/organizations")
+
+
+# --- X-Request-Id logging on 5xx ---
+
+
+class TestRequestIdLoggingOn5xx:
+    @patch("time.sleep", return_value=None)
+    def test_request_id_logged_in_warning(self, mock_sleep, session_with_logger):
+        session = session_with_logger
+        resp_500 = _mock_response(
+            500,
+            reason="Internal Server Error",
+            headers={"X-Request-Id": "abc123def456"},
+        )
+        resp_200 = _mock_response(200)
+        session._req_session.request = MagicMock(side_effect=[resp_500, resp_200])
+
+        result = session.request(_metadata(), "GET", "/organizations")
+
+        assert result.status_code == 200
+        warning_messages = [c.args[0] for c in session._logger.warning.call_args_list]
+        assert any("X-Request-Id: abc123def456" in m for m in warning_messages)
+
+    @patch("time.sleep", return_value=None)
+    def test_request_id_logged_as_error_after_exhausting_retries(self, mock_sleep, session_with_logger):
+        session = session_with_logger
+        session._maximum_retries = 2
+        resp_500 = _mock_response(
+            500,
+            reason="Internal Server Error",
+            headers={"X-Request-Id": "deadbeef00112233"},
+        )
+        session._req_session.request = MagicMock(return_value=resp_500)
+
+        with pytest.raises(APIError):
+            session.request(_metadata(), "GET", "/organizations")
+
+        error_messages = [c.args[0] for c in session._logger.error.call_args_list]
+        assert any("deadbeef00112233" in m for m in error_messages)
+        assert any("Provide this X-Request-Id to Meraki" in m for m in error_messages)
+
+    @patch("time.sleep", return_value=None)
+    def test_no_request_id_logs_none(self, mock_sleep, session_with_logger):
+        session = session_with_logger
+        session._maximum_retries = 2
+        resp_500 = _mock_response(500, reason="Internal Server Error", headers={})
+        session._req_session.request = MagicMock(return_value=resp_500)
+
+        with pytest.raises(APIError):
+            session.request(_metadata(), "GET", "/organizations")
+
+        warning_messages = [c.args[0] for c in session._logger.warning.call_args_list]
+        assert any("X-Request-Id: none" in m for m in warning_messages)
+        error_messages = [c.args[0] for c in session._logger.error.call_args_list]
+        assert any("log lookup: none" in m for m in error_messages)
 
     @patch("time.sleep", return_value=None)
     def test_retry_on_connection_error(self, mock_sleep, session):
