@@ -2553,8 +2553,8 @@ class AsyncSwitch:
 
         - networkId (string): Network ID
         - switchStackId (string): Switch stack ID
-        - name (string): The name of the stack
-        - members (array): The list of switches that should be in the stack
+        - name (string): The name of the switch stack
+        - members (array): The complete list of switches that should be in the stack. Minimum 2 and maximum 8 members. Omitting this field leaves stack membership unchanged.
         """
 
         kwargs.update(locals())

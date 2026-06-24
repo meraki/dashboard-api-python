@@ -306,11 +306,19 @@ class RestSession(object):
                             raise APIError(metadata, response)
                     # Handle 5xx errors
                     case status if 500 <= status:
+                        request_id = response.headers.get("X-Request-Id") or "none"
                         if self._logger:
-                            self._logger.warning(f"{tag}, {operation} - {status} {reason}, retrying in 1 second")
+                            self._logger.warning(
+                                f"{tag}, {operation} - {status} {reason} (X-Request-Id: {request_id}), retrying in 1 second"
+                            )
                         time.sleep(1)
                         retries -= 1
                         if retries == 0:
+                            if self._logger:
+                                self._logger.error(
+                                    f"{tag}, {operation} - {status} {reason} failed after retries. "
+                                    f"Provide this X-Request-Id to Meraki for log lookup: {request_id}"
+                                )
                             raise APIError(metadata, response)
                     # Handle other 4xx errors
                     case status if status != 429 and 400 <= status < 500:
