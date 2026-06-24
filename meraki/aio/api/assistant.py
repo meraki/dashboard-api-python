@@ -359,7 +359,7 @@ class AsyncAssistant:
         return self._session.get(metadata, resource)
 
     def getOrganizationAssistantChatThreadMessageArtifact(
-        self, organizationId: str, threadId: str, messageId: str, artifactId: str
+        self, organizationId: str, threadId: str, messageId: str, artifactId: str, total_pages=1, direction="next", **kwargs
     ):
         """
         **Return a single artifact with its full content.**
@@ -369,7 +369,13 @@ class AsyncAssistant:
         - threadId (string): Thread ID
         - messageId (string): Message ID
         - artifactId (string): Artifact ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - page (integer): Page number for paginated artifact content, defaulting to 1
+        - perPage (integer): Number of entries per page. Defaults to 100. Maximum 1000.
         """
+
+        kwargs.update(locals())
 
         metadata = {
             "tags": ["assistant", "configure", "chat", "threads", "messages", "artifacts"],
@@ -383,7 +389,21 @@ class AsyncAssistant:
             f"/organizations/{organizationId}/assistant/chat/threads/{threadId}/messages/{messageId}/artifacts/{artifactId}"
         )
 
-        return self._session.get(metadata, resource)
+        query_params = [
+            "page",
+            "perPage",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssistantChatThreadMessageArtifact: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationAssistantChatThreadMessageFeedback(self, organizationId: str, threadId: str, messageId: str):
         """

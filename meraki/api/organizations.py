@@ -1350,18 +1350,29 @@ class Organizations(object):
 
         return self._session.get(metadata, resource)
 
-    def getOrganizationApiRestProvisioningPipelines(self, organizationId: str, **kwargs):
+    def getOrganizationApiRestProvisioningPipelines(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
-        **List pipeline IDs for the organization, with optional status and timespan filtering**
+        **List pipelines with operation and status metadata, sorted by pipeline ID**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-api-rest-provisioning-pipelines
 
         - organizationId (string): Organization ID
-        - status (string): If provided, filters pipelines by status. If omitted, pipelines of all statuses are returned.
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 10.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - sortOrder (string): Sorted order of entries. Order options are 'ascending' and 'descending'. Default is 'descending'.
+        - status (string): If provided, filters pipelines by status. If omitted, pipelines of all statuses are returned. `pending` pipelines have not started, `active` pipelines have started but not finished, `success` pipelines completed successfully, and `error` pipelines failed.
         - timespan (integer): Created-at lookback for matching pipelines, in seconds. Defaults to 7200 seconds. The maximum is 30 days.
         """
 
         kwargs.update(locals())
 
+        if "sortOrder" in kwargs:
+            options = ["ascending", "descending"]
+            assert kwargs["sortOrder"] in options, (
+                f'''"sortOrder" cannot be "{kwargs["sortOrder"]}", & must be set to one of: {options}'''
+            )
         if "status" in kwargs:
             options = ["active", "error", "pending", "success"]
             assert kwargs["status"] in options, (
@@ -1376,6 +1387,10 @@ class Organizations(object):
         resource = f"/organizations/{organizationId}/api/rest/provisioning/pipelines"
 
         query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "sortOrder",
             "status",
             "timespan",
         ]
@@ -1389,7 +1404,7 @@ class Organizations(object):
                     f"getOrganizationApiRestProvisioningPipelines: ignoring unrecognized kwargs: {invalid}"
                 )
 
-        return self._session.get(metadata, resource, params)
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationApiRestProvisioningPipelinesJobs(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
@@ -2371,9 +2386,10 @@ class Organizations(object):
 
         - organizationId (string): Organization ID
         - networkId (string): Network ID to query.
-        - serials (array): A list of serials of AP devices
+        - serials (array): A list of serials of wireless AP or wired switch devices
         - bands (array): Filter results by band. Valid bands are: 2.4, 5, and 6.
         - ssidNumbers (array): Filter results by SSID number
+        - deviceType (string): Filter connected client counts by device type.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days. The default is 8 hours. If interval is provided, the timespan will be autocalculated.
@@ -2381,6 +2397,12 @@ class Organizations(object):
         """
 
         kwargs.update(locals())
+
+        if "deviceType" in kwargs:
+            options = ["access_point", "switch"]
+            assert kwargs["deviceType"] in options, (
+                f'''"deviceType" cannot be "{kwargs["deviceType"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
             "tags": ["organizations", "monitor", "clients", "connectedCountHistory"],
@@ -2394,6 +2416,7 @@ class Organizations(object):
             "serials",
             "bands",
             "ssidNumbers",
+            "deviceType",
             "t0",
             "t1",
             "timespan",
@@ -4545,6 +4568,208 @@ class Organizations(object):
         resource = f"/organizations/{organizationId}/cloud/connectivity/requirements"
 
         return self._session.get(metadata, resource)
+
+    def getOrganizationComputeApplicationDeployments(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List the Application Deployment agent configurations for all hosts under this organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-compute-application-deployments
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - developerNames (array): Filters deployments by application developer name
+        - applicationNames (array): Filters deployments by application name
+        - enabled (boolean): Filters deployments by their enabled status
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "compute", "application", "deployments"],
+            "operation": "getOrganizationComputeApplicationDeployments",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/compute/application/deployments"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "developerNames",
+            "applicationNames",
+            "enabled",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "developerNames",
+            "applicationNames",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationComputeApplicationDeployments: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def createOrganizationComputeApplicationDeploymentsBulkCreate(
+        self, organizationId: str, hosts: list, application: dict, enabled: bool, **kwargs
+    ):
+        """
+        **Add Application Deployment agents for a list of hosts**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-compute-application-deployments-bulk-create
+
+        - organizationId (string): Organization ID
+        - hosts (array): List of hosts to deploy applications on
+        - application (object): Application information
+        - enabled (boolean): Whether the deployment should be enabled
+        - applicationConfiguration (object): Optional: Generic object for application-specific configuration
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "compute", "application", "deployments", "bulkCreate"],
+            "operation": "createOrganizationComputeApplicationDeploymentsBulkCreate",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/compute/application/deployments/bulkCreate"
+
+        body_params = [
+            "hosts",
+            "application",
+            "enabled",
+            "applicationConfiguration",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationComputeApplicationDeploymentsBulkCreate: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def updateOrganizationComputeApplicationDeployment(self, organizationId: str, deploymentId: str, enabled: bool, **kwargs):
+        """
+        **Update a Deployment agent configuration**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-compute-application-deployment
+
+        - organizationId (string): Organization ID
+        - deploymentId (string): Deployment ID
+        - enabled (boolean): Whether or not the Application Deployment agent is enabled for the host.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "compute", "application", "deployments"],
+            "operation": "updateOrganizationComputeApplicationDeployment",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        deploymentId = urllib.parse.quote(str(deploymentId), safe="")
+        resource = f"/organizations/{organizationId}/compute/application/deployments/{deploymentId}"
+
+        body_params = [
+            "enabled",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationComputeApplicationDeployment: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteOrganizationComputeApplicationDeployment(self, organizationId: str, deploymentId: str):
+        """
+        **Delete a Application Deployment agent from the host**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-compute-application-deployment
+
+        - organizationId (string): Organization ID
+        - deploymentId (string): Deployment ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "compute", "application", "deployments"],
+            "operation": "deleteOrganizationComputeApplicationDeployment",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        deploymentId = urllib.parse.quote(str(deploymentId), safe="")
+        resource = f"/organizations/{organizationId}/compute/application/deployments/{deploymentId}"
+
+        return self._session.delete(metadata, resource)
+
+    def getOrganizationComputeHosts(
+        self, organizationId: str, developerName: str, applicationName: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Retrieves a list of compute hosts eligible for application deployment within a given organization, filtered by the specified application developer and application name, with optional network ID filtering.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-compute-hosts
+
+        - organizationId (string): Organization ID
+        - developerName (string): Filters hosts by application developer name
+        - applicationName (string): Filters hosts by application name
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Filters hosts by the network ID they belong to
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "compute", "hosts"],
+            "operation": "getOrganizationComputeHosts",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/compute/hosts"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "developerName",
+            "applicationName",
+            "networkIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationComputeHosts: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationConfigTemplates(self, organizationId: str):
         """
@@ -11455,39 +11680,6 @@ class Organizations(object):
         resource = f"/organizations/{organizationId}/sase/sites/detach"
 
         return self._session.delete(metadata, resource)
-
-    def enrollOrganizationSaseSites(self, organizationId: str, **kwargs):
-        """
-        **Enroll sites in this organization to Secure Access**
-        https://developer.cisco.com/meraki/api-v1/#!enroll-organization-sase-sites
-
-        - organizationId (string): Organization ID
-        - items (array): List of Meraki SD-WAN sites with the associated regions to be enrolled.
-        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            "tags": ["organizations", "configure", "sase", "sites"],
-            "operation": "enrollOrganizationSaseSites",
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/sase/sites/enroll"
-
-        body_params = [
-            "items",
-            "callback",
-        ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-
-        if self._session._validate_kwargs:
-            all_params = [] + body_params
-            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
-            if invalid and self._session._logger:
-                self._session._logger.warning(f"enrollOrganizationSaseSites: ignoring unrecognized kwargs: {invalid}")
-
-        return self._session.post(metadata, resource, payload)
 
     def updateOrganizationSaseSite(self, organizationId: str, siteId: str, **kwargs):
         """

@@ -952,6 +952,85 @@ class ActionBatchOrganizations(object):
         }
         return action
 
+    def createOrganizationComputeApplicationDeploymentsBulkCreate(
+        self, organizationId: str, hosts: list, application: dict, enabled: bool, **kwargs
+    ):
+        """
+        **Add Application Deployment agents for a list of hosts. Only valid for hosts with access to Meraki Insight.**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-compute-application-deployments-bulk-create
+
+        - organizationId (string): Organization ID
+        - hosts (array): List of hosts to deploy applications on
+        - application (object): Application information
+        - enabled (boolean): Whether the deployment should be enabled
+        - applicationConfiguration (object): Optional: Generic object for application-specific configuration
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/compute/application/deployments/bulkCreate"
+
+        body_params = [
+            "hosts",
+            "application",
+            "enabled",
+            "applicationConfiguration",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "action",
+            "body": payload,
+        }
+        return action
+
+    def updateOrganizationComputeApplicationDeployment(self, organizationId: str, deploymentId: str, enabled: bool, **kwargs):
+        """
+        **Update a Deployment agent configuration. Only valid for hosts with access to Meraki Insight.**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-compute-application-deployment
+
+        - organizationId (string): Organization ID
+        - deploymentId (string): Deployment ID
+        - enabled (boolean): Whether or not the Application Deployment agent is enabled for the host.
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        deploymentId = urllib.parse.quote(str(deploymentId), safe="")
+        resource = f"/organizations/{organizationId}/compute/application/deployments/{deploymentId}"
+
+        body_params = [
+            "enabled",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "action",
+            "body": payload,
+        }
+        return action
+
+    def deleteOrganizationComputeApplicationDeployment(self, organizationId: str, deploymentId: str):
+        """
+        **Delete a Application Deployment agent from the host. Only valid for host with access to Meraki Insight.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-compute-application-deployment
+
+        - organizationId (string): Organization ID
+        - deploymentId (string): Deployment ID
+        """
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        deploymentId = urllib.parse.quote(str(deploymentId), safe="")
+        resource = f"/organizations/{organizationId}/compute/application/deployments/{deploymentId}"
+
+        action = {
+            "resource": resource,
+            "operation": "action",
+        }
+        return action
+
     def createOrganizationConfigTemplate(self, organizationId: str, name: str, **kwargs):
         """
         **Create a new configuration template**
@@ -2972,33 +3051,6 @@ class ActionBatchOrganizations(object):
         action = {
             "resource": resource,
             "operation": "detach",
-        }
-        return action
-
-    def enrollOrganizationSaseSites(self, organizationId: str, **kwargs):
-        """
-        **Enroll sites in this organization to Secure Access. For an organization, a maximum of 2500 sites can be enrolled if they are in spoke mode or a maximum of 10 sites can be enrolled in hub mode.**
-        https://developer.cisco.com/meraki/api-v1/#!enroll-organization-sase-sites
-
-        - organizationId (string): Organization ID
-        - items (array): List of Meraki SD-WAN sites with the associated regions to be enrolled.
-        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
-        """
-
-        kwargs.update(locals())
-
-        organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/sase/sites/enroll"
-
-        body_params = [
-            "items",
-            "callback",
-        ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-        action = {
-            "resource": resource,
-            "operation": "create",
-            "body": payload,
         }
         return action
 
