@@ -294,6 +294,7 @@ class SessionBase(ABC):
                 self._sleep(1)
                 retries -= 1
                 if retries == 0:
+                    self._log_server_error_exhausted(response, metadata)
                     raise APIError(metadata, response)
             elif 400 <= status < 500:
                 retries = self._handle_client_error(response, metadata, retries)
@@ -371,14 +372,29 @@ class SessionBase(ABC):
         return wait
 
     def _handle_server_error(self, response: "httpx.Response", metadata: Dict[str, Any]) -> None:
-        """Handle 5xx server errors. Logs warning before retry."""
+        """Handle 5xx server errors. Logs warning (with Meraki X-Request-Id) before retry."""
         tag = metadata["tags"][0]
         operation = metadata["operation"]
         reason = response.reason_phrase if hasattr(response, "reason_phrase") else ""
         status = response.status_code
+        request_id = response.headers.get("X-Request-Id") or "none"
 
         if self._logger:
-            self._logger.warning(f"{tag}, {operation} - {status} {reason}, retrying in 1 second")
+            self._logger.warning(f"{tag}, {operation} - {status} {reason} (X-Request-Id: {request_id}), retrying in 1 second")
+
+    def _log_server_error_exhausted(self, response: "httpx.Response", metadata: Dict[str, Any]) -> None:
+        """Log at error level once 5xx retries are exhausted, surfacing the X-Request-Id for Meraki log lookup."""
+        tag = metadata["tags"][0]
+        operation = metadata["operation"]
+        reason = response.reason_phrase if hasattr(response, "reason_phrase") else ""
+        status = response.status_code
+        request_id = response.headers.get("X-Request-Id") or "none"
+
+        if self._logger:
+            self._logger.error(
+                f"{tag}, {operation} - {status} {reason} failed after retries. "
+                f"Provide this X-Request-Id to Meraki for log lookup: {request_id}"
+            )
 
     def _handle_client_error(
         self,

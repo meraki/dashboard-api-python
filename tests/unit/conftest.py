@@ -118,6 +118,11 @@ def session():
 
 
 @pytest.fixture
+def session_with_logger():
+    return make_sync_session(logger=MagicMock())
+
+
+@pytest.fixture
 def async_session():
     return make_async_session()
 
