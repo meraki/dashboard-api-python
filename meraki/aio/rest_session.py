@@ -230,8 +230,17 @@ class AsyncRestSession:
                     await asyncio.sleep(wait)
                 # 5XX errors
                 elif status >= 500:
+                    request_id = response.headers.get("X-Request-Id") or "none"
                     if self._logger:
-                        self._logger.warning(f"{tag}, {operation} > {abs_url} - {status} {reason}, retrying in 1 second")
+                        self._logger.warning(
+                            f"{tag}, {operation} > {abs_url} - {status} {reason} "
+                            f"(X-Request-Id: {request_id}), retrying in 1 second"
+                        )
+                        if _attempt == retries - 1:
+                            self._logger.error(
+                                f"{tag}, {operation} > {abs_url} - {status} {reason} failed after retries. "
+                                f"Provide this X-Request-Id to Meraki for log lookup: {request_id}"
+                            )
                     await asyncio.sleep(1)
                 # 4XX errors
                 else:
