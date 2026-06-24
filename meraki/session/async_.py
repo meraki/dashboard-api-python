@@ -256,11 +256,19 @@ class AsyncRestSession(SessionBase):
                 if retries == 0:
                     raise APIError(metadata, response)
             elif status >= 500:
+                request_id = response.headers.get("X-Request-Id") or "none"
                 if self._logger:
-                    self._logger.warning(f"{tag}, {operation} - {status} {reason}, retrying in 1 second")
+                    self._logger.warning(
+                        f"{tag}, {operation} - {status} {reason} (X-Request-Id: {request_id}), retrying in 1 second"
+                    )
                 await self._sleep(1)
                 retries -= 1
                 if retries == 0:
+                    if self._logger:
+                        self._logger.error(
+                            f"{tag}, {operation} - {status} {reason} failed after retries. "
+                            f"Provide this X-Request-Id to Meraki for log lookup: {request_id}"
+                        )
                     raise APIError(metadata, response)
             elif 400 <= status < 500:
                 retries = await self._handle_client_error_async(response, metadata, retries)

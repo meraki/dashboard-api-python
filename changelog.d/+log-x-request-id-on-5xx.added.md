@@ -1,0 +1,1 @@
+On 5xx responses, the SDK now logs the Meraki `X-Request-Id` response header so it can be shared with Meraki to look up the request in server-side logs. If the header is absent, `none` is logged in its place. After retries are exhausted, the request ID is also logged at error level.
