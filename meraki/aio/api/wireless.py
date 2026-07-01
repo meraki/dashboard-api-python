@@ -4630,7 +4630,7 @@ class AsyncWireless:
         - bands (array): Filter results by band.
         - contributor (string): Contributor for which to retrieve insights. If not specified, returns overall insights.
         - subContributor (string): Sub-contributor for which to retrieve insights. If not specified, returns all sub contributor insights.
-        - insights (string): Insights version to use.
+        - insights (string): Insights version to use. Defaults to 2.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -5325,7 +5325,7 @@ class AsyncWireless:
         - bands (array): Filter results by band.
         - contributor (string): Contributor for which to retrieve insights. If not specified, returns overall insights.
         - subContributor (string): Sub-contributor for which to retrieve insights. If not specified, returns all sub contributor insights.
-        - insights (string): Insights version to use.
+        - insights (string): Insights version to use. Defaults to 2.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -5549,6 +5549,7 @@ class AsyncWireless:
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
         - bands (array): Filter results by band.
+        - variant (string): Wireless State Machine variant to use.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -5558,6 +5559,12 @@ class AsyncWireless:
         """
 
         kwargs.update(locals())
+
+        if "variant" in kwargs:
+            options = ["A", "B"]
+            assert kwargs["variant"] in options, (
+                f'''"variant" cannot be "{kwargs["variant"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
             "tags": ["wireless", "configure", "experience", "successfulConnects", "byNetwork"],
@@ -5571,6 +5578,7 @@ class AsyncWireless:
             "serials",
             "ssidNumbers",
             "bands",
+            "variant",
             "t0",
             "t1",
             "timespan",
@@ -5615,6 +5623,7 @@ class AsyncWireless:
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
         - bands (array): Filter results by band.
+        - variant (string): Wireless State Machine variant to use.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -5624,6 +5633,12 @@ class AsyncWireless:
         """
 
         kwargs.update(locals())
+
+        if "variant" in kwargs:
+            options = ["A", "B"]
+            assert kwargs["variant"] in options, (
+                f'''"variant" cannot be "{kwargs["variant"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
             "tags": ["wireless", "configure", "experience", "successfulConnects", "byNetwork", "byBand"],
@@ -5637,6 +5652,7 @@ class AsyncWireless:
             "serials",
             "ssidNumbers",
             "bands",
+            "variant",
             "t0",
             "t1",
             "timespan",
@@ -5681,6 +5697,7 @@ class AsyncWireless:
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
         - bands (array): Filter results by band.
+        - variant (string): Wireless State Machine variant to use.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -5690,6 +5707,12 @@ class AsyncWireless:
         """
 
         kwargs.update(locals())
+
+        if "variant" in kwargs:
+            options = ["A", "B"]
+            assert kwargs["variant"] in options, (
+                f'''"variant" cannot be "{kwargs["variant"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
             "tags": ["wireless", "configure", "experience", "successfulConnects", "byNetwork", "byClient"],
@@ -5703,6 +5726,7 @@ class AsyncWireless:
             "serials",
             "ssidNumbers",
             "bands",
+            "variant",
             "t0",
             "t1",
             "timespan",
@@ -5747,6 +5771,7 @@ class AsyncWireless:
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
         - bands (array): Filter results by band.
+        - variant (string): Wireless State Machine variant to use.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -5756,6 +5781,12 @@ class AsyncWireless:
         """
 
         kwargs.update(locals())
+
+        if "variant" in kwargs:
+            options = ["A", "B"]
+            assert kwargs["variant"] in options, (
+                f'''"variant" cannot be "{kwargs["variant"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
             "tags": ["wireless", "configure", "experience", "successfulConnects", "byNetwork", "byClientOs"],
@@ -5769,6 +5800,7 @@ class AsyncWireless:
             "serials",
             "ssidNumbers",
             "bands",
+            "variant",
             "t0",
             "t1",
             "timespan",
@@ -5813,6 +5845,7 @@ class AsyncWireless:
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
         - bands (array): Filter results by band.
+        - variant (string): Wireless State Machine variant to use.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -5822,6 +5855,12 @@ class AsyncWireless:
         """
 
         kwargs.update(locals())
+
+        if "variant" in kwargs:
+            options = ["A", "B"]
+            assert kwargs["variant"] in options, (
+                f'''"variant" cannot be "{kwargs["variant"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
             "tags": ["wireless", "configure", "experience", "successfulConnects", "byNetwork", "byClientType"],
@@ -5835,6 +5874,7 @@ class AsyncWireless:
             "serials",
             "ssidNumbers",
             "bands",
+            "variant",
             "t0",
             "t1",
             "timespan",
@@ -5879,6 +5919,7 @@ class AsyncWireless:
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
         - bands (array): Filter results by band.
+        - variant (string): Wireless State Machine variant to use.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -5888,6 +5929,12 @@ class AsyncWireless:
         """
 
         kwargs.update(locals())
+
+        if "variant" in kwargs:
+            options = ["A", "B"]
+            assert kwargs["variant"] in options, (
+                f'''"variant" cannot be "{kwargs["variant"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
             "tags": ["wireless", "configure", "experience", "successfulConnects", "byNetwork", "byDevice"],
@@ -5901,6 +5948,7 @@ class AsyncWireless:
             "serials",
             "ssidNumbers",
             "bands",
+            "variant",
             "t0",
             "t1",
             "timespan",
@@ -5945,6 +5993,7 @@ class AsyncWireless:
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
         - bands (array): Filter results by band.
+        - variant (string): Wireless State Machine variant to use.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 14 days. The default is 2 hours. If interval is provided, the timespan will be autocalculated.
@@ -5955,6 +6004,12 @@ class AsyncWireless:
         """
 
         kwargs.update(locals())
+
+        if "variant" in kwargs:
+            options = ["A", "B"]
+            assert kwargs["variant"] in options, (
+                f'''"variant" cannot be "{kwargs["variant"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
             "tags": ["wireless", "monitor", "experience", "successfulConnects", "byNetwork", "byInterval"],
@@ -5968,6 +6023,7 @@ class AsyncWireless:
             "serials",
             "ssidNumbers",
             "bands",
+            "variant",
             "t0",
             "t1",
             "timespan",
@@ -6013,6 +6069,7 @@ class AsyncWireless:
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
         - bands (array): Filter results by band.
+        - variant (string): Wireless State Machine variant to use.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -6022,6 +6079,12 @@ class AsyncWireless:
         """
 
         kwargs.update(locals())
+
+        if "variant" in kwargs:
+            options = ["A", "B"]
+            assert kwargs["variant"] in options, (
+                f'''"variant" cannot be "{kwargs["variant"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
             "tags": ["wireless", "configure", "experience", "successfulConnects", "byNetwork", "byServer"],
@@ -6035,6 +6098,7 @@ class AsyncWireless:
             "serials",
             "ssidNumbers",
             "bands",
+            "variant",
             "t0",
             "t1",
             "timespan",
@@ -6079,6 +6143,7 @@ class AsyncWireless:
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
         - bands (array): Filter results by band.
+        - variant (string): Wireless State Machine variant to use.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -6088,6 +6153,12 @@ class AsyncWireless:
         """
 
         kwargs.update(locals())
+
+        if "variant" in kwargs:
+            options = ["A", "B"]
+            assert kwargs["variant"] in options, (
+                f'''"variant" cannot be "{kwargs["variant"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
             "tags": ["wireless", "configure", "experience", "successfulConnects", "byNetwork", "bySsid"],
@@ -6101,6 +6172,7 @@ class AsyncWireless:
             "serials",
             "ssidNumbers",
             "bands",
+            "variant",
             "t0",
             "t1",
             "timespan",
@@ -6147,7 +6219,8 @@ class AsyncWireless:
         - bands (array): Filter results by band.
         - contributor (string): Contributor for which to retrieve insights. If not specified, returns overall insights.
         - subContributor (string): Sub-contributor for which to retrieve insights. If not specified, returns all sub contributor insights.
-        - insights (string): Insights version to use.
+        - insights (string): Insights version to use. Defaults to 2.
+        - variant (string): Wireless State Machine variant to use.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -6168,6 +6241,11 @@ class AsyncWireless:
             assert kwargs["insights"] in options, (
                 f'''"insights" cannot be "{kwargs["insights"]}", & must be set to one of: {options}'''
             )
+        if "variant" in kwargs:
+            options = ["A", "B"]
+            assert kwargs["variant"] in options, (
+                f'''"variant" cannot be "{kwargs["variant"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
             "tags": ["wireless", "configure", "experience", "successfulConnects", "insights", "byNetwork"],
@@ -6184,6 +6262,7 @@ class AsyncWireless:
             "contributor",
             "subContributor",
             "insights",
+            "variant",
             "t0",
             "t1",
             "timespan",
@@ -6228,6 +6307,7 @@ class AsyncWireless:
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
         - bands (array): Filter results by band.
+        - variant (string): Wireless State Machine variant to use.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -6237,6 +6317,12 @@ class AsyncWireless:
         """
 
         kwargs.update(locals())
+
+        if "variant" in kwargs:
+            options = ["A", "B"]
+            assert kwargs["variant"] in options, (
+                f'''"variant" cannot be "{kwargs["variant"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
             "tags": ["wireless", "configure", "experience", "timeToConnect", "byNetwork"],
@@ -6250,6 +6336,7 @@ class AsyncWireless:
             "serials",
             "ssidNumbers",
             "bands",
+            "variant",
             "t0",
             "t1",
             "timespan",
@@ -6294,6 +6381,7 @@ class AsyncWireless:
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
         - bands (array): Filter results by band.
+        - variant (string): Wireless State Machine variant to use.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -6303,6 +6391,12 @@ class AsyncWireless:
         """
 
         kwargs.update(locals())
+
+        if "variant" in kwargs:
+            options = ["A", "B"]
+            assert kwargs["variant"] in options, (
+                f'''"variant" cannot be "{kwargs["variant"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
             "tags": ["wireless", "configure", "experience", "timeToConnect", "byNetwork", "byBand"],
@@ -6316,6 +6410,7 @@ class AsyncWireless:
             "serials",
             "ssidNumbers",
             "bands",
+            "variant",
             "t0",
             "t1",
             "timespan",
@@ -6360,6 +6455,7 @@ class AsyncWireless:
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
         - bands (array): Filter results by band.
+        - variant (string): Wireless State Machine variant to use.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -6369,6 +6465,12 @@ class AsyncWireless:
         """
 
         kwargs.update(locals())
+
+        if "variant" in kwargs:
+            options = ["A", "B"]
+            assert kwargs["variant"] in options, (
+                f'''"variant" cannot be "{kwargs["variant"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
             "tags": ["wireless", "configure", "experience", "timeToConnect", "byNetwork", "byClient"],
@@ -6382,6 +6484,7 @@ class AsyncWireless:
             "serials",
             "ssidNumbers",
             "bands",
+            "variant",
             "t0",
             "t1",
             "timespan",
@@ -6426,6 +6529,7 @@ class AsyncWireless:
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
         - bands (array): Filter results by band.
+        - variant (string): Wireless State Machine variant to use.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -6435,6 +6539,12 @@ class AsyncWireless:
         """
 
         kwargs.update(locals())
+
+        if "variant" in kwargs:
+            options = ["A", "B"]
+            assert kwargs["variant"] in options, (
+                f'''"variant" cannot be "{kwargs["variant"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
             "tags": ["wireless", "configure", "experience", "timeToConnect", "byNetwork", "byClientOs"],
@@ -6448,6 +6558,7 @@ class AsyncWireless:
             "serials",
             "ssidNumbers",
             "bands",
+            "variant",
             "t0",
             "t1",
             "timespan",
@@ -6492,6 +6603,7 @@ class AsyncWireless:
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
         - bands (array): Filter results by band.
+        - variant (string): Wireless State Machine variant to use.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -6501,6 +6613,12 @@ class AsyncWireless:
         """
 
         kwargs.update(locals())
+
+        if "variant" in kwargs:
+            options = ["A", "B"]
+            assert kwargs["variant"] in options, (
+                f'''"variant" cannot be "{kwargs["variant"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
             "tags": ["wireless", "configure", "experience", "timeToConnect", "byNetwork", "byClientType"],
@@ -6514,6 +6632,7 @@ class AsyncWireless:
             "serials",
             "ssidNumbers",
             "bands",
+            "variant",
             "t0",
             "t1",
             "timespan",
@@ -6558,6 +6677,7 @@ class AsyncWireless:
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
         - bands (array): Filter results by band.
+        - variant (string): Wireless State Machine variant to use.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -6567,6 +6687,12 @@ class AsyncWireless:
         """
 
         kwargs.update(locals())
+
+        if "variant" in kwargs:
+            options = ["A", "B"]
+            assert kwargs["variant"] in options, (
+                f'''"variant" cannot be "{kwargs["variant"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
             "tags": ["wireless", "configure", "experience", "timeToConnect", "byNetwork", "byDevice"],
@@ -6580,6 +6706,7 @@ class AsyncWireless:
             "serials",
             "ssidNumbers",
             "bands",
+            "variant",
             "t0",
             "t1",
             "timespan",
@@ -6624,6 +6751,7 @@ class AsyncWireless:
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
         - bands (array): Filter results by band.
+        - variant (string): Wireless State Machine variant to use.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 14 days. The default is 2 hours. If interval is provided, the timespan will be autocalculated.
@@ -6634,6 +6762,12 @@ class AsyncWireless:
         """
 
         kwargs.update(locals())
+
+        if "variant" in kwargs:
+            options = ["A", "B"]
+            assert kwargs["variant"] in options, (
+                f'''"variant" cannot be "{kwargs["variant"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
             "tags": ["wireless", "monitor", "experience", "timeToConnect", "byNetwork", "byInterval"],
@@ -6647,6 +6781,7 @@ class AsyncWireless:
             "serials",
             "ssidNumbers",
             "bands",
+            "variant",
             "t0",
             "t1",
             "timespan",
@@ -6692,6 +6827,7 @@ class AsyncWireless:
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
         - bands (array): Filter results by band.
+        - variant (string): Wireless State Machine variant to use.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -6701,6 +6837,12 @@ class AsyncWireless:
         """
 
         kwargs.update(locals())
+
+        if "variant" in kwargs:
+            options = ["A", "B"]
+            assert kwargs["variant"] in options, (
+                f'''"variant" cannot be "{kwargs["variant"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
             "tags": ["wireless", "configure", "experience", "timeToConnect", "byNetwork", "byServer"],
@@ -6714,6 +6856,7 @@ class AsyncWireless:
             "serials",
             "ssidNumbers",
             "bands",
+            "variant",
             "t0",
             "t1",
             "timespan",
@@ -6758,6 +6901,7 @@ class AsyncWireless:
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
         - bands (array): Filter results by band.
+        - variant (string): Wireless State Machine variant to use.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -6767,6 +6911,12 @@ class AsyncWireless:
         """
 
         kwargs.update(locals())
+
+        if "variant" in kwargs:
+            options = ["A", "B"]
+            assert kwargs["variant"] in options, (
+                f'''"variant" cannot be "{kwargs["variant"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
             "tags": ["wireless", "configure", "experience", "timeToConnect", "byNetwork", "bySsid"],
@@ -6780,6 +6930,7 @@ class AsyncWireless:
             "serials",
             "ssidNumbers",
             "bands",
+            "variant",
             "t0",
             "t1",
             "timespan",
@@ -6826,7 +6977,8 @@ class AsyncWireless:
         - bands (array): Filter results by band.
         - contributor (string): Contributor for which to retrieve insights. If not specified, returns overall insights.
         - subContributor (string): Sub-contributor for which to retrieve insights. If not specified, returns all sub contributor insights.
-        - insights (string): Insights version to use.
+        - insights (string): Insights version to use. Defaults to 2.
+        - variant (string): Wireless State Machine variant to use.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -6847,6 +6999,11 @@ class AsyncWireless:
             assert kwargs["insights"] in options, (
                 f'''"insights" cannot be "{kwargs["insights"]}", & must be set to one of: {options}'''
             )
+        if "variant" in kwargs:
+            options = ["A", "B"]
+            assert kwargs["variant"] in options, (
+                f'''"variant" cannot be "{kwargs["variant"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
             "tags": ["wireless", "configure", "experience", "timeToConnect", "insights", "byNetwork"],
@@ -6863,6 +7020,7 @@ class AsyncWireless:
             "contributor",
             "subContributor",
             "insights",
+            "variant",
             "t0",
             "t1",
             "timespan",

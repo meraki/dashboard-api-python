@@ -2896,7 +2896,7 @@ class Appliance(object):
         - dhcpOptions (array): The list of DHCP options that will be included in DHCP responses. Each object in the list should have "code", "type", and "value" properties.
         - adaptivePolicyGroupId (string): Adaptive policy group ID this VLAN is assigned to.
         - sgt (object): Security Group Tag settings for the VLAN.
-        - vrf (object): VRF configuration on the VLAN
+        - vrf (object): VRF configuration on the VLAN.
         - uplinks (array): Per-uplink NAT exception override configuration on the VLAN. Applicable only for networks that support NAT exceptions.
         """
 
@@ -3054,7 +3054,7 @@ class Appliance(object):
         - mandatoryDhcp (object): Mandatory DHCP will enforce that clients connecting to this VLAN must use the IP address assigned by the DHCP server. Clients who use a static IP address won't be able to associate. Only available on firmware versions 17.0 and above
         - adaptivePolicyGroupId (string): Adaptive policy group ID that all traffic originating from this VLAN is assigned to.
         - sgt (object): Security Group Tag settings for the VLAN.
-        - vrf (object): VRF configuration on the VLAN
+        - vrf (object): VRF configuration on the VLAN.
         - uplinks (array): Per-uplink NAT exception override configuration on the VLAN. Applicable only for networks that support NAT exceptions.
         """
 
@@ -3163,11 +3163,11 @@ class Appliance(object):
 
         - networkId (string): Network ID
         - enabled (boolean): Boolean value to enable or disable the BGP configuration. When BGP is enabled, the asNumber (ASN) will be autopopulated with the preconfigured ASN at other Hubs or a default value if there is no ASN configured.
-        - asNumber (integer): An Autonomous System Number (ASN) is required if you are to run BGP and peer with another BGP Speaker outside of the Auto VPN domain. This ASN will be applied to the entire Auto VPN domain. The entire 4-byte ASN range is supported. So, the ASN must be an integer between 1 and 4294967295. When absent, this field is not updated. If no value exists then it defaults to 64512.
+        - asNumber (integer): An Autonomous System Number (ASN) is required if you are to run BGP and peer with another BGP Speaker outside of the Auto VPN domain. This ASN will be applied to the entire Auto VPN domain and is only configurable for Auto VPN BGP networks. The entire 4-byte ASN range is supported. So, the ASN must be an integer between 1 and 4294967295. When absent, this field is not updated. If no value exists then it defaults to 64512.
         - ibgpHoldTimer (integer): The iBGP holdtimer in seconds. The iBGP holdtimer must be an integer between 12 and 240. When absent, this field is not updated. If no value exists then it defaults to 240.
         - ipv6 (object): Settings for IPv6 configurations on the organization.
         - tunnelDownTermination (object): Settings for tunnel down termination on the organization.
-        - vpnAsNumber (integer): Network specific number of the Autonomous System to which the appliance belongs.
+        - vpnAsNumber (integer): Network specific number of the Autonomous System to which the appliance belongs. This field is only configurable for Independent BGP networks.
         - priorityRoute (string): Sets the priority route between eBGP and Auto VPN.
         - routerId (string): The router ID of the appliance
         - neighbors (array): List of BGP neighbors. This list replaces the existing set of neighbors. When absent, this field is not updated.
@@ -4533,6 +4533,58 @@ class Appliance(object):
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def httpsiOrganizationApplianceSecurity(self, organizationId: str):
+        """
+        **Retrieve the HTTPS Inspection state for all security appliances in an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!httpsi-organization-appliance-security
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["appliance", "configure", "security"],
+            "operation": "httpsiOrganizationApplianceSecurity",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/security/httpsi"
+
+        return self._session.get(metadata, resource)
+
+    def certificatesOrganizationApplianceSecurityHttpsi(self, organizationId: str, contents: str, serials: list, **kwargs):
+        """
+        **Upload an HTTPS Inspection certificate to MX devices in the same organization**
+        https://developer.cisco.com/meraki/api-v1/#!certificates-organization-appliance-security-httpsi
+
+        - organizationId (string): Organization ID
+        - contents (string): The private key and certificate used to inspect HTTPS traffic. The certificate must be in .pem format.
+        - serials (array): Serial numbers of the security appliances that will receive the new HTTPS certificate for HTTPS Inspection
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["appliance", "configure", "security", "httpsi"],
+            "operation": "certificatesOrganizationApplianceSecurityHttpsi",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/security/httpsi/certificates"
+
+        body_params = [
+            "contents",
+            "serials",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"certificatesOrganizationApplianceSecurityHttpsi: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
 
     def getOrganizationApplianceSecurityIntrusion(self, organizationId: str):
         """
