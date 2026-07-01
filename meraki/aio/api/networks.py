@@ -886,6 +886,37 @@ class AsyncNetworks:
 
         return self._session.post(metadata, resource, payload)
 
+    def updateNetworkDevicesSyslogServers(self, networkId: str, servers: list, **kwargs):
+        """
+        **Updates the syslog servers configuration for a network.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-devices-syslog-servers
+
+        - networkId (string): Network ID
+        - servers (array): A list of the syslog servers for this network; suggested maximum array size is 10
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["networks", "configure", "devices", "syslog", "servers"],
+            "operation": "updateNetworkDevicesSyslogServers",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/devices/syslog/servers"
+
+        body_params = [
+            "servers",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkDevicesSyslogServers: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
     def getNetworkEvents(self, networkId: str, total_pages=1, direction="prev", event_log_end_time=None, **kwargs):
         """
         **List the events for the network**

@@ -203,6 +203,31 @@ class ActionBatchNetworks(object):
         }
         return action
 
+    def updateNetworkDevicesSyslogServers(self, networkId: str, servers: list, **kwargs):
+        """
+        **Updates the syslog servers configuration for a network.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-devices-syslog-servers
+
+        - networkId (string): Network ID
+        - servers (array): A list of the syslog servers for this network; suggested maximum array size is 10
+        """
+
+        kwargs = locals()
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/devices/syslog/servers"
+
+        body_params = [
+            "servers",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "servers",
+            "body": payload,
+        }
+        return action
+
     def updateNetworkFirmwareUpgrades(self, networkId: str, **kwargs):
         """
         **Update firmware upgrade information for a network**

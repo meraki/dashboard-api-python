@@ -2312,6 +2312,7 @@ class AsyncWireless:
         - dnsRewrite (object): DNS servers rewrite settings
         - speedBurst (object): The SpeedBurst setting for this SSID'
         - namedVlans (object): Named VLAN settings.
+        - security (object): Security settings for the SSID
         - localAuthFallback (object): The current configuration for Local Authentication Fallback. Enables the Access Point (AP) to store client authentication data for a specified duration that can be adjusted as needed.
         - radiusAccountingStartDelay (integer): The delay (in seconds) before sending the first RADIUS accounting start message. Must be between 0 and 60 seconds.
         """
@@ -2463,6 +2464,7 @@ class AsyncWireless:
             "dnsRewrite",
             "speedBurst",
             "namedVlans",
+            "security",
             "localAuthFallback",
             "radiusAccountingStartDelay",
         ]

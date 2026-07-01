@@ -160,7 +160,7 @@ class AsyncDevices:
 
         - serial (string): Serial
         - sims (array): List of SIMs. If a SIM was previously configured and not specified in this request, it will remain unchanged.
-        - simOrdering (array): Specifies the ordering of all SIMs for an MG: primary, secondary, and not-in-use (when applicable). It's required for devices with 3 or more SIMs and can be used in place of 'isPrimary' for dual-SIM devices. To indicate eSIM, use 'sim3'. Sim failover will occur only between primary and secondary sim slots.
+        - simOrdering (array): Specifies the ordering of all SIMs for an MG: primary, secondary, and not-in-use (when applicable). It's required for devices with 3 or more SIMs and can be used in place of 'isPrimary' for dual-SIM devices. Use the raw eSIM slot value for the device, such as 'sim2' or 'sim3'. Sim failover will occur only between primary and secondary sim slots.
         - simFailover (object): SIM Failover settings.
         """
 
@@ -196,7 +196,7 @@ class AsyncDevices:
         - serial (string): Serial
         - slot (string): Required parameter for the SIM slot to update the cellular band mask for
         - type (string): Required parameter for the signal type to update the cellular band mask for
-        - masked (array): Required parameter for the band identifiers to mask for the given SIM slot and signal type. For LTE use bands identifiers like '30' and for 5G use band identifiers like 'n30'. Maximum 256 bands.
+        - masked (array): Required parameter for the band identifiers to mask for the given SIM slot and signal type. For LTE use bands identifiers like '30', for 5G use band identifiers like 'n30', or use 'all' to mask all bands for that signal type. Maximum 256 bands.
         """
 
         kwargs = locals()

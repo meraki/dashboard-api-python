@@ -1469,7 +1469,7 @@ class Organizations(object):
         https://developer.cisco.com/meraki/api-v1/#!dismiss-organization-assurance-alerts
 
         - organizationId (string): Organization ID
-        - alertIds (array): Array of alert IDs to dismiss
+        - alertIds (array): Array of alert IDs in this organization to dismiss. Missing or inaccessible alert IDs return 404.
         """
 
         kwargs = locals()
@@ -1830,7 +1830,7 @@ class Organizations(object):
         https://developer.cisco.com/meraki/api-v1/#!restore-organization-assurance-alerts
 
         - organizationId (string): Organization ID
-        - alertIds (array): Array of alert IDs to restore
+        - alertIds (array): Array of alert IDs in this organization to restore. Missing or inaccessible alert IDs return 404.
         """
 
         kwargs = locals()
@@ -4191,6 +4191,106 @@ class Organizations(object):
                 )
 
         return self._session.get(metadata, resource, params)
+
+    def getOrganizationDevicesSyslogServersByNetwork(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **Returns syslog servers configured for the networks within an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-syslog-servers-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 10.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): IDs of the networks for which to fetch syslog servers; suggested maximum array size is 100
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "syslog", "servers", "byNetwork"],
+            "operation": "getOrganizationDevicesSyslogServersByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/syslog/servers/byNetwork"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesSyslogServersByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationDevicesSyslogServersRolesByNetwork(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Returns roles that can be assigned to a syslog server for a given network.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-syslog-servers-roles-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 10.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): IDs of the networks for which to fetch valid syslog server roles; suggested maximum array size is 100
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "syslog", "servers", "roles", "byNetwork"],
+            "operation": "getOrganizationDevicesSyslogServersRolesByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/syslog/servers/roles/byNetwork"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesSyslogServersRolesByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationDevicesSystemMemoryUsageHistoryByInterval(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
@@ -6641,21 +6741,25 @@ class Organizations(object):
 
     def createOrganizationPolicyObject(self, organizationId: str, name: str, category: str, type: str, **kwargs):
         """
-        **Creates a new Policy Object.**
+        **Creates a new Policy Object**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-policy-object
 
         - organizationId (string): Organization ID
         - name (string): Name of a policy object, unique within the organization (alphanumeric, space, dash, or underscore characters only)
         - category (string): Category of a policy object (one of: adaptivePolicy, network)
-        - type (string): Type of a policy object (one of: adaptivePolicyIpv4Cidr, cidr, fqdn, ipAndMask)
+        - type (string): Type of a policy object (one of: adaptivePolicyIpv4Cidr, cidr, fqdn). DEPRECATED: `ipAndMask` is deprecated and will be removed in a future release. Use `cidr` instead.
         - cidr (string): CIDR Value of a policy object (e.g. 10.11.12.1/24")
         - fqdn (string): Fully qualified domain name of policy object (e.g. "example.com")
-        - mask (string): Mask of a policy object (e.g. "255.255.0.0")
-        - ip (string): IP Address of a policy object (e.g. "1.2.3.4")
+        - mask (string): Mask of a policy object (e.g. "255.255.0.0"). Used only with deprecated `type=ipAndMask`.
+        - ip (string): IP Address of a policy object (e.g. "1.2.3.4"). Used only with deprecated `type=ipAndMask`.
         - groupIds (array): The IDs of policy object groups the policy object belongs to
         """
 
         kwargs.update(locals())
+
+        if "type" in kwargs:
+            options = ["adaptivePolicyIpv4Cidr", "cidr", "fqdn"]
+            assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
 
         metadata = {
             "tags": ["organizations", "configure", "policyObjects"],
@@ -6850,7 +6954,7 @@ class Organizations(object):
 
     def updateOrganizationPolicyObject(self, organizationId: str, policyObjectId: str, **kwargs):
         """
-        **Updates a Policy Object.**
+        **Updates a Policy Object**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-policy-object
 
         - organizationId (string): Organization ID
@@ -6858,8 +6962,8 @@ class Organizations(object):
         - name (string): Name of a policy object, unique within the organization (alphanumeric, space, dash, or underscore characters only)
         - cidr (string): CIDR Value of a policy object (e.g. 10.11.12.1/24")
         - fqdn (string): Fully qualified domain name of policy object (e.g. "example.com")
-        - mask (string): Mask of a policy object (e.g. "255.255.0.0")
-        - ip (string): IP Address of a policy object (e.g. "1.2.3.4")
+        - mask (string): Mask of a policy object (e.g. "255.255.0.0"). Used only with deprecated `type=ipAndMask`.
+        - ip (string): IP Address of a policy object (e.g. "1.2.3.4"). Used only with deprecated `type=ipAndMask`.
         - groupIds (array): The IDs of policy object groups the policy object belongs to
         """
 
@@ -7449,7 +7553,6 @@ class Organizations(object):
 
         - organizationId (string): Organization ID
         - items (array): List of Meraki SD-WAN sites with the associated regions to be attached.
-        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
 
         kwargs.update(locals())
@@ -7463,7 +7566,6 @@ class Organizations(object):
 
         body_params = [
             "items",
-            "callback",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -7542,7 +7644,6 @@ class Organizations(object):
 
         - organizationId (string): Organization ID
         - items (array): List of Secure Access sites to be detached.
-        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
 
         kwargs.update(locals())

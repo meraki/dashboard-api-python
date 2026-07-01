@@ -1082,7 +1082,7 @@ class ActionBatchSwitch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
-            "operation": "update",
+            "operation": "ms/multicast/actions/update",
             "body": payload,
         }
         return action
@@ -1241,6 +1241,35 @@ class ActionBatchSwitch(object):
         action = {
             "resource": resource,
             "operation": "settings/actions/update",
+            "body": payload,
+        }
+        return action
+
+    def updateNetworkSwitchStack(self, networkId: str, switchStackId: str, **kwargs):
+        """
+        **Update a switch stack. At least one of 'name' or 'members' must be provided. If 'members' is provided, it replaces the entire stack membership.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-stack
+
+        - networkId (string): Network ID
+        - switchStackId (string): Switch stack ID
+        - name (string): The name of the switch stack
+        - members (array): The complete list of switches that should be in the stack. Minimum 2 and maximum 8 members. Omitting this field leaves stack membership unchanged.
+        """
+
+        kwargs.update(locals())
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        switchStackId = urllib.parse.quote(switchStackId, safe="")
+        resource = f"/networks/{networkId}/switch/stacks/{switchStackId}"
+
+        body_params = [
+            "name",
+            "members",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "stacks/actions/update",
             "body": payload,
         }
         return action
