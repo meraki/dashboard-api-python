@@ -3013,7 +3013,6 @@ class ActionBatchOrganizations(object):
 
         - organizationId (string): Organization ID
         - items (array): List of Meraki SD-WAN sites with the associated regions to be attached.
-        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
 
         kwargs.update(locals())
@@ -3023,7 +3022,6 @@ class ActionBatchOrganizations(object):
 
         body_params = [
             "items",
-            "callback",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -3040,7 +3038,6 @@ class ActionBatchOrganizations(object):
 
         - organizationId (string): Organization ID
         - items (array): List of Secure Access sites to be detached.
-        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
 
         kwargs.update(locals())
