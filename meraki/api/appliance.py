@@ -66,7 +66,7 @@ class Appliance(object):
 
     def getDeviceAppliancePerformance(self, serial: str, **kwargs):
         """
-        **Return the performance score for a single MX**
+        **Return the performance score for a single Secure Appliance or Secure Router**
         https://developer.cisco.com/meraki/api-v1/#!get-device-appliance-performance
 
         - serial (string): Serial
@@ -2673,7 +2673,7 @@ class Appliance(object):
         https://developer.cisco.com/meraki/api-v1/#!get-network-appliance-uplinks-usage-history
 
         - networkId (string): Network ID
-        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 30 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 10 minutes.
         - resolution (integer): The time resolution in seconds for returned data. The valid resolutions are: 60, 300, 600, 1800, 3600, 86400. The default is 60.
@@ -2747,7 +2747,7 @@ class Appliance(object):
         - dhcpBootFilename (string): DHCP boot option for boot filename
         - dhcpOptions (array): The list of DHCP options that will be included in DHCP responses. Each object in the list should have "code", "type", and "value" properties.
         - sgt (object): Security Group Tag settings for the VLAN.
-        - vrf (object): VRF configuration on the VLAN
+        - vrf (object): VRF configuration on the VLAN.
         - uplinks (array): Per-uplink NAT exception override configuration on the VLAN. Applicable only for networks that support NAT exceptions.
         """
 
@@ -2903,7 +2903,7 @@ class Appliance(object):
         - ipv6 (object): IPv6 configuration on the VLAN
         - mandatoryDhcp (object): Mandatory DHCP will enforce that clients connecting to this VLAN must use the IP address assigned by the DHCP server. Clients who use a static IP address won't be able to associate. Only available on firmware versions 17.0 and above
         - sgt (object): Security Group Tag settings for the VLAN.
-        - vrf (object): VRF configuration on the VLAN
+        - vrf (object): VRF configuration on the VLAN.
         - uplinks (array): Per-uplink NAT exception override configuration on the VLAN. Applicable only for networks that support NAT exceptions.
         """
 
@@ -3011,7 +3011,7 @@ class Appliance(object):
 
         - networkId (string): Network ID
         - enabled (boolean): Boolean value to enable or disable the BGP configuration. When BGP is enabled, the asNumber (ASN) will be autopopulated with the preconfigured ASN at other Hubs or a default value if there is no ASN configured.
-        - asNumber (integer): An Autonomous System Number (ASN) is required if you are to run BGP and peer with another BGP Speaker outside of the Auto VPN domain. This ASN will be applied to the entire Auto VPN domain. The entire 4-byte ASN range is supported. So, the ASN must be an integer between 1 and 4294967295. When absent, this field is not updated. If no value exists then it defaults to 64512.
+        - asNumber (integer): An Autonomous System Number (ASN) is required if you are to run BGP and peer with another BGP Speaker outside of the Auto VPN domain. This ASN will be applied to the entire Auto VPN domain and is only configurable for Auto VPN BGP networks. The entire 4-byte ASN range is supported. So, the ASN must be an integer between 1 and 4294967295. When absent, this field is not updated. If no value exists then it defaults to 64512.
         - ibgpHoldTimer (integer): The iBGP holdtimer in seconds. The iBGP holdtimer must be an integer between 12 and 240. When absent, this field is not updated. If no value exists then it defaults to 240.
         - routerId (string): The router ID of the appliance
         - neighbors (array): List of BGP neighbors. This list replaces the existing set of neighbors. When absent, this field is not updated.

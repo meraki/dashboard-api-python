@@ -5,6 +5,37 @@ class ActionBatchOrganizations(object):
     def __init__(self):
         super(ActionBatchOrganizations, self).__init__()
 
+    def updateOrganization(self, organizationId: str, **kwargs):
+        """
+        **Update an organization**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization
+
+        - organizationId (string): Organization ID
+        - name (string): The name of the organization
+        - management (object): Information about the organization's management system
+        - api (object): API-specific settings
+        - privacy (object): Privacy-related settings for the organization.
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}"
+
+        body_params = [
+            "name",
+            "management",
+            "api",
+            "privacy",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
     def createOrganizationAdaptivePolicyAcl(self, organizationId: str, name: str, rules: list, ipVersion: str, **kwargs):
         """
         **Creates new adaptive policy ACL**
@@ -1717,21 +1748,25 @@ class ActionBatchOrganizations(object):
 
     def createOrganizationPolicyObject(self, organizationId: str, name: str, category: str, type: str, **kwargs):
         """
-        **Creates a new Policy Object.**
+        **Creates a new Policy Object. Note: type `ipAndMask` is deprecated; use `cidr`.**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-policy-object
 
         - organizationId (string): Organization ID
         - name (string): Name of a policy object, unique within the organization (alphanumeric, space, dash, or underscore characters only)
         - category (string): Category of a policy object (one of: adaptivePolicy, network)
-        - type (string): Type of a policy object (one of: adaptivePolicyIpv4Cidr, cidr, fqdn, ipAndMask)
+        - type (string): Type of a policy object (one of: adaptivePolicyIpv4Cidr, cidr, fqdn). DEPRECATED: `ipAndMask` is deprecated and will be removed in a future release. Use `cidr` instead.
         - cidr (string): CIDR Value of a policy object (e.g. 10.11.12.1/24")
         - fqdn (string): Fully qualified domain name of policy object (e.g. "example.com")
-        - mask (string): Mask of a policy object (e.g. "255.255.0.0")
-        - ip (string): IP Address of a policy object (e.g. "1.2.3.4")
+        - mask (string): Mask of a policy object (e.g. "255.255.0.0"). Used only with deprecated `type=ipAndMask`.
+        - ip (string): IP Address of a policy object (e.g. "1.2.3.4"). Used only with deprecated `type=ipAndMask`.
         - groupIds (array): The IDs of policy object groups the policy object belongs to
         """
 
         kwargs.update(locals())
+
+        if "type" in kwargs:
+            options = ["adaptivePolicyIpv4Cidr", "cidr", "fqdn"]
+            assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
 
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/policyObjects"
@@ -1833,7 +1868,7 @@ class ActionBatchOrganizations(object):
 
     def updateOrganizationPolicyObject(self, organizationId: str, policyObjectId: str, **kwargs):
         """
-        **Updates a Policy Object.**
+        **Updates a Policy Object. Note: type `ipAndMask` is deprecated; use `cidr`.**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-policy-object
 
         - organizationId (string): Organization ID
@@ -1841,8 +1876,8 @@ class ActionBatchOrganizations(object):
         - name (string): Name of a policy object, unique within the organization (alphanumeric, space, dash, or underscore characters only)
         - cidr (string): CIDR Value of a policy object (e.g. 10.11.12.1/24")
         - fqdn (string): Fully qualified domain name of policy object (e.g. "example.com")
-        - mask (string): Mask of a policy object (e.g. "255.255.0.0")
-        - ip (string): IP Address of a policy object (e.g. "1.2.3.4")
+        - mask (string): Mask of a policy object (e.g. "255.255.0.0"). Used only with deprecated `type=ipAndMask`.
+        - ip (string): IP Address of a policy object (e.g. "1.2.3.4"). Used only with deprecated `type=ipAndMask`.
         - groupIds (array): The IDs of policy object groups the policy object belongs to
         """
 
@@ -2042,7 +2077,6 @@ class ActionBatchOrganizations(object):
 
         - organizationId (string): Organization ID
         - items (array): List of Meraki SD-WAN sites with the associated regions to be attached.
-        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
 
         kwargs.update(locals())
@@ -2052,7 +2086,6 @@ class ActionBatchOrganizations(object):
 
         body_params = [
             "items",
-            "callback",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -2069,7 +2102,6 @@ class ActionBatchOrganizations(object):
 
         - organizationId (string): Organization ID
         - items (array): List of Secure Access sites to be detached.
-        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
 
         kwargs.update(locals())
@@ -2102,6 +2134,54 @@ class ActionBatchOrganizations(object):
         body_params = [
             "siteId",
             "routing",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def updateOrganizationSnmp(self, organizationId: str, **kwargs):
+        """
+        **Update the SNMP settings for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-snmp
+
+        - organizationId (string): Organization ID
+        - v2cEnabled (boolean): Boolean indicating whether SNMP version 2c is enabled for the organization.
+        - v3Enabled (boolean): Boolean indicating whether SNMP version 3 is enabled for the organization.
+        - v3AuthMode (string): The SNMP version 3 authentication mode. Can be either 'MD5' or 'SHA'.
+        - v3AuthPass (string): The SNMP version 3 authentication password. Must be at least 8 characters if specified.
+        - v3PrivMode (string): The SNMP version 3 privacy mode. Can be either 'DES' or 'AES128'.
+        - v3PrivPass (string): The SNMP version 3 privacy password. Must be at least 8 characters if specified.
+        - peerIps (array): The list of IPv4 addresses that are allowed to access the SNMP server.
+        """
+
+        kwargs.update(locals())
+
+        if "v3AuthMode" in kwargs:
+            options = ["MD5", "SHA"]
+            assert kwargs["v3AuthMode"] in options, (
+                f'''"v3AuthMode" cannot be "{kwargs["v3AuthMode"]}", & must be set to one of: {options}'''
+            )
+        if "v3PrivMode" in kwargs:
+            options = ["AES128", "DES"]
+            assert kwargs["v3PrivMode"] in options, (
+                f'''"v3PrivMode" cannot be "{kwargs["v3PrivMode"]}", & must be set to one of: {options}'''
+            )
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/snmp"
+
+        body_params = [
+            "v2cEnabled",
+            "v3Enabled",
+            "v3AuthMode",
+            "v3AuthPass",
+            "v3PrivMode",
+            "v3PrivPass",
+            "peerIps",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {

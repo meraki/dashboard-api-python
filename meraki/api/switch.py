@@ -2225,6 +2225,41 @@ class Switch(object):
 
         return self._session.post(metadata, resource, payload)
 
+    def updateNetworkSwitchStack(self, networkId: str, switchStackId: str, **kwargs):
+        """
+        **Update a switch stack**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-stack
+
+        - networkId (string): Network ID
+        - switchStackId (string): Switch stack ID
+        - name (string): The name of the switch stack
+        - members (array): The complete list of switches that should be in the stack. Minimum 2 and maximum 8 members. Omitting this field leaves stack membership unchanged.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "stacks"],
+            "operation": "updateNetworkSwitchStack",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        switchStackId = urllib.parse.quote(str(switchStackId), safe="")
+        resource = f"/networks/{networkId}/switch/stacks/{switchStackId}"
+
+        body_params = [
+            "name",
+            "members",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSwitchStack: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
     def getNetworkSwitchStack(self, networkId: str, switchStackId: str):
         """
         **Show a switch stack**
