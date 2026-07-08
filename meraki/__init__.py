@@ -48,13 +48,20 @@ from meraki.config import (
     MERAKI_PYTHON_SDK_CALLER,
     USE_ITERATOR_FOR_GET_PAGES,
     VALIDATE_KWARGS,
+    SMART_FLOW_ENABLED,
+    SMART_FLOW_ORG_RATE,
+    SMART_FLOW_GLOBAL_RATE,
+    SMART_FLOW_CACHE_MODE,
+    SMART_FLOW_CACHE_PATH,
+    SMART_FLOW_CACHE_TTL,
+    SMART_FLOW_LOGGING,
 )
-from meraki.rest_session import RestSession
+from meraki.session.sync import RestSession
 from meraki.exceptions import APIError, APIKeyError, APIResponseError, AsyncAPIError
 from meraki._version import __version__  # noqa: F401
 from datetime import datetime
 
-__api_version__ = "1.72.0"
+__api_version__ = "1.72.0-beta.1"
 
 __all__ = [
     "APIError",
@@ -94,6 +101,11 @@ class DashboardAPI(object):
     - caller (string): optional identifier for API usage tracking; can also be set as an environment variable MERAKI_PYTHON_SDK_CALLER
     - use_iterator_for_get_pages (boolean): list* methods will return an iterator with each object instead of a complete list with all items
     - validate_kwargs (boolean): log warnings when unrecognized kwargs are passed to API methods
+    - smart_flow_enabled (boolean): enable per-org proactive smart flow via token buckets?
+    - smart_flow_org_rate (float): max requests per second per org (Meraki default: 10)
+    - smart_flow_global_rate (float): max requests per second across all orgs (source IP limit, Meraki default: 100)
+    - smart_flow_cache_mode (string): "lazy" (default) or "eager" - how org/network/device mappings are loaded
+    - smart_flow_cache_path (string): path to persist smart flow mapping cache across sessions
     """
 
     def __init__(
@@ -123,6 +135,13 @@ class DashboardAPI(object):
         use_iterator_for_get_pages=USE_ITERATOR_FOR_GET_PAGES,
         inherit_logging_config=INHERIT_LOGGING_CONFIG,
         validate_kwargs=VALIDATE_KWARGS,
+        smart_flow_enabled=SMART_FLOW_ENABLED,
+        smart_flow_org_rate=SMART_FLOW_ORG_RATE,
+        smart_flow_global_rate=SMART_FLOW_GLOBAL_RATE,
+        smart_flow_cache_mode=SMART_FLOW_CACHE_MODE,
+        smart_flow_cache_path=SMART_FLOW_CACHE_PATH,
+        smart_flow_cache_ttl=SMART_FLOW_CACHE_TTL,
+        smart_flow_logging=SMART_FLOW_LOGGING,
     ):
         # Check API key
         api_key = api_key or os.environ.get(API_KEY_ENVIRONMENT_VARIABLE)
@@ -138,9 +157,6 @@ class DashboardAPI(object):
 
         # Pull the caller from an environment variable if present
         caller = caller or os.environ.get("MERAKI_PYTHON_SDK_CALLER")
-
-        use_iterator_for_get_pages = use_iterator_for_get_pages
-        inherit_logging_config = inherit_logging_config
 
         # Configure logging
         if not suppress_logging:
@@ -195,6 +211,13 @@ class DashboardAPI(object):
             caller=caller,
             use_iterator_for_get_pages=use_iterator_for_get_pages,
             validate_kwargs=validate_kwargs,
+            smart_flow_enabled=smart_flow_enabled,
+            smart_flow_org_rate=smart_flow_org_rate,
+            smart_flow_global_rate=smart_flow_global_rate,
+            smart_flow_cache_mode=smart_flow_cache_mode,
+            smart_flow_cache_path=smart_flow_cache_path,
+            smart_flow_cache_ttl=smart_flow_cache_ttl,
+            smart_flow_logging=smart_flow_logging,
         )
 
         # API endpoints by section
@@ -217,3 +240,41 @@ class DashboardAPI(object):
 
         # Batch definitions
         self.batch = Batch()
+
+        # Eager load smart limit cache if enabled (skip if disk cache was fresh)
+        if smart_flow_enabled and smart_flow_cache_mode == "eager":
+            limiter = self._session._smart_flow
+            if limiter and not limiter.cache_fresh:
+                self._eager_load_rate_limit_cache()
+
+    def _eager_load_rate_limit_cache(self) -> None:
+        """Populate the smart flow's org/network/device cache at startup."""
+        rate_limiter = self._session._smart_flow
+        if not rate_limiter:
+            return
+
+        try:
+            orgs = self.organizations.getOrganizations()
+        except Exception:
+            return
+
+        for org in orgs:
+            org_id = org["id"]
+            rate_limiter.register_org(org_id)
+
+            try:
+                networks = self.organizations.getOrganizationNetworks(org_id, total_pages="all", perPage=1000)
+                for net in networks:
+                    rate_limiter.register_network(net["id"], org_id)
+            except Exception:
+                pass
+
+            try:
+                devices = self.organizations.getOrganizationInventoryDevices(org_id, total_pages="all", perPage=1000)
+                for device in devices:
+                    if device.get("serial"):
+                        rate_limiter.register_device(device["serial"], org_id)
+            except Exception:
+                pass
+
+        rate_limiter.save_cache()

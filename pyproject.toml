@@ -1,6 +1,6 @@
 [project]
 name = "meraki"
-version = "3.3.0"
+version = "4.3.0b1"
 description = "Cisco Meraki Dashboard API library"
 authors = [
     {name = "Cisco Meraki", email = "api-feedback@meraki.net"}
@@ -14,8 +14,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
 ]
 dependencies = [
-    "requests>=2.33.1,<3",
-    "aiohttp>=3.13.5,<4",
+    "httpx>=0.28,<1",
 ]
 
 [project.urls]
@@ -37,13 +36,15 @@ dev = [
     "pytest>=8.3.5,<10",
     "pytest-asyncio>=1.0,<2",
     "pytest-cov>=7.1.0,<8",
-    "responses>=0.25,<1",
-    "flake8>=7.0,<8",
+    "respx>=0.23.1,<1",
+    "pytest-benchmark>=2.0.0",
     "pre-commit>=4.6.0",
     "ruff>=0.15.12",
+    "pytest-json-report>=1.5.0",
+    "hypothesis>=6.122.0,<7",
     "towncrier>=24.8.0",
 ]
-generator = ["jinja2==3.1.6"]
+generator = ["jinja2==3.1.6", "httpx>=0.28,<1"]
 
 [tool.uv]
 default-groups = ["dev"]
@@ -53,7 +54,7 @@ line-length = 127
 
 [tool.pytest.ini_options]
 testpaths = ["tests/unit"]
-norecursedirs = ["tests/generator"]
+norecursedirs = ["tests/generator", ".hypothesis"]
 asyncio_mode = "auto"
 
 [tool.coverage.run]

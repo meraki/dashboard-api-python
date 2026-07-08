@@ -39,7 +39,9 @@ class APIError(Exception):
         self.tag = metadata["tags"][0]
         self.operation = metadata["operation"]
         self.status = self.response.status_code if self.response is not None and self.response.status_code else None
-        self.reason = self.response.reason if self.response is not None and self.response.reason else None
+        self.reason = (
+            self.response.reason_phrase if self.response is not None and hasattr(self.response, "reason_phrase") else None
+        )
         try:
             self.message = self.response.json() if self.response is not None and self.response.json() else None
         except ValueError:
@@ -53,20 +55,41 @@ class APIError(Exception):
 
 
 # To catch exceptions while making AIO API calls
-class AsyncAPIError(Exception):
-    def __init__(self, metadata, response, message):
-        self.response = response
-        self.tag = metadata["tags"][0]
-        self.operation = metadata["operation"]
-        self.status = response.status if response is not None and response.status else None
-        self.reason = response.reason if response is not None and response.reason else None
-        self.message = message
-        if isinstance(self.message, str):
-            self.message = self.message.strip()
-            if self.status == 404 and self.reason == "Not Found":
-                self.message += "please wait a minute if the key or org was just newly created."
+class AsyncAPIError(APIError):
+    """Deprecated: Use APIError for both sync and async exceptions.
 
-        super().__init__(f"{self.tag}, {self.operation} - {self.status} {self.reason}, {self.message}")
+    This exception is deprecated as of version 4.0. Catch APIError instead,
+    which now handles both synchronous and asynchronous errors.
+
+    Existing code using ``except AsyncAPIError:`` will continue to work
+    because AsyncAPIError is now a subclass of APIError.
+    """
+
+    def __init__(self, metadata, response, message=None):
+        import warnings
+
+        warnings.warn(
+            "AsyncAPIError is deprecated. Catch APIError instead, which now handles both sync and async errors.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
+        if message is not None:
+            # Old 3-arg form: replicate original AsyncAPIError logic
+            self.response = response
+            self.tag = metadata["tags"][0]
+            self.operation = metadata["operation"]
+            self.status = response.status_code if response is not None and hasattr(response, "status_code") else None
+            self.reason = response.reason_phrase if response is not None and hasattr(response, "reason_phrase") else None
+            self.message = message
+            if isinstance(self.message, str):
+                self.message = self.message.strip()
+                if self.status == 404 and self.reason == "Not Found":
+                    self.message += "please wait a minute if the key or org was just newly created."
+            Exception.__init__(self, f"{self.tag}, {self.operation} - {self.status} {self.reason}, {self.message}")
+        else:
+            # New 2-arg form: delegate to APIError
+            super().__init__(metadata, response)
 
     def __repr__(self):
         return f"{self.tag}, {self.operation} - {self.status} {self.reason}, {self.message}"

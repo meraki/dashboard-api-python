@@ -207,10 +207,6 @@ Unless you are an ecosystem partner, this identifier is optional.
    rep.
 2. If you have any questions about the formatting, please ask your question by opening an issue in this repo.
 
-## Releasing
-
-See [docs/releasing.md](docs/releasing.md) for versioning rules and the automated release process.
-
 ## Development
 
 This project uses [uv](https://docs.astral.sh/uv/) for dependency management and builds with

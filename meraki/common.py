@@ -94,7 +94,10 @@ def validate_base_url(self, url):
         "gov-meraki.com",
     ]
     parsed_url = urllib.parse.urlparse(url)
-    if any(domain in parsed_url.netloc for domain in allowed_domains):
+    # Match on the host boundary to avoid lookalike-host SSRF (e.g.
+    # "api.meraki.com.attacker.net"). Lowercase and strip any port first.
+    host = parsed_url.netloc.lower().split(":")[0]
+    if any(host == domain or host.endswith("." + domain) for domain in allowed_domains):
         abs_url = url
     else:
         abs_url = self._base_url + url

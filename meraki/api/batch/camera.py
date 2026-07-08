@@ -18,7 +18,7 @@ class ActionBatchCamera(object):
 
         kwargs.update(locals())
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/camera/customAnalytics"
 
         body_params = [
@@ -67,7 +67,7 @@ class ActionBatchCamera(object):
                 f'''"motionDetectorVersion" cannot be "{kwargs["motionDetectorVersion"]}", & must be set to one of: {options}'''
             )
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/camera/qualityAndRetention"
 
         body_params = [
@@ -101,7 +101,7 @@ class ActionBatchCamera(object):
 
         kwargs.update(locals())
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/camera/sense"
 
         body_params = [
@@ -129,7 +129,7 @@ class ActionBatchCamera(object):
 
         kwargs.update(locals())
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/camera/video/settings"
 
         body_params = [
@@ -154,7 +154,7 @@ class ActionBatchCamera(object):
 
         kwargs = locals()
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/camera/wirelessProfiles"
 
         body_params = [
@@ -165,5 +165,84 @@ class ActionBatchCamera(object):
             "resource": resource,
             "operation": "update",
             "body": payload,
+        }
+        return action
+
+    def createNetworkCameraVideoWall(self, networkId: str, name: str, tiles: list, **kwargs):
+        """
+        **Create a new video wall.**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-camera-video-wall
+
+        - networkId (string): Network ID
+        - name (string): The name of the video wall.
+        - tiles (array): The tiles that should appear on the video wall.
+        - index (integer): The order that this wall should appear on the video wall list.
+        """
+
+        kwargs.update(locals())
+
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/camera/videoWalls"
+
+        body_params = [
+            "name",
+            "index",
+            "tiles",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def updateNetworkCameraVideoWall(self, networkId: str, id: str, name: str, tiles: list, **kwargs):
+        """
+        **Update the specified video wall.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-camera-video-wall
+
+        - networkId (string): Network ID
+        - id (string): ID
+        - name (string): The name of the video wall.
+        - tiles (array): The tiles that should appear on the video wall.
+        - index (integer): The order that this wall should appear on the video wall list.
+        """
+
+        kwargs.update(locals())
+
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/networks/{networkId}/camera/videoWalls/{id}"
+
+        body_params = [
+            "name",
+            "index",
+            "tiles",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def deleteNetworkCameraVideoWall(self, networkId: str, id: str):
+        """
+        **Delete the specified video wall.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-camera-video-wall
+
+        - networkId (string): Network ID
+        - id (string): ID
+        """
+
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/networks/{networkId}/camera/videoWalls/{id}"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
         }
         return action

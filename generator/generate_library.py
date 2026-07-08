@@ -7,16 +7,11 @@ import subprocess
 import sys
 
 import jinja2
-import requests
+import httpx
 
 import common as common
+from common import REVERSE_PAGINATION, docs_url, check_python_version, return_params
 from parser_v3 import parse_params_v3, clear_cache
-from generate_library_oasv2 import (
-    REVERSE_PAGINATION,
-    docs_url,
-    check_python_version,
-    return_params,
-)
 from generate_stubs import generate_stub_modules
 
 
@@ -32,9 +27,8 @@ def safe_param_name(name: str) -> str:
 def _write_generation_report(version_number: str, api_version_number: str, is_github_action: bool):
     from datetime import date
 
-    report_path = "docs/generation-report.md" if is_github_action else "docs/generation-report.md"
+    report_path = "docs/generation-report.md"
 
-    # Deduplicate violations (same operation+param recorded from both standard and batch)
     seen = set()
     unique_violations = []
     for v in _keyword_param_violations:
@@ -43,7 +37,6 @@ def _write_generation_report(version_number: str, api_version_number: str, is_gi
             seen.add(key)
             unique_violations.append(v)
 
-    # Build the new entry
     lines = []
     lines.append(f"## {date.today().isoformat()} | Library v{version_number} | API {api_version_number}\n")
     lines.append("")
@@ -66,7 +59,6 @@ def _write_generation_report(version_number: str, api_version_number: str, is_gi
 
     new_entry = "\n".join(lines)
 
-    # Read existing content (skip the title header if present)
     existing = ""
     header = "# Generation Report\n\n"
     if os.path.isfile(report_path):
@@ -84,8 +76,8 @@ def _write_generation_report(version_number: str, api_version_number: str, is_gi
 
 READ_ME = """
 === PREREQUISITES ===
-Include the jinja2 files in same directory as this script, and install Python requests
-pip[3] install requests
+Include the jinja2 files in same directory as this script, and install Python httpx
+pip[3] install httpx
 
 === DESCRIPTION ===
 This script generates the Meraki Python library from the OpenAPI v3 specification.
@@ -99,7 +91,13 @@ API key can, and is recommended to, be set as an environment variable named MERA
 
 
 def generate_library(
-    spec: dict, version_number: str, api_version_number: str, is_github_action: bool, generate_stubs: bool = False
+    spec: dict,
+    version_number: str,
+    api_version_number: str,
+    is_github_action: bool,
+    generate_stubs: bool = False,
+    local_source: bool = False,
+    source_branch: str = "master",
 ):
     # Clear parser cache at entry
     clear_cache()
@@ -158,6 +156,7 @@ def generate_library(
     # Check paths and create directories if needed
     directories = [
         "meraki",
+        "meraki/session",
         "meraki/api",
         "meraki/api/batch",
         "meraki/aio",
@@ -173,22 +172,33 @@ def generate_library(
         "_version.py",
         "config.py",
         "common.py",
+        "encoding.py",
         "exceptions.py",
         "response_handler.py",
-        "rest_session.py",
+        "session/__init__.py",
+        "session/base.py",
+        "session/sync.py",
+        "session/async_.py",
         "api/__init__.py",
         "aio/__init__.py",
-        "aio/rest_session.py",
         "aio/api/__init__.py",
         "api/batch/__init__.py",
+        "smart_flow.py",
     ]
-    base_url = "https://raw.githubusercontent.com/meraki/dashboard-api-python/master/meraki/"
+    if local_source:
+        repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        local_meraki = os.path.join(repo_root, "meraki")
+    else:
+        base_url = f"https://raw.githubusercontent.com/meraki/dashboard-api-python/{source_branch}/meraki/"
     for file in non_generated:
-        response = requests.get(f"{base_url}{file}")
-        with open(f"meraki/{file}", "w+", encoding="utf-8", newline=None) as fp:
+        if local_source:
+            with open(os.path.join(local_meraki, file), encoding="utf-8") as src:
+                contents = src.read()
+        else:
+            response = httpx.get(f"{base_url}{file}")
             contents = response.text
+        with open(f"meraki/{file}", "w+", encoding="utf-8", newline=None) as fp:
             if file == "_version.py":
-                # replace library version
                 start = contents.find("__version__ = ")
                 end = contents.find("\n", start)
                 contents = f"{contents[:start]}__version__ = '{version_number}'{contents[end:]}"
@@ -222,7 +232,8 @@ def generate_library(
         print("Generating .pyi type stubs...")
         generate_stub_modules(spec, scopes, jinja_env, template_dir)
         # Write py.typed marker for PEP 561
-        open("meraki/py.typed", "w").close()
+        repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        open(os.path.join(repo_root, "meraki", "py.typed"), "w").close()
         print("Type stubs and py.typed marker created.")
 
     # Format generated code with ruff
@@ -240,12 +251,11 @@ def generate_modules(spec, batchable_actions, jinja_env, scopes, template_dir):
         section = scopes[scope]
 
         # Generate the standard module
-        with open(f"meraki/api/{scope}.py", "w", encoding="utf-8", newline=None) as output:
-            # Open module file for Asyncio API libraries
-            async_output = open(f"meraki/aio/api/{scope}.py", "w", encoding="utf-8", newline=None)
-            # Open module file for Action Batch API libraries
-            batch_output = open(f"meraki/api/batch/{scope}.py", "w", encoding="utf-8", newline=None)
-
+        with (
+            open(f"meraki/api/{scope}.py", "w", encoding="utf-8", newline=None) as output,
+            open(f"meraki/aio/api/{scope}.py", "w", encoding="utf-8", newline=None) as async_output,
+            open(f"meraki/api/batch/{scope}.py", "w", encoding="utf-8", newline=None) as batch_output,
+        ):
             modules = [
                 {"template_name": "class_template.jinja2", "module_output": output},
                 {
@@ -382,6 +392,10 @@ def generate_standard_and_async_functions(
                 if operation == "getNetworkEvents":
                     definition += ", event_log_end_time=None"
 
+            # call_line is bound per-method below; initialize to fail loudly if a
+            # method slips through without setting it (rather than raising NameError).
+            call_line = None
+
             # Function body for GET endpoints
             query_params = array_params = body_params = path_params = {}
             if method == "get":
@@ -389,8 +403,8 @@ def generate_standard_and_async_functions(
                 array_params = return_params(operation, all_params, ["array"])
                 path_params = return_params(operation, all_params, ["path"])
 
-            # Function body for POST/PUT endpoints
-            elif method == "post" or method == "put":
+            # Function body for POST/PUT/PATCH endpoints
+            elif method == "post" or method == "put" or method == "patch":
                 body_params = return_params(operation, all_params, ["body"])
                 path_params = return_params(operation, all_params, ["path"])
 
@@ -437,7 +451,7 @@ def generate_standard_and_async_functions(
                 else:
                     call_line = "return self._session.get(metadata, resource)"
 
-            elif method == "post" or method == "put":
+            elif method == "post" or method == "put" or method == "patch":
                 if body_params:
                     call_line = f"return self._session.{method}(metadata, resource, payload)"
                 else:
@@ -448,6 +462,8 @@ def generate_standard_and_async_functions(
                     call_line = "return self._session.delete(metadata, resource, params)"
                 else:
                     call_line = "return self._session.delete(metadata, resource)"
+
+            assert call_line is not None, f"call_line was not set for {operation} (method={method})"
 
             # Ensure all URL-referenced params get quote lines in the template
             for p in re.findall(r"\{(\w+)\}", path):
@@ -720,9 +736,11 @@ def main(inputs):
     api_version_number = "custom"
     is_github_action = False
     generate_stubs_flag = False
+    local_source = False
+    source_branch = "master"
 
     try:
-        opts, args = getopt.getopt(inputs, "ho:k:v:a:g:s")
+        opts, args = getopt.getopt(inputs, "ho:k:v:a:g:slb:")
     except getopt.GetoptError:
         print_help()
         sys.exit(2)
@@ -743,6 +761,10 @@ def main(inputs):
                 is_github_action = True
         elif opt == "-s":
             generate_stubs_flag = True
+        elif opt == "-l":
+            local_source = True
+        elif opt == "-b":
+            source_branch = arg
 
     check_python_version()
 
@@ -752,19 +774,19 @@ def main(inputs):
             print_help()
             sys.exit(2)
         else:
-            response = requests.get(
+            response = httpx.get(
                 f"https://api.meraki.com/api/v1/organizations/{org_id}/openapiSpec",
                 headers={"Authorization": f"Bearer {api_key}"},
                 params={"version": 3},
             )
-            if response.ok:
+            if response.status_code == 200:
                 spec = response.json()
             else:
                 print_help()
                 sys.exit(f"API key provided does not have access to org {org_id}")
     else:
-        response = requests.get("https://api.meraki.com/api/v1/openapiSpec", params={"version": 3})
-        if response.ok:
+        response = httpx.get("https://api.meraki.com/api/v1/openapiSpec", params={"version": 3})
+        if response.status_code == 200:
             spec = response.json()
             print("Successfully pulled Meraki dashboard API OpenAPI v3 spec.")
         else:
@@ -774,7 +796,15 @@ def main(inputs):
                 "If this continues for more than an hour, please contact Meraki support."
             )
 
-    generate_library(spec, version_number, api_version_number, is_github_action, generate_stubs=generate_stubs_flag)
+    generate_library(
+        spec,
+        version_number,
+        api_version_number,
+        is_github_action,
+        generate_stubs=generate_stubs_flag,
+        local_source=local_source,
+        source_branch=source_branch,
+    )
 
 
 if __name__ == "__main__":

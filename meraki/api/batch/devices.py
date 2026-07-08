@@ -24,7 +24,7 @@ class ActionBatchDevices(object):
 
         kwargs.update(locals())
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}"
 
         body_params = [
@@ -57,7 +57,7 @@ class ActionBatchDevices(object):
 
         kwargs = locals()
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/cellular/geolocations"
 
         body_params = [
@@ -91,7 +91,7 @@ class ActionBatchDevices(object):
             options = ["5GNSA", "5GSA", "LTE"]
             assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/cellular/uplinks/bands/masks/update"
 
         body_params = [
@@ -103,6 +103,50 @@ class ActionBatchDevices(object):
         action = {
             "resource": resource,
             "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def revokeDeviceCertificate(self, serial: str, certificateSerial: str, **kwargs):
+        """
+        **Revoke a device certificate. The device and certificate are identified by the path parameters. You may supply a revocation reason in the request body; if omitted, a default reason is applied.**
+        https://developer.cisco.com/meraki/api-v1/#!revoke-device-certificate
+
+        - serial (string): Serial
+        - certificateSerial (string): Certificate serial
+        - reason (string): Revocation reason per RFC 5280; omit to use `unspecified`
+        """
+
+        kwargs.update(locals())
+
+        if "reason" in kwargs:
+            options = [
+                "aACompromise",
+                "affiliationChanged",
+                "cACompromise",
+                "certificateHold",
+                "cessationOfOperation",
+                "keyCompromise",
+                "privilegeWithdrawn",
+                "removeFromCRL",
+                "superseded",
+                "unspecified",
+            ]
+            assert kwargs["reason"] in options, (
+                f'''"reason" cannot be "{kwargs["reason"]}", & must be set to one of: {options}'''
+            )
+
+        serial = urllib.parse.quote(str(serial), safe="")
+        certificateSerial = urllib.parse.quote(str(certificateSerial), safe="")
+        resource = f"/devices/{serial}/certificates/{certificateSerial}/revoke"
+
+        body_params = [
+            "reason",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "revoke",
             "body": payload,
         }
         return action
@@ -119,7 +163,7 @@ class ActionBatchDevices(object):
 
         kwargs.update(locals())
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/liveTools/leds/blink"
 
         body_params = [
@@ -145,7 +189,7 @@ class ActionBatchDevices(object):
 
         kwargs.update(locals())
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/liveTools/ports/status"
 
         body_params = [
@@ -170,7 +214,7 @@ class ActionBatchDevices(object):
 
         kwargs.update(locals())
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/liveTools/power/usage"
 
         body_params = [
@@ -180,6 +224,31 @@ class ActionBatchDevices(object):
         action = {
             "resource": resource,
             "operation": "job",
+            "body": payload,
+        }
+        return action
+
+    def createDeviceLiveToolsReboot(self, serial: str, **kwargs):
+        """
+        **Enqueue a job to reboot a device. This endpoint has a rate limit of one request every 60 seconds.**
+        https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-reboot
+
+        - serial (string): Serial
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/liveTools/reboot"
+
+        body_params = [
+            "callback",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "device",
             "body": payload,
         }
         return action
@@ -219,7 +288,7 @@ class ActionBatchDevices(object):
             ]
             assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/liveTools/routingTable/lookups"
 
         body_params = [
@@ -248,7 +317,7 @@ class ActionBatchDevices(object):
 
         kwargs.update(locals())
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/liveTools/routingTable/summaries"
 
         body_params = [
@@ -273,7 +342,7 @@ class ActionBatchDevices(object):
 
         kwargs.update(locals())
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/liveTools/throughputTest"
 
         body_params = [
@@ -299,7 +368,7 @@ class ActionBatchDevices(object):
 
         kwargs.update(locals())
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/managementInterface"
 
         body_params = [
