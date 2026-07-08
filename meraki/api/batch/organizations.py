@@ -2471,6 +2471,7 @@ class ActionBatchOrganizations(object):
         - rulesetId (string): ID of the ruleset to assign
         - policyId (string): ID of the policy to assign the ruleset to
         - priority (integer): Priority of the ruleset assignment (lower numbers = higher priority)
+        - staged (boolean): Stage an assignment without applying it immediately to the policy
         """
 
         kwargs.update(locals())
@@ -2482,11 +2483,39 @@ class ActionBatchOrganizations(object):
             "rulesetId",
             "policyId",
             "priority",
+            "staged",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def commitOrganizationPoliciesGlobalGroupPoliciesFirewallRulesetsAssignments(
+        self, organizationId: str, policy: dict, **kwargs
+    ):
+        """
+        **Commit staged Organization-Wide Policy Ruleset Assignments**
+        https://developer.cisco.com/meraki/api-v1/#!commit-organization-policies-global-group-policies-firewall-rulesets-assignments
+
+        - organizationId (string): Organization ID
+        - policy (object): Policy in which all staged rulesets will be committed
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/policies/global/group/policies/firewall/rulesets/assignments/commit"
+
+        body_params = [
+            "policy",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "commit",
             "body": payload,
         }
         return action
@@ -3006,7 +3035,7 @@ class ActionBatchOrganizations(object):
         }
         return action
 
-    def attachOrganizationSaseSites(self, organizationId: str, **kwargs):
+    def attachOrganizationSaseSites(self, organizationId: str, items: list, **kwargs):
         """
         **Attach sites in this organization to Secure Access. For an organization, a maximum of 2500 sites can be attached if they are in spoke mode or a maximum of 10 sites can be attached in hub mode.**
         https://developer.cisco.com/meraki/api-v1/#!attach-organization-sase-sites
@@ -3015,7 +3044,7 @@ class ActionBatchOrganizations(object):
         - items (array): List of Meraki SD-WAN sites with the associated regions to be attached.
         """
 
-        kwargs.update(locals())
+        kwargs = locals()
 
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/sase/sites/attach"
