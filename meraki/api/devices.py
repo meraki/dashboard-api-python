@@ -594,6 +594,7 @@ class Devices(object):
         https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-mac-table
 
         - serial (string): Serial
+        - mac (string): Optional parameter to filter MAC table entries by MAC address. Must be a colon-delimited six-octet MAC address, for example '00:11:22:a0:b1:c2'. Matching is case-insensitive.
         - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
 
@@ -607,6 +608,7 @@ class Devices(object):
         resource = f"/devices/{serial}/liveTools/macTable"
 
         body_params = [
+            "mac",
             "callback",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
@@ -1054,6 +1056,7 @@ class Devices(object):
         https://developer.cisco.com/meraki/api-v1/#!create-device-live-tools-routing-table
 
         - serial (string): Serial
+        - destination (object): Optional destination filter used to return routes containing the supplied destination.
         - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
         """
 
@@ -1067,6 +1070,7 @@ class Devices(object):
         resource = f"/devices/{serial}/liveTools/routingTable"
 
         body_params = [
+            "destination",
             "callback",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
