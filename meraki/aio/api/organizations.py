@@ -7616,7 +7616,7 @@ class AsyncOrganizations:
         - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 500. Default is 500.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
@@ -7655,7 +7655,7 @@ class AsyncOrganizations:
         - organizationId (string): Organization ID
         - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
         - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 500. Default is 500.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         """
@@ -9934,6 +9934,7 @@ class AsyncOrganizations:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - rulesetIds (array): Filter rulesets by IDs
         - name (string): Filter rulesets by name (partial match, case-insensitive). If multiple instances are provided, only the last one is used.
+        - excludedPolicyIds (array): Filter out rulesets that are associated with the specified policy IDs
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 100.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
@@ -9951,6 +9952,7 @@ class AsyncOrganizations:
         query_params = [
             "rulesetIds",
             "name",
+            "excludedPolicyIds",
             "perPage",
             "startingAfter",
             "endingBefore",
@@ -9959,6 +9961,7 @@ class AsyncOrganizations:
 
         array_params = [
             "rulesetIds",
+            "excludedPolicyIds",
         ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
@@ -10479,6 +10482,7 @@ class AsyncOrganizations:
         - rulesetIds (array): Filter assignments by ruleset IDs
         - policyIds (array): Filter assignments by policy IDs
         - assignmentIds (array): Filter assignments by assignment IDs
+        - staged (boolean): Filter assignments by whether or not they are staged
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 100.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
@@ -10497,6 +10501,7 @@ class AsyncOrganizations:
             "rulesetIds",
             "policyIds",
             "assignmentIds",
+            "staged",
             "perPage",
             "startingAfter",
             "endingBefore",
@@ -10534,6 +10539,7 @@ class AsyncOrganizations:
         - rulesetId (string): ID of the ruleset to assign
         - policyId (string): ID of the policy to assign the ruleset to
         - priority (integer): Priority of the ruleset assignment (lower numbers = higher priority)
+        - staged (boolean): Stage an assignment without applying it immediately to the policy
         """
 
         kwargs.update(locals())
@@ -10549,6 +10555,7 @@ class AsyncOrganizations:
             "rulesetId",
             "policyId",
             "priority",
+            "staged",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -10558,6 +10565,41 @@ class AsyncOrganizations:
             if invalid and self._session._logger:
                 self._session._logger.warning(
                     f"createOrganizationPoliciesGlobalGroupPoliciesFirewallRulesetsAssignment: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def commitOrganizationPoliciesGlobalGroupPoliciesFirewallRulesetsAssignments(
+        self, organizationId: str, policy: dict, **kwargs
+    ):
+        """
+        **Commit staged Organization-Wide Policy Ruleset Assignments**
+        https://developer.cisco.com/meraki/api-v1/#!commit-organization-policies-global-group-policies-firewall-rulesets-assignments
+
+        - organizationId (string): Organization ID
+        - policy (object): Policy in which all staged rulesets will be committed
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "policies", "global", "group", "firewall", "rulesets", "assignments"],
+            "operation": "commitOrganizationPoliciesGlobalGroupPoliciesFirewallRulesetsAssignments",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/policies/global/group/policies/firewall/rulesets/assignments/commit"
+
+        body_params = [
+            "policy",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"commitOrganizationPoliciesGlobalGroupPoliciesFirewallRulesetsAssignments: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.post(metadata, resource, payload)
@@ -11705,7 +11747,7 @@ class AsyncOrganizations:
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def attachOrganizationSaseSites(self, organizationId: str, **kwargs):
+    def attachOrganizationSaseSites(self, organizationId: str, items: list, **kwargs):
         """
         **Attach sites in this organization to Secure Access**
         https://developer.cisco.com/meraki/api-v1/#!attach-organization-sase-sites
@@ -11714,7 +11756,7 @@ class AsyncOrganizations:
         - items (array): List of Meraki SD-WAN sites with the associated regions to be attached.
         """
 
-        kwargs.update(locals())
+        kwargs = locals()
 
         metadata = {
             "tags": ["organizations", "configure", "sase", "sites"],
