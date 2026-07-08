@@ -16,11 +16,22 @@ class ActionBatchAppliance(object):
         - personality (object): Describes the port's configurability
         - uplink (object): The port's settings when in WAN mode
         - downlink (object): The port's VLAN settings when in LAN mode
+        - speed (string): Link speed for the port, in Mbps
+        - duplex (string): Duplex configuration for the port
         """
 
         kwargs.update(locals())
 
-        serial = urllib.parse.quote(serial, safe="")
+        if "speed" in kwargs and kwargs["speed"] is not None:
+            options = ["10", "100", "1000", "10000", "2500", "25000", "5000", "auto"]
+            assert kwargs["speed"] in options, f'''"speed" cannot be "{kwargs["speed"]}", & must be set to one of: {options}'''
+        if "duplex" in kwargs and kwargs["duplex"] is not None:
+            options = ["auto", "full", "half"]
+            assert kwargs["duplex"] in options, (
+                f'''"duplex" cannot be "{kwargs["duplex"]}", & must be set to one of: {options}'''
+            )
+
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/appliance/interfaces/ports/update"
 
         body_params = [
@@ -29,6 +40,54 @@ class ActionBatchAppliance(object):
             "personality",
             "uplink",
             "downlink",
+            "speed",
+            "duplex",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def updateDeviceApplianceInterfacesPort(self, serial: str, number: str, **kwargs):
+        """
+        **Update configurations for an appliance's specified port**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-appliance-interfaces-port
+
+        - serial (string): Serial
+        - number (string): Number
+        - enabled (boolean): Indicates whether the port is enabled
+        - personality (object): Describes the port's configurability
+        - uplink (object): The port's settings when in WAN mode
+        - downlink (object): The port's VLAN settings when in LAN mode
+        - speed (string): Link speed for the port, in Mbps
+        - duplex (string): Duplex configuration for the port
+        """
+
+        kwargs.update(locals())
+
+        if "speed" in kwargs and kwargs["speed"] is not None:
+            options = ["10", "100", "1000", "10000", "2500", "25000", "5000", "auto"]
+            assert kwargs["speed"] in options, f'''"speed" cannot be "{kwargs["speed"]}", & must be set to one of: {options}'''
+        if "duplex" in kwargs and kwargs["duplex"] is not None:
+            options = ["auto", "full", "half"]
+            assert kwargs["duplex"] in options, (
+                f'''"duplex" cannot be "{kwargs["duplex"]}", & must be set to one of: {options}'''
+            )
+
+        serial = urllib.parse.quote(str(serial), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/devices/{serial}/appliance/interfaces/ports/{number}"
+
+        body_params = [
+            "enabled",
+            "personality",
+            "uplink",
+            "downlink",
+            "speed",
+            "duplex",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -51,7 +110,7 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/appliance/radio/settings"
 
         body_params = [
@@ -78,7 +137,7 @@ class ActionBatchAppliance(object):
 
         kwargs = locals()
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/appliance/uplinks/settings"
 
         body_params = [
@@ -100,7 +159,7 @@ class ActionBatchAppliance(object):
         - serial (string): Serial
         """
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/appliance/vmx/authenticationToken"
 
         action = {
@@ -120,7 +179,7 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/appliance/connectivityMonitoringDestinations"
 
         body_params = [
@@ -152,7 +211,7 @@ class ActionBatchAppliance(object):
             options = ["active-active", "active-passive", "disabled"]
             assert kwargs["mode"] in options, f'''"mode" cannot be "{kwargs["mode"]}", & must be set to one of: {options}'''
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/appliance/devices/redundancy"
 
         body_params = [
@@ -177,7 +236,7 @@ class ActionBatchAppliance(object):
         - networkId (string): Network ID
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/appliance/devices/redundancy/swap"
 
         action = {
@@ -197,7 +256,7 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/appliance/firewall/l7FirewallRules"
 
         body_params = [
@@ -222,7 +281,7 @@ class ActionBatchAppliance(object):
 
         kwargs = locals()
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/appliance/firewall/multicastForwarding"
 
         body_params = [
@@ -244,16 +303,18 @@ class ActionBatchAppliance(object):
         - networkId (string): Network ID
         - ipv4 (object): IPv4 configuration
         - port (object): Port configuration
+        - vrf (object): VRF assignment for the L3 interface
         """
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/appliance/interfaces/l3"
 
         body_params = [
             "port",
             "ipv4",
+            "vrf",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -272,17 +333,19 @@ class ActionBatchAppliance(object):
         - interfaceId (string): Interface ID
         - port (object): Port configuration
         - ipv4 (object): IPv4 configuration
+        - vrf (object): VRF assignment for the L3 interface
         """
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        interfaceId = urllib.parse.quote(interfaceId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        interfaceId = urllib.parse.quote(str(interfaceId), safe="")
         resource = f"/networks/{networkId}/appliance/interfaces/l3/{interfaceId}"
 
         body_params = [
             "port",
             "ipv4",
+            "vrf",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -301,8 +364,8 @@ class ActionBatchAppliance(object):
         - interfaceId (string): Interface ID
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        interfaceId = urllib.parse.quote(interfaceId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        interfaceId = urllib.parse.quote(str(interfaceId), safe="")
         resource = f"/networks/{networkId}/appliance/interfaces/l3/{interfaceId}"
 
         action = {
@@ -324,13 +387,15 @@ class ActionBatchAppliance(object):
         - vlan (integer): Native VLAN when the port is in Trunk mode. Access VLAN when the port is in Access mode.
         - allowedVlans (string): Comma-delimited list of VLAN IDs (e.g. '2,15') for all devices. Secure Routers also support VLAN ranges (e.g. '2-10,15'). Use 'all' to permit all VLANs on the port.
         - accessPolicy (string): The name of the policy. Only applicable to Access ports. Valid values are: 'open', '8021x-radius', 'mac-radius', 'hybris-radius' for MX64 or Z3 or any MX supporting the per port authentication feature. Otherwise, 'open' is the only valid value and 'open' is the default value if the field is missing.
+        - peerSgtCapable (boolean): If true, Peer SGT is enabled for traffic through this port. Applicable to trunk port only, not access port.
+        - adaptivePolicyGroupId (string): Adaptive policy group ID that all traffic originating from this port is assigned to.
         - sgt (object): Security Group Tag settings for the port.
         """
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        portId = urllib.parse.quote(portId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        portId = urllib.parse.quote(str(portId), safe="")
         resource = f"/networks/{networkId}/appliance/ports/{portId}"
 
         body_params = [
@@ -340,6 +405,8 @@ class ActionBatchAppliance(object):
             "vlan",
             "allowedVlans",
             "accessPolicy",
+            "peerSgtCapable",
+            "adaptivePolicyGroupId",
             "sgt",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
@@ -363,7 +430,7 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/appliance/prefixes/delegated/statics"
 
         body_params = [
@@ -393,8 +460,8 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        staticDelegatedPrefixId = urllib.parse.quote(staticDelegatedPrefixId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        staticDelegatedPrefixId = urllib.parse.quote(str(staticDelegatedPrefixId), safe="")
         resource = f"/networks/{networkId}/appliance/prefixes/delegated/statics/{staticDelegatedPrefixId}"
 
         body_params = [
@@ -419,8 +486,8 @@ class ActionBatchAppliance(object):
         - staticDelegatedPrefixId (string): Static delegated prefix ID
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        staticDelegatedPrefixId = urllib.parse.quote(staticDelegatedPrefixId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        staticDelegatedPrefixId = urllib.parse.quote(str(staticDelegatedPrefixId), safe="")
         resource = f"/networks/{networkId}/appliance/prefixes/delegated/statics/{staticDelegatedPrefixId}"
 
         action = {
@@ -443,7 +510,7 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/appliance/rfProfiles"
 
         body_params = [
@@ -475,8 +542,8 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        rfProfileId = urllib.parse.quote(rfProfileId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        rfProfileId = urllib.parse.quote(str(rfProfileId), safe="")
         resource = f"/networks/{networkId}/appliance/rfProfiles/{rfProfileId}"
 
         body_params = [
@@ -502,8 +569,8 @@ class ActionBatchAppliance(object):
         - rfProfileId (string): Rf profile ID
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        rfProfileId = urllib.parse.quote(rfProfileId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        rfProfileId = urllib.parse.quote(str(rfProfileId), safe="")
         resource = f"/networks/{networkId}/appliance/rfProfiles/{rfProfileId}"
 
         action = {
@@ -523,7 +590,7 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/appliance/sdwan/internetPolicies"
 
         body_params = [
@@ -561,7 +628,7 @@ class ActionBatchAppliance(object):
                 f'''"deploymentMode" cannot be "{kwargs["deploymentMode"]}", & must be set to one of: {options}'''
             )
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/appliance/settings"
 
         body_params = [
@@ -587,11 +654,12 @@ class ActionBatchAppliance(object):
         - applianceIp (string): The appliance IP address of the single LAN
         - ipv6 (object): IPv6 configuration on the VLAN
         - mandatoryDhcp (object): Mandatory DHCP will enforce that clients connecting to this LAN must use the IP address assigned by the DHCP server. Clients who use a static IP address won't be able to associate. Only available on firmware versions 17.0 and above
+        - vrf (object): VRF configuration on the Single LAN. Omit this field to preserve the current VRF.
         """
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/appliance/singleLan"
 
         body_params = [
@@ -599,6 +667,7 @@ class ActionBatchAppliance(object):
             "applianceIp",
             "ipv6",
             "mandatoryDhcp",
+            "vrf",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -646,8 +715,8 @@ class ActionBatchAppliance(object):
                 f'''"wpaEncryptionMode" cannot be "{kwargs["wpaEncryptionMode"]}", & must be set to one of: {options}'''
             )
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        number = urllib.parse.quote(number, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
         resource = f"/networks/{networkId}/appliance/ssids/{number}"
 
         body_params = [
@@ -685,7 +754,7 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/appliance/trafficShaping/customPerformanceClasses"
 
         body_params = [
@@ -719,8 +788,8 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        customPerformanceClassId = urllib.parse.quote(customPerformanceClassId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        customPerformanceClassId = urllib.parse.quote(str(customPerformanceClassId), safe="")
         resource = f"/networks/{networkId}/appliance/trafficShaping/customPerformanceClasses/{customPerformanceClassId}"
 
         body_params = [
@@ -746,8 +815,8 @@ class ActionBatchAppliance(object):
         - customPerformanceClassId (string): Custom performance class ID
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        customPerformanceClassId = urllib.parse.quote(customPerformanceClassId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        customPerformanceClassId = urllib.parse.quote(str(customPerformanceClassId), safe="")
         resource = f"/networks/{networkId}/appliance/trafficShaping/customPerformanceClasses/{customPerformanceClassId}"
 
         action = {
@@ -771,7 +840,7 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/appliance/trafficShaping/rules"
 
         body_params = [
@@ -797,7 +866,7 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/appliance/trafficShaping/uplinkBandwidth"
 
         body_params = [
@@ -827,7 +896,7 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/appliance/trafficShaping/uplinkSelection"
 
         body_params = [
@@ -854,16 +923,18 @@ class ActionBatchAppliance(object):
         - networkId (string): Network ID
         - custom (array): Custom VPN exclusion rules. Pass an empty array to clear existing rules.
         - majorApplications (array): Major Application based VPN exclusion rules. Pass an empty array to clear existing rules.
+        - applications (array): NBAR Application based VPN exclusion rules. Available for networks on >=19.2 firmware
         """
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/appliance/trafficShaping/vpnExclusions"
 
         body_params = [
             "custom",
             "majorApplications",
+            "applications",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -884,7 +955,7 @@ class ActionBatchAppliance(object):
 
         kwargs = locals()
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/appliance/umbrella/account/connect"
 
         body_params = [
@@ -906,12 +977,29 @@ class ActionBatchAppliance(object):
         - networkId (string): Network ID
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/appliance/umbrella/account/disconnect"
 
         action = {
             "resource": resource,
             "operation": "disconnect",
+        }
+        return action
+
+    def disableNetworkApplianceUmbrellaProtection(self, networkId: str):
+        """
+        **Disable umbrella protection for an MX network**
+        https://developer.cisco.com/meraki/api-v1/#!disable-network-appliance-umbrella-protection
+
+        - networkId (string): Network ID
+        """
+
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/appliance/umbrella/disableProtection"
+
+        action = {
+            "resource": resource,
+            "operation": "action",
         }
         return action
 
@@ -926,11 +1014,53 @@ class ActionBatchAppliance(object):
 
         kwargs = locals()
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/appliance/umbrella/domains/exclusions"
 
         body_params = [
             "domains",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "action",
+            "body": payload,
+        }
+        return action
+
+    def enableNetworkApplianceUmbrellaProtection(self, networkId: str):
+        """
+        **Enable umbrella protection for an MX network**
+        https://developer.cisco.com/meraki/api-v1/#!enable-network-appliance-umbrella-protection
+
+        - networkId (string): Network ID
+        """
+
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/appliance/umbrella/enableProtection"
+
+        action = {
+            "resource": resource,
+            "operation": "action",
+        }
+        return action
+
+    def policiesNetworkApplianceUmbrella(self, networkId: str, policyIds: list, **kwargs):
+        """
+        **Update umbrella policies applied to MX network.**
+        https://developer.cisco.com/meraki/api-v1/#!policies-network-appliance-umbrella
+
+        - networkId (string): Network ID
+        - policyIds (array): Array of umbrella policy IDs
+        """
+
+        kwargs = locals()
+
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/appliance/umbrella/policies"
+
+        body_params = [
+            "policyIds",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -951,7 +1081,7 @@ class ActionBatchAppliance(object):
 
         kwargs = locals()
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/appliance/umbrella/policies/add"
 
         body_params = [
@@ -976,7 +1106,7 @@ class ActionBatchAppliance(object):
 
         kwargs = locals()
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/appliance/umbrella/policies/remove"
 
         body_params = [
@@ -1001,7 +1131,7 @@ class ActionBatchAppliance(object):
 
         kwargs = locals()
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/appliance/umbrella/protection"
 
         body_params = [
@@ -1026,7 +1156,7 @@ class ActionBatchAppliance(object):
 
         kwargs = locals()
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/appliance/uplinks/nat"
 
         body_params = [
@@ -1063,6 +1193,7 @@ class ActionBatchAppliance(object):
         - dhcpBootNextServer (string): DHCP boot option to direct boot clients to the server to load the boot file from
         - dhcpBootFilename (string): DHCP boot option for boot filename
         - dhcpOptions (array): The list of DHCP options that will be included in DHCP responses. Each object in the list should have "code", "type", and "value" properties.
+        - adaptivePolicyGroupId (string): Adaptive policy group ID this VLAN is assigned to.
         - sgt (object): Security Group Tag settings for the VLAN.
         - vrf (object): VRF configuration on the VLAN.
         - uplinks (array): Per-uplink NAT exception override configuration on the VLAN. Applicable only for networks that support NAT exceptions.
@@ -1086,7 +1217,7 @@ class ActionBatchAppliance(object):
                 f'''"dhcpLeaseTime" cannot be "{kwargs["dhcpLeaseTime"]}", & must be set to one of: {options}'''
             )
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/appliance/vlans"
 
         body_params = [
@@ -1107,6 +1238,7 @@ class ActionBatchAppliance(object):
             "dhcpBootNextServer",
             "dhcpBootFilename",
             "dhcpOptions",
+            "adaptivePolicyGroupId",
             "sgt",
             "vrf",
             "uplinks",
@@ -1130,7 +1262,7 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/appliance/vlans/settings"
 
         body_params = [
@@ -1171,6 +1303,7 @@ class ActionBatchAppliance(object):
         - mask (integer): Mask used for the subnet of all bound to the template networks. Applicable only for template network.
         - ipv6 (object): IPv6 configuration on the VLAN
         - mandatoryDhcp (object): Mandatory DHCP will enforce that clients connecting to this VLAN must use the IP address assigned by the DHCP server. Clients who use a static IP address won't be able to associate. Only available on firmware versions 17.0 and above
+        - adaptivePolicyGroupId (string): Adaptive policy group ID that all traffic originating from this VLAN is assigned to.
         - sgt (object): Security Group Tag settings for the VLAN.
         - vrf (object): VRF configuration on the VLAN.
         - uplinks (array): Per-uplink NAT exception override configuration on the VLAN. Applicable only for networks that support NAT exceptions.
@@ -1194,8 +1327,8 @@ class ActionBatchAppliance(object):
                 f'''"templateVlanType" cannot be "{kwargs["templateVlanType"]}", & must be set to one of: {options}'''
             )
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        vlanId = urllib.parse.quote(vlanId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        vlanId = urllib.parse.quote(str(vlanId), safe="")
         resource = f"/networks/{networkId}/appliance/vlans/{vlanId}"
 
         body_params = [
@@ -1219,6 +1352,7 @@ class ActionBatchAppliance(object):
             "mask",
             "ipv6",
             "mandatoryDhcp",
+            "adaptivePolicyGroupId",
             "sgt",
             "vrf",
             "uplinks",
@@ -1240,8 +1374,8 @@ class ActionBatchAppliance(object):
         - vlanId (string): Vlan ID
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        vlanId = urllib.parse.quote(vlanId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        vlanId = urllib.parse.quote(str(vlanId), safe="")
         resource = f"/networks/{networkId}/appliance/vlans/{vlanId}"
 
         action = {
@@ -1259,19 +1393,33 @@ class ActionBatchAppliance(object):
         - enabled (boolean): Boolean value to enable or disable the BGP configuration. When BGP is enabled, the asNumber (ASN) will be autopopulated with the preconfigured ASN at other Hubs or a default value if there is no ASN configured.
         - asNumber (integer): An Autonomous System Number (ASN) is required if you are to run BGP and peer with another BGP Speaker outside of the Auto VPN domain. This ASN will be applied to the entire Auto VPN domain and is only configurable for Auto VPN BGP networks. The entire 4-byte ASN range is supported. So, the ASN must be an integer between 1 and 4294967295. When absent, this field is not updated. If no value exists then it defaults to 64512.
         - ibgpHoldTimer (integer): The iBGP holdtimer in seconds. The iBGP holdtimer must be an integer between 12 and 240. When absent, this field is not updated. If no value exists then it defaults to 240.
+        - ipv6 (object): Settings for IPv6 configurations on the organization.
+        - tunnelDownTermination (object): Settings for tunnel down termination on the organization.
+        - vpnAsNumber (integer): Network specific number of the Autonomous System to which the appliance belongs. This field is only configurable for Independent BGP networks.
+        - priorityRoute (string): Sets the priority route between eBGP and Auto VPN.
         - routerId (string): The router ID of the appliance
         - neighbors (array): List of BGP neighbors. This list replaces the existing set of neighbors. When absent, this field is not updated.
         """
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        if "priorityRoute" in kwargs and kwargs["priorityRoute"] is not None:
+            options = ["Auto VPN", "eBGP"]
+            assert kwargs["priorityRoute"] in options, (
+                f'''"priorityRoute" cannot be "{kwargs["priorityRoute"]}", & must be set to one of: {options}'''
+            )
+
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/appliance/vpn/bgp"
 
         body_params = [
             "enabled",
             "asNumber",
             "ibgpHoldTimer",
+            "ipv6",
+            "tunnelDownTermination",
+            "vpnAsNumber",
+            "priorityRoute",
             "routerId",
             "neighbors",
         ]
@@ -1279,6 +1427,33 @@ class ActionBatchAppliance(object):
         action = {
             "resource": resource,
             "operation": "settings/update",
+            "body": payload,
+        }
+        return action
+
+    def updateNetworkApplianceVpnSiteToSiteHubVrfs(self, networkId: str, hubNetworkId: str, _json: list, **kwargs):
+        """
+        **Update the VRF mappings for a source network and hub pair.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-vpn-site-to-site-hub-vrfs
+
+        - networkId (string): Network ID
+        - hubNetworkId (string): Hub network ID
+        - _json (array): The list of VRFs for this source and hub mapping.
+        """
+
+        kwargs = locals()
+
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        hubNetworkId = urllib.parse.quote(str(hubNetworkId), safe="")
+        resource = f"/networks/{networkId}/appliance/vpn/siteToSite/hubs/{hubNetworkId}/vrfs"
+
+        body_params = [
+            "_json",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
             "body": payload,
         }
         return action
@@ -1292,6 +1467,7 @@ class ActionBatchAppliance(object):
         - mode (string): The site-to-site VPN mode. Can be one of 'none', 'spoke' or 'hub'
         - hubs (array): The list of VPN hubs, in order of preference. In spoke mode, at least 1 hub is required.
         - subnets (array): The list of subnets and their VPN presence.
+        - peerSgtCapable (boolean): Whether or not Peer SGT is enabled for traffic to this VPN peer.
         - sgt (object): Security Group Tag settings for the VPN peer.
         - subnet (object): Configuration of subnet features
         - hostTranslations (array): The list of VPN host translations. Host translations are supported starting from MX firmware version 26.1.2
@@ -1303,13 +1479,14 @@ class ActionBatchAppliance(object):
             options = ["hub", "none", "spoke"]
             assert kwargs["mode"] in options, f'''"mode" cannot be "{kwargs["mode"]}", & must be set to one of: {options}'''
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/appliance/vpn/siteToSiteVpn"
 
         body_params = [
             "mode",
             "hubs",
             "subnets",
+            "peerSgtCapable",
             "sgt",
             "subnet",
             "hostTranslations",
@@ -1337,7 +1514,7 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/appliance/warmSpare"
 
         body_params = [
@@ -1363,7 +1540,7 @@ class ActionBatchAppliance(object):
         - networkId (string): Network ID
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/appliance/warmSpare/swap"
 
         action = {
@@ -1383,7 +1560,7 @@ class ActionBatchAppliance(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/appliance/dns/local/profiles"
 
         body_params = [
@@ -1408,7 +1585,7 @@ class ActionBatchAppliance(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/appliance/dns/local/profiles/assignments/bulkCreate"
 
         body_params = [
@@ -1433,7 +1610,7 @@ class ActionBatchAppliance(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/appliance/dns/local/profiles/assignments/bulkDelete"
 
         body_params = [
@@ -1459,8 +1636,8 @@ class ActionBatchAppliance(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        profileId = urllib.parse.quote(profileId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        profileId = urllib.parse.quote(str(profileId), safe="")
         resource = f"/organizations/{organizationId}/appliance/dns/local/profiles/{profileId}"
 
         body_params = [
@@ -1483,8 +1660,8 @@ class ActionBatchAppliance(object):
         - profileId (string): Profile ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        profileId = urllib.parse.quote(profileId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        profileId = urllib.parse.quote(str(profileId), safe="")
         resource = f"/organizations/{organizationId}/appliance/dns/local/profiles/{profileId}"
 
         action = {
@@ -1508,7 +1685,7 @@ class ActionBatchAppliance(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/appliance/dns/local/records"
 
         body_params = [
@@ -1538,8 +1715,8 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        recordId = urllib.parse.quote(recordId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        recordId = urllib.parse.quote(str(recordId), safe="")
         resource = f"/organizations/{organizationId}/appliance/dns/local/records/{recordId}"
 
         body_params = [
@@ -1564,8 +1741,8 @@ class ActionBatchAppliance(object):
         - recordId (string): Record ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        recordId = urllib.parse.quote(recordId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        recordId = urllib.parse.quote(str(recordId), safe="")
         resource = f"/organizations/{organizationId}/appliance/dns/local/records/{recordId}"
 
         action = {
@@ -1589,7 +1766,7 @@ class ActionBatchAppliance(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/appliance/dns/split/profiles"
 
         body_params = [
@@ -1616,7 +1793,7 @@ class ActionBatchAppliance(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/appliance/dns/split/profiles/assignments/bulkCreate"
 
         body_params = [
@@ -1641,7 +1818,7 @@ class ActionBatchAppliance(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/appliance/dns/split/profiles/assignments/bulkDelete"
 
         body_params = [
@@ -1669,8 +1846,8 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        profileId = urllib.parse.quote(profileId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        profileId = urllib.parse.quote(str(profileId), safe="")
         resource = f"/organizations/{organizationId}/appliance/dns/split/profiles/{profileId}"
 
         body_params = [
@@ -1695,8 +1872,8 @@ class ActionBatchAppliance(object):
         - profileId (string): Profile ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        profileId = urllib.parse.quote(profileId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        profileId = urllib.parse.quote(str(profileId), safe="")
         resource = f"/organizations/{organizationId}/appliance/dns/split/profiles/{profileId}"
 
         action = {
@@ -1716,7 +1893,7 @@ class ActionBatchAppliance(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/appliance/routing/vrfs/settings"
 
         body_params = [
@@ -1727,6 +1904,322 @@ class ActionBatchAppliance(object):
             "resource": resource,
             "operation": "update",
             "body": payload,
+        }
+        return action
+
+    def createOrganizationApplianceSecurityIntrusionPolicy(self, organizationId: str, **kwargs):
+        """
+        **Create a new intrusion policy for the organization.**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-appliance-security-intrusion-policy
+
+        - organizationId (string): Organization ID
+        - policy (object): Attributes for the intrusion policy
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/security/intrusion/policies"
+
+        body_params = [
+            "policy",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def updateOrganizationApplianceSecurityIntrusionPolicy(self, organizationId: str, policyId: str, policy: dict, **kwargs):
+        """
+        **Update a single intrusion policy for the organization.**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-appliance-security-intrusion-policy
+
+        - organizationId (string): Organization ID
+        - policyId (string): Policy ID
+        - policy (object): Attributes for the intrusion policy
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        policyId = urllib.parse.quote(str(policyId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/security/intrusion/policies/{policyId}"
+
+        body_params = [
+            "policy",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def deleteOrganizationApplianceSecurityIntrusionPolicy(self, organizationId: str, policyId: str):
+        """
+        **Delete a single intrusion policy for the organization.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-appliance-security-intrusion-policy
+
+        - organizationId (string): Organization ID
+        - policyId (string): Policy ID
+        """
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        policyId = urllib.parse.quote(str(policyId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/security/intrusion/policies/{policyId}"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+
+    def declareOrganizationApplianceSecurityIntrusionPolicyRuleGroupsOverrides(
+        self, organizationId: str, policyId: str, items: list, **kwargs
+    ):
+        """
+                **Declare the desired rule group overrides for an intrusion policy.**
+                https://developer.cisco.com/meraki/api-v1/#!declare-organization-appliance-security-intrusion-policy-rule-groups-overrides
+
+                - organizationId (string): Organization ID
+                - policyId (string): Policy ID
+                - items (array): Desired overrides state
+                - mode (string): Controls how the configuration payload in the request body is applied to the resource. This parameter dictates the declarative mode:
+
+        * **`complete`**: The request body represents the entire desired configuration for this resource. Any existing configurations that are not included in the payload will be removed.
+        * **`partial` (default)**: The request body contains only the configurations to be created or modified. Existing configurations that are not specified in the payload will be preserved.
+
+                - recursive (boolean): Controls how the configuration payload in the request body applies to the rule group hierarchy. When true, the API applies each declared override to the rule group itself and its descendants unless the payload explicitly sets a descendant override. When false (default), the API applies overrides only to the rule groups listed in the payload.
+
+        """
+
+        kwargs.update(locals())
+
+        if "mode" in kwargs:
+            options = ["complete", "partial"]
+            assert kwargs["mode"] in options, f'''"mode" cannot be "{kwargs["mode"]}", & must be set to one of: {options}'''
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        policyId = urllib.parse.quote(str(policyId), safe="")
+        resource = (
+            f"/organizations/{organizationId}/appliance/security/intrusion/policies/{policyId}/ruleGroups/overrides/declare"
+        )
+
+        body_params = [
+            "mode",
+            "recursive",
+            "items",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "declare",
+            "body": payload,
+        }
+        return action
+
+    def createOrganizationApplianceSecurityIntrusionPolicyRuleGroupOverride(
+        self, organizationId: str, policyId: str, ruleGroupId: str, override: dict, **kwargs
+    ):
+        """
+        **Create a rule group override for an intrusion policy.**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-appliance-security-intrusion-policy-rule-group-override
+
+        - organizationId (string): Organization ID
+        - policyId (string): Policy ID
+        - ruleGroupId (string): Rule group ID
+        - override (object): Attributes for the override for a rule group in a intrusion policy
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        policyId = urllib.parse.quote(str(policyId), safe="")
+        ruleGroupId = urllib.parse.quote(str(ruleGroupId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/security/intrusion/policies/{policyId}/ruleGroups/{ruleGroupId}/override"
+
+        body_params = [
+            "override",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def updateOrganizationApplianceSecurityIntrusionPolicyRuleGroupOverride(
+        self, organizationId: str, policyId: str, ruleGroupId: str, override: dict, **kwargs
+    ):
+        """
+        **Update a rule group override for an intrusion policy.**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-appliance-security-intrusion-policy-rule-group-override
+
+        - organizationId (string): Organization ID
+        - policyId (string): Policy ID
+        - ruleGroupId (string): Rule group ID
+        - override (object): Attributes for the override for a rule group in a intrusion policy
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        policyId = urllib.parse.quote(str(policyId), safe="")
+        ruleGroupId = urllib.parse.quote(str(ruleGroupId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/security/intrusion/policies/{policyId}/ruleGroups/{ruleGroupId}/override"
+
+        body_params = [
+            "override",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def declareOrganizationApplianceSecurityIntrusionPolicyRulesOverrides(
+        self, organizationId: str, policyId: str, items: list, **kwargs
+    ):
+        """
+                **Declare the desired rule overrides for an intrusion policy.**
+                https://developer.cisco.com/meraki/api-v1/#!declare-organization-appliance-security-intrusion-policy-rules-overrides
+
+                - organizationId (string): Organization ID
+                - policyId (string): Policy ID
+                - items (array): Desired overrides state
+                - mode (string): Controls how the configuration payload in the request body is applied to the resource. This parameter dictates the declarative mode:
+
+        * **`complete`**: The request body represents the entire desired configuration for this resource. Any existing configurations that are not included in the payload will be removed. This effectively performs a full replacement or overwrite of the resource's configuration.
+        * **`partial` (default)**: The request body contains only the configurations to be created or modified. Existing configurations that are not specified in the payload will be preserved. This performs a merge or partial update, applying only the changes specified.
+
+        """
+
+        kwargs.update(locals())
+
+        if "mode" in kwargs:
+            options = ["complete", "partial"]
+            assert kwargs["mode"] in options, f'''"mode" cannot be "{kwargs["mode"]}", & must be set to one of: {options}'''
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        policyId = urllib.parse.quote(str(policyId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/security/intrusion/policies/{policyId}/rules/overrides/declare"
+
+        body_params = [
+            "mode",
+            "items",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "declare",
+            "body": payload,
+        }
+        return action
+
+    def createOrganizationApplianceSecurityIntrusionPolicyRuleOverride(
+        self, organizationId: str, policyId: str, ruleId: str, override: dict, **kwargs
+    ):
+        """
+        **Create a rule override for an intrusion policy.**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-appliance-security-intrusion-policy-rule-override
+
+        - organizationId (string): Organization ID
+        - policyId (string): Policy ID
+        - ruleId (string): Rule ID
+        - override (object): Rule override to create
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        policyId = urllib.parse.quote(str(policyId), safe="")
+        ruleId = urllib.parse.quote(str(ruleId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/security/intrusion/policies/{policyId}/rules/{ruleId}/override"
+
+        body_params = [
+            "override",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def updateOrganizationApplianceSecurityIntrusionPolicyRuleOverride(
+        self, organizationId: str, policyId: str, ruleId: str, override: dict, **kwargs
+    ):
+        """
+        **Update a rule override for an intrusion policy.**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-appliance-security-intrusion-policy-rule-override
+
+        - organizationId (string): Organization ID
+        - policyId (string): Policy ID
+        - ruleId (string): Rule ID
+        - override (object): Override attributes
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        policyId = urllib.parse.quote(str(policyId), safe="")
+        ruleId = urllib.parse.quote(str(ruleId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/security/intrusion/policies/{policyId}/rules/{ruleId}/override"
+
+        body_params = [
+            "override",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def deleteOrganizationApplianceSecurityIntrusionRuleGroupsOverride(self, organizationId: str, overrideId: str):
+        """
+        **Delete a rule group override for an intrusion policy.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-appliance-security-intrusion-rule-groups-override
+
+        - organizationId (string): Organization ID
+        - overrideId (string): Override ID
+        """
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        overrideId = urllib.parse.quote(str(overrideId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/security/intrusion/ruleGroups/overrides/{overrideId}"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+
+    def deleteOrganizationApplianceSecurityIntrusionRulesOverride(self, organizationId: str, overrideId: str):
+        """
+        **Delete a rule override for an intrusion policy.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-appliance-security-intrusion-rules-override
+
+        - organizationId (string): Organization ID
+        - overrideId (string): Override ID
+        """
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        overrideId = urllib.parse.quote(str(overrideId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/security/intrusion/rules/overrides/{overrideId}"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
         }
         return action
 
@@ -1741,7 +2234,7 @@ class ActionBatchAppliance(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/appliance/vpn/siteToSite/ipsec/peers/slas"
 
         body_params = [
@@ -1769,7 +2262,7 @@ class ActionBatchAppliance(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/appliance/vpn/thirdPartyVPNPeers"
 
         body_params = [
@@ -1797,7 +2290,7 @@ class ActionBatchAppliance(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/policies/global/group/policies/appliance/vlans/assign"
 
         body_params = [
@@ -1826,7 +2319,7 @@ class ActionBatchAppliance(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/policies/global/group/policies/appliance/vlans/remove"
 
         body_params = [

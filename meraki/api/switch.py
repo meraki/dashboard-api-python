@@ -6,13 +6,16 @@ class Switch(object):
         super(Switch, self).__init__()
         self._session = session
 
-    def getDeviceSwitchPorts(self, serial: str):
+    def getDeviceSwitchPorts(self, serial: str, **kwargs):
         """
         **List the switch ports for a switch**
         https://developer.cisco.com/meraki/api-v1/#!get-device-switch-ports
 
         - serial (string): Serial
+        - hideDefaultPorts (boolean): Optional flag that, when true, will hide modular switchports that may not be connected to the device at the moment
         """
+
+        kwargs.update(locals())
 
         metadata = {
             "tags": ["switch", "configure", "ports"],
@@ -21,7 +24,18 @@ class Switch(object):
         serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/switch/ports"
 
-        return self._session.get(metadata, resource)
+        query_params = [
+            "hideDefaultPorts",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getDeviceSwitchPorts: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get(metadata, resource, params)
 
     def cycleDeviceSwitchPorts(self, serial: str, ports: list, **kwargs):
         """
@@ -53,6 +67,46 @@ class Switch(object):
                 self._session._logger.warning(f"cycleDeviceSwitchPorts: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
+
+    def updateDeviceSwitchPortsMirror(self, serial: str, source: dict, destination: dict, **kwargs):
+        """
+        **Update a port mirror**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-switch-ports-mirror
+
+        - serial (string): The switch identifier
+        - source (object): Source ports mirror configuration
+        - destination (object): Destination port mirror configuration
+        - tags (array): Port mirror tags
+        - role (string): Switch role can be source or destination
+        - comment (string): My pretty comment
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "ports", "mirror"],
+            "operation": "updateDeviceSwitchPortsMirror",
+        }
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/switch/ports/mirror"
+
+        body_params = [
+            "serial",
+            "source",
+            "destination",
+            "tags",
+            "role",
+            "comment",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateDeviceSwitchPortsMirror: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
 
     def getDeviceSwitchPortsStatuses(self, serial: str, **kwargs):
         """
@@ -154,6 +208,7 @@ class Switch(object):
         - vlan (integer): The VLAN of the switch port. For a trunk port, this is the native VLAN. A null value will clear the value set for trunk ports.
         - voiceVlan (integer): The voice VLAN of the switch port. Only applicable to access ports.
         - allowedVlans (string): The VLANs allowed on the switch port. Only applicable to trunk ports.
+        - activeVlans (string): The VLANs that are active on the switch port. Only applicable to trunk ports.
         - isolationEnabled (boolean): The isolation status of the switch port.
         - rstpEnabled (boolean): The rapid spanning tree protocol status.
         - stpGuard (string): The state of the STP guard ('disabled', 'root guard', 'bpdu guard' or 'loop guard').
@@ -214,6 +269,7 @@ class Switch(object):
             "vlan",
             "voiceVlan",
             "allowedVlans",
+            "activeVlans",
             "isolationEnabled",
             "rstpEnabled",
             "stpGuard",
@@ -303,6 +359,12 @@ class Switch(object):
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
         - vlanId (integer): The VLAN this L3 interface is on. VLAN must be between 1 and 4094.
         - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a L3 interface. Required if this is the first IPv4 interface.
+        - isSwitchDefaultGateway (boolean): When true, the switch uses the IPv4 uplink gateway as its IPv4 default gateway. This can only be set if the interface is designated as the IPv4 uplink and the switch is running IOS XE version >= 17.18.3.
+        - uplinkV4 (boolean): When true, this interface is used as static IPv4 uplink.
+        - candidateUplinkV4 (boolean): When true, this interface is a UAC candidate for IPv4 Uplink.
+        - uplinkV6 (boolean): When true, this interface is used as static IPv6 uplink.
+        - staticV4Dns1 (string): Primary IPv4 DNS server address
+        - staticV4Dns2 (string): Secondary IPv4 DNS server address
         - ospfSettings (object): The OSPF routing settings of the interface.
         - ipv6 (object): The IPv6 settings of the interface.
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
@@ -337,6 +399,12 @@ class Switch(object):
             "multicastRouting",
             "vlanId",
             "defaultGateway",
+            "isSwitchDefaultGateway",
+            "uplinkV4",
+            "candidateUplinkV4",
+            "uplinkV6",
+            "staticV4Dns1",
+            "staticV4Dns2",
             "ospfSettings",
             "ipv6",
             "vrf",
@@ -386,6 +454,12 @@ class Switch(object):
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
         - vlanId (integer): The VLAN this L3 interface is on. VLAN must be between 1 and 4094.
         - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a L3 interface. Required if this is the first IPv4 interface.
+        - isSwitchDefaultGateway (boolean): When true, the switch uses the IPv4 uplink gateway as its IPv4 default gateway. This can only be set if the interface is designated as the IPv4 uplink and the switch is running IOS XE version >= 17.18.3.
+        - uplinkV4 (boolean): When true, this interface is used as static IPv4 uplink.
+        - candidateUplinkV4 (boolean): When true, this interface is a UAC candidate for IPv4 Uplink.
+        - uplinkV6 (boolean): When true, this interface is used as static IPv6 uplink.
+        - staticV4Dns1 (string): Primary IPv4 DNS server address
+        - staticV4Dns2 (string): Secondary IPv4 DNS server address
         - ospfSettings (object): The OSPF routing settings of the interface.
         - ipv6 (object): The IPv6 settings of the interface.
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
@@ -417,6 +491,12 @@ class Switch(object):
             "multicastRouting",
             "vlanId",
             "defaultGateway",
+            "isSwitchDefaultGateway",
+            "uplinkV4",
+            "candidateUplinkV4",
+            "uplinkV6",
+            "staticV4Dns1",
+            "staticV4Dns2",
             "ospfSettings",
             "ipv6",
             "vrf",
@@ -1388,13 +1468,16 @@ class Switch(object):
 
         return self._session.put(metadata, resource, payload)
 
-    def getNetworkSwitchLinkAggregations(self, networkId: str):
+    def getNetworkSwitchLinkAggregations(self, networkId: str, **kwargs):
         """
         **List link aggregation groups**
         https://developer.cisco.com/meraki/api-v1/#!get-network-switch-link-aggregations
 
         - networkId (string): Network ID
+        - serials (array): Optional parameter to filter by device serial numbers. Matches multiple exact serials.
         """
+
+        kwargs.update(locals())
 
         metadata = {
             "tags": ["switch", "configure", "linkAggregations"],
@@ -1403,7 +1486,26 @@ class Switch(object):
         networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/switch/linkAggregations"
 
-        return self._session.get(metadata, resource)
+        query_params = [
+            "serials",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getNetworkSwitchLinkAggregations: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get(metadata, resource, params)
 
     def createNetworkSwitchLinkAggregation(self, networkId: str, **kwargs):
         """
@@ -1413,6 +1515,7 @@ class Switch(object):
         - networkId (string): Network ID
         - switchPorts (array): Array of switch or stack ports for creating aggregation group. Minimum 2 and maximum 8 ports are supported.
         - switchProfilePorts (array): Array of switch profile ports for creating aggregation group. Minimum 2 and maximum 8 ports are supported.
+        - esiMhPairId (string): ESI-MH pair ID. Required when creating a downstream aggregation across ESI-MH pair member switches.
         """
 
         kwargs.update(locals())
@@ -1427,6 +1530,7 @@ class Switch(object):
         body_params = [
             "switchPorts",
             "switchProfilePorts",
+            "esiMhPairId",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -1652,6 +1756,126 @@ class Switch(object):
 
         return self._session.put(metadata, resource, payload)
 
+    def getNetworkSwitchPortsProfiles(self, networkId: str):
+        """
+        **List the port profiles in a network**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-ports-profiles
+
+        - networkId (string): Network ID
+        """
+
+        metadata = {
+            "tags": ["switch", "configure", "ports", "profiles"],
+            "operation": "getNetworkSwitchPortsProfiles",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/ports/profiles"
+
+        return self._session.get(metadata, resource)
+
+    def createNetworkSwitchPortsProfile(self, networkId: str, **kwargs):
+        """
+        **Create a port profile in a network**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-switch-ports-profile
+
+        - networkId (string): Network ID
+        - name (string): The name of the profile.
+        - description (string): Text describing the profile.
+        - tags (array): Space-seperated list of tags
+        - defaultRadiusProfileName (string): When present, the default RADIUS attribute value for RADIUS-based port profile application
+        - authentication (object): Authentication settings for RADIUS-based port profile application.
+        - port (object): Configuration settings for port profile
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "ports", "profiles"],
+            "operation": "createNetworkSwitchPortsProfile",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/ports/profiles"
+
+        body_params = [
+            "name",
+            "description",
+            "tags",
+            "defaultRadiusProfileName",
+            "authentication",
+            "port",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createNetworkSwitchPortsProfile: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def updateNetworkSwitchPortsProfile(self, networkId: str, id: str, **kwargs):
+        """
+        **Update a port profile in a network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-ports-profile
+
+        - networkId (string): Network ID
+        - id (string): ID
+        - name (string): The name of the profile.
+        - description (string): Text describing the profile.
+        - tags (array): Space-seperated list of tags
+        - defaultRadiusProfileName (string): When present, the default RADIUS attribute value for RADIUS-based port profile application
+        - authentication (object): Authentication settings for RADIUS-based port profile application.
+        - port (object): Configuration settings for port profile
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "ports", "profiles"],
+            "operation": "updateNetworkSwitchPortsProfile",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/networks/{networkId}/switch/ports/profiles/{id}"
+
+        body_params = [
+            "name",
+            "description",
+            "tags",
+            "defaultRadiusProfileName",
+            "authentication",
+            "port",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSwitchPortsProfile: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteNetworkSwitchPortsProfile(self, networkId: str, id: str):
+        """
+        **Delete a port profile from a network**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-switch-ports-profile
+
+        - networkId (string): Network ID
+        - id (string): ID
+        """
+
+        metadata = {
+            "tags": ["switch", "configure", "ports", "profiles"],
+            "operation": "deleteNetworkSwitchPortsProfile",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/networks/{networkId}/switch/ports/profiles/{id}"
+
+        return self._session.delete(metadata, resource)
+
     def getNetworkSwitchQosRules(self, networkId: str):
         """
         **List quality of service rules**
@@ -1852,6 +2076,64 @@ class Switch(object):
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
                 self._session._logger.warning(f"updateNetworkSwitchQosRule: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
+    def getNetworkSwitchRaGuardPolicy(self, networkId: str):
+        """
+        **Return RA Guard settings**
+        https://developer.cisco.com/meraki/api-v1/#!get-network-switch-ra-guard-policy
+
+        - networkId (string): Network ID
+        """
+
+        metadata = {
+            "tags": ["switch", "configure", "raGuardPolicy"],
+            "operation": "getNetworkSwitchRaGuardPolicy",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/raGuardPolicy"
+
+        return self._session.get(metadata, resource)
+
+    def updateNetworkSwitchRaGuardPolicy(self, networkId: str, **kwargs):
+        """
+        **Update RA Guard settings**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-ra-guard-policy
+
+        - networkId (string): Network ID
+        - defaultPolicy (string): New Router Advertisers are 'allowed' or 'blocked'. Default value is 'allowed'.
+        - allowedServers (array): List the MAC addresses of Router Advertisers to permit on the network when defaultPolicy is set to blocked.
+        - blockedServers (array): List the MAC addresses of Router Advertisers to block on the network when defaultPolicy is set to allowed.
+        """
+
+        kwargs.update(locals())
+
+        if "defaultPolicy" in kwargs:
+            options = ["allowed", "blocked"]
+            assert kwargs["defaultPolicy"] in options, (
+                f'''"defaultPolicy" cannot be "{kwargs["defaultPolicy"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["switch", "configure", "raGuardPolicy"],
+            "operation": "updateNetworkSwitchRaGuardPolicy",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/raGuardPolicy"
+
+        body_params = [
+            "defaultPolicy",
+            "allowedServers",
+            "blockedServers",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSwitchRaGuardPolicy: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
 
@@ -2175,6 +2457,45 @@ class Switch(object):
 
         return self._session.put(metadata, resource, payload)
 
+    def updateNetworkSwitchSpanningTree(self, networkId: str, **kwargs):
+        """
+        **Updates Spanning Tree configuration**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-spanning-tree
+
+        - networkId (string): Network ID
+        - enabled (boolean): Network-level spanning Tree enable
+        - mode (string): Catalyst Spanning Tree Protocol mode (mst, rpvst+)
+        - priorities (array): Spanning tree priority for switches/stacks or switch templates. An empty array will clear the priority settings.
+        """
+
+        kwargs.update(locals())
+
+        if "mode" in kwargs:
+            options = ["mst", "rpvst+"]
+            assert kwargs["mode"] in options, f'''"mode" cannot be "{kwargs["mode"]}", & must be set to one of: {options}'''
+
+        metadata = {
+            "tags": ["switch", "configure", "spanningTree"],
+            "operation": "updateNetworkSwitchSpanningTree",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/switch/spanningTree"
+
+        body_params = [
+            "enabled",
+            "mode",
+            "priorities",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSwitchSpanningTree: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
     def getNetworkSwitchStacks(self, networkId: str):
         """
         **List the switch stacks in a network**
@@ -2331,6 +2652,49 @@ class Switch(object):
 
         return self._session.post(metadata, resource, payload)
 
+    def updateNetworkSwitchStackPortsMirror(
+        self, networkId: str, switchStackId: str, source: dict, destination: dict, **kwargs
+    ):
+        """
+        **Update switch port mirrors for switch stacks**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-switch-stack-ports-mirror
+
+        - networkId (string): Network ID
+        - switchStackId (string): Switch stack ID
+        - source (object): Source port details
+        - destination (object): Destination port Details
+        - tags (array): Port mirror tags
+        - role (string): Switch role can be source or destination
+        - comment (string): My pretty comment
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "stacks", "ports", "mirror"],
+            "operation": "updateNetworkSwitchStackPortsMirror",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        switchStackId = urllib.parse.quote(str(switchStackId), safe="")
+        resource = f"/networks/{networkId}/switch/stacks/{switchStackId}/ports/mirror"
+
+        body_params = [
+            "source",
+            "destination",
+            "tags",
+            "role",
+            "comment",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkSwitchStackPortsMirror: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
     def removeNetworkSwitchStack(self, networkId: str, switchStackId: str, serial: str, **kwargs):
         """
         **Remove a switch from a stack**
@@ -2426,6 +2790,12 @@ class Switch(object):
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
         - vlanId (integer): The VLAN this L3 interface is on. VLAN must be between 1 and 4094.
         - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a L3 interface. Required if this is the first IPv4 interface.
+        - isSwitchDefaultGateway (boolean): When true, the switch uses the IPv4 uplink gateway as its IPv4 default gateway. This can only be set if the interface is designated as the IPv4 uplink and the switch is running IOS XE version >= 17.18.3.
+        - uplinkV4 (boolean): When true, this interface is used as static IPv4 uplink.
+        - candidateUplinkV4 (boolean): When true, this interface is a UAC candidate for IPv4 Uplink.
+        - uplinkV6 (boolean): When true, this interface is used as static IPv6 uplink.
+        - staticV4Dns1 (string): Primary IPv4 DNS server address
+        - staticV4Dns2 (string): Secondary IPv4 DNS server address
         - ospfSettings (object): The OSPF routing settings of the interface.
         - ipv6 (object): The IPv6 settings of the interface.
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
@@ -2461,6 +2831,12 @@ class Switch(object):
             "multicastRouting",
             "vlanId",
             "defaultGateway",
+            "isSwitchDefaultGateway",
+            "uplinkV4",
+            "candidateUplinkV4",
+            "uplinkV6",
+            "staticV4Dns1",
+            "staticV4Dns2",
             "ospfSettings",
             "ipv6",
             "vrf",
@@ -2515,6 +2891,12 @@ class Switch(object):
         - multicastRouting (string): Enable multicast support if, multicast routing between VLANs is required. Options are:         'disabled', 'enabled' or 'IGMP snooping querier'. Default is 'disabled'.
         - vlanId (integer): The VLAN this L3 interface is on. VLAN must be between 1 and 4094.
         - defaultGateway (string): The next hop for any traffic that isn't going to a directly connected subnet or over a static route.         This IP address must exist in a subnet with a L3 interface. Required if this is the first IPv4 interface.
+        - isSwitchDefaultGateway (boolean): When true, the switch uses the IPv4 uplink gateway as its IPv4 default gateway. This can only be set if the interface is designated as the IPv4 uplink and the switch is running IOS XE version >= 17.18.3.
+        - uplinkV4 (boolean): When true, this interface is used as static IPv4 uplink.
+        - candidateUplinkV4 (boolean): When true, this interface is a UAC candidate for IPv4 Uplink.
+        - uplinkV6 (boolean): When true, this interface is used as static IPv6 uplink.
+        - staticV4Dns1 (string): Primary IPv4 DNS server address
+        - staticV4Dns2 (string): Secondary IPv4 DNS server address
         - ospfSettings (object): The OSPF routing settings of the interface.
         - ipv6 (object): The IPv6 settings of the interface.
         - vrf (object): The VRF settings of the interface. Requires IOS XE 17.18 or higher
@@ -2547,6 +2929,12 @@ class Switch(object):
             "multicastRouting",
             "vlanId",
             "defaultGateway",
+            "isSwitchDefaultGateway",
+            "uplinkV4",
+            "candidateUplinkV4",
+            "uplinkV6",
+            "staticV4Dns1",
+            "staticV4Dns2",
             "ospfSettings",
             "ipv6",
             "vrf",
@@ -2946,6 +3334,60 @@ class Switch(object):
 
         return self._session.put(metadata, resource, payload)
 
+    def getOrganizationConfigTemplatesSwitchProfilesPortsMirrorsBySwitchProfile(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **list the port mirror configurations in an organization by switch profile**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-config-templates-switch-profiles-ports-mirrors-by-switch-profile
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - configTemplateIds (array): Optional parameter to filter the result set by the included set of config template IDs
+        - ids (array): A list of switch profile ids. The returned profiles will be filtered to only include these ids.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "configTemplates", "profiles", "ports", "mirrors", "bySwitchProfile"],
+            "operation": "getOrganizationConfigTemplatesSwitchProfilesPortsMirrorsBySwitchProfile",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/configTemplates/switch/profiles/ports/mirrors/bySwitchProfile"
+
+        query_params = [
+            "configTemplateIds",
+            "ids",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "configTemplateIds",
+            "ids",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationConfigTemplatesSwitchProfilesPortsMirrorsBySwitchProfile: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
     def getOrganizationConfigTemplateSwitchProfiles(self, organizationId: str, configTemplateId: str):
         """
         **List the switch templates for your switch template configuration**
@@ -2985,6 +3427,55 @@ class Switch(object):
         resource = f"/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles/{profileId}/ports"
 
         return self._session.get(metadata, resource)
+
+    def updateOrganizationConfigTemplateSwitchProfilePortsMirror(
+        self, organizationId: str, configTemplateId: str, profileId: str, source: dict, destination: dict, **kwargs
+    ):
+        """
+        **Update a port mirror**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-config-template-switch-profile-ports-mirror
+
+        - organizationId (string): Organization ID
+        - configTemplateId (string): Config template ID
+        - profileId (string): Profile ID
+        - source (object): Source ports mirror configuration
+        - destination (object): Destination port mirror configuration
+        - tags (array): Port mirror tags
+        - role (string): Switch role can be source or destination
+        - comment (string): My pretty comment
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "configTemplates", "profiles", "ports", "mirror"],
+            "operation": "updateOrganizationConfigTemplateSwitchProfilePortsMirror",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        configTemplateId = urllib.parse.quote(str(configTemplateId), safe="")
+        profileId = urllib.parse.quote(str(profileId), safe="")
+        resource = (
+            f"/organizations/{organizationId}/configTemplates/{configTemplateId}/switch/profiles/{profileId}/ports/mirror"
+        )
+
+        body_params = [
+            "source",
+            "destination",
+            "tags",
+            "role",
+            "comment",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationConfigTemplateSwitchProfilePortsMirror: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
 
     def getOrganizationConfigTemplateSwitchProfilePort(
         self, organizationId: str, configTemplateId: str, profileId: str, portId: str
@@ -3032,6 +3523,7 @@ class Switch(object):
         - vlan (integer): The VLAN of the switch template port. For a trunk port, this is the native VLAN. A null value will clear the value set for trunk ports.
         - voiceVlan (integer): The voice VLAN of the switch template port. Only applicable to access ports.
         - allowedVlans (string): The VLANs allowed on the switch template port. Only applicable to trunk ports.
+        - activeVlans (string): The VLANs that are active on the switch template port. Only applicable to trunk ports.
         - isolationEnabled (boolean): The isolation status of the switch template port.
         - rstpEnabled (boolean): The rapid spanning tree protocol status.
         - stpGuard (string): The state of the STP guard ('disabled', 'root guard', 'bpdu guard' or 'loop guard').
@@ -3094,6 +3586,7 @@ class Switch(object):
             "vlan",
             "voiceVlan",
             "allowedVlans",
+            "activeVlans",
             "isolationEnabled",
             "rstpEnabled",
             "stpGuard",
@@ -3163,6 +3656,387 @@ class Switch(object):
 
         return self._session.get(metadata, resource, params)
 
+    def getOrganizationSwitchAlertsPoeByDevice(self, organizationId: str, networkIds: list, **kwargs):
+        """
+        **Gets all poe related alerts over a given network and returns information by device**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-alerts-poe-by-device
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Filter results by network.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 8 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 5 minutes and be less than or equal to 7 days. The default is 2 hours.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "monitor", "alerts", "poe", "byDevice"],
+            "operation": "getOrganizationSwitchAlertsPoeByDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/alerts/poe/byDevice"
+
+        query_params = [
+            "networkIds",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchAlertsPoeByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def aurora2OrganizationSwitchSwitchTemplates(self, organizationId: str):
+        """
+        **List switch templates running IOS XE Catalyst firmware.**
+        https://developer.cisco.com/meraki/api-v1/#!aurora-2-organization-switch-switch-templates
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["switch", "configure"],
+            "operation": "aurora2OrganizationSwitchSwitchTemplates",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/aurora2SwitchTemplates"
+
+        return self._session.get(metadata, resource)
+
+    def getOrganizationSwitchClientsConnectionsAuthenticationByClient(self, organizationId: str, **kwargs):
+        """
+        **Summarizes authentication outcomes per switch client across an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-clients-connections-authentication-by-client
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Filter results by network.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 8 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 5 minutes and be less than or equal to 7 days. The default is 2 hours.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "monitor", "clients", "connections", "authentication", "byClient"],
+            "operation": "getOrganizationSwitchClientsConnectionsAuthenticationByClient",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/clients/connections/authentication/byClient"
+
+        query_params = [
+            "networkIds",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchClientsConnectionsAuthenticationByClient: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationSwitchClientsConnectionsDhcpByClient(self, organizationId: str, **kwargs):
+        """
+        **Get IP assignment for all clients in the organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-clients-connections-dhcp-by-client
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Filter results by network.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 7 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days. The default is 2 hours.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "monitor", "clients", "connections", "dhcp", "byClient"],
+            "operation": "getOrganizationSwitchClientsConnectionsDhcpByClient",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/clients/connections/dhcp/byClient"
+
+        query_params = [
+            "networkIds",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchClientsConnectionsDhcpByClient: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationSwitchClientsConnectionsSwitchPortStatusByClient(self, organizationId: str, **kwargs):
+        """
+        **Switch port status by client.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-clients-connections-switch-port-status-by-client
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Filter results by network.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 7 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 5 minutes and be less than or equal to 7 days. The default is 2 hours.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "monitor", "clients", "connections", "switchPortStatus", "byClient"],
+            "operation": "getOrganizationSwitchClientsConnectionsSwitchPortStatusByClient",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/clients/connections/switchPortStatus/byClient"
+
+        query_params = [
+            "networkIds",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchClientsConnectionsSwitchPortStatusByClient: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def cloneOrganizationSwitchProfilesToTemplateNetwork(self, organizationId: str, **kwargs):
+        """
+        **Clone existing switch templates into a destination template network.**
+        https://developer.cisco.com/meraki/api-v1/#!clone-organization-switch-profiles-to-template-network
+
+        - organizationId (string): Organization ID
+        - profileIds (array): Switch profile IDs to clone
+        - templateNodeGroupId (string): Destination template network ID
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure"],
+            "operation": "cloneOrganizationSwitchProfilesToTemplateNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/cloneProfilesToTemplateNetwork"
+
+        body_params = [
+            "profileIds",
+            "templateNodeGroupId",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"cloneOrganizationSwitchProfilesToTemplateNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationSwitchConnectivityLanLinkErrorsByDeviceByPort(self, organizationId: str, networkIds: list, **kwargs):
+        """
+        **Lan link errors by device and port.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-connectivity-lan-link-errors-by-device-by-port
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Filter results by network.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 7 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 5 minutes and be less than or equal to 7 days. The default is 2 hours.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "monitor", "connectivity", "lanLink", "errors", "byDevice", "byPort"],
+            "operation": "getOrganizationSwitchConnectivityLanLinkErrorsByDeviceByPort",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/connectivity/lanLink/errors/byDevice/byPort"
+
+        query_params = [
+            "networkIds",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchConnectivityLanLinkErrorsByDeviceByPort: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationSwitchConnectivityLanStpErrorsByDeviceByPort(self, organizationId: str, networkIds: list, **kwargs):
+        """
+        **Lan STP errors by device and port.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-connectivity-lan-stp-errors-by-device-by-port
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Filter results by network.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 7 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 5 minutes and be less than or equal to 7 days. The default is 2 hours.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "monitor", "connectivity", "lanStp", "errors", "byDevice", "byPort"],
+            "operation": "getOrganizationSwitchConnectivityLanStpErrorsByDeviceByPort",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/connectivity/lanStp/errors/byDevice/byPort"
+
+        query_params = [
+            "networkIds",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchConnectivityLanStpErrorsByDeviceByPort: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationSwitchConnectivityVrrpFailuresByDevice(self, organizationId: str, networkIds: list, **kwargs):
+        """
+        **Gets all vrrp related alerts over a given network and returns information by device**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-connectivity-vrrp-failures-by-device
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Filter results by network.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 8 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 5 minutes and be less than or equal to 7 days. The default is 2 hours.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "monitor", "connectivity", "vrrp", "failures", "byDevice"],
+            "operation": "getOrganizationSwitchConnectivityVrrpFailuresByDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/connectivity/vrrp/failures/byDevice"
+
+        query_params = [
+            "networkIds",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchConnectivityVrrpFailuresByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
     def cloneOrganizationSwitchDevices(self, organizationId: str, sourceSerial: str, targetSerials: list, **kwargs):
         """
         **Clone port-level and some switch-level configuration settings from a source switch to one or more target switches**
@@ -3196,6 +4070,68 @@ class Switch(object):
 
         return self._session.post(metadata, resource, payload)
 
+    def getOrganizationSwitchDevicesSystemQueuesHistoryBySwitchByInterval(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Return a historical record of packet transmission and loss, broken down by protocol, for insight into switch device health.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-devices-system-queues-history-by-switch-by-interval
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day. If interval is provided, the timespan will be autocalculated.
+        - interval (integer): The time interval in seconds for returned data. The valid intervals are: 300, 1200, 14400, 86400. The default is 1200. Interval is calculated if time params are provided.
+        - networkIds (array): Optional parameter to filter connectivity history by network ID. This filter uses multiple exact matches.
+        - serials (array): Optional parameter to filter connectivity history by switch.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "monitor", "devices", "system", "queues", "history", "bySwitch", "byInterval"],
+            "operation": "getOrganizationSwitchDevicesSystemQueuesHistoryBySwitchByInterval",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/devices/system/queues/history/bySwitch/byInterval"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "t0",
+            "t1",
+            "timespan",
+            "interval",
+            "networkIds",
+            "serials",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchDevicesSystemQueuesHistoryBySwitchByInterval: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
     def getOrganizationSwitchPortsBySwitch(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **List the switchports in an organization by switch**
@@ -3207,6 +4143,9 @@ class Switch(object):
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 50. Default is 50.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - extendedParams (boolean): Optional flag to return all of the switchport data vs smaller dataset
+        - hideDefaultPorts (boolean): Optional flag that, when true, will hide modular switchports that may not be connected to the device at the moment
+        - type (array): Optional parameter to filter switchports by type ('access', 'trunk', 'stack', 'routed', 'svl' or 'dad'). All types are selected if not supplied.
         - configurationUpdatedAfter (string): Optional parameter to filter items to switches where the configuration has been updated after the given timestamp.
         - mac (string): Optional parameter to filter items to switches with MAC addresses that contain the search term or are an exact match.
         - macs (array): Optional parameter to filter items to switches that have one of the provided MAC addresses.
@@ -3230,6 +4169,9 @@ class Switch(object):
             "perPage",
             "startingAfter",
             "endingBefore",
+            "extendedParams",
+            "hideDefaultPorts",
+            "type",
             "configurationUpdatedAfter",
             "mac",
             "macs",
@@ -3242,6 +4184,7 @@ class Switch(object):
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
         array_params = [
+            "type",
             "macs",
             "networkIds",
             "portProfileIds",
@@ -3332,6 +4275,58 @@ class Switch(object):
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
+    def getOrganizationSwitchPortsMirrorsBySwitch(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **list the port mirror configurations in an organization by switch**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-ports-mirrors-by-switch
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Optional parameter to filter the result set by the included set of network IDs
+        - serials (array): A list of serial numbers. The returned devices will be filtered to only include these serials.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "ports", "mirrors", "bySwitch"],
+            "operation": "getOrganizationSwitchPortsMirrorsBySwitch",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/mirrors/bySwitch"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchPortsMirrorsBySwitch: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
     def getOrganizationSwitchPortsOverview(self, organizationId: str, **kwargs):
         """
         **Returns the counts of all active ports for the requested timespan, grouped by speed**
@@ -3366,6 +4361,896 @@ class Switch(object):
                 self._session._logger.warning(f"getOrganizationSwitchPortsOverview: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get(metadata, resource, params)
+
+    def getOrganizationSwitchPortsProfiles(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List the port profiles in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-ports-profiles
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Return the port profiles for the specified network(s)
+        - formattedStaticAssignments (boolean): Returns the list of static switchports that are assigned to the switchport profile
+        - searchQuery (string): Optional parameter to filter the result set by the search query
+        - radiusProfileEnabled (boolean): Optional parameter. If true, only return port profiles with a radius profile enabled
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "ports", "profiles"],
+            "operation": "getOrganizationSwitchPortsProfiles",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/profiles"
+
+        query_params = [
+            "networkIds",
+            "formattedStaticAssignments",
+            "searchQuery",
+            "radiusProfileEnabled",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationSwitchPortsProfiles: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def createOrganizationSwitchPortsProfile(self, organizationId: str, **kwargs):
+        """
+        **Create a port profile in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-switch-ports-profile
+
+        - organizationId (string): Organization ID
+        - name (string): The name of the profile.
+        - description (string): Text describing the profile.
+        - isOrganizationWide (boolean): The scope of the profile whether it is organization level or network level
+        - networks (object): The networks which are included/excluded in the profile
+        - networkId (string): The network identifier
+        - tags (array): Space-seperated list of tags
+        - defaultRadiusProfileName (string): When present, the default RADIUS attribute value for RADIUS-based port profile application
+        - authentication (object): Authentication settings for RADIUS-based port profile application.
+        - port (object): Configuration settings for port profile
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "ports", "profiles"],
+            "operation": "createOrganizationSwitchPortsProfile",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/profiles"
+
+        body_params = [
+            "name",
+            "description",
+            "isOrganizationWide",
+            "networks",
+            "networkId",
+            "tags",
+            "defaultRadiusProfileName",
+            "authentication",
+            "port",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationSwitchPortsProfile: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def batchOrganizationSwitchPortsProfilesAssignmentsAssign(self, organizationId: str, items: list, **kwargs):
+        """
+        **Batch assign or unassign port profiles to switch ports**
+        https://developer.cisco.com/meraki/api-v1/#!batch-organization-switch-ports-profiles-assignments-assign
+
+        - organizationId (string): Organization ID
+        - items (array): Array of assignment operations (max 100)
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["switch", "configure", "ports", "profiles", "assignments"],
+            "operation": "batchOrganizationSwitchPortsProfilesAssignmentsAssign",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/profiles/assignments/batchAssign"
+
+        body_params = [
+            "items",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"batchOrganizationSwitchPortsProfilesAssignmentsAssign: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationSwitchPortsProfilesAssignmentsByPort(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List the port profile assignments in an organization, grouped by port**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-ports-profiles-assignments-by-port
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - profileIds (array): Filter by specific profile IDs
+        - serials (array): Filter by switch serials
+        - networkIds (array): Filter by network IDs
+        - templateIds (array): Filter by template (node_profile) IDs
+        - types (array): Filter by port type: switch, template
+        - assignmentTypes (array): Filter by assignment type: direct, template, exception
+        - isActive (boolean): Filter by assignment status. true: only ports with active assignments, showing only active assignments per port. false: only ports with inactive assignments, showing only inactive assignments per port. Omit: all ports with all assignment layers.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "ports", "profiles", "assignments", "byPort"],
+            "operation": "getOrganizationSwitchPortsProfilesAssignmentsByPort",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/profiles/assignments/byPort"
+
+        query_params = [
+            "profileIds",
+            "serials",
+            "networkIds",
+            "templateIds",
+            "types",
+            "assignmentTypes",
+            "isActive",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "profileIds",
+            "serials",
+            "networkIds",
+            "templateIds",
+            "types",
+            "assignmentTypes",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchPortsProfilesAssignmentsByPort: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationSwitchPortsProfilesAssignmentsBySwitch(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List the port profile assignments in an organization, grouped by switch**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-ports-profiles-assignments-by-switch
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - profileIds (array): Filter by specific profile IDs
+        - serials (array): Filter by switch serials
+        - networkIds (array): Filter by network IDs
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 50. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "ports", "profiles", "assignments", "bySwitch"],
+            "operation": "getOrganizationSwitchPortsProfilesAssignmentsBySwitch",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/profiles/assignments/bySwitch"
+
+        query_params = [
+            "profileIds",
+            "serials",
+            "networkIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "profileIds",
+            "serials",
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchPortsProfilesAssignmentsBySwitch: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationSwitchPortsProfilesAutomations(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **list the automation port profiles in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-ports-profiles-automations
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - ids (array): Optional parameter to filter the result set by the included set of automation IDs
+        - networkIds (array): Optional parameter to filter the result set by the associated networks.
+        - isOrganizationWide (string): Optional parameter to filter the result set by automations org-wide flag.
+        - searchQuery (string): Optional parameter to filter the result set by the search query
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 10.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "ports", "profiles", "automations"],
+            "operation": "getOrganizationSwitchPortsProfilesAutomations",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/profiles/automations"
+
+        query_params = [
+            "ids",
+            "networkIds",
+            "isOrganizationWide",
+            "searchQuery",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "ids",
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchPortsProfilesAutomations: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def createOrganizationSwitchPortsProfilesAutomation(self, organizationId: str, **kwargs):
+        """
+        **Create a port profile automation for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-switch-ports-profiles-automation
+
+        - organizationId (string): Organization ID
+        - name (string): Name of the port profile automation.
+        - description (string): Text describing the port profile automation.
+        - fallbackProfile (object): Configuration settings for port profile
+        - rules (array): Configuration settings for port profile automation rules
+        - assignedSwitchPorts (array): assigned switch ports
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "ports", "profiles", "automations"],
+            "operation": "createOrganizationSwitchPortsProfilesAutomation",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/profiles/automations"
+
+        body_params = [
+            "name",
+            "description",
+            "fallbackProfile",
+            "rules",
+            "assignedSwitchPorts",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationSwitchPortsProfilesAutomation: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def updateOrganizationSwitchPortsProfilesAutomation(self, organizationId: str, id: str, **kwargs):
+        """
+        **Update a port profile automation in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-switch-ports-profiles-automation
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        - name (string): Name of the port profile automation.
+        - description (string): Text describing the port profile automation.
+        - fallbackProfile (object): Configuration settings for port profile
+        - rules (array): Configuration settings for port profile automation rules
+        - assignedSwitchPorts (array): assigned switch ports
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "ports", "profiles", "automations"],
+            "operation": "updateOrganizationSwitchPortsProfilesAutomation",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/profiles/automations/{id}"
+
+        body_params = [
+            "name",
+            "description",
+            "fallbackProfile",
+            "rules",
+            "assignedSwitchPorts",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationSwitchPortsProfilesAutomation: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteOrganizationSwitchPortsProfilesAutomation(self, organizationId: str, id: str):
+        """
+        **Delete an automation port profile from an organization**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-switch-ports-profiles-automation
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        """
+
+        metadata = {
+            "tags": ["switch", "configure", "ports", "profiles", "automations"],
+            "operation": "deleteOrganizationSwitchPortsProfilesAutomation",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/profiles/automations/{id}"
+
+        return self._session.delete(metadata, resource)
+
+    def getOrganizationSwitchPortsProfilesNetworksAssignments(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Fetch all Network - Smart Port Profile associations for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-ports-profiles-networks-assignments
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): Number of records per page
+        - page (integer): Page number
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "ports", "profiles", "networks", "assignments"],
+            "operation": "getOrganizationSwitchPortsProfilesNetworksAssignments",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/profiles/networks/assignments"
+
+        query_params = [
+            "perPage",
+            "page",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchPortsProfilesNetworksAssignments: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def createOrganizationSwitchPortsProfilesNetworksAssignment(
+        self, organizationId: str, type: str, profile: dict, network: dict, **kwargs
+    ):
+        """
+        **Create Network and Smart Ports Profile association for a specific profile**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-switch-ports-profiles-networks-assignment
+
+        - organizationId (string): Organization ID
+        - type (string): Type of association
+        - profile (object): Smart Port Profile object
+        - network (object): Network object
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["switch", "configure", "ports", "profiles", "networks", "assignments"],
+            "operation": "createOrganizationSwitchPortsProfilesNetworksAssignment",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/profiles/networks/assignments"
+
+        body_params = [
+            "type",
+            "profile",
+            "network",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationSwitchPortsProfilesNetworksAssignment: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def batchOrganizationSwitchPortsProfilesNetworksAssignmentsCreate(self, organizationId: str, items: list, **kwargs):
+        """
+        **Batch Create Network and Smart Ports Profile associations for a specific profile**
+        https://developer.cisco.com/meraki/api-v1/#!batch-organization-switch-ports-profiles-networks-assignments-create
+
+        - organizationId (string): Organization ID
+        - items (array): Array of network and profile associations
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["switch", "configure", "ports", "profiles", "networks", "assignments"],
+            "operation": "batchOrganizationSwitchPortsProfilesNetworksAssignmentsCreate",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/profiles/networks/assignments/batchCreate"
+
+        body_params = [
+            "items",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"batchOrganizationSwitchPortsProfilesNetworksAssignmentsCreate: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def bulkOrganizationSwitchPortsProfilesNetworksAssignmentsDelete(self, organizationId: str, items: list, **kwargs):
+        """
+        **Bulk delete Network and Smart Port Profile associations**
+        https://developer.cisco.com/meraki/api-v1/#!bulk-organization-switch-ports-profiles-networks-assignments-delete
+
+        - organizationId (string): Organization ID
+        - items (array): Array of assignments to delete
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["switch", "configure", "ports", "profiles", "networks", "assignments"],
+            "operation": "bulkOrganizationSwitchPortsProfilesNetworksAssignmentsDelete",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/profiles/networks/assignments/bulkDelete"
+
+        body_params = [
+            "items",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"bulkOrganizationSwitchPortsProfilesNetworksAssignmentsDelete: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def deleteOrganizationSwitchPortsProfilesNetworksAssignment(self, organizationId: str, assignmentId: str):
+        """
+        **Delete Network and Smart Port profile association for a specific profile**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-switch-ports-profiles-networks-assignment
+
+        - organizationId (string): Organization ID
+        - assignmentId (string): Assignment ID
+        """
+
+        metadata = {
+            "tags": ["switch", "configure", "ports", "profiles", "networks", "assignments"],
+            "operation": "deleteOrganizationSwitchPortsProfilesNetworksAssignment",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        assignmentId = urllib.parse.quote(str(assignmentId), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/profiles/networks/assignments/{assignmentId}"
+
+        return self._session.delete(metadata, resource)
+
+    def getOrganizationSwitchPortsProfilesOverviewByProfile(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List the port profiles in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-ports-profiles-overview-by-profile
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Return the port profiles for the specified network(s)
+        - formattedStaticAssignments (boolean): Returns the list of static switchports that are assgined to the switchport profile
+        - searchQuery (string): Optional parameter to filter the result set by the search query
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "ports", "profiles", "overview", "byProfile"],
+            "operation": "getOrganizationSwitchPortsProfilesOverviewByProfile",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/profiles/overview/byProfile"
+
+        query_params = [
+            "networkIds",
+            "formattedStaticAssignments",
+            "searchQuery",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchPortsProfilesOverviewByProfile: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationSwitchPortsProfilesRadiusAssignments(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List the port profile RADIUS assignments**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-ports-profiles-radius-assignments
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): If present, the networks to limit the assignments to
+        - portProfileIds (array): If present, the port profiles to limit the assignments to
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "ports", "profiles", "radius", "assignments"],
+            "operation": "getOrganizationSwitchPortsProfilesRadiusAssignments",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/profiles/radius/assignments"
+
+        query_params = [
+            "networkIds",
+            "portProfileIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "portProfileIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchPortsProfilesRadiusAssignments: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def createOrganizationSwitchPortsProfilesRadiusAssignment(self, organizationId: str, network: dict, **kwargs):
+        """
+        **Create a port profile RADIUS assignment**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-switch-ports-profiles-radius-assignment
+
+        - organizationId (string): Organization ID
+        - network (object): The network where the RADIUS name is assigned
+        - portProfile (object): The assigned port profile
+        - radius (object): The RADIUS options for this assignment
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "ports", "profiles", "radius", "assignments"],
+            "operation": "createOrganizationSwitchPortsProfilesRadiusAssignment",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/profiles/radius/assignments"
+
+        body_params = [
+            "network",
+            "portProfile",
+            "radius",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationSwitchPortsProfilesRadiusAssignment: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationSwitchPortsProfilesRadiusAssignment(self, organizationId: str, id: str):
+        """
+        **Return a port profile RADIUS assignment**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-ports-profiles-radius-assignment
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        """
+
+        metadata = {
+            "tags": ["switch", "configure", "ports", "profiles", "radius", "assignments"],
+            "operation": "getOrganizationSwitchPortsProfilesRadiusAssignment",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/profiles/radius/assignments/{id}"
+
+        return self._session.get(metadata, resource)
+
+    def updateOrganizationSwitchPortsProfilesRadiusAssignment(self, organizationId: str, id: str, **kwargs):
+        """
+        **Update a port profile RADIUS assignment**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-switch-ports-profiles-radius-assignment
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        - network (object): The network where the RADIUS name is assigned
+        - portProfile (object): The assigned port profile
+        - radius (object): The RADIUS options for this assignment
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "ports", "profiles", "radius", "assignments"],
+            "operation": "updateOrganizationSwitchPortsProfilesRadiusAssignment",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/profiles/radius/assignments/{id}"
+
+        body_params = [
+            "network",
+            "portProfile",
+            "radius",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationSwitchPortsProfilesRadiusAssignment: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteOrganizationSwitchPortsProfilesRadiusAssignment(self, organizationId: str, id: str):
+        """
+        **Deletes a port profile RADIUS assignment**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-switch-ports-profiles-radius-assignment
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        """
+
+        metadata = {
+            "tags": ["switch", "configure", "ports", "profiles", "radius", "assignments"],
+            "operation": "deleteOrganizationSwitchPortsProfilesRadiusAssignment",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/profiles/radius/assignments/{id}"
+
+        return self._session.delete(metadata, resource)
+
+    def getOrganizationSwitchPortsProfile(self, organizationId: str, id: str):
+        """
+        **Get detailed information about a port profile**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-ports-profile
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        """
+
+        metadata = {
+            "tags": ["switch", "configure", "ports", "profiles"],
+            "operation": "getOrganizationSwitchPortsProfile",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/profiles/{id}"
+
+        return self._session.get(metadata, resource)
+
+    def updateOrganizationSwitchPortsProfile(self, organizationId: str, id: str, **kwargs):
+        """
+        **Update a port profile in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-switch-ports-profile
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        - name (string): The name of the profile.
+        - description (string): Text describing the profile.
+        - isOrganizationWide (boolean): The scope of the profile whether it is organization level or network level
+        - networks (object): The networks which are included/excluded in the profile
+        - networkId (string): The network identifier
+        - tags (array): Space-seperated list of tags
+        - defaultRadiusProfileName (string): When present, the default RADIUS attribute value for RADIUS-based port profile application
+        - authentication (object): Authentication settings for RADIUS-based port profile application.
+        - port (object): Configuration settings for port profile
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "ports", "profiles"],
+            "operation": "updateOrganizationSwitchPortsProfile",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/profiles/{id}"
+
+        body_params = [
+            "name",
+            "description",
+            "isOrganizationWide",
+            "networks",
+            "networkId",
+            "tags",
+            "defaultRadiusProfileName",
+            "authentication",
+            "port",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationSwitchPortsProfile: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteOrganizationSwitchPortsProfile(self, organizationId: str, id: str):
+        """
+        **Delete a port profile from an organization**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-switch-ports-profile
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        """
+
+        metadata = {
+            "tags": ["switch", "configure", "ports", "profiles"],
+            "operation": "deleteOrganizationSwitchPortsProfile",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/profiles/{id}"
+
+        return self._session.delete(metadata, resource)
 
     def getOrganizationSwitchPortsStatusesBySwitch(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
@@ -3432,6 +5317,55 @@ class Switch(object):
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationSwitchPortsStatusesPacketsByDeviceByPort(self, organizationId: str, networkIds: list, **kwargs):
+        """
+        **Switch port packets by device and port.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-ports-statuses-packets-by-device-by-port
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Filter results by network.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 7 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days. The default is 1 day. If interval is provided, the timespan will be autocalculated.
+        - interval (integer): The time interval in seconds for returned data. The valid intervals are: 1200, 14400, 86400. The default is 14400. Interval is calculated if time params are provided.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "monitor", "ports", "statuses", "packets", "byDevice", "byPort"],
+            "operation": "getOrganizationSwitchPortsStatusesPacketsByDeviceByPort",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/statuses/packets/byDevice/byPort"
+
+        query_params = [
+            "networkIds",
+            "t0",
+            "t1",
+            "timespan",
+            "interval",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchPortsStatusesPacketsByDeviceByPort: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
 
     def getOrganizationSwitchPortsTopologyDiscoveryByDevice(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
@@ -3501,6 +5435,71 @@ class Switch(object):
             if invalid and self._session._logger:
                 self._session._logger.warning(
                     f"getOrganizationSwitchPortsTopologyDiscoveryByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationSwitchPortsTransceiversReadingsHistoryBySwitch(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Return time-series digital optical monitoring (DOM) readings for ports on each DOM-enabled switch in an organization, in addition to thresholds for each relevant Small Form Factor Pluggable (SFP) module.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-ports-transceivers-readings-history-by-switch
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 30 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 30 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 30 days. The default is 1 day. If interval is provided, the timespan will be autocalculated.
+        - interval (integer): The time interval in seconds for returned data. The valid intervals are: 300, 1200, 14400, 86400. The default is 1200. Interval is calculated if time params are provided.
+        - networkIds (array): Networks for which information should be gathered.
+        - serials (array): Optional parameter to filter usage by switch.
+        - portIds (array): Optional parameter to filter usage by port ID.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "monitor", "ports", "transceivers", "readings", "history", "bySwitch"],
+            "operation": "getOrganizationSwitchPortsTransceiversReadingsHistoryBySwitch",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/ports/transceivers/readings/history/bySwitch"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "t0",
+            "t1",
+            "timespan",
+            "interval",
+            "networkIds",
+            "serials",
+            "portIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "portIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchPortsTransceiversReadingsHistoryBySwitch: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -3577,6 +5576,1656 @@ class Switch(object):
             if invalid and self._session._logger:
                 self._session._logger.warning(
                     f"getOrganizationSwitchPortsUsageHistoryByDeviceByInterval: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationSwitchRoutingBgpAutonomousSystems(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List the autonomous systems configured for BGP in the given organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-routing-bgp-autonomous-systems
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - numbers (array): Optional parameter to filter autonomous systems by number. This filter uses multiple exact matches.
+        - autonomousSystemIds (array): Optional parameter to filter autonomous systems by ID. This filter uses multiple exact matches.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "routing", "bgp", "autonomousSystems"],
+            "operation": "getOrganizationSwitchRoutingBgpAutonomousSystems",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/routing/bgp/autonomousSystems"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "numbers",
+            "autonomousSystemIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "numbers",
+            "autonomousSystemIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchRoutingBgpAutonomousSystems: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def createOrganizationSwitchRoutingBgpAutonomousSystem(self, organizationId: str, number: int, **kwargs):
+        """
+        **Create an autonomous system**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-switch-routing-bgp-autonomous-system
+
+        - organizationId (string): Organization ID
+        - number (integer): The autonomous system number (CLI: 'router bgp <number>')
+        - description (string): A description for the autonomous system
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "routing", "bgp", "autonomousSystems"],
+            "operation": "createOrganizationSwitchRoutingBgpAutonomousSystem",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/routing/bgp/autonomousSystems"
+
+        body_params = [
+            "number",
+            "description",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationSwitchRoutingBgpAutonomousSystem: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationSwitchRoutingBgpAutonomousSystemsOverviewByAutonomousSystem(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List the overview of the autonomous systems configured for BGP in the given organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-routing-bgp-autonomous-systems-overview-by-autonomous-system
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - numbers (array): Optional parameter to filter autonomous systems by number. This filter uses multiple exact matches.
+        - autonomousSystemIds (array): Optional parameter to filter autonomous systems by ID. This filter uses multiple exact matches.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "routing", "bgp", "autonomousSystems", "overview", "byAutonomousSystem"],
+            "operation": "getOrganizationSwitchRoutingBgpAutonomousSystemsOverviewByAutonomousSystem",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/routing/bgp/autonomousSystems/overview/byAutonomousSystem"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "numbers",
+            "autonomousSystemIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "numbers",
+            "autonomousSystemIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchRoutingBgpAutonomousSystemsOverviewByAutonomousSystem: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def updateOrganizationSwitchRoutingBgpAutonomousSystem(self, organizationId: str, autonomousSystemId: str, **kwargs):
+        """
+        **Update an autonomous system**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-switch-routing-bgp-autonomous-system
+
+        - organizationId (string): Organization ID
+        - autonomousSystemId (string): Autonomous system ID
+        - number (integer): The autonomous system number (CLI: 'router bgp <number>')
+        - description (string): A description for the autonomous system
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "routing", "bgp", "autonomousSystems"],
+            "operation": "updateOrganizationSwitchRoutingBgpAutonomousSystem",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        autonomousSystemId = urllib.parse.quote(str(autonomousSystemId), safe="")
+        resource = f"/organizations/{organizationId}/switch/routing/bgp/autonomousSystems/{autonomousSystemId}"
+
+        body_params = [
+            "number",
+            "description",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationSwitchRoutingBgpAutonomousSystem: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteOrganizationSwitchRoutingBgpAutonomousSystem(self, organizationId: str, autonomousSystemId: str):
+        """
+        **Delete an autonomous system from an organization**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-switch-routing-bgp-autonomous-system
+
+        - organizationId (string): Organization ID
+        - autonomousSystemId (string): Autonomous system ID
+        """
+
+        metadata = {
+            "tags": ["switch", "configure", "routing", "bgp", "autonomousSystems"],
+            "operation": "deleteOrganizationSwitchRoutingBgpAutonomousSystem",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        autonomousSystemId = urllib.parse.quote(str(autonomousSystemId), safe="")
+        resource = f"/organizations/{organizationId}/switch/routing/bgp/autonomousSystems/{autonomousSystemId}"
+
+        return self._session.delete(metadata, resource)
+
+    def getOrganizationSwitchRoutingBgpFiltersFilterLists(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List the filter lists configured for BGP in the given organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-routing-bgp-filters-filter-lists
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter 'filter lists' by network ID. This filter uses multiple exact matches.
+        - listIds (array): Optional parameter to filter 'filter lists' by ID. This filter uses multiple exact matches.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "routing", "bgp", "filters", "filterLists"],
+            "operation": "getOrganizationSwitchRoutingBgpFiltersFilterLists",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/routing/bgp/filters/filterLists"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "listIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "listIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchRoutingBgpFiltersFilterLists: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def createOrganizationSwitchRoutingBgpFiltersFilterListsDeploy(
+        self, organizationId: str, filterList: dict, network: dict, rules: list, **kwargs
+    ):
+        """
+        **Create or update a filter list, in addition to its associated rules**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-switch-routing-bgp-filters-filter-lists-deploy
+
+        - organizationId (string): Organization ID
+        - filterList (object): Information regarding the filter list
+        - network (object): Information regarding the network the filter list belongs to
+        - rules (array): Information regarding the filter list rules
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["switch", "configure", "routing", "bgp", "filters", "filterLists", "deploy"],
+            "operation": "createOrganizationSwitchRoutingBgpFiltersFilterListsDeploy",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/routing/bgp/filters/filterLists/deploy"
+
+        body_params = [
+            "filterList",
+            "network",
+            "rules",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationSwitchRoutingBgpFiltersFilterListsDeploy: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationSwitchRoutingBgpFiltersFilterListsOverviewByFilterList(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List the overview of the filter lists configured for BGP in the given organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-routing-bgp-filters-filter-lists-overview-by-filter-list
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter 'filter list' overviews by network ID. This filter uses multiple exact matches.
+        - listIds (array): Optional parameter to filter 'filter list' overviews by ID. This filter uses multiple exact matches.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "monitor", "routing", "bgp", "filters", "filterLists", "overview", "byFilterList"],
+            "operation": "getOrganizationSwitchRoutingBgpFiltersFilterListsOverviewByFilterList",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/routing/bgp/filters/filterLists/overview/byFilterList"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "listIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "listIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchRoutingBgpFiltersFilterListsOverviewByFilterList: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationSwitchRoutingBgpFiltersFilterListsRules(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List the filter list rules configured for BGP in the given organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-routing-bgp-filters-filter-lists-rules
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter 'filter list' rules by network ID. This filter uses multiple exact matches.
+        - ruleIds (array): Optional parameter to filter 'filter list' rules by ID. This filter uses multiple exact matches.
+        - filterListIds (array): Optional parameter to filter 'filter lists' by ID. This filter uses multiple exact matches.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "routing", "bgp", "filters", "filterLists", "rules"],
+            "operation": "getOrganizationSwitchRoutingBgpFiltersFilterListsRules",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/routing/bgp/filters/filterLists/rules"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "ruleIds",
+            "filterListIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "ruleIds",
+            "filterListIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchRoutingBgpFiltersFilterListsRules: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def deleteOrganizationSwitchRoutingBgpFiltersFilterList(self, organizationId: str, listId: str):
+        """
+        **Delete a filter list**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-switch-routing-bgp-filters-filter-list
+
+        - organizationId (string): Organization ID
+        - listId (string): List ID
+        """
+
+        metadata = {
+            "tags": ["switch", "configure", "routing", "bgp", "filters", "filterLists"],
+            "operation": "deleteOrganizationSwitchRoutingBgpFiltersFilterList",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        listId = urllib.parse.quote(str(listId), safe="")
+        resource = f"/organizations/{organizationId}/switch/routing/bgp/filters/filterLists/{listId}"
+
+        return self._session.delete(metadata, resource)
+
+    def getOrganizationSwitchRoutingBgpFiltersPrefixLists(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List the prefix lists configured for BGP in the given organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-routing-bgp-filters-prefix-lists
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter prefix lists by network ID. This filter uses multiple exact matches.
+        - listIds (array): Optional parameter to filter prefix lists by ID. This filter uses multiple exact matches.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "routing", "bgp", "filters", "prefixLists"],
+            "operation": "getOrganizationSwitchRoutingBgpFiltersPrefixLists",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/routing/bgp/filters/prefixLists"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "listIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "listIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchRoutingBgpFiltersPrefixLists: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def createOrganizationSwitchRoutingBgpFiltersPrefixListsDeploy(
+        self, organizationId: str, network: dict, prefixList: dict, rules: list, **kwargs
+    ):
+        """
+        **Create or update a prefix list, in addition to its associated rules**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-switch-routing-bgp-filters-prefix-lists-deploy
+
+        - organizationId (string): Organization ID
+        - network (object): Information regarding the network the prefix list belongs to
+        - prefixList (object): Information regarding the prefix list
+        - rules (array): Information regarding the prefix list rules
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["switch", "configure", "routing", "bgp", "filters", "prefixLists", "deploy"],
+            "operation": "createOrganizationSwitchRoutingBgpFiltersPrefixListsDeploy",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/routing/bgp/filters/prefixLists/deploy"
+
+        body_params = [
+            "network",
+            "prefixList",
+            "rules",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationSwitchRoutingBgpFiltersPrefixListsDeploy: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationSwitchRoutingBgpFiltersPrefixListsOverviewByPrefixList(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List the overview of the prefix lists configured for BGP in the given organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-routing-bgp-filters-prefix-lists-overview-by-prefix-list
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter prefix list overviews by network ID. This filter uses multiple exact matches.
+        - listIds (array): Optional parameter to filter prefix list overviews by ID. This filter uses multiple exact matches.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "monitor", "routing", "bgp", "filters", "prefixLists", "overview", "byPrefixList"],
+            "operation": "getOrganizationSwitchRoutingBgpFiltersPrefixListsOverviewByPrefixList",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/routing/bgp/filters/prefixLists/overview/byPrefixList"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "listIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "listIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchRoutingBgpFiltersPrefixListsOverviewByPrefixList: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationSwitchRoutingBgpFiltersPrefixListsRules(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List the prefix list rules configured for BGP in the given organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-routing-bgp-filters-prefix-lists-rules
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter prefix list rules by network ID. This filter uses multiple exact matches.
+        - prefixListIds (array): Optional parameter to filter prefix list rules by prefix list ID. This filter uses multiple exact matches.
+        - ruleIds (array): Optional parameter to filter prefix list rules by ID. This filter uses multiple exact matches.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "routing", "bgp", "filters", "prefixLists", "rules"],
+            "operation": "getOrganizationSwitchRoutingBgpFiltersPrefixListsRules",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/routing/bgp/filters/prefixLists/rules"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "prefixListIds",
+            "ruleIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "prefixListIds",
+            "ruleIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchRoutingBgpFiltersPrefixListsRules: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def deleteOrganizationSwitchRoutingBgpFiltersPrefixList(self, organizationId: str, listId: str):
+        """
+        **Delete a prefix list**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-switch-routing-bgp-filters-prefix-list
+
+        - organizationId (string): Organization ID
+        - listId (string): List ID
+        """
+
+        metadata = {
+            "tags": ["switch", "configure", "routing", "bgp", "filters", "prefixLists"],
+            "operation": "deleteOrganizationSwitchRoutingBgpFiltersPrefixList",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        listId = urllib.parse.quote(str(listId), safe="")
+        resource = f"/organizations/{organizationId}/switch/routing/bgp/filters/prefixLists/{listId}"
+
+        return self._session.delete(metadata, resource)
+
+    def getOrganizationSwitchRoutingBgpPeersGroups(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List the BGP peer groups configured in the given organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-routing-bgp-peers-groups
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter peer groups by network ID. This filter uses multiple exact matches.
+        - routerIds (array): Optional parameter to filter peer groups by router ID. This filter uses multiple exact matches.
+        - profileIds (array): Optional parameter to filter peer groups by profile ID. This filter uses multiple exact matches.
+        - peerGroupIds (array): Optional parameter to filter peer groups by ID. This filter uses multiple exact matches.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "routing", "bgp", "peers", "groups"],
+            "operation": "getOrganizationSwitchRoutingBgpPeersGroups",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/routing/bgp/peers/groups"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "routerIds",
+            "profileIds",
+            "peerGroupIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "routerIds",
+            "profileIds",
+            "peerGroupIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchRoutingBgpPeersGroups: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationSwitchRoutingBgpPeersGroupsAddressFamiliesDeployments(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List all BGP deployment information for multiple peer groups or address families configured in the given organization, including profile information, peer group address family information, neighbors, and listen ranges**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-routing-bgp-peers-groups-address-families-deployments
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter peer group address family deployments by network ID. This filter uses multiple exact matches.
+        - peerGroupIds (array): Optional parameter to filter peer group address family deployments by peer group
+        - addressFamilyIds (array): Optional parameter to filter peer group address family deployments by address family
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "routing", "bgp", "peers", "groups", "addressFamilies", "deployments"],
+            "operation": "getOrganizationSwitchRoutingBgpPeersGroupsAddressFamiliesDeployments",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/routing/bgp/peers/groups/addressFamilies/deployments"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "peerGroupIds",
+            "addressFamilyIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "peerGroupIds",
+            "addressFamilyIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchRoutingBgpPeersGroupsAddressFamiliesDeployments: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def createOrganizationSwitchRoutingBgpPeersGroupsDeploy(
+        self,
+        organizationId: str,
+        addressFamily: dict,
+        network: dict,
+        peerGroup: dict,
+        peerGroupAddressFamilyBindingProfile: dict,
+        peerGroupProfile: dict,
+        policies: list,
+        router: dict,
+        **kwargs,
+    ):
+        """
+        **Create or update a peer group, in addition to an associated peer group profile, peer group address family binding, peer group address family binding profile and routing policies associated with the peer group**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-switch-routing-bgp-peers-groups-deploy
+
+        - organizationId (string): Organization ID
+        - addressFamily (object): Information regarding the address family the peer group address family binding belongs to
+        - network (object): Information regarding the network the peer group profile belongs to
+        - peerGroup (object): Information regarding the peer group
+        - peerGroupAddressFamilyBindingProfile (object): Information regarding the peer group address family binding profile
+        - peerGroupProfile (object): Information regarding the peer group profile
+        - policies (array): Information regarding the routing policies
+        - router (object): Information regarding the router this peer group belongs to
+        - peerGroupAddressFamilyBinding (object): Information regarding the peer group address family binding. Only required when updating.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "routing", "bgp", "peers", "groups", "deploy"],
+            "operation": "createOrganizationSwitchRoutingBgpPeersGroupsDeploy",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/routing/bgp/peers/groups/deploy"
+
+        body_params = [
+            "addressFamily",
+            "network",
+            "peerGroup",
+            "peerGroupAddressFamilyBinding",
+            "peerGroupAddressFamilyBindingProfile",
+            "peerGroupProfile",
+            "policies",
+            "router",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationSwitchRoutingBgpPeersGroupsDeploy: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationSwitchRoutingBgpPeersGroupsDeployments(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List all BGP deployment information for peer groups configured in the given organization, including peer group address family information, as well as routing policies**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-routing-bgp-peers-groups-deployments
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 50. Default is 20.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter peer group deployments by network ID. This filter uses multiple exact matches.
+        - routerIds (array): Optional parameter to filter peer group deployments by router ID. This filter uses multiple exact matches.
+        - profileIds (array): Optional parameter to filter peer group deployments by profile ID. This filter uses multiple exact matches.
+        - peerGroupIds (array): Optional parameter to filter peer group deployments by peer group ID. This filter uses multiple exact matches.
+        - afi (string): Optional parameter to filter deployments on each peer group by address family identifier (AFI).
+        - safi (string): Optional parameter to filter deployments on each peer group by subsequent address family identifier (SAFI).
+        """
+
+        kwargs.update(locals())
+
+        if "afi" in kwargs:
+            options = ["ipv4"]
+            assert kwargs["afi"] in options, f'''"afi" cannot be "{kwargs["afi"]}", & must be set to one of: {options}'''
+        if "safi" in kwargs:
+            options = ["unicast"]
+            assert kwargs["safi"] in options, f'''"safi" cannot be "{kwargs["safi"]}", & must be set to one of: {options}'''
+
+        metadata = {
+            "tags": ["switch", "configure", "routing", "bgp", "peers", "groups", "deployments"],
+            "operation": "getOrganizationSwitchRoutingBgpPeersGroupsDeployments",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/routing/bgp/peers/groups/deployments"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "routerIds",
+            "profileIds",
+            "peerGroupIds",
+            "afi",
+            "safi",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "routerIds",
+            "profileIds",
+            "peerGroupIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchRoutingBgpPeersGroupsDeployments: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationSwitchRoutingBgpPeersGroupsOverviewByPeerGroup(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List the overview of the BGP peer groups configured in the given organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-routing-bgp-peers-groups-overview-by-peer-group
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter peer group overviews by network ID. This filter uses multiple exact matches.
+        - routerIds (array): Optional parameter to filter peer group overviews by router ID. This filter uses multiple exact matches.
+        - profileIds (array): Optional parameter to filter peer group overviews by profile ID. This filter uses multiple exact matches.
+        - peerGroupIds (array): Optional parameter to filter peer group overviews by ID. This filter uses multiple exact matches.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "monitor", "routing", "bgp", "peers", "groups", "overview", "byPeerGroup"],
+            "operation": "getOrganizationSwitchRoutingBgpPeersGroupsOverviewByPeerGroup",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/routing/bgp/peers/groups/overview/byPeerGroup"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "routerIds",
+            "profileIds",
+            "peerGroupIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "routerIds",
+            "profileIds",
+            "peerGroupIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchRoutingBgpPeersGroupsOverviewByPeerGroup: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationSwitchRoutingBgpPeersListenRanges(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List the listen ranges configured for BGP in the given organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-routing-bgp-peers-listen-ranges
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter listen ranges by network ID. This filter uses multiple exact matches.
+        - routerIds (array): Optional parameter to filter listen ranges by router ID. This filter uses multiple exact matches.
+        - peerGroupIds (array): Optional parameter to filter listen ranges by peer group ID. This filter uses multiple exact matches.
+        - listenRangeIds (array): Optional parameter to filter listen ranges by ID. This filter uses multiple exact matches.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "routing", "bgp", "peers", "listenRanges"],
+            "operation": "getOrganizationSwitchRoutingBgpPeersListenRanges",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/routing/bgp/peers/listenRanges"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "routerIds",
+            "peerGroupIds",
+            "listenRangeIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "routerIds",
+            "peerGroupIds",
+            "listenRangeIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchRoutingBgpPeersListenRanges: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationSwitchRoutingBgpPeersNeighbors(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List the neighbors configured for BGP in the given organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-routing-bgp-peers-neighbors
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter neighbors by network ID. This filter uses multiple exact matches.
+        - peerGroupIds (array): Optional parameter to filter neighbors by peer group ID. This filter uses multiple exact matches.
+        - routerIds (array): Optional parameter to filter neighbors by router ID. This filter uses multiple exact matches.
+        - neighborIds (array): Optional parameter to filter neighbors by ID. This filter uses multiple exact matches.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "routing", "bgp", "peers", "neighbors"],
+            "operation": "getOrganizationSwitchRoutingBgpPeersNeighbors",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/routing/bgp/peers/neighbors"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "peerGroupIds",
+            "routerIds",
+            "neighborIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "peerGroupIds",
+            "routerIds",
+            "neighborIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchRoutingBgpPeersNeighbors: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def createOrganizationSwitchRoutingBgpPeersNeighborsDeploy(
+        self,
+        organizationId: str,
+        addressFamily: dict,
+        neighbor: dict,
+        neighborAddressFamilyBinding: dict,
+        peerGroup: dict,
+        policies: list,
+        router: dict,
+        **kwargs,
+    ):
+        """
+        **Create or update a neighor, in addition to an associated neighbor address family binding and routing policies associated with the neighbor**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-switch-routing-bgp-peers-neighbors-deploy
+
+        - organizationId (string): Organization ID
+        - addressFamily (object): Information regarding the address family this binding is bound to
+        - neighbor (object): Information regarding the BPG neighbor
+        - neighborAddressFamilyBinding (object): Information regarding the neighbor address family binding
+        - peerGroup (object): Information regarding the peer group this neighbor belongs to
+        - policies (array): Information regarding the routing policies related to the neighbor
+        - router (object): Information regarding the router this neighbor peers with
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["switch", "configure", "routing", "bgp", "peers", "neighbors", "deploy"],
+            "operation": "createOrganizationSwitchRoutingBgpPeersNeighborsDeploy",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/routing/bgp/peers/neighbors/deploy"
+
+        body_params = [
+            "addressFamily",
+            "neighbor",
+            "neighborAddressFamilyBinding",
+            "peerGroup",
+            "policies",
+            "router",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationSwitchRoutingBgpPeersNeighborsDeploy: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationSwitchRoutingBgpPeersNeighborsDeployments(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List all BGP deployment information for neighbors configured in the given organization, including address family information, as well as routing policies**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-routing-bgp-peers-neighbors-deployments
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 50. Default is 20.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter neighbor deployments by network ID. This filter uses multiple exact matches.
+        - peerGroupIds (array): Optional parameter to filter neighbor deployments by peer group ID. This filter uses multiple exact matches.
+        - routerIds (array): Optional parameter to filter neighbor deployments by router ID. This filter uses multiple exact matches.
+        - neighborIds (array): Optional parameter to filter neighbor deployments by neighbor ID. This filter uses multiple exact matches.
+        - afi (string): Optional parameter to filter deployments on each neighbor by address family identifier (AFI).
+        - safi (string): Optional parameter to filter deployments on each neighbor by subsequent address family identifier (SAFI).
+        """
+
+        kwargs.update(locals())
+
+        if "afi" in kwargs:
+            options = ["ipv4"]
+            assert kwargs["afi"] in options, f'''"afi" cannot be "{kwargs["afi"]}", & must be set to one of: {options}'''
+        if "safi" in kwargs:
+            options = ["unicast"]
+            assert kwargs["safi"] in options, f'''"safi" cannot be "{kwargs["safi"]}", & must be set to one of: {options}'''
+
+        metadata = {
+            "tags": ["switch", "configure", "routing", "bgp", "peers", "neighbors", "deployments"],
+            "operation": "getOrganizationSwitchRoutingBgpPeersNeighborsDeployments",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/routing/bgp/peers/neighbors/deployments"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "peerGroupIds",
+            "routerIds",
+            "neighborIds",
+            "afi",
+            "safi",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "peerGroupIds",
+            "routerIds",
+            "neighborIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchRoutingBgpPeersNeighborsDeployments: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationSwitchRoutingBgpRouters(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List the routers configured in the given organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-routing-bgp-routers
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter routers by network ID. This filter uses multiple exact matches.
+        - serials (array): Optional parameter to filter routers by serial. This filter uses multiple exact matches.
+        - switchNames (array): Optional parameter to filter routers by switch name. The filter uses multiple exact matches.
+        - asNumbers (array): Optional parameter to filter routers by autonomous system number. This filter uses multiple exact matches.
+        - routerIds (array): Optional parameter to filter routers by ID. This filter uses multiple exact matches.
+        - switchStackIds (array): Optional parameter to filter routers by switch stack id. This filter uses multiple exact matches.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "routing", "bgp", "routers"],
+            "operation": "getOrganizationSwitchRoutingBgpRouters",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/routing/bgp/routers"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "serials",
+            "switchNames",
+            "asNumbers",
+            "routerIds",
+            "switchStackIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "switchNames",
+            "asNumbers",
+            "routerIds",
+            "switchStackIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchRoutingBgpRouters: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def createOrganizationSwitchRoutingBgpRoutersDeploy(
+        self,
+        organizationId: str,
+        addressFamily: dict,
+        addressFamilyPrefixes: list,
+        addressFamilyProfile: dict,
+        autonomousSystem: dict,
+        router: dict,
+        switch: dict,
+        **kwargs,
+    ):
+        """
+        **Create a BGP router, in addition to an associated address family, address family prefixes, and address family profile**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-switch-routing-bgp-routers-deploy
+
+        - organizationId (string): Organization ID
+        - addressFamily (object): Information regarding the address family
+        - addressFamilyPrefixes (array): The list of network prefixes to which the address family applies
+        - addressFamilyProfile (object): Information regarding the profile applied to the address family
+        - autonomousSystem (object): Information regarding the router's autonomous system
+        - router (object): Information regarding the BPG router
+        - switch (object): The router's switch node. When the router is part of a switch stack, this is the switch stack's active node
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["switch", "configure", "routing", "bgp", "routers", "deploy"],
+            "operation": "createOrganizationSwitchRoutingBgpRoutersDeploy",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/routing/bgp/routers/deploy"
+
+        body_params = [
+            "addressFamily",
+            "addressFamilyPrefixes",
+            "addressFamilyProfile",
+            "autonomousSystem",
+            "router",
+            "switch",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationSwitchRoutingBgpRoutersDeploy: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationSwitchRoutingBgpRoutersDeployments(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List all BGP deployment information for routers configured in a given organization, including all address families**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-routing-bgp-routers-deployments
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 50. Default is 20.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter router deployments by network ID. This filter uses multiple exact matches.
+        - serials (array): Optional parameter to filter router deployments by serial. This filter uses multiple exact matches.
+        - switchNames (array): Optional parameter to filter router deployments by switch name. The filter uses multiple exact matches.
+        - asNumbers (array): Optional parameter to filter router deployments by autonomous system number. This filter uses multiple exact matches.
+        - routerIds (array): Optional parameter to filter router deployments by router ID. This filter uses multiple exact matches.
+        - switchStackIds (array): Optional parameter to filter router deployments by switch stack id. This filter uses multiple exact matches.
+        - afi (string): Optional parameter to filter deployments on each router by address family identifier (AFI).
+        - safi (string): Optional parameter to filter deployments on each router by subsequent address family identifier (SAFI).
+        """
+
+        kwargs.update(locals())
+
+        if "afi" in kwargs:
+            options = ["ipv4"]
+            assert kwargs["afi"] in options, f'''"afi" cannot be "{kwargs["afi"]}", & must be set to one of: {options}'''
+        if "safi" in kwargs:
+            options = ["unicast"]
+            assert kwargs["safi"] in options, f'''"safi" cannot be "{kwargs["safi"]}", & must be set to one of: {options}'''
+
+        metadata = {
+            "tags": ["switch", "configure", "routing", "bgp", "routers", "deployments"],
+            "operation": "getOrganizationSwitchRoutingBgpRoutersDeployments",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/routing/bgp/routers/deployments"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "serials",
+            "switchNames",
+            "asNumbers",
+            "routerIds",
+            "switchStackIds",
+            "afi",
+            "safi",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "switchNames",
+            "asNumbers",
+            "routerIds",
+            "switchStackIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchRoutingBgpRoutersDeployments: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationSwitchRoutingBgpRoutersOverviewByRouter(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List the overview of the routers configured in the given organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-routing-bgp-routers-overview-by-router
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter router overviews by network ID. This filter uses multiple exact matches.
+        - serials (array): Optional parameter to filter router overviews by serial. This filter uses multiple exact matches.
+        - switchNames (array): Optional parameter to filter router overviews by switch name. This filter uses multiple exact matches.
+        - asNumbers (array): Optional parameter to filter router overviews by autonomous system number. This filter uses multiple exact matches.
+        - routerIds (array): Optional parameter to filter router overviews by ID. This filter uses multiple exact matches.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "monitor", "routing", "bgp", "routers", "overview", "byRouter"],
+            "operation": "getOrganizationSwitchRoutingBgpRoutersOverviewByRouter",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/routing/bgp/routers/overview/byRouter"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "serials",
+            "switchNames",
+            "asNumbers",
+            "routerIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "switchNames",
+            "asNumbers",
+            "routerIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchRoutingBgpRoutersOverviewByRouter: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def createOrganizationSwitchRoutingBgpRoutersPeersDeploy(
+        self, organizationId: str, addressFamily: dict, peerGroups: list, router: dict, **kwargs
+    ):
+        """
+        **Create and update listen ranges, update peers' enabled flag, and delete peer groups for a BGP router**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-switch-routing-bgp-routers-peers-deploy
+
+        - organizationId (string): Organization ID
+        - addressFamily (object): Information regarding the address family
+        - peerGroups (array): Information regarding the peer group peers for a router's peer group
+        - router (object): Information regarding the BPG router
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["switch", "configure", "routing", "bgp", "routers", "peers", "deploy"],
+            "operation": "createOrganizationSwitchRoutingBgpRoutersPeersDeploy",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/routing/bgp/routers/peers/deploy"
+
+        body_params = [
+            "addressFamily",
+            "peerGroups",
+            "router",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationSwitchRoutingBgpRoutersPeersDeploy: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def deleteOrganizationSwitchRoutingBgpRouter(self, organizationId: str, routerId: str):
+        """
+        **Delete a router from an organization**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-switch-routing-bgp-router
+
+        - organizationId (string): Organization ID
+        - routerId (string): Router ID
+        """
+
+        metadata = {
+            "tags": ["switch", "configure", "routing", "bgp", "routers"],
+            "operation": "deleteOrganizationSwitchRoutingBgpRouter",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        routerId = urllib.parse.quote(str(routerId), safe="")
+        resource = f"/organizations/{organizationId}/switch/routing/bgp/routers/{routerId}"
+
+        return self._session.delete(metadata, resource)
+
+    def getOrganizationSwitchRoutingStaticRoutes(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List layer 3 static routes for switches within an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-routing-static-routes
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Optional parameter to filter the result set by the included set of network IDs
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 20.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "monitor", "routing", "staticRoutes"],
+            "operation": "getOrganizationSwitchRoutingStaticRoutes",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/routing/staticRoutes"
+
+        query_params = [
+            "networkIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchRoutingStaticRoutes: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationSwitchSpanningTree(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **Returns Spanning Tree configuration settings**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-spanning-tree
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter by network ID.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "spanningTree"],
+            "operation": "getOrganizationSwitchSpanningTree",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/spanningTree"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationSwitchSpanningTree: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationSwitchStacksPortsMirrorsByStack(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List the port mirror configurations in an organization by switch**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-switch-stacks-ports-mirrors-by-stack
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - ids (array): Return the port mirror configuration for the specified stack(s)
+        - networkIds (array): Return the port mirror configurations for the specified network(s)
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["switch", "configure", "stacks", "ports", "mirrors", "byStack"],
+            "operation": "getOrganizationSwitchStacksPortsMirrorsByStack",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/switch/stacks/ports/mirrors/byStack"
+
+        query_params = [
+            "ids",
+            "networkIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "ids",
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationSwitchStacksPortsMirrorsByStack: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)

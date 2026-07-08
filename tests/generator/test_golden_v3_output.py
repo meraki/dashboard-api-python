@@ -6,7 +6,9 @@ import re
 import shutil
 import sys
 from pathlib import Path
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
+
+import httpx
 
 import pytest
 
@@ -41,12 +43,12 @@ def _generate_fresh_output(spec, output_dir):
         os.chdir(output_dir)
 
         def mock_get(url):
-            m = MagicMock()
-            m.text = f"# placeholder for {url.split('/')[-1]}\n"
-            m.ok = True
-            return m
+            return httpx.Response(
+                200,
+                text=f"# placeholder for {url.split('/')[-1]}\n",
+            )
 
-        with patch("generate_library.requests.get", side_effect=mock_get):
+        with patch("generate_library.httpx.get", side_effect=mock_get):
             gen_v3.generate_library(spec, "0.0.0-golden", "v1", False)
 
         sync = (output_dir / "meraki/api/networks.py").read_text()

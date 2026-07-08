@@ -1083,6 +1083,329 @@ class AsyncOrganizations:
 
         return self._session.delete(metadata, resource)
 
+    def getOrganizationApiPushProfiles(self, organizationId: str, **kwargs):
+        """
+        **List the push profiles in the organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-api-push-profiles
+
+        - organizationId (string): Organization ID
+        - inames (array): Optional parameter to filter the result set by the included set of push profile inames
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "api", "push", "profiles"],
+            "operation": "getOrganizationApiPushProfiles",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/api/push/profiles"
+
+        query_params = [
+            "inames",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "inames",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationApiPushProfiles: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get(metadata, resource, params)
+
+    def createOrganizationApiPushProfile(self, organizationId: str, iname: str, topic: dict, receiver: dict, **kwargs):
+        """
+        **Create a new push profile**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-api-push-profile
+
+        - organizationId (string): Organization ID
+        - iname (string): Immutable name of the resource. Must be unique within resources of this type.
+        - topic (object): Push topic
+        - receiver (object): Push receiver profile
+        - name (string): Name of push profile
+        - description (string): Description of push profile
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "api", "push", "profiles"],
+            "operation": "createOrganizationApiPushProfile",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/api/push/profiles"
+
+        body_params = [
+            "iname",
+            "name",
+            "description",
+            "topic",
+            "receiver",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationApiPushProfile: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def updateOrganizationApiPushProfile(self, organizationId: str, iname: str, **kwargs):
+        """
+        **Update a push profile**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-api-push-profile
+
+        - organizationId (string): Organization ID
+        - iname (string): Iname
+        - name (string): Name of push profile
+        - description (string): Description of push profile
+        - topic (object): Push topic
+        - receiver (object): Push receiver profile
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "api", "push", "profiles"],
+            "operation": "updateOrganizationApiPushProfile",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        iname = urllib.parse.quote(str(iname), safe="")
+        resource = f"/organizations/{organizationId}/api/push/profiles/{iname}"
+
+        body_params = [
+            "name",
+            "description",
+            "topic",
+            "receiver",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationApiPushProfile: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteOrganizationApiPushProfile(self, organizationId: str, iname: str):
+        """
+        **Delete a push profile**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-api-push-profile
+
+        - organizationId (string): Organization ID
+        - iname (string): Iname
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "api", "push", "profiles"],
+            "operation": "deleteOrganizationApiPushProfile",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        iname = urllib.parse.quote(str(iname), safe="")
+        resource = f"/organizations/{organizationId}/api/push/profiles/{iname}"
+
+        return self._session.delete(metadata, resource)
+
+    def getOrganizationApiPushReceiversProfiles(self, organizationId: str):
+        """
+        **List the push receiver profiles in the organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-api-push-receivers-profiles
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "api", "push", "receivers", "profiles"],
+            "operation": "getOrganizationApiPushReceiversProfiles",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/api/push/receivers/profiles"
+
+        return self._session.get(metadata, resource)
+
+    def createOrganizationApiPushReceiversProfile(self, organizationId: str, iname: str, receiver: dict, **kwargs):
+        """
+        **Create a new push receiver profile**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-api-push-receivers-profile
+
+        - organizationId (string): Organization ID
+        - iname (string): Immutable name of the resource. Must be unique within resources of this type.
+        - receiver (object): Webhook receiver
+        - name (string): Name of receiver profile
+        - description (string): Description of receiver profile
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "api", "push", "receivers", "profiles"],
+            "operation": "createOrganizationApiPushReceiversProfile",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/api/push/receivers/profiles"
+
+        body_params = [
+            "iname",
+            "name",
+            "description",
+            "receiver",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationApiPushReceiversProfile: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def deleteOrganizationApiPushReceiversProfile(self, organizationId: str, iname: str):
+        """
+        **Delete a push receiver profile**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-api-push-receivers-profile
+
+        - organizationId (string): Organization ID
+        - iname (string): Iname
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "api", "push", "receivers", "profiles"],
+            "operation": "deleteOrganizationApiPushReceiversProfile",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        iname = urllib.parse.quote(str(iname), safe="")
+        resource = f"/organizations/{organizationId}/api/push/receivers/profiles/{iname}"
+
+        return self._session.delete(metadata, resource)
+
+    def updateOrganizationApiPushReceiversProfile(self, organizationId: str, iname: str, **kwargs):
+        """
+        **Update a push receiver profile**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-api-push-receivers-profile
+
+        - organizationId (string): Organization ID
+        - iname (string): Iname
+        - name (string): Name of the receiver profile
+        - description (string): Description of the receiver profile
+        - receiver (object): API Push Receiver details
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "api", "push", "receivers", "profiles"],
+            "operation": "updateOrganizationApiPushReceiversProfile",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        iname = urllib.parse.quote(str(iname), safe="")
+        resource = f"/organizations/{organizationId}/api/push/receivers/profiles/{iname}"
+
+        body_params = [
+            "name",
+            "description",
+            "receiver",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationApiPushReceiversProfile: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
+    def getOrganizationApiPushTopics(self, organizationId: str):
+        """
+        **List of push topics**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-api-push-topics
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "api", "push", "topics"],
+            "operation": "getOrganizationApiPushTopics",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/api/push/topics"
+
+        return self._session.get(metadata, resource)
+
+    def getOrganizationApiRestProvisioningPipelines(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List pipelines with operation and status metadata, sorted by pipeline ID**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-api-rest-provisioning-pipelines
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 10.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - sortOrder (string): Sorted order of entries. Order options are 'ascending' and 'descending'. Default is 'descending'.
+        - status (string): If provided, filters pipelines by status. If omitted, pipelines of all statuses are returned. `pending` pipelines have not started, `active` pipelines have started but not finished, `success` pipelines completed successfully, and `error` pipelines failed.
+        - timespan (integer): Created-at lookback for matching pipelines, in seconds. Defaults to 7200 seconds. The maximum is 30 days.
+        """
+
+        kwargs.update(locals())
+
+        if "sortOrder" in kwargs:
+            options = ["ascending", "descending"]
+            assert kwargs["sortOrder"] in options, (
+                f'''"sortOrder" cannot be "{kwargs["sortOrder"]}", & must be set to one of: {options}'''
+            )
+        if "status" in kwargs:
+            options = ["active", "error", "pending", "success"]
+            assert kwargs["status"] in options, (
+                f'''"status" cannot be "{kwargs["status"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["organizations", "configure", "api", "rest", "provisioning", "pipelines"],
+            "operation": "getOrganizationApiRestProvisioningPipelines",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/api/rest/provisioning/pipelines"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "sortOrder",
+            "status",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApiRestProvisioningPipelines: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
     def getOrganizationApiRestProvisioningPipelinesJobs(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **List pipeline jobs, with optional status filtering**
@@ -1365,6 +1688,154 @@ class AsyncOrganizations:
             if invalid and self._session._logger:
                 self._session._logger.warning(
                     f"getOrganizationApiRequestsOverviewResponseCodesByInterval: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationApiRequestsResponseCodesHistoryByAdmin(self, organizationId: str, **kwargs):
+        """
+        **Lists API request response codes and their counts aggregated by admin**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-api-requests-response-codes-history-by-admin
+
+        - organizationId (string): Organization ID
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "monitor", "apiRequests", "responseCodes", "history", "byAdmin"],
+            "operation": "getOrganizationApiRequestsResponseCodesHistoryByAdmin",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/apiRequests/responseCodes/history/byAdmin"
+
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApiRequestsResponseCodesHistoryByAdmin: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationApiRequestsResponseCodesHistoryByApplication(self, organizationId: str, **kwargs):
+        """
+        **Lists API request response codes and their counts aggregated by application**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-api-requests-response-codes-history-by-application
+
+        - organizationId (string): Organization ID
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "monitor", "apiRequests", "responseCodes", "history", "byApplication"],
+            "operation": "getOrganizationApiRequestsResponseCodesHistoryByApplication",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/apiRequests/responseCodes/history/byApplication"
+
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApiRequestsResponseCodesHistoryByApplication: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationApiRequestsResponseCodesHistoryByOperation(self, organizationId: str, **kwargs):
+        """
+        **Aggregates API usage data by operationId**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-api-requests-response-codes-history-by-operation
+
+        - organizationId (string): Organization ID
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "monitor", "apiRequests", "responseCodes", "history", "byOperation"],
+            "operation": "getOrganizationApiRequestsResponseCodesHistoryByOperation",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/apiRequests/responseCodes/history/byOperation"
+
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApiRequestsResponseCodesHistoryByOperation: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationApiRequestsResponseCodesHistoryBySourceIp(self, organizationId: str, **kwargs):
+        """
+        **Aggregates API usage by source ip**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-api-requests-response-codes-history-by-source-ip
+
+        - organizationId (string): Organization ID
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 31 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 31 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 31 days. The default is 1 day.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "monitor", "apiRequests", "responseCodes", "history", "bySourceIp"],
+            "operation": "getOrganizationApiRequestsResponseCodesHistoryBySourceIp",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/apiRequests/responseCodes/history/bySourceIp"
+
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApiRequestsResponseCodesHistoryBySourceIp: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.get(metadata, resource, params)
@@ -1908,6 +2379,1426 @@ class AsyncOrganizations:
 
         return self._session.get(metadata, resource)
 
+    def getOrganizationAssuranceClientsConnectedCountHistory(self, organizationId: str, networkId: str, **kwargs):
+        """
+        **Return combined wireless and wired connected client counts over time for a network.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-clients-connected-count-history
+
+        - organizationId (string): Organization ID
+        - networkId (string): Network ID to query.
+        - serials (array): A list of serials of wireless AP or wired switch devices
+        - bands (array): Filter results by band. Valid bands are: 2.4, 5, and 6.
+        - ssidNumbers (array): Filter results by SSID number
+        - deviceType (string): Filter connected client counts by device type.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 7 days. The default is 8 hours. If interval is provided, the timespan will be autocalculated.
+        - interval (integer): The time interval in seconds for returned data. The valid intervals are: 300, 600, 3600. The default is 600. Interval is calculated if time params are provided.
+        """
+
+        kwargs.update(locals())
+
+        if "deviceType" in kwargs:
+            options = ["access_point", "switch"]
+            assert kwargs["deviceType"] in options, (
+                f'''"deviceType" cannot be "{kwargs["deviceType"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["organizations", "monitor", "clients", "connectedCountHistory"],
+            "operation": "getOrganizationAssuranceClientsConnectedCountHistory",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/clients/connectedCountHistory"
+
+        query_params = [
+            "networkId",
+            "serials",
+            "bands",
+            "ssidNumbers",
+            "deviceType",
+            "t0",
+            "t1",
+            "timespan",
+            "interval",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "serials",
+            "bands",
+            "ssidNumbers",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceClientsConnectedCountHistory: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationAssuranceClientsEvents(self, organizationId: str, clientId: str, networkId: str, **kwargs):
+        """
+        **Given a client, get all alerts and events for a given timespan**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-clients-events
+
+        - organizationId (string): Organization ID
+        - clientId (string): ID of client to query
+        - networkId (string): Network ID where client is connected
+        - filter (array): Optional parameter to filter by issue
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 14 days. The default is 2 hours.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "clients", "events"],
+            "operation": "getOrganizationAssuranceClientsEvents",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/clients/events"
+
+        query_params = [
+            "filter",
+            "clientId",
+            "networkId",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "filter",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceClientsEvents: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationAssuranceClientsEventsCorrelated(
+        self, organizationId: str, clientId: str, category: str, networkId: str, timestamp: str, **kwargs
+    ):
+        """
+        **Given a client, category, and timespan, return events that have a close connection to each other.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-clients-events-correlated
+
+        - organizationId (string): Organization ID
+        - clientId (string): Client ID
+        - category (string): Category of events
+        - networkId (string): Network used by the client
+        - timestamp (string): Timestamp for the event
+        - lookback (integer): Amount of time in minutes to look back
+        - lookforward (integer): Amount of time in minutes to look forwards
+        """
+
+        kwargs.update(locals())
+
+        if "category" in kwargs:
+            options = ["application", "association", "authentication", "dhcp", "dns"]
+            assert kwargs["category"] in options, (
+                f'''"category" cannot be "{kwargs["category"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["organizations", "configure", "clients", "events", "correlated"],
+            "operation": "getOrganizationAssuranceClientsEventsCorrelated",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/clients/events/correlated"
+
+        query_params = [
+            "clientId",
+            "category",
+            "networkId",
+            "timestamp",
+            "lookback",
+            "lookforward",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceClientsEventsCorrelated: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationAssuranceClientsTopologyCurrent(self, organizationId: str, clientId: str, networkId: str, **kwargs):
+        """
+        **Given a client, return current topology**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-clients-topology-current
+
+        - organizationId (string): Organization ID
+        - clientId (string): ID of client to query
+        - networkId (string): Network ID where client is connected
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "clients", "topology", "current"],
+            "operation": "getOrganizationAssuranceClientsTopologyCurrent",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/clients/topology/current"
+
+        query_params = [
+            "clientId",
+            "networkId",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceClientsTopologyCurrent: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationAssuranceClientsTopologyNew(self, organizationId: str, clientIds: list, networkId: str, **kwargs):
+        """
+        **Given a client, return current topology**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-clients-topology-new
+
+        - organizationId (string): Organization ID
+        - clientIds (array): List of IDs for client retrieval for a given network. Limited to 1 client for now
+        - networkId (string): Network ID where client is connected
+        - timestamp (string): Timestamp for client topology path
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "clients", "topology", "new"],
+            "operation": "getOrganizationAssuranceClientsTopologyNew",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/clients/topology/new"
+
+        query_params = [
+            "clientIds",
+            "networkId",
+            "timestamp",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "clientIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceClientsTopologyNew: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationAssuranceDevicesStatusesOverview(self, organizationId: str, **kwargs):
+        """
+        **Returns counts of online, offline, and recovered devices by product type, along with offline intervals for impacted devices in the organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-devices-statuses-overview
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Filter results by network.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 7 days.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "monitor", "devices", "statuses", "overview"],
+            "operation": "getOrganizationAssuranceDevicesStatusesOverview",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/devices/statuses/overview"
+
+        query_params = [
+            "networkIds",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceDevicesStatusesOverview: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationAssuranceFetchTableQuery(self, organizationId: str, tableName: str, **kwargs):
+        """
+        **Returns the table data for a given timespan**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-fetch-table-query
+
+        - organizationId (string): Organization ID
+        - tableName (string): The table from which we want to get data
+        - t0 (string): The beginning of the timespan for the data.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 365 days, 5 hours, 49 minutes, and 12 seconds. The default is 30 days, 10 hours, 29 minutes, and 6 seconds.
+        - userEmail (string): The user email for whom we want to calculate lookback
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "monitor", "fetchTableQuery"],
+            "operation": "getOrganizationAssuranceFetchTableQuery",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/fetchTableQuery"
+
+        query_params = [
+            "t0",
+            "timespan",
+            "tableName",
+            "userEmail",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceFetchTableQuery: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationAssuranceNetworkServicesServerHealthByServer(self, organizationId: str, **kwargs):
+        """
+        **Returns network server health in organization by server.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-network-services-server-health-by-server
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Filter results for these networks.
+        - serverTypes (array): Filter results for these server types.
+        - serverIps (array): Filter results for these server IP addresses.
+        - ssidNumbers (array): Filter results for these SSID Numbers.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "networkServices", "serverHealth", "byServer"],
+            "operation": "getOrganizationAssuranceNetworkServicesServerHealthByServer",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/networkServices/serverHealth/byServer"
+
+        query_params = [
+            "networkIds",
+            "serverTypes",
+            "serverIps",
+            "ssidNumbers",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serverTypes",
+            "serverIps",
+            "ssidNumbers",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceNetworkServicesServerHealthByServer: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationAssuranceNetworkServicesServerHealthByServerByInterval(self, organizationId: str, **kwargs):
+        """
+        **Returns network server health in organization by server and by interval.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-network-services-server-health-by-server-by-interval
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Filter results for these networks.
+        - serverTypes (array): Filter results for these server types.
+        - serverIps (array): Filter results for these server IP addresses.
+        - ssidNumbers (array): Filter results for these SSID Numbers.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 14 days. The default is 2 hours. If interval is provided, the timespan will be autocalculated.
+        - interval (integer): The time interval in seconds for returned data. The valid intervals are: 300, 600, 3600, 14400, 86400. The default is 300. Interval is calculated if time params are provided.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "networkServices", "serverHealth", "byServer", "byInterval"],
+            "operation": "getOrganizationAssuranceNetworkServicesServerHealthByServerByInterval",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/networkServices/serverHealth/byServer/byInterval"
+
+        query_params = [
+            "networkIds",
+            "serverTypes",
+            "serverIps",
+            "ssidNumbers",
+            "t0",
+            "t1",
+            "timespan",
+            "interval",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serverTypes",
+            "serverIps",
+            "ssidNumbers",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceNetworkServicesServerHealthByServerByInterval: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationAssuranceNetworkServicesServerHealthByServerType(self, organizationId: str, **kwargs):
+        """
+        **Returns network server health in organization by server type.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-network-services-server-health-by-server-type
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Filter results for these networks.
+        - serverTypes (array): Filter results for these server types.
+        - serverIps (array): Filter results for these server IP addresses.
+        - ssidNumbers (array): Filter results for these SSID Numbers.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "networkServices", "serverHealth", "byServerType"],
+            "operation": "getOrganizationAssuranceNetworkServicesServerHealthByServerType",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/networkServices/serverHealth/byServerType"
+
+        query_params = [
+            "networkIds",
+            "serverTypes",
+            "serverIps",
+            "ssidNumbers",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serverTypes",
+            "serverIps",
+            "ssidNumbers",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceNetworkServicesServerHealthByServerType: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationAssuranceNetworkServicesServerHealthByServerTypeByInterval(self, organizationId: str, **kwargs):
+        """
+        **Returns network server health in organization by server type and by interval.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-network-services-server-health-by-server-type-by-interval
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Filter results for these networks.
+        - serverTypes (array): Filter results for these server types.
+        - serverIps (array): Filter results for these server IP addresses.
+        - ssidNumbers (array): Filter results for these SSID Numbers.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 14 days. The default is 2 hours. If interval is provided, the timespan will be autocalculated.
+        - interval (integer): The time interval in seconds for returned data. The valid intervals are: 300, 600, 3600, 14400, 86400. The default is 300. Interval is calculated if time params are provided.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "networkServices", "serverHealth", "byServerType", "byInterval"],
+            "operation": "getOrganizationAssuranceNetworkServicesServerHealthByServerTypeByInterval",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/networkServices/serverHealth/byServerType/byInterval"
+
+        query_params = [
+            "networkIds",
+            "serverTypes",
+            "serverIps",
+            "ssidNumbers",
+            "t0",
+            "t1",
+            "timespan",
+            "interval",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serverTypes",
+            "serverIps",
+            "ssidNumbers",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceNetworkServicesServerHealthByServerTypeByInterval: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def checkupOrganizationAssuranceOptimization(self, organizationId: str, **kwargs):
+        """
+        **Returns an array of checkup results for the organization**
+        https://developer.cisco.com/meraki/api-v1/#!checkup-organization-assurance-optimization
+
+        - organizationId (string): Organization ID
+        - forceRefresh (boolean): Optional parameter to reassess best practices
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "optimization"],
+            "operation": "checkupOrganizationAssuranceOptimization",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/optimization/checkup"
+
+        query_params = [
+            "forceRefresh",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"checkupOrganizationAssuranceOptimization: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationAssuranceOptimizationCheckupByNetwork(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Returns an array of checkup results for the networks**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-optimization-checkup-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 20. Default is 7.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter checkups by Network Id
+        - forceRefresh (boolean): Optional parameter to reassess best practices
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "optimization", "checkup", "byNetwork"],
+            "operation": "getOrganizationAssuranceOptimizationCheckupByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/optimization/checkup/byNetwork"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "forceRefresh",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceOptimizationCheckupByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceProductAnnouncements(self, organizationId: str, **kwargs):
+        """
+        **Gets relevant product announcements for a user**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-product-announcements
+
+        - organizationId (string): Organization ID
+        - t0 (string): The beginning of the timespan for the data.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameter t0. The value must be in seconds and be less than or equal to 365 days, 5 hours, 49 minutes, and 12 seconds. The default is 91 days, 7 hours, 27 minutes, and 18 seconds.
+        - onlyRelevant (boolean): Limits product announcements that are considered relevant to this user when true
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "productAnnouncements"],
+            "operation": "getOrganizationAssuranceProductAnnouncements",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/productAnnouncements"
+
+        query_params = [
+            "t0",
+            "timespan",
+            "onlyRelevant",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceProductAnnouncements: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationAssuranceScores(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **Get network health scores for a list of networks.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-scores
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 5000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 2 hours and be less than or equal to 14 days. The default is 2 hours.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "monitor", "scores"],
+            "operation": "getOrganizationAssuranceScores",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/scores"
+
+        query_params = [
+            "networkIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationAssuranceScores: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceThousandEyesApplications(self, organizationId: str, networkIds: list, **kwargs):
+        """
+        **Get a list of Thousand Eyes applications with their alerts.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-thousand-eyes-applications
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Filter results by network.
+        - clientId (string): Filter results by client.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 7 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 5 minutes and be less than or equal to 7 days. The default is 2 hours.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "thousandEyes", "applications"],
+            "operation": "getOrganizationAssuranceThousandEyesApplications",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/thousandEyes/applications"
+
+        query_params = [
+            "networkIds",
+            "clientId",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceThousandEyesApplications: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetwork(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wired connection successes and failures by network.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wired-experience-successful-connections-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "wired", "experience", "successfulConnections", "byNetwork"],
+            "operation": "getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wired/experience/successfulConnections/byNetwork"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetworkByClient(self, organizationId: str, **kwargs):
+        """
+        **Summarizes wired connection successes and failures by client.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wired-experience-successful-connections-by-network-by-client
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "wired", "experience", "successfulConnections", "byNetwork", "byClient"],
+            "operation": "getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetworkByClient",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wired/experience/successfulConnections/byNetwork/byClient"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetworkByClient: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetworkByClientOs(self, organizationId: str, **kwargs):
+        """
+        **Summarizes wired connection successes and failures by client OS.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wired-experience-successful-connections-by-network-by-client-os
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "wired", "experience", "successfulConnections", "byNetwork", "byClientOs"],
+            "operation": "getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetworkByClientOs",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wired/experience/successfulConnections/byNetwork/byClientOs"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetworkByClientOs: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetworkByClientType(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wired connection successes and failures by client type.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wired-experience-successful-connections-by-network-by-client-type
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": [
+                "organizations",
+                "configure",
+                "wired",
+                "experience",
+                "successfulConnections",
+                "byNetwork",
+                "byClientType",
+            ],
+            "operation": "getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetworkByClientType",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wired/experience/successfulConnections/byNetwork/byClientType"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetworkByClientType: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetworkByDevice(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Summarizes wired connection successes and failures by device.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wired-experience-successful-connections-by-network-by-device
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 10000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "wired", "experience", "successfulConnections", "byNetwork", "byDevice"],
+            "operation": "getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetworkByDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wired/experience/successfulConnections/byNetwork/byDevice"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetworkByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetworkByInterval(self, organizationId: str, **kwargs):
+        """
+        **Time-series of wired connection successes and failures by network.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wired-experience-successful-connections-by-network-by-interval
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 14 days. The default is 2 hours. If interval is provided, the timespan will be autocalculated.
+        - interval (integer): The time interval in seconds for returned data. The valid intervals are: 60, 300, 600, 3600, 14400, 86400. The default is 300. Interval is calculated if time params are provided.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "monitor", "wired", "experience", "successfulConnections", "byNetwork", "byInterval"],
+            "operation": "getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetworkByInterval",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wired/experience/successfulConnections/byNetwork/byInterval"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "t0",
+            "t1",
+            "timespan",
+            "interval",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetworkByInterval: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetworkByServer(self, organizationId: str, **kwargs):
+        """
+        **Summarizes wired connection successes and failures by server.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wired-experience-successful-connections-by-network-by-server
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Filter results by network.
+        - serials (array): Filter results by device serial.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "wired", "experience", "successfulConnections", "byNetwork", "byServer"],
+            "operation": "getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetworkByServer",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wired/experience/successfulConnections/byNetwork/byServer"
+
+        query_params = [
+            "networkIds",
+            "serials",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetworkByServer: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationAssuranceWorkflows(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **Return workflows filtered by organization ID, network ID, type, and category**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-workflows
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 30.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - sortOrder (string): Sorted order of entries. Order options are 'ascending' and 'descending'. Default is 'ascending'.
+        - networkIds (array): Optional parameter to filter by network ID
+        - types (array): Optional parameter to filter workflows by types
+        - categories (array): Optional parameter to filter workflows by categories
+        - scopeTypes (array): Optional parameter to filter workflows by scope types
+        - networkTags (array): Optional parameter to filter workflows by network tags
+        - clientTags (array): Optional parameter to filter workflows by client tags
+        - nodeTags (array): Optional parameter to filter workflows by node tags
+        - state (string): Optional parameter to filter workflows by state
+        - tsStart (string): Start time to filter workflows
+        - tsEnd (string): End time to filter workflows
+        """
+
+        kwargs.update(locals())
+
+        if "sortOrder" in kwargs:
+            options = ["ascending", "descending"]
+            assert kwargs["sortOrder"] in options, (
+                f'''"sortOrder" cannot be "{kwargs["sortOrder"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["organizations", "configure", "workflows"],
+            "operation": "getOrganizationAssuranceWorkflows",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/workflows"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "sortOrder",
+            "networkIds",
+            "types",
+            "categories",
+            "scopeTypes",
+            "networkTags",
+            "clientTags",
+            "nodeTags",
+            "state",
+            "tsStart",
+            "tsEnd",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "types",
+            "categories",
+            "scopeTypes",
+            "networkTags",
+            "clientTags",
+            "nodeTags",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationAssuranceWorkflows: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAuthRadiusServers(self, organizationId: str):
+        """
+        **List the organization-wide RADIUS servers in the organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-auth-radius-servers
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "auth", "radius", "servers"],
+            "operation": "getOrganizationAuthRadiusServers",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/auth/radius/servers"
+
+        return self._session.get(metadata, resource)
+
+    def createOrganizationAuthRadiusServer(self, organizationId: str, address: str, secret: str, **kwargs):
+        """
+        **Add an organization-wide RADIUS server**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-auth-radius-server
+
+        - organizationId (string): Organization ID
+        - address (string): The IP address or FQDN of the RADIUS server
+        - secret (string): Shared secret of the RADIUS server
+        - name (string): The name of the RADIUS server
+        - modes (array): Available server modes
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "auth", "radius", "servers"],
+            "operation": "createOrganizationAuthRadiusServer",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/auth/radius/servers"
+
+        body_params = [
+            "name",
+            "address",
+            "modes",
+            "secret",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationAuthRadiusServer: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationAuthRadiusServersAssignments(self, organizationId: str):
+        """
+        **Return list of network and policies that organization-wide RADIUS servers are bing used**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-auth-radius-servers-assignments
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "auth", "radius", "servers", "assignments"],
+            "operation": "getOrganizationAuthRadiusServersAssignments",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/auth/radius/servers/assignments"
+
+        return self._session.get(metadata, resource)
+
+    def getOrganizationAuthRadiusServer(self, organizationId: str, serverId: str):
+        """
+        **Return an organization-wide RADIUS server**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-auth-radius-server
+
+        - organizationId (string): Organization ID
+        - serverId (string): Server ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "auth", "radius", "servers"],
+            "operation": "getOrganizationAuthRadiusServer",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        serverId = urllib.parse.quote(str(serverId), safe="")
+        resource = f"/organizations/{organizationId}/auth/radius/servers/{serverId}"
+
+        return self._session.get(metadata, resource)
+
+    def updateOrganizationAuthRadiusServer(self, organizationId: str, serverId: str, **kwargs):
+        """
+        **Update an organization-wide RADIUS server**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-auth-radius-server
+
+        - organizationId (string): Organization ID
+        - serverId (string): Server ID
+        - name (string): The name of the RADIUS server
+        - address (string): The IP address or FQDN of the RADIUS server
+        - modes (array): Available server modes
+        - secret (string): Shared secret of the RADIUS server
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "auth", "radius", "servers"],
+            "operation": "updateOrganizationAuthRadiusServer",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        serverId = urllib.parse.quote(str(serverId), safe="")
+        resource = f"/organizations/{organizationId}/auth/radius/servers/{serverId}"
+
+        body_params = [
+            "name",
+            "address",
+            "modes",
+            "secret",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationAuthRadiusServer: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteOrganizationAuthRadiusServer(self, organizationId: str, serverId: str):
+        """
+        **Delete an organization-wide RADIUS server from a organization**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-auth-radius-server
+
+        - organizationId (string): Organization ID
+        - serverId (string): Server ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "auth", "radius", "servers"],
+            "operation": "deleteOrganizationAuthRadiusServer",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        serverId = urllib.parse.quote(str(serverId), safe="")
+        resource = f"/organizations/{organizationId}/auth/radius/servers/{serverId}"
+
+        return self._session.delete(metadata, resource)
+
+    def codeOrganizationAutomateIdentity(self, organizationId: str):
+        """
+        **Generate a single use short lived code that can be used to retrieve the identity of the current user in the organization.**
+        https://developer.cisco.com/meraki/api-v1/#!code-organization-automate-identity
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "automate", "identity"],
+            "operation": "codeOrganizationAutomateIdentity",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/automate/identity/code"
+
+        return self._session.post(metadata, resource)
+
     def getOrganizationBrandingPolicies(self, organizationId: str):
         """
         **List the branding policies of an organization**
@@ -2102,6 +3993,428 @@ class AsyncOrganizations:
 
         return self._session.delete(metadata, resource)
 
+    def getOrganizationCertificates(self, organizationId: str, **kwargs):
+        """
+        **Gets all or specific certificates for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-certificates
+
+        - organizationId (string): Organization ID
+        - certificateIds (array): List of ids for specific certificate retrieval
+        - certManagedBy (array): List of cert managed by types
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "certificates"],
+            "operation": "getOrganizationCertificates",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/certificates"
+
+        query_params = [
+            "certificateIds",
+            "certManagedBy",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "certificateIds",
+            "certManagedBy",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationCertificates: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationCertificatesAuthorities(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List certificate authorities for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-certificates-authorities
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - authorityIds (array): Feature certificate authority IDs to filter by (exact match on each id; duplicates are ignored)
+        - sortBy (string): Field to sort by (default: authorityId)
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        if "sortBy" in kwargs:
+            options = ["authorityId", "featureType", "status"]
+            assert kwargs["sortBy"] in options, (
+                f'''"sortBy" cannot be "{kwargs["sortBy"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["organizations", "configure", "certificates", "authorities"],
+            "operation": "getOrganizationCertificatesAuthorities",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/certificates/authorities"
+
+        query_params = [
+            "authorityIds",
+            "sortBy",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "authorityIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationCertificatesAuthorities: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def createOrganizationCertificatesAuthority(self, organizationId: str, featureType: str, **kwargs):
+        """
+        **Create a certificate authority for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-certificates-authority
+
+        - organizationId (string): Organization ID
+        - featureType (string): Feature this CA serves (e.g., radsec, openroaming, zigbee)
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "certificates", "authorities"],
+            "operation": "createOrganizationCertificatesAuthority",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/certificates/authorities"
+
+        body_params = [
+            "featureType",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationCertificatesAuthority: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def updateOrganizationCertificatesAuthorities(self, organizationId: str, authorityId: str, **kwargs):
+        """
+        **Trust a newly created certificate authority (transition from untrusted to trusted).**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-certificates-authorities
+
+        - organizationId (string): Organization ID
+        - authorityId (string): ID of the certificate authority to trust. The CA must currently be untrusted.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "certificates", "authorities"],
+            "operation": "updateOrganizationCertificatesAuthorities",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/certificates/authorities"
+
+        body_params = [
+            "authorityId",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationCertificatesAuthorities: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteOrganizationCertificatesAuthorities(self, organizationId: str, authorityId: str, name: str):
+        """
+        **Delete a certificate authority**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-certificates-authorities
+
+        - organizationId (string): Organization ID
+        - authorityId (string): ID of the certificate authority to delete
+        - name (string): Certificate authority name
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "certificates", "authorities"],
+            "operation": "deleteOrganizationCertificatesAuthorities",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/certificates/authorities"
+
+        return self._session.delete(metadata, resource)
+
+    def getOrganizationCertificatesAuthoritiesJob(self, organizationId: str, jobId: str):
+        """
+        **Return the status and result of a certificate authority job.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-certificates-authorities-job
+
+        - organizationId (string): Organization ID
+        - jobId (string): Job ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "certificates", "authorities", "jobs"],
+            "operation": "getOrganizationCertificatesAuthoritiesJob",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        jobId = urllib.parse.quote(str(jobId), safe="")
+        resource = f"/organizations/{organizationId}/certificates/authorities/jobs/{jobId}"
+
+        return self._session.get(metadata, resource)
+
+    def revokeOrganizationCertificatesAuthorities(self, organizationId: str, authorityId: str, **kwargs):
+        """
+        **Revoke a trusted feature certificate authority.**
+        https://developer.cisco.com/meraki/api-v1/#!revoke-organization-certificates-authorities
+
+        - organizationId (string): Organization ID
+        - authorityId (string): ID of the feature certificate authority to revoke
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "certificates", "authorities"],
+            "operation": "revokeOrganizationCertificatesAuthorities",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/certificates/authorities/revoke"
+
+        body_params = [
+            "authorityId",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"revokeOrganizationCertificatesAuthorities: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def importOrganizationCertificates(self, organizationId: str, managedBy: str, contents: str, description: str, **kwargs):
+        """
+        **Import certificate for this organization**
+        https://developer.cisco.com/meraki/api-v1/#!import-organization-certificates
+
+        - organizationId (string): Organization ID
+        - managedBy (string): Certificate managed by type [system_manager, mr, encrypted_syslog, grpc_dial_out]
+        - contents (string): Certificate content in valid PEM format
+        - description (string): Certificate description
+        """
+
+        kwargs = locals()
+
+        if "managedBy" in kwargs:
+            options = ["encrypted_syslog", "grpc_dial_out", "mr", "system_manager"]
+            assert kwargs["managedBy"] in options, (
+                f'''"managedBy" cannot be "{kwargs["managedBy"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["organizations", "configure", "certificates"],
+            "operation": "importOrganizationCertificates",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/certificates/import"
+
+        body_params = [
+            "managedBy",
+            "contents",
+            "description",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"importOrganizationCertificates: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationCertificatesMerakiAuthContents(self, organizationId: str):
+        """
+        **Download the public RADIUS certificate.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-certificates-meraki-auth-contents
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "monitor", "certificates", "merakiAuth", "contents"],
+            "operation": "getOrganizationCertificatesMerakiAuthContents",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/certificates/merakiAuth/contents"
+
+        return self._session.get(metadata, resource)
+
+    def getOrganizationCertificatesRevocationLists(self, organizationId: str, **kwargs):
+        """
+        **Return full certificate revocation lists (CRLs) for the organization's certificate authorities**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-certificates-revocation-lists
+
+        - organizationId (string): Organization ID
+        - certificateAuthorityIds (array): Optional filter: feature certificate authority IDs (base-10 integers). Every value must exist for this organization; otherwise the request fails. Omit to return CRLs for all feature CAs in the organization.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "certificates", "revocationLists"],
+            "operation": "getOrganizationCertificatesRevocationLists",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/certificates/revocationLists"
+
+        query_params = [
+            "certificateAuthorityIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "certificateAuthorityIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationCertificatesRevocationLists: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def deleteOrganizationCertificate(self, organizationId: str, certificateId: str):
+        """
+        **Delete a certificate for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-certificate
+
+        - organizationId (string): Organization ID
+        - certificateId (string): Certificate ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "certificates"],
+            "operation": "deleteOrganizationCertificate",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        certificateId = urllib.parse.quote(str(certificateId), safe="")
+        resource = f"/organizations/{organizationId}/certificates/{certificateId}"
+
+        return self._session.delete(metadata, resource)
+
+    def updateOrganizationCertificate(self, organizationId: str, certificateId: str, **kwargs):
+        """
+        **Update a certificate's description for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-certificate
+
+        - organizationId (string): Organization ID
+        - certificateId (string): Certificate ID
+        - description (string): Description of a certificate that already exist in your org
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "certificates"],
+            "operation": "updateOrganizationCertificate",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        certificateId = urllib.parse.quote(str(certificateId), safe="")
+        resource = f"/organizations/{organizationId}/certificates/{certificateId}"
+
+        body_params = [
+            "description",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationCertificate: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
+    def getOrganizationCertificateContents(self, organizationId: str, certificateId: str, **kwargs):
+        """
+        **Download the trusted certificate by certificate id.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-certificate-contents
+
+        - organizationId (string): Organization ID
+        - certificateId (string): Certificate ID
+        - chainId (string): chainId that represent which certificate chain is being requested
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "certificates", "contents"],
+            "operation": "getOrganizationCertificateContents",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        certificateId = urllib.parse.quote(str(certificateId), safe="")
+        resource = f"/organizations/{organizationId}/certificates/{certificateId}/contents"
+
+        query_params = [
+            "chainId",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationCertificateContents: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get(metadata, resource, params)
+
     def claimIntoOrganization(self, organizationId: str, **kwargs):
         """
         **Claim a list of devices, licenses, and/or orders into an organization inventory**
@@ -2145,6 +4458,7 @@ class AsyncOrganizations:
         - organizationId (string): Organization ID
         - networkTag (string): Match result to an exact network tag
         - deviceTag (string): Match result to an exact device tag
+        - networkId (string): Match result to an exact network id
         - ssidName (string): Filter results by ssid name
         - usageUplink (string): Filter results by usage uplink
         - t0 (string): The beginning of the timespan for the data.
@@ -2164,6 +4478,7 @@ class AsyncOrganizations:
         query_params = [
             "networkTag",
             "deviceTag",
+            "networkId",
             "ssidName",
             "usageUplink",
             "t0",
@@ -2286,6 +4601,225 @@ class AsyncOrganizations:
                 self._session._logger.warning(f"cloneOrganization: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
+
+    def getOrganizationCloudConnectivityRequirements(self, organizationId: str):
+        """
+        **List of source/destination traffic rules**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-cloud-connectivity-requirements
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "monitor", "cloud", "connectivity", "requirements"],
+            "operation": "getOrganizationCloudConnectivityRequirements",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/cloud/connectivity/requirements"
+
+        return self._session.get(metadata, resource)
+
+    def getOrganizationComputeApplicationDeployments(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List the Application Deployment agent configurations for all hosts under this organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-compute-application-deployments
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - developerNames (array): Filters deployments by application developer name
+        - applicationNames (array): Filters deployments by application name
+        - enabled (boolean): Filters deployments by their enabled status
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "compute", "application", "deployments"],
+            "operation": "getOrganizationComputeApplicationDeployments",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/compute/application/deployments"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "developerNames",
+            "applicationNames",
+            "enabled",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "developerNames",
+            "applicationNames",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationComputeApplicationDeployments: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def createOrganizationComputeApplicationDeploymentsBulkCreate(
+        self, organizationId: str, hosts: list, application: dict, enabled: bool, **kwargs
+    ):
+        """
+        **Add Application Deployment agents for a list of hosts**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-compute-application-deployments-bulk-create
+
+        - organizationId (string): Organization ID
+        - hosts (array): List of hosts to deploy applications on
+        - application (object): Application information
+        - enabled (boolean): Whether the deployment should be enabled
+        - applicationConfiguration (object): Optional: Generic object for application-specific configuration
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "compute", "application", "deployments", "bulkCreate"],
+            "operation": "createOrganizationComputeApplicationDeploymentsBulkCreate",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/compute/application/deployments/bulkCreate"
+
+        body_params = [
+            "hosts",
+            "application",
+            "enabled",
+            "applicationConfiguration",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationComputeApplicationDeploymentsBulkCreate: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def updateOrganizationComputeApplicationDeployment(self, organizationId: str, deploymentId: str, enabled: bool, **kwargs):
+        """
+        **Update a Deployment agent configuration**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-compute-application-deployment
+
+        - organizationId (string): Organization ID
+        - deploymentId (string): Deployment ID
+        - enabled (boolean): Whether or not the Application Deployment agent is enabled for the host.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "compute", "application", "deployments"],
+            "operation": "updateOrganizationComputeApplicationDeployment",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        deploymentId = urllib.parse.quote(str(deploymentId), safe="")
+        resource = f"/organizations/{organizationId}/compute/application/deployments/{deploymentId}"
+
+        body_params = [
+            "enabled",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationComputeApplicationDeployment: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteOrganizationComputeApplicationDeployment(self, organizationId: str, deploymentId: str):
+        """
+        **Delete a Application Deployment agent from the host**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-compute-application-deployment
+
+        - organizationId (string): Organization ID
+        - deploymentId (string): Deployment ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "compute", "application", "deployments"],
+            "operation": "deleteOrganizationComputeApplicationDeployment",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        deploymentId = urllib.parse.quote(str(deploymentId), safe="")
+        resource = f"/organizations/{organizationId}/compute/application/deployments/{deploymentId}"
+
+        return self._session.delete(metadata, resource)
+
+    def getOrganizationComputeHosts(
+        self, organizationId: str, developerName: str, applicationName: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Retrieves a list of compute hosts eligible for application deployment within a given organization, filtered by the specified application developer and application name, with optional network ID filtering.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-compute-hosts
+
+        - organizationId (string): Organization ID
+        - developerName (string): Filters hosts by application developer name
+        - applicationName (string): Filters hosts by application name
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Filters hosts by the network ID they belong to
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "compute", "hosts"],
+            "operation": "getOrganizationComputeHosts",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/compute/hosts"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "developerName",
+            "applicationName",
+            "networkIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationComputeHosts: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getOrganizationConfigTemplates(self, organizationId: str):
         """
@@ -2632,9 +5166,25 @@ class AsyncOrganizations:
         - productTypes (array): Optional parameter to filter device availabilities history by device product types
         - networkIds (array): Optional parameter to filter device availabilities history by network IDs
         - statuses (array): Optional parameter to filter device availabilities history by device statuses
+        - categories (array): Optional parameter to filter device availabilities history by categories of status, reboot, or upgrade
+        - networkTags (array): Optional parameter to filter device availabilities history by network tags. The filtering is case-sensitive. If tags are included, 'networkTagsFilterType' should also be included (see below).
+        - networkTagsFilterType (string): An optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return networks which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
+        - deviceTags (array): Optional parameter to filter device availabilities history by device tags. The filtering is case-sensitive. If tags are included, 'deviceTagsFilterType' should also be included (see below).
+        - deviceTagsFilterType (string): An optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return devices which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
         """
 
         kwargs.update(locals())
+
+        if "networkTagsFilterType" in kwargs:
+            options = ["withAllTags", "withAnyTags"]
+            assert kwargs["networkTagsFilterType"] in options, (
+                f'''"networkTagsFilterType" cannot be "{kwargs["networkTagsFilterType"]}", & must be set to one of: {options}'''
+            )
+        if "deviceTagsFilterType" in kwargs:
+            options = ["withAllTags", "withAnyTags"]
+            assert kwargs["deviceTagsFilterType"] in options, (
+                f'''"deviceTagsFilterType" cannot be "{kwargs["deviceTagsFilterType"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
             "tags": ["organizations", "monitor", "devices", "availabilities", "changeHistory"],
@@ -2654,6 +5204,11 @@ class AsyncOrganizations:
             "productTypes",
             "networkIds",
             "statuses",
+            "categories",
+            "networkTags",
+            "networkTagsFilterType",
+            "deviceTags",
+            "deviceTagsFilterType",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
@@ -2662,6 +5217,9 @@ class AsyncOrganizations:
             "productTypes",
             "networkIds",
             "statuses",
+            "categories",
+            "networkTags",
+            "deviceTags",
         ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
@@ -2677,6 +5235,122 @@ class AsyncOrganizations:
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationDevicesBootsHistory(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **Returns the history of device boots in reverse chronological order (most recent first)**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-boots-history
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - t0 (string): The beginning of the timespan for the data.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 730 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 730 days.
+        - serials (array): Optional parameter to filter device by device serial numbers. This filter uses multiple exact matches.
+        - productTypes (array): Optional parameter to filter devices by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, wirelessController, campusGateway, and secureConnect.
+        - mostRecentPerDevice (boolean): If true, only the most recent boot for each device is returned.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - sortOrder (string): Sorted order of entries. Order options are 'ascending' and 'descending'. Default is 'descending'.
+        """
+
+        kwargs.update(locals())
+
+        if "sortOrder" in kwargs:
+            options = ["ascending", "descending"]
+            assert kwargs["sortOrder"] in options, (
+                f'''"sortOrder" cannot be "{kwargs["sortOrder"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "boots", "history"],
+            "operation": "getOrganizationDevicesBootsHistory",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/boots/history"
+
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "serials",
+            "productTypes",
+            "mostRecentPerDevice",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "sortOrder",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "serials",
+            "productTypes",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationDevicesBootsHistory: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationDevicesBootsOverviewByDevice(self, organizationId: str, **kwargs):
+        """
+        **Summarizes device reboots across an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-boots-overview-by-device
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Filter results by network.
+        - productTypes (array): An optional parameter to filter device statuses by product type. Valid types are wireless, appliance, switch, systemsManager, camera, cellularGateway, sensor, wirelessController, campusGateway, and secureConnect.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 8 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 5 minutes and be less than or equal to 7 days. The default is 2 hours.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "monitor", "devices", "boots", "overview", "byDevice"],
+            "operation": "getOrganizationDevicesBootsOverviewByDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/boots/overview/byDevice"
+
+        query_params = [
+            "networkIds",
+            "productTypes",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "productTypes",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesBootsOverviewByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
 
     def getOrganizationDevicesCellularDataDevices(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
@@ -3276,6 +5950,64 @@ class AsyncOrganizations:
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
+    def getOrganizationDevicesCertificates(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List device certificates for the organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-certificates
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - serials (array): Device serial numbers to filter by (exact match; duplicates are ignored)
+        - featureTypes (array): Feature types these device certificates serve (exact match; e.g., radsec, openroaming, zigbee)
+        - sortBy (string): Field to sort by (default: authorityId)
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        if "sortBy" in kwargs:
+            options = ["authorityId", "featureType", "status"]
+            assert kwargs["sortBy"] in options, (
+                f'''"sortBy" cannot be "{kwargs["sortBy"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "certificates"],
+            "operation": "getOrganizationDevicesCertificates",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/certificates"
+
+        query_params = [
+            "serials",
+            "featureTypes",
+            "sortBy",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "serials",
+            "featureTypes",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationDevicesCertificates: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
     def createOrganizationDevicesControllerMigration(self, organizationId: str, serials: list, target: str, **kwargs):
         """
         **Migrate devices to another controller or management mode**
@@ -3409,6 +6141,56 @@ class AsyncOrganizations:
                 self._session._logger.warning(f"bulkUpdateOrganizationDevicesDetails: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.post(metadata, resource, payload)
+
+    def getOrganizationDevicesMemoryByDevice(self, organizationId: str, networkIds: list, productTypes: list, **kwargs):
+        """
+        **Summarizes memory status across devices of a given network**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-memory-by-device
+
+        - organizationId (string): Organization ID
+        - networkIds (array): Filter results by network.
+        - productTypes (array): Parameter to filter device availabilities by device product types. This filter uses multiple exact matches.
+        - usageThreshold (number): Threshold of device memory utilization expressed as a percent. Filters out all devices below this value.
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 7 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 7 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 1 hour and be less than or equal to 7 days. The default is 7 days.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "monitor", "devices", "memory", "byDevice"],
+            "operation": "getOrganizationDevicesMemoryByDevice",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/memory/byDevice"
+
+        query_params = [
+            "networkIds",
+            "productTypes",
+            "usageThreshold",
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "productTypes",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationDevicesMemoryByDevice: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get(metadata, resource, params)
 
     def getOrganizationDevicesOverviewByModel(self, organizationId: str, **kwargs):
         """
@@ -3744,6 +6526,65 @@ class AsyncOrganizations:
 
         return self._session.post(metadata, resource, payload)
 
+    def getOrganizationDevicesPacketCaptureOpportunisticByNetwork(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List the Opportunistic Pcap settings of an organization by network**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-packet-capture-opportunistic-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - networkIds (array): Optional parameter to filter results by network.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 10.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - sortOrder (string): Sorted order of entries. Order options are 'ascending' and 'descending'. Default is 'descending'.
+        """
+
+        kwargs.update(locals())
+
+        if "sortOrder" in kwargs:
+            options = ["ascending", "descending"]
+            assert kwargs["sortOrder"] in options, (
+                f'''"sortOrder" cannot be "{kwargs["sortOrder"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "packetCapture", "opportunistic", "byNetwork"],
+            "operation": "getOrganizationDevicesPacketCaptureOpportunisticByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/packetCapture/opportunistic/byNetwork"
+
+        query_params = [
+            "networkIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "sortOrder",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesPacketCaptureOpportunisticByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
     def getOrganizationDevicesPacketCaptureSchedules(self, organizationId: str, **kwargs):
         """
         **List the Packet Capture Schedules**
@@ -3832,6 +6673,39 @@ class AsyncOrganizations:
             if invalid and self._session._logger:
                 self._session._logger.warning(
                     f"createOrganizationDevicesPacketCaptureSchedule: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def bulkOrganizationDevicesPacketCaptureSchedulesDelete(self, organizationId: str, scheduleIds: list, **kwargs):
+        """
+        **Delete packet capture schedules**
+        https://developer.cisco.com/meraki/api-v1/#!bulk-organization-devices-packet-capture-schedules-delete
+
+        - organizationId (string): Organization ID
+        - scheduleIds (array): Delete the packet capture schedules of the specified schedule ids
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "packetCapture", "schedules"],
+            "operation": "bulkOrganizationDevicesPacketCaptureSchedulesDelete",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/packetCapture/schedules/bulkDelete"
+
+        body_params = [
+            "scheduleIds",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"bulkOrganizationDevicesPacketCaptureSchedulesDelete: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.post(metadata, resource, payload)
@@ -3936,6 +6810,119 @@ class AsyncOrganizations:
         resource = f"/organizations/{organizationId}/devices/packetCapture/schedules/{scheduleId}"
 
         return self._session.delete(metadata, resource)
+
+    def tasksOrganizationDevicesPacketCapture(self, organizationId: str, packetId: str, task: str, **kwargs):
+        """
+        **Enqueues a task for a specific packet capture**
+        https://developer.cisco.com/meraki/api-v1/#!tasks-organization-devices-packet-capture
+
+        - organizationId (string): Organization ID
+        - packetId (string): Packet ID
+        - task (string): Type of task to enqueue. It can be one of: ["analysis", "reasoning", "summary", "highlights", "title", "flow"]
+        - networkId (string): Parameter to validate authorization by network access
+        """
+
+        kwargs.update(locals())
+
+        if "task" in kwargs:
+            options = ["analysis", "flow", "highlights", "reasoning", "summary", "title"]
+            assert kwargs["task"] in options, f'''"task" cannot be "{kwargs["task"]}", & must be set to one of: {options}'''
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "packetCaptures"],
+            "operation": "tasksOrganizationDevicesPacketCapture",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        packetId = urllib.parse.quote(str(packetId), safe="")
+        resource = f"/organizations/{organizationId}/devices/packetCaptures/{packetId}/tasks"
+
+        body_params = [
+            "networkId",
+            "task",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"tasksOrganizationDevicesPacketCapture: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationDevicesPacketCaptureTask(self, organizationId: str, packetId: str, id: str, **kwargs):
+        """
+        **Retrieves packet capture analysis result for a specific packet capture task.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-packet-capture-task
+
+        - organizationId (string): Organization ID
+        - packetId (string): Packet ID
+        - id (string): ID
+        - networkId (string): Optional parameter to validate authorization by network access
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "packetCaptures", "tasks"],
+            "operation": "getOrganizationDevicesPacketCaptureTask",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        packetId = urllib.parse.quote(str(packetId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/devices/packetCaptures/{packetId}/tasks/{id}"
+
+        query_params = [
+            "networkId",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesPacketCaptureTask: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def bulkOrganizationDevicesPlacementPositionsUpdate(self, organizationId: str, serials: list, **kwargs):
+        """
+        **Bulk update the attributes related to positions for provided devices**
+        https://developer.cisco.com/meraki/api-v1/#!bulk-organization-devices-placement-positions-update
+
+        - organizationId (string): Organization ID
+        - serials (array): List of device serials on a floor plan to update
+        - height (object): Height of the devices on the floor plan
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "placement", "positions"],
+            "operation": "bulkOrganizationDevicesPlacementPositionsUpdate",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/placement/positions/bulkUpdate"
+
+        body_params = [
+            "serials",
+            "height",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"bulkOrganizationDevicesPlacementPositionsUpdate: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
 
     def getOrganizationDevicesPowerModulesStatusesByDevice(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
@@ -4078,6 +7065,216 @@ class AsyncOrganizations:
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
+    def getOrganizationDevicesSoftwareUpdatesOverviewsByNetwork(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Returns details about software updates for networks within an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-software-updates-overviews-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 30.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - sortOrder (string): Sorted order of entries. Order options are 'ascending' and 'descending'. Default is 'ascending'.
+        - sortKey (string): Specify key to order the list of networks.
+        - configSource (string): Limit the list of networks to those that contain devices with the specified config source
+        - networkIds (array): Limit the list of networks to those that match the provided network IDs
+        - networkGroupIds (array): Limit the list of networks to those that belong to one of the provided network group IDs.
+        - productTypes (array): Limit the list of product types included for each network
+        - networkName (string): Limit the list of networks to those whose name contains the given search string.
+        - versionIds (array): Limit the list of networks to those that are currently on one of the provided version IDs.
+        - firmwareStatus (string): Limit the list of networks to those whose current firmware version has the specified end-of-support status.
+        - firmwareType (string): Limit the list of networks to those whose current firmware version has the specified release type.
+        - upgradeDependencyIds (array): Limit the list of networks to those that belong to one of the provided upgrade dependencies.
+        - upgradeAvailable (boolean): Limit the list of networks by upgrade availability.
+        - templateRole (string): Limit the list of networks by config template role: non-template only, templates only, or templates and bound networks.
+        """
+
+        kwargs.update(locals())
+
+        if "sortOrder" in kwargs:
+            options = ["ascending", "descending"]
+            assert kwargs["sortOrder"] in options, (
+                f'''"sortOrder" cannot be "{kwargs["sortOrder"]}", & must be set to one of: {options}'''
+            )
+        if "sortKey" in kwargs:
+            options = [
+                "availability",
+                "currentVersion",
+                "firmwareStatus",
+                "firmwareType",
+                "lastUpgrade",
+                "networkGroup",
+                "networkName",
+                "networkType",
+                "scheduledTime",
+                "scheduledUpgradeVersion",
+                "upgradeDependency",
+            ]
+            assert kwargs["sortKey"] in options, (
+                f'''"sortKey" cannot be "{kwargs["sortKey"]}", & must be set to one of: {options}'''
+            )
+        if "configSource" in kwargs:
+            options = ["cloud", "local"]
+            assert kwargs["configSource"] in options, (
+                f'''"configSource" cannot be "{kwargs["configSource"]}", & must be set to one of: {options}'''
+            )
+        if "firmwareStatus" in kwargs:
+            options = ["critical", "good", "warning"]
+            assert kwargs["firmwareStatus"] in options, (
+                f'''"firmwareStatus" cannot be "{kwargs["firmwareStatus"]}", & must be set to one of: {options}'''
+            )
+        if "firmwareType" in kwargs:
+            options = ["beta", "candidate", "stable"]
+            assert kwargs["firmwareType"] in options, (
+                f'''"firmwareType" cannot be "{kwargs["firmwareType"]}", & must be set to one of: {options}'''
+            )
+        if "templateRole" in kwargs:
+            options = ["bound-templates", "non-template", "templates"]
+            assert kwargs["templateRole"] in options, (
+                f'''"templateRole" cannot be "{kwargs["templateRole"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "software", "updates", "overviews", "byNetwork"],
+            "operation": "getOrganizationDevicesSoftwareUpdatesOverviewsByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/software/updates/overviews/byNetwork"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "sortOrder",
+            "sortKey",
+            "configSource",
+            "networkIds",
+            "networkGroupIds",
+            "productTypes",
+            "networkName",
+            "versionIds",
+            "firmwareStatus",
+            "firmwareType",
+            "upgradeDependencyIds",
+            "upgradeAvailable",
+            "templateRole",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "networkGroupIds",
+            "productTypes",
+            "versionIds",
+            "upgradeDependencyIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesSoftwareUpdatesOverviewsByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationDevicesSoftwareVersions(self, organizationId: str, releaseType: str, **kwargs):
+        """
+        **List the available software upgrade versions for an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-software-versions
+
+        - organizationId (string): Organization ID
+        - releaseType (string): Filter by release type
+        """
+
+        kwargs = locals()
+
+        if "releaseType" in kwargs:
+            options = ["beta", "generallyAvailable", "recommended"]
+            assert kwargs["releaseType"] in options, (
+                f'''"releaseType" cannot be "{kwargs["releaseType"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "software", "versions"],
+            "operation": "getOrganizationDevicesSoftwareVersions",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/software/versions"
+
+        query_params = [
+            "releaseType",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesSoftwareVersions: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def getOrganizationDevicesSoftwareVersionsChangelogs(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **Provide changelogs for specified versions or, if unspecified, for all versions in the organization, including reference to the last and next versions.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-software-versions-changelogs
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - versionIds (array): Array of version IDs for filtering
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 30.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "devices", "software", "versions", "changelogs"],
+            "operation": "getOrganizationDevicesSoftwareVersionsChangelogs",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/software/versions/changelogs"
+
+        query_params = [
+            "versionIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "versionIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesSoftwareVersionsChangelogs: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
     def getOrganizationDevicesStatuses(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **List the status of every Meraki device in the organization**
@@ -4096,6 +7293,7 @@ class AsyncOrganizations:
         - models (array): Optional parameter to filter devices by models.
         - tags (array): An optional parameter to filter devices by tags. The filtering is case-sensitive. If tags are included, 'tagsFilterType' should also be included (see below).
         - tagsFilterType (string): An optional parameter of value 'withAnyTags' or 'withAllTags' to indicate whether to return devices which contain ANY or ALL of the included tags. If no type is included, 'withAnyTags' will be selected.
+        - configurationUpdatedAfter (string): Optional parameter to filter results by whether or not the device's configuration has been updated after the given timestamp
         """
 
         kwargs.update(locals())
@@ -4124,6 +7322,7 @@ class AsyncOrganizations:
             "models",
             "tags",
             "tagsFilterType",
+            "configurationUpdatedAfter",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
@@ -4353,6 +7552,136 @@ class AsyncOrganizations:
             if invalid and self._session._logger:
                 self._session._logger.warning(
                     f"getOrganizationDevicesSystemMemoryUsageHistoryByInterval: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationDevicesTopologyInterfaces(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List topology interfaces in an organization, including layer 2 and layer 3 metadata when available.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-topology-interfaces
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter interfaces by network ID. This filter uses multiple exact matches. Query array syntax follows the standard bracket form, for example: networkIds[]=L_1234&networkIds[]=L_5678.
+        - serials (array): Optional parameter to filter interfaces by device serial. This filter uses multiple exact matches. Query array syntax follows the standard bracket form, for example: serials[]=Q234-ABCD-5678&serials[]=Q234-ABCD-9012.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "monitor", "devices", "topology", "interfaces"],
+            "operation": "getOrganizationDevicesTopologyInterfaces",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/topology/interfaces"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "serials",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesTopologyInterfaces: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationDevicesTopologyL2Links(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List layer 2 topology links originating from devices in an organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-topology-l-2-links
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "monitor", "devices", "topology", "l2", "links"],
+            "operation": "getOrganizationDevicesTopologyL2Links",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/topology/l2/links"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesTopologyL2Links: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationDevicesTopologyNodesDiscovered(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List topology nodes discovered by LLDP/CDP from devices in an organization, including reported metadata when available.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-devices-topology-nodes-discovered
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "monitor", "devices", "topology", "nodes", "discovered"],
+            "operation": "getOrganizationDevicesTopologyNodesDiscovered",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/devices/topology/nodes/discovered"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationDevicesTopologyNodesDiscovered: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
@@ -4612,6 +7941,248 @@ class AsyncOrganizations:
 
         return self._session.delete(metadata, resource)
 
+    def updateOrganizationExtensionsSdwanmanagerInterconnect(
+        self, organizationId: str, interconnectId: str, name: str, status: str, **kwargs
+    ):
+        """
+        **Update name and status of an Interconnect**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-extensions-sdwanmanager-interconnect
+
+        - organizationId (string): Organization ID
+        - interconnectId (string): Interconnect ID
+        - name (string): Interconnect name
+        - status (string): Interconnect status
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "extensions", "sdwanmanager", "interconnects"],
+            "operation": "updateOrganizationExtensionsSdwanmanagerInterconnect",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        interconnectId = urllib.parse.quote(str(interconnectId), safe="")
+        resource = f"/organizations/{organizationId}/extensions/sdwanmanager/interconnects/{interconnectId}"
+
+        body_params = [
+            "name",
+            "status",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationExtensionsSdwanmanagerInterconnect: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
+    def getOrganizationExtensionsThousandEyesNetworks(self, organizationId: str):
+        """
+        **List the ThousandEyes agent configurations under this organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-extensions-thousand-eyes-networks
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "extensions", "thousandEyes", "networks"],
+            "operation": "getOrganizationExtensionsThousandEyesNetworks",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/extensions/thousandEyes/networks"
+
+        return self._session.get(metadata, resource)
+
+    def createOrganizationExtensionsThousandEyesNetwork(self, organizationId: str, enabled: bool, networkId: str, **kwargs):
+        """
+        **Add a ThousandEyes agent for this network**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-extensions-thousand-eyes-network
+
+        - organizationId (string): Organization ID
+        - enabled (boolean): Whether or not the ThousandEyes agent is enabled for the network.
+        - networkId (string): Network that will have the ThousandEyes agent installed on.
+        - tests (array): An array of tests to be created
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "extensions", "thousandEyes", "networks"],
+            "operation": "createOrganizationExtensionsThousandEyesNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/extensions/thousandEyes/networks"
+
+        body_params = [
+            "enabled",
+            "networkId",
+            "tests",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationExtensionsThousandEyesNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationExtensionsThousandEyesNetworksSupported(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List all the networks eligible for ThousandEyes agent activation under this organization.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-extensions-thousand-eyes-networks-supported
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - agentInstalled (boolean): Set to true to get only networks with installed ThousandEyes agent; set to false to get networks without agents.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "extensions", "thousandEyes", "networks", "supported"],
+            "operation": "getOrganizationExtensionsThousandEyesNetworksSupported",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/extensions/thousandEyes/networks/supported"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "agentInstalled",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationExtensionsThousandEyesNetworksSupported: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationExtensionsThousandEyesNetwork(self, organizationId: str, networkId: str):
+        """
+        **List the ThousandEyes agent configuration under this network**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-extensions-thousand-eyes-network
+
+        - organizationId (string): Organization ID
+        - networkId (string): Network ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "extensions", "thousandEyes", "networks"],
+            "operation": "getOrganizationExtensionsThousandEyesNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/organizations/{organizationId}/extensions/thousandEyes/networks/{networkId}"
+
+        return self._session.get(metadata, resource)
+
+    def updateOrganizationExtensionsThousandEyesNetwork(self, organizationId: str, networkId: str, enabled: bool, **kwargs):
+        """
+        **Update a ThousandEyes agent from this network**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-extensions-thousand-eyes-network
+
+        - organizationId (string): Organization ID
+        - networkId (string): Network ID
+        - enabled (boolean): Whether or not the ThousandEyes agent is enabled for the network.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "extensions", "thousandEyes", "networks"],
+            "operation": "updateOrganizationExtensionsThousandEyesNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/organizations/{organizationId}/extensions/thousandEyes/networks/{networkId}"
+
+        body_params = [
+            "enabled",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationExtensionsThousandEyesNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteOrganizationExtensionsThousandEyesNetwork(self, organizationId: str, networkId: str):
+        """
+        **Delete a ThousandEyes agent from this network**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-extensions-thousand-eyes-network
+
+        - organizationId (string): Organization ID
+        - networkId (string): Network ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "extensions", "thousandEyes", "networks"],
+            "operation": "deleteOrganizationExtensionsThousandEyesNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/organizations/{organizationId}/extensions/thousandEyes/networks/{networkId}"
+
+        return self._session.delete(metadata, resource)
+
+    def createOrganizationExtensionsThousandEyesTest(self, organizationId: str, **kwargs):
+        """
+        **Create a ThousandEyes test based on a provided test template**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-extensions-thousand-eyes-test
+
+        - organizationId (string): Organization ID
+        - tests (array): An array of tests to be created
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "extensions", "thousandEyes", "tests"],
+            "operation": "createOrganizationExtensionsThousandEyesTest",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/extensions/thousandEyes/tests"
+
+        body_params = [
+            "tests",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationExtensionsThousandEyesTest: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
     def getOrganizationFirmwareUpgrades(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Get firmware upgrade information for an organization**
@@ -4830,6 +8401,94 @@ class AsyncOrganizations:
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAccessGroups(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List effective Catalyst Center access groups for the requested Catalyst Center administrators in the specified organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-access-groups
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): Number of access groups to return per page. Range: 1-50. Defaults to 50 when omitted.
+        - startingAfter (string): Cursor token to retrieve access groups after the specified access group identifier.
+        - endingBefore (string): Cursor token to retrieve access groups before the specified access group identifier.
+        - assignedAdminEmails (array): Catalyst Center administrator email addresses used by federation to filter access groups for the requested administrators.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "monitor", "iam", "admins", "accessGroups"],
+            "operation": "getOrganizationAccessGroups",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/iam/admins/accessGroups"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "assignedAdminEmails",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "assignedAdminEmails",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationAccessGroups: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def resolveOrganizationIamAdminsAdministratorsMePermissions(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List the authenticated caller admin's permissions for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!resolve-organization-iam-admins-administrators-me-permissions
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "iam", "admins", "administrators", "me", "permissions"],
+            "operation": "resolveOrganizationIamAdminsAdministratorsMePermissions",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/iam/admins/administrators/me/permissions/resolve"
+
+        body_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"resolveOrganizationIamAdminsAdministratorsMePermissions: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
 
     def getOrganizationIntegrationsDeployable(self, organizationId: str):
         """
@@ -5097,6 +8756,61 @@ class AsyncOrganizations:
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
                 self._session._logger.warning(f"getOrganizationInventoryDevices: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationInventoryDevicesDetails(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **Return inventory devices with additional site, geolocation, software, licensing, lifecycle, and Catalyst Center-specific fields**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-inventory-devices-details
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter devices by network IDs. Matches devices in any of the provided network IDs. When multiple filter parameters are provided, a device must match each provided filter. Query array syntax follows the standard bracket form, for example: networkIds[]=L_1234&networkIds[]=L_5678. Maximum 100 network IDs.
+        - serials (array): Optional parameter to filter devices by serials. Matches devices with any of the provided serials. When multiple filter parameters are provided, a device must match each provided filter. Query array syntax follows the standard bracket form, for example: serials[]=Q234-ABCD-5678&serials[]=Q234-ABCD-9012. Maximum 100 serials.
+        - productTypes (array): Optional parameter to filter devices by product type. Matches devices with any of the provided product types. When multiple filter parameters are provided, a device must match each provided filter. Query array syntax follows the standard bracket form, for example: productTypes[]=switch&productTypes[]=wireless. Maximum 100 product types.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "monitor", "inventory", "devices", "details"],
+            "operation": "getOrganizationInventoryDevicesDetails",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/inventory/devices/details"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "serials",
+            "productTypes",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serials",
+            "productTypes",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationInventoryDevicesDetails: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
@@ -5687,6 +9401,7 @@ class AsyncOrganizations:
         - timeZone (string): The timezone of the network. For a list of allowed timezones, please see the 'TZ' column in the table in <a target='_blank' href='https://en.wikipedia.org/wiki/List_of_tz_database_time_zones'>this article.</a>
         - copyFromNetworkId (string): The ID of the network to copy configuration from. Other provided parameters will override the copied configuration, except type which must match this network's type exactly.
         - notes (string): Add any notes or additional information about this network here.
+        - details (array): An array of details
         """
 
         kwargs.update(locals())
@@ -5705,6 +9420,7 @@ class AsyncOrganizations:
             "timeZone",
             "copyFromNetworkId",
             "notes",
+            "details",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -5748,6 +9464,251 @@ class AsyncOrganizations:
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
                 self._session._logger.warning(f"combineOrganizationNetworks: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationNetworksGroups(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List the network groups in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-networks-groups
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - groupIds (array): Optional parameter to filter network groups by ID
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "networks", "groups"],
+            "operation": "getOrganizationNetworksGroups",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/networks/groups"
+
+        query_params = [
+            "groupIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "groupIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationNetworksGroups: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def createOrganizationNetworksGroup(self, organizationId: str, name: str, **kwargs):
+        """
+        **Create a network group**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-networks-group
+
+        - organizationId (string): Organization ID
+        - name (string): The name of the network group
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "networks", "groups"],
+            "operation": "createOrganizationNetworksGroup",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/networks/groups"
+
+        body_params = [
+            "name",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationNetworksGroup: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationNetworksGroupsOverviewByGroup(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List the client and status overview information for the network groups in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-networks-groups-overview-by-group
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - sortBy (string): Field by which to sort the results
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 5000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        if "sortBy" in kwargs:
+            options = ["status"]
+            assert kwargs["sortBy"] in options, (
+                f'''"sortBy" cannot be "{kwargs["sortBy"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["organizations", "monitor", "networks", "groups", "overview", "byGroup"],
+            "operation": "getOrganizationNetworksGroupsOverviewByGroup",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/networks/groups/overview/byGroup"
+
+        query_params = [
+            "sortBy",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationNetworksGroupsOverviewByGroup: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def updateOrganizationNetworksGroup(self, organizationId: str, groupId: str, name: str, **kwargs):
+        """
+        **Update a network group**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-networks-group
+
+        - organizationId (string): Organization ID
+        - groupId (string): Group ID
+        - name (string): The new name of the network group
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "networks", "groups"],
+            "operation": "updateOrganizationNetworksGroup",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        groupId = urllib.parse.quote(str(groupId), safe="")
+        resource = f"/organizations/{organizationId}/networks/groups/{groupId}"
+
+        body_params = [
+            "name",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationNetworksGroup: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteOrganizationNetworksGroup(self, organizationId: str, groupId: str):
+        """
+        **Delete a network group**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-networks-group
+
+        - organizationId (string): Organization ID
+        - groupId (string): Group ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "networks", "groups"],
+            "operation": "deleteOrganizationNetworksGroup",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        groupId = urllib.parse.quote(str(groupId), safe="")
+        resource = f"/organizations/{organizationId}/networks/groups/{groupId}"
+
+        return self._session.delete(metadata, resource)
+
+    def bulkOrganizationNetworksGroupAssign(self, organizationId: str, groupId: str, networkIds: list, **kwargs):
+        """
+        **Add networks to a network group**
+        https://developer.cisco.com/meraki/api-v1/#!bulk-organization-networks-group-assign
+
+        - organizationId (string): Organization ID
+        - groupId (string): Group ID
+        - networkIds (array): A list of network IDs to add to the network group
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "networks", "groups"],
+            "operation": "bulkOrganizationNetworksGroupAssign",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        groupId = urllib.parse.quote(str(groupId), safe="")
+        resource = f"/organizations/{organizationId}/networks/groups/{groupId}/bulkAssign"
+
+        body_params = [
+            "networkIds",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"bulkOrganizationNetworksGroupAssign: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def bulkOrganizationNetworksGroupUnassign(self, organizationId: str, groupId: str, networkIds: list, **kwargs):
+        """
+        **Remove networks from a network group**
+        https://developer.cisco.com/meraki/api-v1/#!bulk-organization-networks-group-unassign
+
+        - organizationId (string): Organization ID
+        - groupId (string): Group ID
+        - networkIds (array): A list of network IDs to remove from the network group
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "networks", "groups"],
+            "operation": "bulkOrganizationNetworksGroupUnassign",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        groupId = urllib.parse.quote(str(groupId), safe="")
+        resource = f"/organizations/{organizationId}/networks/groups/{groupId}/bulkUnassign"
+
+        body_params = [
+            "networkIds",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"bulkOrganizationNetworksGroupUnassign: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.post(metadata, resource, payload)
 
@@ -5832,6 +9793,25 @@ class AsyncOrganizations:
                 self._session._logger.warning(f"getNetworkMoves: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def deleteOrganizationOpenRoamingCertificate(self, organizationId: str, id: str):
+        """
+        **Delete an open roaming certificate.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-open-roaming-certificate
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "openRoaming", "certificates"],
+            "operation": "deleteOrganizationOpenRoamingCertificate",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/openRoaming/certificates/{id}"
+
+        return self._session.delete(metadata, resource)
 
     def getOrganizationOpenapiSpec(self, organizationId: str, **kwargs):
         """
@@ -5954,6 +9934,7 @@ class AsyncOrganizations:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - rulesetIds (array): Filter rulesets by IDs
         - name (string): Filter rulesets by name (partial match, case-insensitive). If multiple instances are provided, only the last one is used.
+        - excludedPolicyIds (array): Filter out rulesets that are associated with the specified policy IDs
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 100.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
@@ -5971,6 +9952,7 @@ class AsyncOrganizations:
         query_params = [
             "rulesetIds",
             "name",
+            "excludedPolicyIds",
             "perPage",
             "startingAfter",
             "endingBefore",
@@ -5979,6 +9961,7 @@ class AsyncOrganizations:
 
         array_params = [
             "rulesetIds",
+            "excludedPolicyIds",
         ]
         for k, v in kwargs.items():
             if k.strip() in array_params:
@@ -6499,6 +10482,7 @@ class AsyncOrganizations:
         - rulesetIds (array): Filter assignments by ruleset IDs
         - policyIds (array): Filter assignments by policy IDs
         - assignmentIds (array): Filter assignments by assignment IDs
+        - staged (boolean): Filter assignments by whether or not they are staged
         - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 100.
         - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
@@ -6517,6 +10501,7 @@ class AsyncOrganizations:
             "rulesetIds",
             "policyIds",
             "assignmentIds",
+            "staged",
             "perPage",
             "startingAfter",
             "endingBefore",
@@ -6554,6 +10539,7 @@ class AsyncOrganizations:
         - rulesetId (string): ID of the ruleset to assign
         - policyId (string): ID of the policy to assign the ruleset to
         - priority (integer): Priority of the ruleset assignment (lower numbers = higher priority)
+        - staged (boolean): Stage an assignment without applying it immediately to the policy
         """
 
         kwargs.update(locals())
@@ -6569,6 +10555,7 @@ class AsyncOrganizations:
             "rulesetId",
             "policyId",
             "priority",
+            "staged",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -6578,6 +10565,41 @@ class AsyncOrganizations:
             if invalid and self._session._logger:
                 self._session._logger.warning(
                     f"createOrganizationPoliciesGlobalGroupPoliciesFirewallRulesetsAssignment: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def commitOrganizationPoliciesGlobalGroupPoliciesFirewallRulesetsAssignments(
+        self, organizationId: str, policy: dict, **kwargs
+    ):
+        """
+        **Commit staged Organization-Wide Policy Ruleset Assignments**
+        https://developer.cisco.com/meraki/api-v1/#!commit-organization-policies-global-group-policies-firewall-rulesets-assignments
+
+        - organizationId (string): Organization ID
+        - policy (object): Policy in which all staged rulesets will be committed
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "policies", "global", "group", "firewall", "rulesets", "assignments"],
+            "operation": "commitOrganizationPoliciesGlobalGroupPoliciesFirewallRulesetsAssignments",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/policies/global/group/policies/firewall/rulesets/assignments/commit"
+
+        body_params = [
+            "policy",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"commitOrganizationPoliciesGlobalGroupPoliciesFirewallRulesetsAssignments: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.post(metadata, resource, payload)
@@ -7011,6 +11033,185 @@ class AsyncOrganizations:
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         policyObjectId = urllib.parse.quote(str(policyObjectId), safe="")
         resource = f"/organizations/{organizationId}/policyObjects/{policyObjectId}"
+
+        return self._session.delete(metadata, resource)
+
+    def getOrganizationRoutingVrfs(self, organizationId: str, **kwargs):
+        """
+        **List existing organization-wide VRFs (Virtual Routing and Forwarding).**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-routing-vrfs
+
+        - organizationId (string): Organization ID
+        - vrfIds (array): IDs of the desired VRFs.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "routing", "vrfs"],
+            "operation": "getOrganizationRoutingVrfs",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/routing/vrfs"
+
+        query_params = [
+            "vrfIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "vrfIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationRoutingVrfs: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get(metadata, resource, params)
+
+    def createOrganizationRoutingVrf(self, organizationId: str, name: str, **kwargs):
+        """
+        **Add an organization-wide VRF (Virtual Routing and Forwarding)**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-routing-vrf
+
+        - organizationId (string): Organization ID
+        - name (string): The name of the VRF (Virtual Routing and Forwarding)
+        - description (string): Description of the VRF (Virtual Routing and Forwarding)
+        - routeDistinguisher (string): RD (Route Distinguisher) for the VRF (Virtual Routing and Forwarding)
+        - routeTarget (string): Route target are used to control the import and export of routes between VRFs
+        - appliance (object): This parameter is used to enable or disable the VRF on the WAN appliance
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "routing", "vrfs"],
+            "operation": "createOrganizationRoutingVrf",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/routing/vrfs"
+
+        body_params = [
+            "name",
+            "description",
+            "routeDistinguisher",
+            "routeTarget",
+            "appliance",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationRoutingVrf: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationRoutingVrfsOverviewByVrf(self, organizationId: str, **kwargs):
+        """
+        **List existing organization-wide VRFs (Virtual Routing and Forwarding) overviews.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-routing-vrfs-overview-by-vrf
+
+        - organizationId (string): Organization ID
+        - vrfIds (array): IDs of the desired VRFs.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "monitor", "routing", "vrfs", "overview", "byVrf"],
+            "operation": "getOrganizationRoutingVrfsOverviewByVrf",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/routing/vrfs/overview/byVrf"
+
+        query_params = [
+            "vrfIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "vrfIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationRoutingVrfsOverviewByVrf: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
+    def updateOrganizationRoutingVrf(self, organizationId: str, vrfId: str, **kwargs):
+        """
+        **Update an organization-wide VRF (Virtual Routing and Forwarding)**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-routing-vrf
+
+        - organizationId (string): Organization ID
+        - vrfId (string): Vrf ID
+        - name (string): The name of the VRF (Virtual Routing and Forwarding)
+        - description (string): Description of the VRF (Virtual Routing and Forwarding)
+        - routeDistinguisher (string): RD (Route Distinguisher) for the VRF (Virtual Routing and Forwarding)
+        - routeTarget (string): Route target are used to control the import and export of routes between VRFs
+        - appliance (object): This parameter is used to enable or disable the VRF on the WAN appliance
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "routing", "vrfs"],
+            "operation": "updateOrganizationRoutingVrf",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        vrfId = urllib.parse.quote(str(vrfId), safe="")
+        resource = f"/organizations/{organizationId}/routing/vrfs/{vrfId}"
+
+        body_params = [
+            "name",
+            "description",
+            "routeDistinguisher",
+            "routeTarget",
+            "appliance",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationRoutingVrf: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteOrganizationRoutingVrf(self, organizationId: str, vrfId: str):
+        """
+        **Delete a VRF (Virtual Routing and Forwarding) from a organization**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-routing-vrf
+
+        - organizationId (string): Organization ID
+        - vrfId (string): Vrf ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "routing", "vrfs"],
+            "operation": "deleteOrganizationRoutingVrf",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        vrfId = urllib.parse.quote(str(vrfId), safe="")
+        resource = f"/organizations/{organizationId}/routing/vrfs/{vrfId}"
 
         return self._session.delete(metadata, resource)
 
@@ -7546,7 +11747,7 @@ class AsyncOrganizations:
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def attachOrganizationSaseSites(self, organizationId: str, **kwargs):
+    def attachOrganizationSaseSites(self, organizationId: str, items: list, **kwargs):
         """
         **Attach sites in this organization to Secure Access**
         https://developer.cisco.com/meraki/api-v1/#!attach-organization-sase-sites
@@ -7555,7 +11756,7 @@ class AsyncOrganizations:
         - items (array): List of Meraki SD-WAN sites with the associated regions to be attached.
         """
 
-        kwargs.update(locals())
+        kwargs = locals()
 
         metadata = {
             "tags": ["organizations", "configure", "sase", "sites"],
@@ -7691,6 +11892,111 @@ class AsyncOrganizations:
 
         return self._session.put(metadata, resource, payload)
 
+    def getOrganizationSites(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **Lists unified site resources for an organization across Meraki networks and Catalyst Center sites**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-sites
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 500. Default is 500.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - ids (array): Optional parameter to filter resources by unified resource ID. This filter uses multiple exact matches.
+        - resourceTypes (array): Optional parameter to filter resources by returned resource type.
+        - resourceTags (array): Optional parameter to filter resources by tag. By default all provided tags must match.
+        - resourceName (string): Optional parameter to filter resources by case-insensitive partial name match.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "monitor", "sites"],
+            "operation": "getOrganizationSites",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/sites"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "ids",
+            "resourceTypes",
+            "resourceTags",
+            "resourceName",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "ids",
+            "resourceTypes",
+            "resourceTags",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationSites: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationSitesBuildings(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List the buildings belonging to the organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-sites-buildings
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter buildings by one or more network IDs
+        - buildingIds (array): Optional parameter to filter buildings by one or more building IDs
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "sites", "buildings"],
+            "operation": "getOrganizationSitesBuildings",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/sites/buildings"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "buildingIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "buildingIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationSitesBuildings: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
     def getOrganizationSnmp(self, organizationId: str):
         """
         **Return the SNMP settings for an organization**
@@ -7761,6 +12067,45 @@ class AsyncOrganizations:
                 self._session._logger.warning(f"updateOrganizationSnmp: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.put(metadata, resource, payload)
+
+    def getOrganizationSnmpTrapsByNetwork(self, organizationId: str, **kwargs):
+        """
+        **Retrieve the SNMP trap configuration for the networks in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-snmp-traps-by-network
+
+        - organizationId (string): Organization ID
+        - networkIds (array): An optional parameter to filter SNMP trap configs by network IDs
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "snmp", "traps", "byNetwork"],
+            "operation": "getOrganizationSnmpTrapsByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/snmp/traps/byNetwork"
+
+        query_params = [
+            "networkIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationSnmpTrapsByNetwork: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get(metadata, resource, params)
 
     def getOrganizationSplashAsset(self, organizationId: str, id: str):
         """
@@ -7912,6 +12257,7 @@ class AsyncOrganizations:
         - organizationId (string): Organization ID
         - networkTag (string): Match result to an exact network tag
         - deviceTag (string): Match result to an exact device tag
+        - networkId (string): Match result to an exact network id
         - quantity (integer): Set number of desired results to return. Default is 10. Maximum is 50
         - ssidName (string): Filter results by ssid name
         - usageUplink (string): Filter results by usage uplink
@@ -7932,6 +12278,7 @@ class AsyncOrganizations:
         query_params = [
             "networkTag",
             "deviceTag",
+            "networkId",
             "quantity",
             "ssidName",
             "usageUplink",
@@ -8057,6 +12404,7 @@ class AsyncOrganizations:
         - organizationId (string): Organization ID
         - networkTag (string): Match result to an exact network tag
         - deviceTag (string): Match result to an exact device tag
+        - networkId (string): Match result to an exact network id
         - quantity (integer): Set number of desired results to return. Default is 10. Maximum is 50
         - ssidName (string): Filter results by ssid name
         - usageUplink (string): Filter results by usage uplink
@@ -8077,6 +12425,7 @@ class AsyncOrganizations:
         query_params = [
             "networkTag",
             "deviceTag",
+            "networkId",
             "quantity",
             "ssidName",
             "usageUplink",
@@ -8104,6 +12453,7 @@ class AsyncOrganizations:
         - organizationId (string): Organization ID
         - networkTag (string): Match result to an exact network tag
         - deviceTag (string): Match result to an exact device tag
+        - networkId (string): Match result to an exact network id
         - quantity (integer): Set number of desired results to return. Default is 10. Maximum is 50
         - ssidName (string): Filter results by ssid name
         - usageUplink (string): Filter results by usage uplink
@@ -8124,6 +12474,7 @@ class AsyncOrganizations:
         query_params = [
             "networkTag",
             "deviceTag",
+            "networkId",
             "quantity",
             "ssidName",
             "usageUplink",
@@ -8151,6 +12502,7 @@ class AsyncOrganizations:
         - organizationId (string): Organization ID
         - networkTag (string): Match result to an exact network tag
         - deviceTag (string): Match result to an exact device tag
+        - networkId (string): Match result to an exact network id
         - quantity (integer): Set number of desired results to return. Default is 10. Maximum is 50
         - ssidName (string): Filter results by ssid name
         - usageUplink (string): Filter results by usage uplink
@@ -8171,6 +12523,7 @@ class AsyncOrganizations:
         query_params = [
             "networkTag",
             "deviceTag",
+            "networkId",
             "quantity",
             "ssidName",
             "usageUplink",
@@ -8198,6 +12551,7 @@ class AsyncOrganizations:
         - organizationId (string): Organization ID
         - networkTag (string): Match result to an exact network tag
         - deviceTag (string): Match result to an exact device tag
+        - networkId (string): Match result to an exact network id
         - quantity (integer): Set number of desired results to return. Default is 10. Maximum is 50
         - ssidName (string): Filter results by ssid name
         - usageUplink (string): Filter results by usage uplink
@@ -8218,6 +12572,7 @@ class AsyncOrganizations:
         query_params = [
             "networkTag",
             "deviceTag",
+            "networkId",
             "quantity",
             "ssidName",
             "usageUplink",
@@ -8247,6 +12602,7 @@ class AsyncOrganizations:
         - direction (string): direction to paginate, either "next" (default) or "prev" page
         - networkTag (string): Match result to an exact network tag
         - deviceTag (string): Match result to an exact device tag
+        - networkId (string): Match result to an exact network id
         - quantity (integer): Set number of desired results to return. Default is 10. Maximum is 50
         - ssidName (string): Filter results by ssid name
         - usageUplink (string): Filter results by usage uplink
@@ -8267,6 +12623,7 @@ class AsyncOrganizations:
         query_params = [
             "networkTag",
             "deviceTag",
+            "networkId",
             "quantity",
             "ssidName",
             "usageUplink",
@@ -8294,6 +12651,7 @@ class AsyncOrganizations:
         - organizationId (string): Organization ID
         - networkTag (string): Match result to an exact network tag
         - deviceTag (string): Match result to an exact device tag
+        - networkId (string): Match result to an exact network id
         - quantity (integer): Set number of desired results to return. Default is 10. Maximum is 50
         - ssidName (string): Filter results by ssid name
         - usageUplink (string): Filter results by usage uplink
@@ -8314,6 +12672,7 @@ class AsyncOrganizations:
         query_params = [
             "networkTag",
             "deviceTag",
+            "networkId",
             "quantity",
             "ssidName",
             "usageUplink",
@@ -8341,6 +12700,7 @@ class AsyncOrganizations:
         - organizationId (string): Organization ID
         - networkTag (string): Match result to an exact network tag
         - deviceTag (string): Match result to an exact device tag
+        - networkId (string): Match result to an exact network id
         - quantity (integer): Set number of desired results to return. Default is 10. Maximum is 50
         - ssidName (string): Filter results by ssid name
         - usageUplink (string): Filter results by usage uplink
@@ -8361,6 +12721,7 @@ class AsyncOrganizations:
         query_params = [
             "networkTag",
             "deviceTag",
+            "networkId",
             "quantity",
             "ssidName",
             "usageUplink",
@@ -8489,6 +12850,137 @@ class AsyncOrganizations:
 
         return self._session.get(metadata, resource)
 
+    def getOrganizationWebhooksHttpServers(self, organizationId: str):
+        """
+        **List the HTTP servers for this organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-webhooks-http-servers
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "webhooks", "httpServers"],
+            "operation": "getOrganizationWebhooksHttpServers",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/webhooks/httpServers"
+
+        return self._session.get(metadata, resource)
+
+    def createOrganizationWebhooksHttpServer(self, organizationId: str, name: str, url: str, **kwargs):
+        """
+        **Add an HTTP server to an organization**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-webhooks-http-server
+
+        - organizationId (string): Organization ID
+        - name (string): A name for easy reference to the HTTP server
+        - url (string): The URL of the HTTP server
+        - sharedSecret (string): A shared secret that will be included in POSTs sent to the HTTP server. This secret can be used to verify that the request was sent by Meraki.
+        - payloadTemplate (object): The payload template to use when posting data to the HTTP server.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "webhooks", "httpServers"],
+            "operation": "createOrganizationWebhooksHttpServer",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/webhooks/httpServers"
+
+        body_params = [
+            "name",
+            "url",
+            "sharedSecret",
+            "payloadTemplate",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationWebhooksHttpServer: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationWebhooksHttpServer(self, organizationId: str, id: str):
+        """
+        **Return an HTTP server for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-webhooks-http-server
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "webhooks", "httpServers"],
+            "operation": "getOrganizationWebhooksHttpServer",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/webhooks/httpServers/{id}"
+
+        return self._session.get(metadata, resource)
+
+    def updateOrganizationWebhooksHttpServer(self, organizationId: str, id: str, **kwargs):
+        """
+        **Update an HTTP server for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-webhooks-http-server
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        - name (string): A name for easy reference to the HTTP server
+        - url (string): The URL of the HTTP server
+        - sharedSecret (string): A shared secret that will be included in POSTs sent to the HTTP server. This secret can be used to verify that the request was sent by Meraki.
+        - payloadTemplate (object): The payload template to use when posting data to the HTTP server.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "webhooks", "httpServers"],
+            "operation": "updateOrganizationWebhooksHttpServer",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/webhooks/httpServers/{id}"
+
+        body_params = [
+            "name",
+            "url",
+            "sharedSecret",
+            "payloadTemplate",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationWebhooksHttpServer: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteOrganizationWebhooksHttpServer(self, organizationId: str, id: str):
+        """
+        **Delete an HTTP server from an organization**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-webhooks-http-server
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "webhooks", "httpServers"],
+            "operation": "deleteOrganizationWebhooksHttpServer",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/webhooks/httpServers/{id}"
+
+        return self._session.delete(metadata, resource)
+
     def getOrganizationWebhooksLogs(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Return the log of webhook POSTs sent**
@@ -8533,3 +13025,206 @@ class AsyncOrganizations:
                 self._session._logger.warning(f"getOrganizationWebhooksLogs: ignoring unrecognized kwargs: {invalid}")
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationWebhooksPayloadTemplates(self, organizationId: str):
+        """
+        **List the webhook payload templates for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-webhooks-payload-templates
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "webhooks", "payloadTemplates"],
+            "operation": "getOrganizationWebhooksPayloadTemplates",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/webhooks/payloadTemplates"
+
+        return self._session.get(metadata, resource)
+
+    def createOrganizationWebhooksPayloadTemplate(self, organizationId: str, name: str, **kwargs):
+        """
+        **Create a webhook payload template for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-webhooks-payload-template
+
+        - organizationId (string): Organization ID
+        - name (string): The name of the new template
+        - body (string): The liquid template used for the body of the webhook message. Either `body` or `bodyFile` must be specified.
+        - headers (array): The liquid template used with the webhook headers.
+        - bodyFile (string): A file containing liquid template used for the body of the webhook message. Either `body` or `bodyFile` must be specified.
+        - headersFile (string): A file containing the liquid template used with the webhook headers.
+        - sharing (object): Information on which entities have access to the template
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "webhooks", "payloadTemplates"],
+            "operation": "createOrganizationWebhooksPayloadTemplate",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/webhooks/payloadTemplates"
+
+        body_params = [
+            "name",
+            "body",
+            "headers",
+            "bodyFile",
+            "headersFile",
+            "sharing",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationWebhooksPayloadTemplate: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationWebhooksPayloadTemplate(self, organizationId: str, payloadTemplateId: str):
+        """
+        **Get the webhook payload template for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-webhooks-payload-template
+
+        - organizationId (string): Organization ID
+        - payloadTemplateId (string): Payload template ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "webhooks", "payloadTemplates"],
+            "operation": "getOrganizationWebhooksPayloadTemplate",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        payloadTemplateId = urllib.parse.quote(str(payloadTemplateId), safe="")
+        resource = f"/organizations/{organizationId}/webhooks/payloadTemplates/{payloadTemplateId}"
+
+        return self._session.get(metadata, resource)
+
+    def deleteOrganizationWebhooksPayloadTemplate(self, organizationId: str, payloadTemplateId: str):
+        """
+        **Destroy a webhook payload template for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-webhooks-payload-template
+
+        - organizationId (string): Organization ID
+        - payloadTemplateId (string): Payload template ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "webhooks", "payloadTemplates"],
+            "operation": "deleteOrganizationWebhooksPayloadTemplate",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        payloadTemplateId = urllib.parse.quote(str(payloadTemplateId), safe="")
+        resource = f"/organizations/{organizationId}/webhooks/payloadTemplates/{payloadTemplateId}"
+
+        return self._session.delete(metadata, resource)
+
+    def updateOrganizationWebhooksPayloadTemplate(self, organizationId: str, payloadTemplateId: str, **kwargs):
+        """
+        **Update a webhook payload template for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-webhooks-payload-template
+
+        - organizationId (string): Organization ID
+        - payloadTemplateId (string): Payload template ID
+        - name (string): The name of the template
+        - body (string): The liquid template used for the body of the webhook message.
+        - headers (array): The liquid template used with the webhook headers.
+        - bodyFile (string): A file containing liquid template used for the body of the webhook message.
+        - headersFile (string): A file containing the liquid template used with the webhook headers.
+        - sharing (object): Information on which entities have access to the template
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "webhooks", "payloadTemplates"],
+            "operation": "updateOrganizationWebhooksPayloadTemplate",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        payloadTemplateId = urllib.parse.quote(str(payloadTemplateId), safe="")
+        resource = f"/organizations/{organizationId}/webhooks/payloadTemplates/{payloadTemplateId}"
+
+        body_params = [
+            "name",
+            "body",
+            "headers",
+            "bodyFile",
+            "headersFile",
+            "sharing",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationWebhooksPayloadTemplate: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
+    def createOrganizationWebhooksWebhookTest(self, organizationId: str, url: str, **kwargs):
+        """
+        **Send a test webhook for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-webhooks-webhook-test
+
+        - organizationId (string): Organization ID
+        - url (string): The URL where the test webhook will be sent
+        - sharedSecret (string): The shared secret the test webhook will send. Optional. Defaults to HTTP server's shared secret. Otherwise, defaults to an empty string.
+        - payloadTemplateId (string): The ID of the payload template of the test webhook. Defaults to the HTTP server's template ID if one exists for the given URL, or Generic template ID otherwise
+        - payloadTemplateName (string): The name of the payload template.
+        - alertTypeId (string): The type of alert which the test webhook will send. Optional. Defaults to insight_app_outage_start.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "webhooks", "webhookTests"],
+            "operation": "createOrganizationWebhooksWebhookTest",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/webhooks/webhookTests"
+
+        body_params = [
+            "url",
+            "sharedSecret",
+            "payloadTemplateId",
+            "payloadTemplateName",
+            "alertTypeId",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationWebhooksWebhookTest: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationWebhooksWebhookTest(self, organizationId: str, webhookTestId: str):
+        """
+        **Return the status of a webhook test for an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-webhooks-webhook-test
+
+        - organizationId (string): Organization ID
+        - webhookTestId (string): Webhook test ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "webhooks", "webhookTests"],
+            "operation": "getOrganizationWebhooksWebhookTest",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        webhookTestId = urllib.parse.quote(str(webhookTestId), safe="")
+        resource = f"/organizations/{organizationId}/webhooks/webhookTests/{webhookTestId}"
+
+        return self._session.get(metadata, resource)

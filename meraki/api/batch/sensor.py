@@ -12,9 +12,10 @@ class ActionBatchSensor(object):
 
         - serial (string): Serial
         - operation (string): Operation to run on the sensor. 'enableDownstreamPower', 'disableDownstreamPower', and 'cycleDownstreamPower' turn power on/off to the device that is connected downstream of an MT40 power monitor. 'refreshData' causes an MT15 or MT40 device to upload its latest readings so that they are immediately available in the Dashboard API.
+        - arguments (array): Additional options to provide to commands run on the sensor, each with a corresponding 'name' and 'value'.
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         if "operation" in kwargs:
             options = ["cycleDownstreamPower", "disableDownstreamPower", "enableDownstreamPower", "refreshData"]
@@ -22,10 +23,11 @@ class ActionBatchSensor(object):
                 f'''"operation" cannot be "{kwargs["operation"]}", & must be set to one of: {options}'''
             )
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/sensor/commands"
 
         body_params = [
+            "arguments",
             "operation",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
@@ -47,7 +49,7 @@ class ActionBatchSensor(object):
 
         kwargs.update(locals())
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/sensor/relationships"
 
         body_params = [
@@ -78,7 +80,7 @@ class ActionBatchSensor(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/sensor/alerts/profiles"
 
         body_params = [
@@ -116,8 +118,8 @@ class ActionBatchSensor(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        id = urllib.parse.quote(id, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
         resource = f"/networks/{networkId}/sensor/alerts/profiles/{id}"
 
         body_params = [
@@ -146,8 +148,8 @@ class ActionBatchSensor(object):
         - id (string): ID
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        id = urllib.parse.quote(id, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
         resource = f"/networks/{networkId}/sensor/alerts/profiles/{id}"
 
         action = {
@@ -168,8 +170,8 @@ class ActionBatchSensor(object):
 
         kwargs = locals()
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        mqttBrokerId = urllib.parse.quote(mqttBrokerId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        mqttBrokerId = urllib.parse.quote(str(mqttBrokerId), safe="")
         resource = f"/networks/{networkId}/sensor/mqttBrokers/{mqttBrokerId}"
 
         body_params = [

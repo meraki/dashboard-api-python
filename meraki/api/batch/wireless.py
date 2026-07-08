@@ -16,7 +16,7 @@ class ActionBatchWireless(object):
 
         kwargs.update(locals())
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/wireless/alternateManagementInterface/ipv6"
 
         body_params = [
@@ -42,17 +42,19 @@ class ActionBatchWireless(object):
           Dashboard's automatically generated value.
         - minor (integer): Desired minor value of the beacon. If the value is set to null it will reset to
           Dashboard's automatically generated value.
+        - transmit (object): Transmit settings including power, interval, and advertised power.
         """
 
         kwargs.update(locals())
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/wireless/bluetooth/settings"
 
         body_params = [
             "uuid",
             "major",
             "minor",
+            "transmit",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -74,12 +76,66 @@ class ActionBatchWireless(object):
 
         kwargs.update(locals())
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/wireless/electronicShelfLabel"
 
         body_params = [
             "channel",
             "enabled",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def updateDeviceWirelessRadioAfcPosition(self, serial: str, **kwargs):
+        """
+        **Update the position attributes for this device**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-wireless-radio-afc-position
+
+        - serial (string): Serial
+        - height (object): Height attributes
+        - gps (object): GPS attributes
+        """
+
+        kwargs.update(locals())
+
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/wireless/radio/afc/position"
+
+        body_params = [
+            "height",
+            "gps",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def updateDeviceWirelessRadioOverrides(self, serial: str, **kwargs):
+        """
+        **Update 2.4 GHz, 5 GHz, and 6 GHz radio settings (channel, channel width, power, and enable/disable) that override RF profiles.**
+        https://developer.cisco.com/meraki/api-v1/#!update-device-wireless-radio-overrides
+
+        - serial (string): Serial
+        - rfProfile (object): This device's RF profile
+        - radios (array): Radio overrides.
+        """
+
+        kwargs.update(locals())
+
+        serial = urllib.parse.quote(str(serial), safe="")
+        resource = f"/devices/{serial}/wireless/radio/overrides"
+
+        body_params = [
+            "rfProfile",
+            "radios",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -102,7 +158,7 @@ class ActionBatchWireless(object):
 
         kwargs.update(locals())
 
-        serial = urllib.parse.quote(serial, safe="")
+        serial = urllib.parse.quote(str(serial), safe="")
         resource = f"/devices/{serial}/wireless/radio/settings"
 
         body_params = [
@@ -134,7 +190,7 @@ class ActionBatchWireless(object):
             options = ["alert", "allow", "block"]
             assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/wireless/airMarshal/rules"
 
         body_params = [
@@ -166,8 +222,8 @@ class ActionBatchWireless(object):
             options = ["alert", "allow", "block"]
             assert kwargs["type"] in options, f'''"type" cannot be "{kwargs["type"]}", & must be set to one of: {options}'''
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        ruleId = urllib.parse.quote(ruleId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        ruleId = urllib.parse.quote(str(ruleId), safe="")
         resource = f"/networks/{networkId}/wireless/airMarshal/rules/{ruleId}"
 
         body_params = [
@@ -191,8 +247,8 @@ class ActionBatchWireless(object):
         - ruleId (string): Rule ID
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        ruleId = urllib.parse.quote(ruleId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        ruleId = urllib.parse.quote(str(ruleId), safe="")
         resource = f"/networks/{networkId}/wireless/airMarshal/rules/{ruleId}"
 
         action = {
@@ -218,7 +274,7 @@ class ActionBatchWireless(object):
                 f'''"defaultPolicy" cannot be "{kwargs["defaultPolicy"]}", & must be set to one of: {options}'''
             )
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/wireless/airMarshal/settings"
 
         body_params = [
@@ -246,7 +302,7 @@ class ActionBatchWireless(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/wireless/alternateManagementInterface"
 
         body_params = [
@@ -275,7 +331,7 @@ class ActionBatchWireless(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/wireless/billing"
 
         body_params = [
@@ -307,7 +363,7 @@ class ActionBatchWireless(object):
             options = ["Bluetooth", "high frequency"]
             assert kwargs["mode"] in options, f'''"mode" cannot be "{kwargs["mode"]}", & must be set to one of: {options}'''
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/wireless/electronicShelfLabel"
 
         body_params = [
@@ -332,17 +388,19 @@ class ActionBatchWireless(object):
         - name (string): AP port profile name
         - ports (array): AP ports configuration
         - usbPorts (array): AP usb ports configuration
+        - security (object): AP port security configuration
         """
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/wireless/ethernet/ports/profiles"
 
         body_params = [
             "name",
             "ports",
             "usbPorts",
+            "security",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -364,7 +422,7 @@ class ActionBatchWireless(object):
 
         kwargs = locals()
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/wireless/ethernet/ports/profiles/assign"
 
         body_params = [
@@ -390,7 +448,7 @@ class ActionBatchWireless(object):
 
         kwargs = locals()
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/wireless/ethernet/ports/profiles/setDefault"
 
         body_params = [
@@ -414,18 +472,20 @@ class ActionBatchWireless(object):
         - name (string): AP port profile name
         - ports (array): AP ports configuration
         - usbPorts (array): AP usb ports configuration
+        - security (object): AP port security configuration
         """
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        profileId = urllib.parse.quote(profileId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        profileId = urllib.parse.quote(str(profileId), safe="")
         resource = f"/networks/{networkId}/wireless/ethernet/ports/profiles/{profileId}"
 
         body_params = [
             "name",
             "ports",
             "usbPorts",
+            "security",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -444,8 +504,8 @@ class ActionBatchWireless(object):
         - profileId (string): Profile ID
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        profileId = urllib.parse.quote(profileId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        profileId = urllib.parse.quote(str(profileId), safe="")
         resource = f"/networks/{networkId}/wireless/ethernet/ports/profiles/{profileId}"
 
         action = {
@@ -466,12 +526,95 @@ class ActionBatchWireless(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/wireless/location/scanning"
 
         body_params = [
             "enabled",
             "api",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def updateNetworkWirelessLocationWayfinding(self, networkId: str, **kwargs):
+        """
+        **Change client wayfinding settings**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-location-wayfinding
+
+        - networkId (string): Network ID
+        - enabled (boolean): Whether to enable client wayfinding on that network (only supported on Wireless networks).
+        - maintenanceWindow (object): Maintenance window during which optimization might take place to improve location accuracy.
+        """
+
+        kwargs.update(locals())
+
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/location/wayfinding"
+
+        body_params = [
+            "enabled",
+            "maintenanceWindow",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def updateNetworkWirelessOpportunisticPcap(self, networkId: str, **kwargs):
+        """
+        **Update the Opportunistic Pcap settings for a wireless network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-opportunistic-pcap
+
+        - networkId (string): Network ID
+        - enablement (object): Enablement settings
+        """
+
+        kwargs.update(locals())
+
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/opportunisticPcap"
+
+        body_params = [
+            "enablement",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "factory",
+            "body": payload,
+        }
+        return action
+
+    def updateNetworkWirelessRadioAutoRf(self, networkId: str, **kwargs):
+        """
+        **Update the AutoRF settings for a wireless network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-radio-auto-rf
+
+        - networkId (string): Network ID
+        - busyHour (object): Busy Hour settings
+        - channel (object): Channel settings
+        - fra (object): FRA settings
+        - aiRrm (object): AI-RRM settings
+        """
+
+        kwargs.update(locals())
+
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/radio/autoRf"
+
+        body_params = [
+            "busyHour",
+            "channel",
+            "fra",
+            "aiRrm",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -495,7 +638,7 @@ class ActionBatchWireless(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/wireless/radio/rrm"
 
         body_params = [
@@ -529,6 +672,7 @@ class ActionBatchWireless(object):
         - transmission (object): Settings related to radio transmission.
         - perSsidSettings (object): Per-SSID radio settings by number.
         - flexRadios (object): Flex radio settings.
+        - dot11be (object): 802.11be settings
         """
 
         kwargs.update(locals())
@@ -544,7 +688,7 @@ class ActionBatchWireless(object):
                 f'''"bandSelectionType" cannot be "{kwargs["bandSelectionType"]}", & must be set to one of: {options}'''
             )
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/wireless/rfProfiles"
 
         body_params = [
@@ -559,6 +703,7 @@ class ActionBatchWireless(object):
             "transmission",
             "perSsidSettings",
             "flexRadios",
+            "dot11be",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -588,6 +733,7 @@ class ActionBatchWireless(object):
         - transmission (object): Settings related to radio transmission.
         - perSsidSettings (object): Per-SSID radio settings by number.
         - flexRadios (object): Flex radio settings.
+        - dot11be (object): 802.11be settings
         """
 
         kwargs.update(locals())
@@ -603,8 +749,8 @@ class ActionBatchWireless(object):
                 f'''"bandSelectionType" cannot be "{kwargs["bandSelectionType"]}", & must be set to one of: {options}'''
             )
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        rfProfileId = urllib.parse.quote(rfProfileId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        rfProfileId = urllib.parse.quote(str(rfProfileId), safe="")
         resource = f"/networks/{networkId}/wireless/rfProfiles/{rfProfileId}"
 
         body_params = [
@@ -621,6 +767,7 @@ class ActionBatchWireless(object):
             "transmission",
             "perSsidSettings",
             "flexRadios",
+            "dot11be",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -639,8 +786,8 @@ class ActionBatchWireless(object):
         - rfProfileId (string): Rf profile ID
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        rfProfileId = urllib.parse.quote(rfProfileId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        rfProfileId = urllib.parse.quote(str(rfProfileId), safe="")
         resource = f"/networks/{networkId}/wireless/rfProfiles/{rfProfileId}"
 
         action = {
@@ -673,7 +820,7 @@ class ActionBatchWireless(object):
                 f'''"upgradeStrategy" cannot be "{kwargs["upgradeStrategy"]}", & must be set to one of: {options}'''
             )
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/wireless/settings"
 
         body_params = [
@@ -703,6 +850,7 @@ class ActionBatchWireless(object):
         - number (string): Number
         - name (string): The name of the SSID
         - enabled (boolean): Whether or not the SSID is enabled
+        - localAuth (boolean): Extended local auth flag for Enterprise NAC
         - authMode (string): The association control method for the SSID ('open', 'open-enhanced', 'psk', 'open-with-radius', 'open-enhanced-with-radius', 'open-with-nac', '8021x-meraki', '8021x-nac', '8021x-radius', '8021x-google', '8021x-entra', '8021x-localradius', 'ipsk-with-radius', 'ipsk-without-radius', 'ipsk-with-nac' or 'ipsk-with-radius-easy-psk')
         - enterpriseAdminAccess (string): Whether or not an SSID is accessible by 'enterprise' administrators ('access disabled' or 'access enabled')
         - ssidAdminAccessible (boolean): SSID Administrator access status
@@ -734,6 +882,7 @@ class ActionBatchWireless(object):
         - radiusAccountingInterimInterval (integer): The interval (in seconds) in which accounting information is updated and sent to the RADIUS accounting server.
         - radiusAttributeForGroupPolicies (string): Specify the RADIUS attribute used to look up group policies ('Filter-Id', 'Reply-Message', 'Airespace-ACL-Name' or 'Aruba-User-Role'). Access points must receive this attribute in the RADIUS Access-Accept message
         - ipAssignmentMode (string): The client IP assignment mode ('NAT mode', 'Bridge mode', 'Layer 3 roaming', 'Ethernet over GRE', 'Layer 3 roaming with a concentrator', 'VPN' or 'Campus Gateway')
+        - campusGateway (object): Campus gateway settings
         - useVlanTagging (boolean): Whether or not traffic should be directed to use specific VLANs. This param is only valid if the ipAssignmentMode is 'Bridge mode' or 'Layer 3 roaming'
         - concentratorNetworkId (string): The concentrator to use when the ipAssignmentMode is 'Layer 3 roaming with a concentrator' or 'VPN'.
         - secondaryConcentratorNetworkId (string): The secondary concentrator to use when the ipAssignmentMode is 'VPN'. If configured, the APs will switch to using this concentrator if the primary concentrator is unreachable. This param is optional. ('disabled' represents no secondary concentrator.)
@@ -844,13 +993,14 @@ class ActionBatchWireless(object):
                 f'''"radiusAttributeForGroupPolicies" cannot be "{kwargs["radiusAttributeForGroupPolicies"]}", & must be set to one of: {options}'''
             )
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        number = urllib.parse.quote(number, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
         resource = f"/networks/{networkId}/wireless/ssids/{number}"
 
         body_params = [
             "name",
             "enabled",
+            "localAuth",
             "authMode",
             "enterpriseAdminAccess",
             "ssidAdminAccessible",
@@ -882,6 +1032,7 @@ class ActionBatchWireless(object):
             "radiusAccountingInterimInterval",
             "radiusAttributeForGroupPolicies",
             "ipAssignmentMode",
+            "campusGateway",
             "useVlanTagging",
             "concentratorNetworkId",
             "secondaryConcentratorNetworkId",
@@ -937,8 +1088,8 @@ class ActionBatchWireless(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        number = urllib.parse.quote(number, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
         resource = f"/networks/{networkId}/wireless/ssids/{number}/bonjourForwarding"
 
         body_params = [
@@ -967,8 +1118,8 @@ class ActionBatchWireless(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        number = urllib.parse.quote(number, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
         resource = f"/networks/{networkId}/wireless/ssids/{number}/deviceTypeGroupPolicies"
 
         body_params = [
@@ -998,8 +1149,8 @@ class ActionBatchWireless(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        number = urllib.parse.quote(number, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
         resource = f"/networks/{networkId}/wireless/ssids/{number}/eapOverride"
 
         body_params = [
@@ -1029,8 +1180,8 @@ class ActionBatchWireless(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        number = urllib.parse.quote(number, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
         resource = f"/networks/{networkId}/wireless/ssids/{number}/firewall/l3FirewallRules"
 
         body_params = [
@@ -1057,8 +1208,8 @@ class ActionBatchWireless(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        number = urllib.parse.quote(number, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
         resource = f"/networks/{networkId}/wireless/ssids/{number}/firewall/l7FirewallRules"
 
         body_params = [
@@ -1106,8 +1257,8 @@ class ActionBatchWireless(object):
                 f'''"networkAccessType" cannot be "{kwargs["networkAccessType"]}", & must be set to one of: {options}'''
             )
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        number = urllib.parse.quote(number, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
         resource = f"/networks/{networkId}/wireless/ssids/{number}/hotspot20"
 
         body_params = [
@@ -1143,8 +1294,8 @@ class ActionBatchWireless(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        number = urllib.parse.quote(number, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
         resource = f"/networks/{networkId}/wireless/ssids/{number}/identityPsks"
 
         body_params = [
@@ -1177,9 +1328,9 @@ class ActionBatchWireless(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        number = urllib.parse.quote(number, safe="")
-        identityPskId = urllib.parse.quote(identityPskId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        identityPskId = urllib.parse.quote(str(identityPskId), safe="")
         resource = f"/networks/{networkId}/wireless/ssids/{number}/identityPsks/{identityPskId}"
 
         body_params = [
@@ -1206,9 +1357,9 @@ class ActionBatchWireless(object):
         - identityPskId (string): Identity psk ID
         """
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        number = urllib.parse.quote(number, safe="")
-        identityPskId = urllib.parse.quote(identityPskId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        identityPskId = urllib.parse.quote(str(identityPskId), safe="")
         resource = f"/networks/{networkId}/wireless/ssids/{number}/identityPsks/{identityPskId}"
 
         action = {
@@ -1230,8 +1381,8 @@ class ActionBatchWireless(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        number = urllib.parse.quote(number, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
         resource = f"/networks/{networkId}/wireless/ssids/{number}/openRoaming"
 
         body_params = [
@@ -1243,6 +1394,117 @@ class ActionBatchWireless(object):
             "resource": resource,
             "operation": "update",
             "body": payload,
+        }
+        return action
+
+    def updateNetworkWirelessSsidPoliciesClientExclusion(self, networkId: str, number: str, **kwargs):
+        """
+        **Update the client exclusion status configuration for a given SSID**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-policies-client-exclusion
+
+        - networkId (string): Network ID
+        - number (string): Number
+        - static (object): Static client exclusion status
+        - dynamic (object): Dynamic client exclusion configuration
+        """
+
+        kwargs.update(locals())
+
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/policies/clientExclusion"
+
+        body_params = [
+            "static",
+            "dynamic",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def updateNetworkWirelessSsidPoliciesClientExclusionStaticExclusions(
+        self, networkId: str, number: str, macs: list, **kwargs
+    ):
+        """
+        **Replace the static client exclusion list for the given SSID (use PUT /exclusions)**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssid-policies-client-exclusion-static-exclusions
+
+        - networkId (string): Network ID
+        - number (string): Number
+        - macs (array): MAC addresses to set as static exclusion list
+        """
+
+        kwargs = locals()
+
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/policies/clientExclusion/static/exclusions"
+
+        body_params = [
+            "macs",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def createNetworkWirelessSsidPoliciesClientExclusionStaticExclusionsBulkAdd(
+        self, networkId: str, number: str, macs: list, **kwargs
+    ):
+        """
+        **Add MAC addresses to the existing static client exclusion list for the given SSID (use POST /bulkAdd)**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-wireless-ssid-policies-client-exclusion-static-exclusions-bulk-add
+
+        - networkId (string): Network ID
+        - number (string): Number
+        - macs (array): MAC addresses to add to static exclusion
+        """
+
+        kwargs = locals()
+
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/policies/clientExclusion/static/exclusions/bulkAdd"
+
+        body_params = [
+            "macs",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def createNetworkWirelessSsidPoliciesClientExclusionStaticExclusionsBulkRemove(
+        self, networkId: str, number: str, macs: list, **kwargs
+    ):
+        """
+        **Remove MAC addresses from the existing static client exclusion list for the given SSID (use POST /bulkRemove)**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-wireless-ssid-policies-client-exclusion-static-exclusions-bulk-remove
+
+        - networkId (string): Network ID
+        - number (string): Number
+        - macs (array): MAC addresses to remove from static exclusion
+        """
+
+        kwargs = locals()
+
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/{number}/policies/clientExclusion/static/exclusions/bulkRemove"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
         }
         return action
 
@@ -1260,8 +1522,8 @@ class ActionBatchWireless(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        number = urllib.parse.quote(number, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
         resource = f"/networks/{networkId}/wireless/ssids/{number}/schedules"
 
         body_params = [
@@ -1290,6 +1552,7 @@ class ActionBatchWireless(object):
         - redirectUrl (string): The custom redirect URL where the users will go after the splash page.
         - useRedirectUrl (boolean): The Boolean indicating whether the the user will be redirected to the custom redirect URL after the splash page. A custom redirect URL must be set if this is true.
         - welcomeMessage (string): The welcome message for the users on the splash page.
+        - language (string): Language of splash page.
         - userConsent (object): User consent settings
         - themeId (string): The id of the selected splash theme.
         - splashLogo (object): The logo used in the splash page.
@@ -1311,14 +1574,40 @@ class ActionBatchWireless(object):
             assert kwargs["splashTimeout"] in options, (
                 f'''"splashTimeout" cannot be "{kwargs["splashTimeout"]}", & must be set to one of: {options}'''
             )
+        if "language" in kwargs:
+            options = [
+                "DA",
+                "DE",
+                "EL",
+                "EN",
+                "ES",
+                "FI",
+                "FR",
+                "GL",
+                "IT",
+                "JA",
+                "KO",
+                "NL",
+                "NO",
+                "PL",
+                "PT",
+                "RU",
+                "SK",
+                "SV",
+                "UK",
+                "ZH",
+            ]
+            assert kwargs["language"] in options, (
+                f'''"language" cannot be "{kwargs["language"]}", & must be set to one of: {options}'''
+            )
         if "controllerDisconnectionBehavior" in kwargs:
             options = ["default", "open", "restricted"]
             assert kwargs["controllerDisconnectionBehavior"] in options, (
                 f'''"controllerDisconnectionBehavior" cannot be "{kwargs["controllerDisconnectionBehavior"]}", & must be set to one of: {options}'''
             )
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        number = urllib.parse.quote(number, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
         resource = f"/networks/{networkId}/wireless/ssids/{number}/splash/settings"
 
         body_params = [
@@ -1328,6 +1617,7 @@ class ActionBatchWireless(object):
             "redirectUrl",
             "useRedirectUrl",
             "welcomeMessage",
+            "language",
             "userConsent",
             "themeId",
             "splashLogo",
@@ -1366,8 +1656,8 @@ class ActionBatchWireless(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        number = urllib.parse.quote(number, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
         resource = f"/networks/{networkId}/wireless/ssids/{number}/trafficShaping/rules"
 
         body_params = [
@@ -1397,8 +1687,8 @@ class ActionBatchWireless(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
-        number = urllib.parse.quote(number, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        number = urllib.parse.quote(str(number), safe="")
         resource = f"/networks/{networkId}/wireless/ssids/{number}/vpn"
 
         body_params = [
@@ -1428,7 +1718,7 @@ class ActionBatchWireless(object):
 
         kwargs.update(locals())
 
-        networkId = urllib.parse.quote(networkId, safe="")
+        networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/wireless/zigbee"
 
         body_params = [
@@ -1445,6 +1735,33 @@ class ActionBatchWireless(object):
         }
         return action
 
+    def createOrganizationWirelessDevicesLiveToolsClientDisconnect(self, organizationId: str, clientId: str, **kwargs):
+        """
+        **Enqueue a job to disconnect a client from an AP. This endpoint has a sustained rate limit of one request every five seconds per device, with an allowed burst of five requests.**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-wireless-devices-live-tools-client-disconnect
+
+        - organizationId (string): Organization ID
+        - clientId (string): Client ID
+        - callback (object): Details for the callback. Please include either an httpServerId OR url and sharedSecret
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        clientId = urllib.parse.quote(str(clientId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/devices/liveTools/clients/{clientId}/disconnect"
+
+        body_params = [
+            "callback",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "disconnect",
+            "body": payload,
+        }
+        return action
+
     def createOrganizationWirelessDevicesProvisioningDeployment(self, organizationId: str, items: list, **kwargs):
         """
         **Create a zero touch deployment for a wireless access point**
@@ -1457,7 +1774,7 @@ class ActionBatchWireless(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/wireless/devices/provisioning/deployments"
 
         body_params = [
@@ -1484,7 +1801,7 @@ class ActionBatchWireless(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/wireless/devices/provisioning/deployments"
 
         body_params = [
@@ -1508,8 +1825,8 @@ class ActionBatchWireless(object):
         - deploymentId (string): Deployment ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        deploymentId = urllib.parse.quote(deploymentId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        deploymentId = urllib.parse.quote(str(deploymentId), safe="")
         resource = f"/organizations/{organizationId}/wireless/devices/provisioning/deployments/{deploymentId}"
 
         action = {
@@ -1535,7 +1852,7 @@ class ActionBatchWireless(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/wireless/location/scanning/receivers"
 
         body_params = [
@@ -1567,8 +1884,8 @@ class ActionBatchWireless(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        receiverId = urllib.parse.quote(receiverId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        receiverId = urllib.parse.quote(str(receiverId), safe="")
         resource = f"/organizations/{organizationId}/wireless/location/scanning/receivers/{receiverId}"
 
         body_params = [
@@ -1593,8 +1910,8 @@ class ActionBatchWireless(object):
         - receiverId (string): Receiver ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        receiverId = urllib.parse.quote(receiverId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        receiverId = urllib.parse.quote(str(receiverId), safe="")
         resource = f"/organizations/{organizationId}/wireless/location/scanning/receivers/{receiverId}"
 
         action = {
@@ -1617,7 +1934,7 @@ class ActionBatchWireless(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/wireless/mqtt/settings"
 
         body_params = [
@@ -1645,7 +1962,7 @@ class ActionBatchWireless(object):
 
         kwargs = locals()
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/wireless/radio/autoRf/channels/recalculate"
 
         body_params = [
@@ -1675,7 +1992,7 @@ class ActionBatchWireless(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/wireless/ssids/firewall/isolation/allowlist/entries"
 
         body_params = [
@@ -1701,8 +2018,8 @@ class ActionBatchWireless(object):
         - entryId (string): Entry ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        entryId = urllib.parse.quote(entryId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        entryId = urllib.parse.quote(str(entryId), safe="")
         resource = f"/organizations/{organizationId}/wireless/ssids/firewall/isolation/allowlist/entries/{entryId}"
 
         action = {
@@ -1724,8 +2041,8 @@ class ActionBatchWireless(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        entryId = urllib.parse.quote(entryId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        entryId = urllib.parse.quote(str(entryId), safe="")
         resource = f"/organizations/{organizationId}/wireless/ssids/firewall/isolation/allowlist/entries/{entryId}"
 
         body_params = [
@@ -1737,6 +2054,133 @@ class ActionBatchWireless(object):
             "resource": resource,
             "operation": "update",
             "body": payload,
+        }
+        return action
+
+    def createOrganizationWirelessSsidsProfile(self, organizationId: str, name: str, ssid: dict, **kwargs):
+        """
+        **Create a new SSID profile in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-wireless-ssids-profile
+
+        - organizationId (string): Organization ID
+        - name (string): Name of the SSID profile
+        - ssid (object): SSID configuration for the profile
+        - precedence (object): Precedence configuration for the SSID profile
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/profiles"
+
+        body_params = [
+            "name",
+            "precedence",
+            "ssid",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def createOrganizationWirelessSsidsProfilesAssignment(self, organizationId: str, profile: dict, ssid: dict, **kwargs):
+        """
+        **Assigns an SSID profile to an SSID in the organization**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-wireless-ssids-profiles-assignment
+
+        - organizationId (string): Organization ID
+        - profile (object): SSID profile to assign
+        - ssid (object): SSID to assign the SSID profile to
+        - network (object): Network containing the SSID (required if SSID number is used)
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/profiles/assignments"
+
+        body_params = [
+            "profile",
+            "ssid",
+            "network",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def deleteOrganizationWirelessSsidsProfilesAssignments(self, organizationId: str, ssid: dict, **kwargs):
+        """
+        **Unassigns the SSID profile assigned to an SSID**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-wireless-ssids-profiles-assignments
+
+        - organizationId (string): Organization ID
+        - ssid (object): SSID to delete the SSID profile assignment of
+        - network (object): Network containing the SSID (required if SSID number is used)
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/profiles/assignments"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+
+    def updateOrganizationWirelessSsidsProfile(self, organizationId: str, id: str, **kwargs):
+        """
+        **Update this SSID profile**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-wireless-ssids-profile
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        - name (string): Name of the SSID profile
+        - ssid (object): SSID configuration for the profile
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/profiles/{id}"
+
+        body_params = [
+            "name",
+            "ssid",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def deleteOrganizationWirelessSsidsProfile(self, organizationId: str, id: str):
+        """
+        **Delete an SSID profile**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-wireless-ssids-profile
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        """
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/profiles/{id}"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
         }
         return action
 
@@ -1753,8 +2197,8 @@ class ActionBatchWireless(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        id = urllib.parse.quote(id, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
         resource = f"/organizations/{organizationId}/wireless/zigbee/devices/{id}"
 
         body_params = [
@@ -1781,8 +2225,8 @@ class ActionBatchWireless(object):
 
         kwargs.update(locals())
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
-        doorLockId = urllib.parse.quote(doorLockId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        doorLockId = urllib.parse.quote(str(doorLockId), safe="")
         resource = f"/organizations/{organizationId}/wireless/zigbee/doorLocks/{doorLockId}"
 
         body_params = [

@@ -5,7 +5,9 @@ import os
 import shutil
 import sys
 from pathlib import Path
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
+
+import httpx
 
 import pytest
 
@@ -31,11 +33,11 @@ def output_dir(tmp_path):
     return tmp_path
 
 
-def _mock_requests_get(url):
-    mock_response = MagicMock()
-    mock_response.text = f"# placeholder for {url.split('/')[-1]}\n"
-    mock_response.ok = True
-    return mock_response
+def _mock_httpx_get(url):
+    return httpx.Response(
+        200,
+        text=f"# placeholder for {url.split('/')[-1]}\n",
+    )
 
 
 def _run_v3_generation(v3_spec, output_dir):
@@ -44,7 +46,7 @@ def _run_v3_generation(v3_spec, output_dir):
     original_cwd = os.getcwd()
     try:
         os.chdir(output_dir)
-        with patch("generate_library.requests.get", side_effect=_mock_requests_get):
+        with patch("generate_library.httpx.get", side_effect=_mock_httpx_get):
             gen_v3.generate_library(
                 spec=v3_spec,
                 version_number="0.0.0-test",
@@ -61,7 +63,7 @@ def _run_v3_generation_with_stubs(v3_spec, output_dir):
     original_cwd = os.getcwd()
     try:
         os.chdir(output_dir)
-        with patch("generate_library.requests.get", side_effect=_mock_requests_get):
+        with patch("generate_library.httpx.get", side_effect=_mock_httpx_get):
             gen_v3.generate_library(
                 spec=v3_spec,
                 version_number="0.0.0-test",
@@ -138,11 +140,11 @@ class TestV3CLI:
         """GEN-05: Spec fetch includes ?version=3."""
         import generate_library as gen_v3
 
-        with patch("generate_library.requests.get") as mock_get:
-            mock_response = MagicMock()
-            mock_response.ok = True
-            mock_response.json.return_value = {"paths": {}, "tags": [], "x-batchable-actions": []}
-            mock_get.return_value = mock_response
+        with patch("generate_library.httpx.get") as mock_get:
+            mock_get.return_value = httpx.Response(
+                200,
+                json={"paths": {}, "tags": [], "x-batchable-actions": []},
+            )
 
             with patch.object(gen_v3, "generate_library"):
                 gen_v3.main(["-v", "1.0"])
@@ -155,19 +157,21 @@ class TestV3CLI:
         """GEN-05: Org-specific fetch includes ?version=3 and auth header."""
         import generate_library as gen_v3
 
-        with patch("generate_library.requests.get") as mock_get:
-            mock_response = MagicMock()
-            mock_response.ok = True
-            mock_response.json.return_value = {"paths": {}, "tags": [], "x-batchable-actions": []}
-            mock_get.return_value = mock_response
+        with patch.dict(os.environ, {}, clear=False):
+            os.environ.pop("MERAKI_DASHBOARD_API_KEY", None)
+            with patch("generate_library.httpx.get") as mock_get:
+                mock_get.return_value = httpx.Response(
+                    200,
+                    json={"paths": {}, "tags": [], "x-batchable-actions": []},
+                )
 
-            with patch.object(gen_v3, "generate_library"):
-                gen_v3.main(["-o", "12345", "-k", "testkey", "-v", "1.0"])
+                with patch.object(gen_v3, "generate_library"):
+                    gen_v3.main(["-o", "12345", "-k", "testkey", "-v", "1.0"])
 
-            args, kwargs = mock_get.call_args
-            assert "12345" in args[0]
-            assert kwargs.get("params") == {"version": 3}
-            assert "Bearer testkey" in kwargs.get("headers", {}).get("Authorization", "")
+                args, kwargs = mock_get.call_args
+                assert "12345" in args[0]
+                assert kwargs.get("params") == {"version": 3}
+                assert "Bearer testkey" in kwargs.get("headers", {}).get("Authorization", "")
 
 
 class TestV3Stubs:

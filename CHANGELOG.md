@@ -8,8 +8,8 @@ add a news fragment under `changelog.d/` for every user-facing change. See
 
 <!-- towncrier release notes start -->
 
-## 3.3.0 (2026-07-01)
+## 4.2.0b1 (2026-06-10)
 
-### Added
+### Changed
 
-- On 5xx responses, the SDK now logs the Meraki `X-Request-Id` response header so it can be shared with Meraki to look up the request in server-side logs. If the header is absent, `none` is logged in its place. After retries are exhausted, the request ID is also logged at error level.
+- Migrated the HTTP transport layer from `requests`/`aiohttp` to `httpx`.

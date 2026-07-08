@@ -9,7 +9,7 @@ from pathlib import Path
 import meraki.aio
 from meraki.exceptions import AsyncAPIError
 
-TOOL_VERSION = "1.0.0"
+TOOL_VERSION = "0.1.0b"
 DEFAULT_NETWORK_ID = ""
 DEFAULT_ORG_ID = ""
 BACKUP_DIR = Path(__file__).parent / "ssid_backups"
@@ -264,8 +264,8 @@ async def fetch_ssid_full_config(api: meraki.aio.AsyncDashboardAPI, network_id: 
 
 
 async def backup_all_ssids(api: meraki.aio.AsyncDashboardAPI, network_id: str) -> tuple[Path, list]:
-    today = datetime.now().strftime("%Y-%m-%d")
-    filename = f"{today}-{network_id}-ssids.jsonc"
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")
+    filename = f"{timestamp}-{network_id}-ssids.jsonc"
     filepath = BACKUP_DIR / filename
     BACKUP_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -289,7 +289,7 @@ async def backup_all_ssids(api: meraki.aio.AsyncDashboardAPI, network_id: str) -
     header = f"// SSID Backup - ssid_tool v{TOOL_VERSION}\n// {datetime.now().isoformat()}\n// Network: {network_id}\n"
     with open(filepath, "w", encoding="utf-8") as f:
         f.write(header)
-        json.dump(all_ssids, f, indent=2)
+        json.dump(all_ssids, f, indent=2, ensure_ascii=False)
 
     return filepath, all_errors
 
@@ -300,10 +300,6 @@ async def swap_ssid_slots(
     slot_a: int,
     slot_b: int,
 ) -> dict:
-    cprint("  Creating safety backup...", Color.YELLOW)
-    backup_path, _ = await backup_all_ssids(api, network_id)
-    cprint(f"  Saved: {backup_path.name}", Color.GREEN)
-
     async with AsyncSpinner(f"Reading slots {slot_a} and {slot_b}"):
         (config_a, _), (config_b, _) = await asyncio.gather(
             fetch_ssid_full_config(api, network_id, slot_a),
@@ -311,6 +307,13 @@ async def swap_ssid_slots(
         )
 
     results = {"success": [], "failed": []}
+
+    # Free up SSID names to avoid uniqueness constraint during swap
+    async with AsyncSpinner("Preparing swap"):
+        await asyncio.gather(
+            api.wireless.updateNetworkWirelessSsid(network_id, str(slot_a), name=f"_swap_tmp_{slot_a}"),
+            api.wireless.updateNetworkWirelessSsid(network_id, str(slot_b), name=f"_swap_tmp_{slot_b}"),
+        )
 
     async with AsyncSpinner("Swapping configurations"):
 
@@ -327,6 +330,8 @@ async def swap_ssid_slots(
 
         swap_tasks = []
         for resource_name in SSID_SUB_RESOURCES:
+            if resource_name in ("vpn", "hotspot20"):
+                continue
             swap_tasks.append(_apply(resource_name, slot_a, slot_b, config_a))
             swap_tasks.append(_apply(resource_name, slot_b, slot_a, config_b))
 
@@ -459,9 +464,7 @@ async def main() -> None:
         sys.exit(1)
 
     async with meraki.aio.AsyncDashboardAPI(
-        output_log=False,
-        print_console=False,
-        maximum_retries=10,
+        output_log=True, print_console=False, maximum_retries=10, smart_flow=True, smart_flow_logging=True
     ) as api:
         while True:
             display_menu()
@@ -476,15 +479,28 @@ async def main() -> None:
                 display_report("Backup Complete", results)
 
             elif choice == "2":
+                async with AsyncSpinner("Fetching current SSIDs"):
+                    ssids = await api.wireless.getNetworkWirelessSsids(network_id)
+                display_ssid_summary(ssids)
+
+                backup_task = asyncio.create_task(backup_all_ssids(api, network_id))
+
                 try:
                     slot_a = int(input(f"{Color.YELLOW}  First SSID slot (0-14): {Color.RESET}"))
                     slot_b = int(input(f"{Color.YELLOW}  Second SSID slot (0-14): {Color.RESET}"))
                 except ValueError:
                     cprint("  Invalid input.", Color.RED)
+                    backup_task.cancel()
                     continue
                 if not (0 <= slot_a <= 14 and 0 <= slot_b <= 14 and slot_a != slot_b):
                     cprint("  Slots must be 0-14 and different.", Color.RED)
+                    backup_task.cancel()
                     continue
+
+                cprint("  Waiting for backup to complete...", Color.DIM)
+                backup_path, _ = await backup_task
+                cprint(f"  Saved: {backup_path.name}", Color.GREEN)
+
                 results = await swap_ssid_slots(api, network_id, slot_a, slot_b)
                 display_report(f"Swap: Slot {slot_a} <-> Slot {slot_b}", results)
 

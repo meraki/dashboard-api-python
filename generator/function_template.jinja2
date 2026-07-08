@@ -10,11 +10,14 @@
 
         {% if kwarg_line|length > 0 %}
         {{ kwarg_line }}
-        {% for safe_name, original_name in (renamed_params | default({})).items() %}
-        if "{{ safe_name }}" in kwargs:
-            kwargs["{{ original_name }}"] = kwargs.pop("{{ safe_name }}")
+
+        {% if renamed_params|length > 0 %}
+        {% for safe, orig in renamed_params.items() %}
+        if "{{ safe }}" in kwargs:
+            kwargs["{{ orig }}"] = kwargs.pop("{{ safe }}")
         {% endfor %}
 
+        {% endif %}
         {% endif %}
         {% if assert_blocks|length > 0 %}
         {% for param, values, nullable in assert_blocks %}

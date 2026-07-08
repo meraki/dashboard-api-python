@@ -3,9 +3,11 @@ import pytest
 FILE_ORDER = [
     "test_client_crud_lifecycle_sync.py",
     "test_client_crud_lifecycle_async.py",
+    "test_lifecycle_sync.py",
+    "test_lifecycle_async.py",
     "test_org_wide_workflows.py",
-    "test_pagination_iterator_policy_objects_sync.py",
-    "test_pagination_iterator_policy_objects_async.py",
+    "test_iterator_sync.py",
+    "test_iterator_async.py",
 ]
 
 

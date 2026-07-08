@@ -13,7 +13,7 @@ class ActionBatchSpaces(object):
         - organizationId (string): Organization ID
         """
 
-        organizationId = urllib.parse.quote(organizationId, safe="")
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/spaces/integration/remove"
 
         action = {

@@ -17,7 +17,7 @@ from meraki.aio.api.spaces import AsyncSpaces
 from meraki.aio.api.switch import AsyncSwitch
 from meraki.aio.api.wireless import AsyncWireless
 from meraki.aio.api.wirelessController import AsyncWirelessController
-from meraki.aio.rest_session import AsyncRestSession
+from meraki.session.async_ import AsyncRestSession
 from meraki.exceptions import APIKeyError
 from datetime import datetime
 
@@ -27,6 +27,8 @@ from meraki.api.batch import Batch
 # Config import
 from meraki.config import (
     API_KEY_ENVIRONMENT_VARIABLE,
+    MERAKI_APP_ID,
+    MERAKI_APP_BEARER_TOKEN,
     DEFAULT_BASE_URL,
     SINGLE_REQUEST_TIMEOUT,
     CERTIFICATE_PATH,
@@ -50,6 +52,13 @@ from meraki.config import (
     USE_ITERATOR_FOR_GET_PAGES,
     AIO_MAXIMUM_CONCURRENT_REQUESTS,
     VALIDATE_KWARGS,
+    SMART_FLOW_ENABLED,
+    SMART_FLOW_ORG_RATE,
+    SMART_FLOW_GLOBAL_RATE,
+    SMART_FLOW_CACHE_MODE,
+    SMART_FLOW_CACHE_PATH,
+    SMART_FLOW_CACHE_TTL,
+    SMART_FLOW_LOGGING,
 )
 
 
@@ -58,6 +67,8 @@ class AsyncDashboardAPI:
     **Creates a persistent Meraki dashboard API session**
 
     - api_key (string): API key generated in dashboard; can also be set as an environment variable MERAKI_DASHBOARD_API_KEY
+    - meraki_app_id (string): optional Meraki app ID; can also be set as an environment variable MERAKI_APP_ID
+    - meraki_app_bearer_token (string): optional Meraki app bearer token; can also be set as an environment variable MERAKI_APP_BEARER_TOKEN
     - base_url (string): preceding all endpoint resources
     - single_request_timeout (integer): maximum number of seconds for each API call
     - certificate_path (string): path for TLS/SSL certificate verification if behind local proxy
@@ -81,11 +92,18 @@ class AsyncDashboardAPI:
     - caller (string): optional identifier for API usage tracking; can also be set as an environment variable MERAKI_PYTHON_SDK_CALLER
     - use_iterator_for_get_pages (boolean): list* methods will return an iterator with each object instead of a complete list with all items
     - validate_kwargs (boolean): log warnings when unrecognized kwargs are passed to API methods
+    - smart_flow_enabled (boolean): enable per-org proactive smart flow via token buckets?
+    - smart_flow_org_rate (float): max requests per second per org (Meraki default: 10)
+    - smart_flow_global_rate (float): max requests per second across all orgs (source IP limit, Meraki default: 100)
+    - smart_flow_cache_mode (string): "lazy" (default) or "eager" - how org/network/device mappings are loaded
+    - smart_flow_cache_path (string): path to persist smart flow mapping cache across sessions
     """
 
     def __init__(
         self,
         api_key=None,
+        meraki_app_id=MERAKI_APP_ID,
+        meraki_app_bearer_token=MERAKI_APP_BEARER_TOKEN,
         base_url=DEFAULT_BASE_URL,
         single_request_timeout=SINGLE_REQUEST_TIMEOUT,
         certificate_path=CERTIFICATE_PATH,
@@ -109,20 +127,28 @@ class AsyncDashboardAPI:
         inherit_logging_config=INHERIT_LOGGING_CONFIG,
         maximum_concurrent_requests=AIO_MAXIMUM_CONCURRENT_REQUESTS,
         validate_kwargs=VALIDATE_KWARGS,
+        smart_flow_enabled=SMART_FLOW_ENABLED,
+        smart_flow_org_rate=SMART_FLOW_ORG_RATE,
+        smart_flow_global_rate=SMART_FLOW_GLOBAL_RATE,
+        smart_flow_cache_mode=SMART_FLOW_CACHE_MODE,
+        smart_flow_cache_path=SMART_FLOW_CACHE_PATH,
+        smart_flow_cache_ttl=SMART_FLOW_CACHE_TTL,
+        smart_flow_logging=SMART_FLOW_LOGGING,
     ):
         # Check API key
         api_key = api_key or os.environ.get(API_KEY_ENVIRONMENT_VARIABLE)
         if not api_key:
             raise APIKeyError()
 
+        # Pull the Meraki app ID and bearer token from environment variables if present
+        meraki_app_id = meraki_app_id or os.environ.get("MERAKI_APP_ID")
+        meraki_app_bearer_token = meraki_app_bearer_token or os.environ.get("MERAKI_APP_BEARER_TOKEN")
+
         # Pull the BE GEO ID from an environment variable if present
         be_geo_id = be_geo_id or os.environ.get("BE_GEO_ID")
 
         # Pull the caller from an environment variable if present
         caller = caller or os.environ.get("MERAKI_PYTHON_SDK_CALLER")
-
-        use_iterator_for_get_pages = use_iterator_for_get_pages
-        inherit_logging_config = inherit_logging_config
 
         # Configure logging
         if not suppress_logging:
@@ -159,6 +185,8 @@ class AsyncDashboardAPI:
         self._session = AsyncRestSession(
             logger=self._logger,
             api_key=api_key,
+            meraki_app_id=meraki_app_id,
+            meraki_app_bearer_token=meraki_app_bearer_token,
             base_url=base_url,
             single_request_timeout=single_request_timeout,
             certificate_path=certificate_path,
@@ -176,7 +204,18 @@ class AsyncDashboardAPI:
             use_iterator_for_get_pages=use_iterator_for_get_pages,
             maximum_concurrent_requests=maximum_concurrent_requests,
             validate_kwargs=validate_kwargs,
+            smart_flow_enabled=smart_flow_enabled,
+            smart_flow_org_rate=smart_flow_org_rate,
+            smart_flow_global_rate=smart_flow_global_rate,
+            smart_flow_cache_mode=smart_flow_cache_mode,
+            smart_flow_cache_path=smart_flow_cache_path,
+            smart_flow_cache_ttl=smart_flow_cache_ttl,
+            smart_flow_logging=smart_flow_logging,
         )
+
+        # Store for eager load access
+        self._smart_flow_enabled = smart_flow_enabled
+        self._smart_flow_cache_mode = smart_flow_cache_mode
 
         # API endpoints by section
         self.administered = AsyncAdministered(self._session)
@@ -200,7 +239,50 @@ class AsyncDashboardAPI:
         self.batch = Batch()
 
     async def __aenter__(self):
+        if self._smart_flow_enabled and self._smart_flow_cache_mode == "eager":
+            limiter = self._session._smart_flow
+            if limiter and not limiter.cache_fresh:
+                await self._eager_load_rate_limit_cache()
         return self
 
     async def __aexit__(self, exc_type, exc, tb):
+        # Drain/cancel in-flight background resolve/hydrate + flush tasks and
+        # persist the cache BEFORE closing the httpx client. Closing first would
+        # cause those background tasks to fail with "client has been closed".
+        # shutdown() performs the final save itself, so it is called instead of
+        # save_cache() to keep the persist exactly once.
+        if self._session._smart_flow:
+            await self._session._smart_flow.shutdown()
         await self._session.close()
+
+    async def _eager_load_rate_limit_cache(self) -> None:
+        """Populate the smart flow's org/network/device cache at startup."""
+        rate_limiter = self._session._smart_flow
+        if not rate_limiter:
+            return
+
+        try:
+            orgs = await self.organizations.getOrganizations()
+        except Exception:
+            return
+
+        for org in orgs:
+            org_id = org["id"]
+            rate_limiter.register_org(org_id)
+
+            try:
+                networks = await self.organizations.getOrganizationNetworks(org_id, total_pages="all", perPage=1000)
+                for net in networks:
+                    rate_limiter.register_network(net["id"], org_id)
+            except Exception:
+                pass
+
+            try:
+                devices = await self.organizations.getOrganizationInventoryDevices(org_id, total_pages="all", perPage=1000)
+                for device in devices:
+                    if device.get("serial"):
+                        rate_limiter.register_device(device["serial"], org_id)
+            except Exception:
+                pass
+
+        await rate_limiter.save_cache()
