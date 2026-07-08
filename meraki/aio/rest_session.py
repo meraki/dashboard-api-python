@@ -11,6 +11,7 @@ from meraki._version import __version__
 from meraki.common import (
     check_python_version,
     reject_v0_base_url,
+    validate_meraki_app_value,
     validate_user_agent,
 )
 from meraki.config import (
@@ -20,6 +21,8 @@ from meraki.config import (
     CERTIFICATE_PATH,
     DEFAULT_BASE_URL,
     MAXIMUM_RETRIES,
+    MERAKI_APP_BEARER_TOKEN,
+    MERAKI_APP_ID,
     MERAKI_PYTHON_SDK_CALLER,
     NETWORK_DELETE_RETRY_WAIT_TIME,
     NGINX_429_RETRY_WAIT_TIME,
@@ -40,6 +43,8 @@ class AsyncRestSession:
         self,
         logger,
         api_key,
+        meraki_app_id=MERAKI_APP_ID,
+        meraki_app_bearer_token=MERAKI_APP_BEARER_TOKEN,
         base_url=DEFAULT_BASE_URL,
         single_request_timeout=SINGLE_REQUEST_TIMEOUT,
         certificate_path=CERTIFICATE_PATH,
@@ -63,6 +68,10 @@ class AsyncRestSession:
         # Initialize attributes and properties
         self._version = __version__
         self._api_key = str(api_key)
+        validate_meraki_app_value("meraki_app_id", meraki_app_id)
+        validate_meraki_app_value("meraki_app_bearer_token", meraki_app_bearer_token)
+        self._meraki_app_id = meraki_app_id
+        self._meraki_app_bearer_token = meraki_app_bearer_token
         self._base_url = str(base_url)
         self._single_request_timeout = single_request_timeout
         self._certificate_path = certificate_path
@@ -93,6 +102,10 @@ class AsyncRestSession:
             "Content-Type": "application/json",
             "User-Agent": f"python-meraki/aio-{self._version} " + validate_user_agent(self._be_geo_id, self._caller),
         }
+        if self._meraki_app_id:
+            self._headers["X-MerakiApp"] = self._meraki_app_id
+        if self._meraki_app_bearer_token:
+            self._headers["X-MerakiApp-Authorization"] = "Bearer " + self._meraki_app_bearer_token
         if self._certificate_path:
             self._sslcontext = ssl.create_default_context()
             self._sslcontext.load_verify_locations(certificate_path)
@@ -111,6 +124,8 @@ class AsyncRestSession:
         self._parameters.pop("logger")
         self._parameters.pop("__class__")
         self._parameters["api_key"] = "*" * 36 + self._api_key[-4:]
+        if meraki_app_bearer_token:
+            self._parameters["meraki_app_bearer_token"] = "*" * 36 + str(meraki_app_bearer_token)[-4:]
         if self._logger:
             self._logger.info(f"Meraki dashboard API session initialized with these parameters: {self._parameters}")
 
