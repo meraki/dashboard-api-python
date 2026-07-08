@@ -51,6 +51,17 @@ def validate_user_agent(be_geo_id, caller):
     return caller_string
 
 
+def validate_meraki_app_value(argument, value):
+    # Meraki app ID / bearer token must fit within a 127-character header value
+    if value and len(str(value)) > 127:
+        raise SessionInputError(
+            argument,
+            value,
+            f"{argument} must be 127 characters or fewer (got {len(str(value))}).",
+            None,
+        )
+
+
 def reject_v0_base_url(self):
     if "v0" in self._base_url:
         sys.exit(

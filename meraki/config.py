@@ -9,6 +9,13 @@ from pathlib import Path
 # Meraki dashboard API key, set either at instantiation or as an environment variable
 API_KEY_ENVIRONMENT_VARIABLE = "MERAKI_DASHBOARD_API_KEY"
 
+# --- Meraki App ---
+# Meraki app ID, set either at instantiation or as an environment variable
+MERAKI_APP_ID = ""
+
+# Meraki app bearer token, set either at instantiation or as an environment variable
+MERAKI_APP_BEARER_TOKEN = ""
+
 # --- Base URL ---
 # Base URL preceding all endpoint resources
 DEFAULT_BASE_URL = "https://api.meraki.com/api/v1"

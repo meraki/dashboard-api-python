@@ -27,6 +27,8 @@ from meraki.api.batch import Batch
 # Config import
 from meraki.config import (
     API_KEY_ENVIRONMENT_VARIABLE,
+    MERAKI_APP_ID,
+    MERAKI_APP_BEARER_TOKEN,
     DEFAULT_BASE_URL,
     SINGLE_REQUEST_TIMEOUT,
     CERTIFICATE_PATH,
@@ -65,6 +67,8 @@ class AsyncDashboardAPI:
     **Creates a persistent Meraki dashboard API session**
 
     - api_key (string): API key generated in dashboard; can also be set as an environment variable MERAKI_DASHBOARD_API_KEY
+    - meraki_app_id (string): optional Meraki app ID; can also be set as an environment variable MERAKI_APP_ID
+    - meraki_app_bearer_token (string): optional Meraki app bearer token; can also be set as an environment variable MERAKI_APP_BEARER_TOKEN
     - base_url (string): preceding all endpoint resources
     - single_request_timeout (integer): maximum number of seconds for each API call
     - certificate_path (string): path for TLS/SSL certificate verification if behind local proxy
@@ -98,6 +102,8 @@ class AsyncDashboardAPI:
     def __init__(
         self,
         api_key=None,
+        meraki_app_id=MERAKI_APP_ID,
+        meraki_app_bearer_token=MERAKI_APP_BEARER_TOKEN,
         base_url=DEFAULT_BASE_URL,
         single_request_timeout=SINGLE_REQUEST_TIMEOUT,
         certificate_path=CERTIFICATE_PATH,
@@ -133,6 +139,10 @@ class AsyncDashboardAPI:
         api_key = api_key or os.environ.get(API_KEY_ENVIRONMENT_VARIABLE)
         if not api_key:
             raise APIKeyError()
+
+        # Pull the Meraki app ID and bearer token from environment variables if present
+        meraki_app_id = meraki_app_id or os.environ.get("MERAKI_APP_ID")
+        meraki_app_bearer_token = meraki_app_bearer_token or os.environ.get("MERAKI_APP_BEARER_TOKEN")
 
         # Pull the BE GEO ID from an environment variable if present
         be_geo_id = be_geo_id or os.environ.get("BE_GEO_ID")
@@ -175,6 +185,8 @@ class AsyncDashboardAPI:
         self._session = AsyncRestSession(
             logger=self._logger,
             api_key=api_key,
+            meraki_app_id=meraki_app_id,
+            meraki_app_bearer_token=meraki_app_bearer_token,
             base_url=base_url,
             single_request_timeout=single_request_timeout,
             certificate_path=certificate_path,
