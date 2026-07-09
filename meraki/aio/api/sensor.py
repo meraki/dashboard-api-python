@@ -74,10 +74,9 @@ class AsyncSensor:
 
         - serial (string): Serial
         - operation (string): Operation to run on the sensor. 'enableDownstreamPower', 'disableDownstreamPower', and 'cycleDownstreamPower' turn power on/off to the device that is connected downstream of an MT40 power monitor. 'refreshData' causes an MT15 or MT40 device to upload its latest readings so that they are immediately available in the Dashboard API.
-        - arguments (array): Additional options to provide to commands run on the sensor, each with a corresponding 'name' and 'value'.
         """
 
-        kwargs.update(locals())
+        kwargs = locals()
 
         if "operation" in kwargs:
             options = ["cycleDownstreamPower", "disableDownstreamPower", "enableDownstreamPower", "refreshData"]
@@ -93,7 +92,6 @@ class AsyncSensor:
         resource = f"/devices/{serial}/sensor/commands"
 
         body_params = [
-            "arguments",
             "operation",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
@@ -458,103 +456,6 @@ class AsyncSensor:
 
         return self._session.get(metadata, resource)
 
-    def getNetworkSensorSchedules(self, networkId: str):
-        """
-        **Returns a list of all sensor schedules.**
-        https://developer.cisco.com/meraki/api-v1/#!get-network-sensor-schedules
-
-        - networkId (string): Network ID
-        """
-
-        metadata = {
-            "tags": ["sensor", "configure", "schedules"],
-            "operation": "getNetworkSensorSchedules",
-        }
-        networkId = urllib.parse.quote(str(networkId), safe="")
-        resource = f"/networks/{networkId}/sensor/schedules"
-
-        return self._session.get(metadata, resource)
-
-    def getOrganizationSensorAlerts(self, organizationId: str, networkIds: list, total_pages=1, direction="next", **kwargs):
-        """
-        **Return a list of sensor alert events**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-sensor-alerts
-
-        - organizationId (string): Organization ID
-        - networkIds (array): Filters alerts by network. For now, this must be a single network ID.
-        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
-        - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 10.
-        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 365 days from today.
-        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 365 days after t0.
-        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 365 days. The default is 365 days.
-        - sensorSerial (string): Filters alerts to those triggered by this sensor.
-        - triggerMetric (string): Filters alerts to those triggered by this metric.
-        """
-
-        kwargs.update(locals())
-
-        if "triggerMetric" in kwargs:
-            options = [
-                "apparentPower",
-                "co2",
-                "current",
-                "door",
-                "frequency",
-                "humidity",
-                "indoorAirQuality",
-                "noise",
-                "pm25",
-                "powerFactor",
-                "realPower",
-                "temperature",
-                "tvoc",
-                "upstreamPower",
-                "voltage",
-                "water",
-            ]
-            assert kwargs["triggerMetric"] in options, (
-                f'''"triggerMetric" cannot be "{kwargs["triggerMetric"]}", & must be set to one of: {options}'''
-            )
-
-        metadata = {
-            "tags": ["sensor", "monitor", "alerts"],
-            "operation": "getOrganizationSensorAlerts",
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/sensor/alerts"
-
-        query_params = [
-            "perPage",
-            "startingAfter",
-            "endingBefore",
-            "t0",
-            "t1",
-            "timespan",
-            "sensorSerial",
-            "networkIds",
-            "triggerMetric",
-        ]
-        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
-
-        array_params = [
-            "networkIds",
-        ]
-        for k, v in kwargs.items():
-            if k.strip() in array_params:
-                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
-                params.pop(k.strip())
-
-        if self._session._validate_kwargs:
-            all_params = query_params + array_params
-            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
-            if invalid and self._session._logger:
-                self._session._logger.warning(f"getOrganizationSensorAlerts: ignoring unrecognized kwargs: {invalid}")
-
-        return self._session.get_pages(metadata, resource, params, total_pages, direction)
-
     def getOrganizationSensorGatewaysConnectionsLatest(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
         **Returns latest sensor-gateway connectivity data.**
@@ -660,72 +561,6 @@ class AsyncSensor:
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
                 self._session._logger.warning(f"getOrganizationSensorReadingsHistory: ignoring unrecognized kwargs: {invalid}")
-
-        return self._session.get_pages(metadata, resource, params, total_pages, direction)
-
-    def getOrganizationSensorReadingsHistoryByInterval(self, organizationId: str, total_pages=1, direction="next", **kwargs):
-        """
-        **Return all reported readings from sensors in a given timespan, summarized as a series of intervals, sorted by interval start time in descending order**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-sensor-readings-history-by-interval
-
-        - organizationId (string): Organization ID
-        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
-        - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
-        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 730 days, 11 hours, 38 minutes, and 24 seconds from today.
-        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 730 days, 11 hours, 38 minutes, and 24 seconds after t0.
-        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 730 days, 11 hours, 38 minutes, and 24 seconds. The default is 7 days. If interval is provided, the timespan will be autocalculated.
-        - interval (integer): The time interval in seconds for returned data. The valid intervals are: 15, 120, 300, 900, 3600, 14400, 86400, 604800. The default is 86400. Interval is calculated if time params are provided.
-        - networkIds (array): Optional parameter to filter readings by network.
-        - serials (array): Optional parameter to filter readings by sensor.
-        - metrics (array): Types of sensor readings to retrieve. If no metrics are supplied, all available types of readings will be retrieved.
-        - models (array): Optional parameter to filter readings by one or more models.
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            "tags": ["sensor", "monitor", "readings", "history", "byInterval"],
-            "operation": "getOrganizationSensorReadingsHistoryByInterval",
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/sensor/readings/history/byInterval"
-
-        query_params = [
-            "perPage",
-            "startingAfter",
-            "endingBefore",
-            "t0",
-            "t1",
-            "timespan",
-            "interval",
-            "networkIds",
-            "serials",
-            "metrics",
-            "models",
-        ]
-        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
-
-        array_params = [
-            "networkIds",
-            "serials",
-            "metrics",
-            "models",
-        ]
-        for k, v in kwargs.items():
-            if k.strip() in array_params:
-                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
-                params.pop(k.strip())
-
-        if self._session._validate_kwargs:
-            all_params = query_params + array_params
-            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
-            if invalid and self._session._logger:
-                self._session._logger.warning(
-                    f"getOrganizationSensorReadingsHistoryByInterval: ignoring unrecognized kwargs: {invalid}"
-                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 

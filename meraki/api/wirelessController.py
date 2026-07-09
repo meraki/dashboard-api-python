@@ -177,59 +177,6 @@ class WirelessController(object):
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
-    def getOrganizationWirelessControllerConnectionsUnassigned(
-        self, organizationId: str, total_pages=1, direction="next", **kwargs
-    ):
-        """
-        **List of unassigned Catalyst access points and summary information**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-controller-connections-unassigned
-
-        - organizationId (string): Organization ID
-        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
-        - direction (string): direction to paginate, either "next" (default) or "prev" page
-        - controllerSerials (array): Optional parameter to filter access points by wireless LAN controller cloud ID. This filter uses multiple exact matches.
-        - supported (boolean): Optional parameter to filter access points based on if they are supported for dashboard monitoring. Values can be true/false, if not provided then all unassigned APs will be returned
-        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
-        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            "tags": ["wirelessController", "configure", "connections", "unassigned"],
-            "operation": "getOrganizationWirelessControllerConnectionsUnassigned",
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/wirelessController/connections/unassigned"
-
-        query_params = [
-            "controllerSerials",
-            "supported",
-            "perPage",
-            "startingAfter",
-            "endingBefore",
-        ]
-        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
-
-        array_params = [
-            "controllerSerials",
-        ]
-        for k, v in kwargs.items():
-            if k.strip() in array_params:
-                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
-                params.pop(k.strip())
-
-        if self._session._validate_kwargs:
-            all_params = query_params + array_params
-            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
-            if invalid and self._session._logger:
-                self._session._logger.warning(
-                    f"getOrganizationWirelessControllerConnectionsUnassigned: ignoring unrecognized kwargs: {invalid}"
-                )
-
-        return self._session.get_pages(metadata, resource, params, total_pages, direction)
-
     def getOrganizationWirelessControllerDevicesInterfacesL2ByDevice(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):
@@ -914,36 +861,3 @@ class WirelessController(object):
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
-
-    def generateOrganizationWirelessControllerRegulatoryDomainPackage(self, organizationId: str, **kwargs):
-        """
-        **Generate the regulatory domain package**
-        https://developer.cisco.com/meraki/api-v1/#!generate-organization-wireless-controller-regulatory-domain-package
-
-        - organizationId (string): Organization ID
-        - networkIds (array): A list of network IDs to filter by
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            "tags": ["wirelessController", "configure", "regulatoryDomain", "package"],
-            "operation": "generateOrganizationWirelessControllerRegulatoryDomainPackage",
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/wirelessController/regulatoryDomain/package/generate"
-
-        body_params = [
-            "networkIds",
-        ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-
-        if self._session._validate_kwargs:
-            all_params = [] + body_params
-            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
-            if invalid and self._session._logger:
-                self._session._logger.warning(
-                    f"generateOrganizationWirelessControllerRegulatoryDomainPackage: ignoring unrecognized kwargs: {invalid}"
-                )
-
-        return self._session.post(metadata, resource, payload)
