@@ -176,7 +176,7 @@ class AsyncRestSession(SessionBase):
         # Prepare transport-specific kwargs
         kwargs = self._transport_kwargs(kwargs)
 
-        # aiohttp manipulates URLs as instances of yarl.URL
+        # Coerce non-str URLs (e.g. yarl.URL from legacy callers) to plain str
         if not isinstance(url, str):
             url = str(url)
 
@@ -315,7 +315,7 @@ class AsyncRestSession(SessionBase):
             return None, None
 
     def _handle_redirect_async(self, response: Any) -> str:
-        """Handle 3xx redirects for aiohttp responses."""
+        """Handle 3xx redirects for httpx responses."""
         abs_url = str(response.headers["Location"])
         substring = "meraki.com/api/v"
         if substring not in abs_url:

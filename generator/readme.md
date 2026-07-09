@@ -1,10 +1,9 @@
 # Generating the Meraki Dashboard API Python Library
 
-Generally speaking, you will not need to generate this yourself. Simply use the official PyPI package
-via `pip install --upgrade meraki`.
+Most users don't need this: just `pip install --upgrade meraki`, or a [published beta
+release](https://github.com/meraki/dashboard-api-python#releases) for early-access operations.
 
-However, if you participate in Early Access features, you may want to generate a library to match your org's spec. In
-which case, follow along.
+Generate the library yourself only when you need it matched to your own org's spec. Follow along below.
 
 > **NB:** The generator requires Python 3.11 or later.
 
@@ -16,8 +15,8 @@ which case, follow along.
    uv sync --group generator
    ```
 
-4. *Optional:* If you want to work with beta endpoints, then
-   first [review the warnings, and then opt one of your orgs into the Early API Access program](https://community.meraki.com/t5/Developers-APIs/UPDATED-Beta-testing-with-the-Meraki-Developer-Early-Access/m-p/145344#M5808).
+4. *Optional:* To work with beta operations, first [review the warnings and opt one of your orgs into the Early API
+   Access program](https://community.meraki.com/t5/Developers-APIs/UPDATED-Beta-testing-with-the-Meraki-Developer-Early-Access/m-p/145344#M5808).
 5. Run the generator:
 
    ```shell
@@ -26,14 +25,11 @@ which case, follow along.
 
    Making these replacements:
    * Replace `YOUR_ORG_ID` with the org ID you want to use as reference. Use the one opted into Early API access if you
-     want the beta endpoints.
+     want the beta operations.
    * Replace `YOUR_API_KEY` with an API key that has org admin privileges on that org.
    * NB: Your local system may require minor syntax tweaks (e.g. Windows may require you prepend `generate_library.py`
      with `.\`)
 
-6. You will now have a `meraki` module folder inside `generator`, which you can locally reference in your scripts.
-   Simply copy the `meraki` folder to those projects which require it.
-7. In some cases, if you've already installed the official library, your scripts may prefer that one over the local
-   folder. If that happens, then calls to early access endpoints will fail. So, if necessary, uninstall any instances of
-   the meraki package that may have been installed in your venv or system, or replace the version installed in your venv
-   with that which you generated here.
+6. You now have a `meraki` module folder inside `generator`. Copy it into any project that needs it.
+7. If the official `meraki` package is also installed, your scripts may import it instead, and early-access calls will
+   fail. Uninstall the official package (or replace it with the one you generated) to avoid this.
