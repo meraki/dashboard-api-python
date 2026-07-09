@@ -196,6 +196,7 @@ def generate_library(
                 contents = src.read()
         else:
             response = httpx.get(f"{base_url}{file}")
+            response.raise_for_status()  # 429/5xx from raw.githubusercontent → fail loud, don't write error page into source
             contents = response.text
         with open(f"meraki/{file}", "w+", encoding="utf-8", newline=None) as fp:
             if file == "_version.py":
