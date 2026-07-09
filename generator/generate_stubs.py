@@ -5,7 +5,6 @@ Produces .pyi files with typed method signatures from parsed OASv3 params.
 """
 
 import keyword
-import os
 import re
 import jinja2
 from parser_v3 import parse_params_v3
@@ -72,9 +71,8 @@ def generate_stub_modules(spec: dict, scopes: dict, jinja_env: jinja2.Environmen
     for scope in scopes:
         section = scopes[scope]
 
-        repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        stub_path = os.path.join(repo_root, "meraki", "api", f"{scope}.pyi")
-        with open(stub_path, "w", encoding="utf-8", newline=None) as stub_output:
+        # cwd-relative, matching the .py writers in generate_modules()
+        with open(f"meraki/api/{scope}.pyi", "w", encoding="utf-8", newline=None) as stub_output:
             # Render class header
             with open(f"{template_dir}stub_template.jinja2", encoding="utf-8", newline=None) as fp:
                 class_template = fp.read()

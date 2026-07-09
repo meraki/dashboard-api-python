@@ -74,7 +74,7 @@ def process_assignments(parameters):
         elif v == "str":
             text += f"{param_name} = ''\n"
         else:
-            if type(v) == str:
+            if isinstance(v, str):
                 value = f"'{v}'"
             else:
                 value = v
@@ -85,9 +85,7 @@ def process_assignments(parameters):
 
 def main():
     # Get the latest OpenAPI v3 specification (version=3 selects OASv3 over the legacy v2 shape)
-    spec = httpx.get(
-        "https://api.meraki.com/api/v1/openapiSpec", params={"version": 3}
-    ).json()
+    spec = httpx.get("https://api.meraki.com/api/v1/openapiSpec", params={"version": 3}).json()
 
     # Reset parser_v3's $ref cache at entry, matching the library generator
     clear_cache()
@@ -125,9 +123,7 @@ def main():
     # passed to parse_params_v3 separately via spec["paths"][path].
     filtered_paths = {}
     for path, path_item in paths.items():
-        filtered_paths[path] = {
-            k: v for k, v in path_item.items() if k in ["get", "post", "put", "delete", "patch"]
-        }
+        filtered_paths[path] = {k: v for k, v in path_item.items() if k in ["get", "post", "put", "delete", "patch"]}
 
     # Organize data from OpenAPI specification
     operations, scopes = common.organize_spec(filtered_paths, scopes)
@@ -142,7 +138,6 @@ def main():
                 # Get metadata
                 tags = endpoint["tags"]
                 operation = endpoint["operationId"]
-                description = endpoint.get("summary", endpoint.get("description", ""))
 
                 # Full path_item (incl. path-level parameters) for parse_params_v3
                 path_item = spec["paths"][path]
@@ -159,9 +154,7 @@ def main():
                     else:
                         pagination = False
 
-                    for p, values in parse_params(
-                        endpoint, path_item, spec, ["required"]
-                    ).items():
+                    for p, values in parse_params(endpoint, path_item, spec, ["required"]).items():
                         if "example" in values:
                             required[p] = values["example"]
                         elif p == "organizationId":
@@ -192,9 +185,7 @@ def main():
                         else:
                             optional["total_pages"] = 3
 
-                    for p, values in parse_params(
-                        endpoint, path_item, spec, ["optional"]
-                    ).items():
+                    for p, values in parse_params(endpoint, path_item, spec, ["optional"]).items():
                         if "example" in values:
                             optional[p] = values["example"]
 
@@ -218,7 +209,7 @@ def main():
                                 parameters_text += "total_pages='all'"
                             elif k == "total_pages" and v == 1:
                                 parameters_text += "total_pages=1"
-                            elif type(v) == str:
+                            elif isinstance(v, str):
                                 parameters_text += f"\n    {k}='{v}', "
                             else:
                                 parameters_text += f"\n    {k}={v}, "

@@ -231,9 +231,8 @@ def generate_library(
     if generate_stubs:
         print("Generating .pyi type stubs...")
         generate_stub_modules(spec, scopes, jinja_env, template_dir)
-        # Write py.typed marker for PEP 561
-        repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        open(os.path.join(repo_root, "meraki", "py.typed"), "w").close()
+        # Write py.typed marker for PEP 561 (cwd-relative, like the module writers)
+        open("meraki/py.typed", "w").close()
         print("Type stubs and py.typed marker created.")
 
     # Format generated code with ruff
