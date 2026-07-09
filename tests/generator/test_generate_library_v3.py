@@ -37,6 +37,7 @@ def _mock_httpx_get(url):
     return httpx.Response(
         200,
         text=f"# placeholder for {url.split('/')[-1]}\n",
+        request=httpx.Request("GET", url),  # raise_for_status() needs a request set
     )
 
 

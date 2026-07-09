@@ -46,6 +46,7 @@ def _generate_fresh_output(spec, output_dir):
             return httpx.Response(
                 200,
                 text=f"# placeholder for {url.split('/')[-1]}\n",
+                request=httpx.Request("GET", url),  # raise_for_status() needs a request set
             )
 
         with patch("generate_library.httpx.get", side_effect=mock_get):
