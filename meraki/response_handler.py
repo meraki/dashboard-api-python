@@ -1,7 +1,2 @@
-def handle_3xx(self, response):
-    abs_url = response.headers["Location"]
-    substring = "meraki.com/api/v"
-    if substring not in abs_url:
-        substring = "meraki.cn/api/v"
-    self._base_url = abs_url[: abs_url.find(substring) + len(substring) + 1]
-    return abs_url
+429: Too Many Requests
+For more on scraping GitHub and how it may affect your rights, please review our Terms of Service (https://docs.github.com/en/site-policy/github-terms/github-terms-of-service).
