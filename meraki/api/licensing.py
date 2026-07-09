@@ -45,39 +45,6 @@ class Licensing(object):
 
         return self._session.get(metadata, resource, params)
 
-    def batchAdministeredLicensingSubscriptionNetworksFeatureTiersUpdate(self, **kwargs):
-        """
-        **Batch change networks to their desired feature tier for specified product types**
-        https://developer.cisco.com/meraki/api-v1/#!batch-administered-licensing-subscription-networks-feature-tiers-update
-
-        - items (array): List of networks and corresponding product types to update. Maximum 500 networks
-        - isAtomic (boolean): Flag to determine if the operation should act atomically
-        """
-
-        kwargs.update(locals())
-
-        metadata = {
-            "tags": ["licensing", "configure", "subscription", "featureTiers"],
-            "operation": "batchAdministeredLicensingSubscriptionNetworksFeatureTiersUpdate",
-        }
-        resource = "/administered/licensing/subscription/networks/featureTiers/batchUpdate"
-
-        body_params = [
-            "items",
-            "isAtomic",
-        ]
-        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
-
-        if self._session._validate_kwargs:
-            all_params = [] + body_params
-            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
-            if invalid and self._session._logger:
-                self._session._logger.warning(
-                    f"batchAdministeredLicensingSubscriptionNetworksFeatureTiersUpdate: ignoring unrecognized kwargs: {invalid}"
-                )
-
-        return self._session.post(metadata, resource, payload)
-
     def getAdministeredLicensingSubscriptionSubscriptions(
         self, organizationIds: list, total_pages=1, direction="next", **kwargs
     ):

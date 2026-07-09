@@ -12,10 +12,9 @@ class ActionBatchSensor(object):
 
         - serial (string): Serial
         - operation (string): Operation to run on the sensor. 'enableDownstreamPower', 'disableDownstreamPower', and 'cycleDownstreamPower' turn power on/off to the device that is connected downstream of an MT40 power monitor. 'refreshData' causes an MT15 or MT40 device to upload its latest readings so that they are immediately available in the Dashboard API.
-        - arguments (array): Additional options to provide to commands run on the sensor, each with a corresponding 'name' and 'value'.
         """
 
-        kwargs.update(locals())
+        kwargs = locals()
 
         if "operation" in kwargs:
             options = ["cycleDownstreamPower", "disableDownstreamPower", "enableDownstreamPower", "refreshData"]
@@ -27,7 +26,6 @@ class ActionBatchSensor(object):
         resource = f"/devices/{serial}/sensor/commands"
 
         body_params = [
-            "arguments",
             "operation",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
