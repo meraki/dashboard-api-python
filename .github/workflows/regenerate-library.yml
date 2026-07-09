@@ -75,20 +75,24 @@ jobs:
       - name: Install dependencies
         run: uv sync --group generator
 
-      - name: Delete folder
-        run: rm -rf meraki
+      # Preserve the checked-out non-generated sources, then wipe meraki/ so the
+      # generator only regenerates the API modules. The generator reads the
+      # preserved copy from disk (MERAKI_SOURCE_DIR) instead of fetching them
+      # from raw.githubusercontent, which rate-limits (429s) the shared runner IP.
+      - name: Stash non-generated sources
+        run: |
+          cp -r meraki "$RUNNER_TEMP/meraki-src"
+          rm -rf meraki
 
       - name: Regenerate Python Library
         env:
           LIBRARY_VERSION: ${{ github.event.inputs.library_version }}
           API_VERSION: ${{ github.event.inputs.api_version }}
+          MERAKI_SOURCE_DIR: ${{ runner.temp }}/meraki-src
           MERAKI_DASHBOARD_API_KEY: ${{ (github.event.inputs.release_stage == 'beta' || github.event.inputs.release_stage == 'dev') && secrets.TEST_ORG_API_KEY || '' }}
           BETA_ORG_ID: ${{ (github.event.inputs.release_stage == 'beta' || github.event.inputs.release_stage == 'dev') && secrets.TEST_ORG_BETA_00_ID || '' }}
         run: |
-          ARGS="-g true -v $LIBRARY_VERSION -a $API_VERSION"
-          if [ "${{ github.event.inputs.release_stage }}" = "dev" ]; then
-            ARGS="$ARGS -b httpx"
-          fi
+          ARGS="-g true -l -v $LIBRARY_VERSION -a $API_VERSION"
           if [ -n "$BETA_ORG_ID" ]; then
             ARGS="$ARGS -o $BETA_ORG_ID"
           fi

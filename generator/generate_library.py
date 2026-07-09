@@ -186,8 +186,11 @@ def generate_library(
         "smart_flow.py",
     ]
     if local_source:
+        # MERAKI_SOURCE_DIR lets the caller point at a preserved copy of meraki/
+        # (the regen workflow stashes it before `rm -rf meraki`), avoiding the
+        # rate-limited raw.githubusercontent fetch. Falls back to the checkout.
         repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        local_meraki = os.path.join(repo_root, "meraki")
+        local_meraki = os.environ.get("MERAKI_SOURCE_DIR") or os.path.join(repo_root, "meraki")
     else:
         base_url = f"https://raw.githubusercontent.com/meraki/dashboard-api-python/{source_branch}/meraki/"
     for file in non_generated:
