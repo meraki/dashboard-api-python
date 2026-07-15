@@ -1,0 +1,230 @@
+{
+  "$comment": "Conformance vectors for the Smart Flow rate limiter. See SMARTFLOW.md. All time is injected (monotonic seconds / epoch seconds) so cases are deterministic; no wall-clock is read. An implementation is conformant if it reproduces every expected output. Floats compared with tolerance 1e-9.",
+  "version": 1,
+
+  "token_bucket": {
+    "$comment": "rate in tokens/sec, capacity in tokens. Each step calls acquire() at the given monotonic 'now'. tokens_after and wait are the post-acquire state. See SMARTFLOW.md section 1.",
+    "cases": [
+      {
+        "name": "single_acquire_full_bucket",
+        "rate": 10.0, "capacity": 10.0, "init_tokens": 10.0, "init_last": 0.0,
+        "steps": [
+          { "now": 0.0, "tokens_after": 9.0, "wait": 0.0 }
+        ],
+        "notes": "elapsed 0, no refill, deduct 1 from full bucket, no wait."
+      },
+      {
+        "name": "burst_beyond_capacity_goes_negative",
+        "rate": 10.0, "capacity": 10.0, "init_tokens": 10.0, "init_last": 0.0,
+        "steps": [
+          { "now": 0.0, "tokens_after": 9.0,  "wait": 0.0 },
+          { "now": 0.0, "tokens_after": 8.0,  "wait": 0.0 },
+          { "now": 0.0, "tokens_after": 7.0,  "wait": 0.0 },
+          { "now": 0.0, "tokens_after": 6.0,  "wait": 0.0 },
+          { "now": 0.0, "tokens_after": 5.0,  "wait": 0.0 },
+          { "now": 0.0, "tokens_after": 4.0,  "wait": 0.0 },
+          { "now": 0.0, "tokens_after": 3.0,  "wait": 0.0 },
+          { "now": 0.0, "tokens_after": 2.0,  "wait": 0.0 },
+          { "now": 0.0, "tokens_after": 1.0,  "wait": 0.0 },
+          { "now": 0.0, "tokens_after": 0.0,  "wait": 0.0 },
+          { "now": 0.0, "tokens_after": -1.0, "wait": 0.1 },
+          { "now": 0.0, "tokens_after": -2.0, "wait": 0.2 },
+          { "now": 0.0, "tokens_after": -3.0, "wait": 0.3 },
+          { "now": 0.0, "tokens_after": -4.0, "wait": 0.4 },
+          { "now": 0.0, "tokens_after": -5.0, "wait": 0.5 }
+        ],
+        "notes": "Deduct unconditionally; deficit is the reservation. 11th call waits 0.1s, each subsequent +0.1s. Do NOT clamp at zero."
+      },
+      {
+        "name": "refill_after_elapsed_time",
+        "rate": 10.0, "capacity": 10.0, "init_tokens": -5.0, "init_last": 0.0,
+        "steps": [
+          { "now": 1.0, "tokens_after": 4.0, "wait": 0.0 }
+        ],
+        "notes": "1s elapsed refills 1*10=10 tokens: -5+10=5, capped at capacity 10 (not exceeded here), deduct 1 -> 4."
+      },
+      {
+        "name": "refill_clamped_to_capacity",
+        "rate": 10.0, "capacity": 10.0, "init_tokens": 5.0, "init_last": 0.0,
+        "steps": [
+          { "now": 100.0, "tokens_after": 9.0, "wait": 0.0 }
+        ],
+        "notes": "Huge elapsed would add 1000 tokens but refill is min(capacity, ...) = 10, then deduct 1 -> 9."
+      },
+      {
+        "name": "global_bucket_defaults",
+        "rate": 100.0, "capacity": 100.0, "init_tokens": 100.0, "init_last": 0.0,
+        "steps": [
+          { "now": 0.0, "tokens_after": 99.0, "wait": 0.0 }
+        ],
+        "notes": "Global per-source-IP bucket: rate 100, capacity int(100)=100."
+      }
+    ]
+  },
+
+  "rate_setter_floor": {
+    "$comment": "Setting rate clamps to a floor of 0.5. SMARTFLOW.md section 1.",
+    "cases": [
+      { "name": "above_floor",    "set_rate": 3.0, "expected_rate": 3.0 },
+      { "name": "at_floor",       "set_rate": 0.5, "expected_rate": 0.5 },
+      { "name": "below_floor",    "set_rate": 0.2, "expected_rate": 0.5 },
+      { "name": "zero_clamped",   "set_rate": 0.0, "expected_rate": 0.5 }
+    ]
+  },
+
+  "resolve_org": {
+    "$comment": "resolve_org(url) given a cache of network_to_org / serial_to_org. SMARTFLOW.md section 3.",
+    "network_to_org": { "N_1": "O_2" },
+    "serial_to_org":  { "Q2XX-XXXX-XXXX": "O_3" },
+    "cases": [
+      { "name": "explicit_org",            "url": "/organizations/O_1/networks",          "expected_org": "O_1" },
+      { "name": "network_cached",          "url": "/networks/N_1/clients",                "expected_org": "O_2" },
+      { "name": "network_uncached",        "url": "/networks/N_9/clients",                "expected_org": null },
+      { "name": "device_cached",           "url": "/devices/Q2XX-XXXX-XXXX/lldpCdp",      "expected_org": "O_3" },
+      { "name": "device_uncached",         "url": "/devices/Q2ZZ-ZZZZ-ZZZZ/clients",     "expected_org": null },
+      { "name": "org_precedence_over_net", "url": "/organizations/O_1/networks/N_1",      "expected_org": "O_1" },
+      { "name": "no_identifier",           "url": "/administered/identities/me",          "expected_org": null }
+    ]
+  },
+
+  "is_unresolved_scoped_url": {
+    "$comment": "Purely URL-structural: true if a network/device component is present AND no explicit /organizations/<id>. Independent of cache. SMARTFLOW.md section 5.",
+    "cases": [
+      { "name": "org_url",            "url": "/organizations/O_1/networks",     "expected": false },
+      { "name": "org_and_network",    "url": "/organizations/O_1/networks/N_1", "expected": false },
+      { "name": "network_only",       "url": "/networks/N_9/clients",           "expected": true },
+      { "name": "device_only",        "url": "/devices/Q2ZZ-ZZZZ-ZZZZ/clients", "expected": true },
+      { "name": "no_scope",           "url": "/administered/identities/me",     "expected": false }
+    ]
+  },
+
+  "aimd": {
+    "$comment": "on_rate_limited multiplies rate by 0.7; on_success adds 0.2 (org) / 0.5 (global) capped at configured rate. Rate floor 0.5 applies via setter. SMARTFLOW.md section 5.",
+    "cases": [
+      {
+        "name": "org_decrease",
+        "op": "on_rate_limited", "target": "org", "start_rate": 10.0, "expected_rate": 7.0,
+        "notes": "10 * 0.7 = 7.0"
+      },
+      {
+        "name": "org_increase_below_cap",
+        "op": "on_success", "target": "org", "configured_rate": 10.0, "start_rate": 7.0, "expected_rate": 7.2,
+        "notes": "min(10, 7 + 0.2) = 7.2"
+      },
+      {
+        "name": "org_increase_hits_cap",
+        "op": "on_success", "target": "org", "configured_rate": 10.0, "start_rate": 9.95, "expected_rate": 10.0,
+        "notes": "min(10, 9.95 + 0.2) = 10.0 (clamped)"
+      },
+      {
+        "name": "org_increase_noop_at_cap",
+        "op": "on_success", "target": "org", "configured_rate": 10.0, "start_rate": 10.0, "expected_rate": 10.0,
+        "notes": "rate not < configured, no change"
+      },
+      {
+        "name": "global_decrease",
+        "op": "on_rate_limited", "target": "global", "start_rate": 100.0, "expected_rate": 70.0,
+        "notes": "resolves to no known org and not an unresolved-scoped url -> global penalized. 100 * 0.7 = 70."
+      },
+      {
+        "name": "global_increase_below_cap",
+        "op": "on_success", "target": "global", "configured_rate": 100.0, "start_rate": 70.0, "expected_rate": 70.5,
+        "notes": "min(100, 70 + 0.5) = 70.5"
+      },
+      {
+        "name": "decrease_respects_floor",
+        "op": "on_rate_limited", "target": "org", "start_rate": 0.6, "expected_rate": 0.5,
+        "notes": "0.6 * 0.7 = 0.42, clamped up to floor 0.5 by the rate setter."
+      },
+      {
+        "name": "rate_limited_unresolved_scoped_skips_global",
+        "op": "on_rate_limited", "target": "global", "url": "/networks/N_9/clients",
+        "org_resolvable": false, "start_rate": 100.0, "expected_rate": 100.0,
+        "notes": "Unresolved network/device url: org unknown but specific; global bucket must NOT be penalized. No change."
+      }
+    ]
+  },
+
+  "learn_from_response": {
+    "$comment": "Given url + body, which mappings change. org resolved from url first, else body.organizationId, else body.organization.id. Only changed mappings count. SMARTFLOW.md section 6.",
+    "cases": [
+      {
+        "name": "org_and_network_from_url",
+        "url": "/organizations/O_1/networks/N_1", "body": {},
+        "expected_network_to_org": { "N_1": "O_1" }, "expected_serial_to_org": {},
+        "changed_networks": 1, "changed_devices": 0
+      },
+      {
+        "name": "org_and_device_from_url",
+        "url": "/organizations/O_1/devices/Q2AA-AAAA-AAAA", "body": {},
+        "expected_network_to_org": {}, "expected_serial_to_org": { "Q2AA-AAAA-AAAA": "O_1" },
+        "changed_networks": 0, "changed_devices": 1
+      },
+      {
+        "name": "org_from_body_organizationId",
+        "url": "/networks/N_1/clients", "body": { "organizationId": "O_5" },
+        "expected_network_to_org": { "N_1": "O_5" }, "expected_serial_to_org": {},
+        "changed_networks": 1, "changed_devices": 0
+      },
+      {
+        "name": "org_from_body_organization_id",
+        "url": "/networks/N_2/clients", "body": { "organization": { "id": "O_6" } },
+        "expected_network_to_org": { "N_2": "O_6" }, "expected_serial_to_org": {},
+        "changed_networks": 1, "changed_devices": 0
+      },
+      {
+        "name": "nested_network_id_from_body",
+        "url": "/organizations/O_1/somethingElse", "body": { "network": { "id": "N_3" } },
+        "expected_network_to_org": { "N_3": "O_1" }, "expected_serial_to_org": {},
+        "changed_networks": 1, "changed_devices": 0
+      },
+      {
+        "name": "body_serial_and_networkId",
+        "url": "/organizations/O_1/x", "body": { "networkId": "N_4", "serial": "Q2BB-BBBB-BBBB" },
+        "expected_network_to_org": { "N_4": "O_1" }, "expected_serial_to_org": { "Q2BB-BBBB-BBBB": "O_1" },
+        "changed_networks": 1, "changed_devices": 1
+      },
+      {
+        "name": "no_org_anywhere_noop",
+        "url": "/administered/identities/me", "body": {},
+        "expected_network_to_org": {}, "expected_serial_to_org": {},
+        "changed_networks": 0, "changed_devices": 0
+      },
+      {
+        "name": "unchanged_mapping_not_counted",
+        "url": "/organizations/O_1/networks/N_1", "body": {},
+        "preexisting_network_to_org": { "N_1": "O_1" },
+        "expected_network_to_org": { "N_1": "O_1" }, "expected_serial_to_org": {},
+        "changed_networks": 0, "changed_devices": 0,
+        "notes": "Mapping already equals O_1, so no change is counted (dirty not incremented)."
+      }
+    ]
+  },
+
+  "cache_freshness": {
+    "$comment": "Load-time freshness decision. now and saved_ts are epoch seconds (injected). ttl in seconds; null = never expire. SMARTFLOW.md section 7.",
+    "cases": [
+      { "name": "fresh_within_ttl", "now": 1000000.0, "saved_ts": 999000.0, "ttl": 604800.0, "expected_fresh": true,
+        "notes": "age 1000s < ttl -> load, cache_fresh true." },
+      { "name": "expired_past_ttl", "now": 2000000.0, "saved_ts": 1000000.0, "ttl": 604800.0, "expected_fresh": false,
+        "notes": "age 1,000,000s > 604800 -> ignore file, rebuild." },
+      { "name": "saved_at_missing", "now": 1000000.0, "saved_ts": null, "ttl": 604800.0, "expected_fresh": false,
+        "notes": "No/unparseable saved_at -> expired." },
+      { "name": "ttl_none_never_expires", "now": 9999999999.0, "saved_ts": 1.0, "ttl": null, "expected_fresh": true,
+        "notes": "ttl None disables expiry regardless of age." },
+      { "name": "exactly_at_ttl_boundary", "now": 604800.0, "saved_ts": 0.0, "ttl": 604800.0, "expected_fresh": true,
+        "notes": "age == ttl is NOT > ttl, so still fresh (boundary inclusive)." }
+    ]
+  },
+
+  "saved_at_format": {
+    "$comment": "saved_at is UTC strftime %Y-%m-%dT%H:%M:%SZ. Parser returns epoch seconds or null. SMARTFLOW.md section 7.",
+    "cases": [
+      { "name": "valid",            "value": "2026-07-08T12:00:00Z", "expected_epoch": 1783512000.0 },
+      { "name": "missing_z",        "value": "2026-07-08T12:00:00",  "expected_epoch": null },
+      { "name": "with_offset",      "value": "2026-07-08T12:00:00+00:00", "expected_epoch": null },
+      { "name": "not_a_string",     "value": 12345,                  "expected_epoch": null },
+      { "name": "garbage",          "value": "not-a-date",           "expected_epoch": null }
+    ]
+  }
+}

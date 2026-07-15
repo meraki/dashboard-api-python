@@ -51,15 +51,26 @@ def validate_user_agent(be_geo_id, caller):
     return caller_string
 
 
-def validate_meraki_app_value(argument, value):
-    # Meraki app ID / bearer token must fit within a 127-character header value
-    if value and len(str(value)) > 127:
+def validate_custom_headers(custom_headers):
+    # Custom headers must be a dict of str -> str
+    if not custom_headers:
+        return {}
+    if not isinstance(custom_headers, dict):
         raise SessionInputError(
-            argument,
-            value,
-            f"{argument} must be 127 characters or fewer (got {len(str(value))}).",
+            "custom_headers",
+            custom_headers,
+            "custom_headers must be a dict of header name -> value.",
             None,
         )
+    for name, value in custom_headers.items():
+        if not isinstance(name, str) or not isinstance(value, str):
+            raise SessionInputError(
+                "custom_headers",
+                {name: value},
+                "custom_headers keys and values must both be strings.",
+                None,
+            )
+    return dict(custom_headers)
 
 
 def reject_v0_base_url(self):

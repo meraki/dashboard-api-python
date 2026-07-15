@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rm -f ~/.claude/hooks/gsd-check-update-worker.js)",
+      "Read(//c/Users/jkuchta/.claude/hooks/**)"
+    ]
+  },
+  "enabledMcpjsonServers": [
+    "atlassian",
+    "figma-remote-mcp",
+    "slack",
+    "playwright",
+    "github",
+    "mcp-server-snowflake"
+  ]
+}

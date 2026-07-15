@@ -9,12 +9,10 @@ from pathlib import Path
 # Meraki dashboard API key, set either at instantiation or as an environment variable
 API_KEY_ENVIRONMENT_VARIABLE = "MERAKI_DASHBOARD_API_KEY"
 
-# --- Meraki App ---
-# Meraki app ID, set either at instantiation or as an environment variable
-MERAKI_APP_ID = ""
-
-# Meraki app bearer token, set either at instantiation or as an environment variable
-MERAKI_APP_BEARER_TOKEN = ""
+# --- Custom Headers ---
+# Extra HTTP headers appended to every request, e.g. {"X-MyApp": "id", "X-Trace": "abc"}.
+# Additive only: SDK-managed headers (Authorization, Content-Type, User-Agent) always win on collision.
+CUSTOM_HEADERS = {}
 
 # --- Base URL ---
 # Base URL preceding all endpoint resources
