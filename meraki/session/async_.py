@@ -641,31 +641,34 @@ class AsyncRestSession(SessionBase):
 
         return results
 
-    async def post(self, metadata, url, json=None):
+    async def post(self, metadata, url, json=None, params=None):
         metadata["method"] = "POST"
         metadata["url"] = url
+        metadata["params"] = params
         metadata["json"] = json
-        response = await self.request(metadata, "POST", url, json=json)
+        response = await self.request(metadata, "POST", url, params=params, json=json)
         if response:
             if response.content.strip():
                 return response.json()
         return None
 
-    async def put(self, metadata, url, json=None):
+    async def put(self, metadata, url, json=None, params=None):
         metadata["method"] = "PUT"
         metadata["url"] = url
+        metadata["params"] = params
         metadata["json"] = json
-        response = await self.request(metadata, "PUT", url, json=json)
+        response = await self.request(metadata, "PUT", url, params=params, json=json)
         if response:
             if response.content.strip():
                 return response.json()
         return None
 
-    async def patch(self, metadata, url, json=None):
+    async def patch(self, metadata, url, json=None, params=None):
         metadata["method"] = "PATCH"
         metadata["url"] = url
+        metadata["params"] = params
         metadata["json"] = json
-        response = await self.request(metadata, "PATCH", url, json=json)
+        response = await self.request(metadata, "PATCH", url, params=params, json=json)
         if response:
             if response.content.strip():
                 return response.json()

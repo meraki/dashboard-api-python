@@ -192,5 +192,65 @@ def test_keyword_param_remapped_in_generated_function():
     assert '"from"' in rendered
 
 
+def _write_query_spec():
+    return {
+        "paths": {
+            "/things": {
+                "post": {
+                    "operationId": "claimThings",
+                    "tags": ["organizations"],
+                    "summary": "Claim things",
+                    "parameters": [
+                        {
+                            "name": "validate",
+                            "in": "query",
+                            "required": False,
+                            "schema": {"type": "boolean"},
+                        }
+                    ],
+                    "requestBody": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": ["name"],
+                                    "properties": {"name": {"type": "string", "description": "Thing name"}},
+                                }
+                            }
+                        }
+                    },
+                }
+            }
+        }
+    }
+
+
+def test_write_operations_generate_query_params_for_all_clients():
+    clear_cache()
+    spec = _write_query_spec()
+    section = {"/things": {"post": spec["paths"]["/things"]["post"]}}
+    output = io.StringIO()
+    async_output = io.StringIO()
+    batch_output = io.StringIO()
+
+    generate_library.generate_standard_and_async_functions(_jinja_env(), TEMPLATE_DIR, section, output, async_output, spec)
+    generate_library.generate_action_batch_functions(
+        _jinja_env(),
+        TEMPLATE_DIR,
+        section,
+        batch_output,
+        [{"summary": "Claim things", "operation": "create"}],
+        spec,
+    )
+
+    for rendered in (output.getvalue(), async_output.getvalue()):
+        assert 'query_params = ["validate", ]' in rendered
+        assert "self._session.post(metadata, resource, payload, params=params)" in rendered
+
+    batch_rendered = batch_output.getvalue()
+    assert 'query_params = ["validate", ]' in batch_rendered
+    assert 'resource += f"?{httpx.QueryParams(params)}"' in batch_rendered
+
+
 if __name__ == "__main__":
     sys.exit(pytest.main([__file__, "-q"]))

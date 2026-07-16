@@ -45,6 +45,10 @@
                 params.pop(k.strip())
 
         {% endif %}
+        {% if query_params|length > 0 %}
+        resource += f"?{httpx.QueryParams(params)}"
+
+        {% endif %}
         {% if body_params|length > 0 and batch_operation != 'destroy' %}
         body_params = [{% for param in body_params %}"{{ param }}", {% endfor %}]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}

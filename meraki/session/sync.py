@@ -163,11 +163,12 @@ class RestSession(SessionBase):
             response.close()
         return ret
 
-    def post(self, metadata, url, json=None):
+    def post(self, metadata, url, json=None, params=None):
         metadata["method"] = "POST"
         metadata["url"] = url
+        metadata["params"] = params
         metadata["json"] = json
-        response = self.request(metadata, "POST", url, json=json)
+        response = self.request(metadata, "POST", url, params=params, json=json)
         ret = None
         if response:
             if response.content.strip():
@@ -175,11 +176,12 @@ class RestSession(SessionBase):
             response.close()
         return ret
 
-    def put(self, metadata, url, json=None):
+    def put(self, metadata, url, json=None, params=None):
         metadata["method"] = "PUT"
         metadata["url"] = url
+        metadata["params"] = params
         metadata["json"] = json
-        response = self.request(metadata, "PUT", url, json=json)
+        response = self.request(metadata, "PUT", url, params=params, json=json)
         ret = None
         if response:
             if response.content.strip():
@@ -187,11 +189,12 @@ class RestSession(SessionBase):
             response.close()
         return ret
 
-    def patch(self, metadata, url, json=None):
+    def patch(self, metadata, url, json=None, params=None):
         metadata["method"] = "PATCH"
         metadata["url"] = url
+        metadata["params"] = params
         metadata["json"] = json
-        response = self.request(metadata, "PATCH", url, json=json)
+        response = self.request(metadata, "PATCH", url, params=params, json=json)
         ret = None
         if response:
             if response.content.strip():

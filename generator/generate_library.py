@@ -399,11 +399,12 @@ def generate_standard_and_async_functions(
             # method slips through without setting it (rather than raising NameError).
             call_line = None
 
+            query_params = return_params(operation, all_params, ["query"])
+            array_params = {k: v for k, v in query_params.items() if v["type"] == "array"}
+            body_params = path_params = {}
+
             # Function body for GET endpoints
-            query_params = array_params = body_params = path_params = {}
             if method == "get":
-                query_params = return_params(operation, all_params, ["query"])
-                array_params = return_params(operation, all_params, ["array"])
                 path_params = return_params(operation, all_params, ["path"])
 
             # Function body for POST/PUT/PATCH endpoints
@@ -413,7 +414,6 @@ def generate_standard_and_async_functions(
 
             # Function body for DELETE endpoints
             elif method == "delete":
-                query_params = return_params(operation, all_params, ["query"])
                 path_params = return_params(operation, all_params, ["path"])
 
             # Add **kwargs if optional params OR body/query/array params exist (templates use kwargs.items())
@@ -455,10 +455,12 @@ def generate_standard_and_async_functions(
                     call_line = "return self._session.get(metadata, resource)"
 
             elif method == "post" or method == "put" or method == "patch":
+                args = "metadata, resource"
                 if body_params:
-                    call_line = f"return self._session.{method}(metadata, resource, payload)"
-                else:
-                    call_line = f"return self._session.{method}(metadata, resource)"
+                    args += ", payload"
+                if query_params:
+                    args += ", params=params"
+                call_line = f"return self._session.{method}({args})"
 
             elif method == "delete":
                 if query_params:
@@ -568,7 +570,9 @@ def generate_action_batch_functions(
                 all_params, metadata = parse_params_v3(endpoint, path_item, spec)
 
                 # Initialize param collections
-                query_params = array_params = body_params = {}
+                query_params = return_params(operation, all_params, ["query"])
+                array_params = {k: v for k, v in query_params.items() if v["type"] == "array"}
+                body_params = {}
                 path_params = return_params(operation, all_params, ["path"])
 
                 # Ensure all URL-referenced params get quote lines in the template
@@ -652,8 +656,8 @@ def generate_action_batch_functions(
                 if method == "post" or method == "put":
                     body_params = return_params(operation, all_params, ["body"])
 
-                # Add **kwargs if optional params OR body params exist (batch template uses kwargs.items())
-                if return_params(operation, all_params, ["optional"]) or body_params:
+                # Add **kwargs if optional params OR body/query/array params exist (batch template uses kwargs.items())
+                if return_params(operation, all_params, ["optional"]) or body_params or query_params or array_params:
                     definition += ", **kwargs"
 
                 # Docstring
@@ -666,7 +670,7 @@ def generate_action_batch_functions(
                 kwarg_line = ""
                 if return_params(operation, all_params, ["optional"]):
                     kwarg_line = "kwargs.update(locals())"
-                elif return_params(operation, all_params, ["body"]):
+                elif return_params(operation, all_params, ["query", "array", "body"]):
                     kwarg_line = "kwargs = locals()"
 
                 # Assert valid values for enum
