@@ -806,6 +806,11 @@ class AsyncNetworks:
         networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/devices/claim"
 
+        query_params = [
+            "addAtomically",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
         body_params = [
             "serials",
             "detailsByDevice",
@@ -813,12 +818,12 @@ class AsyncNetworks:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         if self._session._validate_kwargs:
-            all_params = [] + body_params
+            all_params = query_params + body_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
                 self._session._logger.warning(f"claimNetworkDevices: ignoring unrecognized kwargs: {invalid}")
 
-        return self._session.post(metadata, resource, payload)
+        return self._session.post(metadata, resource, payload, params=params)
 
     def vmxNetworkDevicesClaim(self, networkId: str, size: str, **kwargs):
         """

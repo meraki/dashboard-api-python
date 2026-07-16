@@ -2096,6 +2096,11 @@ class Switch(object):
         networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/switch/routing/ospf"
 
+        query_params = [
+            "vrf",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
         body_params = [
             "enabled",
             "helloTimerInSeconds",
@@ -2108,12 +2113,12 @@ class Switch(object):
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         if self._session._validate_kwargs:
-            all_params = [] + body_params
+            all_params = query_params + body_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
                 self._session._logger.warning(f"updateNetworkSwitchRoutingOspf: ignoring unrecognized kwargs: {invalid}")
 
-        return self._session.put(metadata, resource, payload)
+        return self._session.put(metadata, resource, payload, params=params)
 
     def getNetworkSwitchSettings(self, networkId: str):
         """

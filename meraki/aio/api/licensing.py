@@ -132,6 +132,11 @@ class AsyncLicensing:
         }
         resource = "/administered/licensing/subscription/subscriptions/claim"
 
+        query_params = [
+            "validate",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
         body_params = [
             "claimKey",
             "organizationId",
@@ -141,14 +146,14 @@ class AsyncLicensing:
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         if self._session._validate_kwargs:
-            all_params = [] + body_params
+            all_params = query_params + body_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
                 self._session._logger.warning(
                     f"claimAdministeredLicensingSubscriptionSubscriptions: ignoring unrecognized kwargs: {invalid}"
                 )
 
-        return self._session.post(metadata, resource, payload)
+        return self._session.post(metadata, resource, payload, params=params)
 
     def validateAdministeredLicensingSubscriptionSubscriptionsClaimKey(self, claimKey: str, **kwargs):
         """
@@ -242,20 +247,25 @@ class AsyncLicensing:
         subscriptionId = urllib.parse.quote(str(subscriptionId), safe="")
         resource = f"/administered/licensing/subscription/subscriptions/{subscriptionId}/bind"
 
+        query_params = [
+            "validate",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
         body_params = [
             "networkIds",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
         if self._session._validate_kwargs:
-            all_params = [] + body_params
+            all_params = query_params + body_params
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
                 self._session._logger.warning(
                     f"bindAdministeredLicensingSubscriptionSubscription: ignoring unrecognized kwargs: {invalid}"
                 )
 
-        return self._session.post(metadata, resource, payload)
+        return self._session.post(metadata, resource, payload, params=params)
 
     def getOrganizationLicensingCotermLicenses(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """

@@ -1,5 +1,7 @@
 import urllib
 
+import httpx
+
 
 class ActionBatchNetworks(object):
     def __init__(self):
@@ -136,6 +138,14 @@ class ActionBatchNetworks(object):
 
         networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/devices/claim"
+
+        query_params = [
+            "addAtomically",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if params:
+            resource += f"?{httpx.QueryParams(params)}"
 
         body_params = [
             "serials",
@@ -652,6 +662,14 @@ class ActionBatchNetworks(object):
         groupPolicyId = urllib.parse.quote(str(groupPolicyId), safe="")
         resource = f"/networks/{networkId}/groupPolicies/{groupPolicyId}"
 
+        query_params = [
+            "force",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if params:
+            resource += f"?{httpx.QueryParams(params)}"
+
         action = {
             "resource": resource,
             "operation": "destroy",
@@ -716,6 +734,14 @@ class ActionBatchNetworks(object):
         networkId = urllib.parse.quote(str(networkId), safe="")
         merakiAuthUserId = urllib.parse.quote(str(merakiAuthUserId), safe="")
         resource = f"/networks/{networkId}/merakiAuthUsers/{merakiAuthUserId}"
+
+        query_params = [
+            "delete",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if params:
+            resource += f"?{httpx.QueryParams(params)}"
 
         action = {
             "resource": resource,
