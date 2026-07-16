@@ -1,5 +1,7 @@
 import urllib
 
+import httpx
+
 
 class ActionBatchSwitch(object):
     def __init__(self):
@@ -1190,6 +1192,14 @@ class ActionBatchSwitch(object):
 
         networkId = urllib.parse.quote(str(networkId), safe="")
         resource = f"/networks/{networkId}/switch/routing/ospf"
+
+        query_params = [
+            "vrf",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if params:
+            resource += f"?{httpx.QueryParams(params)}"
 
         body_params = [
             "enabled",
