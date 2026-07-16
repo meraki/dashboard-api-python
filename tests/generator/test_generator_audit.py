@@ -249,7 +249,7 @@ def test_write_operations_generate_query_params_for_all_clients():
 
     batch_rendered = batch_output.getvalue()
     assert 'query_params = ["validate", ]' in batch_rendered
-    assert 'resource += f"?{httpx.QueryParams(params)}"' in batch_rendered
+    assert 'if params:\n            resource += f"?{httpx.QueryParams(params)}"' in batch_rendered
 
 
 if __name__ == "__main__":

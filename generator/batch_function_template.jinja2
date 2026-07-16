@@ -46,7 +46,8 @@
 
         {% endif %}
         {% if query_params|length > 0 %}
-        resource += f"?{httpx.QueryParams(params)}"
+        if params:
+            resource += f"?{httpx.QueryParams(params)}"
 
         {% endif %}
         {% if body_params|length > 0 and batch_operation != 'destroy' %}
