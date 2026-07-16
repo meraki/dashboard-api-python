@@ -4630,7 +4630,6 @@ class AsyncWireless:
         - bands (array): Filter results by band.
         - contributor (string): Contributor for which to retrieve insights. If not specified, returns overall insights.
         - subContributor (string): Sub-contributor for which to retrieve insights. If not specified, returns all sub contributor insights.
-        - insights (string): Insights version to use. Defaults to 2.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -4645,11 +4644,6 @@ class AsyncWireless:
             options = ["Co-channel interference", "High traffic", "Non-wifi interference"]
             assert kwargs["contributor"] in options, (
                 f'''"contributor" cannot be "{kwargs["contributor"]}", & must be set to one of: {options}'''
-            )
-        if "insights" in kwargs:
-            options = ["1", "2"]
-            assert kwargs["insights"] in options, (
-                f'''"insights" cannot be "{kwargs["insights"]}", & must be set to one of: {options}'''
             )
 
         metadata = {
@@ -4666,7 +4660,6 @@ class AsyncWireless:
             "bands",
             "contributor",
             "subContributor",
-            "insights",
             "t0",
             "t1",
             "timespan",
@@ -5325,7 +5318,6 @@ class AsyncWireless:
         - bands (array): Filter results by band.
         - contributor (string): Contributor for which to retrieve insights. If not specified, returns overall insights.
         - subContributor (string): Sub-contributor for which to retrieve insights. If not specified, returns all sub contributor insights.
-        - insights (string): Insights version to use. Defaults to 2.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
         - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
@@ -5340,11 +5332,6 @@ class AsyncWireless:
             options = ["Admin power restriction", "Insufficient AP density", "Sticky client", "Transient weak signal"]
             assert kwargs["contributor"] in options, (
                 f'''"contributor" cannot be "{kwargs["contributor"]}", & must be set to one of: {options}'''
-            )
-        if "insights" in kwargs:
-            options = ["1", "2"]
-            assert kwargs["insights"] in options, (
-                f'''"insights" cannot be "{kwargs["insights"]}", & must be set to one of: {options}'''
             )
 
         metadata = {
@@ -5361,7 +5348,6 @@ class AsyncWireless:
             "bands",
             "contributor",
             "subContributor",
-            "insights",
             "t0",
             "t1",
             "timespan",
@@ -6219,7 +6205,6 @@ class AsyncWireless:
         - bands (array): Filter results by band.
         - contributor (string): Contributor for which to retrieve insights. If not specified, returns overall insights.
         - subContributor (string): Sub-contributor for which to retrieve insights. If not specified, returns all sub contributor insights.
-        - insights (string): Insights version to use. Defaults to 2.
         - variant (string): Wireless State Machine variant to use.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
@@ -6235,11 +6220,6 @@ class AsyncWireless:
             options = ["assoc", "auth", "dhcp", "dns"]
             assert kwargs["contributor"] in options, (
                 f'''"contributor" cannot be "{kwargs["contributor"]}", & must be set to one of: {options}'''
-            )
-        if "insights" in kwargs:
-            options = ["1", "2"]
-            assert kwargs["insights"] in options, (
-                f'''"insights" cannot be "{kwargs["insights"]}", & must be set to one of: {options}'''
             )
         if "variant" in kwargs:
             options = ["A", "B"]
@@ -6261,7 +6241,6 @@ class AsyncWireless:
             "bands",
             "contributor",
             "subContributor",
-            "insights",
             "variant",
             "t0",
             "t1",
@@ -6977,7 +6956,6 @@ class AsyncWireless:
         - bands (array): Filter results by band.
         - contributor (string): Contributor for which to retrieve insights. If not specified, returns overall insights.
         - subContributor (string): Sub-contributor for which to retrieve insights. If not specified, returns all sub contributor insights.
-        - insights (string): Insights version to use. Defaults to 2.
         - variant (string): Wireless State Machine variant to use.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
@@ -6993,11 +6971,6 @@ class AsyncWireless:
             options = ["assoc", "auth", "dhcp", "dns"]
             assert kwargs["contributor"] in options, (
                 f'''"contributor" cannot be "{kwargs["contributor"]}", & must be set to one of: {options}'''
-            )
-        if "insights" in kwargs:
-            options = ["1", "2"]
-            assert kwargs["insights"] in options, (
-                f'''"insights" cannot be "{kwargs["insights"]}", & must be set to one of: {options}'''
             )
         if "variant" in kwargs:
             options = ["A", "B"]
@@ -7019,7 +6992,6 @@ class AsyncWireless:
             "bands",
             "contributor",
             "subContributor",
-            "insights",
             "variant",
             "t0",
             "t1",
