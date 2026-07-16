@@ -99,7 +99,12 @@ API key can, and is recommended to, be set as an environment variable named MERA
 
 
 def generate_library(
-    spec: dict, version_number: str, api_version_number: str, is_github_action: bool, generate_stubs: bool = False
+    spec: dict,
+    version_number: str,
+    api_version_number: str,
+    is_github_action: bool,
+    generate_stubs: bool = False,
+    local_source: bool = False,
 ):
     # Clear parser cache at entry
     clear_cache()
@@ -182,11 +187,19 @@ def generate_library(
         "aio/api/__init__.py",
         "api/batch/__init__.py",
     ]
-    base_url = "https://raw.githubusercontent.com/meraki/dashboard-api-python/master/meraki/"
+    if local_source:
+        repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        local_meraki = os.environ.get("MERAKI_SOURCE_DIR") or os.path.join(repo_root, "meraki")
+    else:
+        base_url = "https://raw.githubusercontent.com/meraki/dashboard-api-python/master/meraki/"
     for file in non_generated:
-        response = requests.get(f"{base_url}{file}")
-        with open(f"meraki/{file}", "w+", encoding="utf-8", newline=None) as fp:
+        if local_source:
+            with open(os.path.join(local_meraki, file), encoding="utf-8") as src:
+                contents = src.read()
+        else:
+            response = requests.get(f"{base_url}{file}")
             contents = response.text
+        with open(f"meraki/{file}", "w+", encoding="utf-8", newline=None) as fp:
             if file == "_version.py":
                 # replace library version
                 start = contents.find("__version__ = ")
@@ -720,9 +733,10 @@ def main(inputs):
     api_version_number = "custom"
     is_github_action = False
     generate_stubs_flag = False
+    local_source = False
 
     try:
-        opts, args = getopt.getopt(inputs, "ho:k:v:a:g:s")
+        opts, args = getopt.getopt(inputs, "ho:k:v:a:g:sl")
     except getopt.GetoptError:
         print_help()
         sys.exit(2)
@@ -743,6 +757,8 @@ def main(inputs):
                 is_github_action = True
         elif opt == "-s":
             generate_stubs_flag = True
+        elif opt == "-l":
+            local_source = True
 
     check_python_version()
 
@@ -774,7 +790,14 @@ def main(inputs):
                 "If this continues for more than an hour, please contact Meraki support."
             )
 
-    generate_library(spec, version_number, api_version_number, is_github_action, generate_stubs=generate_stubs_flag)
+    generate_library(
+        spec,
+        version_number,
+        api_version_number,
+        is_github_action,
+        generate_stubs=generate_stubs_flag,
+        local_source=local_source,
+    )
 
 
 if __name__ == "__main__":

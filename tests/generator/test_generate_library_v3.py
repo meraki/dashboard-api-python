@@ -134,6 +134,28 @@ class TestV3CLI:
         assert "-a" in flags
         assert "-g" in flags
 
+    def test_local_source_flag_uses_configured_directory(self, v3_spec, output_dir, monkeypatch):
+        import generate_library as gen_v3
+
+        source_dir = output_dir / "source"
+        shutil.copytree(GENERATOR_DIR.parent / "meraki", source_dir)
+        config = source_dir / "config.py"
+        config.write_text(config.read_text() + "\n# local source\n")
+        monkeypatch.setenv("MERAKI_SOURCE_DIR", str(source_dir))
+
+        mock_response = MagicMock(ok=True)
+        mock_response.json.return_value = v3_spec
+        original_cwd = os.getcwd()
+        try:
+            os.chdir(output_dir)
+            with patch("generate_library.requests.get", return_value=mock_response) as mock_get:
+                gen_v3.main(["-l", "-v", "0.0.0-test", "-a", "v1"])
+        finally:
+            os.chdir(original_cwd)
+
+        assert mock_get.call_count == 1
+        assert "# local source" in (output_dir / "meraki" / "config.py").read_text()
+
     def test_spec_fetch_uses_version_3(self):
         """GEN-05: Spec fetch includes ?version=3."""
         import generate_library as gen_v3
