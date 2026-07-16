@@ -453,7 +453,7 @@ class ActionBatchOrganizations(object):
 
     def createOrganizationApiPushProfile(self, organizationId: str, iname: str, topic: dict, receiver: dict, **kwargs):
         """
-        **Create a new push profile**
+        **Create a Push API profile to subscribe to a topic and send its messages to a receiver profile.**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-api-push-profile
 
         - organizationId (string): Organization ID
@@ -486,7 +486,7 @@ class ActionBatchOrganizations(object):
 
     def updateOrganizationApiPushProfile(self, organizationId: str, iname: str, **kwargs):
         """
-        **Update a push profile**
+        **Update a Push API profile's name, description, topic, receiver profile or other configuration.**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-api-push-profile
 
         - organizationId (string): Organization ID
@@ -519,7 +519,7 @@ class ActionBatchOrganizations(object):
 
     def deleteOrganizationApiPushProfile(self, organizationId: str, iname: str):
         """
-        **Delete a push profile**
+        **Delete a Push API profile to unsubscribe from a topic, ending that topic's message delivery to a receiver profile.**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-api-push-profile
 
         - organizationId (string): Organization ID
@@ -538,7 +538,7 @@ class ActionBatchOrganizations(object):
 
     def createOrganizationApiPushReceiversProfile(self, organizationId: str, iname: str, receiver: dict, **kwargs):
         """
-        **Create a new push receiver profile**
+        **Create a Push API receiver profile to define an external receiver for Push API messages. You may re-use an existing organization-wide webhook receiver.**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-api-push-receivers-profile
 
         - organizationId (string): Organization ID
@@ -569,7 +569,7 @@ class ActionBatchOrganizations(object):
 
     def deleteOrganizationApiPushReceiversProfile(self, organizationId: str, iname: str):
         """
-        **Delete a push receiver profile**
+        **Delete a Push API receiver profile.**
         https://developer.cisco.com/meraki/api-v1/#!delete-organization-api-push-receivers-profile
 
         - organizationId (string): Organization ID
@@ -588,7 +588,7 @@ class ActionBatchOrganizations(object):
 
     def updateOrganizationApiPushReceiversProfile(self, organizationId: str, iname: str, **kwargs):
         """
-        **Update a push receiver profile**
+        **Update a Push API receiver profile's name, description, or receiver configuration.**
         https://developer.cisco.com/meraki/api-v1/#!update-organization-api-push-receivers-profile
 
         - organizationId (string): Organization ID

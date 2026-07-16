@@ -25,13 +25,13 @@ class Assistant(object):
 
     def createOrganizationAssistantChatCompletion(self, organizationId: str, **kwargs):
         """
-        **Create a chat completion with the AI assistant**
+        **Create a synchronous AI assistant chat completion**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-assistant-chat-completion
 
         - organizationId (string): Organization ID
         - query (string): Simple text question or instruction to send to the AI assistant. Provide either 'query' for text-only requests or 'content' for multi-modal input.
         - content (array): List of multi-modal content blocks. Use instead of 'query' to send text or images. Supports text and image types only; for audio and file support, use the messages endpoint. Maximum 8 parts.
-        - threadId (string): An existing thread ID to continue a conversation. If omitted, a new thread is created.
+        - threadId (string): Existing persisted thread ID to continue synchronously. If omitted, the request is handled as a one-off invocation and the response will not include a reusable thread ID.
         - networkId (string): Optional network ID to scope the query to a specific network. Defaults to the user's last visited network.
         - platform (string): Platform identifier. Defaults to MERAKI when omitted. Case-insensitive.
         - language (string): Optional language override. Defaults to the user's preferred language.
@@ -126,7 +126,7 @@ class Assistant(object):
 
     def createOrganizationAssistantChatThread(self, organizationId: str, **kwargs):
         """
-        **Create a new conversation thread.**
+        **Create a conversation thread for multi-turn AI assistant interactions.**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-assistant-chat-thread
 
         - organizationId (string): Organization ID
@@ -279,7 +279,7 @@ class Assistant(object):
 
     def createOrganizationAssistantChatThreadMessage(self, organizationId: str, threadId: str, content: list, **kwargs):
         """
-        **Create a new chat message in a thread.**
+        **Create a new chat message in an existing thread.**
         https://developer.cisco.com/meraki/api-v1/#!create-organization-assistant-chat-thread-message
 
         - organizationId (string): Organization ID
