@@ -617,6 +617,97 @@ class ActionBatchOrganizations(object):
         }
         return action
 
+    def createOrganizationAssuranceAlertsProfile(
+        self, organizationId: str, name: str, networkIds: list, alertTypes: list, configuration: dict, **kwargs
+    ):
+        """
+        **Create an alert profile**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-assurance-alerts-profile
+
+        - organizationId (string): Organization ID
+        - name (string): Name of the alert profile
+        - networkIds (array): Networks associated with this alert profile
+        - alertTypes (array): Alert types associated with this alert profile
+        - configuration (object): Alert configuration for this profile
+        - alertScheduleId (string): ID of the alert schedule associated with this profile
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        resource = f"/organizations/{organizationId}/assurance/alerts/profiles"
+
+        body_params = [
+            "name",
+            "networkIds",
+            "alertTypes",
+            "alertScheduleId",
+            "configuration",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def updateOrganizationAssuranceAlertsProfile(
+        self, organizationId: str, profileId: str, name: str, networkIds: list, alertTypes: list, configuration: dict, **kwargs
+    ):
+        """
+        **Update an alert profile**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-assurance-alerts-profile
+
+        - organizationId (string): Organization ID
+        - profileId (string): Profile ID
+        - name (string): Name of the alert profile
+        - networkIds (array): Networks associated with this alert profile
+        - alertTypes (array): Alert types associated with this alert profile
+        - configuration (object): Alert configuration for this profile
+        - alertScheduleId (string): ID of the alert schedule associated with this profile
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        profileId = urllib.parse.quote(profileId, safe="")
+        resource = f"/organizations/{organizationId}/assurance/alerts/profiles/{profileId}"
+
+        body_params = [
+            "name",
+            "networkIds",
+            "alertTypes",
+            "alertScheduleId",
+            "configuration",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def deleteOrganizationAssuranceAlertsProfile(self, organizationId: str, profileId: str):
+        """
+        **Delete an alert profile for this organization**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-assurance-alerts-profile
+
+        - organizationId (string): Organization ID
+        - profileId (string): Profile ID
+        """
+
+        organizationId = urllib.parse.quote(organizationId, safe="")
+        profileId = urllib.parse.quote(profileId, safe="")
+        resource = f"/organizations/{organizationId}/assurance/alerts/profiles/{profileId}"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+
     def createOrganizationAuthRadiusServer(self, organizationId: str, address: str, secret: str, **kwargs):
         """
         **Add an organization-wide RADIUS server**

@@ -36,6 +36,7 @@ class Appliance(object):
         - downlink (object): The port's VLAN settings when in LAN mode
         - speed (string): Link speed for the port, in Mbps
         - duplex (string): Duplex configuration for the port
+        - profile (object): The optional LAN port's profile which it inherits from
         """
 
         kwargs.update(locals())
@@ -64,6 +65,7 @@ class Appliance(object):
             "downlink",
             "speed",
             "duplex",
+            "profile",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -90,6 +92,7 @@ class Appliance(object):
         - downlink (object): The port's VLAN settings when in LAN mode
         - speed (string): Link speed for the port, in Mbps
         - duplex (string): Duplex configuration for the port
+        - profile (object): The optional LAN port's profile which it inherits from
         """
 
         kwargs.update(locals())
@@ -118,6 +121,7 @@ class Appliance(object):
             "downlink",
             "speed",
             "duplex",
+            "profile",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -1251,6 +1255,101 @@ class Appliance(object):
         resource = f"/networks/{networkId}/appliance/ports"
 
         return self._session.get(metadata, resource)
+
+    def createNetworkAppliancePortsRadiusServer(self, networkId: str, **kwargs):
+        """
+        **Create a shared MX port RADIUS server for a network**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-appliance-ports-radius-server
+
+        - networkId (string): Network ID
+        - host (string): IPv4 address or FQDN of the RADIUS server
+        - port (integer): UDP port the RADIUS server listens on for Access-Requests. Must be between 1 and 65535
+        - secret (object): Write-only RADIUS shared secret
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["appliance", "configure", "ports", "radius", "servers"],
+            "operation": "createNetworkAppliancePortsRadiusServer",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/appliance/ports/radius/servers"
+
+        body_params = [
+            "host",
+            "port",
+            "secret",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createNetworkAppliancePortsRadiusServer: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def updateNetworkAppliancePortsRadiusServer(self, networkId: str, serverId: str, **kwargs):
+        """
+        **Update a shared MX port RADIUS server for a network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-ports-radius-server
+
+        - networkId (string): Network ID
+        - serverId (string): Server ID
+        - host (string): IPv4 address or FQDN of the RADIUS server
+        - port (integer): UDP port the RADIUS server listens on for Access-Requests. Must be between 1 and 65535
+        - secret (object): Write-only RADIUS shared secret
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["appliance", "configure", "ports", "radius", "servers"],
+            "operation": "updateNetworkAppliancePortsRadiusServer",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        serverId = urllib.parse.quote(str(serverId), safe="")
+        resource = f"/networks/{networkId}/appliance/ports/radius/servers/{serverId}"
+
+        body_params = [
+            "host",
+            "port",
+            "secret",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateNetworkAppliancePortsRadiusServer: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteNetworkAppliancePortsRadiusServer(self, networkId: str, serverId: str):
+        """
+        **Delete a network-owned shared MX port RADIUS server**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-appliance-ports-radius-server
+
+        - networkId (string): Network ID
+        - serverId (string): Server ID
+        """
+
+        metadata = {
+            "tags": ["appliance", "configure", "ports", "radius", "servers"],
+            "operation": "deleteNetworkAppliancePortsRadiusServer",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        serverId = urllib.parse.quote(str(serverId), safe="")
+        resource = f"/networks/{networkId}/appliance/ports/radius/servers/{serverId}"
+
+        return self._session.delete(metadata, resource)
 
     def getNetworkAppliancePort(self, networkId: str, portId: str):
         """
@@ -3479,6 +3578,57 @@ class Appliance(object):
 
         return self._session.get(metadata, resource, params)
 
+    def getOrganizationApplianceDevicesInterfacesPortsProfilesAssignments(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **Returns MX port profile assignments**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-devices-interfaces-ports-profiles-assignments
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - serials (array): Optional device serials to filter by. Results include assignments whose device serial is an exact match for any provided serial. If some requested serials are inaccessible, only accessible matches are returned. Maximum: 50 serials per request.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["appliance", "configure", "devices", "interfaces", "ports", "profiles", "assignments"],
+            "operation": "getOrganizationApplianceDevicesInterfacesPortsProfilesAssignments",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/devices/interfaces/ports/profiles/assignments"
+
+        query_params = [
+            "serials",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "serials",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationApplianceDevicesInterfacesPortsProfilesAssignments: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
     def getOrganizationApplianceDevicesPortsTransceiversReadingsHistoryByDevice(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):
@@ -4378,6 +4528,60 @@ class Appliance(object):
             if invalid and self._session._logger:
                 self._session._logger.warning(
                     f"getOrganizationApplianceInterfacesPacketsOverviewsByDevice: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationAppliancePortsRadiusServersByNetwork(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List shared MX port RADIUS servers by network**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-ports-radius-servers-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 100. Default is 10.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter the results by network IDs. Matches are exact. Maximum array size is 100
+        - serverIds (array): Optional parameter to filter the results by RADIUS server IDs. Matches are exact. Maximum array size is 100
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["appliance", "configure", "ports", "radius", "servers", "byNetwork"],
+            "operation": "getOrganizationAppliancePortsRadiusServersByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/appliance/ports/radius/servers/byNetwork"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+            "serverIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+            "serverIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAppliancePortsRadiusServersByNetwork: ignoring unrecognized kwargs: {invalid}"
                 )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
