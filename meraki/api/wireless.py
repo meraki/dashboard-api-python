@@ -2639,6 +2639,37 @@ class Wireless(object):
 
         return self._session.get(metadata, resource)
 
+    def updateNetworkWirelessSsidsOwe(self, networkId: str, transitions: list, **kwargs):
+        """
+        **Update the OWE transition pairs for a network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssids-owe
+
+        - networkId (string): Network ID
+        - transitions (array): Array of OWE transition pairs
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["wireless", "configure", "ssids", "owe"],
+            "operation": "updateNetworkWirelessSsidsOwe",
+        }
+        networkId = urllib.parse.quote(str(networkId), safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/owe"
+
+        body_params = [
+            "transitions",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateNetworkWirelessSsidsOwe: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
     def getNetworkWirelessSsid(self, networkId: str, number: str):
         """
         **Return a single MR SSID**
@@ -10790,6 +10821,55 @@ class Wireless(object):
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
+    def getOrganizationWirelessSsidsOweByNetwork(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **Returns an array of objects, each containing OWE transition pairs for the corresponding network**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-wireless-ssids-owe-by-network
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 1000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - networkIds (array): Optional parameter to filter OWE transition configuration by Network Id.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["wireless", "configure", "ssids", "owe", "byNetwork"],
+            "operation": "getOrganizationWirelessSsidsOweByNetwork",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/owe/byNetwork"
+
+        query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "networkIds",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "networkIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationWirelessSsidsOweByNetwork: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
     def getOrganizationWirelessSsidsPoliciesClientExclusionBySsid(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):
@@ -10805,7 +10885,7 @@ class Wireless(object):
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - networkIds (array): Optional parameter to filter by Network ID.
         - includeDisabledSsids (boolean): Optional parameter to include disabled SSID's.
-        - ssidNumbers (array): Optional parameter to filter by SSID numbers.
+        - ssidNumbers (array): Optional parameter to filter by SSID numbers. Valid values are 0-14. Maximum 15 SSID numbers.
         """
 
         kwargs.update(locals())
@@ -10861,7 +10941,7 @@ class Wireless(object):
         - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - networkIds (array): Optional parameter to filter Network ID.
         - includeDisabledSsids (boolean): Optional parameter to include disabled SSID's.
-        - ssidNumbers (array): Optional parameter to filter by SSID numbers.
+        - ssidNumbers (array): Optional parameter to filter by SSID numbers. Valid values are 0-14. Maximum 15 SSID numbers.
         """
 
         kwargs.update(locals())

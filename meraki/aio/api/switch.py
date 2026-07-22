@@ -3861,17 +3861,19 @@ class AsyncSwitch:
 
         return self._session.get(metadata, resource, params)
 
-    def cloneOrganizationSwitchProfilesToTemplateNetwork(self, organizationId: str, **kwargs):
+    def cloneOrganizationSwitchProfilesToTemplateNetwork(
+        self, organizationId: str, profileIds: list, templateNodeGroupId: str, **kwargs
+    ):
         """
         **Clone existing switch templates into a destination template network.**
         https://developer.cisco.com/meraki/api-v1/#!clone-organization-switch-profiles-to-template-network
 
         - organizationId (string): Organization ID
         - profileIds (array): Switch profile IDs to clone
-        - templateNodeGroupId (string): Destination template network ID
+        - templateNodeGroupId (string): Canonical destination configuration template ID, as returned by getOrganizationConfigTemplates. Legacy numeric switch node group IDs are also accepted
         """
 
-        kwargs.update(locals())
+        kwargs = locals()
 
         metadata = {
             "tags": ["switch", "configure"],

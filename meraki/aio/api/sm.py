@@ -855,12 +855,17 @@ class AsyncSm:
 
         return self._session.get(metadata, resource)
 
-    def getNetworkSmProfiles(self, networkId: str, **kwargs):
+    def getNetworkSmProfiles(self, networkId: str, total_pages=1, direction="next", **kwargs):
         """
-        **List all profiles in a network**
+        **List profiles in a network**
         https://developer.cisco.com/meraki/api-v1/#!get-network-sm-profiles
 
         - networkId (string): Network ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 50. Default is 50.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
         - payloadTypes (array): Filter by payload types
         """
 
@@ -874,6 +879,9 @@ class AsyncSm:
         resource = f"/networks/{networkId}/sm/profiles"
 
         query_params = [
+            "perPage",
+            "startingAfter",
+            "endingBefore",
             "payloadTypes",
         ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
@@ -892,7 +900,7 @@ class AsyncSm:
             if invalid and self._session._logger:
                 self._session._logger.warning(f"getNetworkSmProfiles: ignoring unrecognized kwargs: {invalid}")
 
-        return self._session.get(metadata, resource, params)
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
 
     def getNetworkSmScripts(self, networkId: str):
         """

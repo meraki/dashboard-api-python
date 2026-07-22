@@ -52,7 +52,7 @@ from meraki.exceptions import APIError, APIKeyError, APIResponseError, AsyncAPIE
 from meraki._version import __version__  # noqa: F401
 from datetime import datetime
 
-__api_version__ = "1.72.0"
+__api_version__ = "1.72.0-beta.3"
 
 __all__ = [
     "APIError",

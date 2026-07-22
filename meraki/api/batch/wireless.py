@@ -841,6 +841,31 @@ class ActionBatchWireless(object):
         }
         return action
 
+    def updateNetworkWirelessSsidsOwe(self, networkId: str, transitions: list, **kwargs):
+        """
+        **Update the OWE transition pairs for a network**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-wireless-ssids-owe
+
+        - networkId (string): Network ID
+        - transitions (array): Array of OWE transition pairs
+        """
+
+        kwargs = locals()
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/wireless/ssids/owe"
+
+        body_params = [
+            "transitions",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
     def updateNetworkWirelessSsid(self, networkId: str, number: str, **kwargs):
         """
         **Update the attributes of an MR SSID**

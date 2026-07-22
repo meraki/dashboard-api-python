@@ -549,7 +549,7 @@ wheels = [
 
 [[package]]
 name = "meraki"
-version = "4.3.1b0"
+version = "4.3.0b3"
 source = { editable = "." }
 dependencies = [
     { name = "aiohttp" },

@@ -18,6 +18,7 @@ class ActionBatchAppliance(object):
         - downlink (object): The port's VLAN settings when in LAN mode
         - speed (string): Link speed for the port, in Mbps
         - duplex (string): Duplex configuration for the port
+        - profile (object): The optional LAN port's profile which it inherits from
         """
 
         kwargs.update(locals())
@@ -42,6 +43,7 @@ class ActionBatchAppliance(object):
             "downlink",
             "speed",
             "duplex",
+            "profile",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -64,6 +66,7 @@ class ActionBatchAppliance(object):
         - downlink (object): The port's VLAN settings when in LAN mode
         - speed (string): Link speed for the port, in Mbps
         - duplex (string): Duplex configuration for the port
+        - profile (object): The optional LAN port's profile which it inherits from
         """
 
         kwargs.update(locals())
@@ -88,6 +91,7 @@ class ActionBatchAppliance(object):
             "downlink",
             "speed",
             "duplex",
+            "profile",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -367,6 +371,85 @@ class ActionBatchAppliance(object):
         networkId = urllib.parse.quote(networkId, safe="")
         interfaceId = urllib.parse.quote(interfaceId, safe="")
         resource = f"/networks/{networkId}/appliance/interfaces/l3/{interfaceId}"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+
+    def createNetworkAppliancePortsRadiusServer(self, networkId: str, **kwargs):
+        """
+        **Create a shared MX port RADIUS server for a network. These network-owned servers are shared by all MX ports in the network using '802.1X', 'MAC RADIUS' (MAC-based RADIUS authentication), or 'hybrid' (802.1X authentication with MAC-based RADIUS fallback) access policies. A network can have at most 3 shared servers. This beta operation is available only to organizations with beta API access and may change before GA.**
+        https://developer.cisco.com/meraki/api-v1/#!create-network-appliance-ports-radius-server
+
+        - networkId (string): Network ID
+        - host (string): IPv4 address or FQDN of the RADIUS server
+        - port (integer): UDP port the RADIUS server listens on for Access-Requests. Must be between 1 and 65535
+        - secret (object): Write-only RADIUS shared secret
+        """
+
+        kwargs.update(locals())
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        resource = f"/networks/{networkId}/appliance/ports/radius/servers"
+
+        body_params = [
+            "host",
+            "port",
+            "secret",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def updateNetworkAppliancePortsRadiusServer(self, networkId: str, serverId: str, **kwargs):
+        """
+        **Update a shared MX port RADIUS server for a network. These network-owned servers are shared by all MX ports in the network using '802.1X', 'MAC RADIUS' (MAC-based RADIUS authentication), or 'hybrid' (802.1X authentication with MAC-based RADIUS fallback) access policies. Omitted attributes are left unchanged. This beta operation is available only to organizations with beta API access and may change before GA.**
+        https://developer.cisco.com/meraki/api-v1/#!update-network-appliance-ports-radius-server
+
+        - networkId (string): Network ID
+        - serverId (string): Server ID
+        - host (string): IPv4 address or FQDN of the RADIUS server
+        - port (integer): UDP port the RADIUS server listens on for Access-Requests. Must be between 1 and 65535
+        - secret (object): Write-only RADIUS shared secret
+        """
+
+        kwargs.update(locals())
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        serverId = urllib.parse.quote(serverId, safe="")
+        resource = f"/networks/{networkId}/appliance/ports/radius/servers/{serverId}"
+
+        body_params = [
+            "host",
+            "port",
+            "secret",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def deleteNetworkAppliancePortsRadiusServer(self, networkId: str, serverId: str):
+        """
+        **Delete a network-owned shared MX port RADIUS server. This beta operation is available only to organizations with beta API access and may change before GA.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-network-appliance-ports-radius-server
+
+        - networkId (string): Network ID
+        - serverId (string): Server ID
+        """
+
+        networkId = urllib.parse.quote(networkId, safe="")
+        serverId = urllib.parse.quote(serverId, safe="")
+        resource = f"/networks/{networkId}/appliance/ports/radius/servers/{serverId}"
 
         action = {
             "resource": resource,

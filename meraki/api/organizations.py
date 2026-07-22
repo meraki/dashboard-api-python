@@ -2295,6 +2295,130 @@ class Organizations(object):
 
         return self._session.get(metadata, resource, params)
 
+    def getOrganizationAssuranceAlertsProfiles(self, organizationId: str):
+        """
+        **List the alert profiles for this organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-alerts-profiles
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "alerts", "profiles"],
+            "operation": "getOrganizationAssuranceAlertsProfiles",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/alerts/profiles"
+
+        return self._session.get(metadata, resource)
+
+    def createOrganizationAssuranceAlertsProfile(
+        self, organizationId: str, name: str, networkIds: list, alertTypes: list, configuration: dict, **kwargs
+    ):
+        """
+        **Create an alert profile**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-assurance-alerts-profile
+
+        - organizationId (string): Organization ID
+        - name (string): Name of the alert profile
+        - networkIds (array): Networks associated with this alert profile
+        - alertTypes (array): Alert types associated with this alert profile
+        - configuration (object): Alert configuration for this profile
+        - alertScheduleId (string): ID of the alert schedule associated with this profile
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "alerts", "profiles"],
+            "operation": "createOrganizationAssuranceAlertsProfile",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/alerts/profiles"
+
+        body_params = [
+            "name",
+            "networkIds",
+            "alertTypes",
+            "alertScheduleId",
+            "configuration",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationAssuranceAlertsProfile: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def updateOrganizationAssuranceAlertsProfile(
+        self, organizationId: str, profileId: str, name: str, networkIds: list, alertTypes: list, configuration: dict, **kwargs
+    ):
+        """
+        **Update an alert profile**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-assurance-alerts-profile
+
+        - organizationId (string): Organization ID
+        - profileId (string): Profile ID
+        - name (string): Name of the alert profile
+        - networkIds (array): Networks associated with this alert profile
+        - alertTypes (array): Alert types associated with this alert profile
+        - configuration (object): Alert configuration for this profile
+        - alertScheduleId (string): ID of the alert schedule associated with this profile
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "alerts", "profiles"],
+            "operation": "updateOrganizationAssuranceAlertsProfile",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        profileId = urllib.parse.quote(str(profileId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/alerts/profiles/{profileId}"
+
+        body_params = [
+            "name",
+            "networkIds",
+            "alertTypes",
+            "alertScheduleId",
+            "configuration",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationAssuranceAlertsProfile: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteOrganizationAssuranceAlertsProfile(self, organizationId: str, profileId: str):
+        """
+        **Delete an alert profile for this organization**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-assurance-alerts-profile
+
+        - organizationId (string): Organization ID
+        - profileId (string): Profile ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "alerts", "profiles"],
+            "operation": "deleteOrganizationAssuranceAlertsProfile",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        profileId = urllib.parse.quote(str(profileId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/alerts/profiles/{profileId}"
+
+        return self._session.delete(metadata, resource)
+
     def restoreOrganizationAssuranceAlerts(self, organizationId: str, alertIds: list, **kwargs):
         """
         **Restore health alerts from dismissed**
@@ -8446,6 +8570,61 @@ class Organizations(object):
             invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
             if invalid and self._session._logger:
                 self._session._logger.warning(f"getOrganizationAccessGroups: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def getOrganizationIamAdminsAdministratorsLoginsHistory(
+        self, organizationId: str, total_pages=1, direction="next", **kwargs
+    ):
+        """
+        **List administrator login attempts for the organization (Dashboard Login Attempts)**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-iam-admins-administrators-logins-history
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 90 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 90 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be less than or equal to 90 days. The default is 7 days.
+        - perPage (integer): The number of entries per page returned. Acceptable range is 10 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - sortOrder (string): Sorted order of entries. Order options are 'ascending' and 'descending'. Default is 'descending'.
+        """
+
+        kwargs.update(locals())
+
+        if "sortOrder" in kwargs:
+            options = ["ascending", "descending"]
+            assert kwargs["sortOrder"] in options, (
+                f'''"sortOrder" cannot be "{kwargs["sortOrder"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["organizations", "monitor", "iam", "admins", "administrators", "logins", "history"],
+            "operation": "getOrganizationIamAdminsAdministratorsLoginsHistory",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/iam/admins/administrators/logins/history"
+
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+            "sortOrder",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationIamAdminsAdministratorsLoginsHistory: ignoring unrecognized kwargs: {invalid}"
+                )
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
 

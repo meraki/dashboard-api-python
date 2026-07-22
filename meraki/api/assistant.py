@@ -6,6 +6,294 @@ class Assistant(object):
         super(Assistant, self).__init__()
         self._session = session
 
+    def createAdministeredAssistantChatCompletion(self, **kwargs):
+        """
+        **Create a synchronous AI assistant chat completion for user-wide threads**
+        https://developer.cisco.com/meraki/api-v1/#!create-administered-assistant-chat-completion
+
+        - query (string): Simple text question or instruction to send to the AI assistant. Provide either 'query' for text-only requests or 'content' for multi-modal input.
+        - content (array): List of multi-modal content blocks. Use instead of 'query' to send text or images. Supports text and image types only; for audio and file support, use the messages endpoint. Maximum 8 parts.
+        - threadId (string): Existing persisted thread ID to continue synchronously. If omitted, the request is handled as a one-off invocation and the response will not include a reusable thread ID.
+        - platform (string): Platform identifier. Defaults to MERAKI when omitted. Case-insensitive.
+        - language (string): Optional language override. Defaults to the user's preferred language.
+        - country (string): Optional country override. Defaults to the user's country.
+        """
+
+        kwargs.update(locals())
+
+        if "platform" in kwargs:
+            options = ["DIGITAL_TWIN", "DNAC", "MERAKI", "digital_twin", "dnac", "meraki"]
+            assert kwargs["platform"] in options, (
+                f'''"platform" cannot be "{kwargs["platform"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["assistant", "configure", "chat", "completions"],
+            "operation": "createAdministeredAssistantChatCompletion",
+        }
+        resource = "/administered/assistant/chat/completions"
+
+        body_params = [
+            "query",
+            "content",
+            "threadId",
+            "platform",
+            "language",
+            "country",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createAdministeredAssistantChatCompletion: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def getAdministeredAssistantChatThreads(self, total_pages=1, direction="next", **kwargs):
+        """
+        **List all active user-wide conversation threads for the authenticated user.**
+        https://developer.cisco.com/meraki/api-v1/#!get-administered-assistant-chat-threads
+
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): Number of entries per page. Defaults to 100. Maximum 1000.
+        - sort (string): Field to sort results by. Defaults to dateModified.
+        - sortOrder (string): Sort direction for results. Defaults to desc.
+        - from (string): Filter threads modified after this timestamp.
+        - to (string): Filter threads modified before this timestamp.
+        """
+
+        kwargs.update(locals())
+
+        if "sort" in kwargs:
+            options = ["dateModified", "id", "name"]
+            assert kwargs["sort"] in options, f'''"sort" cannot be "{kwargs["sort"]}", & must be set to one of: {options}'''
+        if "sortOrder" in kwargs:
+            options = ["asc", "desc"]
+            assert kwargs["sortOrder"] in options, (
+                f'''"sortOrder" cannot be "{kwargs["sortOrder"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["assistant", "configure", "chat", "threads"],
+            "operation": "getAdministeredAssistantChatThreads",
+        }
+        resource = "/administered/assistant/chat/threads"
+
+        query_params = [
+            "perPage",
+            "sort",
+            "sortOrder",
+            "from",
+            "to",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getAdministeredAssistantChatThreads: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def createAdministeredAssistantChatThread(self, **kwargs):
+        """
+        **Create a user-wide conversation thread for multi-turn AI assistant interactions.**
+        https://developer.cisco.com/meraki/api-v1/#!create-administered-assistant-chat-thread
+
+        - threadName (string): Display name for the new thread.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["assistant", "configure", "chat", "threads"],
+            "operation": "createAdministeredAssistantChatThread",
+        }
+        resource = "/administered/assistant/chat/threads"
+
+        body_params = [
+            "threadName",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createAdministeredAssistantChatThread: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def getAdministeredAssistantChatThread(self, threadId: str):
+        """
+        **Return a single user-wide conversation thread.**
+        https://developer.cisco.com/meraki/api-v1/#!get-administered-assistant-chat-thread
+
+        - threadId (string): Thread ID
+        """
+
+        metadata = {
+            "tags": ["assistant", "configure", "chat", "threads"],
+            "operation": "getAdministeredAssistantChatThread",
+        }
+        threadId = urllib.parse.quote(str(threadId), safe="")
+        resource = f"/administered/assistant/chat/threads/{threadId}"
+
+        return self._session.get(metadata, resource)
+
+    def updateAdministeredAssistantChatThread(self, threadId: str, threadName: str, **kwargs):
+        """
+        **Update the name of a user-wide conversation thread.**
+        https://developer.cisco.com/meraki/api-v1/#!update-administered-assistant-chat-thread
+
+        - threadId (string): Thread ID
+        - threadName (string): New display name for the thread.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["assistant", "configure", "chat", "threads"],
+            "operation": "updateAdministeredAssistantChatThread",
+        }
+        threadId = urllib.parse.quote(str(threadId), safe="")
+        resource = f"/administered/assistant/chat/threads/{threadId}"
+
+        body_params = [
+            "threadName",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateAdministeredAssistantChatThread: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteAdministeredAssistantChatThread(self, threadId: str):
+        """
+        **Delete a user-wide conversation thread and all its messages.**
+        https://developer.cisco.com/meraki/api-v1/#!delete-administered-assistant-chat-thread
+
+        - threadId (string): Thread ID
+        """
+
+        metadata = {
+            "tags": ["assistant", "configure", "chat", "threads"],
+            "operation": "deleteAdministeredAssistantChatThread",
+        }
+        threadId = urllib.parse.quote(str(threadId), safe="")
+        resource = f"/administered/assistant/chat/threads/{threadId}"
+
+        return self._session.delete(metadata, resource)
+
+    def getAdministeredAssistantChatThreadMessages(self, threadId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List messages in a user-wide conversation thread.**
+        https://developer.cisco.com/meraki/api-v1/#!get-administered-assistant-chat-thread-messages
+
+        - threadId (string): Thread ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - perPage (integer): Number of entries per page. Defaults to 100. Maximum 1000.
+        - sortOrder (string): Sort direction for results by timestamp. Defaults to asc.
+        """
+
+        kwargs.update(locals())
+
+        if "sortOrder" in kwargs:
+            options = ["asc", "desc"]
+            assert kwargs["sortOrder"] in options, (
+                f'''"sortOrder" cannot be "{kwargs["sortOrder"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["assistant", "configure", "chat", "threads", "messages"],
+            "operation": "getAdministeredAssistantChatThreadMessages",
+        }
+        threadId = urllib.parse.quote(str(threadId), safe="")
+        resource = f"/administered/assistant/chat/threads/{threadId}/messages"
+
+        query_params = [
+            "perPage",
+            "sortOrder",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getAdministeredAssistantChatThreadMessages: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def createAdministeredAssistantChatThreadMessage(self, threadId: str, content: list, **kwargs):
+        """
+        **Create a new chat message in an existing user-wide thread.**
+        https://developer.cisco.com/meraki/api-v1/#!create-administered-assistant-chat-thread-message
+
+        - threadId (string): Thread ID
+        - content (array): List of message content parts. Supports text, image, audio, and file types. Maximum 8 parts.
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["assistant", "configure", "chat", "threads", "messages"],
+            "operation": "createAdministeredAssistantChatThreadMessage",
+        }
+        threadId = urllib.parse.quote(str(threadId), safe="")
+        resource = f"/administered/assistant/chat/threads/{threadId}/messages"
+
+        body_params = [
+            "content",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createAdministeredAssistantChatThreadMessage: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def getAdministeredAssistantChatThreadMessage(self, threadId: str, messageId: str):
+        """
+        **Return a single message in a user-wide conversation thread.**
+        https://developer.cisco.com/meraki/api-v1/#!get-administered-assistant-chat-thread-message
+
+        - threadId (string): Thread ID
+        - messageId (string): Message ID
+        """
+
+        metadata = {
+            "tags": ["assistant", "configure", "chat", "threads", "messages"],
+            "operation": "getAdministeredAssistantChatThreadMessage",
+        }
+        threadId = urllib.parse.quote(str(threadId), safe="")
+        messageId = urllib.parse.quote(str(messageId), safe="")
+        resource = f"/administered/assistant/chat/threads/{threadId}/messages/{messageId}"
+
+        return self._session.get(metadata, resource)
+
     def getOrganizationAssistantCapabilities(self, organizationId: str):
         """
         **List the AI assistant's available capabilities and agents for this organization.**
@@ -472,20 +760,3 @@ class Assistant(object):
                 )
 
         return self._session.post(metadata, resource, payload)
-
-    def getOrganizationAssistantQueryLimits(self, organizationId: str):
-        """
-        **Get query limits for the AI assistant for this organization.**
-        https://developer.cisco.com/meraki/api-v1/#!get-organization-assistant-query-limits
-
-        - organizationId (string): Organization ID
-        """
-
-        metadata = {
-            "tags": ["assistant", "configure", "queryLimits"],
-            "operation": "getOrganizationAssistantQueryLimits",
-        }
-        organizationId = urllib.parse.quote(str(organizationId), safe="")
-        resource = f"/organizations/{organizationId}/assistant/queryLimits"
-
-        return self._session.get(metadata, resource)
