@@ -1,9 +1,9 @@
 import urllib
 
 
-class Sensor(object):
+class Sensor:
     def __init__(self, session):
-        super(Sensor, self).__init__()
+        super().__init__()
         self._session = session
 
     def getDeviceSensorCommands(self, serial: str, total_pages=1, direction="next", **kwargs):

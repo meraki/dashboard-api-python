@@ -1,12 +1,12 @@
-import random
-import urllib.parse
-from datetime import datetime, timezone
 import json
+import random
 import time
+import urllib.parse
+from datetime import UTC, datetime
 
 import requests
-from requests.utils import to_key_val_list
 from requests.compat import basestring, urlencode
+from requests.utils import to_key_val_list
 
 from meraki._version import __version__
 from meraki.common import (
@@ -56,9 +56,7 @@ def encode_params(_, data):
 
     Ex. {"param": [{"key_1":"value_1"}, {"key_2":"value_2"}]} => ?param[]key_1=value_1&param[]key_2=value_2
     """
-    if isinstance(data, (str, bytes)):
-        return data
-    elif hasattr(data, "read"):
+    if isinstance(data, (str, bytes)) or hasattr(data, "read"):
         return data
     elif hasattr(data, "__iter__"):
         result = []
@@ -124,7 +122,7 @@ def user_agent_extended(be_geo_id, caller):
 
 
 # Main module interface
-class RestSession(object):
+class RestSession:
     def __init__(
         self,
         logger,
@@ -146,7 +144,7 @@ class RestSession(object):
         use_iterator_for_get_pages=USE_ITERATOR_FOR_GET_PAGES,
         validate_kwargs=False,
     ):
-        super(RestSession, self).__init__()
+        super().__init__()
 
         # Initialize attributes and properties
         self._version = __version__
@@ -433,12 +431,9 @@ class RestSession(object):
                 # Prevent getNetworkEvents from infinite loop as time goes forward
                 if metadata["operation"] == "getNetworkEvents":
                     starting_after = urllib.parse.unquote(str(links["next"]["url"]).split("startingAfter=")[1])
-                    delta = datetime.now(timezone.utc) - datetime.fromisoformat(starting_after)
+                    delta = datetime.now(UTC) - datetime.fromisoformat(starting_after)
                     # Break out of loop if startingAfter returned from next link is within 5 minutes of current time
-                    if delta.total_seconds() < 300:
-                        break
-                    # Or if the next page is past the specified window's end time
-                    elif event_log_end_time and starting_after > event_log_end_time:
+                    if delta.total_seconds() < 300 or event_log_end_time and starting_after > event_log_end_time:
                         break
 
                 metadata["page"] += 1
@@ -525,12 +520,9 @@ class RestSession(object):
                 # Prevent getNetworkEvents from infinite loop as time goes forward
                 if metadata["operation"] == "getNetworkEvents":
                     starting_after = urllib.parse.unquote(links["next"]["url"].split("startingAfter=")[1])
-                    delta = datetime.now(timezone.utc) - datetime.fromisoformat(starting_after)
+                    delta = datetime.now(UTC) - datetime.fromisoformat(starting_after)
                     # Break out of loop if startingAfter returned from next link is within 5 minutes of current time
-                    if delta.total_seconds() < 300:
-                        break
-                    # Or if next page is past the specified window's end time
-                    elif event_log_end_time and starting_after > event_log_end_time:
+                    if delta.total_seconds() < 300 or event_log_end_time and starting_after > event_log_end_time:
                         break
 
                 metadata["page"] += 1
@@ -566,10 +558,8 @@ class RestSession(object):
                 events = response.json()["events"]
                 if direction == "next":
                     events = events[::-1]
-                if start < results["pageStartAt"]:
-                    results["pageStartAt"] = start
-                if end > results["pageEndAt"]:
-                    results["pageEndAt"] = end
+                results["pageStartAt"] = min(results["pageStartAt"], start)
+                results["pageEndAt"] = max(results["pageEndAt"], end)
                 results["events"].extend(events)
 
             total_pages -= 1
@@ -610,4 +600,3 @@ class RestSession(object):
         response = self.request(metadata, "DELETE", url, params=params)
         if response:
             response.close()
-        return None

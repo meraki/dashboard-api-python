@@ -1,9 +1,9 @@
 import urllib
 
 
-class ActionBatchSm(object):
+class ActionBatchSm:
     def __init__(self):
-        super(ActionBatchSm, self).__init__()
+        super().__init__()
 
     def createNetworkSmScript(self, networkId: str, name: str, platform: str, **kwargs):
         """

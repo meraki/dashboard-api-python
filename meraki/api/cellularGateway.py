@@ -1,9 +1,9 @@
 import urllib
 
 
-class CellularGateway(object):
+class CellularGateway:
     def __init__(self, session):
-        super(CellularGateway, self).__init__()
+        super().__init__()
         self._session = session
 
     def getDeviceCellularGatewayLan(self, serial: str):

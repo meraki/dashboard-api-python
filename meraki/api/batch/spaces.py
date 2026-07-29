@@ -1,9 +1,9 @@
 import urllib
 
 
-class ActionBatchSpaces(object):
+class ActionBatchSpaces:
     def __init__(self):
-        super(ActionBatchSpaces, self).__init__()
+        super().__init__()
 
     def removeOrganizationSpacesIntegration(self, organizationId: str):
         """

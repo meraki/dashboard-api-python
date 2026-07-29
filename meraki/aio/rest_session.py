@@ -356,10 +356,7 @@ class AsyncRestSession:
                     starting_after = urllib.parse.unquote(str(links["next"]["url"]).split("startingAfter=")[1])
                     delta = datetime.utcnow() - datetime.fromisoformat(starting_after[:-1])
                     # Break out of loop if startingAfter returned from next link is within 5 minutes of current time
-                    if delta.total_seconds() < 300:
-                        break
-                    # Or if next page is past the specified window's end time
-                    elif event_log_end_time and starting_after > event_log_end_time:
+                    if delta.total_seconds() < 300 or event_log_end_time and starting_after > event_log_end_time:
                         break
 
                 metadata["page"] += 1
@@ -433,10 +430,7 @@ class AsyncRestSession:
                     starting_after = urllib.parse.unquote(str(links["next"]["url"]).split("startingAfter=")[1])
                     delta = datetime.utcnow() - datetime.fromisoformat(starting_after[:-1])
                     # Break out of loop if startingAfter returned from next link is within 5 minutes of current time
-                    if delta.total_seconds() < 300:
-                        break
-                    # Or if next page is past the specified window's end time
-                    elif event_log_end_time and starting_after > event_log_end_time:
+                    if delta.total_seconds() < 300 or event_log_end_time and starting_after > event_log_end_time:
                         break
 
                 metadata["page"] += 1
@@ -472,10 +466,8 @@ class AsyncRestSession:
                     events = json_response["events"]
                     if direction == "next":
                         events = events[::-1]
-                    if start < results["pageStartAt"]:
-                        results["pageStartAt"] = start
-                    if end > results["pageEndAt"]:
-                        results["pageEndAt"] = end
+                    results["pageStartAt"] = min(results["pageStartAt"], start)
+                    results["pageEndAt"] = max(results["pageEndAt"], end)
                     results["events"].extend(events)
 
             total_pages = total_pages - 1
@@ -501,7 +493,7 @@ class AsyncRestSession:
         metadata["url"] = url
         metadata["params"] = params
         async with await self.request(metadata, "DELETE", url, params=params):
-            return None
+            return
 
     async def close(self):
         await self._req_session.close()

@@ -1,9 +1,9 @@
 import urllib
 
 
-class Support(object):
+class Support:
     def __init__(self, session):
-        super(Support, self).__init__()
+        super().__init__()
         self._session = session
 
     def getOrganizationSupportSalesRepresentatives(self, organizationId: str):

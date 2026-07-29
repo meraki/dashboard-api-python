@@ -1,9 +1,9 @@
 import urllib
 
 
-class ActionBatchCellularGateway(object):
+class ActionBatchCellularGateway:
     def __init__(self):
-        super(ActionBatchCellularGateway, self).__init__()
+        super().__init__()
 
     def updateDeviceCellularGatewayLan(self, serial: str, **kwargs):
         """

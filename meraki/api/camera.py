@@ -1,9 +1,9 @@
 import urllib
 
 
-class Camera(object):
+class Camera:
     def __init__(self, session):
-        super(Camera, self).__init__()
+        super().__init__()
         self._session = session
 
     def getDeviceCameraAnalyticsLive(self, serial: str):

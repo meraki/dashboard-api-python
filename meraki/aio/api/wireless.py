@@ -5468,7 +5468,7 @@ class AsyncWireless:
 
     def getOrganizationAssuranceWirelessExperienceMostImpactedNetworks(self, organizationId: str, **kwargs):
         """
-        **Returns the most impacted wireless experience networks and the top failure contributor for each network.**
+        **Returns the most impacted wireless experience networks with client counts, impacted experience metrics, and the top failure contributor for each network.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-most-impacted-networks
 
         - organizationId (string): Organization ID
@@ -5511,7 +5511,7 @@ class AsyncWireless:
 
     def getOrganizationAssuranceWirelessExperienceMostImpactedXMs(self, organizationId: str, **kwargs):
         """
-        **Returns the most impacted wireless experience metrics and the top failure contributor for each metric/network pair.**
+        **Returns the most impacted wireless experience metrics, including client counts, top failure contributor, and most impacted networks for each metric.**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wireless-experience-most-impacted-x-ms
 
         - organizationId (string): Organization ID

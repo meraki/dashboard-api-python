@@ -1,9 +1,9 @@
 import urllib
 
 
-class ActionBatchCamera(object):
+class ActionBatchCamera:
     def __init__(self):
-        super(ActionBatchCamera, self).__init__()
+        super().__init__()
 
     def updateDeviceCameraCustomAnalytics(self, serial: str, **kwargs):
         """

@@ -1,9 +1,9 @@
 import urllib
 
 
-class Administered(object):
+class Administered:
     def __init__(self, session):
-        super(Administered, self).__init__()
+        super().__init__()
         self._session = session
 
     def getAdministeredIdentitiesMe(self):

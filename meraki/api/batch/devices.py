@@ -1,9 +1,9 @@
 import urllib
 
 
-class ActionBatchDevices(object):
+class ActionBatchDevices:
     def __init__(self):
-        super(ActionBatchDevices, self).__init__()
+        super().__init__()
 
     def updateDevice(self, serial: str, **kwargs):
         """

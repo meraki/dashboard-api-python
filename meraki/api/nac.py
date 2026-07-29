@@ -1,9 +1,9 @@
 import urllib
 
 
-class Nac(object):
+class Nac:
     def __init__(self, session):
-        super(Nac, self).__init__()
+        super().__init__()
         self._session = session
 
     def getOrganizationNacAuthorizationPolicies(self, organizationId: str, **kwargs):

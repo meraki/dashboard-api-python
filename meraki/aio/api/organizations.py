@@ -12035,7 +12035,18 @@ class AsyncOrganizations:
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/sase/sites/detach"
 
-        return self._session.delete(metadata, resource)
+        body_params = [
+            "items",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"detachOrganizationSaseSites: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
 
     def updateOrganizationSaseSite(self, organizationId: str, siteId: str, **kwargs):
         """

@@ -1,9 +1,9 @@
 import urllib
 
 
-class Switch(object):
+class Switch:
     def __init__(self, session):
-        super(Switch, self).__init__()
+        super().__init__()
         self._session = session
 
     def getDeviceSwitchPorts(self, serial: str, **kwargs):

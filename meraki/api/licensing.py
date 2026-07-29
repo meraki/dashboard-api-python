@@ -1,9 +1,9 @@
 import urllib
 
 
-class Licensing(object):
+class Licensing:
     def __init__(self, session):
-        super(Licensing, self).__init__()
+        super().__init__()
         self._session = session
 
     def getAdministeredLicensingSubscriptionEntitlements(self, **kwargs):

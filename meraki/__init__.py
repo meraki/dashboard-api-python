@@ -1,6 +1,8 @@
 import logging
 import os
+from datetime import datetime
 
+from meraki._version import __version__  # noqa: F401
 from meraki.api.administered import Administered
 from meraki.api.appliance import Appliance
 
@@ -23,36 +25,34 @@ from meraki.api.wirelessController import WirelessController
 
 # Config import
 from meraki.config import (
-    API_KEY_ENVIRONMENT_VARIABLE,
-    DEFAULT_BASE_URL,
-    SINGLE_REQUEST_TIMEOUT,
-    CERTIFICATE_PATH,
-    REQUESTS_PROXY,
-    WAIT_ON_RATE_LIMIT,
-    NGINX_429_RETRY_WAIT_TIME,
     ACTION_BATCH_RETRY_WAIT_TIME,
+    API_KEY_ENVIRONMENT_VARIABLE,
+    BE_GEO_ID,
+    CERTIFICATE_PATH,
+    DEFAULT_BASE_URL,
+    INHERIT_LOGGING_CONFIG,
+    LOG_FILE_PREFIX,
+    LOG_PATH,
+    MAXIMUM_RETRIES,
+    MERAKI_PYTHON_SDK_CALLER,
     NETWORK_DELETE_RETRY_WAIT_TIME,
+    NGINX_429_RETRY_WAIT_TIME,
+    OUTPUT_LOG,
+    PRINT_TO_CONSOLE,
+    REQUESTS_PROXY,
     RETRY_4XX_ERROR,
     RETRY_4XX_ERROR_WAIT_TIME,
-    MAXIMUM_RETRIES,
-    OUTPUT_LOG,
-    LOG_PATH,
-    LOG_FILE_PREFIX,
-    PRINT_TO_CONSOLE,
-    SUPPRESS_LOGGING,
-    INHERIT_LOGGING_CONFIG,
     SIMULATE_API_CALLS,
-    BE_GEO_ID,
-    MERAKI_PYTHON_SDK_CALLER,
+    SINGLE_REQUEST_TIMEOUT,
+    SUPPRESS_LOGGING,
     USE_ITERATOR_FOR_GET_PAGES,
     VALIDATE_KWARGS,
+    WAIT_ON_RATE_LIMIT,
 )
-from meraki.rest_session import RestSession
 from meraki.exceptions import APIError, APIKeyError, APIResponseError, AsyncAPIError
-from meraki._version import __version__  # noqa: F401
-from datetime import datetime
+from meraki.rest_session import RestSession
 
-__api_version__ = "1.72.0-beta.3"
+__api_version__ = "1.72.0-beta.4"
 
 __all__ = [
     "APIError",
@@ -63,7 +63,7 @@ __all__ = [
 ]
 
 
-class DashboardAPI(object):
+class DashboardAPI:
     """
     **Creates a persistent Meraki dashboard API session**
 

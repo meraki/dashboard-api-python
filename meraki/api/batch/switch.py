@@ -1,9 +1,9 @@
 import urllib
 
 
-class ActionBatchSwitch(object):
+class ActionBatchSwitch:
     def __init__(self):
-        super(ActionBatchSwitch, self).__init__()
+        super().__init__()
 
     def cycleDeviceSwitchPorts(self, serial: str, ports: list, **kwargs):
         """

@@ -1,9 +1,9 @@
 import urllib
 
 
-class ActionBatchOrganizations(object):
+class ActionBatchOrganizations:
     def __init__(self):
-        super(ActionBatchOrganizations, self).__init__()
+        super().__init__()
 
     def updateOrganization(self, organizationId: str, **kwargs):
         """
@@ -3165,9 +3165,14 @@ class ActionBatchOrganizations(object):
         organizationId = urllib.parse.quote(organizationId, safe="")
         resource = f"/organizations/{organizationId}/sase/sites/detach"
 
+        body_params = [
+            "items",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "detach",
+            "body": payload,
         }
         return action
 

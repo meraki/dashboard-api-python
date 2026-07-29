@@ -1,9 +1,9 @@
 import urllib
 
 
-class ActionBatchSensor(object):
+class ActionBatchSensor:
     def __init__(self):
-        super(ActionBatchSensor, self).__init__()
+        super().__init__()
 
     def createDeviceSensorCommand(self, serial: str, operation: str, **kwargs):
         """

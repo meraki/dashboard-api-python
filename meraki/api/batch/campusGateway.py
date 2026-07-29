@@ -1,9 +1,9 @@
 import urllib
 
 
-class ActionBatchCampusGateway(object):
+class ActionBatchCampusGateway:
     def __init__(self):
-        super(ActionBatchCampusGateway, self).__init__()
+        super().__init__()
 
     def createNetworkCampusGatewayCluster(
         self, networkId: str, name: str, uplinks: list, tunnels: list, nameservers: dict, portChannels: list, **kwargs

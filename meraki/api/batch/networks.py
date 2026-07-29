@@ -1,9 +1,9 @@
 import urllib
 
 
-class ActionBatchNetworks(object):
+class ActionBatchNetworks:
     def __init__(self):
-        super(ActionBatchNetworks, self).__init__()
+        super().__init__()
 
     def updateNetwork(self, networkId: str, **kwargs):
         """
@@ -276,6 +276,7 @@ class ActionBatchNetworks(object):
             options = [
                 "appliance",
                 "camera",
+                "campusGateway",
                 "cellularGateway",
                 "secureConnect",
                 "switch",
@@ -1102,17 +1103,15 @@ class ActionBatchNetworks(object):
         - vlanNames (array): An array of named VLANs
         - vlanGroups (array): An array of VLAN groups
         - iname (string): IName of the profile
-        - allowedVlans (string): The VLANs allowed on the VLAN profile. Only applicable to trunk ports. The given range must be inclusive of all named VLANs.
         """
 
-        kwargs.update(locals())
+        kwargs = locals()
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/vlanProfiles"
 
         body_params = [
             "name",
-            "allowedVlans",
             "vlanNames",
             "vlanGroups",
             "iname",

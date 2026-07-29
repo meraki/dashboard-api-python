@@ -1,9 +1,9 @@
 import urllib
 
 
-class Insight(object):
+class Insight:
     def __init__(self, session):
-        super(Insight, self).__init__()
+        super().__init__()
         self._session = session
 
     def getNetworkInsightApplicationHealthByTime(self, networkId: str, applicationId: str, **kwargs):
