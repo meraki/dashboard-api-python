@@ -1,9 +1,9 @@
 import urllib
 
 
-class Assistant(object):
+class Assistant:
     def __init__(self, session):
-        super(Assistant, self).__init__()
+        super().__init__()
         self._session = session
 
     def createAdministeredAssistantChatCompletion(self, **kwargs):

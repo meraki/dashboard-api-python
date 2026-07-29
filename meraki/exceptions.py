@@ -2,7 +2,7 @@
 class APIKeyError(Exception):
     def __init__(self):
         self.message = "Meraki API key needs to be defined"
-        super(APIKeyError, self).__init__(self.message)
+        super().__init__(self.message)
 
     def __repr__(self):
         return self.message
@@ -46,7 +46,7 @@ class APIError(Exception):
             self.message = self.response.content[:100].decode("UTF-8").strip()
             if isinstance(self.message, str) and self.status == 404 and self.reason == "Not Found":
                 self.message += "please wait a minute if the key or org was just newly created."
-        super(APIError, self).__init__(f"{self.tag}, {self.operation} - {self.status} {self.reason}, {self.message}")
+        super().__init__(f"{self.tag}, {self.operation} - {self.status} {self.reason}, {self.message}")
 
     def __repr__(self):
         return f"{self.tag}, {self.operation} - {self.status} {self.reason}, {self.message}"

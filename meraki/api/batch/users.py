@@ -1,9 +1,9 @@
 import urllib
 
 
-class ActionBatchUsers(object):
+class ActionBatchUsers:
     def __init__(self):
-        super(ActionBatchUsers, self).__init__()
+        super().__init__()
 
     def createOrganizationIamUsersAuthorization(self, organizationId: str, authZone: dict, **kwargs):
         """

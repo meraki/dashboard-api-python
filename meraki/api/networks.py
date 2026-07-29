@@ -1,9 +1,9 @@
 import urllib
 
 
-class Networks(object):
+class Networks:
     def __init__(self, session):
-        super(Networks, self).__init__()
+        super().__init__()
         self._session = session
 
     def getNetwork(self, networkId: str):
@@ -1113,6 +1113,7 @@ class Networks(object):
             options = [
                 "appliance",
                 "camera",
+                "campusGateway",
                 "cellularGateway",
                 "secureConnect",
                 "switch",
@@ -3321,10 +3322,9 @@ class Networks(object):
         - vlanNames (array): An array of named VLANs
         - vlanGroups (array): An array of VLAN groups
         - iname (string): IName of the profile
-        - allowedVlans (string): The VLANs allowed on the VLAN profile. Only applicable to trunk ports. The given range must be inclusive of all named VLANs.
         """
 
-        kwargs.update(locals())
+        kwargs = locals()
 
         metadata = {
             "tags": ["networks", "configure", "vlanProfiles"],
@@ -3335,7 +3335,6 @@ class Networks(object):
 
         body_params = [
             "name",
-            "allowedVlans",
             "vlanNames",
             "vlanGroups",
             "iname",
@@ -3471,10 +3470,9 @@ class Networks(object):
         - name (string): Name of the profile, string length must be from 1 to 255 characters
         - vlanNames (array): An array of named VLANs
         - vlanGroups (array): An array of VLAN groups
-        - allowedVlans (string): The VLANs allowed on the VLAN profile. Only applicable to trunk ports. The given range must be inclusive of all named VLANs.
         """
 
-        kwargs.update(locals())
+        kwargs = locals()
 
         metadata = {
             "tags": ["networks", "configure", "vlanProfiles"],
@@ -3486,7 +3484,6 @@ class Networks(object):
 
         body_params = [
             "name",
-            "allowedVlans",
             "vlanNames",
             "vlanGroups",
         ]

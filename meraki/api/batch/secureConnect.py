@@ -1,9 +1,9 @@
 import urllib
 
 
-class ActionBatchSecureConnect(object):
+class ActionBatchSecureConnect:
     def __init__(self):
-        super(ActionBatchSecureConnect, self).__init__()
+        super().__init__()
 
     def createOrganizationSecureConnectPrivateResourceGroup(self, organizationId: str, name: str, **kwargs):
         """

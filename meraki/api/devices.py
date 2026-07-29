@@ -1,9 +1,9 @@
 import urllib
 
 
-class Devices(object):
+class Devices:
     def __init__(self, session):
-        super(Devices, self).__init__()
+        super().__init__()
         self._session = session
 
     def getDevice(self, serial: str):

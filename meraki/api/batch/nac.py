@@ -1,9 +1,9 @@
 import urllib
 
 
-class ActionBatchNac(object):
+class ActionBatchNac:
     def __init__(self):
-        super(ActionBatchNac, self).__init__()
+        super().__init__()
 
     def createOrganizationNacCertificatesAuthoritiesCrl(
         self, organizationId: str, caId: str, content: str, isDelta: bool, **kwargs

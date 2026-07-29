@@ -1,9 +1,9 @@
 import urllib
 
 
-class ActionBatchWireless(object):
+class ActionBatchWireless:
     def __init__(self):
-        super(ActionBatchWireless, self).__init__()
+        super().__init__()
 
     def updateDeviceWirelessAlternateManagementInterfaceIpv6(self, serial: str, **kwargs):
         """

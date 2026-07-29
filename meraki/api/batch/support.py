@@ -1,3 +1,3 @@
-class ActionBatchSupport(object):
+class ActionBatchSupport:
     def __init__(self):
-        super(ActionBatchSupport, self).__init__()
+        super().__init__()

@@ -1,9 +1,9 @@
 import urllib
 
 
-class Sm(object):
+class Sm:
     def __init__(self, session):
-        super(Sm, self).__init__()
+        super().__init__()
         self._session = session
 
     def createNetworkSmBypassActivationLockAttempt(self, networkId: str, ids: list, **kwargs):

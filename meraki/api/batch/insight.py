@@ -1,9 +1,9 @@
 import urllib
 
 
-class ActionBatchInsight(object):
+class ActionBatchInsight:
     def __init__(self):
-        super(ActionBatchInsight, self).__init__()
+        super().__init__()
 
     def createOrganizationInsightApplication(self, organizationId: str, counterSetRuleId: int, **kwargs):
         """

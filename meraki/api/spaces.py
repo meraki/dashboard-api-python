@@ -1,9 +1,9 @@
 import urllib
 
 
-class Spaces(object):
+class Spaces:
     def __init__(self, session):
-        super(Spaces, self).__init__()
+        super().__init__()
         self._session = session
 
     def getOrganizationSpacesIntegrateStatus(self, organizationId: str):

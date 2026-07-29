@@ -1,9 +1,9 @@
 import urllib
 
 
-class Users(object):
+class Users:
     def __init__(self, session):
-        super(Users, self).__init__()
+        super().__init__()
         self._session = session
 
     def getOrganizationIamUsersAuthorizations(

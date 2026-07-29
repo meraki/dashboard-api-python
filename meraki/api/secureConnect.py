@@ -1,9 +1,9 @@
 import urllib
 
 
-class SecureConnect(object):
+class SecureConnect:
     def __init__(self, session):
-        super(SecureConnect, self).__init__()
+        super().__init__()
         self._session = session
 
     def getOrganizationSecureConnectPrivateApplicationGroups(
