@@ -3289,6 +3289,43 @@ class AsyncOrganizations:
 
         return self._session.get(metadata, resource, params)
 
+    def getOrganizationAssuranceWiredExperienceMostImpactedXMs(self, organizationId: str, **kwargs):
+        """
+        **Returns the most impacted wired experience metrics, including client counts, top failure contributor, and most impacted networks for each metric.**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-wired-experience-most-impacted-x-ms
+
+        - organizationId (string): Organization ID
+        - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 14 days from today.
+        - t1 (string): The end of the timespan for the data. t1 can be a maximum of 14 days after t0.
+        - timespan (number): The timespan for which the information will be fetched. If specifying timespan, do not specify parameters t0 and t1. The value must be in seconds and be greater than or equal to 15 minutes and be less than or equal to 14 days. The default is 2 hours.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "wired", "experience", "mostImpactedXMs"],
+            "operation": "getOrganizationAssuranceWiredExperienceMostImpactedXMs",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/wired/experience/mostImpactedXMs"
+
+        query_params = [
+            "t0",
+            "t1",
+            "timespan",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationAssuranceWiredExperienceMostImpactedXMs: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get(metadata, resource, params)
+
     def getOrganizationAssuranceWiredExperienceSuccessfulConnectionsByNetwork(
         self, organizationId: str, total_pages=1, direction="next", **kwargs
     ):

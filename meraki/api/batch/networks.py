@@ -237,6 +237,7 @@ class ActionBatchNetworks:
         - upgradeWindow (object): Upgrade window for devices in network
         - timezone (string): The timezone for the network
         - products (object): Contains information about the network to update
+        - featureLossAcknowledgements (array): Acknowledges the target version has removed certain features that the network is currently using.
         """
 
         kwargs.update(locals())
@@ -248,6 +249,7 @@ class ActionBatchNetworks:
             "upgradeWindow",
             "timezone",
             "products",
+            "featureLossAcknowledgements",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
@@ -912,7 +914,7 @@ class ActionBatchNetworks:
         https://developer.cisco.com/meraki/api-v1/#!update-network-settings
 
         - networkId (string): Network ID
-        - localStatusPageEnabled (boolean): Enables / disables the local device status pages (<a target='_blank' href='http://my.meraki.com/'>my.meraki.com, </a><a target='_blank' href='http://ap.meraki.com/'>ap.meraki.com, </a><a target='_blank' href='http://switch.meraki.com/'>switch.meraki.com, </a><a target='_blank' href='http://wired.meraki.com/'>wired.meraki.com</a>). Optional (defaults to false)
+        - localStatusPageEnabled (boolean): Enables / disables the local device status pages (<a target='_blank' href='http://my.meraki.com/'>my.meraki.com, </a><a target='_blank' href='http://ap.meraki.com/'>ap.meraki.com, </a><a target='_blank' href='http://switch.meraki.com/'>switch.meraki.com, </a><a target='_blank' href='http://wired.meraki.com/'>wired.meraki.com</a>). Optional (defaults to true)
         - remoteStatusPageEnabled (boolean): Enables / disables access to the device status page (<a target='_blank'>http://[device's LAN IP])</a>. Optional. Can only be set if localStatusPageEnabled is set to true
         - localStatusPage (object): A hash of Local Status page(s)' authentication options applied to the Network.
         - securePort (object): A hash of SecureConnect options applied to the Network.
@@ -1103,15 +1105,17 @@ class ActionBatchNetworks:
         - vlanNames (array): An array of named VLANs
         - vlanGroups (array): An array of VLAN groups
         - iname (string): IName of the profile
+        - allowedVlans (string): The VLANs allowed on the VLAN profile. Only applicable to trunk ports. The given range must be inclusive of all named VLANs.
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
 
         networkId = urllib.parse.quote(networkId, safe="")
         resource = f"/networks/{networkId}/vlanProfiles"
 
         body_params = [
             "name",
+            "allowedVlans",
             "vlanNames",
             "vlanGroups",
             "iname",

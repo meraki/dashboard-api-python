@@ -895,8 +895,6 @@ class AsyncSecureConnect:
         - organizationId (string): Organization ID
         - t0 (string): The start of the interval, must be within the past 30 days. Must be provided with t1.
         - t1 (string): The end of the interval, must not exceed the current date. Must be provided with t0.
-        - from (integer): Legacy start of the interval in epoch seconds, must be within the past 30 days. Must be provided with to.
-        - to (integer): Legacy end of the interval in epoch seconds, must not exceed the current date. Must be provided with from.
         """
 
         kwargs.update(locals())
@@ -911,8 +909,6 @@ class AsyncSecureConnect:
         body_params = [
             "t0",
             "t1",
-            "from",
-            "to",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 

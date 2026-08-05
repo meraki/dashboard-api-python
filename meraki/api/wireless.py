@@ -2707,7 +2707,7 @@ class Wireless:
         - wpaEncryptionMode (string): The types of WPA encryption. ('WPA1 only', 'WPA1 and WPA2', 'WPA2 only', 'WPA3 Transition Mode', 'WPA3 only' or 'WPA3 192-bit Security')
         - dot11w (object): The current setting for Protected Management Frames (802.11w).
         - dot11r (object): The current setting for 802.11r
-        - splashPage (string): The type of splash page for the SSID ('None', 'Click-through splash page', 'Billing', 'Password-protected with Meraki RADIUS', 'Password-protected with custom RADIUS', 'Password-protected with Active Directory', 'Password-protected with LDAP', 'SMS authentication', 'Systems Manager Sentry', 'Facebook Wi-Fi', 'Google OAuth', 'Microsoft Entra ID', 'Sponsored guest', 'Cisco ISE' or 'Google Apps domain').This attribute is not supported for template children.
+        - splashPage (string): The type of splash page for the SSID ('None', 'Click-through splash page', 'Billing', 'Password-protected with Meraki RADIUS', 'Password-protected with custom RADIUS', 'Password-protected with Active Directory', 'Password-protected with LDAP', 'SMS authentication', 'Systems Manager Sentry', 'Facebook Wi-Fi', 'Google OAuth', 'Microsoft Entra ID', 'Sponsored guest' or 'Cisco ISE').This attribute is not supported for template children.
         - splashGuestSponsorDomains (array): Array of valid sponsor email domains for sponsored guest splash type.
         - oauth (object): The OAuth settings of this SSID. Only valid if splashPage is 'Google OAuth'.
         - localRadius (object): The current setting for Local Authentication, a built-in RADIUS server on the access point. Only valid if authMode is '8021x-localradius'.
@@ -2810,7 +2810,6 @@ class Wireless:
                 "Cisco ISE",
                 "Click-through splash page",
                 "Facebook Wi-Fi",
-                "Google Apps domain",
                 "Google OAuth",
                 "Microsoft Entra ID",
                 "None",
@@ -5360,7 +5359,7 @@ class Wireless:
         kwargs.update(locals())
 
         if "contributor" in kwargs:
-            options = ["Admin power restriction", "Insufficient AP density", "Sticky client", "Transient weak signal"]
+            options = ["Admin power restriction", "Insufficient AP density", "Sticky client", "Weak signal"]
             assert kwargs["contributor"] in options, (
                 f'''"contributor" cannot be "{kwargs["contributor"]}", & must be set to one of: {options}'''
             )
@@ -6234,6 +6233,7 @@ class Wireless:
         - serials (array): Filter results by device serial.
         - ssidNumbers (array): Filter results by SSID number.
         - bands (array): Filter results by band.
+        - insights (string): Source used to compute insights. Defaults to dashboard.
         - contributor (string): Contributor for which to retrieve insights. If not specified, returns overall insights.
         - subContributor (string): Sub-contributor for which to retrieve insights. If not specified, returns all sub contributor insights.
         - variant (string): Wireless State Machine variant to use.
@@ -6247,6 +6247,11 @@ class Wireless:
 
         kwargs.update(locals())
 
+        if "insights" in kwargs:
+            options = ["dashboard", "rca"]
+            assert kwargs["insights"] in options, (
+                f'''"insights" cannot be "{kwargs["insights"]}", & must be set to one of: {options}'''
+            )
         if "contributor" in kwargs:
             options = ["assoc", "auth", "dhcp", "dns"]
             assert kwargs["contributor"] in options, (
@@ -6270,6 +6275,7 @@ class Wireless:
             "serials",
             "ssidNumbers",
             "bands",
+            "insights",
             "contributor",
             "subContributor",
             "variant",
