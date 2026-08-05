@@ -451,6 +451,97 @@ class ActionBatchOrganizations(object):
         }
         return action
 
+    def createOrganizationAssuranceAlertsProfile(
+        self, organizationId: str, name: str, networkIds: list, alertTypes: list, configuration: dict, **kwargs
+    ):
+        """
+        **Create an alert profile**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-assurance-alerts-profile
+
+        - organizationId (string): Organization ID
+        - name (string): Name of the alert profile
+        - networkIds (array): Networks associated with this alert profile
+        - alertTypes (array): Alert types associated with this alert profile
+        - configuration (object): Alert configuration for this profile
+        - alertScheduleId (string): ID of the alert schedule associated with this profile
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/alerts/profiles"
+
+        body_params = [
+            "name",
+            "networkIds",
+            "alertTypes",
+            "alertScheduleId",
+            "configuration",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def updateOrganizationAssuranceAlertsProfile(
+        self, organizationId: str, profileId: str, name: str, networkIds: list, alertTypes: list, configuration: dict, **kwargs
+    ):
+        """
+        **Update an alert profile**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-assurance-alerts-profile
+
+        - organizationId (string): Organization ID
+        - profileId (string): Profile ID
+        - name (string): Name of the alert profile
+        - networkIds (array): Networks associated with this alert profile
+        - alertTypes (array): Alert types associated with this alert profile
+        - configuration (object): Alert configuration for this profile
+        - alertScheduleId (string): ID of the alert schedule associated with this profile
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        profileId = urllib.parse.quote(str(profileId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/alerts/profiles/{profileId}"
+
+        body_params = [
+            "name",
+            "networkIds",
+            "alertTypes",
+            "alertScheduleId",
+            "configuration",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def deleteOrganizationAssuranceAlertsProfile(self, organizationId: str, profileId: str):
+        """
+        **Delete an alert profile for this organization**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-assurance-alerts-profile
+
+        - organizationId (string): Organization ID
+        - profileId (string): Profile ID
+        """
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        profileId = urllib.parse.quote(str(profileId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/alerts/profiles/{profileId}"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+
     def createOrganizationBrandingPolicy(self, organizationId: str, name: str, **kwargs):
         """
                **Add a new branding policy to an organization**
@@ -1338,6 +1429,131 @@ class ActionBatchOrganizations(object):
         }
         return action
 
+    def createOrganizationNetworksGroup(self, organizationId: str, name: str, **kwargs):
+        """
+        **Create a network group**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-networks-group
+
+        - organizationId (string): Organization ID
+        - name (string): The name of the network group
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/networks/groups"
+
+        body_params = [
+            "name",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def updateOrganizationNetworksGroup(self, organizationId: str, groupId: str, name: str, **kwargs):
+        """
+        **Update a network group**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-networks-group
+
+        - organizationId (string): Organization ID
+        - groupId (string): Group ID
+        - name (string): The new name of the network group
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        groupId = urllib.parse.quote(str(groupId), safe="")
+        resource = f"/organizations/{organizationId}/networks/groups/{groupId}"
+
+        body_params = [
+            "name",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def deleteOrganizationNetworksGroup(self, organizationId: str, groupId: str):
+        """
+        **Delete a network group**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-networks-group
+
+        - organizationId (string): Organization ID
+        - groupId (string): Group ID
+        """
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        groupId = urllib.parse.quote(str(groupId), safe="")
+        resource = f"/organizations/{organizationId}/networks/groups/{groupId}"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+
+    def bulkOrganizationNetworksGroupAssign(self, organizationId: str, groupId: str, networkIds: list, **kwargs):
+        """
+        **Add networks to a network group**
+        https://developer.cisco.com/meraki/api-v1/#!bulk-organization-networks-group-assign
+
+        - organizationId (string): Organization ID
+        - groupId (string): Group ID
+        - networkIds (array): A list of network IDs to add to the network group
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        groupId = urllib.parse.quote(str(groupId), safe="")
+        resource = f"/organizations/{organizationId}/networks/groups/{groupId}/bulkAssign"
+
+        body_params = [
+            "networkIds",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "bulk_assign",
+            "body": payload,
+        }
+        return action
+
+    def bulkOrganizationNetworksGroupUnassign(self, organizationId: str, groupId: str, networkIds: list, **kwargs):
+        """
+        **Remove networks from a network group**
+        https://developer.cisco.com/meraki/api-v1/#!bulk-organization-networks-group-unassign
+
+        - organizationId (string): Organization ID
+        - groupId (string): Group ID
+        - networkIds (array): A list of network IDs to remove from the network group
+        """
+
+        kwargs = locals()
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        groupId = urllib.parse.quote(str(groupId), safe="")
+        resource = f"/organizations/{organizationId}/networks/groups/{groupId}/bulkUnassign"
+
+        body_params = [
+            "networkIds",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "bulk_unassign",
+            "body": payload,
+        }
+        return action
+
     def createOrganizationPoliciesGlobalFirewallRuleset(self, organizationId: str, name: str, **kwargs):
         """
         **Create an Organization-Wide Policy Firewall Ruleset**
@@ -2109,9 +2325,14 @@ class ActionBatchOrganizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/sase/sites/detach"
 
+        body_params = [
+            "items",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
         action = {
             "resource": resource,
             "operation": "detach",
+            "body": payload,
         }
         return action
 

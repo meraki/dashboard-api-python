@@ -175,7 +175,7 @@ class AsyncSwitch:
         - daiTrusted (boolean): If true, ARP packets for this port will be considered trusted, and Dynamic ARP Inspection will allow the traffic.
         - profile (object): Profile attributes
         - dot3az (object): dot3az settings for the port
-        - highSpeed (object): High speed port enablement settings for C9500-32QC
+        - highSpeed (object): High speed port enablement settings for a high-speed logical port.
         """
 
         kwargs.update(locals())
@@ -3056,7 +3056,7 @@ class AsyncSwitch:
         - daiTrusted (boolean): If true, ARP packets for this port will be considered trusted, and Dynamic ARP Inspection will allow the traffic.
         - profile (object): Profile attributes
         - dot3az (object): dot3az settings for the port
-        - highSpeed (object): High speed port enablement settings for C9500-32QC
+        - highSpeed (object): High speed port enablement settings for a high-speed logical port.
         """
 
         kwargs.update(locals())
