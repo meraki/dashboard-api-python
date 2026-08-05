@@ -323,7 +323,7 @@ class ActionBatchAppliance(object):
         - type (string): The type of the port: 'access' or 'trunk'.
         - vlan (integer): Native VLAN when the port is in Trunk mode. Access VLAN when the port is in Access mode.
         - allowedVlans (string): Comma-delimited list of VLAN IDs (e.g. '2,15') for all devices. Secure Routers also support VLAN ranges (e.g. '2-10,15'). Use 'all' to permit all VLANs on the port.
-        - accessPolicy (string): The name of the policy. Only applicable to Access ports. Valid values are: 'open', '8021x-radius', 'mac-radius', 'hybris-radius' for MX64 or Z3 or any MX supporting the per port authentication feature. Otherwise, 'open' is the only valid value and 'open' is the default value if the field is missing.
+        - accessPolicy (string): The name of the policy. Only applicable to Access ports. Valid values are: 'open', '8021x-radius', 'mac-radius', 'hybrid-radius', 'access-manager' for MX64 or Z3 or any MX supporting the per port authentication feature. Otherwise, 'open' is the only valid value and 'open' is the default value if the field is missing.
         - sgt (object): Security Group Tag settings for the port.
         """
 

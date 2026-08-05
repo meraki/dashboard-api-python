@@ -711,7 +711,7 @@ class ActionBatchWireless(object):
         - wpaEncryptionMode (string): The types of WPA encryption. ('WPA1 only', 'WPA1 and WPA2', 'WPA2 only', 'WPA3 Transition Mode', 'WPA3 only' or 'WPA3 192-bit Security')
         - dot11w (object): The current setting for Protected Management Frames (802.11w).
         - dot11r (object): The current setting for 802.11r
-        - splashPage (string): The type of splash page for the SSID ('None', 'Click-through splash page', 'Billing', 'Password-protected with Meraki RADIUS', 'Password-protected with custom RADIUS', 'Password-protected with Active Directory', 'Password-protected with LDAP', 'SMS authentication', 'Systems Manager Sentry', 'Facebook Wi-Fi', 'Google OAuth', 'Microsoft Entra ID', 'Sponsored guest', 'Cisco ISE' or 'Google Apps domain').This attribute is not supported for template children.
+        - splashPage (string): The type of splash page for the SSID ('None', 'Click-through splash page', 'Billing', 'Password-protected with Meraki RADIUS', 'Password-protected with custom RADIUS', 'Password-protected with Active Directory', 'Password-protected with LDAP', 'SMS authentication', 'Systems Manager Sentry', 'Facebook Wi-Fi', 'Google OAuth', 'Microsoft Entra ID', 'Sponsored guest' or 'Cisco ISE').This attribute is not supported for template children.
         - splashGuestSponsorDomains (array): Array of valid sponsor email domains for sponsored guest splash type.
         - oauth (object): The OAuth settings of this SSID. Only valid if splashPage is 'Google OAuth'.
         - localRadius (object): The current setting for Local Authentication, a built-in RADIUS server on the access point. Only valid if authMode is '8021x-localradius'.
@@ -734,6 +734,7 @@ class ActionBatchWireless(object):
         - radiusAccountingInterimInterval (integer): The interval (in seconds) in which accounting information is updated and sent to the RADIUS accounting server.
         - radiusAttributeForGroupPolicies (string): Specify the RADIUS attribute used to look up group policies ('Filter-Id', 'Reply-Message', 'Airespace-ACL-Name' or 'Aruba-User-Role'). Access points must receive this attribute in the RADIUS Access-Accept message
         - ipAssignmentMode (string): The client IP assignment mode ('NAT mode', 'Bridge mode', 'Layer 3 roaming', 'Ethernet over GRE', 'Layer 3 roaming with a concentrator', 'VPN' or 'Campus Gateway')
+        - campusGateway (object): Campus gateway settings
         - useVlanTagging (boolean): Whether or not traffic should be directed to use specific VLANs. This param is only valid if the ipAssignmentMode is 'Bridge mode' or 'Layer 3 roaming'
         - concentratorNetworkId (string): The concentrator to use when the ipAssignmentMode is 'Layer 3 roaming with a concentrator' or 'VPN'.
         - secondaryConcentratorNetworkId (string): The secondary concentrator to use when the ipAssignmentMode is 'VPN'. If configured, the APs will switch to using this concentrator if the primary concentrator is unreachable. This param is optional. ('disabled' represents no secondary concentrator.)
@@ -813,7 +814,6 @@ class ActionBatchWireless(object):
                 "Cisco ISE",
                 "Click-through splash page",
                 "Facebook Wi-Fi",
-                "Google Apps domain",
                 "Google OAuth",
                 "Microsoft Entra ID",
                 "None",
@@ -882,6 +882,7 @@ class ActionBatchWireless(object):
             "radiusAccountingInterimInterval",
             "radiusAttributeForGroupPolicies",
             "ipAssignmentMode",
+            "campusGateway",
             "useVlanTagging",
             "concentratorNetworkId",
             "secondaryConcentratorNetworkId",
@@ -1737,6 +1738,133 @@ class ActionBatchWireless(object):
             "resource": resource,
             "operation": "update",
             "body": payload,
+        }
+        return action
+
+    def createOrganizationWirelessSsidsProfile(self, organizationId: str, name: str, ssid: dict, **kwargs):
+        """
+        **Create a new SSID profile in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-wireless-ssids-profile
+
+        - organizationId (string): Organization ID
+        - name (string): Name of the SSID profile
+        - ssid (object): SSID configuration for the profile
+        - precedence (object): Precedence configuration for the SSID profile
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/profiles"
+
+        body_params = [
+            "name",
+            "precedence",
+            "ssid",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def createOrganizationWirelessSsidsProfilesAssignment(self, organizationId: str, profile: dict, ssid: dict, **kwargs):
+        """
+        **Assigns an SSID profile to an SSID in the organization**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-wireless-ssids-profiles-assignment
+
+        - organizationId (string): Organization ID
+        - profile (object): SSID profile to assign
+        - ssid (object): SSID to assign the SSID profile to
+        - network (object): Network containing the SSID (required if SSID number is used)
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/profiles/assignments"
+
+        body_params = [
+            "profile",
+            "ssid",
+            "network",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "create",
+            "body": payload,
+        }
+        return action
+
+    def deleteOrganizationWirelessSsidsProfilesAssignments(self, organizationId: str, ssid: dict, **kwargs):
+        """
+        **Unassigns the SSID profile assigned to an SSID**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-wireless-ssids-profiles-assignments
+
+        - organizationId (string): Organization ID
+        - ssid (object): SSID to delete the SSID profile assignment of
+        - network (object): Network containing the SSID (required if SSID number is used)
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/profiles/assignments"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
+        }
+        return action
+
+    def updateOrganizationWirelessSsidsProfile(self, organizationId: str, id: str, **kwargs):
+        """
+        **Update this SSID profile**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-wireless-ssids-profile
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        - name (string): Name of the SSID profile
+        - ssid (object): SSID configuration for the profile
+        """
+
+        kwargs.update(locals())
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/profiles/{id}"
+
+        body_params = [
+            "name",
+            "ssid",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+        action = {
+            "resource": resource,
+            "operation": "update",
+            "body": payload,
+        }
+        return action
+
+    def deleteOrganizationWirelessSsidsProfile(self, organizationId: str, id: str):
+        """
+        **Delete an SSID profile**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-wireless-ssids-profile
+
+        - organizationId (string): Organization ID
+        - id (string): ID
+        """
+
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        id = urllib.parse.quote(str(id), safe="")
+        resource = f"/organizations/{organizationId}/wireless/ssids/profiles/{id}"
+
+        action = {
+            "resource": resource,
+            "operation": "destroy",
         }
         return action
 

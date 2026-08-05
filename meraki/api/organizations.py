@@ -1824,6 +1824,130 @@ class Organizations(object):
 
         return self._session.get(metadata, resource, params)
 
+    def getOrganizationAssuranceAlertsProfiles(self, organizationId: str):
+        """
+        **List the alert profiles for this organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-assurance-alerts-profiles
+
+        - organizationId (string): Organization ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "alerts", "profiles"],
+            "operation": "getOrganizationAssuranceAlertsProfiles",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/alerts/profiles"
+
+        return self._session.get(metadata, resource)
+
+    def createOrganizationAssuranceAlertsProfile(
+        self, organizationId: str, name: str, networkIds: list, alertTypes: list, configuration: dict, **kwargs
+    ):
+        """
+        **Create an alert profile**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-assurance-alerts-profile
+
+        - organizationId (string): Organization ID
+        - name (string): Name of the alert profile
+        - networkIds (array): Networks associated with this alert profile
+        - alertTypes (array): Alert types associated with this alert profile
+        - configuration (object): Alert configuration for this profile
+        - alertScheduleId (string): ID of the alert schedule associated with this profile
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "alerts", "profiles"],
+            "operation": "createOrganizationAssuranceAlertsProfile",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/alerts/profiles"
+
+        body_params = [
+            "name",
+            "networkIds",
+            "alertTypes",
+            "alertScheduleId",
+            "configuration",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"createOrganizationAssuranceAlertsProfile: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
+    def updateOrganizationAssuranceAlertsProfile(
+        self, organizationId: str, profileId: str, name: str, networkIds: list, alertTypes: list, configuration: dict, **kwargs
+    ):
+        """
+        **Update an alert profile**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-assurance-alerts-profile
+
+        - organizationId (string): Organization ID
+        - profileId (string): Profile ID
+        - name (string): Name of the alert profile
+        - networkIds (array): Networks associated with this alert profile
+        - alertTypes (array): Alert types associated with this alert profile
+        - configuration (object): Alert configuration for this profile
+        - alertScheduleId (string): ID of the alert schedule associated with this profile
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "alerts", "profiles"],
+            "operation": "updateOrganizationAssuranceAlertsProfile",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        profileId = urllib.parse.quote(str(profileId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/alerts/profiles/{profileId}"
+
+        body_params = [
+            "name",
+            "networkIds",
+            "alertTypes",
+            "alertScheduleId",
+            "configuration",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"updateOrganizationAssuranceAlertsProfile: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteOrganizationAssuranceAlertsProfile(self, organizationId: str, profileId: str):
+        """
+        **Delete an alert profile for this organization**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-assurance-alerts-profile
+
+        - organizationId (string): Organization ID
+        - profileId (string): Profile ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "alerts", "profiles"],
+            "operation": "deleteOrganizationAssuranceAlertsProfile",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        profileId = urllib.parse.quote(str(profileId), safe="")
+        resource = f"/organizations/{organizationId}/assurance/alerts/profiles/{profileId}"
+
+        return self._session.delete(metadata, resource)
+
     def restoreOrganizationAssuranceAlerts(self, organizationId: str, alertIds: list, **kwargs):
         """
         **Restore health alerts from dismissed**
@@ -5751,6 +5875,251 @@ class Organizations(object):
 
         return self._session.post(metadata, resource, payload)
 
+    def getOrganizationNetworksGroups(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List the network groups in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-networks-groups
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - groupIds (array): Optional parameter to filter network groups by ID
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 1000. Default is 100.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            "tags": ["organizations", "configure", "networks", "groups"],
+            "operation": "getOrganizationNetworksGroups",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/networks/groups"
+
+        query_params = [
+            "groupIds",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        array_params = [
+            "groupIds",
+        ]
+        for k, v in kwargs.items():
+            if k.strip() in array_params:
+                params[f"{k.strip()}[]"] = kwargs[f"{k}"]
+                params.pop(k.strip())
+
+        if self._session._validate_kwargs:
+            all_params = query_params + array_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"getOrganizationNetworksGroups: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def createOrganizationNetworksGroup(self, organizationId: str, name: str, **kwargs):
+        """
+        **Create a network group**
+        https://developer.cisco.com/meraki/api-v1/#!create-organization-networks-group
+
+        - organizationId (string): Organization ID
+        - name (string): The name of the network group
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "networks", "groups"],
+            "operation": "createOrganizationNetworksGroup",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/networks/groups"
+
+        body_params = [
+            "name",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"createOrganizationNetworksGroup: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def getOrganizationNetworksGroupsOverviewByGroup(self, organizationId: str, total_pages=1, direction="next", **kwargs):
+        """
+        **List the client and status overview information for the network groups in an organization**
+        https://developer.cisco.com/meraki/api-v1/#!get-organization-networks-groups-overview-by-group
+
+        - organizationId (string): Organization ID
+        - total_pages (integer or string): use with perPage to get total results up to total_pages*perPage; -1 or "all" for all pages
+        - direction (string): direction to paginate, either "next" (default) or "prev" page
+        - sortBy (string): Field by which to sort the results
+        - perPage (integer): The number of entries per page returned. Acceptable range is 3 - 5000.
+        - startingAfter (string): A token used by the server to indicate the start of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        - endingBefore (string): A token used by the server to indicate the end of the page. Often this is a timestamp or an ID but it is not limited to those. This parameter should not be defined by client applications. The link for the first, last, prev, or next page in the HTTP Link header should define it.
+        """
+
+        kwargs.update(locals())
+
+        if "sortBy" in kwargs:
+            options = ["status"]
+            assert kwargs["sortBy"] in options, (
+                f'''"sortBy" cannot be "{kwargs["sortBy"]}", & must be set to one of: {options}'''
+            )
+
+        metadata = {
+            "tags": ["organizations", "monitor", "networks", "groups", "overview", "byGroup"],
+            "operation": "getOrganizationNetworksGroupsOverviewByGroup",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        resource = f"/organizations/{organizationId}/networks/groups/overview/byGroup"
+
+        query_params = [
+            "sortBy",
+            "perPage",
+            "startingAfter",
+            "endingBefore",
+        ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        if self._session._validate_kwargs:
+            all_params = query_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"getOrganizationNetworksGroupsOverviewByGroup: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.get_pages(metadata, resource, params, total_pages, direction)
+
+    def updateOrganizationNetworksGroup(self, organizationId: str, groupId: str, name: str, **kwargs):
+        """
+        **Update a network group**
+        https://developer.cisco.com/meraki/api-v1/#!update-organization-networks-group
+
+        - organizationId (string): Organization ID
+        - groupId (string): Group ID
+        - name (string): The new name of the network group
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "networks", "groups"],
+            "operation": "updateOrganizationNetworksGroup",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        groupId = urllib.parse.quote(str(groupId), safe="")
+        resource = f"/organizations/{organizationId}/networks/groups/{groupId}"
+
+        body_params = [
+            "name",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"updateOrganizationNetworksGroup: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.put(metadata, resource, payload)
+
+    def deleteOrganizationNetworksGroup(self, organizationId: str, groupId: str):
+        """
+        **Delete a network group**
+        https://developer.cisco.com/meraki/api-v1/#!delete-organization-networks-group
+
+        - organizationId (string): Organization ID
+        - groupId (string): Group ID
+        """
+
+        metadata = {
+            "tags": ["organizations", "configure", "networks", "groups"],
+            "operation": "deleteOrganizationNetworksGroup",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        groupId = urllib.parse.quote(str(groupId), safe="")
+        resource = f"/organizations/{organizationId}/networks/groups/{groupId}"
+
+        return self._session.delete(metadata, resource)
+
+    def bulkOrganizationNetworksGroupAssign(self, organizationId: str, groupId: str, networkIds: list, **kwargs):
+        """
+        **Add networks to a network group**
+        https://developer.cisco.com/meraki/api-v1/#!bulk-organization-networks-group-assign
+
+        - organizationId (string): Organization ID
+        - groupId (string): Group ID
+        - networkIds (array): A list of network IDs to add to the network group
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "networks", "groups"],
+            "operation": "bulkOrganizationNetworksGroupAssign",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        groupId = urllib.parse.quote(str(groupId), safe="")
+        resource = f"/organizations/{organizationId}/networks/groups/{groupId}/bulkAssign"
+
+        body_params = [
+            "networkIds",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"bulkOrganizationNetworksGroupAssign: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
+
+    def bulkOrganizationNetworksGroupUnassign(self, organizationId: str, groupId: str, networkIds: list, **kwargs):
+        """
+        **Remove networks from a network group**
+        https://developer.cisco.com/meraki/api-v1/#!bulk-organization-networks-group-unassign
+
+        - organizationId (string): Organization ID
+        - groupId (string): Group ID
+        - networkIds (array): A list of network IDs to remove from the network group
+        """
+
+        kwargs = locals()
+
+        metadata = {
+            "tags": ["organizations", "configure", "networks", "groups"],
+            "operation": "bulkOrganizationNetworksGroupUnassign",
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe="")
+        groupId = urllib.parse.quote(str(groupId), safe="")
+        resource = f"/organizations/{organizationId}/networks/groups/{groupId}/bulkUnassign"
+
+        body_params = [
+            "networkIds",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(
+                    f"bulkOrganizationNetworksGroupUnassign: ignoring unrecognized kwargs: {invalid}"
+                )
+
+        return self._session.post(metadata, resource, payload)
+
     def createNetworkMove(self, organizationId: str, network: dict, organizations: dict, **kwargs):
         """
         **Move networks from one organization to another**
@@ -7655,7 +8024,18 @@ class Organizations(object):
         organizationId = urllib.parse.quote(str(organizationId), safe="")
         resource = f"/organizations/{organizationId}/sase/sites/detach"
 
-        return self._session.delete(metadata, resource)
+        body_params = [
+            "items",
+        ]
+        payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
+
+        if self._session._validate_kwargs:
+            all_params = [] + body_params
+            invalid = [k for k in kwargs if k.strip() not in all_params and k != "self"]
+            if invalid and self._session._logger:
+                self._session._logger.warning(f"detachOrganizationSaseSites: ignoring unrecognized kwargs: {invalid}")
+
+        return self._session.post(metadata, resource, payload)
 
     def updateOrganizationSaseSite(self, organizationId: str, siteId: str, **kwargs):
         """
