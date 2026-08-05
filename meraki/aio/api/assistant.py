@@ -249,9 +249,16 @@ class AsyncAssistant:
 
         - threadId (string): Thread ID
         - content (array): List of message content parts. Supports text, image, audio, and file types. Maximum 8 parts.
+        - platform (string): Platform identifier. Defaults to MERAKI when omitted. Case-insensitive.
         """
 
-        kwargs = locals()
+        kwargs.update(locals())
+
+        if "platform" in kwargs:
+            options = ["DIGITAL_TWIN", "DNAC", "MERAKI", "digital_twin", "dnac", "meraki"]
+            assert kwargs["platform"] in options, (
+                f'''"platform" cannot be "{kwargs["platform"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
             "tags": ["assistant", "configure", "chat", "threads", "messages"],
@@ -262,6 +269,7 @@ class AsyncAssistant:
 
         body_params = [
             "content",
+            "platform",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 
@@ -575,9 +583,16 @@ class AsyncAssistant:
         - content (array): List of message content parts. Supports text, image, audio, and file types. Maximum 8 parts.
         - networkName (string): Name of the target network.
         - networkId (string): Optional Meraki network ID for thread context.
+        - platform (string): Platform identifier. Defaults to MERAKI when omitted. Case-insensitive.
         """
 
         kwargs.update(locals())
+
+        if "platform" in kwargs:
+            options = ["DIGITAL_TWIN", "DNAC", "MERAKI", "digital_twin", "dnac", "meraki"]
+            assert kwargs["platform"] in options, (
+                f'''"platform" cannot be "{kwargs["platform"]}", & must be set to one of: {options}'''
+            )
 
         metadata = {
             "tags": ["assistant", "configure", "chat", "threads", "messages"],
@@ -591,6 +606,7 @@ class AsyncAssistant:
             "content",
             "networkName",
             "networkId",
+            "platform",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
 

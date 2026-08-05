@@ -884,7 +884,7 @@ class ActionBatchWireless:
         - wpaEncryptionMode (string): The types of WPA encryption. ('WPA1 only', 'WPA1 and WPA2', 'WPA2 only', 'WPA3 Transition Mode', 'WPA3 only' or 'WPA3 192-bit Security')
         - dot11w (object): The current setting for Protected Management Frames (802.11w).
         - dot11r (object): The current setting for 802.11r
-        - splashPage (string): The type of splash page for the SSID ('None', 'Click-through splash page', 'Billing', 'Password-protected with Meraki RADIUS', 'Password-protected with custom RADIUS', 'Password-protected with Active Directory', 'Password-protected with LDAP', 'SMS authentication', 'Systems Manager Sentry', 'Facebook Wi-Fi', 'Google OAuth', 'Microsoft Entra ID', 'Sponsored guest', 'Cisco ISE' or 'Google Apps domain').This attribute is not supported for template children.
+        - splashPage (string): The type of splash page for the SSID ('None', 'Click-through splash page', 'Billing', 'Password-protected with Meraki RADIUS', 'Password-protected with custom RADIUS', 'Password-protected with Active Directory', 'Password-protected with LDAP', 'SMS authentication', 'Systems Manager Sentry', 'Facebook Wi-Fi', 'Google OAuth', 'Microsoft Entra ID', 'Sponsored guest' or 'Cisco ISE').This attribute is not supported for template children.
         - splashGuestSponsorDomains (array): Array of valid sponsor email domains for sponsored guest splash type.
         - oauth (object): The OAuth settings of this SSID. Only valid if splashPage is 'Google OAuth'.
         - localRadius (object): The current setting for Local Authentication, a built-in RADIUS server on the access point. Only valid if authMode is '8021x-localradius'.
@@ -987,7 +987,6 @@ class ActionBatchWireless:
                 "Cisco ISE",
                 "Click-through splash page",
                 "Facebook Wi-Fi",
-                "Google Apps domain",
                 "Google OAuth",
                 "Microsoft Entra ID",
                 "None",

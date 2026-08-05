@@ -2139,6 +2139,7 @@ class Appliance:
         - subnet (string): Subnet of the route
         - gatewayIp (string): Gateway IP address (next hop)
         - gatewayVlanId (integer): Gateway VLAN ID
+        - enabled (boolean): Enable/disable the static route
         - vrf (object): VRF settings for the static route.
         """
 
@@ -2156,6 +2157,7 @@ class Appliance:
             "subnet",
             "gatewayIp",
             "gatewayVlanId",
+            "enabled",
             "vrf",
         ]
         payload = {k.strip(): v for k, v in kwargs.items() if k.strip() in body_params}
@@ -3266,7 +3268,7 @@ class Appliance:
         - ibgpHoldTimer (integer): The iBGP holdtimer in seconds. The iBGP holdtimer must be an integer between 12 and 240. When absent, this field is not updated. If no value exists then it defaults to 240.
         - ipv6 (object): Settings for IPv6 configurations on the organization.
         - tunnelDownTermination (object): Settings for tunnel down termination on the organization.
-        - vpnAsNumber (integer): Network specific number of the Autonomous System to which the appliance belongs. This field is only configurable for Independent BGP networks.
+        - localAsNumber (integer): Network-specific local Autonomous System Number (ASN) to which the appliance belongs. This field is only configurable for Independent BGP networks.
         - priorityRoute (string): Sets the priority route between eBGP and Auto VPN.
         - routerId (string): The router ID of the appliance
         - neighbors (array): List of BGP neighbors. This list replaces the existing set of neighbors. When absent, this field is not updated.
@@ -3293,7 +3295,7 @@ class Appliance:
             "ibgpHoldTimer",
             "ipv6",
             "tunnelDownTermination",
-            "vpnAsNumber",
+            "localAsNumber",
             "priorityRoute",
             "routerId",
             "neighbors",
@@ -6215,7 +6217,7 @@ class Appliance:
 
     def getOrganizationApplianceVpnStats(self, organizationId: str, total_pages=1, direction="next", **kwargs):
         """
-        **Show VPN history stat for networks in an organization**
+        **Show VPN history stats for networks in an organization**
         https://developer.cisco.com/meraki/api-v1/#!get-organization-appliance-vpn-stats
 
         - organizationId (string): Organization ID
